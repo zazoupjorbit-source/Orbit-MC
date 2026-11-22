@@ -1,0 +1,407 @@
+# OrbitDevCore messages — MiniMessage format (https://docs.advntr.dev/minimessage/format.html)
+# <prefix> is replaced by the value of "prefix".
+prefix: "<dark_gray>[</dark_gray><gradient:#00c6ff:#7b2ff7>ORBIT</gradient><dark_gray>]</dark_gray> "
+
+general:
+  no-permission: "<prefix><red>You don't have permission."
+  players-only: "<prefix><red>This command can only be used by players."
+  player-not-found: "<prefix><red>Player not found: <white><player></white>."
+  usage: "<prefix><gray>Usage: <white><usage></white>"
+  reloaded: "<prefix><green>Config, messages, warps and NPCs reloaded."
+  info: "<prefix><gray>OrbitDevCore <white>v<version></white> — <white><warps></white> warp(s), <white><npcs></white> NPC(s), proxy: <white><proxy></white>."
+
+spawn:
+  teleported: "<prefix><green>Teleported to spawn."
+  teleported-other: "<prefix><green><white><player></white> was teleported to spawn."
+  set: "<prefix><green>Spawn set to your position."
+  missing: "<prefix><red>No usable spawn (world not found)."
+
+warp:
+  teleported: "<prefix><green>Teleported to warp <white><name></white>."
+  not-found: "<prefix><red>Warp <white><name></white> does not exist."
+  set: "<prefix><green>Warp <white><name></white> saved at your position."
+  deleted: "<prefix><green>Warp <white><name></white> deleted."
+  invalid-name: "<prefix><red>Invalid name: letters, digits, - and _ only (32 characters max)."
+  unknown-icon: "<prefix><red>Unknown icon: <white><icon></white>."
+  world-missing: "<prefix><red>The world of warp <white><name></white> is not loaded."
+
+world:
+  invalid-name: "<prefix><red>Invalid world name: lowercase letters, digits, - and _ only (32 characters max)."
+  invalid-type: "<prefix><red>Unknown world type: <white><type></white> (flat or normal)."
+  creating: "<prefix><gray>Creating / loading world <white><world></white>..."
+  created: "<prefix><green>World <white><world></white> ready (<type>). It will be loaded on every startup."
+  failed: "<prefix><red>Could not create world <white><world></white> (see console)."
+  list-header: "<prefix><gray>Loaded worlds (<white><count></white>):"
+  list-entry: " <dark_gray>•</dark_gray> <white><world></white> <dark_gray>(<type>, <players> player(s))</dark_gray>"
+
+compass:
+  name: "<gradient:#00c6ff:#7b2ff7><bold>Teleport compass</bold></gradient>"
+  lore:
+    - "<gray>Right-click to open the warp menu."
+  given: "<prefix><green>Compass added to your inventory."
+  already: "<prefix><yellow>You already have the compass."
+  inventory-full: "<prefix><red>Your inventory is full, cannot give you the compass."
+  lobby-only: "<prefix><yellow>The compass is only available in the lobby. To go back: <white>/lobby</white>."
+
+menu:
+  title: "<dark_gray>Teleport"
+  spawn-name: "<gold><bold>Spawn</bold>"
+  spawn-lore:
+    - "<gray>Back to the starting point."
+    - ""
+    - "<yellow>Click to teleport"
+  server-lore:
+    - "<gray>Instance: <white><server></white>"
+    - ""
+    - "<yellow>Click to join"
+  server-current-lore:
+    - "<gray>Instance: <white><server></white>"
+    - ""
+    - "<green>You are here"
+  already-here: "<prefix><yellow>You are already on <white><server></white>."
+  navigation-title: "<gradient:#00c6ff:#7b2ff7><bold>ORBIT</bold></gradient> <dark_gray>• Navigation"
+  section-servers: "<aqua><bold>✦ Instances</bold> <gray>(click to join)"
+  section-teleports: "<light_purple><bold>✦ Teleports</bold> <gray>(spawn and warps)"
+  no-servers: "<gray>No instance configured"
+  section-modes: "<aqua><bold>✦ Game modes</bold> <gray>(click to reach the gate)"
+  section-station: "<light_purple><bold>✦ The Station</bold>"
+  section-dev: "<gold><bold>✦ Dev servers</bold> <gray>(staff)"
+  no-modes: "<gray>No mode configured"
+  mode-lore:
+    - ""
+    - "<dark_gray>Coming soon"
+    - "<yellow>Click to reach the gate"
+  hall-name: "<gold><bold>Central hall</bold>"
+  hall-lore:
+    - "<gray>The heart of the Station."
+    - ""
+    - "<yellow>Click to teleport"
+  profile-name: "<gradient:#00c6ff:#7b2ff7><bold><player></bold></gradient>"
+  profile-lore:
+    - "<dark_gray>▪ Profile"
+    - "<gray>Rank: <grade>"
+    - "<gray>Group: <white><group></white>"
+    - "<gray>Role: <white><role></white>"
+    - "<gray>Server: <aqua><server></aqua>"
+    - ""
+    - "<dark_gray>▪ Statistics"
+    - "<gray>Playtime: <white><playtime></white>"
+    - "<gray>First join: <white><first_join></white>"
+    - "<gray>Distance travelled: <white><distance></white>"
+    - "<gray>Mobs killed: <white><mob_kills></white>"
+    - "<gray>Players killed: <white><player_kills></white>"
+    - "<gray>Deaths: <white><deaths></white>"
+  role-op: "Operator"
+  role-player: "Player"
+  close-name: "<red><bold>Close"
+  discord-name: "<#5865F2><bold>Discord"
+  discord-lore:
+    - "<gray>Join the ORBIT community."
+    - "<dark_gray><url>"
+    - ""
+    - "<yellow>Click to get the link"
+  website-name: "<gradient:#00c6ff:#7b2ff7><bold>Server website</bold></gradient>"
+  website-lore:
+    - "<gray>News, store and info."
+    - "<dark_gray><url>"
+    - ""
+    - "<yellow>Click to get the link"
+  link-missing-lore:
+    - "<gray>Link not configured"
+    - "<dark_gray>(links.* in config.yml)"
+  link-missing: "<prefix><red>This link is not configured yet."
+  link-hover: "<gray>Click to open in your browser"
+  discord-message: "<prefix><gray>Join our Discord: "
+  website-message: "<prefix><gray>Server website: "
+  warp-name: "<aqua><bold><name></bold>"
+  warp-lore:
+    - "<gray>World: <white><world></white>"
+    - "<gray>Position: <white><x> <y> <z></white>"
+    - ""
+    - "<yellow>Click to teleport"
+  cosmetics-name: "<gradient:#ffb347:#ff4fd8><bold>Cosmetics</bold></gradient>"
+  cosmetics-lore:
+    - "<gray>Trails, auras, hats, back items,"
+    - "<gray>balloons, pets and mounts."
+    - ""
+    - "<yellow>Click to open"
+  shop-name: "<#F5C542><bold>Store</bold>"
+  shop-lore:
+    - "<gray>Ranks, keys, bundles and Orbit+."
+    - ""
+    - "<yellow>Click to open"
+
+shop:
+  title: "<gradient:#00c6ff:#7b2ff7><bold>ORBIT</bold></gradient> <dark_gray>• Store"
+  back-name: "<#8DB8FF><bold>Navigation</bold>"
+  back-lore:
+    - "<gray>Back to the compass menu."
+  showcase-empty-name: "<#8DB8FF><bold>Showcase coming soon</bold>"
+  showcase-empty-lore:
+    - "<gray>Current offers will show up here."
+  offer-lore:
+    - ""
+    - "<yellow>Click to get the link"
+  online-name: "<#8DB8FF><bold>Online store</bold>"
+  online-lore:
+    - "<gray>All purchases happen on the website."
+    - ""
+    - "<yellow>Click to get the link"
+  grades-name: "<#A48CFF><bold>Ranks</bold>"
+  grades-lore:
+    - "<gray>ORBIT network ranks."
+    - ""
+    - "<yellow>Click to get the link"
+  cles-name: "<#FFCB6B><bold>Keys</bold>"
+  cles-lore:
+    - "<gray>Crate keys."
+    - ""
+    - "<yellow>Click to get the link"
+  packs-name: "<#6FDFA0><bold>Bundles</bold>"
+  packs-lore:
+    - "<gray>Grouped bundles."
+    - ""
+    - "<yellow>Click to get the link"
+  orbit-plus-name: "<#7FEBF7><bold>Orbit+</bold>"
+  orbit-plus-lore:
+    - "<gray>The ORBIT subscription."
+    - ""
+    - "<yellow>Click to get the link"
+  link-message: "<prefix><gray>The store: "
+  soon: "<prefix><yellow>The online store opens soon."
+  soon-website: "<prefix><yellow>The online store opens soon. <gray>Meanwhile, the website: "
+
+pack:
+  disabled: "<prefix><red>The lobby resource pack is disabled on this server."
+  sent: "<prefix><green>Lobby resource pack sent again to <white><count></white> player(s)."
+
+cosmetics:
+  menu-title: "<gradient:#00c6ff:#7b2ff7><bold>ORBIT</bold></gradient> <dark_gray>• Cosmetics"
+  category-title: "<gradient:#00c6ff:#7b2ff7><bold>ORBIT</bold></gradient> <dark_gray>• <category>"
+  header-name: "<gradient:#ffb347:#ff4fd8><bold>Cosmetics</bold></gradient>"
+  header-lore:
+    - "<gray>Customize your look:"
+    - "<white><total></white> <gray>cosmetics to collect."
+    - ""
+    - "<gray>Your cosmetics follow you on"
+    - "<gray>every instance of the network."
+  types:
+    trail:
+      plain: "Trails"
+      name: "<gold><bold>Trails"
+      description: "<gray>Particles behind you while you walk."
+    aura:
+      plain: "Auras"
+      name: "<light_purple><bold>Auras"
+      description: "<gray>Wings, halos, tornadoes... around you."
+    hat:
+      plain: "Hats"
+      name: "<aqua><bold>Hats"
+      description: "<gray>A block or an item on your head."
+    back:
+      plain: "Back"
+      name: "<dark_purple><bold>Back"
+      description: "<gray>Wings, swords, backpacks, capes... on your back."
+    balloon:
+      plain: "Balloons"
+      name: "<red><bold>Balloons"
+      description: "<gray>A balloon tied to a string."
+    pet:
+      plain: "Pets"
+      name: "<green><bold>Pets"
+      description: "<gray>A small companion that follows you."
+    mount:
+      plain: "Mounts"
+      name: "<yellow><bold>Mounts"
+      description: "<gray>Summon a mount and ride it."
+  rarity:
+    common: "<gray>● Common"
+    rare: "<aqua>● Rare"
+    epic: "<light_purple>● Epic"
+    legendary: "<gold><bold>● Legendary</bold>"
+  category-lore:
+    - "<description>"
+    - ""
+    - "<gray>Equipped: <equipped>"
+    - "<gray>Unlocked: <white><owned>/<total></white>"
+    - ""
+    - "<yellow>Click to open"
+  category-header-lore:
+    - "<gray>Equipped: <equipped>"
+    - "<gray>Page <white><page>/<pages></white> <dark_gray>(<total> cosmetics)"
+    - ""
+    - "<dark_gray>Click a cosmetic to equip it,"
+    - "<dark_gray>click again to remove it."
+  none: "<dark_gray>none"
+  lore-available:
+    - "<rarity>"
+    - "<gray><description>"
+    - ""
+    - "<yellow>Click to equip"
+  lore-equipped:
+    - "<rarity>"
+    - "<gray><description>"
+    - ""
+    - "<green>✔ Equipped"
+    - "<yellow>Click to remove"
+  lore-locked:
+    - "<rarity>"
+    - "<gray><description>"
+    - ""
+    - "<red>✖ Locked"
+  mount-lore-available:
+    - "<rarity>"
+    - "<gray><description>"
+    - ""
+    - "<yellow>Click to summon and ride it"
+  mount-lore-equipped:
+    - "<rarity>"
+    - "<gray><description>"
+    - ""
+    - "<green>✔ Your mount"
+    - "<yellow>Click to summon it <dark_gray>(or /mount)"
+  empty-category: "<gray>No cosmetics in this category"
+  previous-name: "<yellow><bold>« Previous page"
+  next-name: "<yellow><bold>Next page »"
+  page-lore:
+    - "<gray>Page <white><page>/<pages>"
+  back-name: "<yellow><bold>Back"
+  back-compass-name: "<yellow><bold>Back to the compass"
+  remove-name: "<red><bold>Remove"
+  remove-lore:
+    - "<gray>Removes <name><gray>."
+  remove-all-name: "<red><bold>Remove all"
+  remove-all-lore:
+    - "<gray>Removes all your cosmetics."
+  remove-all-none:
+    - "<dark_gray>No cosmetic equipped."
+  hat-lore:
+    - "<dark_gray>Cosmetic"
+    - "<gray>Change it with <white>/cosmetics"
+  pet-name: "<pet> <gray>(<white><player></white>)"
+  equipped: "<prefix><green>Cosmetic equipped: <name><green>."
+  unequipped: "<prefix><gray>Cosmetic removed: <name><gray>."
+  unequipped-all: "<prefix><gray>All your cosmetics were removed."
+  locked: "<prefix><red>You haven't unlocked <name><red> yet."
+  helmet-stuck: "<prefix><red>Inventory full: free a slot to store your helmet before wearing a hat."
+  hat-removed-helmet: "<prefix><yellow>Your hat was removed because you put on a helmet."
+  unknown-category: "<prefix><red>Unknown category: <white><category></white> (trails, auras, hats, back, balloons, pets, mounts)."
+  mount-summoned: "<prefix><green>Riding <name><green>! <gray>(sneak to get off, it disappears)"
+  mount-dismissed: "<prefix><gray>Mount dismissed."
+  mount-none: "<prefix><yellow>Pick a mount in the menu first."
+  mount-cooldown: "<prefix><red>Wait a moment before summoning your mount again."
+  mount-unavailable: "<prefix><red>You can't summon a mount here."
+  lobby-only: "<prefix><yellow>Cosmetics are only active in the lobby: you'll get them back there (<white>/lobby</white>)."
+
+npc:
+  created: "<prefix><green>NPC <white><id></white> created, it sends players to <white><target></white>."
+  exists: "<prefix><red>An NPC <white><id></white> already exists."
+  not-found: "<prefix><red>No NPC <white><id></white>."
+  invalid-id: "<prefix><red>Invalid id: letters, digits, - and _ only (32 characters max)."
+  invalid-type: "<prefix><red>Invalid entity type: <white><type></white> (must be a living entity, e.g. VILLAGER, ZOMBIE, ARMOR_STAND)."
+  removed: "<prefix><green>NPC <white><id></white> removed."
+  moved: "<prefix><green>NPC <white><id></white> moved to your position."
+  teleported: "<prefix><green>Teleported to NPC <white><id></white>."
+  target-set: "<prefix><green>NPC <white><id></white> now sends players to <white><target></white>."
+  world-missing: "<prefix><red>World <white><world></white> is not loaded (create it with <white>/devworld create <world></white>)."
+  world-teleported: "<prefix><green>Welcome to <white><world></white>!"
+  name-set: "<prefix><green>NPC <white><id></white> name updated."
+  profession-set: "<prefix><green>NPC <white><id></white> profession: <white><profession></white>."
+  unknown-profession: "<prefix><red>Unknown profession: <white><profession></white>."
+  list-header: "<prefix><gray>Server NPCs (<white><count></white>):"
+  list-entry: " <dark_gray>•</dark_gray> <white><id></white> <dark_gray>→</dark_gray> <aqua><target></aqua> <dark_gray>(<type>, <world> <x> <y> <z>)</dark_gray>"
+  list-empty: "<prefix><gray>No NPCs. Create one with <white>/servernpc create <id> <server|world:name></white>."
+  connecting: "<prefix><green>Connecting to <white><server></white>..."
+  no-proxy: "<prefix><yellow>This NPC sends players to <white><server></white>, but no proxy is configured on the dev server (proxy.enabled: false)."
+  help:
+    - "<gradient:#00c6ff:#7b2ff7><bold>Server NPCs</bold></gradient>"
+    - "<white>/servernpc create <id> <server|world:name> [type]</white> <gray>— create an NPC at your position"
+    - "<white>/servernpc remove <id></white> <gray>— remove an NPC"
+    - "<white>/servernpc list</white> <gray>— list NPCs"
+    - "<white>/servernpc tphere <id></white> <gray>— move an NPC to your position"
+    - "<white>/servernpc tp <id></white> <gray>— teleport to an NPC"
+    - "<white>/servernpc server <id> <server></white> <gray>— target a proxy server"
+    - "<white>/servernpc world <id> <world></white> <gray>— target a world of this server"
+    - "<white>/servernpc name <id> <MiniMessage name></white> <gray>— change the displayed name"
+    - "<white>/servernpc profession <id> <profession></white> <gray>— villager profession"
+    - "<dark_gray>From the console, add <white>@player</white> to create/tphere/tp to use that player's position."
+
+# Firework mini-game. <dot> = dot in the player's color, <killer> = shooter's colored name.
+firework:
+  item:
+    name: "<gradient:#FF4FD8:#3A7FFF><bold>Firework</bold></gradient>"
+    lore:
+      - "<gray>Mini-game: take out players"
+      - "<gray>in firework mode. One shot is enough."
+      - "<gray>Chain kills to unlock bonuses:"
+      - "<gray>speed, grappling hook, shield..."
+      - ""
+      - "<#3A7FFF>Left click</#3A7FFF> <gray>· enter the mode"
+    name-armed: "<gradient:#FF4FD8:#3A7FFF><bold>Firework</bold></gradient> <dark_gray>·</dark_gray> <#FF4D4D><bold>ARMED</bold>"
+    lore-armed:
+      - "<gray>Other players in firework mode"
+      - "<gray>can take you out."
+      - ""
+      - "<#3A7FFF>Right click</#3A7FFF> <gray>· shoot"
+      - "<#3A7FFF>Left click</#3A7FFF> <gray>· leave the mode"
+  enter-title: "<gradient:#FF4FD8:#3A7FFF><bold>FIREWORK MODE</bold></gradient>"
+  enter-subtitle: "<gray>Right click to shoot · one shot = one kill"
+  left: "<gray>You left firework mode."
+  leave-locked: "<#FF4D4D>You just fired: <white><seconds> s</white> left before you can leave the mode."
+  not-armed: "<gray>Left click with the firework to enter firework mode."
+  hud: "<dot> <white><bold>FIREWORK</bold></white> <dark_gray>|</dark_gray> <gray>Kills <white><kills></white> <dark_gray>|</dark_gray> <gray>Streak <white><streak></white> <dark_gray>|</dark_gray> <gray>Playing <white><players></white><bonuses>"
+  # Appended to the HUD when the player has bonuses. <list> = bonus names.
+  hud-bonuses: " <dark_gray>|</dark_gray> <#F5C542><list>"
+  eliminated-title: "<#FF4D4D><bold>ELIMINATED</bold>"
+  eliminated-subtitle: "<gray>by <killer>"
+  kill: "<#7CFC9A><bold>+1</bold> <gray>· you took out <white><victim></white>"
+  feed: "<prefix><killer> <gray>took out</gray> <white><victim></white><gray>.</gray>"
+  streak: "<prefix><killer> <#F5C542>is on a <white><streak></white> kill streak!"
+  lobby-only: "<prefix><yellow>The firework mini-game only exists in the lobby."
+  # Test tools (/orbitdev feu, admins).
+  not-in-mode: "<prefix><red>Enter firework mode first (left click with the firework)."
+  streak-set: "<prefix><green>Streak set to <white><streak></white>: bonuses unlocked up to that tier."
+  admin-help:
+    - "<gradient:#FF4FD8:#3A7FFF><bold>Firework mini-game — testing</bold></gradient>"
+    - "<white>/orbitdev feu cible</white> <gray>— training target at your position"
+    - "<white>/orbitdev feu riposte</white> <gray>— target that shoots the nearest player in firework mode"
+    - "<white>/orbitdev feu retirer</white> <gray>— remove all targets"
+    - "<white>/orbitdev feu serie <n></white> <gray>— set your streak (unlocks bonuses up to n)"
+    - "<dark_gray>Targets count as players in firework mode: kills, streak and bonuses."
+  dummy:
+    name: "<#FF4D4D><bold>Training target</bold>"
+    short-name: "<#FF4D4D>Training target</#FF4D4D>"
+    description: "<gray>Shoot it in firework mode"
+    description-fires: "<#FF4D4D>Shoots back!"
+    placed: "<prefix><green>Training target placed.</green> <gray>It counts as a player in firework mode and comes back 3 s after each kill."
+    placed-fires: "<prefix><green>Shooting target placed.</green> <gray>It fires every 3 s at the nearest player in firework mode (in sight, 48 blocks)."
+    removed: "<prefix><green><white><count></white> training target(s) removed."
+  shield-broken: "<#00C6FF>Your shield absorbed <killer>'s shot!"
+  shield-hit: "<gray><white><victim></white> had a shield: it just broke."
+  grapple:
+    name: "<#F5C542><bold>Grappling hook</bold>"
+    lore:
+      - "<gray>Streak bonus."
+      - ""
+      - "<#3A7FFF>Right click</#3A7FFF> <gray>· pull yourself to the block you aim at"
+      - "<gray>Nothing in range: boosted jump forward."
+      - ""
+      - "<dark_gray>Lost if you get taken out."
+  # Streak bonuses: <bonus> = name, <hint> = effect, <streak> = kills in a row.
+  bonus:
+    unlocked: "<prefix><#F5C542><bold>BONUS</bold></#F5C542> <gray>(<white><streak></white> streak)</gray> <white><bonus></white> <dark_gray>·</dark_gray> <hint>"
+    speed:
+      name: "Speed"
+      hint: "<gray>You run faster until you get taken out."
+    grapple:
+      name: "Grappling hook"
+      hint: "<gray>Right click with the hook: pull or boosted jump."
+    rapid-fire:
+      name: "Rapid fire"
+      hint: "<gray>Your firework reloads twice as fast."
+    shield:
+      name: "Shield"
+      hint: "<gray>The next shot you take won't eliminate you."
+    volley:
+      name: "Volley"
+      hint: "<gray>Every shot fires 3 rockets."

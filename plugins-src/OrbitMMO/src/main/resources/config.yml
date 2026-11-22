@@ -1,0 +1,270 @@
+# ------------------------------------------------------------------
+#  Orbit MMO
+#  Rechargement des monstres / boss / étages / classes : /mmoadmin reload
+#  Classes, sorts et talents : fichiers classes/<classe>.yml (/mmoadmin classes exporter)
+# ------------------------------------------------------------------
+
+start:
+  # Pièces d'or données à la création du personnage.
+  gold: 100
+
+progression:
+  max-level: 80
+  # Niveau du choix de la spécialisation ; 1 point de talent par niveau à partir de celui-ci.
+  spec-level: 10
+
+sorts:
+  # Recharge globale entre deux sorts, en secondes.
+  recharge-globale: 1.0
+
+pvp:
+  # PvP entre les factions Lumière et Ombre, hors des zones sûres.
+  enabled: true
+
+party:
+  max-size: 6
+
+hdv:
+  # Hôtel des ventes entre joueurs (PNJ Corvin, ex-marchand). Annonces dans plugins/OrbitMMO/hdv.yml.
+  taxe: 5            # % retenu sur le prix à la vente
+  duree-heures: 48   # après ce délai, l'objet revient au vendeur (« Mes ventes »)
+  max-annonces: 10   # annonces en cours par joueur
+
+butin:
+  # Chances par monstre tué (les boss donnent toujours un objet Rare ou mieux à chaque participant).
+  equipement: 0.06   # arme, armure ou bouclier Inhabituel (70 %), Rare (25 %), Épique (4,5 %), Légendaire (0,5 %)
+  runes: 0.025       # rune de rang I (85 %), II (14 %) ou III (1 %)
+
+lobby:
+  # Nom du serveur lobby dans velocity.toml (bouton « Retour au lobby » et /lobby).
+  server: lobby
+
+resource-pack:
+  # Pack OrbitMMO (modèles d'armes, cristaux, potion, barre de vie dessinée).
+  # Proposé pendant l'écran de connexion ; sans le pack, le jeu reste jouable (apparence normale).
+  enabled: true
+  # Port du mini serveur HTTP intégré qui distribue le pack. Les joueurs le téléchargent
+  # à l'adresse qu'ils ont utilisée pour se connecter : ouvre ce port (TCP) comme le port du jeu.
+  port: 8790
+  # Pour héberger le pack ailleurs (CDN, site), mets son URL ici : le serveur intégré n'est alors pas lancé.
+  public-url: ""
+  # true : refuser le pack déconnecte le joueur.
+  required: false
+
+hud:
+  # Décalage horizontal de la barre de vie dessinée, en pixels d'interface (négatif = vers la gauche).
+  offset-x: 0
+
+spawning:
+  interval-ticks: 80
+  per-player: 6
+  per-floor: 60
+
+# Délai avant qu'un boss d'étage vaincu puisse réapparaître (pour s'entraîner).
+bosses-respawn-minutes: 10
+
+# Le continent : le monde ouvert, généré d'après le dessin tools\continent\continent.txt (voir docs\continent.md).
+continent:
+  enabled: true
+  world: orbit_continent
+  # Chunks demandés en même temps pendant la pré-génération et les aperçus (/continent).
+  parallele: 64
+
+floors:
+  # Nombre total d'étages. Ceux qui ne sont pas listés sont générés automatiquement
+  # (thèmes en boucle, niveaux croissants, monstres et boss repris des étages listés).
+  max: 100
+  # Rayon d'un étage en blocs (disque flottant).
+  radius: 160
+  list:
+    1:
+      name: "Plaines de l'Éveil"
+      town: "Cité des Débuts"
+      theme: PLAINS
+      levels: [1, 5]
+      mobs: [sanglier, loup, kobold]
+      boss: roi_kobold
+    2:
+      name: "Prairies du Taureau"
+      town: "Bourg des Pâtres"
+      theme: FOREST
+      levels: [5, 10]
+      mobs: [taureau, araignee, loup]
+      boss: taureau_titan
+    3:
+      name: "Forêt des Brumes"
+      town: "Village Sylvestre"
+      theme: DARK_FOREST
+      levels: [10, 16]
+      mobs: [elfe_sombre, araignee_geante, loup_ombre]
+      boss: treant
+    4:
+      name: "Désert des Mirages"
+      town: "Oasis d'Ambre"
+      theme: DESERT
+      levels: [16, 22]
+      mobs: [momie, scorpion, squelette]
+      boss: pharaon
+    5:
+      name: "Toundra de Givre"
+      town: "Fort Blanc"
+      theme: SNOW
+      levels: [22, 28]
+      mobs: [ours, errant, loup_givre]
+      boss: colosse
+
+# Monstres. type : entité Minecraft. hp / damage / speed / xp / col : multiplicateurs.
+# scale : taille. weapon : objet tenu. drop : matériau revendable au marchand.
+mobs:
+  sanglier:
+    name: "Sanglier frénétique"
+    type: HOGLIN
+    hp: 0.9
+    damage: 0.8
+    scale: 0.75
+    drop: { name: "Viande de sanglier", item: PORKCHOP, sell: 6, chance: 0.5 }
+  loup:
+    name: "Loup des plaines"
+    type: WOLF
+    hp: 0.7
+    damage: 0.7
+    speed: 1.1
+    drop: { name: "Croc de loup", item: BONE, sell: 5, chance: 0.4 }
+  kobold:
+    name: "Kobold éclaireur"
+    type: ZOMBIE
+    weapon: STONE_AXE
+    drop: { name: "Écaille de kobold", item: FLINT, sell: 8, chance: 0.35 }
+  kobold_garde:
+    name: "Sentinelle kobold"
+    type: ZOMBIE
+    weapon: IRON_SWORD
+    hp: 1.2
+  taureau:
+    name: "Taureau des prairies"
+    type: RAVAGER
+    hp: 1.6
+    damage: 1.2
+    speed: 0.9
+    scale: 0.6
+    drop: { name: "Corne de taureau", item: GOAT_HORN, sell: 14, chance: 0.35 }
+  araignee:
+    name: "Araignée des herbes"
+    type: SPIDER
+    hp: 0.8
+    damage: 0.9
+    speed: 1.05
+    drop: { name: "Fil de soie", item: STRING, sell: 5, chance: 0.5 }
+  elfe_sombre:
+    name: "Elfe sombre"
+    type: VINDICATOR
+    weapon: IRON_AXE
+    hp: 1.1
+    damage: 1.15
+    drop: { name: "Fragment elfique", item: LAPIS_LAZULI, sell: 12, chance: 0.3 }
+  araignee_geante:
+    name: "Araignée géante"
+    type: CAVE_SPIDER
+    scale: 2.2
+    drop: { name: "Venin", item: SPIDER_EYE, sell: 9, chance: 0.3 }
+  loup_ombre:
+    name: "Loup des ombres"
+    type: WOLF
+    scale: 1.25
+    drop: { name: "Croc noir", item: BONE, sell: 10, chance: 0.35 }
+  momie:
+    name: "Momie"
+    type: HUSK
+    hp: 1.1
+    drop: { name: "Bandelette", item: PAPER, sell: 10, chance: 0.4 }
+  scorpion:
+    name: "Scorpion des sables"
+    type: SILVERFISH
+    scale: 3.0
+    hp: 0.9
+    damage: 1.1
+    speed: 0.9
+    drop: { name: "Dard de scorpion", item: PRISMARINE_SHARD, sell: 12, chance: 0.35 }
+  squelette:
+    name: "Squelette maudit"
+    type: SKELETON
+    weapon: BOW
+    hp: 0.8
+    damage: 0.9
+    drop: { name: "Os maudit", item: BONE, sell: 8, chance: 0.4 }
+  ours:
+    name: "Ours des glaces"
+    type: POLAR_BEAR
+    hp: 1.5
+    damage: 1.2
+    drop: { name: "Fourrure", item: RABBIT_HIDE, sell: 14, chance: 0.4 }
+  errant:
+    name: "Errant gelé"
+    type: STRAY
+    weapon: BOW
+    hp: 0.9
+    damage: 0.95
+    drop: { name: "Éclat de givre", item: QUARTZ, sell: 12, chance: 0.35 }
+  loup_givre:
+    name: "Loup de givre"
+    type: WOLF
+    scale: 1.15
+    drop: { name: "Croc de givre", item: BONE, sell: 12, chance: 0.35 }
+
+# Boss d'étage. bars : nombre de barres de vie. final-weapon : arme dégainée sur la dernière barre.
+# adds : monstre appelé en renfort à chaque barre perdue. lab : « Bonus du dernier coup ».
+bosses:
+  roi_kobold:
+    name: "Roi Kobold"
+    type: ZOMBIE
+    scale: 2.6
+    hp: 14
+    damage: 1.6
+    bars: 4
+    weapon: IRON_AXE
+    final-weapon: NETHERITE_SWORD
+    adds: kobold_garde
+    adds-per-bar: 2
+    lab: { kind: armor, name: "Manteau des ténèbres", item: LEATHER_CHESTPLATE, value: 8 }
+  taureau_titan:
+    name: "Taureau titan"
+    type: RAVAGER
+    scale: 1.5
+    hp: 16
+    damage: 1.8
+    speed: 0.9
+    bars: 4
+    adds: taureau
+    adds-per-bar: 1
+    lab: { kind: weapon, name: "Corne du titan", value: 6 }
+  treant:
+    name: "Tréant corrompu"
+    type: VINDICATOR
+    scale: 2.4
+    hp: 18
+    damage: 2.0
+    bars: 4
+    weapon: IRON_AXE
+    final-weapon: DIAMOND_AXE
+    adds: elfe_sombre
+    lab: { kind: armor, name: "Cape sylvestre", item: LEATHER_CHESTPLATE, value: 10 }
+  pharaon:
+    name: "Pharaon des sables"
+    type: HUSK
+    scale: 2.8
+    hp: 20
+    damage: 2.2
+    bars: 4
+    weapon: GOLDEN_SWORD
+    final-weapon: GOLDEN_AXE
+    adds: momie
+    lab: { kind: weapon, name: "Sceptre solaire", value: 8 }
+  colosse:
+    name: "Colosse de givre"
+    type: POLAR_BEAR
+    scale: 2.5
+    hp: 22
+    damage: 2.4
+    bars: 5
+    adds: loup_givre
+    lab: { kind: armor, name: "Cuirasse de givre", item: IRON_CHESTPLATE, value: 12 }

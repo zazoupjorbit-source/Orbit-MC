@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [{"texture": "orbitguns:emeute"}],
+    "humanoid_leggings": [{"texture": "orbitguns:emeute"}]
+  }
+}

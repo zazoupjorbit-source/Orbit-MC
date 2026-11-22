@@ -1,0 +1,17 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {"when": "orbitmmo:staff_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/staff_0"}},
+      {"when": "orbitmmo:staff_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/staff_1"}},
+      {"when": "orbitmmo:staff_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/staff_2"}},
+      {"when": "orbitmmo:staff_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/staff_3"}}
+    ],
+    "fallback": {
+    "type": "minecraft:model",
+    "model": "minecraft:item/blaze_rod"
+  }
+  }
+}

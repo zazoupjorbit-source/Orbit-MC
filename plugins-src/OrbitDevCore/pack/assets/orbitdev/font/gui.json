@@ -1,0 +1,55 @@
+{
+  "providers": [
+    {"type": "space", "advances": {"\uf000": -18, "\uf001": -1, "\uf002": -197}},
+
+    {"type": "bitmap", "file": "orbitdev:gui/shop.png", "height": 62, "ascent": 37, "chars": ["\ue210\ue211", "\u0000\u0000", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/shop.png", "height": 62, "ascent": -25, "chars": ["\u0000\u0000", "\ue212\ue213", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/shop.png", "height": 62, "ascent": -87, "chars": ["\u0000\u0000", "\u0000\u0000", "\ue214\ue215", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/shop.png", "height": 62, "ascent": -149, "chars": ["\u0000\u0000", "\u0000\u0000", "\u0000\u0000", "\ue216\ue217"]},
+
+    {"type": "bitmap", "file": "orbitdev:gui/nav.png", "height": 62, "ascent": 37, "chars": ["\ue200\ue201", "\u0000\u0000", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/nav.png", "height": 62, "ascent": -25, "chars": ["\u0000\u0000", "\ue202\ue203", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/nav.png", "height": 62, "ascent": -87, "chars": ["\u0000\u0000", "\u0000\u0000", "\ue204\ue205", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/nav.png", "height": 62, "ascent": -149, "chars": ["\u0000\u0000", "\u0000\u0000", "\u0000\u0000", "\ue206\ue207"]},
+
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics.png", "height": 62, "ascent": 37, "chars": ["\ue220\ue221", "\u0000\u0000", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics.png", "height": 62, "ascent": -25, "chars": ["\u0000\u0000", "\ue222\ue223", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics.png", "height": 62, "ascent": -87, "chars": ["\u0000\u0000", "\u0000\u0000", "\ue224\ue225", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics.png", "height": 62, "ascent": -149, "chars": ["\u0000\u0000", "\u0000\u0000", "\u0000\u0000", "\ue226\ue227"]},
+
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_trail.png", "height": 62, "ascent": 37, "chars": ["\ue230\ue231", "\u0000\u0000", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_trail.png", "height": 62, "ascent": -25, "chars": ["\u0000\u0000", "\ue232\ue233", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_trail.png", "height": 62, "ascent": -87, "chars": ["\u0000\u0000", "\u0000\u0000", "\ue234\ue235", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_trail.png", "height": 62, "ascent": -149, "chars": ["\u0000\u0000", "\u0000\u0000", "\u0000\u0000", "\ue236\ue237"]},
+
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_aura.png", "height": 62, "ascent": 37, "chars": ["\ue240\ue241", "\u0000\u0000", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_aura.png", "height": 62, "ascent": -25, "chars": ["\u0000\u0000", "\ue242\ue243", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_aura.png", "height": 62, "ascent": -87, "chars": ["\u0000\u0000", "\u0000\u0000", "\ue244\ue245", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_aura.png", "height": 62, "ascent": -149, "chars": ["\u0000\u0000", "\u0000\u0000", "\u0000\u0000", "\ue246\ue247"]},
+
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_hat.png", "height": 62, "ascent": 37, "chars": ["\ue250\ue251", "\u0000\u0000", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_hat.png", "height": 62, "ascent": -25, "chars": ["\u0000\u0000", "\ue252\ue253", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_hat.png", "height": 62, "ascent": -87, "chars": ["\u0000\u0000", "\u0000\u0000", "\ue254\ue255", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_hat.png", "height": 62, "ascent": -149, "chars": ["\u0000\u0000", "\u0000\u0000", "\u0000\u0000", "\ue256\ue257"]},
+
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_back.png", "height": 62, "ascent": 37, "chars": ["\ue260\ue261", "\u0000\u0000", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_back.png", "height": 62, "ascent": -25, "chars": ["\u0000\u0000", "\ue262\ue263", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_back.png", "height": 62, "ascent": -87, "chars": ["\u0000\u0000", "\u0000\u0000", "\ue264\ue265", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_back.png", "height": 62, "ascent": -149, "chars": ["\u0000\u0000", "\u0000\u0000", "\u0000\u0000", "\ue266\ue267"]},
+
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_balloon.png", "height": 62, "ascent": 37, "chars": ["\ue270\ue271", "\u0000\u0000", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_balloon.png", "height": 62, "ascent": -25, "chars": ["\u0000\u0000", "\ue272\ue273", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_balloon.png", "height": 62, "ascent": -87, "chars": ["\u0000\u0000", "\u0000\u0000", "\ue274\ue275", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_balloon.png", "height": 62, "ascent": -149, "chars": ["\u0000\u0000", "\u0000\u0000", "\u0000\u0000", "\ue276\ue277"]},
+
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_pet.png", "height": 62, "ascent": 37, "chars": ["\ue280\ue281", "\u0000\u0000", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_pet.png", "height": 62, "ascent": -25, "chars": ["\u0000\u0000", "\ue282\ue283", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_pet.png", "height": 62, "ascent": -87, "chars": ["\u0000\u0000", "\u0000\u0000", "\ue284\ue285", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_pet.png", "height": 62, "ascent": -149, "chars": ["\u0000\u0000", "\u0000\u0000", "\u0000\u0000", "\ue286\ue287"]},
+
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_mount.png", "height": 62, "ascent": 37, "chars": ["\ue290\ue291", "\u0000\u0000", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_mount.png", "height": 62, "ascent": -25, "chars": ["\u0000\u0000", "\ue292\ue293", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_mount.png", "height": 62, "ascent": -87, "chars": ["\u0000\u0000", "\u0000\u0000", "\ue294\ue295", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitdev:gui/cosmetics_mount.png", "height": 62, "ascent": -149, "chars": ["\u0000\u0000", "\u0000\u0000", "\u0000\u0000", "\ue296\ue297"]}
+  ]
+}

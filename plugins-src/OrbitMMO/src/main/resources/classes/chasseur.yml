@@ -1,0 +1,427 @@
+# ------------------------------------------------------------------
+#  Chasseur — arc à distance ou dagues au corps à corps, toujours avec son compagnon.
+#  Ressource : Concentration (se régénère en continu, même en combat).
+#  Format des sorts et des talents : voir guerrier.yml.
+#  Le compagnon n'est pas (encore) une vraie créature : il agit à travers les sorts « Ordre : … ».
+# ------------------------------------------------------------------
+
+nom: Chasseur
+couleur: "#8BC34A"
+icone: BOW
+jouable: true
+ressource: CONCENTRATION
+armure: MAILLES
+pv: 1.0
+arme: BOW
+description:
+  - "Pisteur et tireur hors pair,"
+  - "jamais sans son compagnon animal."
+
+specialisations:
+  archer:
+    nom: Archer
+    role: DEGATS
+    icone: BOW
+    couleur: "#A5D66E"
+    arme: BOW
+    description:
+      - "Dégâts à distance : tirs chargés, pièges,"
+      - "garder l'ennemi loin de soi."
+    passifs: { degats: 5 }
+    talents:
+      precision: { nom: "Précision", icone: ARROW, palier: 0, colonne: 0, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      oeil_affute: { nom: "Œil affûté", icone: SPYGLASS, palier: 0, colonne: 1, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      souffle_maitrise: { nom: "Souffle maîtrisé", icone: FEATHER, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de concentration régénérée." }
+      tir_vise_ameliore: { nom: "Tir visé amélioré", icone: BOW, palier: 1, colonne: 0, rangs: 3, effets: { degats.tir_vise: 6 }, description: "Tir visé inflige {degats.tir_vise} % de dégâts en plus." }
+      eclats_aceres: { nom: "Éclats acérés", icone: FLINT, palier: 1, colonne: 1, rangs: 3, effets: { degats.fleche_a_eclats: 8 }, description: "Flèche à éclats inflige {degats.fleche_a_eclats} % de dégâts en plus." }
+      pas_de_pisteur: { nom: "Pas de pisteur", icone: LEATHER_BOOTS, palier: 1, colonne: 2, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      fleche_perforante: { nom: "Flèche perforante", icone: SPECTRAL_ARROW, palier: 2, colonne: 0, rangs: 1, sort: fleche_perforante, description: "Apprend Flèche perforante : un tir lourd à très longue portée." }
+      volee_dense: { nom: "Volée dense", icone: TIPPED_ARROW, palier: 2, colonne: 1, rangs: 3, effets: { degats.volee: 10 }, description: "Volée inflige {degats.volee} % de dégâts en plus." }
+      visee_rapide: { nom: "Visée rapide", icone: CLOCK, palier: 2, colonne: 2, rangs: 3, effets: { incantation.tir_vise: 0.2 }, description: "Préparation de Tir visé réduite de {incantation.tir_vise} s." }
+      lien_du_compagnon: { nom: "Lien du compagnon", icone: BONE, palier: 3, colonne: 0, rangs: 3, effets: { degats.ordre_morsure: 10 }, description: "Ordre : Morsure inflige {degats.ordre_morsure} % de dégâts en plus." }
+      cuir_tanne: { nom: "Mailles éprouvées", icone: CHAINMAIL_CHESTPLATE, palier: 3, colonne: 1, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      pieges_affutes: { nom: "Pièges affûtés", icone: TRIPWIRE_HOOK, palier: 3, colonne: 2, rangs: 3, effets: { recharge.piege_givrant: 2 }, description: "Recharge de Piège givrant réduite de {recharge.piege_givrant} s." }
+      tir_mortel: { nom: "Tir mortel", icone: SKELETON_SKULL, palier: 4, colonne: 0, rangs: 3, effets: { critdeg: 8 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      entrave_rapide: { nom: "Entrave rapide", icone: COBWEB, palier: 4, colonne: 1, rangs: 2, effets: { recharge.fleche_entravante: 2 }, description: "Recharge de Flèche entravante réduite de {recharge.fleche_entravante} s." }
+      percee: { nom: "Percée", icone: SPECTRAL_ARROW, palier: 4, colonne: 2, rangs: 3, requiert: fleche_perforante, effets: { degats.fleche_perforante: 10 }, description: "Flèche perforante inflige {degats.fleche_perforante} % de dégâts en plus." }
+      barrage: { nom: "Barrage", icone: DISPENSER, palier: 5, colonne: 0, rangs: 1, sort: barrage, description: "Apprend Barrage : une pluie de flèches continue sur une zone." }
+      sang_froid: { nom: "Sang-froid", icone: SNOWBALL, palier: 5, colonne: 1, rangs: 3, effets: { crit.tir_vise: 4 }, description: "Tir visé : +{crit.tir_vise} % de critique." }
+      endurance: { nom: "Endurance du pisteur", icone: COOKED_BEEF, palier: 5, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      oeil_de_lynx: { nom: "Œil de lynx", icone: ENDER_EYE, palier: 6, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      volee_incessante: { nom: "Volée incessante", icone: ARROW, palier: 6, colonne: 1, rangs: 3, requiert: volee_dense, effets: { recharge.volee: 2 }, description: "Recharge de Volée réduite de {recharge.volee} s." }
+      traits_lestes: { nom: "Traits lestes", icone: STRING, palier: 6, colonne: 2, rangs: 3, effets: { cout.tir_vise: 4 }, description: "Tir visé coûte {cout.tir_vise} concentration de moins." }
+      regard_du_faucon: { nom: "Regard du faucon", icone: PHANTOM_MEMBRANE, palier: 7, colonne: 0, rangs: 2, effets: { duree.oeil_de_faucon: 2 }, description: "Œil de faucon dure {duree.oeil_de_faucon} s de plus." }
+      barrage_nourri: { nom: "Barrage nourri", icone: DISPENSER, palier: 7, colonne: 1, rangs: 3, requiert: barrage, effets: { degats.barrage: 10 }, description: "Barrage inflige {degats.barrage} % de dégâts en plus." }
+      instinct_de_survie: { nom: "Instinct de survie", icone: RABBIT_HIDE, palier: 7, colonne: 2, rangs: 3, effets: { esquive: 1 }, description: "+{esquive} % de chances d'esquiver un coup de mêlée." }
+      fleche_filante: { nom: "Flèche filante", icone: FIREWORK_ROCKET, palier: 8, colonne: 0, rangs: 1, sort: fleche_filante, requiert: barrage, description: "Apprend Flèche filante : un tir chargé d'Éclat qui explose et étourdit." }
+      tireur_d_elite: { nom: "Tireur d'élite", icone: CROSSBOW, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      predateur_patient: { nom: "Prédateur patient", icone: WOLF_ARMOR, palier: 8, colonne: 2, rangs: 3, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+
+  traqueur:
+    nom: Traqueur
+    role: DEGATS
+    icone: IRON_SWORD
+    couleur: "#6E9E3A"
+    arme: DAGGER
+    description:
+      - "Deux dagues au corps à corps, saignements,"
+      - "combat aux côtés de son compagnon."
+    passifs: { crit: 5 }
+    talents:
+      lames_vives: { nom: "Lames vives", icone: IRON_SWORD, palier: 0, colonne: 0, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      instinct_de_meute: { nom: "Instinct de meute", icone: BONE, palier: 0, colonne: 1, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      souffle_court: { nom: "Souffle court", icone: FEATHER, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de concentration régénérée." }
+      laceration_profonde: { nom: "Lacération profonde", icone: REDSTONE, palier: 1, colonne: 0, rangs: 3, effets: { degats.laceration: 12 }, description: "Lacération et son saignement infligent {degats.laceration} % de dégâts en plus." }
+      double_estoc_ameliore: { nom: "Estoc rapide", icone: IRON_SWORD, palier: 1, colonne: 1, rangs: 3, effets: { degats.double_estoc: 8 }, description: "Double estoc inflige {degats.double_estoc} % de dégâts en plus." }
+      foulee_feline: { nom: "Foulée féline", icone: RABBIT_FOOT, palier: 1, colonne: 2, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      assaut_conjoint: { nom: "Assaut conjoint", icone: LEAD, palier: 2, colonne: 0, rangs: 1, sort: assaut_conjoint, description: "Apprend Assaut conjoint : vous et votre compagnon frappez trois fois la cible." }
+      crocs_du_compagnon: { nom: "Crocs du compagnon", icone: BONE, palier: 2, colonne: 1, rangs: 3, effets: { degats.ordre_morsure: 10 }, description: "Ordre : Morsure inflige {degats.ordre_morsure} % de dégâts en plus." }
+      ruee_rapide: { nom: "Ruée rapide", icone: CLOCK, palier: 2, colonne: 2, rangs: 2, effets: { recharge.ruee_du_fauve: 3 }, description: "Recharge de Ruée du fauve réduite de {recharge.ruee_du_fauve} s." }
+      gout_du_sang: { nom: "Goût du sang", icone: BEETROOT, palier: 3, colonne: 0, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+      peau_de_bete: { nom: "Peau de bête", icone: LEATHER_CHESTPLATE, palier: 3, colonne: 1, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      esquive_feline: { nom: "Esquive féline", icone: FEATHER, palier: 3, colonne: 2, rangs: 5, effets: { esquive: 1 }, description: "+{esquive} % de chances d'esquiver un coup de mêlée." }
+      curee_impitoyable: { nom: "Curée impitoyable", icone: WITHER_SKELETON_SKULL, palier: 4, colonne: 0, rangs: 3, effets: { degats.curee: 10 }, description: "Curée inflige {degats.curee} % de dégâts en plus." }
+      tranchant_cruel: { nom: "Tranchant cruel", icone: DIAMOND_SWORD, palier: 4, colonne: 1, rangs: 3, effets: { critdeg: 8 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      assaut_coordonne: { nom: "Assaut coordonné", icone: LEAD, palier: 4, colonne: 2, rangs: 3, requiert: assaut_conjoint, effets: { degats.assaut_conjoint: 10 }, description: "Assaut conjoint inflige {degats.assaut_conjoint} % de dégâts en plus." }
+      danse_des_crocs: { nom: "Danse des crocs", icone: WIND_CHARGE, palier: 5, colonne: 0, rangs: 1, sort: danse_des_crocs, description: "Apprend Danse des crocs : trois tours de lames qui font saigner tout autour." }
+      soif_du_traqueur: { nom: "Soif du traqueur", icone: GLISTERING_MELON_SLICE, palier: 5, colonne: 1, rangs: 3, effets: { soin-sur-kill: 3 }, description: "Tuer un ennemi rend {soin-sur-kill} % de vos PV." }
+      vigueur_sauvage: { nom: "Vigueur sauvage", icone: COOKED_BEEF, palier: 5, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      plaies_beantes: { nom: "Plaies béantes", icone: REDSTONE_BLOCK, palier: 6, colonne: 0, rangs: 3, requiert: laceration_profonde, effets: { duree.laceration: 2 }, description: "Le saignement de Lacération dure {duree.laceration} s de plus." }
+      lames_jumelles: { nom: "Lames jumelles", icone: GOLDEN_SWORD, palier: 6, colonne: 1, rangs: 3, effets: { crit.double_estoc: 5 }, description: "Double estoc : +{crit.double_estoc} % de critique." }
+      economie_de_gestes: { nom: "Économie de gestes", icone: STRING, palier: 6, colonne: 2, rangs: 3, effets: { cout.double_estoc: 4 }, description: "Double estoc coûte {cout.double_estoc} concentration de moins." }
+      frenesie_prolongee: { nom: "Frénésie prolongée", icone: BLAZE_POWDER, palier: 7, colonne: 0, rangs: 2, effets: { duree.frenesie_de_la_meute: 2 }, description: "Frénésie de la meute dure {duree.frenesie_de_la_meute} s de plus." }
+      tourbillon_de_crocs: { nom: "Tourbillon de crocs", icone: WIND_CHARGE, palier: 7, colonne: 1, rangs: 3, requiert: danse_des_crocs, effets: { degats.danse_des_crocs: 10 }, description: "Danse des crocs inflige {degats.danse_des_crocs} % de dégâts en plus." }
+      cuir_de_fauve: { nom: "Cuir de fauve", icone: RABBIT_HIDE, palier: 7, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      hallali: { nom: "Hallali", icone: GOAT_HORN, palier: 8, colonne: 0, rangs: 1, sort: hallali, requiert: danse_des_crocs, description: "Apprend Hallali : la meute s'abat sur tout ce qui vous entoure." }
+      maitre_traqueur: { nom: "Maître traqueur", icone: NETHERITE_SWORD, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      sang_pour_sang: { nom: "Sang pour sang", icone: SWEET_BERRIES, palier: 8, colonne: 2, rangs: 3, requiert: gout_du_sang, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+
+sorts:
+  # ---------------- Toute la classe ----------------
+  tir_du_pisteur:
+    nom: Tir du pisteur
+    type: PROJECTILE
+    icone: ARROW
+    couleur: "#C9E89A"
+    niveau: 1
+    gain: 10
+    portee: 30
+    puissance: 1.0
+    description: "Un trait rapide sur la cible visée qui rend de la concentration."
+  ordre_morsure:
+    nom: "Ordre : Morsure"
+    type: PROJECTILE
+    icone: BONE
+    couleur: "#C8A27A"
+    niveau: 2
+    cout: 15
+    recharge: 6
+    portee: 20
+    puissance: 1.3
+    effets: { saignement: 4, dot: 0.15 }
+    description: "Votre compagnon bondit sur la cible et la mord : elle saigne pendant 4 s."
+  bond_de_repli:
+    nom: Bond de repli
+    type: BOND
+    icone: RABBIT_FOOT
+    couleur: "#7FD4FF"
+    niveau: 4
+    recharge: 20
+    portee: 10
+    zone: 3
+    puissance: 0.3
+    effets: { ralentir: 2 }
+    description: "Bondit vers le point visé ; les ennemis à l'arrivée sont ralentis."
+  ordre_hurlement:
+    nom: "Ordre : Hurlement"
+    type: CRI
+    icone: GOAT_HORN
+    couleur: "#FFB347"
+    niveau: 6
+    recharge: 60
+    gcd: false
+    zone: 20
+    duree: 20
+    effets: { bonus-degats: 8 }
+    description: "Votre compagnon hurle : vous et votre groupe infligez 8 % de dégâts en plus pendant 20 s."
+  piege_givrant:
+    nom: Piège givrant
+    type: ZONE
+    icone: TRIPWIRE_HOOK
+    couleur: "#9AD8FF"
+    niveau: 8
+    cout: 15
+    recharge: 20
+    portee: 15
+    zone: 3
+    duree: 4
+    puissance: 0.2
+    effets: { ralentir: 2 }
+    description: "Pose un piège au point visé : les ennemis dedans sont gelés et ralentis pendant 4 s."
+  herbes_du_pisteur:
+    nom: Herbes du pisteur
+    type: BUFF
+    icone: KELP
+    couleur: "#5EE89A"
+    niveau: 12
+    recharge: 60
+    gcd: false
+    duree: 8
+    effets: { soin-par-sec: 2.5 }
+    description: "Mâche des herbes de soin : rend 2,5 % de vos PV par seconde pendant 8 s."
+  pas_du_pisteur:
+    nom: Pas du pisteur
+    type: BUFF
+    icone: LEATHER_BOOTS
+    couleur: "#C9E89A"
+    niveau: 16
+    recharge: 45
+    gcd: false
+    duree: 10
+    effets: { vitesse: 2 }
+    description: "Vitesse de déplacement fortement augmentée pendant 10 s."
+  fleche_assommante:
+    nom: Flèche assommante
+    type: PROJECTILE
+    icone: TIPPED_ARROW
+    couleur: "#FFE066"
+    niveau: 20
+    cout: 20
+    recharge: 30
+    portee: 25
+    zone: 3
+    puissance: 0.6
+    effets: { etourdir: 2 }
+    description: "Un trait qui éclate et étourdit les ennemis touchés pendant 2 s."
+
+  # ---------------- Archer ----------------
+  tir_vise:
+    nom: Tir visé
+    type: PROJECTILE
+    icone: BOW
+    couleur: "#A5D66E"
+    spe: [archer]
+    niveau: 2
+    cout: 30
+    recharge: 6
+    incantation: 1.5
+    portee: 35
+    puissance: 3.0
+    arme: [BOW]
+    description: "Bande l'arc longuement puis décoche un tir puissant (immobile)."
+  fleche_a_eclats:
+    nom: Flèche à éclats
+    type: PROJECTILE
+    icone: FLINT
+    couleur: "#FFB347"
+    spe: [archer]
+    niveau: 5
+    cout: 25
+    recharge: 8
+    portee: 30
+    zone: 3
+    puissance: 1.4
+    arme: [BOW]
+    description: "Une flèche qui éclate à l'impact et touche les ennemis proches."
+  volee:
+    nom: Volée
+    type: ZONE
+    icone: TIPPED_ARROW
+    couleur: "#C9E89A"
+    spe: [archer]
+    niveau: 9
+    cout: 35
+    recharge: 15
+    portee: 25
+    zone: 4
+    duree: 4
+    puissance: 0.6
+    arme: [BOW]
+    description: "Une pluie de flèches s'abat sur la zone visée pendant 4 s."
+  fleche_entravante:
+    nom: Flèche entravante
+    type: PROJECTILE
+    icone: COBWEB
+    couleur: "#9AD8FF"
+    spe: [archer]
+    niveau: 14
+    cout: 15
+    recharge: 10
+    portee: 30
+    puissance: 1.2
+    effets: { ralentir: 4 }
+    arme: [BOW]
+    description: "Un tir aux jambes qui ralentit la cible pendant 4 s."
+  oeil_de_faucon:
+    nom: Œil de faucon
+    type: BUFF
+    icone: SPYGLASS
+    couleur: "#FFD66E"
+    spe: [archer]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 12
+    effets: { bonus-crit: 25, bonus-degats: 10 }
+    description: "+25 % de critique et +10 % de dégâts pendant 12 s."
+  fleche_perforante:
+    nom: Flèche perforante
+    type: PROJECTILE
+    icone: SPECTRAL_ARROW
+    couleur: "#E0F5C0"
+    spe: [archer]
+    talent: true
+    cout: 30
+    recharge: 12
+    portee: 45
+    puissance: 2.6
+    arme: [BOW]
+    description: "Un tir lourd à très longue portée."
+  barrage:
+    nom: Barrage
+    type: ZONE
+    icone: DISPENSER
+    couleur: "#FFB347"
+    spe: [archer]
+    talent: true
+    cout: 40
+    recharge: 45
+    portee: 25
+    zone: 5
+    duree: 3
+    puissance: 1.1
+    arme: [BOW]
+    description: "Un déluge de flèches sur une large zone pendant 3 s."
+  fleche_filante:
+    nom: Flèche filante
+    type: PROJECTILE
+    icone: FIREWORK_ROCKET
+    couleur: "#FFF3B0"
+    spe: [archer]
+    talent: true
+    cout: 40
+    recharge: 60
+    portee: 40
+    zone: 5
+    puissance: 4.0
+    effets: { etourdir: 2 }
+    arme: [BOW]
+    description: "Une flèche chargée d'Éclat qui explose comme une étoile filante et étourdit 2 s."
+
+  # ---------------- Traqueur ----------------
+  laceration:
+    nom: Lacération
+    type: FRAPPE
+    icone: REDSTONE
+    couleur: "#C0392B"
+    spe: [traqueur]
+    niveau: 2
+    cout: 20
+    portee: 3.5
+    arc: 50
+    puissance: 1.2
+    effets: { saignement: 10, dot: 0.2 }
+    arme: [DAGGER]
+    description: "Entaille la cible qui saigne pendant 10 s."
+  double_estoc:
+    nom: Double estoc
+    type: FRAPPE
+    icone: IRON_SWORD
+    couleur: "#A5D66E"
+    spe: [traqueur]
+    niveau: 5
+    cout: 25
+    recharge: 5
+    portee: 3.5
+    arc: 50
+    coups: 2
+    intervalle: 4
+    puissance: 1.1
+    arme: [DAGGER]
+    description: "Deux coups de dague rapides sur la cible."
+  ruee_du_fauve:
+    nom: Ruée du fauve
+    type: CHARGE
+    icone: RABBIT_FOOT
+    couleur: "#FF8A3B"
+    spe: [traqueur]
+    niveau: 9
+    gain: 20
+    recharge: 15
+    portee: 15
+    portee-min: 3
+    puissance: 0.8
+    effets: { ralentir: 3 }
+    description: "Fond sur l'ennemi visé, le ralentit et rend de la concentration."
+  curee:
+    nom: Curée
+    type: FRAPPE
+    icone: WITHER_SKELETON_SKULL
+    couleur: "#FF3B3B"
+    spe: [traqueur]
+    niveau: 14
+    cout: 20
+    portee: 3.5
+    arc: 50
+    puissance: 3.2
+    condition: cible-pv<20
+    arme: [DAGGER]
+    description: "Achève une proie à moins de 20 % de vie."
+  frenesie_de_la_meute:
+    nom: Frénésie de la meute
+    type: BUFF
+    icone: BLAZE_POWDER
+    couleur: "#FF6A00"
+    spe: [traqueur]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 12
+    effets: { bonus-degats: 25, vitesse: 1 }
+    description: "+25 % de dégâts et vitesse accrue pendant 12 s."
+  assaut_conjoint:
+    nom: Assaut conjoint
+    type: FRAPPE
+    icone: LEAD
+    couleur: "#C8A27A"
+    spe: [traqueur]
+    talent: true
+    cout: 30
+    recharge: 20
+    portee: 3.5
+    arc: 50
+    coups: 3
+    intervalle: 5
+    puissance: 0.9
+    description: "Vous et votre compagnon frappez la cible trois fois d'affilée."
+  danse_des_crocs:
+    nom: Danse des crocs
+    type: TOURBILLON
+    icone: WIND_CHARGE
+    couleur: "#FFB347"
+    spe: [traqueur]
+    talent: true
+    cout: 30
+    recharge: 30
+    portee: 4.5
+    coups: 3
+    intervalle: 5
+    puissance: 0.7
+    effets: { saignement: 6, dot: 0.2 }
+    arme: [DAGGER]
+    description: "Trois tours de lames : tous les ennemis autour saignent pendant 6 s."
+  hallali:
+    nom: Hallali
+    type: TOURBILLON
+    icone: GOAT_HORN
+    couleur: "#FF3B3B"
+    spe: [traqueur]
+    talent: true
+    cout: 40
+    recharge: 45
+    portee: 6
+    puissance: 3.0
+    effets: { saignement: 8, dot: 0.3 }
+    description: "La meute s'abat sur tout ce qui vous entoure : gros dégâts et saignement de 8 s."

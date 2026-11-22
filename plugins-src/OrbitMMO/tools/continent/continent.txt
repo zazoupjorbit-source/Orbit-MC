@@ -1,0 +1,98 @@
+# Dessin du continent d'Orbit MMO. Lu par tools\gen-continent.ps1 (moteur : tools\continent\Cartographe.cs).
+# Repere : x vers l'est, z vers le sud (comme en jeu), origine au centre de la carte. Unite : le bloc.
+# Une ligne = un element, champs separes par « | ». Les noms sont provisoires.
+
+titre  | Le continent — v1 validée le 22/11/2026
+taille | 8000
+graine | 2026
+
+# ---------------------------------------------------------------- Cotes
+# Part de la distance au bord gardee en terre, 16 directions a partir de l'est en tournant vers le sud
+# (est, est-sud-est, sud-est, sud-sud-est, sud, ... nord, ... est-nord-est).
+cote | 0.775 0.74 0.84 0.72 0.78 0.86 0.70 0.80 0.775 0.76 0.84 0.74 0.93 0.80 0.82 0.74
+# baie / ile | centre | rayons est-ouest, nord-sud
+baie | 520,3350    | 430,1050
+baie | -3250,640   | 260,150
+baie | 3250,380    | 260,150
+baie | -1450,-3650 | 330,520
+baie | 1250,-3700  | 300,480
+ile  | -3100,2850  | 230,170
+ile  | 3150,-2450  | 210,160
+ile  | 1500,3520   | 170,120
+
+# Volcan : centre | rayon du cone
+volcan | 0,-3150 | 620
+
+# ---------------------------------------------------------------- Regions
+# region | id | nom | faction (lumiere, ombre, conteste) | niveaux | terrain | points d'ancrage | place de l'etiquette (facultatif)
+# Terrains : plaine, lande, foret, foret-sombre, collines, montagne, desert, marais, cendres, volcan
+region | A | Prés d'Auréval      | lumiere  | 1-8   | plaine       | -2600,500 -2200,1000 -2700,1250 -2100,300 -2900,-50 -2300,1600 | -2450,1800
+region | B | Bois de l'Aube      | lumiere  | 8-16  | foret        | -1500,-500 -1900,-900 -1300,-1100 -2300,-650 -1200,-100 | -1600,-430
+region | C | Collines du Ponant  | lumiere  | 16-26 | collines     | -2400,-1900 -2000,-2500 -2850,-1500 -1550,-2150 -2400,-2600 | -2050,-2200
+region | D | Landes de Morneval  | ombre    | 1-8   | lande        | 2600,250 2200,700 2700,950 2100,0 2900,-350 2500,-600 | 2400,-320
+region | E | Sylve Noire         | ombre    | 8-16  | foret-sombre | 1500,-700 1900,-1100 1300,-1300 2350,-1200 2600,-1700 | 2350,-1750
+region | F | Marais des Murmures | ombre    | 16-26 | marais       | 1900,1700 1500,2200 2400,1700 1300,1600 2100,2450 | 1750,2050
+region | G | La Marche           | conteste | 26-36 | plaine       | 0,0 -600,500 600,400 0,-700 -750,-200 750,-300 0,900 -350,1300 | -850,950
+region | H | Désert d'Ocre       | conteste | 36-48 | desert       | -900,2200 -1500,2000 -500,2700 -1400,2800 -200,1900 -900,3000 | -1250,2850
+region | J | Cimes de Givre      | conteste | 48-60 | montagne     | 0,-1800 -700,-1700 700,-1900 -300,-2250 400,-2250 -1150,-1550 1050,-1750 | 600,-1700
+region | K | Terres de Cendre    | conteste | 60-72 | cendres      | -700,-2650 100,-2700 800,-2650 1500,-2500 1900,-2250 1500,-2950 | 2000,-2450
+region | L | La Fournaise        | conteste | 72-80 | volcan       | 0,-3200 -450,-3250 450,-3300 0,-3550 | 0,-3420
+
+# ---------------------------------------------------------------- Lacs
+# lac | nom | centre | rayons
+lac | Lac Miroir    | 100,-350    | 250,180
+lac | Lac du Ponant | -2300,-1750 | 160,115
+lac | Étang Noir    | 1800,-1300  | 140,105
+lac | Oasis d'Ambre | -1000,2250  | 85,65
+lac | Lac des Cimes | -150,-2050  | 105,80
+
+# ---------------------------------------------------------------- Fleuves (les affluents apres leur fleuve)
+# fleuve | nom | largeur a la source et a l'embouchure | trace de la source vers la mer
+fleuve | L'Aure     | 8 26  | -1150,-1750 -1350,-1300 -1700,-800 -1950,-250 -2250,250 -2550,520 -2850,640 -3150,620 -3450,650 -3800,650
+fleuve | La Morne   | 8 26  | 650,-2000 1000,-1550 1400,-1100 1800,-600 2200,-100 2550,250 2850,380 3150,360 3500,400 3800,400
+fleuve | La Vive    | 7 24  | -150,-2050 0,-1650 -80,-1100 60,-650 100,-350 180,-50 150,250 80,700 250,1200 420,1700 500,2150 500,2500 500,2900
+fleuve | Le Murmure | 6 20  | 1250,800 1500,1250 1750,1700 1850,2150 2050,2600 2250,3000 2400,3400
+fleuve | Ruisseau du Ponant | 5 12 | -2300,-1750 -2100,-1350 -1900,-1000 -1700,-800
+# coulee de lave | nom | largeurs | trace
+coulee | Coulée du Nord | 6 9  | -60,-3275 -180,-3420 -260,-3600 -300,-3850
+coulee | Coulée de l'Est | 6 10 | 120,-3105 300,-2990 520,-2890 800,-2830 1050,-2800
+
+# ---------------------------------------------------------------- Routes
+# route | type (royale, chemin) | nom | trace
+route | royale | Voie Royale           | -2550,520 -2050,620 -1500,520 -900,380 -350,300 60,220 500,200 1000,150 1600,250 2100,350 2550,250
+route | chemin | Route du Col          | 60,220 -200,-200 -330,-700 -300,-1200 -350,-1600 -350,-1900 -250,-2300 -50,-2620 -50,-2880
+route | chemin | Route des Cendres     | -50,-2620 400,-2620 900,-2560 1300,-2550 1650,-2300 1800,-1900 1600,-1350 1750,-850
+route | chemin | Chemin de la Sylve    | 1750,-850 2050,-520 2380,-120 2550,250
+route | chemin | Chemin de l'Aube      | -2550,520 -2420,180 -2150,-300 -1950,-750 -2200,-1100 -2420,-1450 -2520,-1780
+route | chemin | Chemin des Lisières   | -1950,-750 -1500,-600 -1000,-400 -500,-250 -200,-200
+route | chemin | Route du Sud          | -2550,520 -2400,900 -2250,1150 -1950,1600 -1500,2000 -1000,2370
+route | chemin | Chaussée des Marais   | 2550,250 2350,780 2150,1250 1900,1650 1500,1900 1100,1950 750,2000 350,2000 -400,2200 -1000,2370
+route | chemin | Chemin de la Vive     | 60,220 -30,650 120,1200 300,1700 350,2000
+
+# ---------------------------------------------------------------- Lieux
+# lieu | type (capitale, ville, village, donjon) | nom | faction (lumiere, ombre, neutre) | position | rayon de zone sure | cote de l'etiquette (d, g, h, b)
+lieu | capitale | Auréval              | lumiere | -2550,520   | 280 | b
+lieu | capitale | Morneval             | ombre   | 2550,250    | 280 | b
+lieu | ville    | Les Quatre-Vents     | neutre  | 60,220      | 120 | b
+lieu | village  | Bourg des Pâtres     | lumiere | -2250,1150  | 70  | d
+lieu | village  | Village Sylvestre    | lumiere | -1950,-750  | 70  | g
+lieu | village  | Guet du Ponant       | lumiere | -2520,-1780 | 70  | g
+lieu | village  | Gris-Hameau          | ombre   | 2350,780    | 70  | d
+lieu | village  | Sombrebois           | ombre   | 1750,-850   | 70  | d
+lieu | village  | Les Pilotis          | ombre   | 1900,1650   | 70  | d
+lieu | village  | Oasis d'Ambre        | neutre  | -1000,2370  | 70  | b
+lieu | village  | Fort Blanc           | neutre  | -350,-1900  | 70  | g
+lieu | village  | Camp des Cendres     | neutre  | 1300,-2550  | 70  | b
+lieu | village  | Guet de la Fournaise | neutre  | -50,-2880   | 60  | g
+# Donjons : les anciens etages (1 a 5) et ceux a creer
+lieu | donjon | Terrier des Kobolds (étage 1)    | neutre | -2750,1350  | 0
+lieu | donjon | Enclos du Taureau (étage 2)      | neutre | 2750,-450   | 0
+lieu | donjon | Crypte de l'Aube                 | neutre | -1350,-850  | 0
+lieu | donjon | Cœur de la Sylve (étage 3)       | neutre | 2100,-1350  | 0
+lieu | donjon | Mine du Ponant                   | neutre | -2100,-2450 | 0
+lieu | donjon | Temple englouti                  | neutre | 1650,2350   | 0
+lieu | donjon | Ruines de la Marche              | neutre | 550,-450    | 0
+lieu | donjon | Tombeau du Pharaon (étage 4)     | neutre | -650,2750   | 0
+lieu | donjon | Antre du Colosse (étage 5)       | neutre | 450,-2050   | 0
+lieu | donjon | Forge éteinte                    | neutre | 1750,-2700  | 0
+lieu | donjon | Cœur de la Fournaise             | neutre | -150,-3060  | 0

@@ -1,0 +1,51 @@
+# Dépôt Orbit MC : on ne suit QUE le code, les docs et les scripts.
+# Principe : tout ignorer, puis ré-autoriser ce qui doit être partagé.
+/*
+
+# --- Racine ---
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/CLAUDE.md
+!/start-network.ps1
+!/stop-network.ps1
+
+# --- Plugins (sources) ---
+!/plugins-src/
+/plugins-src/*/target/
+/plugins-src/*/build/
+/plugins-src/*/.gradle/
+/plugins-src/*/out/
+/plugins-src/*/.idea/
+*.class
+
+# --- Panel de dev ---
+!/panel/
+/panel/*
+!/panel/src/
+!/panel/web/
+!/panel/bridge/
+/panel/bridge/out/
+!/panel/build.bat
+
+# --- Lanceur ---
+!/launcher/
+/launcher/*.exe
+
+# --- Bot Discord ---
+!/discord/
+/discord/node_modules/
+/discord/data/
+/discord/.env
+
+# --- Lore, maquettes, base ---
+!/lore/
+!/maquettes/
+!/setup/
+/setup/*.properties
+
+# --- Jamais dans git ---
+*.env
+*.secret
+*.properties.local
+runtime.json

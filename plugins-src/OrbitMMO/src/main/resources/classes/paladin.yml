@@ -1,0 +1,779 @@
+# ------------------------------------------------------------------
+#  Paladin (Lumière) / Chevalier noir (Ombre). Ressource : Ferveur.
+#  La ferveur monte à chaque attaque de base (+5) et avec les sorts « générateurs »,
+#  puis se dépense dans les gros sorts ; elle retombe hors combat.
+#  Format des sorts et des talents : voir guerrier.yml.
+# ------------------------------------------------------------------
+
+nom: Paladin
+couleur: "#FFD66E"
+icone: GOLDEN_SWORD
+jouable: true
+ressource: FERVEUR
+armure: PLAQUES
+pv: 1.15
+arme: ONE_HANDED
+bouclier: true
+formes:
+  lumiere: "Paladin"
+  ombre: "Chevalier noir"
+description:
+  - "Guerrier en armure lourde"
+  - "qui manie la magie de son camp."
+
+specialisations:
+  protection:
+    nom: Protection
+    role: TANK
+    faction: lumiere
+    icone: SHIELD
+    couleur: "#FFE9A8"
+    arme: ONE_HANDED
+    bouclier: true
+    description:
+      - "Bouclier sacré, auras,"
+      - "soins sur lui-même."
+    passifs: { pv: 20, armure: 10, blocage: 5 }
+    talents:
+      foi_inebranlable: { nom: "Foi inébranlable", icone: IRON_CHESTPLATE, palier: 0, colonne: 0, rangs: 5, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      bouclier_beni: { nom: "Bouclier béni", icone: SHIELD, palier: 0, colonne: 1, rangs: 5, effets: { blocage: 2 }, description: "+{blocage} % de chances de bloquer la moitié d'un coup de mêlée." }
+      ferveur_ardente: { nom: "Ferveur ardente", icone: BLAZE_POWDER, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 5 }, description: "+{ressource} % de ferveur générée." }
+      vengeur_rapide: { nom: "Vengeur rapide", icone: CLOCK, palier: 1, colonne: 0, rangs: 3, effets: { recharge.bouclier_du_vengeur: 1 }, description: "Recharge de Bouclier du vengeur réduite de {recharge.bouclier_du_vengeur} s." }
+      marteau_lourd: { nom: "Marteau lourd", icone: MACE, palier: 1, colonne: 1, rangs: 3, effets: { degats.marteau_du_vertueux: 10 }, description: "Marteau du vertueux inflige {degats.marteau_du_vertueux} % de dégâts en plus." }
+      armure_sainte: { nom: "Armure sainte", icone: GOLDEN_CHESTPLATE, palier: 1, colonne: 2, rangs: 5, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      priere_du_gardien: { nom: "Prière du gardien", icone: GOLDEN_APPLE, palier: 2, colonne: 0, rangs: 1, sort: priere_du_gardien, description: "Apprend Prière du gardien : rend 30 % de vos PV d'un coup." }
+      defi_rapide: { nom: "Défi constant", icone: TARGET, palier: 2, colonne: 1, rangs: 2, effets: { recharge.defi_sacre: 1.5 }, description: "Recharge de Défi sacré réduite de {recharge.defi_sacre} s." }
+      main_guerisseuse: { nom: "Main guérisseuse", icone: GLISTERING_MELON_SLICE, palier: 2, colonne: 2, rangs: 3, effets: { soins.main_de_l_aube: 10 }, description: "Main de l'Aube soigne {soins.main_de_l_aube} % de plus." }
+      sol_beni_large: { nom: "Sol béni ardent", icone: GOLD_BLOCK, palier: 3, colonne: 0, rangs: 3, effets: { degats.sol_beni: 10 }, description: "Sol béni inflige {degats.sol_beni} % de dégâts en plus." }
+      rempart_de_foi_rapide: { nom: "Rempart rapide", icone: CLOCK, palier: 3, colonne: 1, rangs: 3, effets: { recharge.rempart_de_foi: 2 }, description: "Recharge de Rempart de foi réduite de {recharge.rempart_de_foi} s." }
+      lumiere_reparatrice: { nom: "Lumière réparatrice", icone: GOLDEN_CARROT, palier: 3, colonne: 2, rangs: 3, effets: { soin-sur-kill: 2 }, description: "Tuer un ennemi rend {soin-sur-kill} % de vos PV." }
+      gardien_eternel: { nom: "Gardien éternel", icone: NETHERITE_CHESTPLATE, palier: 4, colonne: 0, rangs: 3, requiert: foi_inebranlable, effets: { pv: 3 }, description: "+{pv} % de points de vie supplémentaires." }
+      priere_rapide_p: { nom: "Prière rapide", icone: CLOCK, palier: 4, colonne: 1, rangs: 3, requiert: priere_du_gardien, effets: { recharge.priere_du_gardien: 15 }, description: "Recharge de Prière du gardien réduite de {recharge.priere_du_gardien} s." }
+      bouclier_reflechissant: { nom: "Bouclier réfléchissant", icone: GLASS, palier: 4, colonne: 2, rangs: 3, effets: { epines: 5 }, description: "Renvoie {epines} % des dégâts de mêlée subis à l'attaquant." }
+      eclat_du_bouclier: { nom: "Éclat du bouclier", icone: HEAVY_CORE, palier: 5, colonne: 0, rangs: 1, sort: eclat_du_bouclier, requiert: marteau_lourd, description: "Apprend Éclat du bouclier : un coup de bouclier lumineux qui étourdit les ennemis devant vous 3 s." }
+      bastion_de_lumiere: { nom: "Bastion de lumière", icone: BEACON, palier: 5, colonne: 1, rangs: 2, effets: { armure: 2 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      justice: { nom: "Justice", icone: GOLDEN_SWORD, palier: 5, colonne: 2, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      chair_benie: { nom: "Chair bénie", icone: GOLDEN_APPLE, palier: 6, colonne: 0, rangs: 5, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      vengeur_tonnant: { nom: "Vengeur tonnant", icone: SHIELD, palier: 6, colonne: 1, rangs: 3, requiert: vengeur_rapide, effets: { degats.bouclier_du_vengeur: 10 }, description: "Bouclier du vengeur inflige {degats.bouclier_du_vengeur} % de dégâts en plus." }
+      parade_sacree: { nom: "Parade sacrée", icone: IRON_BARS, palier: 6, colonne: 2, rangs: 3, effets: { esquive: 1 }, description: "+{esquive} % de chances d'esquiver un coup de mêlée." }
+      defenseur_prolonge: { nom: "Défenseur prolongé", icone: TOTEM_OF_UNDYING, palier: 7, colonne: 0, rangs: 2, effets: { duree.ardent_defenseur: 2 }, description: "Ardent défenseur dure {duree.ardent_defenseur} s de plus." }
+      aura_puissante: { nom: "Aura puissante", icone: BELL, palier: 7, colonne: 1, rangs: 3, effets: { recharge.aube_eternelle: 15 }, description: "Recharge d'Aube éternelle réduite de {recharge.aube_eternelle} s." }
+      muraille_doree: { nom: "Muraille dorée", icone: GOLD_BLOCK, palier: 7, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      chatiment_du_gardien: { nom: "Châtiment du gardien", icone: GOLDEN_AXE, palier: 8, colonne: 0, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      aube_eternelle: { nom: "Aube éternelle", icone: END_CRYSTAL, palier: 8, colonne: 1, rangs: 1, sort: aube_eternelle, requiert: bastion_de_lumiere, description: "Apprend Aube éternelle : bouclier de 20 % des PV et −15 % de dégâts subis pour vous et votre groupe." }
+      main_providentielle: { nom: "Main providentielle", icone: ENCHANTED_GOLDEN_APPLE, palier: 8, colonne: 2, rangs: 3, requiert: main_guerisseuse, effets: { recharge.main_de_l_aube: 2 }, description: "Recharge de Main de l'Aube réduite de {recharge.main_de_l_aube} s." }
+
+  vindicte:
+    nom: Vindicte
+    role: DEGATS
+    faction: lumiere
+    icone: GOLDEN_AXE
+    couleur: "#FFB347"
+    arme: TWO_HANDED
+    description:
+      - "Arme à deux mains"
+      - "et jugements sacrés."
+    passifs: { degats: 10, crit: 3 }
+    talents:
+      conviction: { nom: "Conviction", icone: GOLDEN_SWORD, palier: 0, colonne: 0, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      bras_de_l_aube: { nom: "Bras de l'Aube", icone: ANVIL, palier: 0, colonne: 1, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      zele_ardent: { nom: "Zèle ardent", icone: BLAZE_POWDER, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 5 }, description: "+{ressource} % de ferveur générée." }
+      verdict_lourd: { nom: "Verdict lourd", icone: GOLDEN_AXE, palier: 1, colonne: 0, rangs: 3, effets: { degats.verdict: 6 }, description: "Verdict inflige {degats.verdict} % de dégâts en plus." }
+      tempete_ardente: { nom: "Tempête ardente", icone: WIND_CHARGE, palier: 1, colonne: 1, rangs: 3, effets: { degats.tempete_divine: 8 }, description: "Tempête divine inflige {degats.tempete_divine} % de dégâts en plus." }
+      jugement_rapide: { nom: "Jugement rapide", icone: CLOCK, palier: 1, colonne: 2, rangs: 3, effets: { recharge.jugement: 1 }, description: "Recharge de Jugement réduite de {recharge.jugement} s." }
+      marteaux_de_l_aube: { nom: "Marteaux de l'Aube", icone: MACE, palier: 2, colonne: 0, rangs: 1, sort: marteaux_de_l_aube, description: "Apprend Marteaux de l'Aube : des marteaux de lumière tombent sur la zone visée." }
+      lame_affutee: { nom: "Lame de justice affûtée", icone: DIAMOND_SWORD, palier: 2, colonne: 1, rangs: 3, effets: { degats.lame_de_justice: 8 }, description: "Lame de justice inflige {degats.lame_de_justice} % de dégâts en plus." }
+      sentence_impitoyable: { nom: "Sentence impitoyable", icone: DIAMOND_AXE, palier: 2, colonne: 2, rangs: 3, effets: { critdeg: 10 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      condamnation_rapide: { nom: "Condamnation rapide", icone: WITHER_SKELETON_SKULL, palier: 3, colonne: 0, rangs: 3, effets: { cout.condamnation: 3 }, description: "Condamnation coûte {cout.condamnation} ferveur de moins." }
+      elan_du_croise: { nom: "Élan du croisé", icone: SUGAR, palier: 3, colonne: 1, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      lumiere_vorace: { nom: "Lumière vorace", icone: GHAST_TEAR, palier: 3, colonne: 2, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+      ailes_prolongees: { nom: "Ailes prolongées", icone: ELYTRA, palier: 4, colonne: 0, rangs: 2, effets: { duree.ailes_de_l_aube: 2 }, description: "Ailes de l'Aube dure {duree.ailes_de_l_aube} s de plus." }
+      marteaux_lourds: { nom: "Marteaux lourds", icone: MACE, palier: 4, colonne: 1, rangs: 3, requiert: marteaux_de_l_aube, effets: { degats.marteaux_de_l_aube: 10 }, description: "Marteaux de l'Aube inflige {degats.marteaux_de_l_aube} % de dégâts en plus." }
+      armure_de_croise: { nom: "Armure de croisé", icone: GOLDEN_CHESTPLATE, palier: 4, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      jugement_final: { nom: "Jugement final", icone: BELL, palier: 5, colonne: 0, rangs: 1, sort: jugement_final, requiert: tempete_ardente, description: "Apprend Jugement final : la lumière s'abat sur tous les ennemis autour de vous." }
+      vertu: { nom: "Vertu", icone: NETHER_STAR, palier: 5, colonne: 1, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      verdict_precis: { nom: "Verdict précis", icone: TARGET, palier: 5, colonne: 2, rangs: 3, effets: { crit.verdict: 5 }, description: "Verdict : +{crit.verdict} % de critique." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      verdict_econome: { nom: "Verdict économe", icone: HONEYCOMB, palier: 6, colonne: 0, rangs: 3, effets: { cout.verdict: 3 }, description: "Verdict coûte {cout.verdict} ferveur de moins." }
+      colere_sainte: { nom: "Colère sainte", icone: FIRE_CHARGE, palier: 6, colonne: 1, rangs: 5, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      robustesse_du_croise: { nom: "Robustesse du croisé", icone: IRON_CHESTPLATE, palier: 6, colonne: 2, rangs: 3, effets: { pv: 3 }, description: "+{pv} % de points de vie." }
+      jugement_final_rapide: { nom: "Jugement imminent", icone: CLOCK, palier: 7, colonne: 0, rangs: 2, requiert: jugement_final, effets: { recharge.jugement_final: 5 }, description: "Recharge de Jugement final réduite de {recharge.jugement_final} s." }
+      tempete_econome: { nom: "Tempête économe", icone: HONEYCOMB, palier: 7, colonne: 1, rangs: 3, effets: { cout.tempete_divine: 3 }, description: "Tempête divine coûte {cout.tempete_divine} ferveur de moins." }
+      ferveur_sans_fin: { nom: "Ferveur sans fin", icone: MAGMA_CREAM, palier: 7, colonne: 2, rangs: 3, effets: { ressource: 5 }, description: "+{ressource} % de ferveur générée." }
+      condamnation_divine: { nom: "Condamnation divine", icone: SKELETON_SKULL, palier: 8, colonne: 0, rangs: 2, requiert: condamnation_rapide, effets: { crit.condamnation: 10 }, description: "Condamnation : +{crit.condamnation} % de critique." }
+      descente_de_l_aube: { nom: "Descente de l'Aube", icone: END_CRYSTAL, palier: 8, colonne: 1, rangs: 1, sort: descente_de_l_aube, requiert: vertu, description: "Apprend Descente de l'Aube : vous tombez sur vos ennemis comme une étoile filante." }
+      champion_de_l_astre: { nom: "Champion de l'Astre", icone: GOLDEN_SWORD, palier: 8, colonne: 2, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+
+  sang:
+    nom: Sang
+    role: TANK
+    faction: ombre
+    icone: REDSTONE_BLOCK
+    couleur: "#C0392B"
+    arme: TWO_HANDED
+    description:
+      - "Vol de vie : survit"
+      - "en frappant."
+    passifs: { pv: 20, armure: 10, vol-de-vie: 3 }
+    talents:
+      sang_epais: { nom: "Sang épais", icone: REDSTONE, palier: 0, colonne: 0, rangs: 5, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      soif_ecarlate: { nom: "Soif écarlate", icone: GHAST_TEAR, palier: 0, colonne: 1, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+      ferveur_sombre: { nom: "Ferveur sombre", icone: BLAZE_POWDER, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 5 }, description: "+{ressource} % de ferveur générée." }
+      frappe_rapide: { nom: "Frappe sanglante rapide", icone: CLOCK, palier: 1, colonne: 0, rangs: 3, effets: { recharge.frappe_de_sang: 0.5 }, description: "Recharge de Frappe de sang réduite de {recharge.frappe_de_sang} s." }
+      ebullition_vive: { nom: "Ébullition vive", icone: MAGMA_BLOCK, palier: 1, colonne: 1, rangs: 3, effets: { degats.ebullition_sanguine: 10 }, description: "Ébullition sanguine et son saignement infligent {degats.ebullition_sanguine} % de dégâts en plus." }
+      plaques_noires: { nom: "Plaques noires", icone: NETHERITE_CHESTPLATE, palier: 1, colonne: 2, rangs: 5, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      transfusion: { nom: "Transfusion", icone: REDSTONE_BLOCK, palier: 2, colonne: 0, rangs: 1, sort: transfusion, description: "Apprend Transfusion : rend 25 % de vos PV d'un coup." }
+      appel_rapide_s: { nom: "Appel impérieux", icone: TARGET, palier: 2, colonne: 1, rangs: 2, effets: { recharge.appel_du_sang: 1.5 }, description: "Recharge d'Appel du sang réduite de {recharge.appel_du_sang} s." }
+      pointes_d_os: { nom: "Pointes d'os", icone: POINTED_DRIPSTONE, palier: 2, colonne: 2, rangs: 3, effets: { epines: 5 }, description: "Renvoie {epines} % des dégâts de mêlée subis à l'attaquant." }
+      carapace_rapide: { nom: "Carapace rapide", icone: CLOCK, palier: 3, colonne: 0, rangs: 3, effets: { recharge.carapace_de_sang: 2 }, description: "Recharge de Carapace de sang réduite de {recharge.carapace_de_sang} s." }
+      frappe_avide: { nom: "Frappe avide", icone: IRON_AXE, palier: 3, colonne: 1, rangs: 3, effets: { degats.frappe_de_sang: 10 }, description: "Frappe de sang inflige {degats.frappe_de_sang} % de dégâts en plus." }
+      festin_de_sang: { nom: "Festin de sang", icone: COOKED_BEEF, palier: 3, colonne: 2, rangs: 3, effets: { soin-sur-kill: 3 }, description: "Tuer un ennemi rend {soin-sur-kill} % de vos PV." }
+      coeur_noir: { nom: "Cœur noir", icone: NETHERITE_CHESTPLATE, palier: 4, colonne: 0, rangs: 3, requiert: sang_epais, effets: { pv: 3 }, description: "+{pv} % de points de vie supplémentaires." }
+      transfusion_rapide: { nom: "Transfusion rapide", icone: CLOCK, palier: 4, colonne: 1, rangs: 3, requiert: transfusion, effets: { recharge.transfusion: 15 }, description: "Recharge de Transfusion réduite de {recharge.transfusion} s." }
+      sang_vorace: { nom: "Sang vorace", icone: GHAST_TEAR, palier: 4, colonne: 2, rangs: 3, requiert: soif_ecarlate, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+      effusion: { nom: "Effusion", icone: HEAVY_CORE, palier: 5, colonne: 0, rangs: 1, sort: effusion, requiert: frappe_avide, description: "Apprend Effusion : une gerbe de sang devant vous qui étourdit les ennemis 3 s." }
+      chair_morte_s: { nom: "Chair insensible", icone: ROTTEN_FLESH, palier: 5, colonne: 1, rangs: 2, effets: { armure: 2 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      cruaute_noire: { nom: "Cruauté noire", icone: NETHERITE_AXE, palier: 5, colonne: 2, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      veines_de_fer: { nom: "Veines de fer", icone: IRON_BLOCK, palier: 6, colonne: 0, rangs: 5, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      ebullition_rapide: { nom: "Ébullition rapide", icone: CLOCK, palier: 6, colonne: 1, rangs: 3, requiert: ebullition_vive, effets: { recharge.ebullition_sanguine: 0.5 }, description: "Recharge d'Ébullition sanguine réduite de {recharge.ebullition_sanguine} s." }
+      garde_noire: { nom: "Garde noire", icone: IRON_BARS, palier: 6, colonne: 2, rangs: 3, effets: { esquive: 1 }, description: "+{esquive} % de chances d'esquiver un coup de mêlée." }
+      pacte_prolonge: { nom: "Pacte prolongé", icone: CRYING_OBSIDIAN, palier: 7, colonne: 0, rangs: 2, effets: { duree.pacte_vampirique: 2 }, description: "Pacte vampirique dure {duree.pacte_vampirique} s de plus." }
+      carapace_durable: { nom: "Carapace durable", icone: OBSIDIAN, palier: 7, colonne: 1, rangs: 3, requiert: carapace_rapide, effets: { duree.carapace_de_sang: 1 }, description: "Carapace de sang dure {duree.carapace_de_sang} s de plus." }
+      armure_d_obsidienne: { nom: "Armure d'obsidienne", icone: OBSIDIAN, palier: 7, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      seigneur_du_sang: { nom: "Seigneur du sang", icone: NETHERITE_AXE, palier: 8, colonne: 0, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      pacte_des_sangs_lies: { nom: "Pacte des Sangs-Liés", icone: END_CRYSTAL, palier: 8, colonne: 1, rangs: 1, sort: pacte_des_sangs_lies, requiert: chair_morte_s, description: "Apprend Pacte des Sangs-Liés : bouclier de 15 % des PV et −15 % de dégâts subis pour vous et votre groupe." }
+      immortel: { nom: "Presque immortel", icone: TOTEM_OF_UNDYING, palier: 8, colonne: 2, rangs: 3, requiert: sang_vorace, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+
+  effroi:
+    nom: Effroi
+    role: DEGATS
+    faction: ombre
+    icone: NETHERITE_SWORD
+    couleur: "#7FB2FF"
+    arme: TWO_HANDED
+    description:
+      - "Armes runiques, peur, frappes"
+      - "de givre et d'ombre."
+    passifs: { degats: 10, crit: 3 }
+    talents:
+      givre_mordant: { nom: "Givre mordant", icone: PACKED_ICE, palier: 0, colonne: 0, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      lame_runique: { nom: "Lame runique", icone: NETHERITE_SWORD, palier: 0, colonne: 1, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      ferveur_glacee: { nom: "Ferveur glacée", icone: BLAZE_POWDER, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 5 }, description: "+{ressource} % de ferveur générée." }
+      frappe_de_givre_amelioree: { nom: "Givre tranchant", icone: ICE, palier: 1, colonne: 0, rangs: 3, effets: { degats.frappe_de_givre: 6 }, description: "Frappe de givre inflige {degats.frappe_de_givre} % de dégâts en plus." }
+      faux_affutee: { nom: "Faux affûtée", icone: IRON_HOE, palier: 1, colonne: 1, rangs: 3, effets: { degats.faux_d_ombre: 8 }, description: "Faux d'ombre inflige {degats.faux_d_ombre} % de dégâts en plus." }
+      runes_rapides: { nom: "Runes rapides", icone: CLOCK, palier: 1, colonne: 2, rangs: 3, effets: { recharge.frappe_runique: 0.5 }, description: "Recharge de Frappe runique réduite de {recharge.frappe_runique} s." }
+      annihilation: { nom: "Annihilation", icone: NETHERITE_AXE, palier: 2, colonne: 0, rangs: 1, sort: annihilation, description: "Apprend Annihilation : un coup dévastateur qui ralentit la cible." }
+      terreur_rapide_e: { nom: "Visage terrible", icone: CLOCK, palier: 2, colonne: 1, rangs: 2, effets: { recharge.visage_de_la_terreur: 5 }, description: "Recharge de Visage de la terreur réduite de {recharge.visage_de_la_terreur} s." }
+      froid_cruel: { nom: "Froid cruel", icone: DIAMOND_AXE, palier: 2, colonne: 2, rangs: 3, effets: { critdeg: 10 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      condamnation_rapide_e: { nom: "Sentence glacée", icone: WITHER_SKELETON_SKULL, palier: 3, colonne: 0, rangs: 3, effets: { cout.condamnation: 3 }, description: "Condamnation coûte {cout.condamnation} ferveur de moins." }
+      pas_glacial: { nom: "Pas glacial", icone: SUGAR, palier: 3, colonne: 1, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      ame_volee: { nom: "Âme volée", icone: GHAST_TEAR, palier: 3, colonne: 2, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+      runes_prolongees: { nom: "Runes prolongées", icone: CRYING_OBSIDIAN, palier: 4, colonne: 0, rangs: 2, effets: { duree.runes_du_neant: 2 }, description: "Runes du Néant dure {duree.runes_du_neant} s de plus." }
+      annihilation_totale: { nom: "Annihilation totale", icone: NETHERITE_AXE, palier: 4, colonne: 1, rangs: 3, requiert: annihilation, effets: { degats.annihilation: 10 }, description: "Annihilation inflige {degats.annihilation} % de dégâts en plus." }
+      plaques_givrees: { nom: "Plaques givrées", icone: NETHERITE_CHESTPLATE, palier: 4, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      blizzard_du_neant: { nom: "Blizzard du Néant", icone: POWDER_SNOW_BUCKET, palier: 5, colonne: 0, rangs: 1, sort: blizzard_du_neant, requiert: faux_affutee, description: "Apprend Blizzard du Néant : une tempête de givre noir sur la zone visée." }
+      hiver_eternel: { nom: "Hiver éternel", icone: NETHER_STAR, palier: 5, colonne: 1, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      frappe_precise: { nom: "Frappe précise", icone: TARGET, palier: 5, colonne: 2, rangs: 3, effets: { crit.frappe_de_givre: 5 }, description: "Frappe de givre : +{crit.frappe_de_givre} % de critique." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      givre_econome: { nom: "Givre économe", icone: HONEYCOMB, palier: 6, colonne: 0, rangs: 3, effets: { cout.frappe_de_givre: 3 }, description: "Frappe de givre coûte {cout.frappe_de_givre} ferveur de moins." }
+      morsure_du_froid: { nom: "Morsure du froid", icone: BLUE_ICE, palier: 6, colonne: 1, rangs: 5, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      cuirasse_noire: { nom: "Cuirasse noire", icone: IRON_CHESTPLATE, palier: 6, colonne: 2, rangs: 3, effets: { pv: 3 }, description: "+{pv} % de points de vie." }
+      blizzard_rapide: { nom: "Blizzard rapide", icone: CLOCK, palier: 7, colonne: 0, rangs: 2, requiert: blizzard_du_neant, effets: { recharge.blizzard_du_neant: 5 }, description: "Recharge de Blizzard du Néant réduite de {recharge.blizzard_du_neant} s." }
+      faux_econome: { nom: "Faux économe", icone: HONEYCOMB, palier: 7, colonne: 1, rangs: 3, effets: { cout.faux_d_ombre: 3 }, description: "Faux d'ombre coûte {cout.faux_d_ombre} ferveur de moins." }
+      ferveur_noire: { nom: "Ferveur noire", icone: MAGMA_CREAM, palier: 7, colonne: 2, rangs: 3, effets: { ressource: 5 }, description: "+{ressource} % de ferveur générée." }
+      condamnation_noire: { nom: "Condamnation noire", icone: SKELETON_SKULL, palier: 8, colonne: 0, rangs: 2, requiert: condamnation_rapide_e, effets: { crit.condamnation: 10 }, description: "Condamnation : +{crit.condamnation} % de critique." }
+      faucheuse: { nom: "Faucheuse", icone: WITHER_SKELETON_SKULL, palier: 8, colonne: 1, rangs: 1, sort: faucheuse, requiert: hiver_eternel, description: "Apprend Faucheuse : un grand coup de faux autour de vous qui terrifie les survivants." }
+      champion_du_neant: { nom: "Champion du Néant", icone: NETHERITE_SWORD, palier: 8, colonne: 2, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+
+sorts:
+  # ---------------- Toute la classe (les deux formes) ----------------
+  charge_implacable:
+    nom: Charge implacable
+    type: CHARGE
+    icone: RABBIT_FOOT
+    couleur: "#FF8A3B"
+    niveau: 4
+    gain: 15
+    recharge: 15
+    portee: 15
+    portee-min: 4
+    puissance: 0.5
+    effets: { etourdir: 1 }
+    description: "Fonce sur l'ennemi visé, l'étourdit 1 s et génère de la ferveur."
+  condamnation:
+    nom: Condamnation
+    type: FRAPPE
+    icone: WITHER_SKELETON_SKULL
+    couleur: "#FF3B3B"
+    niveau: 12
+    cout: 30
+    portee: 3.5
+    arc: 50
+    puissance: 3.5
+    condition: cible-pv<20
+    description: "Achève une cible à moins de 20 % de vie."
+
+  # ---------------- Paladin (Lumière) ----------------
+  frappe_de_l_aube:
+    nom: Frappe de l'Aube
+    type: FRAPPE
+    icone: GOLDEN_SWORD
+    couleur: "#FFD66E"
+    faction: lumiere
+    niveau: 1
+    gain: 15
+    recharge: 4.5
+    portee: 3.5
+    arc: 50
+    puissance: 1.5
+    description: "Une frappe bénie qui génère de la ferveur."
+  main_de_l_aube:
+    nom: Main de l'Aube
+    type: SOIN
+    icone: GLISTERING_MELON_SLICE
+    couleur: "#FFE9A8"
+    faction: lumiere
+    niveau: 2
+    cout: 30
+    recharge: 15
+    portee: 20
+    puissance: 2.0
+    description: "Dépense de la ferveur pour soigner l'allié visé (ou vous)."
+  aura_de_devotion:
+    nom: Aura de dévotion
+    type: CRI
+    icone: BEACON
+    couleur: "#FFD66E"
+    faction: lumiere
+    niveau: 6
+    recharge: 60
+    gcd: false
+    zone: 20
+    duree: 60
+    effets: { reduction: 5 }
+    description: "Vous et votre groupe subissez 5 % de dégâts en moins pendant 60 s."
+  marteau_de_justice:
+    nom: Marteau de justice
+    type: PROJECTILE
+    icone: MACE
+    couleur: "#FFE066"
+    faction: lumiere
+    niveau: 8
+    recharge: 30
+    portee: 15
+    puissance: 0.6
+    effets: { etourdir: 3 }
+    description: "Lance un marteau de lumière qui étourdit la cible 3 s."
+  bouclier_divin:
+    nom: Bouclier divin
+    type: BUFF
+    icone: SHIELD
+    couleur: "#FFF3B0"
+    faction: lumiere
+    niveau: 20
+    recharge: 180
+    gcd: false
+    duree: 6
+    effets: { reduction: 60 }
+    description: "Dégâts subis réduits de 60 % pendant 6 s."
+
+  # ---------------- Chevalier noir (Ombre) ----------------
+  frappe_du_neant:
+    nom: Frappe du Néant
+    type: FRAPPE
+    icone: NETHERITE_SWORD
+    couleur: "#B36BFF"
+    faction: ombre
+    niveau: 1
+    gain: 15
+    recharge: 4.5
+    portee: 3.5
+    arc: 50
+    puissance: 1.5
+    description: "Une frappe chargée de Néant qui génère de la ferveur."
+  lame_vampirique:
+    nom: Lame vampirique
+    type: FRAPPE
+    icone: REDSTONE
+    couleur: "#C0392B"
+    faction: ombre
+    niveau: 2
+    cout: 30
+    recharge: 10
+    portee: 3.5
+    arc: 50
+    puissance: 1.8
+    effets: { vol-de-vie: 60 }
+    description: "Dépense de la ferveur : 60 % des dégâts de ce coup vous soignent."
+  aura_d_effroi:
+    nom: Aura d'effroi
+    type: CRI
+    icone: WITHER_ROSE
+    couleur: "#B36BFF"
+    faction: ombre
+    niveau: 6
+    recharge: 60
+    gcd: false
+    zone: 20
+    duree: 60
+    effets: { bonus-degats: 5 }
+    description: "Vous et votre groupe infligez 5 % de dégâts en plus pendant 60 s."
+  chaines_de_givre:
+    nom: Chaînes de givre
+    type: PROJECTILE
+    icone: IRON_BARS
+    couleur: "#9AD8FF"
+    faction: ombre
+    niveau: 8
+    recharge: 25
+    portee: 15
+    puissance: 0.6
+    effets: { etourdir: 1, ralentir: 6 }
+    description: "Des chaînes de givre noir immobilisent la cible 1 s puis la ralentissent."
+  carapace_d_ombre:
+    nom: Carapace d'ombre
+    type: BUFF
+    icone: CRYING_OBSIDIAN
+    couleur: "#8E6BFF"
+    faction: ombre
+    niveau: 20
+    recharge: 180
+    gcd: false
+    duree: 6
+    effets: { reduction: 60 }
+    description: "Dégâts subis réduits de 60 % pendant 6 s."
+
+  # ---------------- Protection ----------------
+  bouclier_du_vengeur:
+    nom: Bouclier du vengeur
+    type: PROJECTILE
+    icone: SHIELD
+    couleur: "#FFE9A8"
+    spe: [protection]
+    niveau: 2
+    gain: 15
+    recharge: 8
+    portee: 15
+    zone: 3
+    puissance: 1.5
+    bouclier: true
+    effets: { provocation: 1 }
+    description: "Lance votre bouclier qui frappe les ennemis proches de la cible et les attire sur vous."
+  marteau_du_vertueux:
+    nom: Marteau du vertueux
+    type: FRAPPE
+    icone: MACE
+    couleur: "#FFD66E"
+    spe: [protection]
+    niveau: 5
+    gain: 15
+    recharge: 6
+    portee: 3.5
+    arc: 50
+    puissance: 1.8
+    effets: { provocation: 1 }
+    description: "Un coup sacré qui génère de la ferveur et attire la cible sur vous."
+  sol_beni:
+    nom: Sol béni
+    type: ZONE
+    icone: GOLD_BLOCK
+    couleur: "#FFE066"
+    spe: [protection]
+    niveau: 9
+    cout: 20
+    recharge: 12
+    portee: 6
+    zone: 4
+    duree: 6
+    puissance: 0.5
+    effets: { provocation: 1 }
+    description: "Bénit le sol devant vous : les ennemis dessus brûlent et vous ciblent pendant 6 s."
+  defi_sacre:
+    nom: Défi sacré
+    type: CRI
+    icone: TARGET
+    couleur: "#FF5C5C"
+    spe: [protection]
+    niveau: 14
+    recharge: 8
+    gcd: false
+    zone: 10
+    puissance: 0
+    effets: { provocation: 1 }
+    description: "Force les ennemis proches à vous attaquer."
+  rempart_de_foi:
+    nom: Rempart de foi
+    type: BUFF
+    icone: GOLDEN_CHESTPLATE
+    couleur: "#E6C35C"
+    spe: [protection]
+    niveau: 18
+    cout: 30
+    recharge: 15
+    gcd: false
+    duree: 6
+    bouclier: true
+    effets: { reduction: 40 }
+    description: "Dégâts subis réduits de 40 % pendant 6 s."
+  ardent_defenseur:
+    nom: Ardent défenseur
+    type: BUFF
+    icone: TOTEM_OF_UNDYING
+    couleur: "#FFF3B0"
+    spe: [protection]
+    niveau: 30
+    recharge: 180
+    gcd: false
+    duree: 10
+    effets: { reduction: 50, soin-par-sec: 2 }
+    description: "Dégâts subis réduits de 50 % et 2 % des PV rendus par seconde pendant 10 s."
+  priere_du_gardien:
+    nom: Prière du gardien
+    type: BUFF
+    icone: GOLDEN_APPLE
+    couleur: "#5EE89A"
+    spe: [protection]
+    talent: true
+    recharge: 120
+    gcd: false
+    effets: { soin: 30 }
+    description: "Rend 30 % de vos PV d'un coup."
+  eclat_du_bouclier:
+    nom: Éclat du bouclier
+    type: FRAPPE
+    icone: HEAVY_CORE
+    couleur: "#FFE066"
+    spe: [protection]
+    talent: true
+    recharge: 30
+    portee: 6
+    arc: 70
+    puissance: 1.0
+    bouclier: true
+    effets: { etourdir: 3 }
+    description: "Un coup de bouclier lumineux qui étourdit les ennemis devant vous 3 s."
+  aube_eternelle:
+    nom: Aube éternelle
+    type: CRI
+    icone: END_CRYSTAL
+    couleur: "#FFE9A8"
+    spe: [protection]
+    talent: true
+    recharge: 120
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { bouclier: 20, reduction: 15 }
+    description: "Vous et votre groupe : bouclier de 20 % des PV et dégâts subis réduits de 15 % pendant 10 s."
+
+  # ---------------- Vindicte ----------------
+  verdict:
+    nom: Verdict
+    type: FRAPPE
+    icone: GOLDEN_AXE
+    couleur: "#FFB347"
+    spe: [vindicte]
+    niveau: 2
+    cout: 30
+    portee: 3.8
+    arc: 50
+    puissance: 2.6
+    description: "Dépense de la ferveur pour un coup dévastateur."
+  tempete_divine:
+    nom: Tempête divine
+    type: TOURBILLON
+    icone: WIND_CHARGE
+    couleur: "#FFE066"
+    spe: [vindicte]
+    niveau: 5
+    cout: 30
+    portee: 5
+    puissance: 1.2
+    description: "Un tourbillon de lumière qui frappe tous les ennemis autour."
+  jugement:
+    nom: Jugement
+    type: PROJECTILE
+    icone: GOLD_INGOT
+    couleur: "#FFD66E"
+    spe: [vindicte]
+    niveau: 9
+    gain: 20
+    recharge: 8
+    portee: 20
+    puissance: 1.6
+    description: "Un trait de jugement sur la cible qui génère de la ferveur."
+  lame_de_justice:
+    nom: Lame de justice
+    type: FRAPPE
+    icone: DIAMOND_SWORD
+    couleur: "#FFF3B0"
+    spe: [vindicte]
+    niveau: 14
+    gain: 20
+    recharge: 10
+    portee: 3.8
+    arc: 80
+    puissance: 2.0
+    description: "Un large coup de lumière qui génère de la ferveur."
+  ailes_de_l_aube:
+    nom: Ailes de l'Aube
+    type: BUFF
+    icone: ELYTRA
+    couleur: "#FFF3B0"
+    spe: [vindicte]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 15
+    effets: { bonus-degats: 25, bonus-crit: 10 }
+    description: "Des ailes de lumière : +25 % de dégâts et +10 % de critique pendant 15 s."
+  marteaux_de_l_aube:
+    nom: Marteaux de l'Aube
+    type: ZONE
+    icone: MACE
+    couleur: "#FFE066"
+    spe: [vindicte]
+    talent: true
+    cout: 20
+    recharge: 20
+    portee: 20
+    zone: 3
+    duree: 3
+    puissance: 1.0
+    description: "Des marteaux de lumière tombent sur la zone visée pendant 3 s."
+  jugement_final:
+    nom: Jugement final
+    type: TOURBILLON
+    icone: BELL
+    couleur: "#FFFFFF"
+    spe: [vindicte]
+    talent: true
+    cout: 40
+    recharge: 30
+    portee: 6
+    puissance: 2.5
+    description: "La lumière s'abat sur tous les ennemis autour de vous."
+  descente_de_l_aube:
+    nom: Descente de l'Aube
+    type: BOND
+    icone: END_CRYSTAL
+    couleur: "#FFF3B0"
+    spe: [vindicte]
+    talent: true
+    recharge: 60
+    portee: 15
+    zone: 6
+    puissance: 3.5
+    effets: { etourdir: 1 }
+    description: "Vous tombez sur le point visé comme une étoile filante : gros dégâts et étourdissement."
+
+  # ---------------- Sang ----------------
+  frappe_de_sang:
+    nom: Frappe de sang
+    type: FRAPPE
+    icone: REDSTONE
+    couleur: "#C0392B"
+    spe: [sang]
+    niveau: 2
+    gain: 15
+    recharge: 5
+    portee: 3.8
+    arc: 50
+    puissance: 1.6
+    effets: { vol-de-vie: 40, provocation: 1 }
+    description: "Un coup qui génère de la ferveur, vous soigne de 40 % des dégâts et attire la cible."
+  ebullition_sanguine:
+    nom: Ébullition sanguine
+    type: TOURBILLON
+    icone: MAGMA_BLOCK
+    couleur: "#FF3B3B"
+    spe: [sang]
+    niveau: 5
+    cout: 20
+    recharge: 5
+    portee: 5
+    puissance: 1.0
+    effets: { saignement: 6, dot: 0.15 }
+    description: "Le sang des ennemis autour de vous bout : ils saignent pendant 6 s."
+  appel_du_sang:
+    nom: Appel du sang
+    type: CRI
+    icone: TARGET
+    couleur: "#FF5C5C"
+    spe: [sang]
+    niveau: 9
+    recharge: 8
+    gcd: false
+    zone: 10
+    puissance: 0
+    effets: { provocation: 1 }
+    description: "Force les ennemis proches à vous attaquer."
+  carapace_de_sang:
+    nom: Carapace de sang
+    type: BUFF
+    icone: REDSTONE_BLOCK
+    couleur: "#8B0000"
+    spe: [sang]
+    niveau: 14
+    cout: 30
+    recharge: 15
+    gcd: false
+    duree: 6
+    effets: { reduction: 35 }
+    description: "Votre sang durcit : dégâts subis réduits de 35 % pendant 6 s."
+  pacte_vampirique:
+    nom: Pacte vampirique
+    type: BUFF
+    icone: CRYING_OBSIDIAN
+    couleur: "#C0392B"
+    spe: [sang]
+    niveau: 30
+    recharge: 180
+    gcd: false
+    duree: 10
+    effets: { reduction: 30, soin-par-sec: 3 }
+    description: "Dégâts subis réduits de 30 % et 3 % des PV rendus par seconde pendant 10 s."
+  transfusion:
+    nom: Transfusion
+    type: BUFF
+    icone: REDSTONE_BLOCK
+    couleur: "#5EE89A"
+    spe: [sang]
+    talent: true
+    recharge: 90
+    gcd: false
+    effets: { soin: 25 }
+    description: "Rend 25 % de vos PV d'un coup."
+  effusion:
+    nom: Effusion
+    type: FRAPPE
+    icone: HEAVY_CORE
+    couleur: "#FF3B3B"
+    spe: [sang]
+    talent: true
+    recharge: 30
+    portee: 6
+    arc: 70
+    puissance: 1.0
+    effets: { etourdir: 3 }
+    description: "Une gerbe de sang devant vous qui étourdit les ennemis 3 s."
+  pacte_des_sangs_lies:
+    nom: Pacte des Sangs-Liés
+    type: CRI
+    icone: END_CRYSTAL
+    couleur: "#C0392B"
+    spe: [sang]
+    talent: true
+    recharge: 120
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { bouclier: 15, reduction: 15 }
+    description: "Vous et votre groupe : bouclier de 15 % des PV et dégâts subis réduits de 15 % pendant 10 s."
+
+  # ---------------- Effroi ----------------
+  frappe_de_givre:
+    nom: Frappe de givre
+    type: FRAPPE
+    icone: ICE
+    couleur: "#9AD8FF"
+    spe: [effroi]
+    niveau: 2
+    cout: 25
+    portee: 3.8
+    arc: 50
+    puissance: 2.0
+    effets: { ralentir: 3 }
+    description: "Un coup glacé qui ralentit la cible."
+  faux_d_ombre:
+    nom: Faux d'ombre
+    type: TOURBILLON
+    icone: IRON_HOE
+    couleur: "#8E6BFF"
+    spe: [effroi]
+    niveau: 5
+    cout: 30
+    portee: 5
+    puissance: 1.1
+    description: "Un revers d'ombre qui fauche tous les ennemis autour."
+  frappe_runique:
+    nom: Frappe runique
+    type: FRAPPE
+    icone: NETHERITE_SWORD
+    couleur: "#7FB2FF"
+    spe: [effroi]
+    niveau: 9
+    gain: 20
+    recharge: 6
+    portee: 3.8
+    arc: 50
+    puissance: 1.6
+    description: "Les runes de votre arme s'allument : un coup qui génère de la ferveur."
+  visage_de_la_terreur:
+    nom: Visage de la terreur
+    type: CRI
+    icone: WITHER_SKELETON_SKULL
+    couleur: "#5A3A8C"
+    spe: [effroi]
+    niveau: 14
+    recharge: 30
+    zone: 8
+    puissance: 0
+    effets: { peur: 3 }
+    description: "Votre visage devient celui du Néant : les ennemis proches fuient pendant 3 s."
+  runes_du_neant:
+    nom: Runes du Néant
+    type: BUFF
+    icone: CRYING_OBSIDIAN
+    couleur: "#B36BFF"
+    spe: [effroi]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 15
+    effets: { bonus-degats: 25, bonus-crit: 10 }
+    description: "+25 % de dégâts et +10 % de critique pendant 15 s."
+  annihilation:
+    nom: Annihilation
+    type: FRAPPE
+    icone: NETHERITE_AXE
+    couleur: "#7FB2FF"
+    spe: [effroi]
+    talent: true
+    cout: 35
+    recharge: 10
+    portee: 3.8
+    arc: 50
+    puissance: 3.0
+    effets: { ralentir: 2 }
+    description: "Un coup dévastateur qui ralentit la cible."
+  blizzard_du_neant:
+    nom: Blizzard du Néant
+    type: ZONE
+    icone: POWDER_SNOW_BUCKET
+    couleur: "#9AD8FF"
+    spe: [effroi]
+    talent: true
+    cout: 25
+    recharge: 30
+    portee: 15
+    zone: 5
+    duree: 6
+    puissance: 0.6
+    effets: { ralentir: 2 }
+    description: "Une tempête de givre noir frappe et ralentit la zone visée pendant 6 s."
+  faucheuse:
+    nom: Faucheuse
+    type: TOURBILLON
+    icone: WITHER_SKELETON_SKULL
+    couleur: "#5A3A8C"
+    spe: [effroi]
+    talent: true
+    cout: 40
+    recharge: 60
+    portee: 6
+    puissance: 3.5
+    effets: { peur: 2 }
+    description: "Un grand coup de faux autour de vous : gros dégâts, les survivants fuient 2 s."

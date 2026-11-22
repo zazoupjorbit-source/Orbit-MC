@@ -1,0 +1,18 @@
+{
+  "name": "orbit-mc-discord",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Installation automatique et bot du serveur Discord ORBIT MC",
+  "main": "src/bot.js",
+  "scripts": {
+    "setup": "node src/setup.js",
+    "start": "node src/bot.js"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "dotenv": "^17.2.0"
+  }
+}

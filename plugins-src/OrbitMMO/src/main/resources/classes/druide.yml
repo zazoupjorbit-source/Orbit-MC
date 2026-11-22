@@ -1,0 +1,563 @@
+# ------------------------------------------------------------------
+#  Druide — gardien de la nature qui prend la forme des bêtes.
+#  Ressource : Mana (Sylvestre), Rage en forme d'ours (Gardien), Énergie en forme de loup (Croc).
+#  Les sorts communs ne coûtent rien (ils ont une recharge), car chaque forme a sa propre ressource.
+#  Format des sorts et des talents : voir guerrier.yml.
+#  La transformation n'est pas (encore) visible : la forme se lit dans les sorts de la spécialisation.
+# ------------------------------------------------------------------
+
+nom: Druide
+couleur: "#FF9A3B"
+icone: OAK_SAPLING
+jouable: true
+ressource: MANA
+armure: CUIR
+pv: 1.0
+arme: STAFF
+description:
+  - "Gardien de la nature qui prend"
+  - "la forme des bêtes sauvages."
+
+specialisations:
+  gardien:
+    nom: Gardien
+    role: TANK
+    icone: BONE
+    couleur: "#C8A27A"
+    ressource: RAGE
+    arme: MACE
+    description:
+      - "Forme d'ours : encaisse, provoque"
+      - "et protège le groupe. Ressource : rage."
+    passifs: { pv: 25, armure: 8, esquive: 3 }
+    talents:
+      fourrure_epaisse: { nom: "Fourrure épaisse", icone: BROWN_WOOL, palier: 0, colonne: 0, rangs: 5, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      instinct_ursin: { nom: "Instinct ursin", icone: FEATHER, palier: 0, colonne: 1, rangs: 5, effets: { esquive: 1 }, description: "+{esquive} % de chances d'esquiver un coup de mêlée." }
+      colere_de_l_ours: { nom: "Colère de l'ours", icone: BLAZE_POWDER, palier: 0, colonne: 2, rangs: 3, effets: { rage-par-coup: 1 }, description: "Chaque attaque de base rend {rage-par-coup} rage de plus." }
+      mutilation_rapide: { nom: "Mutilation rapide", icone: CLOCK, palier: 1, colonne: 0, rangs: 3, effets: { recharge.mutilation: 0.5 }, description: "Recharge de Mutilation réduite de {recharge.mutilation} s." }
+      taillade_profonde: { nom: "Taillade profonde", icone: REDSTONE, palier: 1, colonne: 1, rangs: 3, effets: { degats.taillade: 10 }, description: "Taillade et son saignement infligent {degats.taillade} % de dégâts en plus." }
+      peau_rugueuse: { nom: "Peau rugueuse", icone: LEATHER_CHESTPLATE, palier: 1, colonne: 2, rangs: 5, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      regain_frenetique: { nom: "Regain frénétique", icone: GOLDEN_APPLE, palier: 2, colonne: 0, rangs: 1, sort: regain_frenetique, description: "Apprend Regain frénétique : rend 25 % de vos PV d'un coup." }
+      rugissement_puissant: { nom: "Rugissement puissant", icone: GOAT_HORN, palier: 2, colonne: 1, rangs: 2, effets: { recharge.rugissement: 1.5 }, description: "Recharge de Rugissement réduite de {recharge.rugissement} s." }
+      griffes_epineuses: { nom: "Griffes épineuses", icone: SWEET_BERRIES, palier: 2, colonne: 2, rangs: 3, effets: { epines: 5 }, description: "Renvoie {epines} % des dégâts de mêlée subis à l'attaquant." }
+      ecorce_durcie: { nom: "Écorce durcie", icone: OAK_LOG, palier: 3, colonne: 0, rangs: 3, effets: { recharge.peau_d_ecorce: 2 }, description: "Recharge de Peau d'écorce réduite de {recharge.peau_d_ecorce} s." }
+      mutilation_feroce: { nom: "Mutilation féroce", icone: BONE, palier: 3, colonne: 1, rangs: 3, effets: { degats.mutilation: 10 }, description: "Mutilation inflige {degats.mutilation} % de dégâts en plus." }
+      graisse_d_hiver: { nom: "Graisse d'hiver", icone: COOKED_SALMON, palier: 3, colonne: 2, rangs: 3, effets: { soin-sur-kill: 2 }, description: "Tuer un ennemi rend {soin-sur-kill} % de vos PV." }
+      ours_massif: { nom: "Ours massif", icone: BROWN_WOOL, palier: 4, colonne: 0, rangs: 3, requiert: fourrure_epaisse, effets: { pv: 3 }, description: "+{pv} % de points de vie supplémentaires." }
+      sang_chaud: { nom: "Sang chaud", icone: MAGMA_CREAM, palier: 4, colonne: 1, rangs: 3, effets: { ressource: 5 }, description: "+{ressource} % de rage générée." }
+      regain_rapide: { nom: "Regain rapide", icone: GLISTERING_MELON_SLICE, palier: 4, colonne: 2, rangs: 3, requiert: regain_frenetique, effets: { recharge.regain_frenetique: 15 }, description: "Recharge de Regain frénétique réduite de {recharge.regain_frenetique} s." }
+      fracas_d_ours: { nom: "Fracas d'ours", icone: HEAVY_CORE, palier: 5, colonne: 0, rangs: 1, sort: fracas_d_ours, requiert: mutilation_feroce, description: "Apprend Fracas d'ours : un coup de patte qui étourdit les ennemis devant vous 3 s." }
+      cuir_de_pierre: { nom: "Cuir de pierre", icone: STONE, palier: 5, colonne: 1, rangs: 2, effets: { armure: 2 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      fureur_ursine: { nom: "Fureur ursine", icone: GOLDEN_AXE, palier: 5, colonne: 2, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      hibernation: { nom: "Hibernation", icone: SNOW_BLOCK, palier: 6, colonne: 0, rangs: 5, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      taillade_sauvage: { nom: "Taillade sauvage", icone: CLOCK, palier: 6, colonne: 1, rangs: 3, requiert: taillade_profonde, effets: { recharge.taillade: 0.5 }, description: "Recharge de Taillade réduite de {recharge.taillade} s." }
+      pelage_fuyant: { nom: "Pelage fuyant", icone: RABBIT_HIDE, palier: 6, colonne: 2, rangs: 3, effets: { esquive: 1 }, description: "+{esquive} % de chances d'esquiver un coup de mêlée." }
+      instincts_prolonges: { nom: "Instincts prolongés", icone: TOTEM_OF_UNDYING, palier: 7, colonne: 0, rangs: 2, effets: { duree.instincts_de_survie: 2 }, description: "Instincts de survie dure {duree.instincts_de_survie} s de plus." }
+      ecorce_ancienne: { nom: "Écorce ancienne", icone: DARK_OAK_LOG, palier: 7, colonne: 1, rangs: 3, requiert: ecorce_durcie, effets: { duree.peau_d_ecorce: 1 }, description: "Peau d'écorce dure {duree.peau_d_ecorce} s de plus." }
+      montagne_vivante: { nom: "Montagne vivante", icone: MOSSY_COBBLESTONE, palier: 7, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      chatiment_sauvage: { nom: "Châtiment sauvage", icone: IRON_AXE, palier: 8, colonne: 0, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      esprit_de_l_ours_ancien: { nom: "Esprit de l'Ours ancien", icone: TOTEM_OF_UNDYING, palier: 8, colonne: 1, rangs: 1, sort: esprit_de_l_ours_ancien, requiert: cuir_de_pierre, description: "Apprend Esprit de l'Ours ancien : bouclier de 15 % des PV et −15 % de dégâts subis pour vous et votre groupe." }
+      fourrure_ensanglantee: { nom: "Fourrure ensanglantée", icone: REDSTONE_BLOCK, palier: 8, colonne: 2, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+
+  croc:
+    nom: Croc
+    role: DEGATS
+    icone: WOLF_ARMOR
+    couleur: "#E07A3B"
+    ressource: ENERGIE
+    arme: DAGGER
+    description:
+      - "Forme de loup : griffes, saignements"
+      - "et bonds rapides. Ressource : énergie."
+    passifs: { crit: 5, vitesse: 5 }
+    talents:
+      griffes_aiguisees: { nom: "Griffes aiguisées", icone: SHEARS, palier: 0, colonne: 0, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      faim_du_loup: { nom: "Faim du loup", icone: MUTTON, palier: 0, colonne: 1, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      souffle_du_chasseur: { nom: "Souffle du prédateur", icone: FEATHER, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 4 }, description: "+{ressource} % d'énergie régénérée." }
+      griffure_profonde: { nom: "Griffure profonde", icone: REDSTONE, palier: 1, colonne: 0, rangs: 3, effets: { degats.griffure: 12 }, description: "Griffure et son saignement infligent {degats.griffure} % de dégâts en plus." }
+      morsure_affamee: { nom: "Morsure affamée", icone: BONE, palier: 1, colonne: 1, rangs: 3, effets: { degats.morsure_feroce: 8 }, description: "Morsure féroce inflige {degats.morsure_feroce} % de dégâts en plus." }
+      pattes_legeres: { nom: "Pattes légères", icone: RABBIT_FOOT, palier: 1, colonne: 2, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      egorger: { nom: "Égorger", icone: WITHER_SKELETON_SKULL, palier: 2, colonne: 0, rangs: 1, sort: egorger, description: "Apprend Égorger : achève une proie à moins de 20 % de vie." }
+      bond_rapide: { nom: "Bond rapide", icone: CLOCK, palier: 2, colonne: 1, rangs: 2, effets: { recharge.bond_du_loup: 3 }, description: "Recharge de Bond du loup réduite de {recharge.bond_du_loup} s." }
+      crocs_cruels: { nom: "Crocs cruels", icone: DIAMOND_SWORD, palier: 2, colonne: 2, rangs: 3, effets: { critdeg: 10 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      saveur_du_sang: { nom: "Saveur du sang", icone: BEETROOT, palier: 3, colonne: 0, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+      balayage_large: { nom: "Balayage large", icone: WIND_CHARGE, palier: 3, colonne: 1, rangs: 3, effets: { degats.balayage: 10 }, description: "Balayage inflige {degats.balayage} % de dégâts en plus." }
+      pelage_souple: { nom: "Pelage souple", icone: RABBIT_HIDE, palier: 3, colonne: 2, rangs: 5, effets: { esquive: 1 }, description: "+{esquive} % de chances d'esquiver un coup de mêlée." }
+      morsure_econome: { nom: "Morsure économe", icone: STRING, palier: 4, colonne: 0, rangs: 3, effets: { cout.morsure_feroce: 4 }, description: "Morsure féroce coûte {cout.morsure_feroce} énergie de moins." }
+      lune_de_sang: { nom: "Lune de sang", icone: RED_DYE, palier: 4, colonne: 1, rangs: 3, effets: { crit.morsure_feroce: 5 }, description: "Morsure féroce : +{crit.morsure_feroce} % de critique." }
+      curee_du_loup: { nom: "Curée du loup", icone: SKELETON_SKULL, palier: 4, colonne: 2, rangs: 3, requiert: egorger, effets: { degats.egorger: 12 }, description: "Égorger inflige {degats.egorger} % de dégâts en plus." }
+      tourbillon_de_griffes: { nom: "Tourbillon de griffes", icone: WIND_CHARGE, palier: 5, colonne: 0, rangs: 1, sort: tourbillon_de_griffes, requiert: balayage_large, description: "Apprend Tourbillon de griffes : trois tours de griffes qui font saigner tout autour." }
+      loup_alpha: { nom: "Loup alpha", icone: WOLF_ARMOR, palier: 5, colonne: 1, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      robustesse_sauvage: { nom: "Robustesse sauvage", icone: COOKED_BEEF, palier: 5, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      plaies_lacerees: { nom: "Plaies lacérées", icone: REDSTONE_BLOCK, palier: 6, colonne: 0, rangs: 3, requiert: griffure_profonde, effets: { duree.griffure: 2 }, description: "Le saignement de Griffure dure {duree.griffure} s de plus." }
+      instinct_de_tueur: { nom: "Instinct de tueur", icone: ENDER_EYE, palier: 6, colonne: 1, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      griffure_econome: { nom: "Griffure économe", icone: STRING, palier: 6, colonne: 2, rangs: 3, effets: { cout.griffure: 4 }, description: "Griffure coûte {cout.griffure} énergie de moins." }
+      fureur_prolongee: { nom: "Fureur prolongée", icone: BLAZE_POWDER, palier: 7, colonne: 0, rangs: 2, effets: { duree.fureur_sauvage: 2 }, description: "Fureur sauvage dure {duree.fureur_sauvage} s de plus." }
+      danse_lunaire: { nom: "Danse lunaire", icone: WIND_CHARGE, palier: 7, colonne: 1, rangs: 3, requiert: tourbillon_de_griffes, effets: { degats.tourbillon_de_griffes: 10 }, description: "Tourbillon de griffes inflige {degats.tourbillon_de_griffes} % de dégâts en plus." }
+      cuir_du_loup: { nom: "Cuir du loup", icone: LEATHER_CHESTPLATE, palier: 7, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      chasse_primordiale: { nom: "Chasse primordiale", icone: NETHERITE_SWORD, palier: 8, colonne: 0, rangs: 1, sort: chasse_primordiale, requiert: loup_alpha, description: "Apprend Chasse primordiale : cinq morsures d'affilée sur la cible." }
+      predateur_supreme: { nom: "Prédateur suprême", icone: NETHER_STAR, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      festin: { nom: "Festin", icone: GLISTERING_MELON_SLICE, palier: 8, colonne: 2, rangs: 3, requiert: saveur_du_sang, effets: { soin-sur-kill: 3 }, description: "Tuer un ennemi rend {soin-sur-kill} % de vos PV." }
+
+  sylvestre:
+    nom: Sylvestre
+    role: SOIN
+    icone: OAK_SAPLING
+    couleur: "#5EE89A"
+    arme: STAFF
+    description:
+      - "Soins dans le temps par les plantes,"
+      - "racines qui bloquent l'ennemi."
+    passifs: { soins: 10 }
+    talents:
+      seve_vive: { nom: "Sève vive", icone: HONEY_BOTTLE, palier: 0, colonne: 0, rangs: 5, effets: { soins: 1 }, description: "+{soins} % de soins." }
+      esprit_serein: { nom: "Esprit serein", icone: LILY_PAD, palier: 0, colonne: 1, rangs: 5, effets: { ressource: 2 }, description: "+{ressource} % de mana régénéré." }
+      ecorce_tendre: { nom: "Écorce tendre", icone: BIRCH_LOG, palier: 0, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      recuperation_prolongee: { nom: "Récupération prolongée", icone: CLOCK, palier: 1, colonne: 0, rangs: 3, effets: { duree.recuperation: 1 }, description: "Récupération dure {duree.recuperation} s de plus." }
+      rameau_vigoureux: { nom: "Rameau vigoureux", icone: OAK_SAPLING, palier: 1, colonne: 1, rangs: 3, effets: { soins.rameau_guerisseur: 6 }, description: "Rameau guérisseur soigne {soins.rameau_guerisseur} % de plus." }
+      fleurs_sauvages: { nom: "Fleurs sauvages", icone: POPPY, palier: 1, colonne: 2, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de soin critique." }
+      fleur_de_vie: { nom: "Fleur de vie", icone: PINK_TULIP, palier: 2, colonne: 0, rangs: 1, sort: fleur_de_vie, description: "Apprend Fleur de vie : un soin qui fleurit et continue de soigner." }
+      croissance_vive: { nom: "Croissance vive", icone: BONE_MEAL, palier: 2, colonne: 1, rangs: 3, effets: { recharge.croissance_rapide: 1 }, description: "Recharge de Croissance rapide réduite de {recharge.croissance_rapide} s." }
+      rameau_rapide: { nom: "Rameau rapide", icone: FEATHER, palier: 2, colonne: 2, rangs: 3, effets: { incantation.rameau_guerisseur: 0.2 }, description: "Incantation de Rameau guérisseur réduite de {incantation.rameau_guerisseur} s." }
+      floraison_large: { nom: "Floraison généreuse", icone: SUNFLOWER, palier: 3, colonne: 0, rangs: 3, effets: { duree.floraison: 1 }, description: "Floraison dure {duree.floraison} s de plus." }
+      racines_tenaces: { nom: "Racines tenaces", icone: HANGING_ROOTS, palier: 3, colonne: 1, rangs: 3, effets: { recharge.racines: 3 }, description: "Recharge de Racines réduite de {recharge.racines} s." }
+      seve_economisee: { nom: "Sève économisée", icone: HONEYCOMB, palier: 3, colonne: 2, rangs: 3, effets: { cout.rameau_guerisseur: 1 }, description: "Rameau guérisseur coûte {cout.rameau_guerisseur} mana de moins." }
+      epanouissement: { nom: "Épanouissement", icone: AZURE_BLUET, palier: 4, colonne: 0, rangs: 3, requiert: fleur_de_vie, effets: { soins.fleur_de_vie: 10 }, description: "Fleur de vie soigne {soins.fleur_de_vie} % de plus." }
+      meditation_profonde: { nom: "Méditation profonde", icone: LILY_PAD, palier: 4, colonne: 1, rangs: 3, effets: { recharge.meditation_sylvestre: 10 }, description: "Recharge de Méditation sylvestre réduite de {recharge.meditation_sylvestre} s." }
+      peau_de_mousse: { nom: "Peau de mousse", icone: MOSS_BLOCK, palier: 4, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      ecorce_de_la_sylve: { nom: "Écorce de la sylve", icone: OAK_LOG, palier: 5, colonne: 0, rangs: 1, sort: ecorce_de_la_sylve, description: "Apprend Écorce de la sylve : bouclier de 15 % des PV sur vous et votre groupe." }
+      main_verte: { nom: "Main verte", icone: WHEAT_SEEDS, palier: 5, colonne: 1, rangs: 3, effets: { soins: 2 }, description: "+{soins} % de soins." }
+      floraison_econome: { nom: "Floraison économe", icone: HONEYCOMB, palier: 5, colonne: 2, rangs: 3, requiert: floraison_large, effets: { cout.floraison: 2 }, description: "Floraison coûte {cout.floraison} mana de moins." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      coeur_de_chene: { nom: "Cœur de chêne", icone: OAK_LOG, palier: 6, colonne: 0, rangs: 3, effets: { pv: 3 }, description: "+{pv} % de points de vie." }
+      rosee_du_matin: { nom: "Rosée du matin", icone: GLOW_BERRIES, palier: 6, colonne: 1, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de soin critique." }
+      source_claire: { nom: "Source claire", icone: WATER_BUCKET, palier: 6, colonne: 2, rangs: 5, effets: { ressource: 2 }, description: "+{ressource} % de mana régénéré." }
+      tranquillite_profonde: { nom: "Tranquillité profonde", icone: LILY_OF_THE_VALLEY, palier: 7, colonne: 0, rangs: 2, effets: { duree.tranquillite: 2 }, description: "Tranquillité dure {duree.tranquillite} s de plus." }
+      ecorce_epaisse: { nom: "Écorce épaisse", icone: SPRUCE_LOG, palier: 7, colonne: 1, rangs: 3, requiert: ecorce_de_la_sylve, effets: { recharge.ecorce_de_la_sylve: 8 }, description: "Recharge d'Écorce de la sylve réduite de {recharge.ecorce_de_la_sylve} s." }
+      soins_naturels: { nom: "Soins naturels", icone: FERN, palier: 7, colonne: 2, rangs: 3, effets: { soins: 2 }, description: "+{soins} % de soins." }
+      eveil_de_l_arbre_coeur: { nom: "Éveil de l'Arbre-cœur", icone: BIG_DRIPLEAF, palier: 8, colonne: 0, rangs: 1, sort: eveil_de_l_arbre_coeur, requiert: ecorce_de_la_sylve, description: "Apprend Éveil de l'Arbre-cœur : rend 30 % des PV au groupe et le protège." }
+      croissance_debordante: { nom: "Croissance débordante", icone: BONE_MEAL, palier: 8, colonne: 1, rangs: 3, effets: { soins.croissance_rapide: 10 }, description: "Croissance rapide soigne {soins.croissance_rapide} % de plus." }
+      gardien_de_la_sylve: { nom: "Gardien de la sylve", icone: MANGROVE_PROPAGULE, palier: 8, colonne: 2, rangs: 3, effets: { soins: 2 }, description: "+{soins} % de soins." }
+
+sorts:
+  # ---------------- Toute la classe ----------------
+  ronce:
+    nom: Ronce
+    type: PROJECTILE
+    icone: SWEET_BERRIES
+    couleur: "#6E9E3A"
+    niveau: 1
+    gain: 5
+    portee: 25
+    puissance: 0.9
+    description: "Projette une ronce épineuse sur la cible visée."
+  toucher_regenerant:
+    nom: Toucher régénérant
+    type: SOIN
+    icone: GLOW_BERRIES
+    couleur: "#5EE89A"
+    niveau: 2
+    recharge: 10
+    portee: 25
+    puissance: 1.5
+    duree: 6
+    effets: { soin-par-sec: 1 }
+    description: "Soigne l'allié visé (ou vous) et le soigne encore pendant 6 s."
+  bond_sauvage:
+    nom: Bond sauvage
+    type: BOND
+    icone: RABBIT_FOOT
+    couleur: "#FFB347"
+    niveau: 4
+    recharge: 20
+    portee: 12
+    zone: 3
+    puissance: 0.5
+    description: "Bondit vers le point visé et frappe à l'atterrissage."
+  ecorce_partagee:
+    nom: Écorce partagée
+    type: CRI
+    icone: OAK_LEAVES
+    couleur: "#8BC34A"
+    niveau: 6
+    recharge: 60
+    gcd: false
+    zone: 20
+    duree: 30
+    effets: { reduction: 5 }
+    description: "Vous et votre groupe subissez 5 % de dégâts en moins pendant 30 s."
+  racines:
+    nom: Racines
+    type: ZONE
+    icone: HANGING_ROOTS
+    couleur: "#8B5A2B"
+    niveau: 8
+    recharge: 25
+    portee: 20
+    zone: 3
+    duree: 3
+    puissance: 0.1
+    effets: { etourdir: 1 }
+    description: "Des racines jaillissent au point visé et immobilisent les ennemis pendant 3 s."
+  regeneration_sauvage:
+    nom: Régénération sauvage
+    type: BUFF
+    icone: GOLDEN_CARROT
+    couleur: "#5EE89A"
+    niveau: 12
+    recharge: 120
+    gcd: false
+    effets: { soin: 20 }
+    description: "Rend 20 % de vos PV d'un coup."
+  course_du_cerf:
+    nom: Course du cerf
+    type: BUFF
+    icone: LEATHER_BOOTS
+    couleur: "#FFE066"
+    niveau: 16
+    recharge: 45
+    gcd: false
+    duree: 10
+    effets: { vitesse: 2 }
+    description: "Vitesse de déplacement fortement augmentée pendant 10 s."
+  souffle_de_la_tempete:
+    nom: Souffle de la tempête
+    type: CRI
+    icone: WIND_CHARGE
+    couleur: "#9AD8FF"
+    niveau: 20
+    recharge: 30
+    zone: 6
+    puissance: 0.4
+    effets: { repousser: 1.5 }
+    description: "Une bourrasque repousse les ennemis autour de vous."
+
+  # ---------------- Gardien (forme d'ours) ----------------
+  mutilation:
+    nom: Mutilation
+    type: FRAPPE
+    icone: BONE
+    couleur: "#C8A27A"
+    spe: [gardien]
+    niveau: 2
+    gain: 15
+    recharge: 6
+    portee: 3.5
+    arc: 50
+    puissance: 1.8
+    effets: { provocation: 1 }
+    description: "Un coup de griffes qui génère de la rage et attire la cible sur vous."
+  taillade:
+    nom: Taillade
+    type: TOURBILLON
+    icone: REDSTONE
+    couleur: "#C0392B"
+    spe: [gardien]
+    niveau: 5
+    cout: 10
+    recharge: 4
+    portee: 4
+    puissance: 1.0
+    effets: { saignement: 6, dot: 0.1 }
+    description: "Lacère tous les ennemis autour de vous, qui saignent pendant 6 s."
+  rugissement:
+    nom: Rugissement
+    type: CRI
+    icone: GOAT_HORN
+    couleur: "#FF5C5C"
+    spe: [gardien]
+    niveau: 9
+    recharge: 8
+    gcd: false
+    zone: 10
+    puissance: 0
+    effets: { provocation: 1 }
+    description: "Rugit et force les ennemis proches à vous attaquer."
+  peau_d_ecorce:
+    nom: Peau d'écorce
+    type: BUFF
+    icone: OAK_LOG
+    couleur: "#8B5A2B"
+    spe: [gardien]
+    niveau: 14
+    cout: 15
+    recharge: 15
+    gcd: false
+    duree: 6
+    effets: { reduction: 35 }
+    description: "Votre peau devient écorce : dégâts subis réduits de 35 % pendant 6 s."
+  instincts_de_survie:
+    nom: Instincts de survie
+    type: BUFF
+    icone: TOTEM_OF_UNDYING
+    couleur: "#FFF3B0"
+    spe: [gardien]
+    niveau: 30
+    recharge: 180
+    gcd: false
+    duree: 8
+    effets: { reduction: 50, soin-par-sec: 2 }
+    description: "Dégâts subis réduits de 50 % et 2 % des PV rendus par seconde pendant 8 s."
+  regain_frenetique:
+    nom: Regain frénétique
+    type: BUFF
+    icone: GOLDEN_APPLE
+    couleur: "#5EE89A"
+    spe: [gardien]
+    talent: true
+    recharge: 90
+    gcd: false
+    effets: { soin: 25 }
+    description: "Rend 25 % de vos PV d'un coup."
+  fracas_d_ours:
+    nom: Fracas d'ours
+    type: FRAPPE
+    icone: HEAVY_CORE
+    couleur: "#FFE066"
+    spe: [gardien]
+    talent: true
+    recharge: 30
+    portee: 6
+    arc: 70
+    puissance: 1.0
+    effets: { etourdir: 3 }
+    description: "Un coup de patte qui étourdit les ennemis devant vous pendant 3 s."
+  esprit_de_l_ours_ancien:
+    nom: Esprit de l'Ours ancien
+    type: CRI
+    icone: TOTEM_OF_UNDYING
+    couleur: "#C8A27A"
+    spe: [gardien]
+    talent: true
+    recharge: 120
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { bouclier: 15, reduction: 15 }
+    description: "Vous et votre groupe : bouclier de 15 % des PV et dégâts subis réduits de 15 % pendant 10 s."
+
+  # ---------------- Croc (forme de loup) ----------------
+  griffure:
+    nom: Griffure
+    type: FRAPPE
+    icone: SHEARS
+    couleur: "#C0392B"
+    spe: [croc]
+    niveau: 2
+    cout: 35
+    portee: 3.5
+    arc: 50
+    puissance: 1.2
+    effets: { saignement: 9, dot: 0.2 }
+    description: "Lacère la cible qui saigne pendant 9 s."
+  morsure_feroce:
+    nom: Morsure féroce
+    type: FRAPPE
+    icone: BONE
+    couleur: "#E07A3B"
+    spe: [croc]
+    niveau: 5
+    cout: 40
+    recharge: 6
+    portee: 3.5
+    arc: 50
+    puissance: 2.4
+    description: "Une morsure brutale sur la cible."
+  bond_du_loup:
+    nom: Bond du loup
+    type: CHARGE
+    icone: RABBIT_FOOT
+    couleur: "#FF8A3B"
+    spe: [croc]
+    niveau: 9
+    recharge: 15
+    portee: 15
+    portee-min: 3
+    puissance: 0.8
+    effets: { etourdir: 1 }
+    description: "Bondit sur l'ennemi visé et l'étourdit 1 s."
+  balayage:
+    nom: Balayage
+    type: TOURBILLON
+    icone: WIND_CHARGE
+    couleur: "#FFB347"
+    spe: [croc]
+    niveau: 14
+    cout: 45
+    portee: 4.5
+    puissance: 0.9
+    description: "Un revers de griffes qui touche tous les ennemis autour."
+  fureur_sauvage:
+    nom: Fureur sauvage
+    type: BUFF
+    icone: BLAZE_POWDER
+    couleur: "#FF6A00"
+    spe: [croc]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 12
+    effets: { bonus-degats: 20, bonus-crit: 15 }
+    description: "+20 % de dégâts et +15 % de critique pendant 12 s."
+  egorger:
+    nom: Égorger
+    type: FRAPPE
+    icone: WITHER_SKELETON_SKULL
+    couleur: "#FF3B3B"
+    spe: [croc]
+    talent: true
+    cout: 30
+    portee: 3.5
+    arc: 50
+    puissance: 3.5
+    condition: cible-pv<20
+    description: "Achève une proie à moins de 20 % de vie."
+  tourbillon_de_griffes:
+    nom: Tourbillon de griffes
+    type: TOURBILLON
+    icone: WIND_CHARGE
+    couleur: "#E07A3B"
+    spe: [croc]
+    talent: true
+    cout: 40
+    recharge: 30
+    portee: 4.5
+    coups: 3
+    intervalle: 5
+    puissance: 0.8
+    effets: { saignement: 6, dot: 0.2 }
+    description: "Trois tours de griffes : tous les ennemis autour saignent pendant 6 s."
+  chasse_primordiale:
+    nom: Chasse primordiale
+    type: FRAPPE
+    icone: NETHERITE_SWORD
+    couleur: "#FF3B6B"
+    spe: [croc]
+    talent: true
+    cout: 40
+    recharge: 45
+    portee: 3.5
+    arc: 50
+    coups: 5
+    intervalle: 3
+    puissance: 0.9
+    description: "Cinq morsures d'affilée sur la cible."
+
+  # ---------------- Sylvestre ----------------
+  recuperation:
+    nom: Récupération
+    type: SOIN
+    icone: GLOW_BERRIES
+    couleur: "#5EE89A"
+    spe: [sylvestre]
+    niveau: 2
+    cout: 6
+    portee: 25
+    puissance: 0.6
+    duree: 12
+    effets: { soin-par-sec: 2 }
+    description: "Petit soin puis 2 % des PV rendus par seconde pendant 12 s."
+  rameau_guerisseur:
+    nom: Rameau guérisseur
+    type: SOIN
+    icone: OAK_SAPLING
+    couleur: "#8BC34A"
+    spe: [sylvestre]
+    niveau: 5
+    cout: 12
+    incantation: 2.0
+    portee: 25
+    puissance: 3.0
+    description: "Un gros soin incanté sur l'allié visé (immobile)."
+  floraison:
+    nom: Floraison
+    type: CRI
+    icone: SUNFLOWER
+    couleur: "#FFE066"
+    spe: [sylvestre]
+    niveau: 9
+    cout: 18
+    recharge: 12
+    zone: 15
+    duree: 8
+    effets: { soin-par-sec: 1.5 }
+    description: "Des fleurs éclosent autour de vous : le groupe récupère 1,5 % des PV par seconde pendant 8 s."
+  croissance_rapide:
+    nom: Croissance rapide
+    type: SOIN
+    icone: BONE_MEAL
+    couleur: "#5EE89A"
+    spe: [sylvestre]
+    niveau: 14
+    cout: 10
+    recharge: 8
+    portee: 25
+    puissance: 2.0
+    description: "Un soin instantané sur l'allié visé."
+  meditation_sylvestre:
+    nom: Méditation sylvestre
+    type: BUFF
+    icone: LILY_PAD
+    couleur: "#4FA3FF"
+    spe: [sylvestre]
+    niveau: 18
+    gain: 30
+    recharge: 90
+    gcd: false
+    description: "Puise dans la forêt : rend 30 points de mana."
+  tranquillite:
+    nom: Tranquillité
+    type: CRI
+    icone: LILY_OF_THE_VALLEY
+    couleur: "#E0FFE8"
+    spe: [sylvestre]
+    niveau: 30
+    recharge: 180
+    gcd: false
+    zone: 20
+    duree: 8
+    effets: { soin: 20, soin-par-sec: 3 }
+    description: "Rend 20 % des PV au groupe, puis 3 % par seconde pendant 8 s."
+  fleur_de_vie:
+    nom: Fleur de vie
+    type: SOIN
+    icone: PINK_TULIP
+    couleur: "#FF9AD5"
+    spe: [sylvestre]
+    talent: true
+    cout: 10
+    recharge: 15
+    portee: 25
+    puissance: 2.5
+    duree: 6
+    effets: { soin-par-sec: 3 }
+    description: "Soigne l'allié visé, puis 3 % de ses PV par seconde pendant 6 s."
+  ecorce_de_la_sylve:
+    nom: Écorce de la sylve
+    type: CRI
+    icone: OAK_LOG
+    couleur: "#8B5A2B"
+    spe: [sylvestre]
+    talent: true
+    cout: 15
+    recharge: 60
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { bouclier: 15 }
+    description: "Une écorce protège le groupe : bouclier de 15 % des PV pendant 10 s."
+  eveil_de_l_arbre_coeur:
+    nom: Éveil de l'Arbre-cœur
+    type: CRI
+    icone: BIG_DRIPLEAF
+    couleur: "#5EE89A"
+    spe: [sylvestre]
+    talent: true
+    recharge: 150
+    gcd: false
+    zone: 20
+    duree: 10
+    effets: { soin: 30, bouclier: 10 }
+    description: "Rend 30 % des PV au groupe et pose un bouclier de 10 % des PV pendant 10 s."

@@ -1,0 +1,22 @@
+name: RebornMMO
+version: '0.1.0'
+main: fr.orbit.reborn.RebornMMO
+api-version: '1.21'
+description: MMO de l'instance Reborn (étages flottants, classes, compétences d'épée, boss d'étage).
+authors: [ORBIT]
+
+commands:
+  mmo:
+    description: Ouvre le menu du jeu.
+    aliases: [menu, profil]
+  groupe:
+    description: Groupe de joueurs (inviter, accepter, quitter, expulser).
+    aliases: [party]
+  mmoadmin:
+    description: Outils d'administration et de test de RebornMMO.
+    permission: rebornmmo.admin
+
+permissions:
+  rebornmmo.admin:
+    description: Accès à /mmoadmin.
+    default: op

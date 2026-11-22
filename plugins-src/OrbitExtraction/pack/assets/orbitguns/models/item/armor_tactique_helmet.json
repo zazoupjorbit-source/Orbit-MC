@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {"layer0": "orbitguns:item/armor_tactique_helmet"}
+}

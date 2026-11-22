@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [{"texture": "orbitguns:police"}],
+    "humanoid_leggings": [{"texture": "orbitguns:police"}]
+  }
+}

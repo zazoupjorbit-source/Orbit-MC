@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {"when": "orbitguns:lmg", "model": {"type": "minecraft:model", "model": "orbitguns:item/lmg"}},
+      {"when": "orbitguns:bfg", "model": {"type": "minecraft:model", "model": "orbitguns:item/bfg"}},
+      {"when": "orbitguns:grenadelauncher", "model": {"type": "minecraft:model", "model": "orbitguns:item/grenadelauncher"}}
+    ],
+    "fallback": {
+    "type": "minecraft:model",
+    "model": "minecraft:item/warped_fungus_on_a_stick"
+  }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {"when": "orbitmmo:grimoire_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/grimoire_0"}},
+      {"when": "orbitmmo:grimoire_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/grimoire_1"}},
+      {"when": "orbitmmo:grimoire_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/grimoire_2"}},
+      {"when": "orbitmmo:grimoire_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/grimoire_3"}}
+    ],
+    "fallback": {
+    "type": "minecraft:model",
+    "model": "minecraft:item/book"
+  }
+  }
+}

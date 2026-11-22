@@ -1,0 +1,29 @@
+# Capitales du continent (Orbit MMO) : réglages lus par /continent capitale.
+#
+# La ville est dessinée par le plugin à partir du terrain : rempart rond, portes là où les routes arrivent,
+# fleuve entre deux quais, grand pont, deux places, rues, maisons, et les PNJ de ville.
+#
+# Après un changement ici :
+#   /continent capitale recharger          relit ce fichier
+#   /continent capitale <nom> plan         écrit une image du plan (plugins/OrbitMMO/apercus), sans toucher au monde
+#   /continent capitale <nom> ecarts       compare le monde au plan, sans rien changer
+#   /continent capitale <nom> generer      construit ; sur une capitale déjà générée et retouchée, demande « confirmer »
+
+# Temps passé à poser des blocs à chaque tick (2 à 40). Plus haut : plus rapide, mais le serveur saccade.
+millisecondes-par-tick: 20
+
+capitales:
+  aureval:
+    lieu: Auréval          # nom du lieu sur la carte du continent
+    style: lumiere         # lumiere : pierre claire, colombages de chêne, tuiles rouges ; ombre : ardoise, chêne noir, tuf
+    rayon-rempart: 104     # 70 à 160
+    rayon-raccord: 150     # jusqu'où le terrain est remodelé pour rejoindre le relief naturel ; au-delà, rien n'est touché
+    niveau: auto           # Y du pavé ; auto = un bloc au-dessus du fleuve, ou le sol moyen s'il est plus haut
+    graine: 1              # change le tirage des maisons, des arbres et des lanternes
+  morneval:
+    lieu: Morneval
+    style: ombre
+    rayon-rempart: 104
+    rayon-raccord: 150
+    niveau: auto
+    graine: 1

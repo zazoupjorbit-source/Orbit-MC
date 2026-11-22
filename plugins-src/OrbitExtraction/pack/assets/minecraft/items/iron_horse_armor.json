@@ -1,0 +1,17 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {"when": "orbitguns:g18", "model": {"type": "minecraft:model", "model": "orbitguns:item/g18"}},
+      {"when": "orbitguns:c96", "model": {"type": "minecraft:model", "model": "orbitguns:item/c96"}},
+      {"when": "orbitguns:tec9", "model": {"type": "minecraft:model", "model": "orbitguns:item/tec9"}},
+      {"when": "orbitguns:elcovert", "model": {"type": "minecraft:model", "model": "orbitguns:item/elcovert"}}
+    ],
+    "fallback": {
+    "type": "minecraft:model",
+    "model": "minecraft:item/iron_horse_armor"
+  }
+  }
+}

@@ -1,0 +1,210 @@
+# ------------------------------------------------------------------
+#  OrbitDevCore — plugin core du serveur de dev ORBIT
+#  Rechargement : /orbitdev reload (pas besoin de /reload du serveur)
+# ------------------------------------------------------------------
+
+# Langue des messages : fr | en  (fichiers dans plugins/OrbitDevCore/lang/)
+language: fr
+
+spawn:
+  # Téléporte le joueur au spawn à chaque connexion.
+  teleport-on-join: true
+  # Fait réapparaître le joueur au spawn après une mort.
+  teleport-on-respawn: true
+
+compass:
+  # false : pas de boussole sur ce serveur (elle est retirée de l'inventaire et /boussole est refusée).
+  # À laisser à true sur le lobby seulement.
+  enabled: true
+  # Donne la boussole à la connexion et à la réapparition (si le joueur ne l'a pas déjà).
+  give-on-join: true
+  # Case de la barre d'action (0 à 8). Si elle est occupée, la boussole va dans la première case libre.
+  slot: 4
+  # Matériau de l'objet (nom Bukkit, ex. COMPASS, RECOVERY_COMPASS, CLOCK).
+  material: COMPASS
+  # true : impossible de jeter la boussole, et elle n'est pas lâchée à la mort.
+  locked: true
+
+menu:
+  # Icône de l'entrée « Spawn » dans le menu de la boussole.
+  spawn-icon: BEACON
+  # Icône par défaut d'un warp créé sans icône.
+  default-warp-icon: ENDER_PEARL
+
+# Pack de ressources du lobby : textures des menus (boussole, boutique), style « station » ORBIT.
+# Proposé pendant l'écran de connexion ; sans le pack, les menus gardent la même disposition en vitres colorées.
+resource-pack:
+  # Sans cette ligne : actif seulement là où la boussole l'est (compass.enabled, donc le lobby).
+  # enabled: true
+  # Port du mini serveur HTTP intégré qui distribue le pack (8790 = OrbitMMO, 8791 = OrbitExtraction).
+  # Les joueurs le téléchargent à l'adresse utilisée pour se connecter : ouvre ce port (TCP) comme celui du jeu.
+  port: 8792
+  # URL publique du pack (CDN, site...) : si renseignée, le serveur HTTP intégré n'est pas lancé.
+  public-url: ""
+  # true : un joueur qui refuse le pack est déconnecté.
+  required: false
+
+# Mini-jeu du lobby : feu d'artifice en main, clic gauche = entrer / sortir du mode feu d'artifice,
+# clic droit = tir en ligne droite vers le viseur. Un tir élimine d'un coup, et ne touche que les joueurs
+# eux aussi en mode feu d'artifice (les autres sont traversés). Aucun vrai dégât : renvoi au spawn.
+firework-game:
+  # Sans cette ligne : actif seulement là où la boussole l'est (compass.enabled, donc le lobby).
+  # enabled: true
+  # Donne le feu d'artifice à la connexion et à la réapparition.
+  give-on-join: true
+  # Case de la barre d'action (0 à 8). Si elle est occupée, le feu d'artifice va dans la première case libre.
+  slot: 2
+  # Délai entre deux tirs, en ticks (20 = 1 s).
+  cooldown-ticks: 16
+  # Vitesse du projectile (blocs par tick) et portée maximale (blocs).
+  speed: 2.5
+  range: 64
+  # Marge autour des joueurs pour toucher (blocs) : plus grand = plus facile.
+  hit-radius: 0.3
+  # Après un tir, secondes avant de pouvoir quitter le mode (pas de « tir puis fuite »).
+  leave-lock-seconds: 5
+  # Contour lumineux (visible à travers les murs) sur les joueurs en mode feu d'artifice.
+  glow: true
+  # true : le joueur éliminé est renvoyé au spawn ; false : il reste sur place, hors du mode.
+  respawn-at-spawn: true
+  # Bonus de série : nombre d'éliminations d'affilée pour le débloquer (0 = bonus désactivé).
+  # Tous les bonus sont perdus à l'élimination ou en quittant le mode.
+  streak-rewards:
+    speed: 2        # Vitesse II
+    grapple: 3      # Grappin (voir plus bas)
+    rapid-fire: 5   # Délai entre deux tirs divisé par deux
+    shield: 7       # Encaisse un tir sans être éliminé (une fois)
+    volley: 10      # Chaque tir part en salve de 3 fusées
+  # Écart entre les fusées d'une salve, en degrés.
+  volley-spread: 6
+  grapple:
+    # Case de la barre d'action (0 à 8) ; si elle est occupée, première case libre.
+    slot: 3
+    # Clic droit : propulsé vers le bloc visé jusqu'à cette distance ; au-delà, grand saut vers l'avant.
+    range: 32
+    # Vitesse maximale de la propulsion (blocs par tick).
+    power: 2.6
+    # Délai entre deux utilisations, en ticks (20 = 1 s).
+    cooldown-ticks: 50
+  # Cibles d'entraînement (/orbitdev feu cible | riposte) : mannequins qui comptent comme des joueurs
+  # en mode (éliminations et série comprises), pour tester seul. Non sauvegardées : /orbitdev feu retirer.
+  dummy:
+    # Délai avant qu'une cible éliminée réapparaisse, en ticks.
+    respawn-ticks: 60
+    # Cible « riposte » : délai entre deux tirs sur le joueur en mode le plus proche (en vue, 48 blocs).
+    fire-ticks: 60
+
+# Menu /boutique (et bouton de la boussole). Rien n'est vendu en jeu : les boutons envoient un lien.
+shop:
+  # Lien général de la boutique en ligne. Vide = « la boutique ouvre bientôt » (+ lien du site).
+  url: ""
+  # Lien par bouton (vide = lien général ci-dessus).
+  categories:
+    online: ""
+    grades: ""
+    cles: ""
+    packs: ""
+    orbit-plus: ""
+  # Vitrine « En vedette » : jusqu'à 10 offres réelles. name / lore : MiniMessage ; url vide = lien général.
+  featured: []
+  # Exemple :
+  # featured:
+  #   - icon: NETHER_STAR
+  #     name: "<#8DB8FF><bold>Grade Pilote"
+  #     lore:
+  #       - "<gray>Préfixe et couleur de chat."
+  #     glint: true
+  #     url: ""
+
+# Boutons Discord et Site du menu de la boussole (clic = lien cliquable envoyé dans le chat).
+# Laisser vide ("") pour afficher « lien non configuré ».
+links:
+  discord: "https://discord.gg/SCuRFgjNQ7"
+  website: "https://projet-orbit.fr"
+
+cosmetics:
+  # false : cosmétiques coupés sur ce serveur (rien d'affiché, menus et /monture refusés) ;
+  # la sélection n'est pas effacée. À laisser à true sur le lobby seulement.
+  enabled: true
+  # true : tous les cosmétiques sont gratuits (serveur de dev).
+  # false : il faut la permission orbitdev.cosmetic.<type>.<id> (ex. orbitdev.cosmetic.pet.renard).
+  # Si un plugin ORBIT enregistre l'API CosmeticAccess (boutique), c'est lui qui décide et ce réglage est ignoré.
+  unlock-all: true
+  # Dossier des cosmétiques équipés (un fichier par joueur). Vide = plugins/OrbitDevCore/cosmetics.
+  # Mettre le même dossier sur le lobby et les instances pour garder ses cosmétiques en changeant de serveur.
+  data-folder: ""
+
+npc:
+  # Type d'entité par défaut pour /servernpc create (toute entité vivante : VILLAGER, ZOMBIE, ARMOR_STAND...).
+  default-type: VILLAGER
+  # Profession par défaut des villageois (none, librarian, cartographer, cleric, weaponsmith...).
+  default-profession: librarian
+  # true : un clic gauche sur le PNJ envoie aussi vers le serveur (en plus du clic droit).
+  left-click-connects: true
+  # Délai minimum entre deux clics sur un PNJ, en millisecondes.
+  click-cooldown-ms: 1000
+
+proxy:
+  # Laisser à false tant qu'il n'y a pas de proxy (Velocity / BungeeCord) devant le serveur :
+  # le clic sur un PNJ affiche alors seulement un message au lieu d'envoyer le joueur.
+  # À true, le plugin utilise le canal « BungeeCord » (compatible Velocity avec
+  # bungee-plugin-message-channel = true dans velocity.toml).
+  enabled: false
+  # Nom de CE serveur dans velocity.toml : marqué « Tu es ici » dans le menu de la boussole.
+  server-name: lobby
+  # Serveur rejoint avec /lobby (ou /hub).
+  lobby-server: lobby
+
+chat:
+  # Chat et messages de connexion aux couleurs des rôles LuckPerms.
+  # <prefix> = préfixe du rôle (lp group <rôle> meta setprefix ...), <name> = pseudo. Format MiniMessage.
+  enabled: true
+  format: "<prefix><name> <#5A6270>»</#5A6270> "
+  # Laisser vide ("") pour garder le message de Minecraft.
+  join: "<#3A7FFF><b>+</b></#3A7FFF> <prefix><name>"
+  quit: "<#5A6270><b>-</b></#5A6270> <prefix><name>"
+  # Couleur du texte des messages (si le joueur n'en met pas).
+  message-color: "#E6EDF3"
+
+# Instances affichées dans le menu de la boussole (clic = envoi direct via le proxy).
+# Clé = nom du serveur dans velocity.toml. name : MiniMessage, icon : matériau Bukkit.
+# Exemple :
+#   servers:
+#     lobby:
+#       name: "<gold><bold>Lobby</bold></gold>"
+#       icon: NETHER_STAR
+servers: {}
+
+# Modes de jeu du menu de la boussole : les 4 premiers, dans cet ordre (haut gauche, haut droite,
+# bas gauche, bas droite). Leurs noms sont dessinés dans la texture du menu : si tu changes de mode,
+# regénère-la (plugins-src/OrbitDevCore/tools/OrbitGuiGen.java, drawNav).
+# warp = warp de la porte (aile de la Station) ; description = lignes MiniMessage.
+modes:
+  survie:
+    name: "<#7CFC9A><bold>Survie</bold>"
+    icon: OAK_SAPLING
+    warp: survie
+    description:
+      - "<gray>La serre sous le dôme."
+      - "<gray>Construis, farme, survis."
+  extraction:
+    name: "<#FF4D4D><bold>Extraction</bold>"
+    icon: CROSSBOW
+    warp: extraction
+    description:
+      - "<gray>Le sas militaire."
+      - "<gray>Entre, loote, ressors vivant."
+  practice:
+    name: "<#3A7FFF><bold>Practice HCF</bold>"
+    icon: DIAMOND_SWORD
+    warp: practice
+    description:
+      - "<gray>L'arène holographique."
+      - "<gray>Duels classés et kits HCF."
+  mmo:
+    name: "<#F5C542><bold>MMO</bold>"
+    icon: ENDER_EYE
+    warp: mmo
+    description:
+      - "<gray>Le portail ancien."
+      - "<gray>Classes, donjons et lore ORBIT."

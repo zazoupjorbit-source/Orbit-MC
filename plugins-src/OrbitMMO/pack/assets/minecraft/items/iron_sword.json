@@ -1,0 +1,29 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {"when": "orbitmmo:sword_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/sword_0"}},
+      {"when": "orbitmmo:sword_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/sword_1"}},
+      {"when": "orbitmmo:sword_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/sword_2"}},
+      {"when": "orbitmmo:sword_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/sword_3"}},
+      {"when": "orbitmmo:rapier_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/rapier_0"}},
+      {"when": "orbitmmo:rapier_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/rapier_1"}},
+      {"when": "orbitmmo:rapier_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/rapier_2"}},
+      {"when": "orbitmmo:rapier_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/rapier_3"}},
+      {"when": "orbitmmo:katana_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/katana_0"}},
+      {"when": "orbitmmo:katana_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/katana_1"}},
+      {"when": "orbitmmo:katana_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/katana_2"}},
+      {"when": "orbitmmo:katana_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/katana_3"}},
+      {"when": "orbitmmo:dagger_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/dagger_0"}},
+      {"when": "orbitmmo:dagger_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/dagger_1"}},
+      {"when": "orbitmmo:dagger_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/dagger_2"}},
+      {"when": "orbitmmo:dagger_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/dagger_3"}}
+    ],
+    "fallback": {
+    "type": "minecraft:model",
+    "model": "minecraft:item/iron_sword"
+  }
+  }
+}

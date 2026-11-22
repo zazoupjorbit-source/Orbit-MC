@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {"when": "orbitguns:ammo_40mm", "model": {"type": "minecraft:model", "model": "orbitguns:item/ammo_40mm"}}
+    ],
+    "fallback": {
+    "type": "minecraft:model",
+    "model": "minecraft:item/fire_charge"
+  }
+  }
+}

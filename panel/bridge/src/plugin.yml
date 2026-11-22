@@ -1,0 +1,6 @@
+name: PanelBridge
+version: 1.0.0
+main: fr.devpanel.bridge.PanelBridge
+api-version: '1.21'
+description: Expose les stats du serveur au panel de dev local.
+authors: [DevPanel]

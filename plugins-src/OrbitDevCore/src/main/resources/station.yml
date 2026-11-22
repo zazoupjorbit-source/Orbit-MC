@@ -1,0 +1,56 @@
+# La Station : réglages du générateur du lobby (/station generer).
+# Change une valeur ici ou avec /station regle <clé> <valeur>, puis relance /station generer.
+# /station etancheite contrôle que rien n'est ouvert sur le vide (fait aussi à chaque génération complète).
+# /station ecarts liste, sans rien toucher, ce qui diffère entre le monde et le plan : à lancer AVANT
+# /station generer si quelqu'un a retouché la station à la main, car une génération remet tout comme sur le plan.
+
+# Monde vide dans lequel la station est construite (créé s'il n'existe pas).
+monde: station
+
+# Centre de l'atrium. y = niveau du sol.
+origine:
+  x: 0
+  y: 100
+  z: 0
+
+atrium:
+  # Distance du centre aux murs (largeur = 2 x rayon + 1).
+  rayon: 24
+  hauteur-murs: 14
+  hauteur-dome: 16
+
+passerelle:
+  longueur: 20
+  # Largeur intérieure (nombre impair).
+  largeur: 9
+
+ailes:
+  # Rayon des 4 ailes (serre, sas, arène, portail).
+  rayon: 22
+
+# Part de verre dans les murs et les dômes : 0 = coque pleine, 1 = presque tout en verre.
+verre: 0.6
+
+parcours:
+  rayon: 9
+  marches: 32
+  # Hauteur gagnée entre le sol et le belvédère.
+  hauteur: 21
+
+obelisques:
+  # Décalage en x et en z par rapport au centre.
+  distance: 62
+  hauteur: 30
+
+# Blocs posés par tick : plus haut = plus rapide, plus bas = plus doux pour le serveur.
+blocs-par-tick: 12000
+
+# À la fin d'une génération complète : le spawn du lobby devient celui de la station
+# et les warps survie / extraction / practice / mmo sont créés devant les portes.
+definir-spawn: true
+creer-warps: true
+
+# Remplacer un bloc d'une zone : palettes.<zone>.<rôle>: <bloc>
+# Zones : atrium, passerelle, serre, sas, arene, portail, reliques.
+# Exemples de rôles : sol, coque, verre, dome, or, lumiere, accent, rideau.
+palettes: {}

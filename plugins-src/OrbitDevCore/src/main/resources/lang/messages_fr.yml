@@ -1,0 +1,407 @@
+# Messages OrbitDevCore — format MiniMessage (https://docs.advntr.dev/minimessage/format.html)
+# <prefix> est remplacé par la valeur de « prefix ».
+prefix: "<dark_gray>[</dark_gray><gradient:#00c6ff:#7b2ff7>ORBIT</gradient><dark_gray>]</dark_gray> "
+
+general:
+  no-permission: "<prefix><red>Tu n'as pas la permission."
+  players-only: "<prefix><red>Cette commande est réservée aux joueurs."
+  player-not-found: "<prefix><red>Joueur introuvable : <white><player></white>."
+  usage: "<prefix><gray>Utilisation : <white><usage></white>"
+  reloaded: "<prefix><green>Configuration, messages, warps et PNJ rechargés."
+  info: "<prefix><gray>OrbitDevCore <white>v<version></white> — <white><warps></white> warp(s), <white><npcs></white> PNJ, proxy : <white><proxy></white>."
+
+spawn:
+  teleported: "<prefix><green>Téléporté au spawn."
+  teleported-other: "<prefix><green><white><player></white> a été téléporté au spawn."
+  set: "<prefix><green>Spawn défini à ta position."
+  missing: "<prefix><red>Aucun spawn utilisable (monde introuvable)."
+
+warp:
+  teleported: "<prefix><green>Téléporté au warp <white><name></white>."
+  not-found: "<prefix><red>Le warp <white><name></white> n'existe pas."
+  set: "<prefix><green>Warp <white><name></white> enregistré à ta position."
+  deleted: "<prefix><green>Warp <white><name></white> supprimé."
+  invalid-name: "<prefix><red>Nom invalide : lettres, chiffres, - et _ uniquement (32 caractères max)."
+  unknown-icon: "<prefix><red>Icône inconnue : <white><icon></white>."
+  world-missing: "<prefix><red>Le monde du warp <white><name></white> n'est pas chargé."
+
+world:
+  invalid-name: "<prefix><red>Nom de monde invalide : minuscules, chiffres, - et _ uniquement (32 caractères max)."
+  invalid-type: "<prefix><red>Type de monde inconnu : <white><type></white> (flat ou normal)."
+  creating: "<prefix><gray>Création / chargement du monde <white><world></white>..."
+  created: "<prefix><green>Monde <white><world></white> prêt (<type>). Il sera rechargé à chaque démarrage."
+  failed: "<prefix><red>Impossible de créer le monde <white><world></white> (voir la console)."
+  list-header: "<prefix><gray>Mondes chargés (<white><count></white>) :"
+  list-entry: " <dark_gray>•</dark_gray> <white><world></white> <dark_gray>(<type>, <players> joueur(s))</dark_gray>"
+
+compass:
+  name: "<gradient:#00c6ff:#7b2ff7><bold>Boussole de téléportation</bold></gradient>"
+  lore:
+    - "<gray>Clic droit pour ouvrir le menu des warps."
+  given: "<prefix><green>Boussole ajoutée à ton inventaire."
+  already: "<prefix><yellow>Tu as déjà la boussole."
+  inventory-full: "<prefix><red>Inventaire plein, impossible de te donner la boussole."
+  lobby-only: "<prefix><yellow>La boussole n'existe qu'au lobby. Pour y retourner : <white>/lobby</white>."
+
+menu:
+  title: "<dark_gray>Téléportation"
+  spawn-name: "<gold><bold>Spawn</bold>"
+  spawn-lore:
+    - "<gray>Retour au point de départ."
+    - ""
+    - "<yellow>Clic pour te téléporter"
+  server-lore:
+    - "<gray>Instance : <white><server></white>"
+    - ""
+    - "<yellow>Clic pour rejoindre"
+  server-current-lore:
+    - "<gray>Instance : <white><server></white>"
+    - ""
+    - "<green>Tu es ici"
+  already-here: "<prefix><yellow>Tu es déjà sur <white><server></white>."
+  navigation-title: "<gradient:#00c6ff:#7b2ff7><bold>ORBIT</bold></gradient> <dark_gray>• Navigation"
+  section-servers: "<aqua><bold>✦ Instances</bold> <gray>(clic pour rejoindre)"
+  section-teleports: "<light_purple><bold>✦ Téléportations</bold> <gray>(spawn et warps)"
+  no-servers: "<gray>Aucune instance configurée"
+  section-modes: "<aqua><bold>✦ Modes de jeu</bold> <gray>(clic pour aller à la porte)"
+  section-station: "<light_purple><bold>✦ La Station</bold>"
+  section-dev: "<gold><bold>✦ Serveurs de dev</bold> <gray>(staff)"
+  no-modes: "<gray>Aucun mode configuré"
+  mode-lore:
+    - ""
+    - "<dark_gray>Bientôt disponible"
+    - "<yellow>Clic pour aller à la porte"
+  hall-name: "<gold><bold>Hall central</bold>"
+  hall-lore:
+    - "<gray>Le cœur de la Station."
+    - ""
+    - "<yellow>Clic pour te téléporter"
+  profile-name: "<gradient:#00c6ff:#7b2ff7><bold><player></bold></gradient>"
+  profile-lore:
+    - "<dark_gray>▪ Profil"
+    - "<gray>Grade : <grade>"
+    - "<gray>Groupe : <white><group></white>"
+    - "<gray>Rôle : <white><role></white>"
+    - "<gray>Serveur : <aqua><server></aqua>"
+    - ""
+    - "<dark_gray>▪ Statistiques"
+    - "<gray>Temps de jeu : <white><playtime></white>"
+    - "<gray>Première connexion : <white><first_join></white>"
+    - "<gray>Distance parcourue : <white><distance></white>"
+    - "<gray>Mobs tués : <white><mob_kills></white>"
+    - "<gray>Joueurs tués : <white><player_kills></white>"
+    - "<gray>Morts : <white><deaths></white>"
+  role-op: "Opérateur"
+  role-player: "Joueur"
+  close-name: "<red><bold>Fermer"
+  discord-name: "<#5865F2><bold>Discord"
+  discord-lore:
+    - "<gray>Rejoins la communauté ORBIT."
+    - "<dark_gray><url>"
+    - ""
+    - "<yellow>Clic pour recevoir le lien"
+  website-name: "<gradient:#00c6ff:#7b2ff7><bold>Site du serveur</bold></gradient>"
+  website-lore:
+    - "<gray>Actus, boutique et infos."
+    - "<dark_gray><url>"
+    - ""
+    - "<yellow>Clic pour recevoir le lien"
+  link-missing-lore:
+    - "<gray>Lien non configuré"
+    - "<dark_gray>(links.* dans config.yml)"
+  link-missing: "<prefix><red>Ce lien n'est pas encore configuré."
+  link-hover: "<gray>Clic pour ouvrir dans ton navigateur"
+  discord-message: "<prefix><gray>Rejoins notre Discord : "
+  website-message: "<prefix><gray>Le site du serveur : "
+  warp-name: "<aqua><bold><name></bold>"
+  warp-lore:
+    - "<gray>Monde : <white><world></white>"
+    - "<gray>Position : <white><x> <y> <z></white>"
+    - ""
+    - "<yellow>Clic pour te téléporter"
+  cosmetics-name: "<gradient:#ffb347:#ff4fd8><bold>Cosmétiques</bold></gradient>"
+  cosmetics-lore:
+    - "<gray>Traînées, auras, chapeaux, dos,"
+    - "<gray>ballons, familiers et montures."
+    - ""
+    - "<yellow>Clic pour ouvrir"
+  shop-name: "<#F5C542><bold>Boutique</bold>"
+  shop-lore:
+    - "<gray>Grades, clés, packs et Orbit+."
+    - ""
+    - "<yellow>Clic pour ouvrir"
+
+shop:
+  title: "<gradient:#00c6ff:#7b2ff7><bold>ORBIT</bold></gradient> <dark_gray>• Boutique"
+  back-name: "<#8DB8FF><bold>Navigation</bold>"
+  back-lore:
+    - "<gray>Retour au menu de la boussole."
+  showcase-empty-name: "<#8DB8FF><bold>Vitrine en préparation</bold>"
+  showcase-empty-lore:
+    - "<gray>Les offres du moment s'afficheront ici."
+  offer-lore:
+    - ""
+    - "<yellow>Clic pour recevoir le lien"
+  online-name: "<#8DB8FF><bold>Boutique en ligne</bold>"
+  online-lore:
+    - "<gray>Tous les achats se font sur le site."
+    - ""
+    - "<yellow>Clic pour recevoir le lien"
+  grades-name: "<#A48CFF><bold>Grades</bold>"
+  grades-lore:
+    - "<gray>Les grades du réseau ORBIT."
+    - ""
+    - "<yellow>Clic pour recevoir le lien"
+  cles-name: "<#FFCB6B><bold>Clés</bold>"
+  cles-lore:
+    - "<gray>Les clés de caisses."
+    - ""
+    - "<yellow>Clic pour recevoir le lien"
+  packs-name: "<#6FDFA0><bold>Packs</bold>"
+  packs-lore:
+    - "<gray>Les packs groupés."
+    - ""
+    - "<yellow>Clic pour recevoir le lien"
+  orbit-plus-name: "<#7FEBF7><bold>Orbit+</bold>"
+  orbit-plus-lore:
+    - "<gray>L'abonnement ORBIT."
+    - ""
+    - "<yellow>Clic pour recevoir le lien"
+  link-message: "<prefix><gray>La boutique : "
+  soon: "<prefix><yellow>La boutique en ligne ouvre bientôt."
+  soon-website: "<prefix><yellow>La boutique en ligne ouvre bientôt. <gray>En attendant, le site : "
+
+pack:
+  disabled: "<prefix><red>Le pack du lobby est désactivé sur ce serveur."
+  sent: "<prefix><green>Pack du lobby renvoyé à <white><count></white> joueur(s)."
+
+cosmetics:
+  menu-title: "<gradient:#00c6ff:#7b2ff7><bold>ORBIT</bold></gradient> <dark_gray>• Cosmétiques"
+  category-title: "<gradient:#00c6ff:#7b2ff7><bold>ORBIT</bold></gradient> <dark_gray>• <category>"
+  header-name: "<gradient:#ffb347:#ff4fd8><bold>Cosmétiques</bold></gradient>"
+  header-lore:
+    - "<gray>Personnalise ton apparence :"
+    - "<white><total></white> <gray>cosmétiques à collectionner."
+    - ""
+    - "<gray>Tes cosmétiques te suivent sur"
+    - "<gray>toutes les instances du réseau."
+  types:
+    trail:
+      plain: "Traînées"
+      name: "<gold><bold>Traînées"
+      description: "<gray>Des particules derrière toi quand tu marches."
+    aura:
+      plain: "Auras"
+      name: "<light_purple><bold>Auras"
+      description: "<gray>Ailes, halos, tornades... autour de toi."
+    hat:
+      plain: "Chapeaux"
+      name: "<aqua><bold>Chapeaux"
+      description: "<gray>Un bloc ou un objet sur la tête."
+    back:
+      plain: "Dos"
+      name: "<dark_purple><bold>Dos"
+      description: "<gray>Ailes, épées, sacs à dos, capes... dans ton dos."
+    balloon:
+      plain: "Ballons"
+      name: "<red><bold>Ballons"
+      description: "<gray>Un ballon attaché au bout d'une ficelle."
+    pet:
+      plain: "Familiers"
+      name: "<green><bold>Familiers"
+      description: "<gray>Un petit compagnon qui te suit."
+    mount:
+      plain: "Montures"
+      name: "<yellow><bold>Montures"
+      description: "<gray>Invoque une monture et chevauche-la."
+  rarity:
+    common: "<gray>● Commun"
+    rare: "<aqua>● Rare"
+    epic: "<light_purple>● Épique"
+    legendary: "<gold><bold>● Légendaire</bold>"
+  category-lore:
+    - "<description>"
+    - ""
+    - "<gray>Équipé : <equipped>"
+    - "<gray>Débloqués : <white><owned>/<total></white>"
+    - ""
+    - "<yellow>Clic pour ouvrir"
+  category-header-lore:
+    - "<gray>Équipé : <equipped>"
+    - "<gray>Page <white><page>/<pages></white> <dark_gray>(<total> cosmétiques)"
+    - ""
+    - "<dark_gray>Clic sur un cosmétique pour l'équiper,"
+    - "<dark_gray>re-clic pour le retirer."
+  none: "<dark_gray>aucun"
+  lore-available:
+    - "<rarity>"
+    - "<gray><description>"
+    - ""
+    - "<yellow>Clic pour équiper"
+  lore-equipped:
+    - "<rarity>"
+    - "<gray><description>"
+    - ""
+    - "<green>✔ Équipé"
+    - "<yellow>Clic pour retirer"
+  lore-locked:
+    - "<rarity>"
+    - "<gray><description>"
+    - ""
+    - "<red>✖ Verrouillé"
+  mount-lore-available:
+    - "<rarity>"
+    - "<gray><description>"
+    - ""
+    - "<yellow>Clic pour l'invoquer et monter dessus"
+  mount-lore-equipped:
+    - "<rarity>"
+    - "<gray><description>"
+    - ""
+    - "<green>✔ Ta monture"
+    - "<yellow>Clic pour l'invoquer <dark_gray>(ou /monture)"
+  empty-category: "<gray>Aucun cosmétique dans cette catégorie"
+  previous-name: "<yellow><bold>« Page précédente"
+  next-name: "<yellow><bold>Page suivante »"
+  page-lore:
+    - "<gray>Page <white><page>/<pages>"
+  back-name: "<yellow><bold>Retour"
+  back-compass-name: "<yellow><bold>Retour à la boussole"
+  remove-name: "<red><bold>Retirer"
+  remove-lore:
+    - "<gray>Retire <name><gray>."
+  remove-all-name: "<red><bold>Tout retirer"
+  remove-all-lore:
+    - "<gray>Retire tous tes cosmétiques."
+  remove-all-none:
+    - "<dark_gray>Aucun cosmétique équipé."
+  hat-lore:
+    - "<dark_gray>Cosmétique"
+    - "<gray>Change-le avec <white>/cosmetiques"
+  pet-name: "<pet> <gray>de <white><player>"
+  equipped: "<prefix><green>Cosmétique équipé : <name><green>."
+  unequipped: "<prefix><gray>Cosmétique retiré : <name><gray>."
+  unequipped-all: "<prefix><gray>Tous tes cosmétiques ont été retirés."
+  locked: "<prefix><red>Tu n'as pas encore débloqué <name><red>."
+  helmet-stuck: "<prefix><red>Inventaire plein : libère une case pour ranger ton casque avant de mettre un chapeau."
+  hat-removed-helmet: "<prefix><yellow>Ton chapeau a été retiré car tu as mis un casque."
+  unknown-category: "<prefix><red>Catégorie inconnue : <white><category></white> (trainees, auras, chapeaux, dos, ballons, familiers, montures)."
+  mount-summoned: "<prefix><green>En selle sur <name><green> ! <gray>(accroupis-toi pour descendre, elle disparaît)"
+  mount-dismissed: "<prefix><gray>Monture renvoyée."
+  mount-none: "<prefix><yellow>Choisis d'abord une monture dans le menu."
+  mount-cooldown: "<prefix><red>Attends un peu avant d'invoquer à nouveau ta monture."
+  mount-unavailable: "<prefix><red>Impossible d'invoquer une monture ici."
+  lobby-only: "<prefix><yellow>Les cosmétiques ne sont actifs qu'au lobby : tu les retrouveras en y revenant (<white>/lobby</white>)."
+
+npc:
+  created: "<prefix><green>PNJ <white><id></white> créé, il envoie vers <white><target></white>."
+  exists: "<prefix><red>Un PNJ <white><id></white> existe déjà."
+  not-found: "<prefix><red>Aucun PNJ <white><id></white>."
+  invalid-id: "<prefix><red>Identifiant invalide : lettres, chiffres, - et _ uniquement (32 caractères max)."
+  invalid-type: "<prefix><red>Type d'entité invalide : <white><type></white> (il faut une entité vivante, ex. VILLAGER, ZOMBIE, ARMOR_STAND)."
+  removed: "<prefix><green>PNJ <white><id></white> supprimé."
+  moved: "<prefix><green>PNJ <white><id></white> déplacé à ta position."
+  teleported: "<prefix><green>Téléporté au PNJ <white><id></white>."
+  target-set: "<prefix><green>Le PNJ <white><id></white> envoie maintenant vers <white><target></white>."
+  world-missing: "<prefix><red>Le monde <white><world></white> n'est pas chargé (crée-le avec <white>/devworld create <world></white>)."
+  world-teleported: "<prefix><green>Bienvenue dans <white><world></white> !"
+  name-set: "<prefix><green>Nom du PNJ <white><id></white> mis à jour."
+  profession-set: "<prefix><green>Profession du PNJ <white><id></white> : <white><profession></white>."
+  unknown-profession: "<prefix><red>Profession inconnue : <white><profession></white>."
+  list-header: "<prefix><gray>PNJ de serveurs (<white><count></white>) :"
+  list-entry: " <dark_gray>•</dark_gray> <white><id></white> <dark_gray>→</dark_gray> <aqua><target></aqua> <dark_gray>(<type>, <world> <x> <y> <z>)</dark_gray>"
+  list-empty: "<prefix><gray>Aucun PNJ. Crée-en un avec <white>/servernpc create <id> <serveur|monde:nom></white>."
+  connecting: "<prefix><green>Connexion à <white><server></white>..."
+  no-proxy: "<prefix><yellow>Ce PNJ envoie vers <white><server></white>, mais aucun proxy n'est configuré sur le serveur de dev (proxy.enabled: false)."
+  help:
+    - "<gradient:#00c6ff:#7b2ff7><bold>PNJ de serveurs</bold></gradient>"
+    - "<white>/servernpc create <id> <serveur|monde:nom> [type]</white> <gray>— crée un PNJ à ta position"
+    - "<white>/servernpc remove <id></white> <gray>— supprime un PNJ"
+    - "<white>/servernpc list</white> <gray>— liste les PNJ"
+    - "<white>/servernpc tphere <id></white> <gray>— déplace un PNJ à ta position"
+    - "<white>/servernpc tp <id></white> <gray>— te téléporte au PNJ"
+    - "<white>/servernpc server <id> <serveur></white> <gray>— cible un serveur du proxy"
+    - "<white>/servernpc world <id> <monde></white> <gray>— cible un monde de ce serveur"
+    - "<white>/servernpc name <id> <nom MiniMessage></white> <gray>— change le nom affiché"
+    - "<white>/servernpc profession <id> <profession></white> <gray>— profession d'un villageois"
+    - "<dark_gray>Depuis la console, ajoute <white>@joueur</white> à create/tphere/tp pour utiliser la position de ce joueur."
+
+# Mini-jeu feu d'artifice. <dot> = pastille à la couleur du joueur, <killer> = pseudo coloré du tireur.
+firework:
+  item:
+    name: "<gradient:#FF4FD8:#3A7FFF><bold>Feu d'artifice</bold></gradient>"
+    lore:
+      - "<gray>Mini-jeu : élimine les joueurs"
+      - "<gray>en mode feu d'artifice. Un tir suffit."
+      - "<gray>Enchaîne les éliminations pour débloquer"
+      - "<gray>des bonus : vitesse, grappin, bouclier..."
+      - ""
+      - "<#3A7FFF>Clic gauche</#3A7FFF> <gray>· entrer dans le mode"
+    name-armed: "<gradient:#FF4FD8:#3A7FFF><bold>Feu d'artifice</bold></gradient> <dark_gray>·</dark_gray> <#FF4D4D><bold>ARMÉ</bold>"
+    lore-armed:
+      - "<gray>Tu peux être éliminé par les autres"
+      - "<gray>joueurs en mode feu d'artifice."
+      - ""
+      - "<#3A7FFF>Clic droit</#3A7FFF> <gray>· tirer"
+      - "<#3A7FFF>Clic gauche</#3A7FFF> <gray>· quitter le mode"
+  enter-title: "<gradient:#FF4FD8:#3A7FFF><bold>MODE FEU D'ARTIFICE</bold></gradient>"
+  enter-subtitle: "<gray>Clic droit pour tirer · un tir = une élimination"
+  left: "<gray>Tu as quitté le mode feu d'artifice."
+  leave-locked: "<#FF4D4D>Tu viens de tirer : encore <white><seconds> s</white> avant de pouvoir quitter le mode."
+  not-armed: "<gray>Clic gauche avec le feu d'artifice pour entrer en mode feu d'artifice."
+  hud: "<dot> <white><bold>FEU D'ARTIFICE</bold></white> <dark_gray>|</dark_gray> <gray>Éliminations <white><kills></white> <dark_gray>|</dark_gray> <gray>Série <white><streak></white> <dark_gray>|</dark_gray> <gray>En jeu <white><players></white><bonuses>"
+  # Ajouté à la fin du HUD quand le joueur a des bonus. <list> = noms des bonus.
+  hud-bonuses: " <dark_gray>|</dark_gray> <#F5C542><list>"
+  eliminated-title: "<#FF4D4D><bold>ÉLIMINÉ</bold>"
+  eliminated-subtitle: "<gray>par <killer>"
+  kill: "<#7CFC9A><bold>+1</bold> <gray>· tu as éliminé <white><victim></white>"
+  feed: "<prefix><killer> <gray>a éliminé</gray> <white><victim></white><gray>.</gray>"
+  streak: "<prefix><killer> <#F5C542>enchaîne <white><streak></white> éliminations sans tomber !"
+  lobby-only: "<prefix><yellow>Le mini-jeu feu d'artifice n'existe qu'au lobby."
+  # Outils de test (/orbitdev feu, admins).
+  not-in-mode: "<prefix><red>Entre d'abord en mode feu d'artifice (clic gauche avec le feu d'artifice)."
+  streak-set: "<prefix><green>Série fixée à <white><streak></white> : bonus débloqués jusqu'à ce palier."
+  admin-help:
+    - "<gradient:#FF4FD8:#3A7FFF><bold>Mini-jeu feu d'artifice — test</bold></gradient>"
+    - "<white>/orbitdev feu cible</white> <gray>— cible d'entraînement à ta position"
+    - "<white>/orbitdev feu riposte</white> <gray>— cible qui tire sur le joueur en mode le plus proche"
+    - "<white>/orbitdev feu retirer</white> <gray>— retire toutes les cibles"
+    - "<white>/orbitdev feu serie <n></white> <gray>— fixe ta série (débloque les bonus jusqu'à n)"
+    - "<dark_gray>Les cibles comptent comme des joueurs en mode : éliminations, série et bonus."
+  dummy:
+    name: "<#FF4D4D><bold>Cible d'entraînement</bold>"
+    short-name: "<#FF4D4D>Cible d'entraînement</#FF4D4D>"
+    description: "<gray>Tire dessus en mode feu d'artifice"
+    description-fires: "<#FF4D4D>Riposte !"
+    placed: "<prefix><green>Cible d'entraînement posée.</green> <gray>Elle compte comme un joueur en mode et réapparaît 3 s après chaque élimination."
+    placed-fires: "<prefix><green>Cible qui riposte posée.</green> <gray>Elle tire toutes les 3 s sur le joueur en mode le plus proche (en vue, 48 blocs)."
+    removed: "<prefix><green><white><count></white> cible(s) d'entraînement retirée(s)."
+  shield-broken: "<#00C6FF>Ton bouclier a encaissé le tir de <killer> !"
+  shield-hit: "<gray><white><victim></white> avait un bouclier : il vient de sauter."
+  grapple:
+    name: "<#F5C542><bold>Grappin</bold>"
+    lore:
+      - "<gray>Bonus de série."
+      - ""
+      - "<#3A7FFF>Clic droit</#3A7FFF> <gray>· propulsion vers le bloc visé"
+      - "<gray>Rien à portée : saut boosté vers l'avant."
+      - ""
+      - "<dark_gray>Perdu si tu es éliminé."
+  # Bonus de série : <bonus> = nom, <hint> = effet, <streak> = éliminations d'affilée.
+  bonus:
+    unlocked: "<prefix><#F5C542><bold>BONUS</bold></#F5C542> <gray>(série de <white><streak></white>)</gray> <white><bonus></white> <dark_gray>·</dark_gray> <hint>"
+    speed:
+      name: "Vitesse"
+      hint: "<gray>Tu cours plus vite jusqu'à ton élimination."
+    grapple:
+      name: "Grappin"
+      hint: "<gray>Clic droit avec le grappin : propulsion ou saut boosté."
+    rapid-fire:
+      name: "Tir rapide"
+      hint: "<gray>Ton feu d'artifice recharge deux fois plus vite."
+    shield:
+      name: "Bouclier"
+      hint: "<gray>Le prochain tir reçu ne t'élimine pas."
+    volley:
+      name: "Salve"
+      hint: "<gray>Chaque tir part en salve de 3 fusées."

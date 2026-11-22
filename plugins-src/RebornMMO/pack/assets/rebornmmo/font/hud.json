@@ -1,0 +1,13 @@
+{
+  "providers": [
+    {"type": "space", "advances": {"\uF801": -1, "\uF821": 1, "\uF802": -2, "\uF822": 2, "\uF803": -4, "\uF823": 4, "\uF804": -8, "\uF824": 8, "\uF805": -16, "\uF825": 16, "\uF806": -32, "\uF826": 32, "\uF807": -64, "\uF827": 64, "\uF808": -128, "\uF828": 128}},
+    {"type": "bitmap", "file": "rebornmmo:font/hp_frame_big.png", "ascent": -1, "height": 7, "chars": ["\uE000"]},
+    {"type": "bitmap", "file": "rebornmmo:font/hp_frame_small.png", "ascent": -1, "height": 7, "chars": ["\uE001"]},
+    {"type": "bitmap", "file": "rebornmmo:font/hp_green_2.png", "ascent": -2, "height": 5, "chars": ["\uE010"]},
+    {"type": "bitmap", "file": "rebornmmo:font/hp_green_8.png", "ascent": -2, "height": 5, "chars": ["\uE011"]},
+    {"type": "bitmap", "file": "rebornmmo:font/hp_yellow_2.png", "ascent": -2, "height": 5, "chars": ["\uE012"]},
+    {"type": "bitmap", "file": "rebornmmo:font/hp_yellow_8.png", "ascent": -2, "height": 5, "chars": ["\uE013"]},
+    {"type": "bitmap", "file": "rebornmmo:font/hp_red_2.png", "ascent": -2, "height": 5, "chars": ["\uE014"]},
+    {"type": "bitmap", "file": "rebornmmo:font/hp_red_8.png", "ascent": -2, "height": 5, "chars": ["\uE015"]}
+  ]
+}

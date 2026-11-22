@@ -1,0 +1,34 @@
+name: OrbitMMO
+version: '0.2.0'
+main: fr.orbit.mmo.OrbitMMO
+api-version: '1.21'
+description: Orbit MMO — factions Lumière et Ombre, classes à deux spécialisations, sorts, talents, boss.
+authors: [ORBIT]
+
+commands:
+  mmo:
+    description: Ouvre le menu du jeu.
+    aliases: [menu]
+  perso:
+    description: Fiche du personnage (stats, classe, race, sorts, talents) ; /perso <joueur> pour inspecter.
+    aliases: [profil, stats]
+  lobby:
+    description: Retour au lobby du réseau.
+    aliases: [hub]
+  groupe:
+    description: Groupe de joueurs (inviter, accepter, quitter, expulser).
+    aliases: [party]
+  quetes:
+    description: Journal de quêtes ; /quetes passer pour la réplique suivante ; /quetes admin pour l'administration.
+    aliases: [quete, journal]
+  mmoadmin:
+    description: Outils d'administration et de test d'Orbit MMO.
+    permission: orbitmmo.admin
+  continent:
+    description: Le continent (monde ouvert) — téléportation, pré-génération, aperçus PNG du terrain.
+    permission: orbitmmo.admin
+
+permissions:
+  orbitmmo.admin:
+    description: Accès à /mmoadmin.
+    default: op

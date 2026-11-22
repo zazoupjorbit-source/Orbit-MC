@@ -1,0 +1,424 @@
+# ------------------------------------------------------------------
+#  Astromancien — classe propre à ORBIT : étoiles et gravité. Ressource : Orbes d'étoile (0 à 5).
+#  Les sorts « générateurs » donnent des orbes (gain: 1 ou 2), les gros sorts en dépensent (cout: 2 à 5).
+#  Les orbes s'éteignent lentement hors combat.
+#  Seul à lire les deux côtés du ciel : chaque faction a son sort signature
+#  (Lance de l'Astre pour la Lumière, Œil du Néant pour l'Ombre).
+#  Format des sorts et des talents : voir guerrier.yml.
+# ------------------------------------------------------------------
+
+nom: Astromancien
+couleur: "#9AD8FF"
+icone: NETHER_STAR
+jouable: true
+ressource: ORBES
+armure: TISSU
+pv: 0.9
+arme: STAFF
+description:
+  - "Lit la course des étoiles et plie"
+  - "la gravité à sa volonté."
+
+specialisations:
+  cosmos:
+    nom: Cosmos
+    role: DEGATS
+    icone: FIRE_CHARGE
+    couleur: "#7FB2FF"
+    arme: STAFF
+    description:
+      - "Météores, puits de gravité :"
+      - "accumuler puis vider ses orbes."
+    passifs: { degats: 8 }
+    talents:
+      poussiere_cosmique: { nom: "Poussière cosmique", icone: GLOWSTONE_DUST, palier: 0, colonne: 0, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      lecture_du_ciel: { nom: "Lecture du ciel", icone: SPYGLASS, palier: 0, colonne: 1, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      peau_d_etoile: { nom: "Peau d'étoile", icone: IRON_CHESTPLATE, palier: 0, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      etincelle_rapide: { nom: "Étincelle rapide", icone: CLOCK, palier: 1, colonne: 0, rangs: 3, effets: { incantation.etincelle_stellaire: 0.15 }, description: "Incantation d'Étincelle stellaire réduite de {incantation.etincelle_stellaire} s." }
+      meteore_lourd: { nom: "Météore lourd", icone: MAGMA_BLOCK, palier: 1, colonne: 1, rangs: 3, effets: { degats.meteore: 8 }, description: "Météore inflige {degats.meteore} % de dégâts en plus." }
+      orbite_legere: { nom: "Orbite légère", icone: FEATHER, palier: 1, colonne: 2, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      etoile_filante: { nom: "Étoile filante", icone: FIREWORK_ROCKET, palier: 2, colonne: 0, rangs: 1, sort: etoile_filante, description: "Apprend Étoile filante : un trait rapide qui donne 2 orbes." }
+      poussiere_rapide: { nom: "Poussière rapide", icone: CLOCK, palier: 2, colonne: 1, rangs: 3, effets: { recharge.poussiere_d_etoiles: 1 }, description: "Recharge de Poussière d'étoiles réduite de {recharge.poussiere_d_etoiles} s." }
+      eclat_aveuglant: { nom: "Éclat aveuglant", icone: END_ROD, palier: 2, colonne: 2, rangs: 3, effets: { critdeg: 10 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      puits_profond: { nom: "Puits profond", icone: ENDER_PEARL, palier: 3, colonne: 0, rangs: 3, effets: { duree.puits_de_gravite: 1 }, description: "Puits de gravité dure {duree.puits_de_gravite} s de plus." }
+      supernova_ardente: { nom: "Supernova ardente", icone: TNT, palier: 3, colonne: 1, rangs: 3, effets: { degats.supernova: 8 }, description: "Supernova inflige {degats.supernova} % de dégâts en plus." }
+      bouclier_d_astres_fort: { nom: "Astres protecteurs", icone: SHIELD, palier: 3, colonne: 2, rangs: 3, effets: { recharge.bouclier_d_astres: 3 }, description: "Recharge de Bouclier d'astres réduite de {recharge.bouclier_d_astres} s." }
+      trajectoire_parfaite: { nom: "Trajectoire parfaite", icone: FIREWORK_ROCKET, palier: 4, colonne: 0, rangs: 3, requiert: etoile_filante, effets: { degats.etoile_filante: 10 }, description: "Étoile filante inflige {degats.etoile_filante} % de dégâts en plus." }
+      conjonction_prolongee: { nom: "Conjonction prolongée", icone: CLOCK, palier: 4, colonne: 1, rangs: 2, effets: { duree.conjonction: 2 }, description: "Conjonction dure {duree.conjonction} s de plus." }
+      meteore_rapide: { nom: "Chute rapide", icone: CLOCK, palier: 4, colonne: 2, rangs: 3, effets: { incantation.meteore: 0.2 }, description: "Incantation de Météore réduite de {incantation.meteore} s." }
+      effondrement: { nom: "Effondrement", icone: CRYING_OBSIDIAN, palier: 5, colonne: 0, rangs: 1, sort: effondrement, requiert: puits_profond, description: "Apprend Effondrement : la gravité écrase la zone visée et étourdit." }
+      maitre_des_orbites: { nom: "Maître des orbites", icone: NETHER_STAR, palier: 5, colonne: 1, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      voile_stellaire: { nom: "Voile stellaire", icone: WHITE_WOOL, palier: 5, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      meteore_precis: { nom: "Météore précis", icone: TARGET, palier: 6, colonne: 0, rangs: 3, effets: { crit.meteore: 4 }, description: "Météore : +{crit.meteore} % de critique." }
+      gravite_ecrasante: { nom: "Gravité écrasante", icone: ANVIL, palier: 6, colonne: 1, rangs: 3, requiert: effondrement, effets: { degats.effondrement: 10 }, description: "Effondrement inflige {degats.effondrement} % de dégâts en plus." }
+      supernova_econome: { nom: "Supernova contenue", icone: HONEYCOMB, palier: 6, colonne: 2, rangs: 1, effets: { cout.supernova: 1 }, description: "Supernova coûte {cout.supernova} orbe de moins." }
+      effondrement_rapide: { nom: "Effondrement rapide", icone: CLOCK, palier: 7, colonne: 0, rangs: 2, requiert: effondrement, effets: { recharge.effondrement: 5 }, description: "Recharge d'Effondrement réduite de {recharge.effondrement} s." }
+      lumiere_mourante: { nom: "Lumière mourante", icone: SHROOMLIGHT, palier: 7, colonne: 1, rangs: 5, effets: { critdeg: 5 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      noyau_dense: { nom: "Noyau dense", icone: HEAVY_CORE, palier: 7, colonne: 2, rangs: 3, effets: { pv: 3 }, description: "+{pv} % de points de vie." }
+      pluie_d_eclats: { nom: "Pluie d'Éclats", icone: AMETHYST_CLUSTER, palier: 8, colonne: 0, rangs: 1, sort: pluie_d_eclats, requiert: effondrement, description: "Apprend Pluie d'Éclats : vous rappelez la Nuit des Étoiles Filantes sur une large zone." }
+      ciel_dechire: { nom: "Ciel déchiré", icone: END_CRYSTAL, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      alignement_parfait: { nom: "Alignement parfait", icone: ENDER_EYE, palier: 8, colonne: 2, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+
+  constellation:
+    nom: Constellation
+    role: SOIN
+    icone: NETHER_STAR
+    couleur: "#E0B864"
+    arme: GRIMOIRE
+    description:
+      - "Relie les alliés par des étoiles :"
+      - "boucliers, soins, petits bonds."
+    passifs: { soins: 10 }
+    talents:
+      lueur_bienveillante: { nom: "Lueur bienveillante", icone: GLOW_BERRIES, palier: 0, colonne: 0, rangs: 5, effets: { soins: 1 }, description: "+{soins} % de soins." }
+      etoile_porte_bonheur: { nom: "Étoile porte-bonheur", icone: NETHER_STAR, palier: 0, colonne: 1, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de soin critique." }
+      peau_d_etoile_c: { nom: "Peau d'étoile", icone: IRON_CHESTPLATE, palier: 0, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      lien_renforce_c: { nom: "Lien renforcé", icone: LEAD, palier: 1, colonne: 0, rangs: 3, effets: { soins.lien_stellaire: 8 }, description: "Lien stellaire soigne {soins.lien_stellaire} % de plus." }
+      lumiere_rapide: { nom: "Lumière rapide", icone: CLOCK, palier: 1, colonne: 1, rangs: 3, effets: { incantation.lumiere_des_astres: 0.25 }, description: "Incantation de Lumière des astres réduite de {incantation.lumiere_des_astres} s." }
+      constellation_durable: { nom: "Constellation durable", icone: CLOCK, palier: 1, colonne: 2, rangs: 3, effets: { duree.constellation: 1 }, description: "Constellation dure {duree.constellation} s de plus." }
+      etoile_gardienne: { nom: "Étoile gardienne", icone: END_ROD, palier: 2, colonne: 0, rangs: 1, sort: etoile_gardienne, description: "Apprend Étoile gardienne : une étoile veille sur l'allié visé et le soigne." }
+      lien_durable: { nom: "Lien durable", icone: CLOCK, palier: 2, colonne: 1, rangs: 3, effets: { duree.lien_stellaire: 2 }, description: "Lien stellaire dure {duree.lien_stellaire} s de plus." }
+      constellation_rapide: { nom: "Constellation rapide", icone: CLOCK, palier: 2, colonne: 2, rangs: 3, effets: { recharge.constellation: 1 }, description: "Recharge de Constellation réduite de {recharge.constellation} s." }
+      lumiere_intense: { nom: "Lumière intense", icone: GLOWSTONE, palier: 3, colonne: 0, rangs: 3, effets: { soins.lumiere_des_astres: 6 }, description: "Lumière des astres soigne {soins.lumiere_des_astres} % de plus." }
+      nova_rapide_c: { nom: "Nova rapide", icone: CLOCK, palier: 3, colonne: 1, rangs: 3, effets: { recharge.nova_bienveillante: 1.5 }, description: "Recharge de Nova bienveillante réduite de {recharge.nova_bienveillante} s." }
+      voile_stellaire_c: { nom: "Voile stellaire", icone: WHITE_WOOL, palier: 3, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      etoile_fidele: { nom: "Étoile fidèle", icone: END_ROD, palier: 4, colonne: 0, rangs: 3, requiert: etoile_gardienne, effets: { soins.etoile_gardienne: 10 }, description: "Étoile gardienne soigne {soins.etoile_gardienne} % de plus." }
+      firmament_prolonge: { nom: "Firmament prolongé", icone: CLOCK, palier: 4, colonne: 1, rangs: 2, effets: { duree.firmament: 2 }, description: "Firmament dure {duree.firmament} s de plus." }
+      nova_genereuse: { nom: "Nova généreuse", icone: SUNFLOWER, palier: 4, colonne: 2, rangs: 3, effets: { soins.nova_bienveillante: 8 }, description: "Nova bienveillante soigne {soins.nova_bienveillante} % de plus." }
+      anneau_celeste: { nom: "Anneau céleste", icone: HEART_OF_THE_SEA, palier: 5, colonne: 0, rangs: 1, sort: anneau_celeste, description: "Apprend Anneau céleste : un anneau d'étoiles protège le groupe." }
+      harmonie_des_spheres: { nom: "Harmonie des sphères", icone: NETHER_STAR, palier: 5, colonne: 1, rangs: 3, effets: { soins: 2 }, description: "+{soins} % de soins." }
+      bond_rapide_c: { nom: "Bond rapide", icone: CLOCK, palier: 5, colonne: 2, rangs: 3, effets: { recharge.saut_d_etoile: 2 }, description: "Recharge de Saut d'étoile réduite de {recharge.saut_d_etoile} s." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      astre_favorable: { nom: "Astre favorable", icone: ENDER_EYE, palier: 6, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de soin critique." }
+      anneau_epais: { nom: "Anneau épais", icone: HEART_OF_THE_SEA, palier: 6, colonne: 1, rangs: 3, requiert: anneau_celeste, effets: { recharge.anneau_celeste: 8 }, description: "Recharge d'Anneau céleste réduite de {recharge.anneau_celeste} s." }
+      nova_contenue: { nom: "Nova contenue", icone: HONEYCOMB, palier: 6, colonne: 2, rangs: 1, effets: { cout.nova_bienveillante: 1 }, description: "Nova bienveillante coûte {cout.nova_bienveillante} orbe de moins." }
+      anneau_durable: { nom: "Anneau durable", icone: CLOCK, palier: 7, colonne: 0, rangs: 2, requiert: anneau_celeste, effets: { duree.anneau_celeste: 2 }, description: "Anneau céleste dure {duree.anneau_celeste} s de plus." }
+      chant_des_etoiles: { nom: "Chant des étoiles", icone: NOTE_BLOCK, palier: 7, colonne: 1, rangs: 5, effets: { soins: 2 }, description: "+{soins} % de soins." }
+      noyau_dense_c: { nom: "Noyau dense", icone: HEAVY_CORE, palier: 7, colonne: 2, rangs: 3, effets: { pv: 3 }, description: "+{pv} % de points de vie." }
+      renaissance_stellaire: { nom: "Renaissance stellaire", icone: BEACON, palier: 8, colonne: 0, rangs: 1, sort: renaissance_stellaire, requiert: anneau_celeste, description: "Apprend Renaissance stellaire : rend 40 % des PV au groupe, puis le soigne encore." }
+      ciel_protecteur: { nom: "Ciel protecteur", icone: END_CRYSTAL, palier: 8, colonne: 1, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      lumiere_eternelle: { nom: "Lumière éternelle", icone: GLOWSTONE, palier: 8, colonne: 2, rangs: 3, requiert: lumiere_intense, effets: { soins.lumiere_des_astres: 8 }, description: "Lumière des astres soigne {soins.lumiere_des_astres} % de plus." }
+
+sorts:
+  # ---------------- Toute la classe ----------------
+  etincelle_stellaire:
+    nom: Étincelle stellaire
+    type: PROJECTILE
+    icone: GLOWSTONE_DUST
+    couleur: "#9AD8FF"
+    niveau: 1
+    gain: 1
+    incantation: 1.5
+    portee: 30
+    puissance: 1.5
+    description: "Un trait de lumière d'étoile sur la cible visée. Donne 1 orbe."
+  bouclier_d_astres:
+    nom: Bouclier d'astres
+    type: BUFF
+    icone: SHIELD
+    couleur: "#CFE8FF"
+    niveau: 2
+    recharge: 30
+    gcd: false
+    duree: 10
+    effets: { bouclier: 20 }
+    description: "De petites étoiles tournent autour de vous : bouclier de 20 % de vos PV pendant 10 s."
+  saut_d_etoile:
+    nom: Saut d'étoile
+    type: BOND
+    icone: ENDER_PEARL
+    couleur: "#9AD8FF"
+    niveau: 4
+    recharge: 15
+    portee: 14
+    zone: 3
+    puissance: 0.3
+    description: "La gravité s'allège : vous bondissez vers le point visé."
+  alignement_des_astres:
+    nom: Alignement des astres
+    type: CRI
+    icone: SPYGLASS
+    couleur: "#E0B864"
+    niveau: 6
+    recharge: 60
+    gcd: false
+    zone: 20
+    duree: 60
+    effets: { bonus-crit: 5 }
+    description: "Les astres s'alignent : vous et votre groupe gagnez 5 % de critique pendant 60 s."
+  apesanteur:
+    nom: Apesanteur
+    type: CRI
+    icone: PHANTOM_MEMBRANE
+    couleur: "#CFE8FF"
+    niveau: 8
+    recharge: 25
+    zone: 6
+    puissance: 0.2
+    effets: { soulever: 1.0 }
+    description: "La gravité s'annule autour de vous : les ennemis sont soulevés dans les airs."
+  comete:
+    nom: Comète
+    type: PROJECTILE
+    icone: FIRE_CHARGE
+    couleur: "#7FB2FF"
+    niveau: 12
+    cout: 2
+    portee: 30
+    zone: 3
+    puissance: 2.6
+    description: "Dépense 2 orbes : une comète qui éclate sur les ennemis proches de la cible."
+  orbite:
+    nom: Orbite
+    type: BUFF
+    icone: HEART_OF_THE_SEA
+    couleur: "#CFE8FF"
+    niveau: 20
+    recharge: 120
+    gcd: false
+    duree: 6
+    effets: { reduction: 50 }
+    description: "Les coups dévient autour de vous comme des astres en orbite : −50 % de dégâts subis pendant 6 s."
+  lance_de_l_astre:
+    nom: Lance de l'Astre
+    type: PROJECTILE
+    icone: SPECTRAL_ARROW
+    couleur: "#FFD66E"
+    faction: lumiere
+    niveau: 16
+    cout: 3
+    recharge: 30
+    portee: 35
+    puissance: 3.5
+    effets: { etourdir: 1 }
+    description: "Signature de la Lumière : une lance de la lumière de l'Astre qui transperce et étourdit 1 s."
+  oeil_du_neant:
+    nom: Œil du Néant
+    type: ZONE
+    icone: ENDER_EYE
+    couleur: "#B36BFF"
+    faction: ombre
+    niveau: 16
+    cout: 3
+    recharge: 30
+    portee: 25
+    zone: 4
+    duree: 4
+    puissance: 0.8
+    effets: { affaiblir: 6 }
+    description: "Signature de l'Ombre : l'œil du Néant s'ouvre sur la zone visée, la ronge et affaiblit les ennemis."
+
+  # ---------------- Cosmos ----------------
+  poussiere_d_etoiles:
+    nom: Poussière d'étoiles
+    type: PROJECTILE
+    icone: SUGAR
+    couleur: "#CFE8FF"
+    spe: [cosmos]
+    niveau: 2
+    gain: 1
+    recharge: 6
+    portee: 30
+    puissance: 1.4
+    description: "Un nuage de poussière d'étoiles instantané. Donne 1 orbe."
+  meteore:
+    nom: Météore
+    type: ZONE
+    icone: MAGMA_BLOCK
+    couleur: "#FF8A3B"
+    spe: [cosmos]
+    niveau: 5
+    cout: 3
+    incantation: 1.5
+    portee: 25
+    zone: 4
+    duree: 2
+    puissance: 2.2
+    description: "Dépense 3 orbes : un météore s'écrase sur la zone visée."
+  puits_de_gravite:
+    nom: Puits de gravité
+    type: ZONE
+    icone: ENDER_PEARL
+    couleur: "#5A3A8C"
+    spe: [cosmos]
+    niveau: 9
+    cout: 2
+    recharge: 20
+    portee: 25
+    zone: 5
+    duree: 5
+    puissance: 0.4
+    effets: { ralentir: 2 }
+    description: "Dépense 2 orbes : un puits de gravité écrase et ralentit les ennemis pendant 5 s."
+  supernova:
+    nom: Supernova
+    type: TOURBILLON
+    icone: TNT
+    couleur: "#FFF3B0"
+    spe: [cosmos]
+    niveau: 14
+    cout: 5
+    portee: 7
+    puissance: 4.0
+    effets: { repousser: 1.2 }
+    description: "Dépense 5 orbes : une étoile explose autour de vous et repousse les ennemis."
+  conjonction:
+    nom: Conjonction
+    type: BUFF
+    icone: END_CRYSTAL
+    couleur: "#9AD8FF"
+    spe: [cosmos]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 12
+    effets: { bonus-degats: 20, bonus-crit: 15 }
+    description: "+20 % de dégâts et +15 % de critique pendant 12 s."
+  etoile_filante:
+    nom: Étoile filante
+    type: PROJECTILE
+    icone: FIREWORK_ROCKET
+    couleur: "#FFF3B0"
+    spe: [cosmos]
+    talent: true
+    gain: 2
+    recharge: 12
+    portee: 35
+    puissance: 2.0
+    description: "Un trait rapide comme une étoile filante. Donne 2 orbes."
+  effondrement:
+    nom: Effondrement
+    type: ZONE
+    icone: CRYING_OBSIDIAN
+    couleur: "#5A3A8C"
+    spe: [cosmos]
+    talent: true
+    cout: 4
+    recharge: 40
+    portee: 25
+    zone: 6
+    duree: 3
+    puissance: 1.4
+    effets: { etourdir: 1 }
+    description: "Dépense 4 orbes : la gravité écrase la zone visée et étourdit pendant 3 s."
+  pluie_d_eclats:
+    nom: Pluie d'Éclats
+    type: ZONE
+    icone: AMETHYST_CLUSTER
+    couleur: "#CFA8FF"
+    spe: [cosmos]
+    talent: true
+    cout: 5
+    recharge: 60
+    portee: 30
+    zone: 7
+    duree: 5
+    puissance: 1.8
+    description: "Dépense 5 orbes : des Éclats tombent du ciel sur une large zone pendant 5 s."
+
+  # ---------------- Constellation ----------------
+  lien_stellaire:
+    nom: Lien stellaire
+    type: SOIN
+    icone: LEAD
+    couleur: "#E0B864"
+    spe: [constellation]
+    niveau: 2
+    gain: 1
+    portee: 25
+    puissance: 1.4
+    duree: 6
+    effets: { soin-par-sec: 1 }
+    description: "Relie l'allié visé à une étoile : soin, puis 1 % des PV par seconde pendant 6 s. Donne 1 orbe."
+  constellation:
+    nom: Constellation
+    type: CRI
+    icone: NETHER_STAR
+    couleur: "#E0B864"
+    spe: [constellation]
+    niveau: 5
+    cout: 3
+    recharge: 10
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { bouclier: 12 }
+    description: "Dépense 3 orbes : une constellation relie le groupe et pose un bouclier de 12 % des PV pendant 10 s."
+  lumiere_des_astres:
+    nom: Lumière des astres
+    type: SOIN
+    icone: GLOWSTONE
+    couleur: "#FFF3B0"
+    spe: [constellation]
+    niveau: 9
+    cout: 2
+    incantation: 2.0
+    portee: 25
+    puissance: 3.8
+    description: "Dépense 2 orbes : un gros soin incanté sur l'allié visé (immobile)."
+  nova_bienveillante:
+    nom: Nova bienveillante
+    type: CRI
+    icone: SUNFLOWER
+    couleur: "#FFE9A8"
+    spe: [constellation]
+    niveau: 14
+    cout: 5
+    recharge: 15
+    zone: 15
+    effets: { soin: 20 }
+    description: "Dépense 5 orbes : une étoile éclate en douceur et rend 20 % des PV au groupe."
+  firmament:
+    nom: Firmament
+    type: CRI
+    icone: BEACON
+    couleur: "#CFE8FF"
+    spe: [constellation]
+    niveau: 30
+    recharge: 180
+    gcd: false
+    zone: 20
+    duree: 10
+    effets: { soin: 30, bouclier: 15 }
+    description: "Tout le ciel veille sur le groupe : 30 % des PV rendus et bouclier de 15 % des PV pendant 10 s."
+  etoile_gardienne:
+    nom: Étoile gardienne
+    type: SOIN
+    icone: END_ROD
+    couleur: "#FFF3B0"
+    spe: [constellation]
+    talent: true
+    cout: 1
+    recharge: 15
+    portee: 25
+    puissance: 2.5
+    duree: 6
+    effets: { soin-par-sec: 3 }
+    description: "Dépense 1 orbe : une étoile veille sur l'allié visé, soin puis 3 % des PV par seconde pendant 6 s."
+  anneau_celeste:
+    nom: Anneau céleste
+    type: CRI
+    icone: HEART_OF_THE_SEA
+    couleur: "#CFE8FF"
+    spe: [constellation]
+    talent: true
+    recharge: 60
+    gcd: false
+    zone: 15
+    duree: 8
+    effets: { bouclier: 20, reduction: 10 }
+    description: "Un anneau d'étoiles : bouclier de 20 % des PV et −10 % de dégâts subis pour le groupe pendant 8 s."
+  renaissance_stellaire:
+    nom: Renaissance stellaire
+    type: CRI
+    icone: BEACON
+    couleur: "#FFFFFF"
+    spe: [constellation]
+    talent: true
+    recharge: 180
+    gcd: false
+    zone: 20
+    duree: 8
+    effets: { soin: 40, soin-par-sec: 3 }
+    description: "Rend 40 % des PV au groupe, puis 3 % par seconde pendant 8 s."

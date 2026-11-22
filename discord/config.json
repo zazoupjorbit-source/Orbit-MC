@@ -1,0 +1,26 @@
+{
+  "minecraft": {
+    "address": "",
+    "version": "26.3"
+  },
+  "links": {
+    "site": "",
+    "boutique": "",
+    "youtube": "",
+    "tiktok": "",
+    "x": "",
+    "twitch": ""
+  },
+  "status": {
+    "enabled": true,
+    "intervalSeconds": 60,
+    "servers": [
+      { "name": "Réseau ORBIT (proxy)", "host": "127.0.0.1", "port": 25565 },
+      { "name": "Lobby", "host": "127.0.0.1", "port": 30065 },
+      { "name": "Reborn", "host": "127.0.0.1", "port": 25567 },
+      { "name": "Survie", "host": "127.0.0.1", "port": 25569 },
+      { "name": "Extraction", "host": "127.0.0.1", "port": 25570 },
+      { "name": "Practice", "host": "127.0.0.1", "port": 25571 }
+    ]
+  }
+}

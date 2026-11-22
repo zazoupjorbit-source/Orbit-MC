@@ -1,0 +1,265 @@
+# ------------------------------------------------------------------
+#  Zone de départ Lumière — le Val d'Ardence (quêtes 1 à 4)
+#  Source narrative : lore/zones/LUMIERE-DEPART.md
+#
+#  Les lieux sont des POINTS nommés, posés en jeu :
+#     /quetes admin point <nom>      (à votre position)
+#     /quetes admin manquants        (ce qu'il reste à poser)
+#  Une quête ne se lance que lorsque tous ses points sont posés.
+#  Après modification de ce fichier : /quetes admin recharger
+#
+#  Dialogues : « id_du_pnj: texte », « joueur: texte », ou texte seul (narration).
+#  {joueur} est remplacé par le pseudo.
+#
+#  Types d'étapes : PARLER (pnj), ATTEINDRE (point, rayon), INTERAGIR (point),
+#  TUER (monstres, nombre), RAMASSER (monstres, nombre, chance, objet),
+#  SORT (lancer un sort), ANCRAGE (point : devient le lieu de réapparition).
+# ------------------------------------------------------------------
+
+pnj:
+  maelis:
+    nom: "Sœur Maëlis"
+    titre: "Prêtresse de l'Aube"
+    couleur: "#FFE9A8"
+    type: MANNEQUIN
+    point: maelis
+    repliques:
+      - "Que la lumière de l'Astre veille sur vous."
+      - "Ils sont si nombreux à s'être réveillés cette nuit…"
+  teo:
+    nom: "Téo"
+    titre: "Marqué"
+    couleur: "#D7DCE2"
+    type: MANNEQUIN
+    point: teo
+    repliques:
+      - "J'arrive pas à me rappeler le nom de ma mère. C'est normal, ça ?"
+  brune:
+    nom: "Brune"
+    titre: "Marquée"
+    couleur: "#D7DCE2"
+    type: MANNEQUIN
+    point: brune
+    repliques:
+      - "La lumière chante encore, tu l'entends ?"
+  # Le Marqué mourant n'a pas de corps posé : il parle pendant l'étape « INTERAGIR ».
+  mourant:
+    nom: "Marqué inconnu"
+    couleur: "#8C96A3"
+    point: mourant_sans_corps
+  varenne:
+    nom: "Capitaine Varenne"
+    titre: "Garnison de Veillemont"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    point: varenne
+    main: IRON_SWORD
+    repliques:
+      - "Garde les yeux ouverts, Marqué."
+      - "Si t'as le temps de bavarder, t'as le temps de tuer des Rampants."
+  orsan:
+    nom: "Maître Orsan"
+    titre: "Astromancien de l'Aube"
+    couleur: "#9AD8FF"
+    type: MANNEQUIN
+    point: orsan
+    repliques:
+      - "Votre Marque a-t-elle changé de couleur ? Non ? Dommage."
+      - "Les étoiles ne mentent jamais. Les hommes, si."
+
+monstres:
+  rampant:
+    nom: "Rampant cristallin"
+    type: SILVERFISH
+    taille: 2.2
+    pv: 0.6
+    degats: 0.55
+    vitesse: 0.9
+  loup_rampant:
+    nom: "Loup tordu"
+    type: WOLF
+    taille: 1.05
+    pv: 0.7
+    degats: 0.6
+    vitesse: 1.05
+
+apparitions:
+  rampants_veillemont:
+    point: rampants
+    monstre: rampant
+    niveau: [2, 3]
+    nombre: 4
+    rayon: 10
+  loups_veillemont:
+    point: rampants
+    monstre: loup_rampant
+    niveau: [2, 3]
+    nombre: 2
+    rayon: 10
+
+quetes:
+
+  # ---------------------------------------------------------------- 1
+  l_eveil:
+    nom: "L'Éveil"
+    faction: lumiere
+    niveau: 1
+    depart: cratere_eveil
+    resume:
+      - "Vous vous êtes réveillé au fond d'un cratère,"
+      - "une lumière dorée sous la peau."
+    intro:
+      - "Le froid. C'est la première chose."
+      - "Puis la lumière — pas celle du jour, mais une lueur dorée qui pulse sous ta peau, au rythme de ton cœur."
+      - "Autour de toi, la terre est vitrifiée, encore fumante. Au fond du cratère, un éclat de cristal chante doucement."
+      - "Tu ne te souviens pas de ton nom. Mais tu sais une chose : cette lumière t'a choisi."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Sortir du cratère"
+        point: bord_cratere
+        rayon: 3
+      - type: INTERAGIR
+        texte: "Toucher l'Éclat"
+        point: eclat_eveil
+        apres:
+          - "Tes doigts effleurent le cristal. La Marque s'embrase sur ton bras, brûlante, puis s'apaise."
+          - "Quelqu'un approche à travers la fumée."
+      - type: PARLER
+        texte: "Parler à Sœur Maëlis"
+        pnj: maelis
+        dialogue:
+          - "maelis: Ne bougez pas trop vite… Là. Regardez-moi. Vous m'entendez ?"
+          - "maelis: Votre bras… Par l'Aube. Vous portez la Marque."
+          - "maelis: Vous êtes tombé avec les étoiles, cette nuit, et vous êtes encore en vie."
+          - "joueur: Je… je ne me souviens de rien."
+          - "maelis: C'est normal. Ils sont tous comme vous. Venez, il y en a d'autres."
+    recompenses:
+      xp: 60
+      or: 10
+
+  # ---------------------------------------------------------------- 2
+  ceux_qui_sont_tombes:
+    nom: "Ceux qui sont tombés"
+    faction: lumiere
+    niveau: 1
+    requiert: [l_eveil]
+    resume:
+      - "Sœur Maëlis cherche les autres Marqués"
+      - "perdus dans les Champs Vitrifiés."
+    intro:
+      - "maelis: Ils errent dans les Champs Vitrifiés, perdus comme vous l'étiez."
+      - "maelis: Aidez-moi à les retrouver. Parlez-leur, rassurez-les."
+    etapes:
+      - type: PARLER
+        texte: "Retrouver Téo"
+        pnj: teo
+        dialogue:
+          - "teo: T'es… t'es comme moi ? T'as la lumière, toi aussi ?"
+          - "teo: J'arrive pas à me rappeler mon nom. Ni rien d'autre."
+          - "joueur: Une prêtresse nous attend. Tu n'es pas seul."
+          - "teo: … D'accord. D'accord, j'y vais."
+      - type: PARLER
+        texte: "Retrouver Brune"
+        pnj: brune
+        dialogue:
+          - "brune: Chut. Écoute. Tu l'entends chanter ?"
+          - "brune: La lumière. Elle chante sous ma peau depuis cette nuit."
+          - "brune: Va voir l'autre, là-bas. Lui, il ne chante pas. Il crie."
+      - type: INTERAGIR
+        texte: "Approcher du troisième Marqué"
+        point: mourant
+        apres:
+          - "Un homme est recroquevillé au bord d'un cratère. Sa Marque vacille comme une bougie dans le vent."
+          - "mourant: Elle brûle… elle brûle trop fort…"
+          - "mourant: Je ne la sens plus…"
+          - "La lueur s'éteint. Son corps se fige, grisaille, puis s'effondre en cendres que le vent emporte."
+      - type: PARLER
+        texte: "Revenir voir Sœur Maëlis"
+        pnj: maelis
+        dialogue:
+          - "maelis: Je sais. Je l'ai vu aussi."
+          - "maelis: L'Éclat choisit, mais il ne garde pas tout le monde."
+          - "maelis: Vous, il vous a gardé. Ça veut dire quelque chose."
+          - "maelis: Allez à Veillemont, avant la nuit. Le capitaine Varenne aura besoin de vous."
+    recompenses:
+      xp: 90
+      or: 15
+
+  # ---------------------------------------------------------------- 3
+  ce_qui_rampe:
+    nom: "Ce qui rampe"
+    faction: lumiere
+    niveau: 1
+    requiert: [ceux_qui_sont_tombes]
+    donneur: varenne
+    resume:
+      - "Des créatures tordues par les Éclats"
+      - "rôdent autour de Veillemont."
+    offre:
+      - "varenne: Encore un Marqué. La Sœur en ramène tous les jours."
+      - "varenne: Écoute-moi bien. Ici, j'ai pas besoin de miracle, j'ai besoin d'épées."
+      - "varenne: Ces choses dehors, on les appelle les Rampants. Avant, c'étaient des renards, des loups. Les Éclats les ont tordus."
+      - "varenne: Tue-les. Après, on parlera."
+    etapes:
+      - type: SORT
+        texte: "Lancer un sort de votre classe"
+        monstres: [rampant, loup_rampant]
+        apres:
+          - "La magie répond à la Marque, presque d'elle-même."
+      - type: TUER
+        texte: "Tuer des Rampants"
+        monstres: [rampant, loup_rampant]
+        nombre: 8
+      - type: PARLER
+        texte: "Faire votre rapport au capitaine Varenne"
+        pnj: varenne
+        dialogue:
+          - "varenne: Huit. Pas mal, pour quelqu'un qui a oublié son propre nom."
+          - "varenne: Va voir Orsan, l'astromancien. Il passe ses nuits à fixer le ciel, mais il sait des choses sur votre Marque."
+    recompenses:
+      xp: 150
+      or: 25
+
+  # ---------------------------------------------------------------- 4
+  poussiere_d_etoile:
+    nom: "Poussière d'étoile"
+    faction: lumiere
+    niveau: 2
+    requiert: [ce_qui_rampe]
+    donneur: orsan
+    resume:
+      - "Maître Orsan étudie la poussière d'Éclat"
+      - "et s'intéresse beaucoup à votre Marque."
+    offre:
+      - "orsan: Ah. Le Marqué dont parle Varenne. Approchez, que je vous voie."
+      - "orsan: Les Rampants portent en eux de la poussière d'Éclat. Elle les a changés."
+      - "orsan: Rapportez-m'en. Pour la science… et pour vous, je le crains."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer de la poussière d'Éclat"
+        monstres: [rampant, loup_rampant]
+        nombre: 6
+        chance: 0.6
+        objet: "Poussière d'Éclat"
+      - type: PARLER
+        texte: "Apporter la poussière à Maître Orsan"
+        pnj: orsan
+        dialogue:
+          - "orsan: Fascinant… Votre Marque réagit à la poussière. Elle la boit, littéralement."
+          - "orsan: Venez. Il y a ici un Éclat plus ancien que le village. Je veux voir ce qu'il fait de vous."
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage de Veillemont"
+        point: ancre_veillemont
+        apres:
+          - "Une chaleur te traverse, comme un fil tendu entre ta poitrine et le cristal."
+          - "orsan: Voilà. Désormais, si vous tombez au combat, la lumière vous ramènera ici."
+          - "orsan: Ne me demandez pas comment, je ne le sais pas encore. Mais je compte bien le découvrir."
+          - "orsan: Revenez me voir de temps en temps. J'aimerais suivre… votre évolution."
+    recompenses:
+      xp: 180
+      or: 30
+      objets:
+        - materiau: AMETHYST_SHARD
+          nom: "Éclat de souvenir"
+          description:
+            - "Un fragment tiède du cristal qui t'a marqué."

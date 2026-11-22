@@ -1,0 +1,70 @@
+Carte 8000 x 8000 blocs, 4000 px de cote (2 blocs par pixel), graine 2026.
+Terres : 35.9 millions de blocs carres (56 % de la carte). Fond marin le plus bas Y 32, sommet Y 202 en (-277, -2153).
+
+Regions (part des terres, altitude moyenne) :
+  A Prés d'Auréval       lumiere  niv.  1-8  Plaine          3.8 M blocs2 (10.7 %), Y moyen 69
+  B Bois de l'Aube       lumiere  niv.  8-16 Forêt claire    2.7 M blocs2 ( 7.5 %), Y moyen 79
+  C Collines du Ponant   lumiere  niv. 16-26 Collines        2.6 M blocs2 ( 7.1 %), Y moyen 94
+  D Landes de Morneval   ombre    niv.  1-8  Lande           3.2 M blocs2 ( 8.9 %), Y moyen 71
+  E Sylve Noire          ombre    niv.  8-16 Forêt sombre    2.8 M blocs2 ( 7.8 %), Y moyen 79
+  F Marais des Murmures  ombre    niv. 16-26 Marais          4.0 M blocs2 (11.2 %), Y moyen 64
+  G La Marche            conteste niv. 26-36 Plaine          5.7 M blocs2 (16.0 %), Y moyen 72
+  H Désert d'Ocre        conteste niv. 36-48 Désert          4.2 M blocs2 (11.8 %), Y moyen 74
+  J Cimes de Givre       conteste niv. 48-60 Montagne        3.0 M blocs2 ( 8.2 %), Y moyen 138
+  K Terres de Cendre     conteste niv. 60-72 Cendres         2.8 M blocs2 ( 7.7 %), Y moyen 98
+  L La Fournaise         conteste niv. 72-80 Volcan          1.1 M blocs2 ( 3.0 %), Y moyen 115
+
+Fleuves et coulees :
+  L'Aure                 3276 blocs, de Y 103 a Y 63
+  La Morne               3692 blocs, de Y 146 a Y 63
+  La Vive                4592 blocs, de Y 163 a Y 63
+  Le Murmure             2360 blocs, de Y 71 a Y 63
+  Ruisseau du Ponant     1168 blocs, de Y 96 a Y 72
+  Coulée du Nord          628 blocs, de Y 193 a Y 62 (lave)
+  Coulée de l'Est        1000 blocs, de Y 194 a Y 92 (lave)
+
+Lacs :
+  Lac Miroir           niveau Y 69 en (100, -350)
+  Lac du Ponant        niveau Y 96 en (-2300, -1750)
+  Étang Noir           niveau Y 75 en (1800, -1300)
+  Oasis d'Ambre        niveau Y 91 en (-1000, 2250)
+  Lac des Cimes        niveau Y 163 en (-150, -2050)
+
+Lieux (region, altitude, distance a la mer) :
+  capitale Auréval                          (-2550,   520)  Prés d'Auréval       Y  63  mer a 450
+  capitale Morneval                         ( 2550,   250)  Landes de Morneval   Y  65  mer a 355
+  ville    Les Quatre-Vents                 (   60,   220)  La Marche            Y  68  mer a plus de 1500
+  village  Bourg des Pâtres                 (-2250,  1150)  Prés d'Auréval       Y  71  mer a 883
+  village  Village Sylvestre                (-1950,  -750)  Bois de l'Aube       Y  73  mer a 956
+  village  Guet du Ponant                   (-2520, -1780)  Collines du Ponant   Y 105  mer a 387
+  village  Gris-Hameau                      ( 2350,   780)  Landes de Morneval   Y  71  mer a 546
+  village  Sombrebois                       ( 1750,  -850)  Sylve Noire          Y  82  mer a 1172
+  village  Les Pilotis                      ( 1900,  1650)  Marais des Murmures  Y  64  mer a 823
+  village  Oasis d'Ambre                    (-1000,  2370)  Désert d'Ocre        Y  76  mer a 849
+  village  Fort Blanc                       ( -350, -1900)  Cimes de Givre       Y 139  mer a 1358
+  village  Camp des Cendres                 ( 1300, -2550)  Terres de Cendre     Y  91  mer a 493
+  village  Guet de la Fournaise             (  -50, -2880)  Terres de Cendre     Y 146  mer a 754
+  donjon   Terrier des Kobolds (étage 1)    (-2750,  1350)  Prés d'Auréval       Y  70  mer a 402
+  donjon   Enclos du Taureau (étage 2)      ( 2750,  -450)  Landes de Morneval   Y  67  mer a 277
+  donjon   Crypte de l'Aube                 (-1350,  -850)  Bois de l'Aube       Y  78  mer a plus de 1500
+  donjon   Cœur de la Sylve (étage 3)       ( 2100, -1350)  Sylve Noire          Y  77  mer a 786
+  donjon   Mine du Ponant                   (-2100, -2450)  Collines du Ponant   Y  99  mer a 453
+  donjon   Temple englouti                  ( 1650,  2350)  Marais des Murmures  Y  65  mer a 550
+  donjon   Ruines de la Marche              (  550,  -450)  La Marche            Y  66  mer a plus de 1500
+  donjon   Tombeau du Pharaon (étage 4)     ( -650,  2750)  Désert d'Ocre        Y  73  mer a 434
+  donjon   Antre du Colosse (étage 5)       (  450, -2050)  Cimes de Givre       Y 173  mer a 1208
+  donjon   Forge éteinte                    ( 1750, -2700)  Terres de Cendre     Y  85  mer a 192
+  donjon   Cœur de la Fournaise             ( -150, -3060)  La Fournaise         Y 182  mer a 630
+
+Routes :
+  Voie Royale              5198 blocs, 3 pont(s), pente max 0.25, tranchee max 1 blocs, talus max 1 blocs
+  Route du Col             3279 blocs, 0 pont(s), pente max 0.40, tranchee max 10 blocs, talus max 10 blocs
+  Route des Cendres        3346 blocs, 0 pont(s), pente max 0.40, tranchee max 4 blocs, talus max 2 blocs
+  Chemin de la Sylve       1374 blocs, 1 pont(s), pente max 0.40, tranchee max 1 blocs, talus max 1 blocs
+  Chemin de l'Aube         2614 blocs, 1 pont(s), pente max 0.40, tranchee max 3 blocs, talus max 2 blocs
+  Chemin des Lisières      1841 blocs, 1 pont(s), pente max 0.40, tranchee max 1 blocs, talus max 1 blocs
+  Route du Sud             2472 blocs, 1 pont(s), pente max 0.40, tranchee max 5 blocs, talus max 5 blocs
+  Chaussée des Marais      4589 blocs, 3 pont(s), pente max 0.40, tranchee max 9 blocs, talus max 8 blocs
+  Chemin de la Vive        1853 blocs, 0 pont(s), pente max 0.40, tranchee max 11 blocs, talus max 11 blocs
+
+Donnees du generateur : C:\Users\Zazou\MinecraftDev\plugins-src\OrbitMMO\src\main\resources\continent\continent.dat (4000 px de cote, 18 Mo).

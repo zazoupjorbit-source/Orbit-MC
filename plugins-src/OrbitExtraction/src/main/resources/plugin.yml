@@ -1,0 +1,41 @@
+name: OrbitExtraction
+version: '0.1.0'
+main: fr.orbit.extraction.OrbitExtraction
+api-version: '1.21'
+description: Orbit Extraction — extraction shooter PvPvE (armes à feu, infestés, raids, planque).
+authors: [ORBIT]
+# Rangs : préfixes et couleurs lus dans LuckPerms s'il est là.
+softdepend: [LuckPerms]
+
+commands:
+  raid:
+    description: Part en raid depuis la planque, ou affiche le raid en cours.
+    usage: /raid [info]
+  planque:
+    description: Ouvre le coffre de ta planque (hors raid).
+    usage: /planque
+    aliases: [stash, coffre]
+  telephone:
+    description: Ouvre ton téléphone (raid, boutique, colis, messages, coffre).
+    usage: /telephone
+    aliases: [tel, phone]
+  kit:
+    description: Kits de ton rang (arme, munitions, armure), à prendre à la planque.
+    usage: /kit [nom]
+    aliases: [kits]
+  carte:
+    description: Range ou ressort la carte tactique (mini-carte en main gauche) ; /carte zoom change d'échelle.
+    usage: /carte [zoom]
+    aliases: [minimap, map]
+  extraction:
+    description: Administration du mode extraction.
+    usage: /extraction <planque|spawn|extract|give|infecte|purge|kit|rang|caisses|carte|fin|stats|pack|credits|reload>
+    aliases: [ext]
+
+permissions:
+  extraction.play:
+    description: Partir en raid et utiliser la planque.
+    default: true
+  extraction.admin:
+    description: Régler la map, donner des armes, faire apparaître des infestés ; commandes libres en raid.
+    default: op

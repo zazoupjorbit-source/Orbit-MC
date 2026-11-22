@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {"when": "orbitmmo:heal_crystal", "model": {"type": "minecraft:model", "model": "orbitmmo:item/heal_crystal"}}
+    ],
+    "fallback": {
+    "type": "minecraft:model",
+    "model": "minecraft:item/amethyst_shard"
+  }
+  }
+}
