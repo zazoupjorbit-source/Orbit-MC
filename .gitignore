@@ -114,6 +114,7 @@ runtime.json
 !/instances/*/plugins/OrbitDevCore/
 !/instances/*/plugins/OrbitMMO/
 !/instances/*/plugins/OrbitExtraction/
+!/instances/*/plugins/OrbitTycoon/
 !/instances/*/plugins/LuckPerms/
 /instances/*/plugins/LuckPerms/*
 !/instances/*/plugins/LuckPerms/config.yml.exemple
@@ -140,3 +141,7 @@ runtime.json
 **/plugins/*/*.db
 **/plugins/*/*.gz
 *.log
+# Kit Claude (local)
+.claude-kit/
+# Etat de generation du monde tycoon (lie au monde, pas partage)
+/instances/*/plugins/OrbitTycoon/donnees.yml

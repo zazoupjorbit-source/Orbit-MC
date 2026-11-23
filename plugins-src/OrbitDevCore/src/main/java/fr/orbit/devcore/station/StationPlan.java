@@ -23,10 +23,34 @@ public final class StationPlan {
 
     public record Point(double x, double y, double z, float yaw) { }
 
+    /** Disque d'un anneau-portail : centre, sens de passage (nx, nz), rayon, serveur visé. */
+    public record Ring(String zone, double x, double y, double z, double nx, double nz, double r, String server) { }
+
+    /** Modèle du pack (orbitdev:&lt;model&gt;) qui tourne lentement sur lui-même. */
+    public record Model(String zone, double x, double y, double z, String model, float scale) { }
+
     private final Map<Pos, BlockData> blocks = new LinkedHashMap<>();
     private final List<Text> texts = new ArrayList<>();
     private final List<Creature> creatures = new ArrayList<>();
     private final Map<String, Point> points = new LinkedHashMap<>();
+    private final List<Ring> rings = new ArrayList<>();
+    private final List<Model> models = new ArrayList<>();
+
+    public void ring(String zone, double x, double y, double z, double nx, double nz, double r, String server) {
+        rings.add(new Ring(zone, x, y, z, nx, nz, r, server));
+    }
+
+    public void model(String zone, double x, double y, double z, String model, float scale) {
+        models.add(new Model(zone, x, y, z, model, scale));
+    }
+
+    public List<Ring> rings() {
+        return rings;
+    }
+
+    public List<Model> models() {
+        return models;
+    }
 
     public void set(int x, int y, int z, BlockData data) {
         blocks.put(new Pos(x, y, z), data);

@@ -1,0 +1,99 @@
+# OrbitDevCore messages — MiniMessage format (https://docs.advntr.dev/minimessage/format.html)
+# <prefix> is replaced by the value of "prefix".
+prefix: "<dark_gray>[</dark_gray><gradient:#00c6ff:#7b2ff7>ORBIT</gradient><dark_gray>]</dark_gray> "
+
+general:
+  no-permission: "<prefix><red>You don't have permission."
+  players-only: "<prefix><red>This command can only be used by players."
+  player-not-found: "<prefix><red>Player not found: <white><player></white>."
+  usage: "<prefix><gray>Usage: <white><usage></white>"
+  reloaded: "<prefix><green>Config, messages, warps and NPCs reloaded."
+  info: "<prefix><gray>OrbitDevCore <white>v<version></white> — <white><warps></white> warp(s), <white><npcs></white> NPC(s), proxy: <white><proxy></white>."
+
+spawn:
+  teleported: "<prefix><green>Teleported to spawn."
+  teleported-other: "<prefix><green><white><player></white> was teleported to spawn."
+  set: "<prefix><green>Spawn set to your position."
+  missing: "<prefix><red>No usable spawn (world not found)."
+
+warp:
+  teleported: "<prefix><green>Teleported to warp <white><name></white>."
+  not-found: "<prefix><red>Warp <white><name></white> does not exist."
+  set: "<prefix><green>Warp <white><name></white> saved at your position."
+  deleted: "<prefix><green>Warp <white><name></white> deleted."
+  invalid-name: "<prefix><red>Invalid name: letters, digits, - and _ only (32 characters max)."
+  unknown-icon: "<prefix><red>Unknown icon: <white><icon></white>."
+  world-missing: "<prefix><red>The world of warp <white><name></white> is not loaded."
+
+world:
+  invalid-name: "<prefix><red>Invalid world name: lowercase letters, digits, - and _ only (32 characters max)."
+  invalid-type: "<prefix><red>Unknown world type: <white><type></white> (flat or normal)."
+  creating: "<prefix><gray>Creating / loading world <white><world></white>..."
+  created: "<prefix><green>World <white><world></white> ready (<type>). It will be loaded on every startup."
+  failed: "<prefix><red>Could not create world <white><world></white> (see console)."
+  list-header: "<prefix><gray>Loaded worlds (<white><count></white>):"
+  list-entry: " <dark_gray>•</dark_gray> <white><world></white> <dark_gray>(<type>, <players> player(s))</dark_gray>"
+
+compass:
+  name: "<gradient:#00c6ff:#7b2ff7><bold>Teleport compass</bold></gradient>"
+  lore:
+    - "<gray>Right-click to open the warp menu."
+  given: "<prefix><green>Compass added to your inventory."
+  already: "<prefix><yellow>You already have the compass."
+  inventory-full: "<prefix><red>Your inventory is full, cannot give you the compass."
+
+menu:
+  title: "<dark_gray>Teleport"
+  spawn-name: "<gold><bold>Spawn</bold>"
+  spawn-lore:
+    - "<gray>Back to the starting point."
+    - ""
+    - "<yellow>Click to teleport"
+  server-lore:
+    - "<gray>Instance: <white><server></white>"
+    - ""
+    - "<yellow>Click to join"
+  server-current-lore:
+    - "<gray>Instance: <white><server></white>"
+    - ""
+    - "<green>You are here"
+  already-here: "<prefix><yellow>You are already on <white><server></white>."
+  warp-name: "<aqua><bold><name></bold>"
+  warp-lore:
+    - "<gray>World: <white><world></white>"
+    - "<gray>Position: <white><x> <y> <z></white>"
+    - ""
+    - "<yellow>Click to teleport"
+
+npc:
+  created: "<prefix><green>NPC <white><id></white> created, it sends players to <white><target></white>."
+  exists: "<prefix><red>An NPC <white><id></white> already exists."
+  not-found: "<prefix><red>No NPC <white><id></white>."
+  invalid-id: "<prefix><red>Invalid id: letters, digits, - and _ only (32 characters max)."
+  invalid-type: "<prefix><red>Invalid entity type: <white><type></white> (must be a living entity, e.g. VILLAGER, ZOMBIE, ARMOR_STAND)."
+  removed: "<prefix><green>NPC <white><id></white> removed."
+  moved: "<prefix><green>NPC <white><id></white> moved to your position."
+  teleported: "<prefix><green>Teleported to NPC <white><id></white>."
+  target-set: "<prefix><green>NPC <white><id></white> now sends players to <white><target></white>."
+  world-missing: "<prefix><red>World <white><world></white> is not loaded (create it with <white>/devworld create <world></white>)."
+  world-teleported: "<prefix><green>Welcome to <white><world></white>!"
+  name-set: "<prefix><green>NPC <white><id></white> name updated."
+  profession-set: "<prefix><green>NPC <white><id></white> profession: <white><profession></white>."
+  unknown-profession: "<prefix><red>Unknown profession: <white><profession></white>."
+  list-header: "<prefix><gray>Server NPCs (<white><count></white>):"
+  list-entry: " <dark_gray>•</dark_gray> <white><id></white> <dark_gray>→</dark_gray> <aqua><target></aqua> <dark_gray>(<type>, <world> <x> <y> <z>)</dark_gray>"
+  list-empty: "<prefix><gray>No NPCs. Create one with <white>/servernpc create <id> <server|world:name></white>."
+  connecting: "<prefix><green>Connecting to <white><server></white>..."
+  no-proxy: "<prefix><yellow>This NPC sends players to <white><server></white>, but no proxy is configured on the dev server (proxy.enabled: false)."
+  help:
+    - "<gradient:#00c6ff:#7b2ff7><bold>Server NPCs</bold></gradient>"
+    - "<white>/servernpc create <id> <server|world:name> [type]</white> <gray>— create an NPC at your position"
+    - "<white>/servernpc remove <id></white> <gray>— remove an NPC"
+    - "<white>/servernpc list</white> <gray>— list NPCs"
+    - "<white>/servernpc tphere <id></white> <gray>— move an NPC to your position"
+    - "<white>/servernpc tp <id></white> <gray>— teleport to an NPC"
+    - "<white>/servernpc server <id> <server></white> <gray>— target a proxy server"
+    - "<white>/servernpc world <id> <world></white> <gray>— target a world of this server"
+    - "<white>/servernpc name <id> <MiniMessage name></white> <gray>— change the displayed name"
+    - "<white>/servernpc profession <id> <profession></white> <gray>— villager profession"
+    - "<dark_gray>From the console, add <white>@player</white> to create/tphere/tp to use that player's position."

@@ -39,6 +39,8 @@ resource-pack:
   # Port du mini serveur HTTP intégré qui distribue le pack (8790 = OrbitMMO, 8791 = OrbitExtraction).
   # Les joueurs le téléchargent à l'adresse utilisée pour se connecter : ouvre ce port (TCP) comme celui du jeu.
   port: 8792
+  # false : ne lance pas le serveur HTTP ici, le pack (identique) est servi par le lobby sur ce port (autres serveurs du réseau).
+  serve-local: true
   # URL publique du pack (CDN, site...) : si renseignée, le serveur HTTP intégré n'est pas lancé.
   public-url: ""
   # true : un joueur qui refuse le pack est déconnecté.

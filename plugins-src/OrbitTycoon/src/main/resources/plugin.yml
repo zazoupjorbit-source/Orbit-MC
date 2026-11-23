@@ -1,0 +1,25 @@
+name: OrbitTycoon
+version: '0.1.0'
+main: fr.orbit.tycoon.OrbitTycoon
+api-version: '1.21'
+description: Orbit Tycoon — base spatiale, zones de farm (pêche, bûcheron, agriculture, mobzone).
+authors: [ORBIT]
+
+commands:
+  zones:
+    description: Ouvre le menu de téléportation vers les zones.
+    usage: /zones
+    aliases: [navigateur]
+  solde:
+    description: Affiche tes Crédits orbitaux, ton Flux stellaire et ton Plasma.
+    usage: /solde
+    aliases: [monnaie, argent, money, balance]
+  tycoon:
+    description: Administration du Tycoon.
+    usage: /tycoon <generer|tp|equiper|reload|monnaie>
+    permission: orbittycoon.admin
+
+permissions:
+  orbittycoon.admin:
+    description: Commandes d'administration du Tycoon et droit de construire partout.
+    default: op

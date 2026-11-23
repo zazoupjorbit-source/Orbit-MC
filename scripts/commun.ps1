@@ -239,6 +239,7 @@ $Plugins = @(
     @{ Nom = 'OrbitDevCore';    Type = 'ps1';    Dossier = 'plugins-src\OrbitDevCore';    Jar = 'plugins-src\OrbitDevCore\target\OrbitDevCore.jar';       Vers = @('*') },
     @{ Nom = 'OrbitMMO';        Type = 'ps1';    Dossier = 'plugins-src\OrbitMMO';        Jar = 'plugins-src\OrbitMMO\target\OrbitMMO.jar';               Vers = @('instances\reborn') },
     @{ Nom = 'OrbitExtraction'; Type = 'ps1';    Dossier = 'plugins-src\OrbitExtraction'; Jar = 'plugins-src\OrbitExtraction\target\OrbitExtraction.jar'; Vers = @('instances\extraction') },
+    @{ Nom = 'OrbitTycoon';     Type = 'ps1';    Dossier = 'plugins-src\OrbitTycoon';     Jar = 'plugins-src\OrbitTycoon\target\OrbitTycoon.jar';         Vers = @('instances\tycoon') },
     @{ Nom = 'PanelBridge';     Type = 'bridge'; Dossier = 'panel\bridge';                Jar = 'panel\bridge\PanelBridge.jar';                           Vers = @('server') },
     @{ Nom = 'OrbitStaff';      Type = 'maven';  Dossier = 'mods-src\orbitstaff';         Jar = 'mods-src\orbitstaff\orbitstaff-core\target\OrbitStaff-0.1.0-SNAPSHOT.jar'; Vers = @('server'); Optionnel = $true }
 )

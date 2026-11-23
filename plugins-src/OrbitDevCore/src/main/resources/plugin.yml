@@ -54,6 +54,9 @@ commands:
     description: Ouvre le menu de la boutique.
     usage: /boutique
     aliases: [shop, store]
+  anneau:
+    description: Anneaux-portails vers les autres serveurs (style Orbit).
+    usage: /anneau <creer|retour|retirer|liste>
   orbitdev:
     description: Administration d'OrbitDevCore.
     usage: /orbitdev <reload|info|pack|feu>

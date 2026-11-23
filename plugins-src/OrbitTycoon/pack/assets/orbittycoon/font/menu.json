@@ -1,0 +1,6 @@
+{
+  "providers": [
+    {"type": "space", "advances": {"": -18, "": -153}},
+    {"type": "bitmap", "file": "orbittycoon:font/menu_nav.png", "height": 182, "ascent": 23, "chars": [""]}
+  ]
+}
