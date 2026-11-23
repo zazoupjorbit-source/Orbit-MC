@@ -139,6 +139,7 @@ final class Navigateur implements Listener {
             .build();
 
     void ouvrir(Player p) {
+        plugin.tuto().fait(p, Tuto.Etape.NAVIGATEUR);
         Menu holder = new Menu();
         boolean habille = pack != null && pack.charge(p);
         Inventory inv = Bukkit.createInventory(holder, 27, habille ? TITRE_HABILLE

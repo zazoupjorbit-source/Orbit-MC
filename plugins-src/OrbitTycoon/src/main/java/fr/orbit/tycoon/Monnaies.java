@@ -53,6 +53,12 @@ final class Monnaies implements Listener {
     /** Prestige et nom d'île, rangés dans le même fichier joueur (affichés par le HUD). */
     private final Map<UUID, Integer> prestiges = new ConcurrentHashMap<>();
     private final Map<UUID, String> iles = new ConcurrentHashMap<>();
+    /** Prestige de chaque outil (pioche, hache, houe, canne, épée) : sert aux /classements par outil. */
+    private final Map<UUID, EnumMap<Outil.Mode, Integer>> prestigesOutils = new ConcurrentHashMap<>();
+    /** Niveau et XP de chaque outil : {niveau, xp dans le niveau}. */
+    private final Map<UUID, EnumMap<Outil.Mode, long[]>> niveaux = new ConcurrentHashMap<>();
+    /** Quêtes de prestige récupérées, par outil (paliers 10, 20…). */
+    private final Map<UUID, EnumMap<Outil.Mode, java.util.Set<Integer>>> quetes = new ConcurrentHashMap<>();
     private BukkitTask sauvegardeAuto;
 
     Monnaies(OrbitTycoon plugin) {
@@ -105,6 +111,18 @@ final class Monnaies implements Listener {
         modifies.put(id, true);
     }
 
+    int prestige(UUID id, Outil.Mode outil) {
+        soldes.computeIfAbsent(id, this::lire);
+        EnumMap<Outil.Mode, Integer> m = prestigesOutils.get(id);
+        return m == null ? 0 : m.getOrDefault(outil, 0);
+    }
+
+    void definirPrestige(UUID id, Outil.Mode outil, int niveau) {
+        soldes.computeIfAbsent(id, this::lire);
+        prestigesOutils.computeIfAbsent(id, k -> new EnumMap<>(Outil.Mode.class)).put(outil, Math.max(0, niveau));
+        modifies.put(id, true);
+    }
+
     /** Nom de l'île du joueur, ou null s'il n'en a pas encore. */
     String ile(UUID id) {
         soldes.computeIfAbsent(id, this::lire);
@@ -114,6 +132,45 @@ final class Monnaies implements Listener {
     void definirIle(UUID id, String nom) {
         soldes.computeIfAbsent(id, this::lire);
         if (nom == null || nom.isBlank()) iles.remove(id); else iles.put(id, nom);
+        modifies.put(id, true);
+    }
+
+    // ------------------------------------------------------------------ niveaux, XP et quêtes des outils
+
+    /** Niveau de l'outil (1 au départ). */
+    int niveau(UUID id, Outil.Mode outil) {
+        soldes.computeIfAbsent(id, this::lire);
+        EnumMap<Outil.Mode, long[]> m = niveaux.get(id);
+        long[] v = m == null ? null : m.get(outil);
+        return v == null ? 1 : (int) v[0];
+    }
+
+    /** XP accumulée dans le niveau actuel de l'outil. */
+    long xp(UUID id, Outil.Mode outil) {
+        soldes.computeIfAbsent(id, this::lire);
+        EnumMap<Outil.Mode, long[]> m = niveaux.get(id);
+        long[] v = m == null ? null : m.get(outil);
+        return v == null ? 0 : v[1];
+    }
+
+    void definirNiveau(UUID id, Outil.Mode outil, int niveau, long xp) {
+        soldes.computeIfAbsent(id, this::lire);
+        niveaux.computeIfAbsent(id, k -> new EnumMap<>(Outil.Mode.class)).put(outil, new long[]{Math.max(1, niveau), Math.max(0, xp)});
+        modifies.put(id, true);
+    }
+
+    /** Paliers de quêtes de prestige déjà récupérés pour cet outil. */
+    java.util.Set<Integer> quetes(UUID id, Outil.Mode outil) {
+        soldes.computeIfAbsent(id, this::lire);
+        EnumMap<Outil.Mode, java.util.Set<Integer>> m = quetes.get(id);
+        java.util.Set<Integer> s = m == null ? null : m.get(outil);
+        return s == null ? java.util.Set.of() : java.util.Collections.unmodifiableSet(s);
+    }
+
+    void marquerQuete(UUID id, Outil.Mode outil, int palier) {
+        soldes.computeIfAbsent(id, this::lire);
+        quetes.computeIfAbsent(id, k -> new EnumMap<>(Outil.Mode.class))
+                .computeIfAbsent(outil, k -> new java.util.TreeSet<>()).add(palier);
         modifies.put(id, true);
     }
 
@@ -145,6 +202,20 @@ final class Monnaies implements Listener {
         return tout;
     }
 
+    /** Prestige d'un outil pour tous les joueurs (fichiers + mémoire) : sert à /classements. Hors thread principal. */
+    Map<UUID, Integer> tousLesPrestiges(Outil.Mode outil) {
+        Map<UUID, Integer> tout = new java.util.HashMap<>();
+        File[] fichiers = new File(plugin.getDataFolder(), "joueurs").listFiles((d, n) -> n.endsWith(".yml"));
+        if (fichiers != null) for (File f : fichiers) {
+            try {
+                UUID id = UUID.fromString(f.getName().substring(0, f.getName().length() - 4));
+                tout.put(id, YamlConfiguration.loadConfiguration(f).getInt("prestige-outils." + outil.id, 0));
+            } catch (IllegalArgumentException ignore) { }
+        }
+        prestigesOutils.forEach((id, m) -> tout.put(id, m.getOrDefault(outil, 0)));
+        return tout;
+    }
+
     // ------------------------------------------------------------------ fichiers
 
     private File fichier(UUID id) {
@@ -158,6 +229,17 @@ final class Monnaies implements Listener {
             YamlConfiguration y = YamlConfiguration.loadConfiguration(f);
             for (Monnaie m : Monnaie.values()) map.put(m, y.getLong("monnaies." + m.id, 0));
             prestiges.put(id, y.getInt("prestige", 0));
+            EnumMap<Outil.Mode, Integer> po = new EnumMap<>(Outil.Mode.class);
+            for (Outil.Mode o : Outil.Mode.values()) po.put(o, y.getInt("prestige-outils." + o.id, 0));
+            prestigesOutils.put(id, po);
+            EnumMap<Outil.Mode, long[]> nv = new EnumMap<>(Outil.Mode.class);
+            EnumMap<Outil.Mode, java.util.Set<Integer>> qu = new EnumMap<>(Outil.Mode.class);
+            for (Outil.Mode o : Outil.Mode.values()) {
+                nv.put(o, new long[]{Math.max(1, y.getInt("outils." + o.id + ".niveau", 1)), Math.max(0, y.getLong("outils." + o.id + ".xp", 0))});
+                qu.put(o, new java.util.TreeSet<>(y.getIntegerList("quetes." + o.id)));
+            }
+            niveaux.put(id, nv);
+            quetes.put(id, qu);
             String ile = y.getString("ile.nom");
             if (ile != null && !ile.isBlank()) iles.put(id, ile);
         }
@@ -176,6 +258,17 @@ final class Monnaies implements Listener {
         YamlConfiguration y = f.exists() ? YamlConfiguration.loadConfiguration(f) : new YamlConfiguration();
         for (Monnaie m : Monnaie.values()) y.set("monnaies." + m.id, map.getOrDefault(m, 0L));
         y.set("prestige", prestiges.getOrDefault(id, 0));
+        EnumMap<Outil.Mode, Integer> po = prestigesOutils.get(id);
+        for (Outil.Mode o : Outil.Mode.values()) y.set("prestige-outils." + o.id, po == null ? 0 : po.getOrDefault(o, 0));
+        EnumMap<Outil.Mode, long[]> nv = niveaux.get(id);
+        EnumMap<Outil.Mode, java.util.Set<Integer>> qu = quetes.get(id);
+        for (Outil.Mode o : Outil.Mode.values()) {
+            long[] v = nv == null ? null : nv.get(o);
+            y.set("outils." + o.id + ".niveau", v == null ? 1 : v[0]);
+            y.set("outils." + o.id + ".xp", v == null ? 0 : v[1]);
+            java.util.Set<Integer> s = qu == null ? null : qu.get(o);
+            y.set("quetes." + o.id, s == null ? java.util.List.of() : new java.util.ArrayList<>(s));
+        }
         y.set("ile.nom", iles.get(id));
         try {
             y.save(f);
@@ -200,7 +293,7 @@ final class Monnaies implements Listener {
         UUID id = e.getPlayer().getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             sauver(id);
-            if (Bukkit.getPlayer(id) == null) { soldes.remove(id); prestiges.remove(id); iles.remove(id); }
+            if (Bukkit.getPlayer(id) == null) { soldes.remove(id); prestiges.remove(id); prestigesOutils.remove(id); iles.remove(id); niveaux.remove(id); quetes.remove(id); }
         });
     }
 
@@ -216,7 +309,7 @@ final class Monnaies implements Listener {
      * Récompense d'une ressource récoltée : Flux stellaire + Crédits orbitaux, lus dans config.yml
      * (sections flux-stellaire / credit-orbital, clé = nom du bloc, du poisson ou du mob), puis affichés en barre d'action.
      */
-    void recompenser(Player p, String cle, int quantite) {
+    void recompenser(Player p, Outil.Mode outil, String cle, int quantite) {
         var cfg = plugin.getConfig();
         StringBuilder texte = new StringBuilder();
         for (Monnaie m : new Monnaie[]{Monnaie.FLUX, Monnaie.CREDIT}) {
@@ -228,6 +321,14 @@ final class Monnaies implements Listener {
             texte.append("<").append(m.couleur).append(">+").append(gain).append(" ").append(m.symbole).append(" ")
                     .append(gain > 1 ? m.pluriel : m.nom).append("</").append(m.couleur).append(">");
         }
+        if (outil != null) {
+            String xp = plugin.progression().gagner(p, outil, cle, quantite);
+            if (xp != null) {
+                if (!texte.isEmpty()) texte.append("   ");
+                texte.append(xp);
+            }
+        }
         if (!texte.isEmpty()) p.sendActionBar(MiniMessage.miniMessage().deserialize(texte.toString()));
+        plugin.tuto().recolte(p, quantite);
     }
 }

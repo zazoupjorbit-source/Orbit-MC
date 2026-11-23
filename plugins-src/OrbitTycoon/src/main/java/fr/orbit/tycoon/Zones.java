@@ -116,7 +116,20 @@ final class Zones implements Listener {
     private void recolter(BlockBreakEvent e, Material t, int quantite) {
         e.setDropItems(false);
         e.setExpToDrop(0);
-        plugin.monnaies().recompenser(e.getPlayer(), t.name(), quantite);
+        plugin.monnaies().recompenser(e.getPlayer(), outilDe(Zone.at(e.getBlock().getLocation())), t.name(), quantite);
+    }
+
+    /** Outil qui gagne l'XP d'un bloc cassé, selon la zone. */
+    private static Outil.Mode outilDe(Zone z) {
+        if (z == null) return null;
+        return switch (z) {
+            case MINE -> Outil.Mode.PIOCHE;
+            case BUCHERON -> Outil.Mode.HACHE;
+            case AGRICULTURE -> Outil.Mode.HOUE;
+            case PECHE -> Outil.Mode.CANNE;
+            case MOBZONE -> Outil.Mode.EPEE;
+            default -> null;
+        };
     }
 
     /** Mobs : plus aucun objet ni XP ; le joueur qui tue reçoit directement ses monnaies. */
@@ -127,7 +140,7 @@ final class Zones implements Listener {
         e.getDrops().clear();
         e.setDroppedExp(0);
         Player tueur = e.getEntity().getKiller();
-        if (tueur != null) plugin.monnaies().recompenser(tueur, e.getEntityType().name(), 1);
+        if (tueur != null) plugin.monnaies().recompenser(tueur, Outil.Mode.EPEE, e.getEntityType().name(), 1);
     }
 
     /** Après la casse : pose l'état intermédiaire (pousse) puis remet l'origine après le délai. */
@@ -209,7 +222,7 @@ final class Zones implements Listener {
         Material poisson = n < 60 ? Material.COD : n < 85 ? Material.SALMON : n < 98 ? Material.PUFFERFISH : Material.TROPICAL_FISH;
         item.remove();
         e.setExpToDrop(0);
-        plugin.monnaies().recompenser(e.getPlayer(), poisson.name(), 1);
+        plugin.monnaies().recompenser(e.getPlayer(), Outil.Mode.CANNE, poisson.name(), 1);
     }
 
     /** Mobzone : les monstres des spawners ne brûlent pas au soleil. */

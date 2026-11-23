@@ -9,6 +9,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Mannequin;
@@ -60,6 +61,7 @@ final class Classement implements Listener {
     private final List<Place> panneaux = new ArrayList<>();
     private final Place[] mannequins = new Place[3];
     private final Place[] etiquettes = new Place[3];
+    private Place titre;
     private volatile List<Ligne> top = List.of();
     /** Profils complets (avec skin) déjà récupérés. */
     private final Map<UUID, PlayerProfile> profils = new ConcurrentHashMap<>();
@@ -81,14 +83,33 @@ final class Classement implements Listener {
     /** Angle (degrés) du podium : entre deux avenues, du côté du point d'arrivée. */
     private double anglePodium() { return plugin.getConfig().getDouble("classement.podium.angle", 108); }
 
-    private double rayonPodium() { return plugin.getConfig().getDouble("classement.podium.rayon", 36); }
+    /** 97 = centre du pavillon « Classement » (petit dôme de l'anneau extérieur, voir Plans.base). */
+    private double rayonPodium() { return plugin.getConfig().getDouble("classement.podium.rayon", 97); }
+
+    /** Ancienne place du podium (au milieu du spawn), effacée par « /tycoon classement poser ». */
+    private static final double ANCIEN_RAYON = 36;
 
     /** Centre (x, z) de la marche n (0 = 1re place au milieu, 1 = 2e, 2 = 3e). */
-    private double[] posMarche(int n) {
-        double a = Math.toRadians(anglePodium()), r = rayonPodium();
+    private double[] posMarche(int n) { return posMarche(n, rayonPodium()); }
+
+    private double[] posMarche(int n, double r) {
+        double a = Math.toRadians(anglePodium());
         double cx = Math.cos(a) * r, cz = Math.sin(a) * r, tx = -Math.sin(a), tz = Math.cos(a);
         double decal = n == 0 ? 0 : n == 1 ? -3.5 : 3.5;
         return new double[]{Math.floor(cx + tx * decal) + 0.5, Math.floor(cz + tz * decal) + 0.5};
+    }
+
+    /** Point de TP (/classement) : devant l'entrée du pavillon, tourné vers le podium. */
+    Location pointTp() {
+        double a = Math.toRadians(anglePodium()), r = rayonPodium() - 15;
+        return new Location(plugin.monde(), Math.floor(Math.cos(a) * r) + 0.5, Y + 1, Math.floor(Math.sin(a) * r) + 0.5,
+                Zone.yaw(Math.cos(a), Math.sin(a)), 0f);
+    }
+
+    /** Titre du pavillon, juste devant son entrée. */
+    private Location posTitre() {
+        double a = Math.toRadians(anglePodium()), r = rayonPodium() - 11.5;
+        return new Location(plugin.monde(), Math.cos(a) * r + 0.5, Y + 6.2, Math.sin(a) * r + 0.5);
     }
 
     /** Yaw pour regarder le centre du spawn depuis (x, z). */
@@ -112,6 +133,7 @@ final class Classement implements Listener {
             mannequins[i] = new Place(new Location(w, m[0], Y + 1 + HAUTEURS[i], m[1], yaw, 0));
             etiquettes[i] = new Place(new Location(w, m[0], Y + 1 + HAUTEURS[i] + 3.2, m[1]));
         }
+        titre = new Place(posTitre());
         // Nettoie les restes d'un ancien démarrage (entités non sauvegardées, mais au cas où).
         for (Entity e : w.getEntities()) if (e.getScoreboardTags().contains("orbit_classement")) e.remove();
         long periode = Math.max(20, plugin.getConfig().getLong("classement.periode-secondes", 60) * 20);
@@ -124,6 +146,7 @@ final class Classement implements Listener {
         for (Place p : panneaux) if (p.vivante()) p.entite.remove();
         for (Place[] t : new Place[][]{mannequins, etiquettes})
             for (Place p : t) if (p != null && p.vivante()) p.entite.remove();
+        if (titre != null && titre.vivante()) titre.entite.remove();
     }
 
     /** Hors thread principal : lit les prestiges, trie, récupère les skins du top 3, puis met à jour au spawn. */
@@ -175,6 +198,9 @@ final class Classement implements Listener {
             else ((TextDisplay) p.entite).text(texte);
         }
         for (int i = 0; i < 3; i++) majPodium(i);
+        if (titre != null && titre.loc.isChunkLoaded() && !titre.vivante())
+            titre.entite = texteFixe(titre.loc, MM.deserialize("<gradient:#62CFF4:#E0B864><bold>✪ CLASSEMENT PRESTIGE</bold></gradient>\n"
+                    + "<gray>Les 3 meilleurs de la station"), 1.6f);
     }
 
     private void majPodium(int i) {
@@ -234,6 +260,7 @@ final class Classement implements Listener {
         boolean concerne = false;
         for (Place p : panneaux) if (p.loc.getBlockX() >> 4 == cx && p.loc.getBlockZ() >> 4 == cz) concerne = true;
         for (Place p : mannequins) if (p != null && p.loc.getBlockX() >> 4 == cx && p.loc.getBlockZ() >> 4 == cz) concerne = true;
+        if (titre != null && titre.loc.getBlockX() >> 4 == cx && titre.loc.getBlockZ() >> 4 == cz) concerne = true;
         if (concerne) Bukkit.getScheduler().runTask(plugin, this::rafraichir);
     }
 
@@ -273,21 +300,42 @@ final class Classement implements Listener {
             for (int dx = -1; dx <= 1; dx++) for (int dz = -1; dz <= 1; dz++)
                 poses += sol(w, x0 + dx, z0 + dz, dx == 0 && dz == 0 ? Material.SEA_LANTERN : Material.POLISHED_DEEPSLATE);
         }
-        // Podium : trois marches (or, quartz, cuivre) sur une base de deepslate, face au centre.
+        // Ancien podium (au milieu du spawn) : on retire ses blocs (le dallage dessous n'avait pas été touché).
+        if (Math.abs(rayonPodium() - ANCIEN_RAYON) > 5)
+            for (int i = 0; i < 3; i++) {
+                double[] m = posMarche(i, ANCIEN_RAYON);
+                int mx = (int) Math.floor(m[0]), mz = (int) Math.floor(m[1]);
+                for (int dx = -1; dx <= 1; dx++) for (int dz = -1; dz <= 1; dz++) {
+                    for (int h = 1; h <= 3; h++) {
+                        Block b = w.getBlockAt(mx + dx, Y + h, mz + dz);
+                        if (MARCHES.contains(b.getType())) { b.setType(Material.AIR, false); poses++; }
+                    }
+                }
+            }
+        // Pavillon : on retire le pilier lumineux du centre et l'ancien texte « Classements / Bientôt ».
+        double a = Math.toRadians(anglePodium());
+        int pcx = (int) Math.round(Math.cos(a) * rayonPodium()), pcz = (int) Math.round(Math.sin(a) * rayonPodium());
+        for (Entity e : w.getNearbyEntities(new Location(w, pcx + 0.5, Y + 4.2, pcz + 0.5), 1.5, 1.5, 1.5))
+            if (e instanceof TextDisplay && !e.getScoreboardTags().contains("orbit_classement")) e.remove();
+        // Podium : trois marches (or, quartz, cuivre) sur une base de deepslate, face au centre (remplace ce qui gêne).
         for (int i = 0; i < 3; i++) {
             double[] m = posMarche(i);
             int mx = (int) Math.floor(m[0]), mz = (int) Math.floor(m[1]);
             for (int dx = -1; dx <= 1; dx++) for (int dz = -1; dz <= 1; dz++) {
-                for (int h = 1; h <= HAUTEURS[i]; h++) {
-                    Material mat = h == HAUTEURS[i] ? DESSUS[i]
+                for (int h = 1; h <= 3; h++) {
+                    Material mat = h > HAUTEURS[i] ? Material.AIR : h == HAUTEURS[i] ? DESSUS[i]
                             : (dx == 0 || dz == 0) ? Material.POLISHED_DEEPSLATE : Material.LIGHT_BLUE_CONCRETE;
                     if (h == HAUTEURS[i] && dx == 0 && dz == 0) mat = Material.SEA_LANTERN;
-                    poses += air(w, mx + dx, Y + h, mz + dz, mat);
+                    Block b = w.getBlockAt(mx + dx, Y + h, mz + dz);
+                    if (b.getType() != mat) { b.setType(mat, false); poses++; }
                 }
             }
         }
         return poses;
     }
+
+    private static final java.util.Set<Material> MARCHES = java.util.EnumSet.of(Material.POLISHED_DEEPSLATE,
+            Material.LIGHT_BLUE_CONCRETE, Material.GOLD_BLOCK, Material.QUARTZ_BLOCK, Material.WAXED_COPPER_BLOCK, Material.SEA_LANTERN);
 
     private static int air(World w, int x, int y, int z, Material m) {
         if (!w.getBlockAt(x, y, z).getType().isAir()) return 0;

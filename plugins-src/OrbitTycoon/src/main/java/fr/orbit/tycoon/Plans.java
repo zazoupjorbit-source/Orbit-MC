@@ -275,12 +275,12 @@ final class Plans {
 
     // ================================================================== Base Orbit (spawn)
 
-    private static final String[] PAVILLONS = {
-            "<#E0B864><bold>Marché orbital</bold>\n<gray>Bientôt",
-            "<#E0B864><bold>Classements</bold>\n<gray>Bientôt",
-            "<#E0B864><bold>Atelier des outils</bold>\n<gray>Bientôt",
-            "<#E0B864><bold>Quêtes de la station</bold>\n<gray>Bientôt",
-            "<#E0B864><bold>Observatoire</bold>\n<gray>Bientôt"};
+    static final String[] PAVILLONS = {
+            "<#E0B864><bold>Marché orbital</bold>",
+            null,   // pavillon du classement : le podium et son titre sont gérés par Classement
+            "<#E0B864><bold>Atelier des outils</bold>",
+            "<#E0B864><bold>Quêtes de la station</bold>",
+            "<#E0B864><bold>Observatoire</bold>"};
 
     private void base(Chantier c) {
         Zone b = Zone.BASE;
@@ -325,7 +325,7 @@ final class Plans {
                         : (((int) (Math.toDegrees(ang) + 180) / 10) % 2 == 0 ? Material.DEEPSLATE_TILES : Material.POLISHED_DEEPSLATE));
 
             // Garde-corps vitré, piliers dorés.
-            if (d >= R - 0.9 && !Dome.couloir(dx, dz)) {
+            if (d >= R - 0.9) {
                 double arc = (ang + Math.PI) * R;
                 if (arc % 12 < 1.2) {
                     for (int y = Y + 1; y <= Y + 5; y++) c.set(dx, y, dz, Material.GOLD_BLOCK);
@@ -426,6 +426,7 @@ final class Plans {
     private void pavillon(Chantier c, int cx, int cz, double ox, double oz, String nom) {
         disque(c, cx, cz, 10, (dx, dz, d) -> c.set(cx + dx, Y, cz + dz, d > 9 ? Material.GOLD_BLOCK : Material.SMOOTH_QUARTZ));
         dome(c, cx, Y + 1, cz, 9, ox, oz);
+        if (nom == null) return;
         c.etape(() -> {
             c.set(cx, Y + 1, cz, Material.GOLD_BLOCK);
             c.set(cx, Y + 2, cz, Material.SEA_LANTERN);

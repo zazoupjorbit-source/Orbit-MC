@@ -1,29 +1,104 @@
 # Orbit Tycoon — réglages.
 # Après une modification : /tycoon reload (jamais /reload du serveur).
 
+progression:
+  niveau-max: 100
+  prestige-max: 100
+  # XP pour passer du niveau N au suivant = (xp-base + xp-par-niveau × (N - 1)) × (1 + xp-bonus-prestige × prestige)
+  xp-base: 25
+  xp-par-niveau: 5
+  xp-bonus-prestige: 0.1
+  # XP gagnée par ressource récoltée (clé = nom du bloc, du poisson ou du mob, comme pour les monnaies).
+  xp:
+    defaut: 1
+    ressources: {}
+  # Coût pour passer prestige = prestige-cout-base × (prestige actuel + 1), en Crédits orbitaux.
+  prestige-cout-base: 10000
+  # Cases d'amélioration (9 par outil), noms et prérequis à définir. Une liste par outil possible :
+  # ameliorations.pioche, .hache, .houe, .peche, .epee ; sinon .defaut. Champs : nom, objet, description, prerequis.
+  ameliorations:
+    defaut:
+    - nom: Amélioration 1
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 2
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 3
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 4
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 5
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 6
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 7
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 8
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 9
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+quetes:
+  pas: 10
+  # Récompense PROVISOIRE si rien n'est réglé ci-dessous : palier × credit-par-palier Crédits orbitaux.
+  credit-par-palier: 500
+  # Vraies récompenses (à définir) : recompenses.<outil>.<palier> ou recompenses.tous.<palier>.
+  # Champs : credit, flux, texte (affiché), commandes (console, %joueur% = pseudo). Exemple :
+  #   tous:
+  #     50: {credit: 50000, texte: "1 clé de coffre n°3", commandes: ["tycoon cle 3 %joueur% 1"]}
+  recompenses: {}
+hdv:
+  taxe: 5 # % retenu sur chaque vente
+  max-offres: 10 # par joueur, expirées comprises
+  duree-heures: 48 # après, l'objet revient dans « Mes ventes »
+  prix-min: 1
+  prix-max: 1000000000000
+tuto:
+  actif: true
+  recoltes: 10 # ressources à récolter à l'étape 5
+  zones: 5 # îles de farm à visiter à l'étape 6 (1 à 5)
+  cle-coffre: 1 # coffre (1 à 5) dont la clé est offerte à l'étape 7
+  recompense-credits: 500 # Crédits orbitaux donnés une seule fois à la fin du tuto
 coffres:
+  loots: {}
   noms:
-  - Coffre 1
-  - Coffre 2
-  - Coffre 3
-  - Coffre 4
-  - Coffre 5
+  - Vote
+  - Farm
+  - Event
+  - Saturne
+  - Neptune
   angle: 36 # direction depuis le centre du spawn (degrés), entre deux avenues
   rayon: 36
 classement:
   periode-secondes: 60
   podium:
     angle: 108 # direction depuis le centre du spawn (degrés), entre deux avenues
-    rayon: 36 # distance au centre
+    rayon: 97 # distance au centre (97 = dans le pavillon « Classement »)
 iles:
   tailles:
-  - 50
-  - 75
   - 100
   - 125
   - 150
   - 200
   - 250
+  - 300
+  - 400
   couts:
   - 0
   - 25000
@@ -125,7 +200,7 @@ credit-orbital:
 navigateur:
   slot: 8
 
-# Outil orbital : pioche, hache, houe, canne et épée en un seul objet lié (Shift + clic droit pour changer).
+# Outil orbital : pioche, hache, houe, canne et épée en un seul objet lié (Shift + clic droit = interface, Shift + F = outil suivant).
 outil:
   slot: 0
 
@@ -159,3 +234,9 @@ pack:
   port: 8794
   # Si les joueurs passent par un tunnel : URL publique du pack (vide = serveur local ci-dessus).
   url-publique: ''
+
+# Boutique du spawn : avenues (identifiants de zone) qui ont un PNJ astronaute sous une arche.
+# Après un changement : /tycoon reload, puis /tycoon boutique poser (nouvelles arches) ou retirer (arches en trop).
+boutique:
+  avenues:
+  - mobzone

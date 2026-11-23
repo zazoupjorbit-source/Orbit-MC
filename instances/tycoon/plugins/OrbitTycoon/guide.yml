@@ -1,0 +1,303 @@
+# Livre-guide d'Orbit Tycoon (donné à la 1re connexion, /guide pour le reprendre, /guide lire pour le lire sans le prendre).
+# Une entrée = une page, en MiniMessage. Environ 19 caractères par ligne et 14 lignes par page.
+# Variables : <coffre1> … <coffre5> = noms des coffres (config.yml, coffres.noms).
+# Changer de page au clic : <click:change_page:'4'>…</click>. Après une modification : /tycoon reload.
+# Le guide déjà donné aux joueurs ne change pas : ils doivent le jeter puis faire /guide.
+# Couleurs lisibles sur le papier : bleu #1F4E8C, or foncé #8A5A00.
+titre: "Guide d'Orbit Tycoon"
+pages:
+  # 1 — Couverture
+  - |-
+    <#1F4E8C><bold>   ORBIT</bold>
+    <#8A5A00><bold>   TYCOON</bold>
+
+    <black>Le guide de la
+    station orbitale.
+
+    <dark_gray>Lis-le jusqu'au bout :
+    à la dernière page,
+    tu pourras le jeter.
+
+    <#1F4E8C><click:change_page:'2'>➤ Commencer</click>
+  # 2 — Sommaire (1/2)
+  - |-
+    <#8A5A00><bold>Sommaire</bold>
+
+    <#1F4E8C><click:change_page:'4'>➤ Le concept</click>
+    <#1F4E8C><click:change_page:'5'>➤ Les monnaies</click>
+    <#1F4E8C><click:change_page:'6'>➤ Le Navigateur</click>
+    <#1F4E8C><click:change_page:'7'>➤ L'Outil orbital</click>
+    <#1F4E8C><click:change_page:'9'>➤ Les mondes</click>
+    <#1F4E8C><click:change_page:'11'>➤ Ton île</click>
+    <#1F4E8C><click:change_page:'12'>➤ Le Noyau d'île</click>
+
+    <dark_gray>Clique sur un titre
+    pour y aller.
+  # 3 — Sommaire (2/2)
+  - |-
+    <#8A5A00><bold>Sommaire (suite)</bold>
+
+    <#1F4E8C><click:change_page:'13'>➤ Coffres et clés</click>
+    <#1F4E8C><click:change_page:'14'>➤ Boutique et HDV</click>
+    <#1F4E8C><click:change_page:'15'>➤ Les armures</click>
+    <#1F4E8C><click:change_page:'16'>➤ Les pets</click>
+    <#1F4E8C><click:change_page:'17'>➤ Les votes</click>
+    <#1F4E8C><click:change_page:'18'>➤ Les commandes</click>
+    <#1F4E8C><click:change_page:'20'>➤ Jeter le guide</click>
+  # 4 — Le concept
+  - |-
+    <#8A5A00><bold>Le concept</bold>
+
+    <black>Bienvenue sur la
+    station <#1F4E8C>Orbit</#1F4E8C> !
+
+    Récolte dans les
+    mondes de farm, gagne
+    des monnaies, monte
+    tes outils en niveau
+    et en prestige, puis
+    agrandis ton île avec
+    tes amis.
+
+    <dark_gray>Tout ce que tu récoltes
+    est payé directement.
+  # 5 — Les monnaies
+  - |-
+    <#8A5A00><bold>Les monnaies</bold>
+
+    <#8A5A00>⛃ Crédits orbitaux
+    <black>La monnaie principale
+    (île, prestige, HDV).
+
+    <#1F4E8C>✦ Flux stellaire
+    <black>Gagné à chaque
+    ressource récoltée.
+
+    <dark_purple>◆ Plasma
+    <black>Boutique cosmétique.
+
+    <dark_gray>Ton solde : /solde
+  # 6 — Le Navigateur orbital
+  - |-
+    <#8A5A00><bold>Le Navigateur</bold>
+
+    <black>La boussole de ta
+    dernière case. Clic
+    droit : le menu de
+    tous les mondes.
+
+    Tu peux aussi passer
+    dans les <#1F4E8C>anneaux-
+    portails</#1F4E8C> du spawn.
+
+    <dark_gray>Raccourci : /zones
+    Il ne se perd jamais,
+    même à la mort.
+  # 7 — L'Outil orbital (1/2)
+  - |-
+    <#8A5A00><bold>L'Outil orbital</bold>
+
+    <black>5 outils en un seul
+    objet, lié à toi :
+
+    <#1F4E8C>Pioche</#1F4E8C> → la Mine
+    <#1F4E8C>Hache</#1F4E8C> → le Bûcheron
+    <#1F4E8C>Houe</#1F4E8C> → l'Agriculture
+    <#1F4E8C>Canne</#1F4E8C> → la Pêche
+    <#1F4E8C>Épée</#1F4E8C> → la Mobzone
+
+    <#8A5A00>Shift + F<black> : outil
+    suivant.
+  # 8 — L'Outil orbital (2/2)
+  - |-
+    <#8A5A00><bold>Niveaux, prestige</bold>
+
+    <#8A5A00>Shift + clic droit
+    <black>ouvre sa fiche.
+
+    Chaque récolte donne
+    de l'XP : niveau max
+    100. Ensuite, passe
+    <#1F4E8C>prestige</#1F4E8C> (contre des
+    Crédits) et grimpe
+    au classement.
+
+    <black>9 améliorations par
+    outil arrivent.
+  # 9 — Les mondes (1/2) : la Base
+  - |-
+    <#8A5A00><bold>La Base Orbit</bold>
+
+    <black>Le spawn. Tu y
+    trouves :
+    <#1F4E8C>•</#1F4E8C> les 5 coffres
+    <#1F4E8C>•</#1F4E8C> la Boutique
+    <#1F4E8C>•</#1F4E8C> le Marché (HDV)
+    <#1F4E8C>•</#1F4E8C> l'Atelier (Forgeron)
+    <#1F4E8C>•</#1F4E8C> les Quêtes
+    <#1F4E8C>•</#1F4E8C> l'Observatoire
+    <#1F4E8C>•</#1F4E8C> le Classement
+    <#1F4E8C>•</#1F4E8C> les anneaux-portails
+  # 10 — Les mondes (2/2) : zones de farm
+  - |-
+    <#8A5A00><bold>Mondes de farm</bold>
+
+    <#1F4E8C>Pêche<black> : le lagon.
+    <#1F4E8C>Bûcheron<black> : la forêt
+    suspendue.
+    <#1F4E8C>Agriculture<black> : la serre
+    de blé.
+    <#1F4E8C>Mobzone<black> : monstres
+    des spawners.
+    <#1F4E8C>Mine<black> : l'astéroïde.
+    1 étage = 1 minerai,
+    plus bas = plus rare.
+
+    <dark_gray>Tout repousse seul.
+  # 11 — Ton île
+  - |-
+    <#8A5A00><bold>Ton île (/is)</bold>
+
+    <black>/is create : la créer
+    /is home : y aller
+    /is invite : inviter
+    /is join : rejoindre
+    /is upgrade : agrandir
+    /is visit : visiter
+    /is level : niveau
+
+    7 tailles, de 100 à
+    400 blocs, payées en
+    Crédits orbitaux.
+  # 12 — Le Noyau d'île (bientôt)
+  - |-
+    <#8A5A00><bold>Le Noyau d'île</bold>
+    <dark_gray>(bientôt)
+
+    <black>Le cœur de ton île.
+    Pour l'améliorer, il
+    faudra remplir des
+    <#1F4E8C>prérequis</#1F4E8C> : ressources,
+    niveaux d'outils,
+    Crédits…
+
+    Chaque niveau du
+    Noyau débloquera des
+    avantages pour toute
+    ton équipe.
+  # 13 — Coffres et clés
+  - |-
+    <#8A5A00><bold>Coffres et clés</bold>
+
+    <black>5 coffres au spawn
+    (/coffres) : <#1F4E8C><coffre1></#1F4E8C>,
+    <#1F4E8C><coffre2></#1F4E8C>, <#1F4E8C><coffre3></#1F4E8C>,
+    <#1F4E8C><coffre4></#1F4E8C>, <#1F4E8C><coffre5></#1F4E8C>.
+
+    <#8A5A00>Clic gauche<black> : voir
+    le contenu.
+    <#8A5A00>Clic droit<black>, la bonne
+    clé en main : ouvrir.
+
+    <dark_gray>Chaque coffre a sa clé.
+  # 14 — Boutique et HDV
+  - |-
+    <#8A5A00><bold>Boutique et HDV</bold>
+
+    <black>La <#1F4E8C>Boutique</#1F4E8C> (PNJ ou
+    /boutique) vend des
+    cosmétiques en Plasma.
+    <#8A5A00>Aucun pay-to-win.
+
+    <black>L'<#1F4E8C>Hôtel des ventes</#1F4E8C>
+    (/hdv, /marchand) :
+    achète et vends entre
+    joueurs, en Crédits.
+    /hdv vendre \<prix>
+  # 15 — Les armures (bientôt)
+  - |-
+    <#8A5A00><bold>Les armures</bold>
+    <dark_gray>(bientôt)
+
+    <black>Des armures spéciales
+    à obtenir en jeu.
+    Portées, elles te
+    donneront des <#1F4E8C>boosts</#1F4E8C> :
+    plus de Crédits, plus
+    de Flux, plus d'XP
+    d'outil…
+
+    <dark_gray>Plus d'infos à leur
+    arrivée.
+  # 16 — Les pets (bientôt)
+  - |-
+    <#8A5A00><bold>Les pets</bold>
+    <dark_gray>(bientôt)
+
+    <black>Des compagnons qui
+    te suivent partout.
+    Chaque pet donnera
+    un <#1F4E8C>boost</#1F4E8C> (récolte,
+    monnaies, XP…).
+
+    Monte-les en niveau
+    pour renforcer leur
+    effet.
+
+    <dark_gray>Plus d'infos à leur
+    arrivée.
+  # 17 — Les votes
+  - |-
+    <#8A5A00><bold>Les votes</bold>
+
+    <black>Tape <#1F4E8C>/vote</#1F4E8C> : tu
+    reçois les liens des
+    sites de vote.
+
+    Voter aide Orbit à
+    grandir et te
+    rapportera des
+    récompenses (clés du
+    coffre <#1F4E8C><coffre1></#1F4E8C>…).
+
+    <dark_gray>Un vote par site et
+    par jour.
+  # 18 — Les commandes (1/2)
+  - |-
+    <#8A5A00><bold>Commandes</bold>
+
+    <#1F4E8C>/zones<black> : les mondes
+    <#1F4E8C>/solde<black> : tes monnaies
+    <#1F4E8C>/is<black> : ton île
+    <#1F4E8C>/coffres<black> : les coffres
+    <#1F4E8C>/boutique<black> : boutique
+    <#1F4E8C>/hdv<black> : hôtel des
+    ventes
+    <#1F4E8C>/vote<black> : voter
+    <#1F4E8C>/tuto<black> : le tutoriel
+    <#1F4E8C>/guide<black> : ce livre
+  # 19 — Les commandes (2/2)
+  - |-
+    <#8A5A00><bold>Commandes (suite)</bold>
+
+    <#1F4E8C>/marchand<black> : Marché
+    <#1F4E8C>/forgeron<black> : Atelier
+    <#1F4E8C>/quetes<black> : Quêtes
+    <#1F4E8C>/observatoire<black> :
+    animaux spatiaux
+    <#1F4E8C>/classement<black> : podium
+    <#1F4E8C>/classements<black> \<outil> :
+    top 10 d'un outil
+  # 20 — Fin
+  - |-
+    <#8A5A00><bold>Tu sais tout !</bold>
+
+    <black>Bon jeu sur la
+    station Orbit.
+
+
+
+    <dark_red><bold><click:run_command:'/guide jeter'><hover:show_text:'<gray>Supprime ce livre de ton inventaire'>✖ Jeter ce livre</hover></click></bold>
+
+    <dark_gray>Tu pourras le
+    récupérer avec /guide.

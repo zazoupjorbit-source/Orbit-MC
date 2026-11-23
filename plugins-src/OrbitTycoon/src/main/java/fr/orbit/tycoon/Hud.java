@@ -131,7 +131,8 @@ final class Hud implements Listener {
         String ile = monnaies.ile(id);
         l.add("<gray>Île <dark_gray>» " + (ile == null ? "<dark_gray><i>aucune</i>" : "<white>" + echapper(ile)));
         l.add(TRAIT + " ");
-        l.add("<#62CFF4>Orbit <#E0B864>MC");
+        // 15 lignes max dans la barre latérale : le pied « Orbit MC » laisse la place aux commandes.
+        l.add("<#E0B864>/boutique <dark_gray>• <#62CFF4>/vote");
         return l;
     }
 

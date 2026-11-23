@@ -50,7 +50,7 @@ import java.util.UUID;
 
 /**
  * Îles des joueurs (/is) : un monde vide à part, une île par équipe rangée sur une grille (une case = 1000 blocs).
- * Chaque île est délimitée (50 × 50 au départ) par un mur invisible ; les améliorations (/is upgrade) l'agrandissent.
+ * Chaque île est délimitée (100 × 100 au départ) par un mur invisible ; les améliorations (/is upgrade) l'agrandissent.
  * Données : plugins/OrbitTycoon/iles.yml.
  */
 final class IlesJoueurs implements Listener {
@@ -116,7 +116,7 @@ final class IlesJoueurs implements Listener {
         monde.setGameRule(GameRules.KEEP_INVENTORY, true);
         monde.setGameRule(GameRules.IMMEDIATE_RESPAWN, true);
         monde.setGameRule(GameRules.PVP, false);
-        monde.setTime(6000);
+        monde.setTime(18000);   // nuit permanente (minuit)
         monde.setStorm(false);
         monde.setSpawnLocation(0, Y + 1, 0);
         charger();
@@ -195,7 +195,7 @@ final class IlesJoueurs implements Listener {
 
     private List<Integer> tailles() {
         List<Integer> l = plugin.getConfig().getIntegerList("iles.tailles");
-        return l.isEmpty() ? List.of(50) : l;
+        return l.isEmpty() ? List.of(100) : l;
     }
 
     private List<Long> couts() { return plugin.getConfig().getLongList("iles.couts"); }
@@ -227,23 +227,14 @@ final class IlesJoueurs implements Listener {
 
     // ------------------------------------------------------------------ construction de l'île de départ
 
-    /** Petit astéroïde de départ (13 × 13) au centre de la zone : herbe, roche en cône dessous, un arbre et un pad. */
+    /** Rayon de l'astéroïde de départ (15 = environ 31 × 31 blocs). */
+    private static final int RAYON_ILE = 15;
+
+    /** Astéroïde de départ (≈ 31 × 31) au centre de la zone : herbe, roche en cône dessous, un arbre et un pad. */
     private void construire(Ile ile) {
         int cx = ile.cx(), cz = ile.cz();
         monde.getChunkAt(cx >> 4, cz >> 4).load(true);
-        int r = 6;
-        for (int dx = -r; dx <= r; dx++) for (int dz = -r; dz <= r; dz++) {
-            double d = Math.sqrt(dx * dx + dz * dz);
-            if (d > r + 0.4) continue;
-            int x = cx + dx, z = cz + dz;
-            monde.getBlockAt(x, Y, z).setType(Material.GRASS_BLOCK, false);
-            int prof = (int) Math.round((r + 1 - d) * 1.3) + 1;
-            for (int k = 1; k <= prof; k++) {
-                Material m = k <= 2 ? Material.DIRT : ((x * 31 + z * 17 + k) % 5 == 0 ? Material.DEEPSLATE : Material.STONE);
-                if (k == prof && (x + z) % 3 == 0) m = Material.LIGHT_BLUE_STAINED_GLASS;
-                monde.getBlockAt(x, Y - k, z).setType(m, false);
-            }
-        }
+        plateforme(ile);
         // Pad d'arrivée (bleu et or), au sud.
         for (int dx = -1; dx <= 1; dx++) for (int dz = 3; dz <= 5; dz++)
             monde.getBlockAt(cx + dx, Y, cz + dz).setType(dx == 0 && dz == 4 ? Material.SEA_LANTERN
@@ -255,6 +246,184 @@ final class IlesJoueurs implements Listener {
         Block sol = monde.getBlockAt(cx - 2, Y, cz - 2);
         if (!monde.generateTree(sol.getLocation().add(0, 1, 0), TreeType.TREE))
             sol.getRelative(0, 1, 0).setType(Material.OAK_SAPLING, false);
+        decorer(ile);
+    }
+
+    // ------------------------------------------------------------------ décor spatial autour de l'île
+
+    /** Pose le décor spatial de toutes les îles existantes (ne remplace que de l'air). Renvoie le nombre de blocs posés. */
+    int decorerTout() {
+        int n = 0;
+        for (Ile ile : parIndex.values()) n += plateforme(ile) + decorer(ile);
+        return n;
+    }
+
+    /**
+     * Plateforme de l'astéroïde (disque d'herbe de rayon RAYON_ILE, roche en cône dessous).
+     * Ne pose que dans l'air : sur une île existante, elle agrandit le bord sans toucher aux constructions.
+     */
+    int plateforme(Ile ile) {
+        int cx = ile.cx(), cz = ile.cz(), r = RAYON_ILE, n = 0;
+        for (int dx = -r; dx <= r; dx++) for (int dz = -r; dz <= r; dz++) {
+            double d = Math.sqrt(dx * dx + dz * dz);
+            if (d > r + 0.4) continue;
+            int x = cx + dx, z = cz + dz;
+            Block haut = monde.getBlockAt(x, Y, z);
+            if (haut.getType().isAir()) { haut.setType(Material.GRASS_BLOCK, false); n++; }
+            int prof = (int) Math.round((r + 1 - d) * 0.9) + 1;
+            for (int k = 1; k <= prof; k++) {
+                Block b = monde.getBlockAt(x, Y - k, z);
+                if (!b.getType().isAir()) continue;
+                Material m = k <= 2 ? Material.DIRT : (Math.floorMod(x * 31 + z * 17 + k, 5) == 0 ? Material.DEEPSLATE : Material.STONE);
+                if (k == prof && Math.floorMod(x + z, 3) == 0) m = Material.LIGHT_BLUE_STAINED_GLASS;
+                b.setType(m, false);
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /**
+     * Décor spatial dans la zone de départ (100 × 100) : antenne sur l'astéroïde, anneau orbital incliné au-dessus,
+     * satellite à panneaux solaires, petite planète à anneau, trois mini-astéroïdes à cristaux.
+     * Ne pose que dans l'air : sans risque sur une île déjà construite par les joueurs.
+     */
+    int decorer(Ile ile) { return decorerPlateforme(ile) + decorerCiel(ile); }
+
+    /**
+     * Décor posé sur la plateforme centrale : allée dorée depuis le pad, cercle bleu et or, 4 lampadaires stellaires,
+     * mini-fusée sur son pas de tir, antenne radar, jardin de cristaux et de fleurs bleues.
+     * Au sol, ne remplace que l'herbe ; au-dessus, que l'air.
+     */
+    private int decorerPlateforme(Ile ile) {
+        int cx = ile.cx(), cz = ile.cz();
+        int[] n = {0};
+        // Pose (dx, dy, dz) : au niveau du sol (dy = 0) seulement sur l'herbe, au-dessus seulement dans l'air.
+        java.util.function.BiConsumer<int[], Material> poser = (p, m) -> {
+            Block b = monde.getBlockAt(cx + p[0], Y + p[1], cz + p[2]);
+            boolean libre = p[1] == 0 ? b.getType() == Material.GRASS_BLOCK : b.getType().isAir();
+            if (libre) { b.setType(m, false); n[0]++; }
+        };
+        // Allée du pad d'arrivée jusqu'au bord sud : bord doré, centre bleu, lanterne tous les 4 blocs.
+        for (int dz = 6; dz <= 14; dz++)
+            for (int dx = -1; dx <= 1; dx++)
+                poser.accept(new int[]{dx, 0, dz}, dx != 0 ? Material.GOLD_BLOCK
+                        : dz % 4 == 0 ? Material.SEA_LANTERN : Material.LIGHT_BLUE_CONCRETE);
+        // Cercle bleu et or (rayon 11).
+        for (int t = 0; t < 360; t += 2) {
+            double a = Math.toRadians(t);
+            int x = (int) Math.round(11 * Math.cos(a)), z = (int) Math.round(11 * Math.sin(a));
+            poser.accept(new int[]{x, 0, z}, t % 30 == 0 ? Material.GOLD_BLOCK : Material.LIGHT_BLUE_CONCRETE);
+        }
+        // 4 lampadaires stellaires sur les diagonales.
+        for (int[] l : new int[][]{{9, 9}, {-9, 9}, {9, -9}, {-9, -9}}) {
+            poser.accept(new int[]{l[0], 0, l[1]}, Material.POLISHED_DEEPSLATE);
+            for (int y = 1; y <= 3; y++) poser.accept(new int[]{l[0], y, l[1]}, Material.POLISHED_DEEPSLATE_WALL);
+            poser.accept(new int[]{l[0], 4, l[1]}, Material.SEA_LANTERN);
+            poser.accept(new int[]{l[0], 5, l[1]}, Material.END_ROD);
+        }
+        // Mini-fusée sur son pas de tir (à l'ouest du pad).
+        int fx = -8, fz = 2;
+        for (int dx = -2; dx <= 2; dx++) for (int dz = -2; dz <= 2; dz++)
+            poser.accept(new int[]{fx + dx, 0, fz + dz}, Math.abs(dx) == 2 || Math.abs(dz) == 2 ? Material.GOLD_BLOCK : Material.POLISHED_DEEPSLATE);
+        for (int y = 1; y <= 7; y++)
+            poser.accept(new int[]{fx, y, fz}, y == 4 ? Material.LIGHT_BLUE_STAINED_GLASS
+                    : y == 7 ? Material.GOLD_BLOCK : Material.WHITE_CONCRETE);
+        poser.accept(new int[]{fx, 8, fz}, Material.LIGHTNING_ROD);
+        for (int[] a : new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}})
+            for (int y = 1; y <= 2; y++) poser.accept(new int[]{fx + a[0], y, fz + a[1]}, Material.LIGHT_BLUE_CONCRETE);   // ailerons
+        // Antenne radar (à l'est) : mât, parabole de capteurs, émetteur au centre.
+        int rx = 8, rz = 3;
+        poser.accept(new int[]{rx, 0, rz}, Material.POLISHED_DEEPSLATE);
+        for (int y = 1; y <= 2; y++) poser.accept(new int[]{rx, y, rz}, Material.IRON_CHAIN);
+        for (int dx = -1; dx <= 1; dx++) for (int dz = -1; dz <= 1; dz++)
+            poser.accept(new int[]{rx + dx, 3, rz + dz}, dx == 0 && dz == 0 ? Material.GOLD_BLOCK : Material.DAYLIGHT_DETECTOR);
+        poser.accept(new int[]{rx, 4, rz}, Material.END_ROD);
+        // Jardin de cristaux et de fleurs bleues sur l'herbe (hors allée et cercle).
+        Material[] fleurs = {Material.CORNFLOWER, Material.BLUE_ORCHID, Material.AZURE_BLUET, Material.SMALL_AMETHYST_BUD,
+                Material.AMETHYST_CLUSTER, Material.CORNFLOWER};
+        for (int dx = -14; dx <= 14; dx++) for (int dz = -14; dz <= 14; dz++) {
+            double d = Math.sqrt(dx * dx + dz * dz);
+            if (d < 6 || d > 14.5) continue;
+            int h = Math.floorMod((cx + dx) * 73856093 ^ (cz + dz) * 19349663, 100);
+            if (h >= 9) continue;
+            if (monde.getBlockAt(cx + dx, Y, cz + dz).getType() != Material.GRASS_BLOCK) continue;
+            poser.accept(new int[]{dx, 1, dz}, fleurs[h % fleurs.length]);
+        }
+        return n[0];
+    }
+
+    /** Décor dans le ciel de la zone (anneau, satellite, planète, mini-astéroïdes) et antenne sur l'astéroïde. */
+    private int decorerCiel(Ile ile) {
+        int cx = ile.cx(), cz = ile.cz();
+        int[] n = {0};
+        java.util.function.BiConsumer<int[], Material> poser = (p, m) -> {
+            Block b = monde.getBlockAt(cx + p[0], Y + p[1], cz + p[2]);
+            if (b.getType().isAir()) { b.setType(m, false); n[0]++; }
+        };
+        // Antenne de communication sur l'astéroïde.
+        for (int y = 1; y <= 4; y++) poser.accept(new int[]{3, y, -1}, Material.IRON_CHAIN);
+        poser.accept(new int[]{3, 5, -1}, Material.LIGHTNING_ROD);
+        poser.accept(new int[]{2, 3, -1}, Material.END_ROD);
+        poser.accept(new int[]{4, 3, -1}, Material.END_ROD);
+
+        // Anneau orbital incliné (or + lanternes de mer) au-dessus de l'île.
+        double inc = Math.toRadians(22);
+        for (int t = 0; t < 360; t += 2) {
+            double a = Math.toRadians(t);
+            int x = (int) Math.round(14 * Math.cos(a)), y = 18 + (int) Math.round(14 * Math.sin(a) * Math.sin(inc));
+            int z = (int) Math.round(14 * Math.sin(a) * Math.cos(inc));
+            poser.accept(new int[]{x, y, z}, t % 30 == 0 ? Material.SEA_LANTERN : Material.GOLD_BLOCK);
+        }
+
+        // Satellite : corps bleu, panneaux solaires (verre bleu sur longeron doré), antenne.
+        int sx = 18, sy = 9, sz = -15;
+        for (int dx = 0; dx <= 2; dx++) for (int dy = 0; dy <= 2; dy++) for (int dz = 0; dz <= 2; dz++)
+            poser.accept(new int[]{sx + dx, sy + dy, sz + dz}, dx == 1 && dy == 1 && dz == 0 ? Material.SEA_LANTERN
+                    : (dx + dy + dz) % 2 == 0 ? Material.LIGHT_BLUE_CONCRETE : Material.WHITE_CONCRETE);
+        for (int dx = -7; dx <= 9; dx++) {
+            if (dx >= 0 && dx <= 2) continue;
+            for (int dz = 0; dz <= 2; dz++)
+                poser.accept(new int[]{sx + dx, sy + 1, sz + dz}, dz == 1 || dx == -7 || dx == 9 ? Material.GOLD_BLOCK : Material.BLUE_STAINED_GLASS);
+        }
+        poser.accept(new int[]{sx + 1, sy + 3, sz + 1}, Material.LIGHTNING_ROD);
+        poser.accept(new int[]{sx + 1, sy + 4, sz + 1}, Material.END_ROD);
+
+        // Petite planète bleue à anneau doré, au loin.
+        int px = -30, py = 24, pz = 28;
+        for (int dx = -4; dx <= 4; dx++) for (int dy = -4; dy <= 4; dy++) for (int dz = -4; dz <= 4; dz++) {
+            double d = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            if (d > 4.3) continue;
+            int h = Math.floorMod(dx * 73 + dy * 31 + dz * 17, 7);
+            poser.accept(new int[]{px + dx, py + dy, pz + dz}, h == 0 ? Material.CYAN_TERRACOTTA
+                    : h <= 2 ? Material.LIGHT_BLUE_TERRACOTTA : Material.BLUE_TERRACOTTA);
+        }
+        for (int t = 0; t < 360; t += 4) {
+            double a = Math.toRadians(t);
+            int x = (int) Math.round(7.5 * Math.cos(a)), z = (int) Math.round(7.5 * Math.sin(a));
+            int y = (int) Math.round(x * 0.35);
+            poser.accept(new int[]{px + x, py + y, pz + z}, t % 24 == 0 ? Material.GOLD_BLOCK : Material.LIGHT_BLUE_STAINED_GLASS);
+        }
+
+        // Trois mini-astéroïdes flottants, cristaux d'améthyste et glace cosmique.
+        int[][] rochers = {{-22, 4, 12, 3}, {24, -3, 18, 3}, {-15, 7, -24, 2}};
+        Material[] roches = {Material.TUFF, Material.DEEPSLATE, Material.COBBLED_DEEPSLATE, Material.BLACKSTONE};
+        for (int[] r : rochers) {
+            int ry = r[3];
+            for (int dx = -ry; dx <= ry; dx++) for (int dy = -ry; dy <= ry; dy++) for (int dz = -ry; dz <= ry; dz++) {
+                double d = Math.sqrt(dx * dx + dy * dy * 1.8 + dz * dz);
+                if (d > ry + 0.3) continue;
+                int h = Math.floorMod(dx * 13 + dy * 7 + dz * 29 + r[0], 11);
+                Material m = d < 1 ? Material.BLUE_ICE : h == 0 ? Material.AMETHYST_BLOCK : roches[h % roches.length];
+                poser.accept(new int[]{r[0] + dx, r[1] + dy, r[2] + dz}, m);
+            }
+            // Cristaux sur le dessus.
+            for (int[] c : new int[][]{{0, 0}, {1, -1}, {-1, 1}}) {
+                int top = r[1] + (int) Math.floor(ry / Math.sqrt(1.8)) + 1;
+                poser.accept(new int[]{r[0] + c[0], top, r[2] + c[1]}, c[0] == 0 ? Material.AMETHYST_CLUSTER : Material.END_ROD);
+            }
+        }
+        return n[0];
     }
 
     // ------------------------------------------------------------------ commande /is

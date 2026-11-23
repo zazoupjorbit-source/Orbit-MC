@@ -1,6 +1,13 @@
 {
   "providers": [
-    {"type": "space", "advances": {"": -18, "": -153}},
-    {"type": "bitmap", "file": "orbittycoon:font/menu_nav.png", "height": 182, "ascent": 23, "chars": [""]}
+    {"type": "space", "advances": {"\uF801": -18, "\uF802": -153, "\uF803": -134, "\uF810": -1, "\uF811": -2, "\uF812": -4, "\uF813": -8, "\uF814": -16, "\uF815": -32, "\uF816": -64, "\uF817": -128}},
+    {"type": "bitmap", "file": "orbittycoon:font/menu_nav.png", "height": 182, "ascent": 23, "chars": ["\uE000"]},
+    {"type": "bitmap", "file": "orbittycoon:font/menu_outil.png", "height": 182, "ascent": 23, "chars": ["\uE001"]},
+    {"type": "bitmap", "file": "orbittycoon:font/menu_grille1.png", "height": 146, "ascent": 23, "chars": ["\uE002"]},
+    {"type": "bitmap", "file": "orbittycoon:font/menu_grille2.png", "height": 164, "ascent": 23, "chars": ["\uE003"]},
+    {"type": "bitmap", "file": "orbittycoon:font/menu_grille3.png", "height": 182, "ascent": 23, "chars": ["\uE004"]},
+    {"type": "bitmap", "file": "orbittycoon:font/menu_grille4.png", "height": 200, "ascent": 23, "chars": ["\uE005"]},
+    {"type": "bitmap", "file": "orbittycoon:font/menu_grille5.png", "height": 218, "ascent": 23, "chars": ["\uE006"]},
+    {"type": "bitmap", "file": "orbittycoon:font/menu_grille6.png", "height": 236, "ascent": 23, "chars": ["\uE007"]}
   ]
 }

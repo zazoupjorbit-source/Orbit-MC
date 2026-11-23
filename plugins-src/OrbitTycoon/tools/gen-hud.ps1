@@ -1,4 +1,4 @@
-# Dessine l'habillage Tycoon dans ..\pack (DA Orbit : bleu nuit + or, accent Tycoon menthe #3DDCB0) :
+﻿# Dessine l'habillage Tycoon dans ..\pack (DA Orbit : bleu nuit + or, accent Tycoon menthe #3DDCB0) :
 #  - barre d'action (hotbar), selection, main secondaire et barre d'experience ;
 #  - inventaire du joueur (texture vanilla du jar client recoloree : memes cases, memes positions) ;
 #  - fond du menu du Navigateur orbital (police orbittycoon:menu, pose par Navigateur.java).
@@ -202,9 +202,7 @@ Save-Png $b 'assets/minecraft/textures/gui/container/inventory.png'
 # Image de 196 px de large = fenetre (176) + 10 px de chaque cote, 10 px au-dessus. Le titre du coffre commence
 # en (8, 6) de la fenetre, ligne de base a 13 : ascent = 13 + 10 = 23. Navigateur.java recule de 18 px avant
 # le glyphe (avance 197) pour que l'image commence 10 px a gauche de la fenetre.
-$MX = 10; $MY = 10; $rows = 3
-$imgH = 114 + 18 * $rows
-$b = New-Canvas 196 ($MY + $imgH + 4)
+$MX = 10; $MY = 10
 function Socket($b, [int]$wx, [int]$wy, [string]$acc) {
     for ($j = 0; $j -lt 18; $j++) { for ($i = 0; $i -lt 18; $i++) {
         $x = $wx + $MX + $i; $y = $wy + $MY + $j
@@ -215,6 +213,10 @@ function Socket($b, [int]$wx, [int]$wy, [string]$acc) {
         } else { Px $b $x $y (Recess $i $j 1) }
     } }
 }
+# $cases : emplacement du coffre -> couleur des coins ; $filets : (rangee, x debut, x fin) des filets menthe.
+function New-FondMenu([hashtable]$cases, [array]$filets, [string]$rel, [int]$rows = 3) {
+$imgH = 114 + 18 * $rows
+$b = New-Canvas 196 ($MY + $imgH + 4)
 $x0 = -4 + $MX; $x1 = 179 + $MX; $y0 = -4 + $MY; $y1 = $imgH + 3 + $MY
 for ($y = $y0; $y -le $y1; $y++) {
     $body = Mix '17284A' '0A1424' (($y - $y0) / [double]($y1 - $y0))
@@ -251,11 +253,10 @@ for ($ty = 3; $ty -le 15; $ty++) { for ($tx = 12; $tx -le 163; $tx++) {
     Px $b $x $y $c
 } }
 Diamond $b (8 + $MX) (9 + $MY) $OR $OR_L; Diamond $b (167 + $MX) (9 + $MY) $OR $OR_L
-# Cases des zones (rangee 1, colonnes 2 a 6), de la base (rangee 2, colonne 4) et de « Mon ile » (rangee 2, colonne 6), coins a la couleur de la zone.
-$zones = @{ 11 = '3FA9F5'; 12 = 'C8894B'; 13 = 'F5D442'; 14 = 'FF4D4D'; 15 = 'B0BEC5'; 22 = $OR; 24 = '7CFC9A' }
-foreach ($slot in $zones.Keys) { Socket $b (7 + 18 * ($slot % 9)) (17 + 18 * [Math]::Floor($slot / 9)) $zones[$slot] }
-# Filets menthe de part et d'autre, rangees 0 et 2.
-foreach ($o in @(@(0, 12, 164), @(2, 12, 74), @(2, 101, 110), @(2, 138, 164))) {
+# Cases cliquables, coins a la couleur de leur zone / outil.
+foreach ($slot in @($cases.Keys)) { Socket $b (7 + 18 * ($slot % 9)) (17 + 18 * [Math]::Floor($slot / 9)) $cases[$slot] }
+# Filets menthe de part et d'autre des cases.
+foreach ($o in $filets) {
     $y = 18 + 18 * $o[0] + 7
     for ($x = $o[1]; $x -le $o[2]; $x++) {
         Px $b ($x + $MX) ($y + $MY) (Mix $MT $MT_D ([Math]::Abs($x - ($o[1] + $o[2]) / 2.0) / [Math]::Max(1, ($o[2] - $o[1]) / 2.0)))
@@ -278,15 +279,41 @@ $invY = 18 * $rows + 31
 for ($k = 0; $k -lt 3; $k++) { for ($c = 0; $c -lt 9; $c++) { Socket $b (7 + 18 * $c) ($invY - 1 + 18 * $k) $null } }
 for ($x = 7; $x -le 168; $x++) { Px $b ($x + $MX) ($invY + 55 + $MY) (Mix $OR_D '0A1424' 0.4) }
 for ($c = 0; $c -lt 9; $c++) { Socket $b (7 + 18 * $c) ($invY + 57) $null }
-$menuH = $b.Height
-Save-Png $b 'assets/orbittycoon/textures/font/menu_nav.png' -Force
+$h = $b.Height
+Save-Png $b $rel -Force
+return $h
+}
 
-# Police :  = -18 px,  = -153 px (retour pour centrer le titre),  = fond du menu.
+# Navigateur : zones (rangee 1, colonnes 2 a 6), base (rangee 2, colonne 4), « Mon ile » (rangee 2, colonne 6).
+$menuH = New-FondMenu @{ 11 = '3FA9F5'; 12 = 'C8894B'; 13 = 'F5D442'; 14 = 'FF4D4D'; 15 = 'B0BEC5'; 22 = $OR; 24 = '7CFC9A' } `
+    @(@(0, 12, 164), @(2, 12, 74), @(2, 101, 110), @(2, 138, 164)) 'assets/orbittycoon/textures/font/menu_nav.png'
+# Outil orbital (Outil.java) : fiche (rangee 0, colonne 4), pioche/hache/houe/canne/epee (rangee 1), ameliorations (rangee 2, colonne 4).
+$null = New-FondMenu @{ 4 = $OR; 11 = 'B0BEC5'; 12 = 'C8894B'; 13 = 'F5D442'; 14 = '3FA9F5'; 15 = 'FF4D4D'; 22 = $OR } `
+    @(@(0, 12, 74), @(0, 101, 164), @(2, 12, 74), @(2, 101, 164)) 'assets/orbittycoon/textures/font/menu_outil.png'
+
+# Grilles generiques de 1 a 6 rangees (toutes les cases dessinees) : fiche d'outil, quetes, HDV, boutique, coffres…
+# Glyphes U+E002 (1 rangee) a U+E007 (6 rangees), poses par Habillage.java.
+$grilles = @()
+for ($r = 1; $r -le 6; $r++) {
+    $cases = @{}
+    for ($s = 0; $s -lt 9 * $r; $s++) { $cases[$s] = $null }
+    $h = New-FondMenu $cases @() "assets/orbittycoon/textures/font/menu_grille$r.png" $r
+    $code = '\u' + (0xE001 + $r).ToString('X4')
+    $grilles += "    {`"type`": `"bitmap`", `"file`": `"orbittycoon:font/menu_grille$r.png`", `"height`": $h, `"ascent`": $(13 + $MY), `"chars`": [`"$code`"]}"
+}
+
+# Police : U+F801 = -18 px, U+F802 = -153 px (centre « Navigateur orbital », 109 px), U+F803 = -134 px (centre « Outil orbital », 71 px),
+# U+F810..F817 = -1, -2, -4 ... -128 px (recul quelconque, calcule par Habillage.java pour centrer un titre),
+# U+E000 = fond du Navigateur, U+E001 = fond de l'Outil orbital, U+E002..E007 = grilles de 1 a 6 rangees.
+$espaces = '"\uF801": -18, "\uF802": -153, "\uF803": -134'
+for ($k = 0; $k -lt 8; $k++) { $espaces += ', "\u' + (0xF810 + $k).ToString('X4') + '": -' + [int][Math]::Pow(2, $k) }
 $json = @"
 {
   "providers": [
-    {"type": "space", "advances": {"": -18, "": -153}},
-    {"type": "bitmap", "file": "orbittycoon:font/menu_nav.png", "height": $menuH, "ascent": $(13 + $MY), "chars": [""]}
+    {"type": "space", "advances": {$espaces}},
+    {"type": "bitmap", "file": "orbittycoon:font/menu_nav.png", "height": $menuH, "ascent": $(13 + $MY), "chars": ["\uE000"]},
+    {"type": "bitmap", "file": "orbittycoon:font/menu_outil.png", "height": $menuH, "ascent": $(13 + $MY), "chars": ["\uE001"]},
+$($grilles -join ",`n")
   ]
 }
 "@

@@ -125,6 +125,7 @@ public final class OrbitDevCore extends JavaPlugin {
         register("orbitdev", new AdminCommand(this));
         register("station", new StationCommand(this));
         register("boutique", new ShopCommand(this));
+        register("vote", new fr.orbit.devcore.command.VoteCommand(this));
         register("anneau", new fr.orbit.devcore.command.AnneauCommand(this));
 
         npcs.spawnAllLoaded();
