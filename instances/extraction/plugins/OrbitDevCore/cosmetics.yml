@@ -1,0 +1,2040 @@
+# ------------------------------------------------------------------
+#  Catalogue des cosmétiques d'OrbitDevCore (rechargé par /orbitdev reload)
+#
+#  Identifiant : minuscules, chiffres, - et _ (il est enregistré dans les fichiers joueurs,
+#  ne le renomme pas après coup). name / description : MiniMessage. icon : matériau Bukkit.
+#  rarity : common | rare | epic | legendary (affichée dans le menu, servira aux prix de la boutique).
+#  Une catégorie peut contenir autant de cosmétiques que voulu : le menu ajoute des pages.
+#
+#  trails / auras : particle = particule Minecraft (flame, heart, note, end_rod, dust...).
+#    dust : color "#RRGGBB" + size ; dust_color_transition : color, to-color, size ;
+#    entity_effect / tinted_leaves / flash : color ; effect / instant_effect : color + power ;
+#    falling_dust / block / dust_pillar : block = bloc ; item : item = objet.
+#    trails : count (particules par pas, 1 à 20) et speed (vitesse des particules qui bougent).
+#    auras : style = ring | halo | spiral | wings | atom | pulse | tornado | crown | cloud.
+#  hats / balloons : item = objet (le chapeau occupe la case du casque ; le ballon flotte au bout
+#    d'une ficelle). texture = tête personnalisée : valeur « Value » de minecraft-heads.com
+#    (onglet For Developers) ou identifiant de texture textures.minecraft.net.
+#  backs : accessoires de dos. style = item (un objet au milieu du dos : sac, bouclier...)
+#    | diagonal (un objet en travers du dos, poignée au-dessus de l'épaule : épée, arc...)
+#    | wings (ailes qui battent : éventail de l'objet « item », ou plaques du bloc « block »)
+#    | cape (bloc « block », se soulève quand tu cours) | jetpack (réservoirs en bloc « block »).
+#    accent = bloc secondaire (une plaque d'aile sur deux, bande de la cape, tuyères du jetpack).
+#    particle (facultatif, mêmes réglages que les traînées) : bouts des ailes, tuyères, bas de la cape...
+#    Réglages fins si l'objet est mal placé : offset [gauche, haut, avant] en blocs,
+#    rotation [x, y, z] en degrés, scale (taille), flap (amplitude du battement en degrés).
+#  pets : entity = créature (fox, cat, wolf...), baby = version bébé si elle existe,
+#    variant = variante (voir plus bas), collar = couleur du collier (chats et loups).
+#    Préférer les créatures à IA « classique » : allay, sniffer, frog, axolotl, goat, camel...
+#    ont leur propre cerveau et se promènent au lieu de suivre le joueur. Le serveur est en
+#    difficulté paisible : les monstres (zombie, creeper...) y disparaissent tout seuls.
+#    Variantes : mouton = couleur de laine ; renard = red, snow ; lapin = brown, white, black,
+#    black_and_white, gold, salt_and_pepper, the_killer_bunny ; perroquet = red, blue, green, cyan, gray ;
+#    lama = creamy, white, brown, gray ; panda = normal, lazy, worried, playful, brown, weak, aggressive ;
+#    champimeuh = red, brown ; chat = tabby, black, red, siamese, british_shorthair, calico, persian,
+#    ragdoll, white, jellie, all_black ; loup = pale, ashen, black, chestnut, rusty, snowy, spotted,
+#    striped, woods ; cochon / vache / poule = temperate, warm, cold.
+#  mounts : entity = monture (horse, skeleton_horse, zombie_horse, donkey, mule, camel, camel_husk,
+#    happy_ghast, nautilus, zombie_nautilus...). speed (au sol, max vanilla 0,3375), jump (0,4 à 1,0),
+#    flying-speed (ghast joyeux), color / style (chevaux), armor (armure de cheval / de nautile,
+#    harnais du ghast). Les montures sont toujours sellées et disparaissent quand on descend.
+# ------------------------------------------------------------------
+
+trails:
+  flammes:
+    name: "<gold>Flammes"
+    description: "Tu laisses une traînée de feu."
+    particle: flame
+    icon: BLAZE_POWDER
+  petites-flammes:
+    name: "<yellow>Étincelles de bougie"
+    description: "De toutes petites flammes."
+    particle: small_flame
+    icon: CANDLE
+  ames:
+    name: "<aqua>Flammes des âmes"
+    description: "Le feu bleu de la vallée des âmes."
+    particle: soul_fire_flame
+    icon: SOUL_LANTERN
+    rarity: rare
+  cuivre:
+    name: "<green>Flammes de cuivre"
+    description: "Un feu vert-de-gris."
+    particle: copper_fire_flame
+    icon: COPPER_TORCH
+    rarity: rare
+  coeurs:
+    name: "<red>Cœurs"
+    description: "Pour les joueurs pleins d'amour."
+    particle: heart
+    count: 1
+    icon: POPPY
+    rarity: rare
+  colere:
+    name: "<dark_red>Colère"
+    description: "Des petits nuages orageux."
+    particle: angry_villager
+    count: 1
+    icon: REDSTONE
+  joie:
+    name: "<green>Bonne humeur"
+    description: "Des étincelles vertes de villageois content."
+    particle: happy_villager
+    icon: EMERALD
+  notes:
+    name: "<green>Notes de musique"
+    description: "Chaque pas est une mélodie."
+    particle: note
+    icon: NOTE_BLOCK
+  etoiles:
+    name: "<white>Poussière d'étoiles"
+    description: "Des étincelles de l'End."
+    particle: end_rod
+    icon: END_ROD
+    rarity: rare
+  cerisier:
+    name: "<light_purple>Pétales de cerisier"
+    description: "Le printemps te suit partout."
+    particle: cherry_leaves
+    icon: PINK_PETALS
+    rarity: rare
+  chene-pale:
+    name: "<gray>Feuilles de chêne pâle"
+    description: "Des feuilles grises et silencieuses."
+    particle: pale_oak_leaves
+    icon: PALE_OAK_LEAVES
+    rarity: rare
+  automne:
+    name: "<gold>Feuilles d'automne"
+    description: "Des feuilles de peuplier orangées."
+    particle: orange_poplar_leaves
+    icon: ORANGE_POPLAR_LEAVES
+    rarity: rare
+  feuilles-rouges:
+    name: "<red>Feuilles rouges"
+    description: "L'automne en rouge."
+    particle: red_poplar_leaves
+    icon: RED_DYE
+    rarity: rare
+  feuilles-dorees:
+    name: "<yellow>Feuilles dorées"
+    description: "L'automne en or."
+    particle: yellow_poplar_leaves
+    icon: YELLOW_DYE
+    rarity: rare
+  neige:
+    name: "<white>Flocons"
+    description: "Un petit hiver sous tes pieds."
+    particle: snowflake
+    icon: SNOWBALL
+  totem:
+    name: "<gold>Totem"
+    description: "La magie du totem d'immortalité."
+    particle: totem_of_undying
+    count: 3
+    speed: 0.15
+    icon: TOTEM_OF_UNDYING
+    rarity: epic
+  enchantement:
+    name: "<light_purple>Glyphes"
+    description: "Les lettres d'une table d'enchantement."
+    particle: enchant
+    count: 4
+    speed: 0.6
+    icon: ENCHANTING_TABLE
+    rarity: rare
+  sorciere:
+    name: "<dark_purple>Sorcellerie"
+    description: "Une magie violette et mystérieuse."
+    particle: witch
+    icon: CAULDRON
+    rarity: rare
+  lucioles:
+    name: "<yellow>Lucioles"
+    description: "Des petites lumières qui flottent."
+    particle: firefly
+    icon: FIREFLY_BUSH
+    rarity: epic
+  electrique:
+    name: "<aqua>Électrique"
+    description: "Tu crépites à chaque pas."
+    particle: electric_spark
+    icon: LIGHTNING_ROD
+    rarity: rare
+  cire:
+    name: "<gold>Cire d'abeille"
+    description: "Des éclats de cire dorée."
+    particle: wax_on
+    icon: HONEYCOMB
+  oxydation:
+    name: "<aqua>Oxydation"
+    description: "Des éclats de cuivre gratté."
+    particle: scrape
+    icon: COPPER_INGOT
+  portail:
+    name: "<dark_purple>Portail du Nether"
+    description: "Des particules de portail."
+    particle: portal
+    count: 4
+    speed: 0.4
+    icon: OBSIDIAN
+    rarity: rare
+  portail-inverse:
+    name: "<light_purple>Portail inversé"
+    description: "Comme une ancre de réapparition."
+    particle: reverse_portal
+    count: 3
+    speed: 0.02
+    icon: CRYING_OBSIDIAN
+    rarity: rare
+  souffle-dragon:
+    name: "<light_purple>Souffle du dragon"
+    description: "Le souffle violet de l'Ender Dragon."
+    particle: dragon_breath
+    count: 3
+    speed: 0.02
+    icon: DRAGON_BREATH
+    rarity: legendary
+  nuage:
+    name: "<white>Petits nuages"
+    description: "Tu marches sur les nuages."
+    particle: cloud
+    icon: WHITE_WOOL
+  fumee:
+    name: "<gray>Fumée blanche"
+    description: "Un nuage de fumée derrière toi."
+    particle: white_smoke
+    icon: CAMPFIRE
+  miel:
+    name: "<gold>Gouttes de miel"
+    description: "Collant mais délicieux."
+    particle: falling_honey
+    icon: HONEY_BOTTLE
+  lave:
+    name: "<red>Gouttes de lave"
+    description: "Attention, ça brûle."
+    particle: dripping_lava
+    icon: LAVA_BUCKET
+    rarity: rare
+  larmes:
+    name: "<dark_purple>Larmes d'obsidienne"
+    description: "L'obsidienne pleure avec toi."
+    particle: dripping_obsidian_tear
+    icon: CRYING_OBSIDIAN
+    rarity: rare
+  spores:
+    name: "<light_purple>Spores fleuries"
+    description: "Le pollen d'une sporée fleurie."
+    particle: spore_blossom_air
+    count: 4
+    icon: SPORE_BLOSSOM
+    rarity: rare
+  spores-carmin:
+    name: "<red>Spores carmin"
+    description: "L'air de la forêt carmin."
+    particle: crimson_spore
+    count: 4
+    icon: CRIMSON_FUNGUS
+  spores-biscornues:
+    name: "<dark_aqua>Spores biscornues"
+    description: "L'air de la forêt biscornue."
+    particle: warped_spore
+    count: 4
+    icon: WARPED_FUNGUS
+  cendres:
+    name: "<gray>Cendres"
+    description: "Le vent du bassin de basalte."
+    particle: white_ash
+    count: 5
+    icon: BASALT
+  sculk:
+    name: "<dark_aqua>Âmes du sculk"
+    description: "Le sculk a faim."
+    particle: sculk_soul
+    speed: 0.02
+    icon: SCULK
+    rarity: epic
+  ames-errantes:
+    name: "<aqua>Âmes errantes"
+    description: "Des âmes s'échappent de tes pas."
+    particle: soul
+    speed: 0.02
+    icon: SOUL_SAND
+    rarity: epic
+  encre-luisante:
+    name: "<aqua>Encre luisante"
+    description: "L'encre d'un poulpe luisant."
+    particle: glow_squid_ink
+    speed: 0.02
+    icon: GLOW_INK_SAC
+    rarity: rare
+  lueur:
+    name: "<green>Lueur"
+    description: "Des points lumineux comme un poulpe luisant."
+    particle: glow
+    icon: GLOW_BERRIES
+    rarity: rare
+  feu-artifice:
+    name: "<gold>Feu d'artifice"
+    description: "C'est la fête !"
+    particle: firework
+    count: 3
+    speed: 0.05
+    icon: FIREWORK_ROCKET
+    rarity: epic
+  bulles:
+    name: "<aqua>Bulles"
+    description: "Tu fais des bulles."
+    particle: bubble_pop
+    count: 3
+    icon: PUFFERFISH
+  slime:
+    name: "<green>Slime"
+    description: "Ça colle un peu."
+    particle: item_slime
+    count: 3
+    icon: SLIME_BALL
+  toile:
+    name: "<white>Fils de toile"
+    description: "Tu laisses des bouts de toile d'araignée."
+    particle: item_cobweb
+    count: 3
+    icon: COBWEB
+  sable:
+    name: "<yellow>Sable"
+    description: "Le désert te suit."
+    particle: falling_dust
+    block: SAND
+    count: 3
+    icon: SAND
+  redstone:
+    name: "<red>Poussière de redstone"
+    description: "Un circuit derrière toi."
+    particle: falling_dust
+    block: REDSTONE_BLOCK
+    count: 3
+    icon: REDSTONE_BLOCK
+    rarity: rare
+  potion:
+    name: "<green>Potion"
+    description: "Des bulles d'effet de potion."
+    particle: entity_effect
+    color: "#7cff4a"
+    count: 3
+    icon: POTION
+  magie:
+    name: "<light_purple>Magie instantanée"
+    description: "Des étincelles d'effet instantané."
+    particle: instant_effect
+    color: "#ff66ff"
+    count: 3
+    icon: GLISTERING_MELON_SLICE
+    rarity: rare
+  feuilles-teintees:
+    name: "<green>Feuilles vertes"
+    description: "Une pluie de feuilles fraîches."
+    particle: tinted_leaves
+    color: "#5fbf3a"
+    icon: OAK_LEAVES
+  presage:
+    name: "<dark_aqua>Présage"
+    description: "Le signe d'une épreuve sinistre."
+    particle: trial_omen
+    icon: OMINOUS_BOTTLE
+    rarity: epic
+  coffre-fort:
+    name: "<gold>Lien du coffre-fort"
+    description: "Comme un coffre-fort des épreuves."
+    particle: vault_connection
+    count: 3
+    speed: 0.3
+    icon: TRIAL_KEY
+    rarity: epic
+  poussiere-or:
+    name: "<gold>Poussière d'or"
+    description: "Tu sèmes de l'or."
+    particle: dust
+    color: "#ffd700"
+    size: 1.2
+    icon: GOLD_NUGGET
+    rarity: rare
+  poussiere-emeraude:
+    name: "<green>Poussière d'émeraude"
+    description: "Des éclats verts brillants."
+    particle: dust
+    color: "#2ee86a"
+    size: 1.2
+    icon: EMERALD
+    rarity: rare
+  poussiere-saphir:
+    name: "<blue>Poussière de saphir"
+    description: "Des éclats bleu profond."
+    particle: dust
+    color: "#2f6bff"
+    size: 1.2
+    icon: LAPIS_LAZULI
+    rarity: rare
+  poussiere-rose:
+    name: "<light_purple>Poussière de rose"
+    description: "Tout en douceur."
+    particle: dust
+    color: "#ff7ad9"
+    size: 1.2
+    icon: PINK_DYE
+    rarity: rare
+  ombre:
+    name: "<dark_gray>Ombre"
+    description: "Une poussière noire comme la nuit."
+    particle: dust
+    color: "#1a1a1a"
+    size: 1.4
+    icon: BLACK_DYE
+    rarity: rare
+  feu-glace:
+    name: "<aqua>Givre"
+    description: "Du bleu glacier au blanc."
+    particle: dust_color_transition
+    color: "#00e5ff"
+    to-color: "#ffffff"
+    size: 1.2
+    icon: BLUE_ICE
+    rarity: epic
+  coucher-soleil:
+    name: "<gradient:#ff8a00:#ff2fd0>Coucher de soleil</gradient>"
+    description: "De l'orange au rose."
+    particle: dust_color_transition
+    color: "#ff8a00"
+    to-color: "#ff2fd0"
+    size: 1.2
+    icon: ORANGE_TULIP
+    rarity: epic
+  braise:
+    name: "<gradient:#ffcc00:#ff2a00>Braise</gradient>"
+    description: "Du jaune au rouge vif."
+    particle: dust_color_transition
+    color: "#ffcc00"
+    to-color: "#ff2a00"
+    size: 1.2
+    icon: MAGMA_CREAM
+    rarity: epic
+  orbit:
+    name: "<gradient:#00c6ff:#7b2ff7>Sillage ORBIT</gradient>"
+    description: "Une poussière aux couleurs du serveur."
+    particle: dust_color_transition
+    color: "#00c6ff"
+    to-color: "#7b2ff7"
+    size: 1.2
+    icon: AMETHYST_SHARD
+    rarity: legendary
+
+auras:
+  halo:
+    name: "<yellow>Halo d'ange"
+    description: "Une auréole lumineuse au-dessus de la tête."
+    particle: end_rod
+    style: halo
+    icon: GLOWSTONE_DUST
+    rarity: rare
+  couronne-coeurs:
+    name: "<red>Couronne de cœurs"
+    description: "Des cœurs qui tournent au-dessus de toi."
+    particle: heart
+    style: halo
+    icon: RED_DYE
+    rarity: epic
+  halo-lucioles:
+    name: "<yellow>Halo de lucioles"
+    description: "Des lucioles tournent au-dessus de ta tête."
+    particle: firefly
+    style: halo
+    icon: FIREFLY_BUSH
+    rarity: epic
+  anneau-orbit:
+    name: "<gradient:#00c6ff:#7b2ff7>Anneau ORBIT</gradient>"
+    description: "Un anneau en orbite autour de toi."
+    particle: dust_color_transition
+    color: "#00c6ff"
+    to-color: "#7b2ff7"
+    size: 1.0
+    style: ring
+    icon: ENDER_EYE
+    rarity: legendary
+  runes:
+    name: "<dark_purple>Runes"
+    description: "Les glyphes d'une table d'enchantement."
+    particle: enchant
+    style: ring
+    icon: ENCHANTED_BOOK
+    rarity: rare
+  anneau-cerisier:
+    name: "<light_purple>Anneau de cerisier"
+    description: "Des pétales tournent autour de toi."
+    particle: cherry_leaves
+    style: ring
+    icon: CHERRY_SAPLING
+    rarity: rare
+  anneau-totem:
+    name: "<gold>Anneau du totem"
+    description: "La magie du totem en orbite."
+    particle: totem_of_undying
+    style: ring
+    icon: TOTEM_OF_UNDYING
+    rarity: epic
+  spirale-feu:
+    name: "<gold>Spirale de feu"
+    description: "Une double hélice de flammes."
+    particle: flame
+    style: spiral
+    icon: FIRE_CHARGE
+    rarity: rare
+  spirale-ames:
+    name: "<aqua>Spirale des âmes"
+    description: "Une double hélice de feu bleu."
+    particle: soul_fire_flame
+    style: spiral
+    icon: SOUL_TORCH
+    rarity: rare
+  etincelles:
+    name: "<yellow>Électrique"
+    description: "Des étincelles crépitent autour de toi."
+    particle: electric_spark
+    style: spiral
+    icon: LIGHTNING_ROD
+    rarity: rare
+  spirale-sculk:
+    name: "<dark_aqua>Spirale du sculk"
+    description: "Des âmes du sculk montent autour de toi."
+    particle: sculk_soul
+    style: spiral
+    icon: SCULK_CATALYST
+    rarity: epic
+  ailes-ange:
+    name: "<white>Ailes d'ange"
+    description: "De grandes ailes blanches dans le dos."
+    particle: dust
+    color: "#ffffff"
+    size: 0.9
+    style: wings
+    icon: FEATHER
+    rarity: legendary
+  ailes-demon:
+    name: "<dark_red>Ailes de démon"
+    description: "Des ailes rouge sang."
+    particle: dust_color_transition
+    color: "#8b0000"
+    to-color: "#1a0000"
+    size: 0.9
+    style: wings
+    icon: NETHER_WART
+    rarity: legendary
+  ailes-orbit:
+    name: "<gradient:#00c6ff:#7b2ff7>Ailes ORBIT</gradient>"
+    description: "Les ailes officielles du serveur."
+    particle: dust_color_transition
+    color: "#00c6ff"
+    to-color: "#7b2ff7"
+    size: 0.9
+    style: wings
+    icon: ELYTRA
+    rarity: legendary
+  ailes-papillon:
+    name: "<light_purple>Ailes de papillon"
+    description: "Légères et roses."
+    particle: dust
+    color: "#ff7ad9"
+    size: 0.8
+    style: wings
+    icon: PINK_TULIP
+    rarity: epic
+  ailes-feu:
+    name: "<gold>Ailes de phénix"
+    description: "Des ailes de feu."
+    particle: flame
+    style: wings
+    icon: BLAZE_ROD
+    rarity: legendary
+  ailes-glace:
+    name: "<aqua>Ailes de glace"
+    description: "Des ailes de givre."
+    particle: snowflake
+    style: wings
+    icon: PACKED_ICE
+    rarity: epic
+  ailes-ames:
+    name: "<dark_aqua>Ailes des âmes"
+    description: "Des ailes de feu bleu."
+    particle: soul_fire_flame
+    style: wings
+    icon: SOUL_CAMPFIRE
+    rarity: legendary
+  atome:
+    name: "<aqua>Atome"
+    description: "Trois orbites autour de toi."
+    particle: dust
+    color: "#00c6ff"
+    size: 0.9
+    style: atom
+    icon: HEART_OF_THE_SEA
+    rarity: epic
+  atome-ames:
+    name: "<dark_aqua>Atome des âmes"
+    description: "Trois orbites de feu bleu."
+    particle: soul_fire_flame
+    style: atom
+    icon: SOUL_LANTERN
+    rarity: epic
+  atome-etoiles:
+    name: "<white>Système stellaire"
+    description: "Des étoiles en orbite."
+    particle: end_rod
+    style: atom
+    icon: NETHER_STAR
+    rarity: legendary
+  onde:
+    name: "<light_purple>Onde de choc"
+    description: "Des ondes s'élargissent sous tes pieds."
+    particle: dust
+    color: "#7b2ff7"
+    size: 1.0
+    style: pulse
+    icon: ECHO_SHARD
+    rarity: rare
+  onde-notes:
+    name: "<green>Onde musicale"
+    description: "Des notes en cercle autour de toi."
+    particle: note
+    style: pulse
+    icon: JUKEBOX
+    rarity: rare
+  onde-givre:
+    name: "<white>Onde de givre"
+    description: "Le sol gèle autour de toi."
+    particle: snowflake
+    style: pulse
+    icon: SNOW_BLOCK
+    rarity: rare
+  tornade:
+    name: "<white>Tornade"
+    description: "Un petit cyclone t'entoure."
+    particle: cloud
+    style: tornado
+    icon: WIND_CHARGE
+    rarity: epic
+  tornade-feu:
+    name: "<gold>Tornade de feu"
+    description: "Un cyclone de flammes."
+    particle: flame
+    style: tornado
+    icon: MAGMA_BLOCK
+    rarity: legendary
+  tornade-sable:
+    name: "<yellow>Tempête de sable"
+    description: "Le vent du désert."
+    particle: dust
+    color: "#d8c38a"
+    size: 1.1
+    style: tornado
+    icon: SANDSTONE
+    rarity: epic
+  couronne-or:
+    name: "<gold>Couronne d'or"
+    description: "Digne d'un roi."
+    particle: dust
+    color: "#ffd700"
+    size: 0.8
+    style: crown
+    icon: GOLD_INGOT
+    rarity: epic
+  couronne-glace:
+    name: "<aqua>Couronne de glace"
+    description: "Une couronne de givre."
+    particle: snowflake
+    style: crown
+    icon: ICE
+    rarity: rare
+  couronne-flammes:
+    name: "<yellow>Couronne de flammes"
+    description: "Des petites flammes sur ta tête."
+    particle: small_flame
+    style: crown
+    icon: CANDLE
+    rarity: rare
+  nuage-pluie:
+    name: "<blue>Nuage de pluie"
+    description: "Un petit nuage pluvieux te suit."
+    particle: dripping_water
+    style: cloud
+    icon: WATER_BUCKET
+    rarity: rare
+  nuage-neige:
+    name: "<white>Nuage de neige"
+    description: "Il neige juste pour toi."
+    particle: snowflake
+    style: cloud
+    icon: POWDER_SNOW_BUCKET
+    rarity: rare
+  orage:
+    name: "<yellow>Orage"
+    description: "Des éclairs miniatures."
+    particle: electric_spark
+    style: cloud
+    icon: TRIDENT
+    rarity: epic
+  nuage-coeurs:
+    name: "<red>Nuage d'amour"
+    description: "Il pleut des cœurs."
+    particle: heart
+    style: cloud
+    icon: PINK_WOOL
+    rarity: epic
+
+hats:
+  casque-spatial:
+    name: "<aqua>Casque spatial"
+    description: "Tenue officielle des explorateurs ORBIT."
+    item: LIGHT_BLUE_STAINED_GLASS
+    rarity: rare
+  bocal:
+    name: "<white>Bocal"
+    description: "Un bocal en verre sur la tête."
+    item: GLASS
+  casque-teinte:
+    name: "<dark_gray>Visière teintée"
+    description: "Mystérieux."
+    item: TINTED_GLASS
+    rarity: rare
+  balise:
+    name: "<white>Balise"
+    description: "On te voit de loin."
+    item: BEACON
+    rarity: epic
+  conduit:
+    name: "<aqua>Conduit"
+    description: "La puissance des océans."
+    item: CONDUIT
+    rarity: epic
+  oeuf-dragon:
+    name: "<dark_purple>Œuf de dragon"
+    description: "Le trophée le plus rare du jeu."
+    item: DRAGON_EGG
+    rarity: legendary
+  tete-dragon:
+    name: "<dark_purple>Tête de dragon"
+    description: "Le trophée ultime."
+    item: DRAGON_HEAD
+    rarity: legendary
+  creeper:
+    name: "<green>Tête de creeper"
+    description: "Sssss..."
+    item: CREEPER_HEAD
+    rarity: rare
+  zombie:
+    name: "<dark_green>Tête de zombie"
+    description: "Braaaains."
+    item: ZOMBIE_HEAD
+    rarity: rare
+  squelette:
+    name: "<white>Crâne de squelette"
+    description: "Un crâne bien blanc."
+    item: SKELETON_SKULL
+    rarity: rare
+  wither:
+    name: "<dark_gray>Crâne de wither squelette"
+    description: "Sombre et inquiétant."
+    item: WITHER_SKELETON_SKULL
+    rarity: epic
+  piglin:
+    name: "<gold>Tête de piglin"
+    description: "Il aime l'or."
+    item: PIGLIN_HEAD
+    rarity: rare
+  lanterne:
+    name: "<gold>Citrouille-lanterne"
+    description: "Halloween toute l'année."
+    item: JACK_O_LANTERN
+  citrouille:
+    name: "<gold>Citrouille"
+    description: "Une citrouille entière."
+    item: PUMPKIN
+  pasteque:
+    name: "<green>Pastèque"
+    description: "Fraîche et juteuse."
+    item: MELON
+  slime:
+    name: "<green>Bloc de slime"
+    description: "Rebondissant."
+    item: SLIME_BLOCK
+  miel:
+    name: "<gold>Bloc de miel"
+    description: "Collant."
+    item: HONEY_BLOCK
+  tnt:
+    name: "<red>TNT"
+    description: "Tête explosive."
+    item: TNT
+    rarity: rare
+  ruche:
+    name: "<yellow>Ruche"
+    description: "Bzzz."
+    item: BEE_NEST
+  gateau:
+    name: "<white>Gâteau d'anniversaire"
+    description: "Joyeux anniversaire !"
+    item: CAKE
+    rarity: rare
+  champignon-rouge:
+    name: "<red>Chapeau champignon"
+    description: "Un vrai chapeau de champignon."
+    item: RED_MUSHROOM_BLOCK
+  champignon-brun:
+    name: "<gold>Champignon brun"
+    description: "Version forêt."
+    item: BROWN_MUSHROOM_BLOCK
+  azalee:
+    name: "<light_purple>Azalée fleurie"
+    description: "Une couronne de fleurs."
+    item: FLOWERING_AZALEA
+    rarity: rare
+  mousse:
+    name: "<green>Mousse"
+    description: "Un peu de nature."
+    item: MOSS_BLOCK
+  foin:
+    name: "<yellow>Botte de foin"
+    description: "Tout droit sorti de la ferme."
+    item: HAY_BLOCK
+  lanterne-mer:
+    name: "<aqua>Lanterne aquatique"
+    description: "Elle brille sous l'eau."
+    item: SEA_LANTERN
+    rarity: rare
+  pierre-lumineuse:
+    name: "<yellow>Pierre lumineuse"
+    description: "Une ampoule sur la tête."
+    item: GLOWSTONE
+  champilampe:
+    name: "<gold>Champilampe"
+    description: "Lumière du Nether."
+    item: SHROOMLIGHT
+  grenouillampe:
+    name: "<light_purple>Perlampe"
+    description: "Une grenouillampe nacrée."
+    item: PEARLESCENT_FROGLIGHT
+    rarity: rare
+  ampoule-cuivre:
+    name: "<gold>Ampoule en cuivre"
+    description: "Une idée lumineuse."
+    item: COPPER_BULB
+    rarity: rare
+  lanterne-ames:
+    name: "<aqua>Lanterne des âmes"
+    description: "Une petite lanterne bleue."
+    item: SOUL_LANTERN
+  lanterne-cuivre:
+    name: "<green>Lanterne en cuivre"
+    description: "Une lanterne verte."
+    item: COPPER_LANTERN
+  feu-camp:
+    name: "<gold>Feu de camp"
+    description: "Attention à la fumée."
+    item: CAMPFIRE
+    rarity: rare
+  enclume:
+    name: "<gray>Enclume"
+    description: "Tête dure."
+    item: ANVIL
+  coffre:
+    name: "<gold>Coffre"
+    description: "Qu'est-ce qu'il y a dedans ?"
+    item: CHEST
+  coffre-ender:
+    name: "<dark_purple>Coffre de l'Ender"
+    description: "Tes affaires te suivent partout."
+    item: ENDER_CHEST
+    rarity: rare
+  shulker:
+    name: "<light_purple>Boîte de shulker"
+    description: "Violette, comme ORBIT."
+    item: PURPLE_SHULKER_BOX
+    rarity: rare
+  table-enchantement:
+    name: "<dark_purple>Table d'enchantement"
+    description: "Le savoir sur ta tête."
+    item: ENCHANTING_TABLE
+    rarity: epic
+  bibliotheque:
+    name: "<gold>Bibliothèque"
+    description: "Tu as beaucoup lu."
+    item: BOOKSHELF
+  etabli:
+    name: "<gold>Établi"
+    description: "Toujours prêt à crafter."
+    item: CRAFTING_TABLE
+  crafteur:
+    name: "<gray>Crafteur"
+    description: "L'établi automatique."
+    item: CRAFTER
+    rarity: rare
+  juke-box:
+    name: "<gold>Juke-box"
+    description: "Mets un disque !"
+    item: JUKEBOX
+  cible:
+    name: "<red>Cible"
+    description: "Vise bien."
+    item: TARGET
+  sculk:
+    name: "<dark_aqua>Capteur sculk"
+    description: "Il t'entend."
+    item: SCULK_SENSOR
+    rarity: epic
+  hurleur:
+    name: "<dark_aqua>Hurleur sculk"
+    description: "Chut..."
+    item: SCULK_SHRIEKER
+    rarity: epic
+  generateur:
+    name: "<dark_gray>Générateur d'épreuve"
+    description: "Des monstres sur la tête."
+    item: TRIAL_SPAWNER
+    rarity: epic
+  coffre-fort:
+    name: "<gold>Coffre-fort"
+    description: "Le trésor des épreuves."
+    item: VAULT
+    rarity: epic
+  coeur-lourd:
+    name: "<gray>Cœur lourd"
+    description: "Très, très lourd."
+    item: HEAVY_CORE
+    rarity: epic
+  pot:
+    name: "<gold>Pot décoré"
+    description: "Un vase sur la tête."
+    item: DECORATED_POT
+  ancre:
+    name: "<dark_purple>Ancre de réapparition"
+    description: "Chargée à bloc."
+    item: RESPAWN_ANCHOR
+    rarity: epic
+  glace:
+    name: "<aqua>Glace bleue"
+    description: "Tête froide."
+    item: BLUE_ICE
+  neige:
+    name: "<white>Bloc de neige"
+    description: "Un bonhomme de neige ?"
+    item: SNOW_BLOCK
+  or:
+    name: "<gold>Bloc d'or"
+    description: "Bling bling."
+    item: GOLD_BLOCK
+    rarity: rare
+  diamant:
+    name: "<aqua>Bloc de diamant"
+    description: "Le rêve de tout mineur."
+    item: DIAMOND_BLOCK
+    rarity: epic
+  emeraude:
+    name: "<green>Bloc d'émeraude"
+    description: "Les villageois t'adorent."
+    item: EMERALD_BLOCK
+    rarity: epic
+  netherite:
+    name: "<dark_gray>Bloc de netherite"
+    description: "Le plus solide de tous."
+    item: NETHERITE_BLOCK
+    rarity: legendary
+  amethyste:
+    name: "<light_purple>Cristal d'améthyste"
+    description: "Un cristal qui pousse sur ta tête."
+    item: AMETHYST_CLUSTER
+    rarity: rare
+
+backs:
+  # --- sacs et objets
+  sac-coffre:
+    name: "<gold>Sac coffre"
+    description: "Un coffre sur le dos, prêt pour l'aventure."
+    style: item
+    item: CHEST
+  sac-tonneau:
+    name: "<gold>Tonneau"
+    description: "Un tonneau bien ficelé."
+    style: item
+    item: BARREL
+  baluchon:
+    name: "<gold>Baluchon"
+    description: "Le sac du voyageur."
+    style: item
+    item: BUNDLE
+  baluchon-violet:
+    name: "<dark_purple>Baluchon violet"
+    description: "Aux couleurs d'ORBIT."
+    style: item
+    item: PURPLE_BUNDLE
+    rarity: rare
+  sac-ender:
+    name: "<dark_purple>Sac de l'Ender"
+    description: "Tes affaires te suivent partout."
+    style: item
+    item: ENDER_CHEST
+    particle: portal
+    count: 2
+    speed: 0.2
+    rarity: epic
+  sac-shulker:
+    name: "<light_purple>Sac shulker"
+    description: "Une boîte de shulker en bandoulière."
+    style: item
+    item: PURPLE_SHULKER_BOX
+    rarity: rare
+  sac-shulker-cyan:
+    name: "<aqua>Sac shulker bleu ciel"
+    description: "L'autre couleur ORBIT."
+    style: item
+    item: LIGHT_BLUE_SHULKER_BOX
+    rarity: rare
+  ruche:
+    name: "<yellow>Ruche ambulante"
+    description: "Ça goutte un peu."
+    style: item
+    item: BEE_NEST
+    particle: falling_honey
+    count: 1
+    rarity: rare
+  bouclier:
+    name: "<white>Bouclier"
+    description: "Toujours paré."
+    style: item
+    item: SHIELD
+  pot:
+    name: "<gold>Pot décoré"
+    description: "Un vase à porter sur le dos."
+    style: item
+    item: DECORATED_POT
+  sono:
+    name: "<green>Sono ambulante"
+    description: "La musique te suit."
+    style: item
+    item: JUKEBOX
+    particle: note
+    count: 1
+    rarity: epic
+  # --- armes et outils en travers du dos
+  epee-bois:
+    name: "<gold>Épée en bois"
+    description: "Tout le monde commence quelque part."
+    style: diagonal
+    item: WOODEN_SWORD
+  epee-fer:
+    name: "<white>Épée en fer"
+    description: "L'arme du chevalier."
+    style: diagonal
+    item: IRON_SWORD
+  epee-or:
+    name: "<gold>Épée en or"
+    description: "Plus belle que solide."
+    style: diagonal
+    item: GOLDEN_SWORD
+    rarity: rare
+  epee-diamant:
+    name: "<aqua>Épée en diamant"
+    description: "Le rêve de tout aventurier."
+    style: diagonal
+    item: DIAMOND_SWORD
+    rarity: rare
+  epee-netherite:
+    name: "<dark_gray>Épée en netherite"
+    description: "La lame ultime."
+    style: diagonal
+    item: NETHERITE_SWORD
+    rarity: epic
+  lance-diamant:
+    name: "<aqua>Lance en diamant"
+    description: "Pour les charges héroïques."
+    style: diagonal
+    item: DIAMOND_SPEAR
+    rarity: rare
+  lance-netherite:
+    name: "<dark_gray>Lance en netherite"
+    description: "Longue et redoutable."
+    style: diagonal
+    item: NETHERITE_SPEAR
+    rarity: epic
+  trident:
+    name: "<aqua>Trident"
+    description: "L'arme des profondeurs."
+    style: diagonal
+    item: TRIDENT
+    rarity: epic
+  masse:
+    name: "<gray>Masse"
+    description: "Ça cogne fort."
+    style: diagonal
+    item: MACE
+    rarity: epic
+  arc:
+    name: "<gold>Arc"
+    description: "L'archer de la forêt."
+    style: diagonal
+    item: BOW
+  arbalete:
+    name: "<gray>Arbalète"
+    description: "Précise et puissante."
+    style: diagonal
+    item: CROSSBOW
+    rarity: rare
+  canne-peche:
+    name: "<aqua>Canne à pêche"
+    description: "On va à la pêche ?"
+    style: diagonal
+    item: FISHING_ROD
+  hache-netherite:
+    name: "<dark_gray>Hache du bûcheron"
+    description: "Une hache en netherite, lame en l'air."
+    style: diagonal
+    item: NETHERITE_AXE
+    rotation: [0, 0, 180]
+    rarity: rare
+  pioche-diamant:
+    name: "<aqua>Pioche du mineur"
+    description: "Toujours prêt à creuser."
+    style: diagonal
+    item: DIAMOND_PICKAXE
+    rotation: [0, 0, 180]
+  baton-feu:
+    name: "<gold>Bâton de feu"
+    description: "Un bâton de blaze qui crépite."
+    style: diagonal
+    item: BLAZE_ROD
+    particle: flame
+    count: 1
+    rarity: epic
+  baton-vent:
+    name: "<white>Bâton du vent"
+    description: "Un bâton de breeze."
+    style: diagonal
+    item: BREEZE_ROD
+    particle: cloud
+    count: 1
+    rarity: epic
+  baton-end:
+    name: "<white>Bâton de l'End"
+    description: "Une barre de l'End lumineuse."
+    style: diagonal
+    item: END_ROD
+    particle: end_rod
+    count: 1
+    rarity: epic
+  # --- ailes en éventail d'objets
+  ailes-ange:
+    name: "<white>Ailes d'ange"
+    description: "Des ailes de plumes qui battent doucement."
+    style: wings
+    item: FEATHER
+    rarity: epic
+  ailes-chauve-souris:
+    name: "<dark_gray>Ailes de chauve-souris"
+    description: "Des membranes de phantom."
+    style: wings
+    item: PHANTOM_MEMBRANE
+    rarity: rare
+  ailes-os:
+    name: "<white>Ailes squelettiques"
+    description: "Il n'en reste que les os."
+    style: wings
+    item: BONE
+    rarity: rare
+  ailes-cristal:
+    name: "<light_purple>Ailes de cristal"
+    description: "Des éclats d'améthyste."
+    style: wings
+    item: AMETHYST_SHARD
+    particle: end_rod
+    count: 1
+    rarity: epic
+  ailes-prismarine:
+    name: "<aqua>Ailes de prismarine"
+    description: "Les ailes des océans."
+    style: wings
+    item: PRISMARINE_SHARD
+    rarity: epic
+  ailes-fee:
+    name: "<light_purple>Ailes de fée"
+    description: "Des pétales roses qui volettent."
+    style: wings
+    item: PINK_PETALS
+    particle: cherry_leaves
+    count: 1
+    rarity: epic
+  ailes-lames:
+    name: "<white>Ailes de lames"
+    description: "Un éventail d'épées en fer."
+    style: wings
+    item: IRON_SWORD
+    flap: 12
+    rarity: epic
+  ailes-lames-or:
+    name: "<gold>Ailes de lames dorées"
+    description: "Un éventail d'épées en or."
+    style: wings
+    item: GOLDEN_SWORD
+    flap: 12
+    rarity: legendary
+  ailes-vent:
+    name: "<white>Ailes du vent"
+    description: "Des bâtons de breeze."
+    style: wings
+    item: BREEZE_ROD
+    particle: cloud
+    count: 1
+    rarity: epic
+  ailes-phenix:
+    name: "<gold>Ailes de phénix"
+    description: "Des ailes de feu."
+    style: wings
+    item: BLAZE_ROD
+    particle: flame
+    count: 2
+    speed: 0.01
+    rarity: legendary
+  ailes-echo:
+    name: "<dark_aqua>Ailes de l'écho"
+    description: "Des éclats d'écho venus des profondeurs."
+    style: wings
+    item: ECHO_SHARD
+    particle: sculk_soul
+    count: 1
+    speed: 0.02
+    rarity: legendary
+  # --- ailes en plaques de blocs
+  ailes-neige:
+    name: "<white>Ailes de neige"
+    description: "Blanches comme la neige."
+    style: wings
+    block: SNOW_BLOCK
+    particle: snowflake
+    count: 1
+    rarity: rare
+  ailes-demon:
+    name: "<dark_red>Ailes de démon"
+    description: "Noires et rouges."
+    style: wings
+    block: BLACK_CONCRETE
+    accent: RED_CONCRETE
+    rarity: epic
+  ailes-glace:
+    name: "<aqua>Ailes de glace"
+    description: "Du verre givré."
+    style: wings
+    block: LIGHT_BLUE_STAINED_GLASS
+    accent: WHITE_STAINED_GLASS
+    particle: snowflake
+    count: 1
+    rarity: epic
+  ailes-cerisier:
+    name: "<light_purple>Ailes de cerisier"
+    description: "Des ailes de feuilles roses."
+    style: wings
+    block: CHERRY_LEAVES
+    particle: cherry_leaves
+    count: 1
+    rarity: epic
+  ailes-azalee:
+    name: "<green>Ailes d'azalée"
+    description: "Des feuilles en fleurs."
+    style: wings
+    block: FLOWERING_AZALEA_LEAVES
+    rarity: rare
+  ailes-or:
+    name: "<gold>Ailes d'or"
+    description: "Pour briller dans le ciel."
+    style: wings
+    block: GOLD_BLOCK
+    accent: YELLOW_STAINED_GLASS
+    rarity: epic
+  ailes-magma:
+    name: "<red>Ailes de magma"
+    description: "Brûlantes."
+    style: wings
+    block: MAGMA_BLOCK
+    particle: flame
+    count: 1
+    rarity: legendary
+  ailes-sculk:
+    name: "<dark_aqua>Ailes de sculk"
+    description: "Elles pulsent dans le noir."
+    style: wings
+    block: SCULK
+    particle: sculk_soul
+    count: 1
+    speed: 0.02
+    rarity: legendary
+  ailes-orbit:
+    name: "<gradient:#00c6ff:#7b2ff7>Ailes ORBIT</gradient>"
+    description: "Les ailes officielles du serveur."
+    style: wings
+    block: PURPLE_STAINED_GLASS
+    accent: LIGHT_BLUE_STAINED_GLASS
+    particle: end_rod
+    count: 1
+    rarity: legendary
+  # --- capes
+  cape-rouge:
+    name: "<red>Cape rouge"
+    description: "La cape du héros."
+    style: cape
+    block: RED_WOOL
+  cape-noire:
+    name: "<dark_gray>Cape noire"
+    description: "Discrète et élégante."
+    style: cape
+    block: BLACK_WOOL
+  cape-blanche:
+    name: "<white>Cape blanche"
+    description: "Toute simple."
+    style: cape
+    block: WHITE_WOOL
+  cape-heros:
+    name: "<blue>Cape de super-héros"
+    description: "Bleue avec une bande rouge."
+    style: cape
+    block: BLUE_WOOL
+    accent: RED_WOOL
+    rarity: rare
+  cape-royale:
+    name: "<dark_purple>Cape royale"
+    description: "Violette avec une bande d'or."
+    style: cape
+    block: PURPLE_WOOL
+    accent: YELLOW_WOOL
+    rarity: rare
+  cape-feuilles:
+    name: "<green>Cape de feuilles"
+    description: "Le camouflage du rôdeur."
+    style: cape
+    block: OAK_LEAVES
+    rarity: rare
+  cape-mousse:
+    name: "<green>Cape de mousse"
+    description: "Douce et verte."
+    style: cape
+    block: MOSS_BLOCK
+    rarity: rare
+  cape-magma:
+    name: "<red>Cape de magma"
+    description: "Une cape en fusion."
+    style: cape
+    block: MAGMA_BLOCK
+    particle: small_flame
+    count: 1
+    rarity: epic
+  cape-sculk:
+    name: "<dark_aqua>Cape de sculk"
+    description: "Elle vibre au moindre bruit."
+    style: cape
+    block: SCULK
+    particle: sculk_soul
+    count: 1
+    speed: 0.02
+    rarity: epic
+  cape-orbit:
+    name: "<gradient:#00c6ff:#7b2ff7>Cape ORBIT</gradient>"
+    description: "Violette avec une bande bleu ciel."
+    style: cape
+    block: PURPLE_CONCRETE
+    accent: LIGHT_BLUE_CONCRETE
+    rarity: legendary
+  # --- jetpacks
+  jetpack:
+    name: "<white>Jetpack"
+    description: "Deux réservoirs et des flammes."
+    style: jetpack
+    block: IRON_BLOCK
+    accent: POLISHED_BLACKSTONE
+    particle: flame
+    count: 2
+    speed: 0.02
+    rarity: epic
+  jetpack-cuivre:
+    name: "<gold>Jetpack en cuivre"
+    description: "Des flammes vertes."
+    style: jetpack
+    block: COPPER_BLOCK
+    accent: OXIDIZED_COPPER
+    particle: copper_fire_flame
+    count: 2
+    speed: 0.02
+    rarity: epic
+  jetpack-netherite:
+    name: "<dark_gray>Jetpack en netherite"
+    description: "Propulsé au feu des âmes."
+    style: jetpack
+    block: NETHERITE_BLOCK
+    accent: GOLD_BLOCK
+    particle: soul_fire_flame
+    count: 2
+    speed: 0.02
+    rarity: legendary
+  jetpack-orbit:
+    name: "<gradient:#00c6ff:#7b2ff7>Jetpack ORBIT</gradient>"
+    description: "Le jetpack officiel du serveur."
+    style: jetpack
+    block: PURPLE_CONCRETE
+    accent: LIGHT_BLUE_CONCRETE
+    particle: electric_spark
+    count: 2
+    rarity: legendary
+
+balloons:
+  rouge:
+    name: "<red>Ballon rouge"
+    description: "Le classique."
+    item: RED_STAINED_GLASS
+  orange:
+    name: "<gold>Ballon orange"
+    description: "Vitaminé."
+    item: ORANGE_STAINED_GLASS
+  jaune:
+    name: "<yellow>Ballon jaune"
+    description: "Comme le soleil."
+    item: YELLOW_STAINED_GLASS
+  vert:
+    name: "<green>Ballon vert"
+    description: "Couleur nature."
+    item: LIME_STAINED_GLASS
+  bleu:
+    name: "<blue>Ballon bleu"
+    description: "Bleu comme le ciel."
+    item: BLUE_STAINED_GLASS
+  cyan:
+    name: "<aqua>Ballon cyan"
+    description: "Couleur ORBIT."
+    item: LIGHT_BLUE_STAINED_GLASS
+  violet:
+    name: "<dark_purple>Ballon violet"
+    description: "L'autre couleur ORBIT."
+    item: PURPLE_STAINED_GLASS
+  rose:
+    name: "<light_purple>Ballon rose"
+    description: "Tout doux."
+    item: PINK_STAINED_GLASS
+  blanc:
+    name: "<white>Ballon blanc"
+    description: "Simple et élégant."
+    item: WHITE_STAINED_GLASS
+  noir:
+    name: "<dark_gray>Ballon noir"
+    description: "Mystérieux."
+    item: BLACK_STAINED_GLASS
+  creeper:
+    name: "<green>Ballon creeper"
+    description: "Il ne va pas exploser... normalement."
+    item: CREEPER_HEAD
+    rarity: rare
+  zombie:
+    name: "<dark_green>Ballon zombie"
+    description: "Une tête de zombie qui flotte."
+    item: ZOMBIE_HEAD
+    rarity: rare
+  squelette:
+    name: "<white>Ballon squelette"
+    description: "Un crâne qui flotte."
+    item: SKELETON_SKULL
+    rarity: rare
+  piglin:
+    name: "<gold>Ballon piglin"
+    description: "Groin doré."
+    item: PIGLIN_HEAD
+    rarity: rare
+  dragon:
+    name: "<dark_purple>Ballon dragon"
+    description: "Une tête de dragon au bout d'une ficelle."
+    item: DRAGON_HEAD
+    rarity: legendary
+  slime:
+    name: "<green>Ballon slime"
+    description: "Il rebondit dans les airs."
+    item: SLIME_BLOCK
+    rarity: rare
+  tnt:
+    name: "<red>Ballon TNT"
+    description: "Ne pas approcher d'une flamme."
+    item: TNT
+    rarity: rare
+  citrouille:
+    name: "<gold>Ballon citrouille"
+    description: "Une citrouille-lanterne volante."
+    item: JACK_O_LANTERN
+    rarity: rare
+  pasteque:
+    name: "<green>Ballon pastèque"
+    description: "Un fruit volant."
+    item: MELON
+  gateau:
+    name: "<white>Ballon gâteau"
+    description: "Pour faire la fête."
+    item: CAKE
+    rarity: rare
+  ruche:
+    name: "<yellow>Ballon ruche"
+    description: "Bzzz là-haut."
+    item: BEE_NEST
+  lanterne-mer:
+    name: "<aqua>Ballon lumineux"
+    description: "Il éclaire tes nuits."
+    item: SEA_LANTERN
+    rarity: rare
+  balise:
+    name: "<white>Ballon balise"
+    description: "Une balise qui flotte."
+    item: BEACON
+    rarity: epic
+  oeuf-dragon:
+    name: "<dark_purple>Ballon œuf de dragon"
+    description: "Le plus rare des ballons."
+    item: DRAGON_EGG
+    rarity: legendary
+  terre:
+    name: "<green>Planète Terre"
+    description: "Le monde au bout d'une ficelle."
+    item: GRASS_BLOCK
+    rarity: epic
+  lune:
+    name: "<white>Lune"
+    description: "Une petite lune rien qu'à toi."
+    item: END_STONE
+    rarity: epic
+  planete-lave:
+    name: "<red>Planète de lave"
+    description: "Une planète en fusion."
+    item: MAGMA_BLOCK
+    rarity: epic
+  planete-glace:
+    name: "<aqua>Planète gelée"
+    description: "Une planète de glace."
+    item: BLUE_ICE
+    rarity: epic
+  planete-amethyste:
+    name: "<light_purple>Planète améthyste"
+    description: "Une planète de cristal."
+    item: AMETHYST_BLOCK
+    rarity: epic
+  soleil:
+    name: "<gold>Soleil"
+    description: "Le centre du système ORBIT."
+    item: SHROOMLIGHT
+    rarity: legendary
+
+pets:
+  renard:
+    name: "<gold>Renardeau"
+    description: "Un petit renard qui te suit partout."
+    entity: FOX
+    variant: red
+  renard-neiges:
+    name: "<white>Renardeau des neiges"
+    description: "Un renard tout blanc."
+    entity: FOX
+    variant: snow
+    rarity: rare
+  chat:
+    name: "<yellow>Chaton tigré"
+    description: "Il ronronne (en silence)."
+    entity: CAT
+    variant: tabby
+  chaton-noir:
+    name: "<dark_gray>Chaton noir"
+    description: "Porte-bonheur, promis."
+    entity: CAT
+    variant: all_black
+    collar: PURPLE
+    rarity: rare
+  chaton-siamois:
+    name: "<white>Chaton siamois"
+    description: "Élégant."
+    entity: CAT
+    variant: siamese
+    rarity: rare
+  chaton-persan:
+    name: "<gold>Chaton persan"
+    description: "Tout en poils."
+    entity: CAT
+    variant: persian
+    rarity: rare
+  chaton-calico:
+    name: "<gold>Chaton calico"
+    description: "Trois couleurs."
+    entity: CAT
+    variant: calico
+  chaton-roux:
+    name: "<gold>Chaton roux"
+    description: "Un petit roux plein d'énergie."
+    entity: CAT
+    variant: red
+  chaton-jellie:
+    name: "<light_purple>Jellie"
+    description: "La chatte la plus célèbre du jeu."
+    entity: CAT
+    variant: jellie
+    collar: PINK
+    rarity: epic
+  loup:
+    name: "<white>Louveteau"
+    description: "Fidèle compagnon."
+    entity: WOLF
+    variant: pale
+  louveteau-neiges:
+    name: "<white>Louveteau des neiges"
+    description: "Tout blanc, tout doux."
+    entity: WOLF
+    variant: snowy
+    collar: LIGHT_BLUE
+    rarity: rare
+  louveteau-noir:
+    name: "<dark_gray>Louveteau noir"
+    description: "Le loup de la nuit."
+    entity: WOLF
+    variant: black
+    collar: RED
+    rarity: epic
+  louveteau-roux:
+    name: "<gold>Louveteau roux"
+    description: "Un loup des badlands."
+    entity: WOLF
+    variant: rusty
+    rarity: rare
+  louveteau-tachete:
+    name: "<yellow>Louveteau tacheté"
+    description: "Un loup de savane."
+    entity: WOLF
+    variant: spotted
+    rarity: rare
+  abeille:
+    name: "<yellow>Abeille"
+    description: "Elle bourdonne autour de toi."
+    entity: BEE
+  ourson:
+    name: "<white>Ourson polaire"
+    description: "Une petite boule de poils."
+    entity: POLAR_BEAR
+    rarity: rare
+  panda:
+    name: "<white>Bébé panda"
+    description: "Il adore le bambou."
+    entity: PANDA
+    variant: normal
+    rarity: rare
+  panda-brun:
+    name: "<gold>Panda brun"
+    description: "Le panda le plus rare."
+    entity: PANDA
+    variant: brown
+    rarity: epic
+  panda-joueur:
+    name: "<green>Panda joueur"
+    description: "Toujours prêt à jouer."
+    entity: PANDA
+    variant: playful
+    rarity: rare
+  lapin:
+    name: "<white>Lapereau blanc"
+    description: "Il saute derrière toi."
+    entity: RABBIT
+    variant: white
+  lapin-brun:
+    name: "<gold>Lapereau brun"
+    description: "Un lapin des prairies."
+    entity: RABBIT
+    variant: brown
+  lapin-dore:
+    name: "<yellow>Lapereau doré"
+    description: "Un lapin du désert."
+    entity: RABBIT
+    variant: gold
+    rarity: rare
+  lapin-tueur:
+    name: "<dark_red>Lapin tueur"
+    description: "Il a l'air gentil..."
+    entity: RABBIT
+    variant: the_killer_bunny
+    rarity: legendary
+  perroquet:
+    name: "<red>Perroquet rouge"
+    description: "Un perroquet coloré."
+    entity: PARROT
+    variant: red
+    baby: false
+  perroquet-bleu:
+    name: "<blue>Perroquet bleu"
+    description: "Le plus rare des perroquets."
+    entity: PARROT
+    variant: blue
+    baby: false
+    rarity: epic
+  perroquet-vert:
+    name: "<green>Perroquet vert"
+    description: "Vert comme la jungle."
+    entity: PARROT
+    variant: green
+    baby: false
+  perroquet-cyan:
+    name: "<aqua>Perroquet cyan"
+    description: "Couleur ORBIT."
+    entity: PARROT
+    variant: cyan
+    baby: false
+    rarity: rare
+  perroquet-gris:
+    name: "<gray>Perroquet gris"
+    description: "Discret."
+    entity: PARROT
+    variant: gray
+    baby: false
+  porcelet:
+    name: "<light_purple>Porcelet"
+    description: "Groin groin."
+    entity: PIG
+    variant: temperate
+  porcelet-froid:
+    name: "<gray>Porcelet des neiges"
+    description: "Un cochon des régions froides."
+    entity: PIG
+    variant: cold
+    rarity: rare
+  porcelet-chaud:
+    name: "<gold>Porcelet du désert"
+    description: "Un cochon des régions chaudes."
+    entity: PIG
+    variant: warm
+    rarity: rare
+  poussin:
+    name: "<yellow>Poussin"
+    description: "Piou piou."
+    entity: CHICKEN
+    variant: temperate
+  poussin-froid:
+    name: "<white>Poussin des neiges"
+    description: "Un poussin tout gris."
+    entity: CHICKEN
+    variant: cold
+    rarity: rare
+  poussin-chaud:
+    name: "<gold>Poussin du désert"
+    description: "Un poussin orangé."
+    entity: CHICKEN
+    variant: warm
+    rarity: rare
+  veau:
+    name: "<gold>Veau"
+    description: "Meuh."
+    entity: COW
+    variant: temperate
+  veau-froid:
+    name: "<white>Veau des neiges"
+    description: "Un veau à poils longs."
+    entity: COW
+    variant: cold
+    rarity: rare
+  veau-chaud:
+    name: "<red>Veau du désert"
+    description: "Un veau roux."
+    entity: COW
+    variant: warm
+    rarity: rare
+  champimeuh:
+    name: "<red>Champimeuh"
+    description: "Une vache champignon."
+    entity: MOOSHROOM
+    variant: red
+    rarity: rare
+  champimeuh-brune:
+    name: "<gold>Champimeuh brune"
+    description: "Encore plus rare."
+    entity: MOOSHROOM
+    variant: brown
+    rarity: epic
+  agneau:
+    name: "<white>Agneau"
+    description: "Bêêê."
+    entity: SHEEP
+    variant: white
+  agneau-rose:
+    name: "<light_purple>Agneau rose"
+    description: "Le plus rare des moutons."
+    entity: SHEEP
+    variant: pink
+    rarity: epic
+  agneau-bleu:
+    name: "<aqua>Agneau bleu ciel"
+    description: "Couleur ORBIT."
+    entity: SHEEP
+    variant: light_blue
+    rarity: rare
+  agneau-violet:
+    name: "<dark_purple>Agneau violet"
+    description: "L'autre couleur ORBIT."
+    entity: SHEEP
+    variant: purple
+    rarity: rare
+  agneau-noir:
+    name: "<dark_gray>Agneau noir"
+    description: "Le mouton noir de la famille."
+    entity: SHEEP
+    variant: black
+    rarity: rare
+  ocelot:
+    name: "<yellow>Bébé ocelot"
+    description: "Un félin de la jungle."
+    entity: OCELOT
+    rarity: rare
+  lama:
+    name: "<white>Bébé lama"
+    description: "Il ne crache pas, promis."
+    entity: LLAMA
+    variant: creamy
+  lama-brun:
+    name: "<gold>Bébé lama brun"
+    description: "Un lama des montagnes."
+    entity: LLAMA
+    variant: brown
+  lama-marchand:
+    name: "<blue>Lama du marchand"
+    description: "Il a perdu son marchand."
+    entity: TRADER_LLAMA
+    rarity: rare
+  tortue:
+    name: "<green>Bébé tortue"
+    description: "Lente mais déterminée."
+    entity: TURTLE
+    rarity: rare
+  arpenteur:
+    name: "<red>Bébé arpenteur"
+    description: "Il a un peu froid hors de la lave."
+    entity: STRIDER
+    rarity: epic
+
+mounts:
+  cheval-blanc:
+    name: "<white>Cheval blanc"
+    description: "Un cheval rapide à la robe tachetée."
+    entity: HORSE
+    color: WHITE
+    style: WHITE_DOTS
+    speed: 0.3
+    jump: 0.8
+  alezan:
+    name: "<gold>Alezan"
+    description: "Un cheval roux classique."
+    entity: HORSE
+    color: CHESTNUT
+    style: NONE
+    speed: 0.29
+    jump: 0.8
+  bai:
+    name: "<gold>Cheval bai"
+    description: "Robe brune et balzanes blanches."
+    entity: HORSE
+    color: BROWN
+    style: WHITE
+    speed: 0.29
+    jump: 0.8
+  gris-pommele:
+    name: "<gray>Gris pommelé"
+    description: "Une robe grise tachetée."
+    entity: HORSE
+    color: GRAY
+    style: WHITE_DOTS
+    speed: 0.3
+    jump: 0.85
+    rarity: rare
+  creme:
+    name: "<yellow>Cheval crème"
+    description: "Une robe claire et douce."
+    entity: HORSE
+    color: CREAMY
+    style: WHITEFIELD
+    speed: 0.3
+    jump: 0.85
+    rarity: rare
+  pie-noir:
+    name: "<dark_gray>Pie noir"
+    description: "Noir tacheté de blanc."
+    entity: HORSE
+    color: DARK_BROWN
+    style: BLACK_DOTS
+    speed: 0.3
+    jump: 0.85
+    rarity: rare
+  cheval-cuir:
+    name: "<gold>Cheval de voyage"
+    description: "Une armure en cuir pour les longues routes."
+    entity: HORSE
+    color: BROWN
+    style: NONE
+    armor: LEATHER_HORSE_ARMOR
+    icon: LEATHER_HORSE_ARMOR
+    speed: 0.3
+    jump: 0.85
+    rarity: rare
+  cheval-cuivre:
+    name: "<gold>Cheval de cuivre"
+    description: "Une armure de cuivre brillante."
+    entity: HORSE
+    color: CHESTNUT
+    style: WHITE
+    armor: COPPER_HORSE_ARMOR
+    icon: COPPER_HORSE_ARMOR
+    speed: 0.3
+    jump: 0.85
+    rarity: rare
+  cheval-fer:
+    name: "<white>Cheval de fer"
+    description: "Monture de chevalier."
+    entity: HORSE
+    color: GRAY
+    style: NONE
+    armor: IRON_HORSE_ARMOR
+    icon: IRON_HORSE_ARMOR
+    speed: 0.31
+    jump: 0.9
+    rarity: epic
+  cheval-dore:
+    name: "<gold>Cheval doré"
+    description: "Un alezan paré d'or."
+    entity: HORSE
+    color: CHESTNUT
+    style: WHITE
+    armor: GOLDEN_HORSE_ARMOR
+    icon: GOLDEN_HORSE_ARMOR
+    speed: 0.32
+    jump: 0.9
+    rarity: epic
+  cheval-diamant:
+    name: "<aqua>Cheval de diamant"
+    description: "Le cheval des champions."
+    entity: HORSE
+    color: WHITE
+    style: NONE
+    armor: DIAMOND_HORSE_ARMOR
+    icon: DIAMOND_HORSE_ARMOR
+    speed: 0.33
+    jump: 0.95
+    rarity: legendary
+  destrier:
+    name: "<dark_gray>Destrier noir"
+    description: "Monture de guerre en armure de netherite."
+    entity: HORSE
+    color: BLACK
+    style: NONE
+    armor: NETHERITE_HORSE_ARMOR
+    icon: NETHERITE_HORSE_ARMOR
+    speed: 0.335
+    jump: 1.0
+    rarity: legendary
+  cheval-squelette:
+    name: "<gray>Cheval squelette"
+    description: "Il ne craint pas le soleil."
+    entity: SKELETON_HORSE
+    speed: 0.3
+    jump: 0.9
+    rarity: epic
+  cheval-zombie:
+    name: "<dark_green>Cheval zombie"
+    description: "Lent mais increvable."
+    entity: ZOMBIE_HORSE
+    speed: 0.26
+    jump: 0.8
+    rarity: rare
+  ane:
+    name: "<yellow>Âne"
+    description: "Têtu, mais fidèle."
+    entity: DONKEY
+    speed: 0.24
+    jump: 0.6
+  mule:
+    name: "<gold>Mule"
+    description: "Solide et courageuse."
+    entity: MULE
+    speed: 0.25
+    jump: 0.6
+  chameau:
+    name: "<gold>Chameau"
+    description: "Grand, et il fonce (touche de saut)."
+    entity: CAMEL
+    rarity: rare
+  chameau-momifie:
+    name: "<yellow>Chameau momifié"
+    description: "Un chameau revenu du désert."
+    entity: CAMEL_HUSK
+    rarity: epic
+  ghast-joyeux:
+    name: "<white>Ghast joyeux"
+    description: "Une monture volante. Regarde où tu veux aller."
+    entity: HAPPY_GHAST
+    armor: WHITE_HARNESS
+    icon: WHITE_HARNESS
+    rarity: epic
+  ghast-rouge:
+    name: "<red>Ghast au harnais rouge"
+    description: "Un ghast volant tout en rouge."
+    entity: HAPPY_GHAST
+    armor: RED_HARNESS
+    icon: RED_HARNESS
+    rarity: epic
+  ghast-jaune:
+    name: "<yellow>Ghast au harnais jaune"
+    description: "Un ghast volant ensoleillé."
+    entity: HAPPY_GHAST
+    armor: YELLOW_HARNESS
+    icon: YELLOW_HARNESS
+    rarity: epic
+  ghast-vert:
+    name: "<green>Ghast au harnais vert"
+    description: "Un ghast volant couleur nature."
+    entity: HAPPY_GHAST
+    armor: LIME_HARNESS
+    icon: LIME_HARNESS
+    rarity: epic
+  ghast-rose:
+    name: "<light_purple>Ghast au harnais rose"
+    description: "Un ghast volant tout doux."
+    entity: HAPPY_GHAST
+    armor: PINK_HARNESS
+    icon: PINK_HARNESS
+    rarity: epic
+  ghast-noir:
+    name: "<dark_gray>Ghast au harnais noir"
+    description: "Un ghast volant de la nuit."
+    entity: HAPPY_GHAST
+    armor: BLACK_HARNESS
+    icon: BLACK_HARNESS
+    rarity: epic
+  ghast-cyan:
+    name: "<aqua>Ghast au harnais bleu ciel"
+    description: "Un ghast volant couleur ciel."
+    entity: HAPPY_GHAST
+    armor: LIGHT_BLUE_HARNESS
+    icon: LIGHT_BLUE_HARNESS
+    rarity: epic
+  ghast-orbit:
+    name: "<gradient:#00c6ff:#7b2ff7>Ghast ORBIT</gradient>"
+    description: "Le ghast volant aux couleurs du serveur, plus rapide."
+    entity: HAPPY_GHAST
+    armor: PURPLE_HARNESS
+    icon: PURPLE_HARNESS
+    flying-speed: 0.09
+    rarity: legendary
+  nautile:
+    name: "<aqua>Nautile"
+    description: "Une monture aquatique (sous l'eau)."
+    entity: NAUTILUS
+    armor: GOLDEN_NAUTILUS_ARMOR
+    rarity: epic
+  nautile-zombie:
+    name: "<dark_green>Nautile zombie"
+    description: "Une monture aquatique mort-vivante (sous l'eau)."
+    entity: ZOMBIE_NAUTILUS
+    armor: IRON_NAUTILUS_ARMOR
+    rarity: epic

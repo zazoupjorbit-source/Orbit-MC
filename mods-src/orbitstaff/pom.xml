@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>games.orbit.orbitstaff</groupId>
+    <artifactId>orbitstaff-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>OrbitStaff</name>
+    <description>Ecosysteme de gestion du staff pour serveurs Minecraft communautaires (ORBIT FOUNDRY)</description>
+
+    <!--
+      Ce POM racine est un AGREGATEUR pur.
+      Regle d'architecture: le plugin Paper ne doit jamais tirer Spring, et l'API
+      ne doit jamais tirer Paper. Chaque module declare donc ses propres dependances.
+      La racine ne fournit que la gestion de versions partagees et la configuration
+      des plugins de build communs.
+
+      Les modules sont ajoutes phase par phase (voir docs/architecture.md).
+      Phase 1 (socle): orbitstaff-common.
+    -->
+    <modules>
+        <module>orbitstaff-common</module>
+        <module>orbitstaff-api</module>
+        <module>orbitstaff-core</module>
+        <module>orbitstaff-integrations</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- Versions partagees -->
+        <junit.version>5.11.3</junit.version>
+
+        <!-- Versions cibles des phases suivantes (documentees ici comme source unique) -->
+        <paper.version>1.21.1-R0.1-SNAPSHOT</paper.version>
+        <spring-boot.version>3.3.5</spring-boot.version>
+        <flyway.version>10.20.1</flyway.version>
+        <mariadb.driver.version>3.4.1</mariadb.driver.version>
+
+        <!-- Versions des plugins de build -->
+        <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
+        <maven.surefire.plugin.version>3.5.2</maven.surefire.plugin.version>
+        <maven.failsafe.plugin.version>3.5.2</maven.failsafe.plugin.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven.failsafe.plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

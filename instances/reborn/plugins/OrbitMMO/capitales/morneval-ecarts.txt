@@ -1,0 +1,6 @@
+Morneval : 1 blocs diffèrent du plan (0 à poser, 1 à retirer, 0 à remplacer).
+Par nature (les plus nombreux d'abord) :
+  1  à retirer : glass
+
+Détail (x y z : monde -> plan) :
+2550 100 292 : minecraft:glass -> minecraft:air

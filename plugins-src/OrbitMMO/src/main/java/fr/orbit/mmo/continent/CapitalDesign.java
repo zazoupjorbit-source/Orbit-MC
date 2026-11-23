@@ -17,7 +17,7 @@ import static fr.orbit.mmo.continent.ContinentGenerator.NONE;
  *
  * Repère : dx vers l'est, dz vers le sud, origine au centre du lieu. Le pavé de la ville est à Y = g.
  */
-final class CapitalDesign {
+class CapitalDesign {
 
     static final int AUTO = Integer.MIN_VALUE;
 
@@ -30,17 +30,17 @@ final class CapitalDesign {
     }
 
     // Nature de chaque colonne. De YARD à PLAZA : sol de la ville, du moins au plus « noble » (une rue ne recouvre que moins noble qu'elle).
-    private static final byte OUT = 0, YARD = 1, QUAY = 2, LANE = 3, STREET = 4, AVENUE = 5, PLAZA = 6, LOT = 7,
+    static final byte OUT = 0, YARD = 1, QUAY = 2, LANE = 3, STREET = 4, AVENUE = 5, PLAZA = 6, LOT = 7,
             QUAY_EDGE = 10, WATER = 11, WALL = 12, GATE = 13, PASSAGE = 14, TOWER = 15, RING = 16, RING_WATER = 17, BRIDGE = 18;
     /** Demi-côté des deux places. */
-    private static final int PH = 16;
+    static final int PH = 16;
     /** Hauteur du chemin de ronde au-dessus du pavé. */
-    private static final int WALL_H = 10;
+    static final int WALL_H = 10;
     /** Hauteur du plan au-dessus du pavé. */
-    private static final int TOP = 40;
+    static final int TOP = 40;
 
     // ------------------------------------------------------------------ Styles
-    private static final class Style {
+    static final class Style {
         Object[] wall, street, avenue, lane, quay, frames, bases, infills, roofs, floors, flowers;
         String coping, plazaA, plazaB, accent, walk, cone, fence, post, lantern, banner, leaves, log, planks, door, glass,
                 stained, stone, stoneBase, pale, paleFloor, pillar, bigRoof, chimney, parapet, stairs, slab, rim, light;
@@ -135,48 +135,48 @@ final class CapitalDesign {
     }
 
     /** Un bâtiment à poser : rectangle (bornes comprises), côté de la façade, nature. */
-    private record Lot(int x0, int z0, int x1, int z1, char front, String kind) {
+    record Lot(int x0, int z0, int x1, int z1, char front, String kind) {
     }
 
-    private static final class Gate {
+    static final class Gate {
         double ang, ex, ez, half;
         boolean royal;
         String name;
     }
 
-    private record Tower(int cx, int cz, double rad, int h) {
+    record Tower(int cx, int cz, double rad, int h) {
     }
 
     /** Portion du rempart déjà occupée (porte ou passage du fleuve), tours comprises. */
-    private record Feature(double a1, double a2) {
+    record Feature(double a1, double a2) {
     }
 
     /** Ce qui distingue un bâtiment d'un autre. */
-    private static final class Spec {
+    static final class Spec {
         int storeys = 1, storeyH = 4, winLo = 2, winHi = 3, doorW = 1;
         String frame, base, infill0, infill1, floor, roof, door, glass, bed = "red";
         boolean gableFront, flat, chimney, furnish = true;
     }
 
-    private final ContinentData data;
-    private final ContinentGenerator gen;
-    private final Settings s;
-    private final Style st;
-    private final int ox, oz, R, side, Rw, Ro, salt;
-    private final String placeName;
-    private int g, cn, cs;
-    private final int[] nTop, fTop, low;
-    private final byte[] bio, zone;
-    private final float[] roadY, dw;
-    private final boolean[] royal, parvis, doorFront;
-    private CapitalPlan plan;
-    private final List<Gate> gates = new ArrayList<>();
-    private final List<Tower> towers = new ArrayList<>();
-    private final List<Lot> lots = new ArrayList<>();
-    private final List<int[]> lamps = new ArrayList<>();
-    private int houses, trees;
+    final ContinentData data;
+    final ContinentGenerator gen;
+    final Settings s;
+    final Style st;
+    final int ox, oz, R, side, Rw, Ro, salt;
+    final String placeName;
+    int g, cn, cs;
+    final int[] nTop, fTop, low;
+    final byte[] bio, zone;
+    final float[] roadY, dw;
+    final boolean[] royal, parvis, doorFront;
+    CapitalPlan plan;
+    final List<Gate> gates = new ArrayList<>();
+    final List<Tower> towers = new ArrayList<>();
+    final List<Lot> lots = new ArrayList<>();
+    final List<int[]> lamps = new ArrayList<>();
+    int houses, trees;
 
-    private CapitalDesign(ContinentData data, ContinentGenerator gen, Settings s, ContinentData.Place place) {
+    CapitalDesign(ContinentData data, ContinentGenerator gen, Settings s, ContinentData.Place place) {
         this.data = data;
         this.gen = gen;
         this.s = s;
@@ -214,7 +214,7 @@ final class CapitalDesign {
         return new CapitalDesign(data, gen, s, place).run();
     }
 
-    private CapitalPlan run() {
+    CapitalPlan run() {
         survey();
         distances();
         zones();
@@ -247,31 +247,31 @@ final class CapitalDesign {
     }
 
     // ------------------------------------------------------------------ Outils
-    private boolean inGrid(int dx, int dz) {
+    boolean inGrid(int dx, int dz) {
         return dx >= -R && dx <= R && dz >= -R && dz <= R;
     }
 
-    private int ci(int dx, int dz) {
+    int ci(int dx, int dz) {
         return (dz + R) * side + dx + R;
     }
 
-    private byte zoneAt(int dx, int dz) {
+    byte zoneAt(int dx, int dz) {
         return inGrid(dx, dz) ? zone[ci(dx, dz)] : OUT;
     }
 
-    private boolean wetAt(int dx, int dz) {
+    boolean wetAt(int dx, int dz) {
         return inGrid(dx, dz) && fTop[ci(dx, dz)] != NONE;
     }
 
-    private static boolean walk(byte z) {
+    static boolean walk(byte z) {
         return (z >= QUAY && z <= PLAZA) || z == PASSAGE;
     }
 
-    private double rnd(int dx, int dz, int k) {
+    double rnd(int dx, int dz, int k) {
         return ContinentGenerator.rnd(ox + dx, oz + dz, k * 131 + salt);
     }
 
-    private static String pick(double r, Object[] table) {
+    static String pick(double r, Object[] table) {
         double total = 0;
         for (int i = 1; i < table.length; i += 2) {
             total += ((Number) table[i]).doubleValue();
@@ -286,50 +286,50 @@ final class CapitalDesign {
         return (String) table[table.length - 2];
     }
 
-    private String mix(Object[] table, int dx, int dz, int k) {
+    String mix(Object[] table, int dx, int dz, int k) {
         return pick(rnd(dx, dz, k), table);
     }
 
-    private static String name(Material m) {
+    static String name(Material m) {
         return m.name().toLowerCase(Locale.ROOT);
     }
 
-    private static String dirName(int dx, int dz) {
+    static String dirName(int dx, int dz) {
         return dx > 0 ? "east" : (dx < 0 ? "west" : (dz > 0 ? "south" : "north"));
     }
 
     /** Regard (en degrés, 0 = sud, 90 = ouest) de quelqu'un tourné vers (fx, fz). */
-    private static float yaw(double fx, double fz) {
+    static float yaw(double fx, double fz) {
         return (float) Math.toDegrees(Math.atan2(-fx, fz));
     }
 
     /** Bûche, pilier : blocs qui ont un axe. Les autres restent tels quels. */
-    private static String log(String block, String axis) {
+    static String log(String block, String axis) {
         boolean axial = block.endsWith("_log") || block.endsWith("_wood") || block.contains("pillar") || block.endsWith("basalt")
                 || block.endsWith("_stem");
         return axial ? block + "[axis=" + axis + "]" : block;
     }
 
-    private void put(int dx, int y, int dz, String state) {
+    void put(int dx, int y, int dz, String state) {
         plan.set(dx, y, dz, plan.id(state));
     }
 
-    private void air(int dx, int y, int dz) {
+    void air(int dx, int y, int dz) {
         plan.set(dx, y, dz, CapitalPlan.AIR);
     }
 
-    private boolean free(int dx, int y, int dz) {
+    boolean free(int dx, int y, int dz) {
         return plan.in(dx, y, dz) && plan.get(dx, y, dz) <= CapitalPlan.AIR;
     }
 
-    private void putIfFree(int dx, int y, int dz, String state) {
+    void putIfFree(int dx, int y, int dz, String state) {
         if (free(dx, y, dz)) {
             put(dx, y, dz, state);
         }
     }
 
     /** Premier Y libre au-dessus de ce qui est posé dans la colonne, à partir de fromY. */
-    private int topOf(int dx, int dz, int fromY) {
+    int topOf(int dx, int dz, int fromY) {
         int y = fromY;
         while (plan.in(dx, y, dz) && plan.get(dx, y, dz) > CapitalPlan.AIR) {
             y++;
@@ -337,7 +337,7 @@ final class CapitalDesign {
         return y;
     }
 
-    private void paint(int dx, int dz, byte code) {
+    void paint(int dx, int dz, byte code) {
         if (!inGrid(dx, dz)) {
             return;
         }
@@ -348,7 +348,7 @@ final class CapitalDesign {
         }
     }
 
-    private void paintRect(int x0, int z0, int x1, int z1, byte code) {
+    void paintRect(int x0, int z0, int x1, int z1, byte code) {
         for (int dz = Math.max(-R, z0); dz <= Math.min(R, z1); dz++) {
             for (int dx = Math.max(-R, x0); dx <= Math.min(R, x1); dx++) {
                 paint(dx, dz, code);
@@ -356,7 +356,7 @@ final class CapitalDesign {
         }
     }
 
-    private void paintSegment(double x0, double z0, double x1, double z1, double hw, byte code) {
+    void paintSegment(double x0, double z0, double x1, double z1, double hw, byte code) {
         int ax = (int) Math.floor(Math.min(x0, x1) - hw - 1), bx = (int) Math.ceil(Math.max(x0, x1) + hw + 1);
         int az = (int) Math.floor(Math.min(z0, z1) - hw - 1), bz = (int) Math.ceil(Math.max(z0, z1) + hw + 1);
         double vx = x1 - x0, vz = z1 - z0, len2 = vx * vx + vz * vz;
@@ -372,7 +372,7 @@ final class CapitalDesign {
     }
 
     // ------------------------------------------------------------------ Relevé du terrain
-    private void survey() {
+    void survey() {
         ContinentGenerator.Column c = new ContinentGenerator.Column();
         ContinentData.RoadHit hit = new ContinentData.RoadHit();
         long sum = 0;
@@ -413,7 +413,7 @@ final class CapitalDesign {
     }
 
     /** Distance de chaque colonne sèche à l'eau la plus proche. */
-    private void distances() {
+    void distances() {
         final float big = 1e6f, d1 = 1f, d2 = 1.4142f;
         for (int i = 0; i < dw.length; i++) {
             dw[i] = fTop[i] != NONE ? 0 : big;
@@ -458,7 +458,7 @@ final class CapitalDesign {
         }
     }
 
-    private void zones() {
+    void zones() {
         for (int dz = -R; dz <= R; dz++) {
             for (int dx = -R; dx <= R; dx++) {
                 int i = ci(dx, dz);
@@ -488,11 +488,11 @@ final class CapitalDesign {
     }
 
     // ------------------------------------------------------------------ Portes, passages du fleuve, tours
-    private static double angDiff(double a, double b) {
+    static double angDiff(double a, double b) {
         return Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
     }
 
-    private void addGate(double ang, boolean isRoyal, String roadName) {
+    void addGate(double ang, boolean isRoyal, String roadName) {
         for (Gate o : gates) {
             if (angDiff(o.ang, ang) < 0.3) {
                 if (isRoyal && !o.royal) {
@@ -513,7 +513,7 @@ final class CapitalDesign {
         gates.add(gt);
     }
 
-    private boolean towerWet(int cx, int cz, double rad) {
+    boolean towerWet(int cx, int cz, double rad) {
         int k = (int) Math.ceil(rad) + 1;
         for (int dz = -k; dz <= k; dz++) {
             for (int dx = -k; dx <= k; dx++) {
@@ -526,7 +526,7 @@ final class CapitalDesign {
     }
 
     /** Ajoute une tour à cet angle ; « step » la décale (en radians) tant qu'elle aurait les pieds dans l'eau. */
-    private void addTower(double ang, double radius, double rad, int h, double step) {
+    void addTower(double ang, double radius, double rad, int h, double step) {
         for (int tries = 0; tries < 10; tries++) {
             int cx = (int) Math.round(radius * Math.cos(ang)), cz = (int) Math.round(radius * Math.sin(ang));
             if (!towerWet(cx, cz, rad)) {
@@ -545,7 +545,7 @@ final class CapitalDesign {
         }
     }
 
-    private void features() {
+    void features() {
         // Portes : là où une route du dessin franchit le rempart.
         for (ContinentData.Road road : data.roads) {
             for (int k = 1; k < road.x.length; k++) {
@@ -662,7 +662,7 @@ final class CapitalDesign {
     }
 
     // ------------------------------------------------------------------ Places, rues, bâtiments
-    private boolean plazaFits(int cz) {
+    boolean plazaFits(int cz) {
         for (int dz = cz - PH; dz <= cz + PH; dz++) {
             for (int dx = -PH; dx <= PH; dx++) {
                 if (zoneAt(dx, dz) != YARD || dw[ci(dx, dz)] < 7.5f) {
@@ -673,7 +673,7 @@ final class CapitalDesign {
         return true;
     }
 
-    private int plazaCentre(int sign) {
+    int plazaCentre(int sign) {
         for (int c = PH + 8; c <= Rw - PH - 30; c++) {
             if (plazaFits(sign * c)) {
                 return sign * c;
@@ -683,7 +683,7 @@ final class CapitalDesign {
         return sign * 48;
     }
 
-    private void plazas() {
+    void plazas() {
         cn = plazaCentre(-1);
         cs = plazaCentre(1);
         paintRect(-PH, cn - PH, PH, cn + PH, PLAZA);
@@ -691,7 +691,7 @@ final class CapitalDesign {
         plan.notes.add("parvis (nord) centré en dz " + cn + ", Grand-Place (sud) en dz " + cs);
     }
 
-    private boolean crossesWater(double x0, double z0, double x1, double z1) {
+    boolean crossesWater(double x0, double z0, double x1, double z1) {
         double len = Math.hypot(x1 - x0, z1 - z0);
         for (double t = 0; t <= len; t += 0.5) {
             byte z = zoneAt((int) Math.round(x0 + (x1 - x0) * t / len), (int) Math.round(z0 + (z1 - z0) * t / len));
@@ -702,7 +702,7 @@ final class CapitalDesign {
         return false;
     }
 
-    private void streets() {
+    void streets() {
         // Grand-Rue : d'une place à l'autre, par le grand pont.
         paintRect(-3, cn + PH, 3, cs - PH, AVENUE);
         paintRect(-Rw, cn - 2, Rw, cn + 2, STREET);
@@ -734,7 +734,7 @@ final class CapitalDesign {
     }
 
     /** Rectangle entièrement libre (cour), sans bâtiment collé. */
-    private boolean freeRect(int x0, int z0, int x1, int z1) {
+    boolean freeRect(int x0, int z0, int x1, int z1) {
         for (int dz = z0 - 1; dz <= z1 + 1; dz++) {
             for (int dx = x0 - 1; dx <= x1 + 1; dx++) {
                 byte z = zoneAt(dx, dz);
@@ -747,7 +747,7 @@ final class CapitalDesign {
         return true;
     }
 
-    private Lot claim(int x0, int z0, int x1, int z1, char front, String kind) {
+    Lot claim(int x0, int z0, int x1, int z1, char front, String kind) {
         for (int dz = z0; dz <= z1; dz++) {
             for (int dx = x0; dx <= x1; dx++) {
                 zone[ci(dx, dz)] = LOT;
@@ -759,7 +759,7 @@ final class CapitalDesign {
     }
 
     /** Cherche une place pour un bâtiment de façade w et de profondeur d, adossé à un côté d'une place. */
-    private Lot placeFront(int pcz, int w, int d, String sides, String kind) {
+    Lot placeFront(int pcz, int w, int d, String sides, String kind) {
         for (char sideOf : sides.toCharArray()) {
             for (int k = 0; k <= 2 * PH; k++) {
                 int off = (k + 1) / 2 * ((k & 1) == 1 ? 1 : -1);
@@ -808,7 +808,7 @@ final class CapitalDesign {
     }
 
     /** Rectangle d'un bâtiment dont un coin de façade est en (px, pz) et qui s'étend vers les dx/dz croissants le long de la rue. */
-    private static int[] rect(int px, int pz, int w, int d, char front) {
+    static int[] rect(int px, int pz, int w, int d, char front) {
         return switch (front) {
             case 'N' -> new int[]{px, pz, px + w - 1, pz + d - 1};
             case 'S' -> new int[]{px, pz - d + 1, px + w - 1, pz};
@@ -818,7 +818,7 @@ final class CapitalDesign {
     }
 
     /** La porte donne-t-elle sur une rue (directement, ou à un pas) ? */
-    private boolean doorway(int[] q, char front, boolean commit) {
+    boolean doorway(int[] q, char front, boolean commit) {
         Frame f = new Frame(q[0], q[1], q[2], q[3], front);
         int a = f.w / 2;
         byte z1 = zoneAt(f.x(a, -1), f.z(a, -1));
@@ -835,7 +835,7 @@ final class CapitalDesign {
     }
 
     /** À défaut de place libre au bord d'une place : le terrain libre sur rue le plus proche. */
-    private Lot placeAnywhere(int nearX, int nearZ, int w, int d, String kind) {
+    Lot placeAnywhere(int nearX, int nearZ, int w, int d, String kind) {
         double best = Double.MAX_VALUE;
         int[] bq = null;
         char bf = 'N';
@@ -866,7 +866,7 @@ final class CapitalDesign {
         return claim(bq[0], bq[1], bq[2], bq[3], bf, kind);
     }
 
-    private void special(int pcz, int w, int d, String sides, String kind) {
+    void special(int pcz, int w, int d, String sides, String kind) {
         Lot lot = placeFront(pcz, w, d, sides, kind);
         String where = "au bord de la place";
         if (lot == null) {
@@ -881,7 +881,7 @@ final class CapitalDesign {
         }
     }
 
-    private void landmarks() {
+    void landmarks() {
         special(cn, 19, 19, "N", "donjon");
         special(cs, 15, 11, "S", "hotel-des-ventes");
         special(cn, 11, 21, "WE", "temple");
@@ -890,7 +890,7 @@ final class CapitalDesign {
         special(cs, 9, 9, "EWN", "alchimie");
     }
 
-    private void lanes() {
+    void lanes() {
         for (int x : new int[]{-64, -32, 32, 64}) {
             paintRect(x - 1, -Rw, x + 1, Rw, LANE);
         }
@@ -901,7 +901,7 @@ final class CapitalDesign {
         }
     }
 
-    private void houses() {
+    void houses() {
         char[] fronts = {'N', 'S', 'W', 'E'};
         int[][] out = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
         for (int dz = -Rw; dz <= Rw; dz++) {
@@ -918,7 +918,7 @@ final class CapitalDesign {
         }
     }
 
-    private boolean tryHouse(int px, int pz, char front) {
+    boolean tryHouse(int px, int pz, char front) {
         int w = 6 + (int) (rnd(px, pz, 41) * 5), d = 6 + (int) (rnd(px, pz, 42) * 4);
         for (int attempt = 0; attempt < 6; attempt++) {
             int[] q = rect(px, pz, w, d, front);
@@ -942,7 +942,7 @@ final class CapitalDesign {
     }
 
     // ------------------------------------------------------------------ Sol
-    private String yardTop(int dx, int dz) {
+    String yardTop(int dx, int dz) {
         if (st.dark) {
             double p = rnd(dx >> 2, dz >> 2, 12);
             return p > 0.8 ? "podzol" : (p < 0.1 ? "coarse_dirt" : "grass_block");
@@ -950,7 +950,7 @@ final class CapitalDesign {
         return "grass_block";
     }
 
-    private String plazaBlock(int dx, int dz) {
+    String plazaBlock(int dx, int dz) {
         int c = dz < 0 ? cn : cs, m = Math.max(Math.abs(dx), Math.abs(dz - c));
         if (m == 7 || m == 13) {
             return st.accent;
@@ -958,7 +958,7 @@ final class CapitalDesign {
         return m == PH || Math.abs(dx) == Math.abs(dz - c) ? st.plazaB : st.plazaA;
     }
 
-    private void ground() {
+    void ground() {
         int yTop = plan.y0 + plan.height - 1;
         short water = plan.id("water[level=0]"), stone = plan.id("stone"), dirt = plan.id("dirt");
         ContinentGenerator.Column col = new ContinentGenerator.Column();
@@ -1014,7 +1014,7 @@ final class CapitalDesign {
     }
 
     /** Hors les murs : le terrain rejoint en pente douce son relief naturel, les routes avec lui. */
-    private void ring(int dx, int dz, int i, ContinentGenerator.Column col, int yTop) {
+    void ring(int dx, int dz, int i, ContinentGenerator.Column col, int yTop) {
         double r = Math.hypot(dx, dz);
         double t = Math.max(0, Math.min(1, (r - (Rw + 9)) / (double) (Ro - (Rw + 9))));
         double sm = t * t * (3 - 2 * t);
@@ -1065,7 +1065,7 @@ final class CapitalDesign {
     }
 
     // ------------------------------------------------------------------ Rempart
-    private void wall() {
+    void wall() {
         int top = g + WALL_H;
         for (int dz = -R; dz <= R; dz++) {
             for (int dx = -R; dx <= R; dx++) {
@@ -1097,7 +1097,7 @@ final class CapitalDesign {
         }
     }
 
-    private void towers() {
+    void towers() {
         for (Tower t : towers) {
             int top = g + t.h, span = (int) Math.ceil(t.rad) + 2, floor = g + WALL_H;
             // Direction cardinale qui regarde vers la ville : la porte est de ce côté, l'échelle en face.
@@ -1164,7 +1164,7 @@ final class CapitalDesign {
         }
     }
 
-    private void gatehouses() {
+    void gatehouses() {
         for (Gate gt : gates) {
             int cx = (int) Math.round(Rw * gt.ex), cz = (int) Math.round(Rw * gt.ez), roof = g + WALL_H + 3;
             for (int dz = cz - 14; dz <= cz + 14; dz++) {
@@ -1209,12 +1209,12 @@ final class CapitalDesign {
     }
 
     // ------------------------------------------------------------------ Ponts (du nord au sud)
-    private boolean land(int dx, int dz) {
+    boolean land(int dx, int dz) {
         byte z = zoneAt(dx, dz);
         return (z >= YARD && z <= PLAZA) || z == QUAY_EDGE;
     }
 
-    private void bridge(int bx, int hw, boolean stone) {
+    void bridge(int bx, int hw, boolean stone) {
         int lim = Rw - 9, zMin = Integer.MAX_VALUE, zMax = Integer.MIN_VALUE;
         for (int dz = -lim; dz <= lim; dz++) {
             for (int dx = bx - hw; dx <= bx + hw; dx++) {
@@ -1299,7 +1299,7 @@ final class CapitalDesign {
 
     // ------------------------------------------------------------------ Bâtiments
     /** Repère d'un bâtiment : a le long de la façade, b vers le fond. b négatif : devant la façade. */
-    private final class Frame {
+    final class Frame {
         final int x0, z0, ax, az, bx, bz, w, d;
         final String in, out, dirA, dirAm, axisA, axisB, paneA, paneB;
 
@@ -1384,7 +1384,7 @@ final class CapitalDesign {
         }
     }
 
-    private static boolean window(int p, int n, int door, int doorW) {
+    static boolean window(int p, int n, int door, int doorW) {
         if (p < 2 || p > n - 3) {
             return false;
         }
@@ -1399,7 +1399,7 @@ final class CapitalDesign {
     }
 
     /** Murs, planchers, porte, fenêtres et toit d'un bâtiment de w sur d, posé sur le pavé. */
-    private void building(Frame f, Spec sp) {
+    void building(Frame f, Spec sp) {
         int w = f.w, d = f.d, top = g + sp.storeys * sp.storeyH, pc = w / 2;
         for (int a = 0; a < w; a++) {
             for (int b = 0; b < d; b++) {
@@ -1510,7 +1510,7 @@ final class CapitalDesign {
     }
 
     /** Tour carrée creuse, de yFrom à yTop (plancher), avec ou sans créneaux. */
-    private void squareTower(Frame f, int a0, int b0, int size, int yFrom, int yTop, String block, boolean crenel) {
+    void squareTower(Frame f, int a0, int b0, int size, int yFrom, int yTop, String block, boolean crenel) {
         for (int a = a0; a < a0 + size; a++) {
             for (int b = b0; b < b0 + size; b++) {
                 boolean edge = a == a0 || a == a0 + size - 1 || b == b0 || b == b0 + size - 1;
@@ -1532,7 +1532,7 @@ final class CapitalDesign {
     }
 
     /** Toit en pyramide : un anneau d'escaliers par niveau, centré sur (cx, cz). */
-    private void pyramid(int cx, int cz, int half, int y, String roof) {
+    void pyramid(int cx, int cz, int half, int y, String roof) {
         for (int k = 0; k <= half; k++) {
             int m = half - k;
             for (int dz = -m; dz <= m; dz++) {
@@ -1550,7 +1550,7 @@ final class CapitalDesign {
         put(cx, y + half + 1, cz, "lightning_rod[facing=up]");
     }
 
-    private void build(Lot lot) {
+    void build(Lot lot) {
         Frame f = new Frame(lot.x0, lot.z0, lot.x1, lot.z1, lot.front);
         switch (lot.kind) {
             case "donjon" -> keep(f);
@@ -1563,7 +1563,7 @@ final class CapitalDesign {
         }
     }
 
-    private Spec common(int x, int z) {
+    Spec common(int x, int z) {
         Spec sp = new Spec();
         sp.frame = mix(st.frames, x, z, 51);
         sp.base = mix(st.bases, x, z, 52);
@@ -1576,7 +1576,7 @@ final class CapitalDesign {
         return sp;
     }
 
-    private void house(Frame f, Lot lot) {
+    void house(Frame f, Lot lot) {
         Spec sp = common(lot.x0, lot.z0);
         if (rnd(lot.x0, lot.z0, 56) < 0.3) {
             sp.infill0 = sp.base;
@@ -1588,7 +1588,7 @@ final class CapitalDesign {
         building(f, sp);
     }
 
-    private void keep(Frame f) {
+    void keep(Frame f) {
         Spec sp = new Spec();
         sp.storeys = 2;
         sp.storeyH = 5;
@@ -1621,7 +1621,7 @@ final class CapitalDesign {
         }
     }
 
-    private void temple(Frame f) {
+    void temple(Frame f) {
         Spec sp = new Spec();
         sp.storeyH = 9;
         sp.winLo = 3;
@@ -1665,7 +1665,7 @@ final class CapitalDesign {
         stall(f, "priest", "autel", "white_wool", "yellow_wool");
     }
 
-    private void hall(Frame f) {
+    void hall(Frame f) {
         Spec sp = common(0, cs);
         sp.storeys = 2;
         sp.storeyH = 5;
@@ -1688,7 +1688,7 @@ final class CapitalDesign {
         stall(f, "merchant", "hotel-des-ventes", "red_wool", "yellow_wool");
     }
 
-    private void forge(Frame f) {
+    void forge(Frame f) {
         Spec sp = common(1, cs);
         sp.storeyH = 5;
         sp.infill0 = st.dark ? "cobbled_deepslate" : "cobblestone";
@@ -1700,7 +1700,7 @@ final class CapitalDesign {
         stall(f, "blacksmith", "forge", "orange_wool", "gray_wool");
     }
 
-    private void alchemy(Frame f) {
+    void alchemy(Frame f) {
         Spec sp = common(2, cs);
         sp.storeys = 2;
         sp.roof = st.dark ? "crimson" : "dark_prismarine";
@@ -1709,7 +1709,7 @@ final class CapitalDesign {
         stall(f, "alchemist", "alchimie", "magenta_wool", "white_wool");
     }
 
-    private void runes(Frame f) {
+    void runes(Frame f) {
         Spec sp = common(3, cn);
         sp.storeys = 2;
         sp.infill0 = st.dark ? "polished_tuff" : "smooth_sandstone";
@@ -1721,7 +1721,7 @@ final class CapitalDesign {
     }
 
     /** Étal devant la porte : auvent, accessoires du métier, et le PNJ au milieu, tourné vers la place. */
-    private void stall(Frame f, String tag, String point, String woolA, String woolB) {
+    void stall(Frame f, String tag, String point, String woolA, String woolB) {
         int pc = f.w / 2;
         for (int a = pc - 3; a <= pc + 3; a++) {
             for (int b = -3; b <= -1; b++) {
@@ -1784,7 +1784,7 @@ final class CapitalDesign {
     }
 
     // ------------------------------------------------------------------ Décor
-    private void plazaDecor() {
+    void plazaDecor() {
         // Fontaine de la Grand-Place.
         for (int dz = -5; dz <= 5; dz++) {
             for (int dx = -5; dx <= 5; dx++) {
@@ -1847,7 +1847,7 @@ final class CapitalDesign {
         }
     }
 
-    private boolean near(int dx, int dz, int reach, byte code) {
+    boolean near(int dx, int dz, int reach, byte code) {
         for (int oz2 = -reach; oz2 <= reach; oz2++) {
             for (int ox2 = -reach; ox2 <= reach; ox2++) {
                 if (zoneAt(dx + ox2, dz + oz2) == code) {
@@ -1859,7 +1859,7 @@ final class CapitalDesign {
     }
 
     /** Cours et jardins : herbes, fleurs et quelques arbres à l'écart des toits. */
-    private void yards() {
+    void yards() {
         List<int[]> placed = new ArrayList<>();
         for (int dz = -Rw; dz <= Rw; dz++) {
             for (int dx = -Rw; dx <= Rw; dx++) {
@@ -1889,7 +1889,7 @@ final class CapitalDesign {
         trees = placed.size();
     }
 
-    private void tree(int dx, int dz) {
+    void tree(int dx, int dz) {
         int h = 4 + (rnd(dx, dz, 64) < 0.5 ? 1 : 0);
         put(dx, g, dz, "dirt");
         for (int y = g + 1; y <= g + h; y++) {
@@ -1910,7 +1910,7 @@ final class CapitalDesign {
         }
     }
 
-    private void lamps() {
+    void lamps() {
         for (int dz = -Rw; dz <= Rw; dz++) {
             for (int dx = -Rw; dx <= Rw; dx++) {
                 byte z = zoneAt(dx, dz);

@@ -1,0 +1,880 @@
+# ------------------------------------------------------------------
+#  OrbitExtraction — extraction shooter PvPvE
+#  Rechargement : /extraction reload
+#  Format des objets (kit, butin) :
+#    arme:<id>                 arme de guns.yml (chargeur plein dans le kit, vide en butin)
+#    munition:<id>:<n|a-b>     munitions de guns.yml
+#    grenade:<id>:<n|a-b>      grenades de guns.yml
+#    soin:<id>:<n|a-b>         objets de soin de la section « soins » (bandage, medkit)
+#    objet:<MATERIAU>:<n|a-b>  objet vanilla (BREAD, COOKED_BEEF, GOLDEN_APPLE...)
+# ------------------------------------------------------------------
+
+resource-pack:
+  # Pack Orbit Extraction (généré par tools/gen-pack.ps1) : modèles 3D des armes et du téléphone, textures des
+  # infectés, écrans du téléphone. Proposé pendant l'écran de connexion. Sans le pack : les armes ressemblent à
+  # leur objet de base, le téléphone s'affiche en vitres, et runners / rampants / cracheurs n'ont pas de texture
+  # (damier noir et violet) : sur un serveur public, passe « required » à true.
+  enabled: true
+  # Port du mini serveur HTTP intégré qui distribue le pack. Les joueurs le téléchargent à l'adresse
+  # qu'ils ont utilisée pour se connecter : ouvre ce port (TCP) comme le port du jeu. (8790 = OrbitMMO.)
+  port: 8791
+  # Si le pack est hébergé ailleurs (CDN, site web), mets son URL ici : le serveur intégré ne démarre pas.
+  public-url: ""
+  # true = refuser le pack expulse le joueur.
+  required: false
+
+raid:
+  # Durée d'un raid. À zéro : « porté disparu », tout l'inventaire est perdu.
+  duree-minutes: 25
+  # Nombre de points d'extraction tirés au sort pour chaque joueur à son déploiement.
+  extractions-par-raid: 3
+  # Compte à rebours avant le déploiement (secondes).
+  compte-a-rebours: 5
+  # Un joueur hors raid qui s'éloigne plus que ça de la planque y est ramené (hors créatif/spectateur).
+  # La planque est la salle en hauteur de Lost Paradise City (84 x 56 blocs), à 500 blocs de l'île.
+  rayon-planque: 110
+  # Monde du raid. Si plugins/OrbitExtraction/apparitions-auto.csv existe (points au sol de la grande île,
+  # calculés par tools/MapScan.java), le déploiement tire une zone de 64 blocs au hasard puis un point dedans ;
+  # sinon il utilise les points posés à la main (/extraction spawn add).
+  monde: world
+  # Le déploiement privilégie les points d'apparition à au moins cette distance des autres joueurs en raid.
+  distance-min-spawn: 60
+  # Crédits versés au tueur d'un joueur en raid, et à chaque extraction réussie.
+  prime-joueur: 150
+  prime-extraction: 200
+  # Commandes autorisées pendant un raid (les admins ne sont pas bloqués).
+  commandes-autorisees: [raid, telephone, tel, phone, kit, kits, carte, minimap, map, msg, tell, r, w, me]
+  # Donné une seule fois, à la première arrivée dans la planque.
+  kit-de-depart:
+    - "arme:c96"
+    - "munition:9mm:40"
+    - "grenade:frag:1"
+    - "objet:BREAD:6"
+
+# ------------------------------------------------------------------ téléphone
+# Chaque joueur garde un téléphone (clic droit, ou /telephone) : raid, boutique, colis, messages, coffre, stats.
+# Les crédits ne s'achètent pas : ils se gagnent en jeu (primes des infectés, joueurs abattus, extractions, revente).
+economie:
+  # Crédits d'un nouveau joueur.
+  depart: 300
+  # La boutique rachète ce qu'elle vend à ce taux du prix d'achat (0.25 = 25 %), à l'unité.
+  taux-rachat: 0.25
+
+boutique:
+  # Achat et revente à la planque uniquement. « objet » : même format que le kit. 36 articles par page.
+  articles:
+    - { objet: "munition:9mm:40", prix: 40 }
+    - { objet: "munition:5-56:40", prix: 70 }
+    - { objet: "munition:7-62:30", prix: 80 }
+    - { objet: "munition:12g:16", prix: 60 }
+    - { objet: "munition:carreau:12", prix: 50 }
+    - { objet: "munition:40mm:2", prix: 160 }
+    - { objet: "munition:cellule:2", prix: 300 }
+    - { objet: "grenade:frag:1", prix: 90 }
+    - { objet: "objet:BREAD:6", prix: 20 }
+    - { objet: "objet:COOKED_BEEF:6", prix: 45 }
+    - { objet: "objet:GOLDEN_APPLE:1", prix: 150 }
+    - { objet: "arme:c96", prix: 150 }
+    - { objet: "arme:g18", prix: 220 }
+    - { objet: "arme:tec9", prix: 260 }
+    - { objet: "arme:elcovert", prix: 300 }
+    - { objet: "arme:crossbow", prix: 400 }
+    - { objet: "arme:pdw", prix: 520 }
+    - { objet: "arme:combatsmg", prix: 560 }
+    - { objet: "arme:pompe", prix: 650 }
+    - { objet: "arme:vector", prix: 700 }
+    - { objet: "arme:p90", prix: 760 }
+    - { objet: "arme:m4", prix: 900 }
+    - { objet: "arme:ak12", prix: 950 }
+    - { objet: "arme:famas", prix: 950 }
+    - { objet: "arme:tavor", prix: 1000 }
+    - { objet: "arme:aug", prix: 1050 }
+    - { objet: "arme:fal", prix: 1100 }
+    - { objet: "arme:scar", prix: 1150 }
+    - { objet: "arme:impact", prix: 1200 }
+    - { objet: "arme:tactm4", prix: 1300 }
+    - { objet: "arme:tactscar", prix: 1450 }
+    - { objet: "arme:vssvintorez", prix: 1500 }
+    - { objet: "arme:m24", prix: 1700 }
+    - { objet: "arme:lmg", prix: 1900 }
+    - { objet: "arme:grenadelauncher", prix: 2600 }
+    - { objet: "arme:bfg", prix: 4000 }
+    # Page 2 : soins et tenues (voir « armures » plus bas ; l'armure lourde ne se vend pas, elle se trouve en caisse rouge).
+    - { objet: "soin:bandage:2", prix: 60 }
+    - { objet: "soin:medkit:1", prix: 140 }
+    - { objet: "armure:fortune:casque", prix: 40 }
+    - { objet: "armure:fortune:plastron", prix: 70 }
+    - { objet: "armure:fortune:jambieres", prix: 60 }
+    - { objet: "armure:fortune:bottes", prix: 40 }
+    - { objet: "armure:police:casque", prix: 130 }
+    - { objet: "armure:police:plastron", prix: 220 }
+    - { objet: "armure:police:jambieres", prix: 190 }
+    - { objet: "armure:police:bottes", prix: 120 }
+    - { objet: "armure:emeute:casque", prix: 320 }
+    - { objet: "armure:emeute:plastron", prix: 540 }
+    - { objet: "armure:emeute:jambieres", prix: 460 }
+    - { objet: "armure:emeute:bottes", prix: 280 }
+    - { objet: "armure:tactique:casque", prix: 700 }
+    - { objet: "armure:tactique:plastron", prix: 1150 }
+    - { objet: "armure:tactique:jambieres", prix: 950 }
+    - { objet: "armure:tactique:bottes", prix: 600 }
+    # Véhicules : carburant et réparation (les véhicules eux-mêmes se trouvent sur l'île ou se commandent en colis).
+    - { objet: "vehicule:jerrican:1", prix: 90 }
+    - { objet: "vehicule:reparation:1", prix: 160 }
+  # Rachat (Maj + clic sur un objet de son inventaire, boutique ouverte) : prix fixes à l'unité pour le butin
+  # que la boutique ne vend pas. Clé = MATERIAU vanilla, ou « arme:id », « munition:id », « grenade:id », « armure:tenue:pièce ».
+  rachat:
+    # Ressources trouvées dans les caisses et sur les infectés : elles ne servent qu'à être revendues.
+    COPPER_INGOT: 8
+    IRON_INGOT: 15
+    GOLD_INGOT: 40
+    EMERALD: 90
+    DIAMOND: 140
+    "armure:lourde:casque": 450
+    "armure:lourde:plastron": 750
+    "armure:lourde:jambieres": 650
+    "armure:lourde:bottes": 400
+
+# ------------------------------------------------------------------ tenues
+# Cinq niveaux de protection, de la tenue bricolée à l'armure lourde : plus le niveau monte, plus la tenue protège
+# (et plus elle a l'air solide). Dans un kit, une caisse ou la boutique : « armure:<tenue>:<pièce> » avec
+# pièce = casque, plastron, jambieres ou bottes ; « armure:<tenue> » donne les quatre pièces.
+#   materiau    armure vanilla qui sert de base (LEATHER, CHAINMAIL, IRON, DIAMOND, NETHERITE) : elle fixe l'usure
+#               et l'apparence sans le pack ; le pack fournit la texture portée et l'icône de la tenue du même nom.
+#   armure      points d'armure (un plastron en fer vanilla = 6) ; robustesse : encaisse mieux les gros dégâts ;
+#   recul       résistance au recul (0.1 = 10 %) ; vitesse : % de vitesse de marche (-3 = 3 % plus lent) ;
+#   durabilite  usure maximale (absent = celle du matériau).
+armures:
+  # Les armures vanilla d'avant les tenues trouvées dans l'inventaire d'un joueur sont remplacées par la pièce de
+  # tenue du même matériau (usure conservée).
+  convertir-vanilla: true
+  tenues:
+    fortune:
+      nom: "Tenue de fortune"
+      niveau: 1
+      couleur: "#C9A26B"
+      materiau: LEATHER
+      description: "Tôle, pneu et ruban adhésif."
+      pieces:
+        casque:    { nom: "Casque de chantier", armure: 1 }
+        plastron:  { nom: "Plastron de fortune", armure: 3 }
+        jambieres: { nom: "Jambières rafistolées", armure: 2 }
+        bottes:    { nom: "Bottes usées", armure: 1 }
+    police:
+      nom: "Tenue de patrouille"
+      niveau: 2
+      couleur: "#6FA0E0"
+      materiau: CHAINMAIL
+      description: "Gilet pare-balles léger des patrouilles."
+      pieces:
+        casque:    { nom: "Casque de patrouille", armure: 2 }
+        plastron:  { nom: "Gilet pare-balles", armure: 5 }
+        jambieres: { nom: "Pantalon de patrouille", armure: 4 }
+        bottes:    { nom: "Rangers", armure: 1 }
+    emeute:
+      nom: "Tenue anti-émeute"
+      niveau: 3
+      couleur: "#AEB6C2"
+      materiau: IRON
+      description: "Coques rigides des unités anti-émeute."
+      pieces:
+        casque:    { nom: "Casque à visière", armure: 2 }
+        plastron:  { nom: "Plastron anti-émeute", armure: 6 }
+        jambieres: { nom: "Protège-jambes", armure: 5 }
+        bottes:    { nom: "Bottes coquées", armure: 2 }
+    tactique:
+      nom: "Tenue tactique"
+      niveau: 4
+      couleur: "#9DB36A"
+      materiau: DIAMOND
+      description: "Porte-plaques et casque balistique."
+      pieces:
+        casque:    { nom: "Casque balistique", armure: 3, robustesse: 2 }
+        plastron:  { nom: "Porte-plaques", armure: 8, robustesse: 2 }
+        jambieres: { nom: "Treillis renforcé", armure: 6, robustesse: 2 }
+        bottes:    { nom: "Rangers tactiques", armure: 3, robustesse: 2 }
+    lourde:
+      nom: "Armure lourde"
+      niveau: 5
+      couleur: "#E8695C"
+      materiau: NETHERITE
+      description: "Blindage intégral. Lourd : on court moins vite."
+      pieces:
+        casque:    { nom: "Casque intégral", armure: 3, robustesse: 3, recul: 0.1, vitesse: -3 }
+        plastron:  { nom: "Cuirasse", armure: 8, robustesse: 3, recul: 0.1, vitesse: -3 }
+        jambieres: { nom: "Grèves blindées", armure: 6, robustesse: 3, recul: 0.1, vitesse: -3 }
+        bottes:    { nom: "Solerets", armure: 3, robustesse: 3, recul: 0.1, vitesse: -3 }
+
+# ------------------------------------------------------------------ soins
+# Clic droit : il faut rester quelques secondes sans changer d'objet ni prendre de coup.
+#   vie = points de vie rendus (2 = un cœur) ; secondes = durée d'utilisation.
+soins:
+  bandage:
+    nom: "Bandage"
+    materiau: PAPER
+    vie: 6
+    secondes: 2.5
+  medkit:
+    nom: "Trousse de soins"
+    materiau: PAPER
+    vie: 14
+    secondes: 5
+
+# ------------------------------------------------------------------ rangs
+# Le rang d'un joueur est le plus haut de la liste dont il a la permission. « group.<rôle> » est donnée par
+# LuckPerms aux membres du rôle (et à ceux qui en héritent) : donner un rang = /lp user <joueur> parent add vip
+# (ou « parent addtemp vip 30d » pour 30 jours). LuckPerms est partagé par tout le réseau.
+# Dans le tab et le chat, le préfixe et la couleur viennent du rôle LuckPerms (meta prefix + meta namecolor) ;
+# « prefixe » ci-dessous (MiniMessage) ne sert que si LuckPerms est absent.
+# Avantages, en pourcentage :
+#   bonus-credits    crédits gagnés en plus (primes, extractions)
+#   remise-boutique  remise sur les achats à la boutique
+#   recharge-colis   attente en moins entre deux colis
+rangs:
+  # Affiché dans le kit du téléphone si renseigné (adresse de la boutique des rangs).
+  lien-boutique: ""
+  tab:
+    # {joueurs} connectés, {en-raid}, {planque}, {rang} du joueur qui regarde. Vide = pas d'en-tête / de pied.
+    entete: "<newline><#C0392B><b>☣ ORBIT EXTRACTION ☣</b></#C0392B><newline><#8A919B>Survis. Pille. Extrais-toi.<newline>"
+    pied: "<newline><#8A919B>En raid : <#E67E22>{en-raid}</#E67E22>  <#5A6270>•</#5A6270>  À la planque : <#2ECC71>{planque}</#2ECC71><newline><#8A919B>Ton rang : {rang}<newline>"
+  liste:
+    joueur:
+      nom: "Joueur"
+      couleur: "#D7DCE2"
+      prefixe: "<#8A919B>ᴊᴏᴜᴇᴜʀ <#D7DCE2>"
+    vip:
+      nom: "VIP"
+      couleur: "#F5C542"
+      prefixe: "<#F5C542>ᴠɪᴘ "
+      permission: group.vip
+      bonus-credits: 10
+      remise-boutique: 5
+      recharge-colis: 15
+    vipplus:
+      nom: "VIP+"
+      couleur: "#5CE0A0"
+      prefixe: "<#5CE0A0>ᴠɪᴘ+ "
+      permission: group.vipplus
+      bonus-credits: 20
+      remise-boutique: 10
+      recharge-colis: 30
+    orbit:
+      nom: "ORBIT"
+      couleur: "#B57BFF"
+      prefixe: "<#B57BFF>ᴏʀʙɪᴛ "
+      permission: group.orbit
+      bonus-credits: 30
+      remise-boutique: 15
+      recharge-colis: 50
+
+# ------------------------------------------------------------------ kits
+# À prendre à la planque (téléphone > Kits, ou /kit <nom>). Un rang ouvre son kit et ceux des rangs en dessous,
+# chacun avec son propre délai. L'armure s'équipe toute seule si l'emplacement est libre.
+# En raid on peut tout perdre : les délais sont longs pour les gros kits, court pour le kit de base
+# (un joueur à sec peut toujours repartir).
+kits:
+  survivant:
+    nom: "Kit Survivant"
+    rang: joueur
+    icone: LEATHER_CHESTPLATE
+    recharge-minutes: 30
+    contenu:
+      - "arme:c96"
+      - "munition:9mm:30"
+      - "armure:fortune:casque"
+      - "armure:fortune:plastron"
+      - "soin:bandage:1"
+      - "objet:BREAD:4"
+  eclaireur:
+    nom: "Kit Éclaireur"
+    rang: vip
+    icone: CHAINMAIL_CHESTPLATE
+    recharge-minutes: 120
+    contenu:
+      - "arme:tec9"
+      - "munition:9mm:80"
+      - "armure:fortune:casque"
+      - "armure:police:plastron"
+      - "armure:fortune:jambieres"
+      - "armure:fortune:bottes"
+      - "soin:bandage:2"
+      - "objet:COOKED_BEEF:4"
+  commando:
+    nom: "Kit Commando"
+    rang: vipplus
+    icone: IRON_CHESTPLATE
+    recharge-minutes: 240
+    contenu:
+      - "arme:pdw"
+      - "munition:9mm:120"
+      - "armure:police:casque"
+      - "armure:emeute:plastron"
+      - "armure:police:jambieres"
+      - "armure:police:bottes"
+      - "grenade:frag:1"
+      - "soin:bandage:2"
+      - "soin:medkit:1"
+      - "objet:COOKED_BEEF:6"
+  orbit:
+    nom: "Kit ORBIT"
+    rang: orbit
+    icone: DIAMOND_CHESTPLATE
+    recharge-minutes: 360
+    contenu:
+      - "arme:m4"
+      - "munition:5-56:120"
+      - "armure:emeute"
+      - "grenade:frag:2"
+      - "soin:medkit:2"
+      - "objet:GOLDEN_APPLE:1"
+      - "objet:COOKED_BEEF:8"
+
+# ------------------------------------------------------------------ caisses de butin
+# Des caisses sont réparties au hasard sur l'île (points de apparitions-auto.csv). Une colonne de lumière de la
+# couleur du niveau les signale de loin, et elles sont marquées sur la carte tactique (bannière de la couleur).
+# Ouvrir une caisse fait du bruit (attire les infectés) ; vidée ou trop vieille, elle est remplacée ailleurs.
+caisses:
+  actives-en-jeu: true
+  # Nombre de caisses présentes en même temps sur l'île (hors caisses d'événement).
+  nombre: 32
+  # Une caisse non vidée est déplacée après ce temps.
+  duree-minutes: 12
+  # Délai avant qu'une caisse retirée soit remplacée.
+  reapparition-secondes: 20
+  # Distance minimale entre deux caisses.
+  distance-min: 55
+  # La caisse et son faisceau n'existent que lorsqu'un joueur est à moins de cette distance.
+  distance-affichage: 150
+  bruit: 30
+  # Un niveau de poids 0 n'apparaît jamais au hasard : il sert aux événements (épave d'hélicoptère, largage).
+  # Par niveau : poids = fréquence ; tirages = nombre d'objets tirés (a-b) ; butin = objets et leur poids ;
+  # bloc = apparence de la caisse ; faisceau = verre de la colonne ; banniere = couleur sur la carte
+  # (WHITE, LIME, LIGHT_BLUE, PURPLE, YELLOW, ORANGE, RED) ; annonce = message aux joueurs en raid.
+  niveaux:
+    blanche:
+      nom: "Caisse blanche"
+      couleur: "#E6EDF3"
+      bloc: WHITE_SHULKER_BOX
+      faisceau: WHITE_STAINED_GLASS
+      banniere: WHITE
+      poids: 40
+      tirages: 4-5
+      butin:
+        - { objet: "munition:9mm:10-24", poids: 30 }
+        - { objet: "munition:12g:4-8", poids: 14 }
+        - { objet: "objet:BREAD:2-4", poids: 22 }
+        - { objet: "soin:bandage:1", poids: 20 }
+        - { objet: "objet:COPPER_INGOT:2-5", poids: 16 }
+        - { objet: "objet:IRON_INGOT:1-3", poids: 14 }
+        - { objet: "armure:fortune:casque", poids: 6 }
+        - { objet: "armure:fortune:bottes", poids: 6 }
+        - { objet: "arme:c96", poids: 5 }
+    verte:
+      nom: "Caisse verte"
+      couleur: "#3FC46A"
+      bloc: LIME_SHULKER_BOX
+      faisceau: LIME_STAINED_GLASS
+      banniere: LIME
+      poids: 28
+      tirages: 5-6
+      butin:
+        - { objet: "munition:9mm:20-40", poids: 26 }
+        - { objet: "munition:5-56:10-25", poids: 16 }
+        - { objet: "munition:12g:6-12", poids: 14 }
+        - { objet: "munition:carreau:3-6", poids: 8 }
+        - { objet: "soin:bandage:1-2", poids: 20 }
+        - { objet: "objet:COOKED_BEEF:2-4", poids: 16 }
+        - { objet: "objet:IRON_INGOT:2-5", poids: 16 }
+        - { objet: "armure:fortune:plastron", poids: 8 }
+        - { objet: "armure:fortune:jambieres", poids: 8 }
+        - { objet: "grenade:frag:1", poids: 6 }
+        - { objet: "vehicule:jerrican:1", poids: 10 }
+        - { objet: "arme:g18", poids: 6 }
+        - { objet: "arme:tec9", poids: 5 }
+        - { objet: "arme:crossbow", poids: 3 }
+    bleue:
+      nom: "Caisse bleue"
+      couleur: "#5CC8FF"
+      bloc: LIGHT_BLUE_SHULKER_BOX
+      faisceau: LIGHT_BLUE_STAINED_GLASS
+      banniere: LIGHT_BLUE
+      poids: 18
+      tirages: 5-7
+      butin:
+        - { objet: "munition:5-56:20-40", poids: 22 }
+        - { objet: "munition:7-62:10-20", poids: 14 }
+        - { objet: "munition:9mm:30-50", poids: 16 }
+        - { objet: "soin:bandage:2", poids: 16 }
+        - { objet: "soin:medkit:1", poids: 12 }
+        - { objet: "objet:GOLD_INGOT:1-3", poids: 14 }
+        - { objet: "armure:police:casque", poids: 7 }
+        - { objet: "armure:police:plastron", poids: 6 }
+        - { objet: "armure:police:jambieres", poids: 6 }
+        - { objet: "armure:police:bottes", poids: 7 }
+        - { objet: "grenade:frag:1-2", poids: 8 }
+        - { objet: "vehicule:jerrican:1-2", poids: 10 }
+        - { objet: "vehicule:reparation:1", poids: 6 }
+        - { objet: "arme:pdw", poids: 6 }
+        - { objet: "arme:combatsmg", poids: 5 }
+        - { objet: "arme:pompe", poids: 5 }
+        - { objet: "arme:vector", poids: 3 }
+    violette:
+      nom: "Caisse violette"
+      couleur: "#B57BFF"
+      bloc: PURPLE_SHULKER_BOX
+      faisceau: PURPLE_STAINED_GLASS
+      banniere: PURPLE
+      poids: 10
+      tirages: 6-7
+      butin:
+        - { objet: "munition:5-56:40-60", poids: 20 }
+        - { objet: "munition:7-62:20-40", poids: 18 }
+        - { objet: "soin:medkit:1-2", poids: 16 }
+        - { objet: "objet:GOLDEN_APPLE:1", poids: 10 }
+        - { objet: "objet:GOLD_INGOT:2-4", poids: 12 }
+        - { objet: "objet:EMERALD:1-2", poids: 10 }
+        - { objet: "armure:emeute:casque", poids: 6 }
+        - { objet: "armure:emeute:plastron", poids: 5 }
+        - { objet: "armure:emeute:jambieres", poids: 5 }
+        - { objet: "armure:emeute:bottes", poids: 6 }
+        - { objet: "grenade:frag:2", poids: 8 }
+        - { objet: "vehicule:jerrican:2", poids: 8 }
+        - { objet: "vehicule:reparation:1", poids: 6 }
+        - { objet: "arme:m4", poids: 5 }
+        - { objet: "arme:ak12", poids: 5 }
+        - { objet: "arme:famas", poids: 4 }
+        - { objet: "arme:scar", poids: 3 }
+        - { objet: "arme:p90", poids: 4 }
+    rouge:
+      nom: "Caisse rouge"
+      couleur: "#E23B3B"
+      bloc: RED_SHULKER_BOX
+      faisceau: RED_STAINED_GLASS
+      banniere: RED
+      poids: 4
+      tirages: 7-8
+      annonce: true
+      butin:
+        - { objet: "munition:5-56:60", poids: 16 }
+        - { objet: "munition:7-62:40", poids: 16 }
+        - { objet: "munition:40mm:2", poids: 6 }
+        - { objet: "munition:cellule:1-2", poids: 4 }
+        - { objet: "soin:medkit:2", poids: 14 }
+        - { objet: "objet:GOLDEN_APPLE:1-2", poids: 10 }
+        - { objet: "objet:DIAMOND:1-3", poids: 12 }
+        - { objet: "objet:EMERALD:2-4", poids: 10 }
+        - { objet: "armure:emeute:plastron", poids: 6 }
+        - { objet: "armure:tactique:casque", poids: 3 }
+        - { objet: "armure:tactique:plastron", poids: 2 }
+        - { objet: "armure:tactique:jambieres", poids: 2 }
+        - { objet: "armure:tactique:bottes", poids: 3 }
+        - { objet: "armure:lourde:casque", poids: 1 }
+        - { objet: "armure:lourde:plastron", poids: 1 }
+        - { objet: "armure:lourde:jambieres", poids: 1 }
+        - { objet: "armure:lourde:bottes", poids: 1 }
+        - { objet: "grenade:frag:3", poids: 8 }
+        - { objet: "arme:tactm4", poids: 5 }
+        - { objet: "arme:tactscar", poids: 4 }
+        - { objet: "arme:vssvintorez", poids: 4 }
+        - { objet: "arme:m24", poids: 4 }
+        - { objet: "arme:lmg", poids: 3 }
+        - { objet: "arme:grenadelauncher", poids: 2 }
+        - { objet: "arme:bfg", poids: 1 }
+    # Caisses d'événement (poids 0) : voir la section « evenements ».
+    epave:
+      nom: "Épave d'hélicoptère"
+      couleur: "#FF9A3D"
+      bloc: ORANGE_SHULKER_BOX
+      faisceau: ORANGE_STAINED_GLASS
+      banniere: ORANGE
+      poids: 0
+      tirages: 8-9
+      butin:
+        - { objet: "munition:5-56:60", poids: 16 }
+        - { objet: "munition:7-62:40", poids: 16 }
+        - { objet: "munition:40mm:2-3", poids: 8 }
+        - { objet: "munition:cellule:1-2", poids: 4 }
+        - { objet: "soin:medkit:2", poids: 14 }
+        - { objet: "grenade:frag:2-3", poids: 10 }
+        - { objet: "vehicule:jerrican:2", poids: 8 }
+        - { objet: "vehicule:reparation:1-2", poids: 8 }
+        - { objet: "objet:DIAMOND:1-3", poids: 10 }
+        - { objet: "armure:tactique:casque", poids: 6 }
+        - { objet: "armure:tactique:plastron", poids: 5 }
+        - { objet: "armure:tactique:jambieres", poids: 5 }
+        - { objet: "armure:tactique:bottes", poids: 6 }
+        - { objet: "armure:lourde:casque", poids: 2 }
+        - { objet: "armure:lourde:plastron", poids: 2 }
+        - { objet: "arme:tactm4", poids: 6 }
+        - { objet: "arme:tactscar", poids: 5 }
+        - { objet: "arme:lmg", poids: 5 }
+        - { objet: "arme:m24", poids: 4 }
+        - { objet: "arme:grenadelauncher", poids: 3 }
+    largage:
+      nom: "Largage de ravitaillement"
+      couleur: "#F5C542"
+      bloc: YELLOW_SHULKER_BOX
+      faisceau: YELLOW_STAINED_GLASS
+      banniere: YELLOW
+      poids: 0
+      tirages: 6-7
+      butin:
+        - { objet: "munition:9mm:40-60", poids: 16 }
+        - { objet: "munition:5-56:40-60", poids: 18 }
+        - { objet: "munition:7-62:20-40", poids: 14 }
+        - { objet: "munition:12g:10-16", poids: 10 }
+        - { objet: "soin:bandage:2-3", poids: 14 }
+        - { objet: "soin:medkit:1-2", poids: 14 }
+        - { objet: "objet:COOKED_BEEF:4-6", poids: 10 }
+        - { objet: "objet:GOLDEN_APPLE:1", poids: 8 }
+        - { objet: "grenade:frag:1-2", poids: 8 }
+        - { objet: "vehicule:jerrican:1-2", poids: 8 }
+        - { objet: "armure:emeute:casque", poids: 5 }
+        - { objet: "armure:emeute:plastron", poids: 5 }
+        - { objet: "arme:m4", poids: 5 }
+        - { objet: "arme:ak12", poids: 5 }
+        - { objet: "arme:pompe", poids: 5 }
+        - { objet: "arme:p90", poids: 4 }
+
+# ------------------------------------------------------------------ événements de raid
+# Tirés au hasard dès qu'il y a assez de joueurs en raid. Test : /extraction evenement <crash|horde|largage>.
+evenements:
+  actifs: true
+  # Délai entre deux événements, en minutes (tiré au hasard entre les deux bornes).
+  intervalle-minutes: 4-7
+  # Nombre de joueurs en raid à partir duquel les événements se déclenchent.
+  joueurs-min: 1
+  # poids = fréquence relative (0 = jamais).
+  crash:
+    # Un hélicoptère s'écrase sur l'île : épave fumante visible de loin, gardée par des infectés, avec une caisse
+    # de matériel militaire (niveau « caisse » de la section caisses). Annoncé à tous les joueurs en raid.
+    poids: 3
+    # Distance du joueur tiré au sort (blocs).
+    distance: 120-400
+    duree-minutes: 10
+    gardes: 8-12
+    caisse: epave
+  horde:
+    # Une vague d'infectés converge vers un joueur après une courte alerte (cor + message aux joueurs proches).
+    poids: 4
+    taille: 12-18
+    # Distance d'apparition autour du joueur visé.
+    distance: 28-42
+    alerte-secondes: 8
+  largage:
+    # Une caisse de ravitaillement tombe sur l'île, annoncée à tous.
+    poids: 3
+    distance: 80-300
+    duree-minutes: 8
+    caisse: largage
+
+# ------------------------------------------------------------------ hôtel des ventes
+# Vente entre joueurs depuis le téléphone (bouton Marché) : Maj + clic sur un objet de son inventaire, puis le
+# prix dans le chat. Achat et mise en vente à la planque uniquement. Les annonces sont dans marche.yml.
+hdv:
+  actif: true
+  # Part du prix retenue à la vente, en % (les crédits sortent du jeu).
+  taxe: 5
+  # Une annonce invendue revient à son vendeur après ce délai.
+  duree-heures: 48
+  # Annonces simultanées par joueur, plus « annonces-par-rang » par niveau de rang (VIP +2, VIP+ +4, ORBIT +6).
+  annonces-max: 5
+  annonces-par-rang: 2
+  prix-min: 1
+  prix-max: 1000000
+
+colis:
+  # Commandés en raid depuis le téléphone : la caisse tombe près du joueur après ce délai, fume (visible de loin),
+  # son impact attire les infectés (rayon « bruit ») et n'importe quel joueur peut la piller.
+  delai-secondes: 20
+  # Attente entre deux commandes d'un même joueur, après le largage.
+  recharge-secondes: 90
+  # Une caisse non vidée disparaît après ce temps.
+  duree-secondes: 180
+  bruit: 40
+  offres:
+    - nom: "Vivres"
+      icone: COOKED_BEEF
+      prix: 80
+      contenu: ["objet:COOKED_BEEF:4", "objet:BREAD:4", "objet:GOLDEN_APPLE:1"]
+    - nom: "Munitions légères"
+      icone: IRON_NUGGET
+      prix: 120
+      contenu: ["munition:9mm:60", "munition:12g:12"]
+    - nom: "Munitions lourdes"
+      icone: GOLD_NUGGET
+      prix: 200
+      contenu: ["munition:5-56:60", "munition:7-62:40"]
+    - nom: "Explosifs"
+      icone: TNT
+      prix: 280
+      contenu: ["grenade:frag:3"]
+    - nom: "Arme de secours"
+      icone: BARREL
+      prix: 450
+      contenu: ["arme:tec9", "munition:9mm:60"]
+    - nom: "Kit d'assaut"
+      icone: ENDER_CHEST
+      prix: 1500
+      contenu: ["arme:m4", "munition:5-56:90", "grenade:frag:2", "objet:GOLDEN_APPLE:1"]
+    - nom: "Carburant"
+      icone: LAVA_BUCKET
+      prix: 150
+      contenu: ["vehicule:jerrican:2"]
+    # Véhicules : « vehicule » = type de la section vehicules. Posé près du joueur, réservoir plein, s'il y a la place
+    # (sinon la commande est remboursée). Il reste sur l'île à la fin du raid.
+    - nom: "Moto"
+      icone: MINECART
+      prix: 350
+      vehicule: moto
+    - nom: "Voiture"
+      icone: CHEST_MINECART
+      prix: 600
+      vehicule: voiture
+    - nom: "Humvee"
+      icone: TNT_MINECART
+      prix: 1200
+      vehicule: humvee
+    - nom: "Hélicoptère"
+      icone: ELYTRA
+      prix: 2200
+      vehicule: helico
+
+# ------------------------------------------------------------------ véhicules
+# Clic droit sur un véhicule : monter (première place libre ; la première est celle du conducteur). Maj : descendre.
+#   Au sol : Z/S accélérer, freiner et reculer • Q/D tourner • Espace frein à main.
+#   Hélicoptère : Espace monter • Maj descendre (au sol : sortir) • Z/S avancer, reculer • Q/D pivoter.
+# Les passagers peuvent tirer. Une barre en haut de l'écran donne la vitesse, le carburant et l'état.
+# Carburant : « vehicule:jerrican » (clic droit sur le véhicule ou depuis son siège). Réparation : « vehicule:reparation ».
+# Un véhicule encaisse les balles, les explosions et les chocs ; à zéro il explose. Le moteur attire les infectés.
+vehicules:
+  actifs: true
+  # Les entités d'un véhicule n'existent que lorsqu'un joueur est à moins de cette distance.
+  distance-affichage: 110
+  # Un véhicule utilisé (ou livré) puis laissé vide disparaît après ce temps ; ceux de l'île sont regarés ailleurs.
+  abandon-minutes: 10
+  reapparition-secondes: 60
+  # Distance minimale entre deux véhicules garés par le serveur.
+  distance-min: 70
+  # Plafond de vol (altitude Y) et marge autour de l'île au-delà de laquelle on ne peut plus avancer.
+  altitude-max: 220
+  marge-zone: 150
+  jerrican-litres: 15
+  reparation-pv: 60
+  # Multiplicateurs des dégâts subis par les véhicules.
+  degats-balles: 1.0
+  degats-explosions: 2.5
+  # Par type : nombre = véhicules garés sur l'île (réservoir entre 10 et 35 %) ; vitesse, marche-arriere, montee en
+  # blocs/s (x3,6 = km/h) ; acceleration, freinage en blocs/s² ; braquage en degrés/s ; pv = points de structure ;
+  # blindage = part des dégâts de balle épargnée aux occupants ; reservoir en litres ; consommation en litres par
+  # minute à fond ; bruit = rayon d'alerte des infectés ; largeur/longueur/hauteur = gabarit (collisions, balles) ;
+  # franchissement = marche maximale ; belier = dégâts à pleine vitesse sur ce qu'on écrase ;
+  # places = [droite, hauteur, avant] en blocs depuis le centre au sol (elles suivent le modèle 3D du pack) ;
+  # echelle = taille du modèle ; son / son-intervalle (ticks) / son-ton = bruit du moteur.
+  types:
+    moto:
+      nom: "Moto"
+      icone: MINECART
+      nombre: 5
+      echelle: 1.25
+      places: [[0, 0.78, -0.31], [0, 0.8, -0.74]]
+      vitesse: 19
+      marche-arriere: 3
+      acceleration: 10
+      freinage: 18
+      braquage: 140
+      pv: 60
+      blindage: 0
+      reservoir: 12
+      consommation: 1.6
+      bruit: 26
+      largeur: 0.9
+      longueur: 2.4
+      hauteur: 1.4
+      franchissement: 1.1
+      belier: 10
+      son: entity.bee.loop
+      son-intervalle: 12
+      son-ton: 0.7
+    voiture:
+      nom: "Voiture"
+      icone: CHEST_MINECART
+      nombre: 4
+      echelle: 1.75
+      places: [[-0.38, 0.6, 0.27], [0.38, 0.6, 0.27], [-0.38, 0.6, -0.82], [0.38, 0.6, -0.82]]
+      vitesse: 16
+      marche-arriere: 5
+      acceleration: 6
+      freinage: 14
+      braquage: 95
+      pv: 120
+      blindage: 0.3
+      reservoir: 40
+      consommation: 5
+      bruit: 30
+      largeur: 1.9
+      longueur: 4.3
+      hauteur: 1.95
+      franchissement: 1.1
+      belier: 18
+      son: entity.minecart.inside
+      son-intervalle: 20
+      son-ton: 0.8
+    humvee:
+      nom: "Humvee"
+      icone: TNT_MINECART
+      nombre: 2
+      echelle: 2.0
+      places: [[-0.5, 0.875, 0.44], [0.5, 0.875, 0.44], [-0.5, 0.875, -0.41], [0.5, 0.875, -0.41]]
+      vitesse: 12.5
+      marche-arriere: 4
+      acceleration: 4.5
+      freinage: 12
+      braquage: 80
+      pv: 260
+      blindage: 0.6
+      reservoir: 70
+      consommation: 10
+      bruit: 36
+      largeur: 2.3
+      longueur: 4.9
+      hauteur: 2.3
+      franchissement: 1.6
+      belier: 28
+      son: entity.minecart.inside
+      son-intervalle: 20
+      son-ton: 0.55
+    helico:
+      nom: "Hélicoptère"
+      icone: ELYTRA
+      volant: true
+      nombre: 1
+      echelle: 2.5
+      # Le mât du rotor est en avant du centre du modèle : on recule le modèle pour pivoter autour du mât.
+      decalage: -1.72
+      rotor-hauteur: 3.1
+      places: [[-0.55, 0.86, 0.94], [0.55, 0.86, 0.94], [-0.55, 0.86, -0.47], [0.55, 0.86, -0.47]]
+      vitesse: 20
+      marche-arriere: 6
+      montee: 7
+      acceleration: 5
+      braquage: 75
+      pv: 160
+      blindage: 0.2
+      reservoir: 90
+      consommation: 18
+      bruit: 70
+      largeur: 2.4
+      longueur: 4.0
+      hauteur: 2.7
+      son: entity.ender_dragon.flap
+      son-intervalle: 4
+      son-ton: 1.5
+
+infectes:
+  max-par-joueur: 12
+  max-total: 80
+  # Toutes les N ticks, une tentative d'apparition autour de chaque joueur en raid.
+  intervalle-apparition: 40
+  distance-apparition-min: 22
+  distance-apparition-max: 44
+  # Un infesté plus loin que ça de tout joueur en raid disparaît.
+  distance-disparition: 90
+  # Combien de temps un infesté va enquêter sur un bruit (tir) entendu.
+  memoire-bruit-secondes: 12
+  # Bloque les monstres vanilla (apparition naturelle) : seuls les infestés peuplent la map.
+  bloquer-monstres-naturels: true
+  # Tirages de butin par infesté tué (chaque entrée est tentée à chaque tirage).
+  butin-tirages: 1
+  butin:
+    - { objet: "munition:9mm:4-10", chance: 0.22 }
+    - { objet: "munition:5-56:5-15", chance: 0.10 }
+    - { objet: "munition:7-62:2-6", chance: 0.05 }
+    - { objet: "munition:12g:2-5", chance: 0.06 }
+    - { objet: "munition:carreau:1-3", chance: 0.04 }
+    - { objet: "munition:40mm:1", chance: 0.008 }
+    - { objet: "munition:cellule:1", chance: 0.004 }
+    - { objet: "grenade:frag:1", chance: 0.03 }
+    - { objet: "objet:BREAD:1-2", chance: 0.12 }
+    - { objet: "objet:IRON_INGOT:1-2", chance: 0.06 }
+    - { objet: "arme:c96", chance: 0.010 }
+    - { objet: "arme:tec9", chance: 0.006 }
+    - { objet: "arme:pdw", chance: 0.004 }
+    - { objet: "arme:crossbow", chance: 0.004 }
+  # Runner, rampant et cracheur ont un corps « mannequin » (entité à modèle de joueur) qui porte une texture du
+  # pack ; l'entité vanilla qui porte l'IA est alors invisible. false = tout le monde garde l'apparence vanilla.
+  corps-mannequin: true
+  # Par type :
+  #   entite        entité vanilla qui porte l'IA et la boîte de collision (ZOMBIE et HUSK ont leur texture dans le pack ;
+  #                 évite DROWNED : il n'attaque pas en plein jour hors de l'eau)
+  #   vie, degats, vitesse, taille, resistance-recul, poids (fréquence d'apparition), butin-tirages
+  #   prime         crédits versés au joueur qui le tue
+  #   skins         textures du pack (assets/orbitguns/textures/entity/infecte/<nom>.png, voir tools/InfectedSkins.java),
+  #                 une au hasard par infecté -> corps mannequin
+  #   pose          debout | accroupi | ramper (corps mannequin seulement)
+  #   taille-corps  taille du corps mannequin (« taille » règle alors seulement la boîte de collision)
+  #   crachat       attaque à distance (portee, recharge-ticks, degats, poison-ticks)
+  types:
+    marcheur:
+      entite: ZOMBIE
+      nom: "Marcheur"
+      vie: 24
+      degats: 3
+      vitesse: 0.21
+      poids: 45
+      prime: 8
+    traineur:
+      entite: HUSK
+      nom: "Traîneur"
+      vie: 20
+      degats: 3.5
+      vitesse: 0.29
+      taille: 0.94
+      poids: 22
+      prime: 12
+    runner:
+      entite: ZOMBIE
+      nom: "Runner"
+      vie: 14
+      degats: 2.5
+      vitesse: 0.37
+      poids: 16
+      prime: 15
+      skins: [runner_1, runner_2, runner_3]
+    rampant:
+      entite: ZOMBIE
+      nom: "Rampant"
+      vie: 12
+      degats: 3
+      vitesse: 0.26
+      taille: 0.45
+      poids: 12
+      prime: 12
+      skins: [rampant_1, rampant_2]
+      pose: ramper
+    cracheur:
+      entite: ZOMBIE
+      nom: "Cracheur"
+      vie: 18
+      degats: 2
+      vitesse: 0.24
+      poids: 7
+      prime: 20
+      skins: [cracheur_1]
+      pose: accroupi
+      crachat:
+        portee: 14
+        recharge-ticks: 50
+        degats: 4
+        poison-ticks: 60
+    mastodonte:
+      entite: ZOMBIE
+      nom: "Mastodonte"
+      vie: 80
+      degats: 7
+      vitesse: 0.19
+      taille: 1.4
+      resistance-recul: 0.8
+      poids: 4
+      butin-tirages: 3
+      prime: 60

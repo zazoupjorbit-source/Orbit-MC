@@ -863,7 +863,7 @@ pages.dev = {
         <div class="card"><h2>${icon('rocket')}Déploiement automatique des plugins</h2>
           <div class="sub">Le panel surveille le dossier où ton IDE compile tes plugins. Dès qu'un <b>.jar</b> change, il est copié dans <span class="mono">plugins/</span> et le serveur redémarre.</div>
           <div class="field"><label>Dossier de build</label>
-            <input class="input mono" id="dvPath" placeholder="ex : C:\\Users\\Zazou\\IdeaProjects\\MonPlugin\\target" value="${esc(c.watchPath)}">
+            <input class="input mono" id="dvPath" placeholder="ex : C:\\Projets\\MonPlugin\\target" value="${esc(c.watchPath)}">
             <span class="desc">Maven : <span class="mono">target</span> · Gradle : <span class="mono">build\\libs</span>. Les jars <span class="mono">original-*</span>, <span class="mono">-sources</span> et <span class="mono">-javadoc</span> sont ignorés.</span></div>
           <div class="toggle-row mt"><div><b>Redémarrer automatiquement après déploiement</b><small>Sinon, le jar est juste copié.</small></div><label class="switch"><input type="checkbox" id="dvAuto" ${c.autoDeploy ? 'checked' : ''}><span></span></label></div>
           <div class="row mt"><button class="btn green" id="dvSave">${icon('save')}Enregistrer</button><button class="btn" id="dvNow">${icon('upload')}Déployer maintenant</button><button class="btn ghost" id="dvOpen">${icon('ext')}Ouvrir le dossier</button></div>
@@ -957,6 +957,110 @@ pages.settings = {
       if (!await confirmBox('Quitter le panel ?', 'Le serveur sera arrêté proprement puis le panel se fermera.', 'Quitter', true)) return;
       await api('POST', 'quit'); document.body.innerHTML = '<div class="empty" style="padding-top:30vh">Panel fermé. Tu peux fermer cette fenêtre.</div>';
     };
+  },
+};
+
+// ---------------------------------------------------------------- Synchronisation GitHub
+// Deux boutons : « Valider et envoyer » (valider.ps1) et « Récupérer » (recuperer.ps1). Le panel affiche leur sortie.
+const SY = { timer: null };
+pages.sync = {
+  title: 'Synchronisation (GitHub)',
+  async render(v) {
+    clearInterval(SY.timer);
+    v.innerHTML = `
+      <div class="grid g2">
+        <div class="card"><h2>${icon('upload')}Envoyer mes changements</h2>
+          <div class="sub">Compile les plugins, vérifie qu'aucun mot de passe ne part, puis envoie tout sur GitHub. Rien n'est jamais envoyé sans ce bouton.</div>
+          <div class="row mt"><button class="btn green" id="syPush">${icon('upload')}Valider et envoyer</button></div>
+        </div>
+        <div class="card"><h2>${icon('download')}Prendre les changements de l'autre</h2>
+          <div class="sub">Récupère depuis GitHub, recompile, remet les jars et les configs dans les serveurs. Tes modifs non envoyées sont gardées.</div>
+          <div class="row mt"><button class="btn" id="syPull">${icon('download')}Récupérer</button></div>
+        </div>
+      </div>
+      <div class="grid g2 mt">
+        <div class="card"><h2>${icon('code')}Branche et modifs en attente</h2>
+          <div id="syState" class="muted">…</div>
+          <div class="row mt"><button class="btn ghost" id="syBranch">${icon('edit')}Changer de branche</button><button class="btn ghost" id="syRefresh">${icon('restart')}Actualiser</button></div>
+          <div id="syChanges" class="console mt" style="max-height:260px;font-size:11.5px"></div>
+        </div>
+        <div class="card"><h2>${icon('term')}Journal</h2><div id="syLog" class="console" style="height:330px;font-size:12px"></div></div>
+      </div>`;
+    hydrateIcons(v);
+    let next = 0, wasRunning = false, lastJob = '';
+    const logBox = $('#syLog');
+    const setBusy = b => { $('#syPush').disabled = b; $('#syPull').disabled = b; $('#syBranch').disabled = b; };
+    const refresh = async () => {
+      const s = await api('GET', 'git/status');
+      $('#syState').innerHTML = `Branche : <b>${esc(s.branch)}</b>${s.track ? ` <span class="tag">${esc(s.track.replace('ahead', 'en avance de').replace('behind', 'en retard de'))}</span>` : ''}
+        <div class="mt">${s.count ? `<b>${s.count}</b> fichier(s) modifié(s), pas encore envoyé(s)` : 'Aucune modif en attente.'}</div>`;
+      $('#syChanges').textContent = s.changes.join('\n');
+      $('#syChanges').style.display = s.count ? '' : 'none';
+    };
+    const afterJob = async (job, exit) => {
+      await refresh().catch(() => { });
+      if (exit !== 0) { toast('Échec : regarde le journal', true); return; }
+      if (job === 'valider.ps1') { toast('Envoyé sur GitHub'); return; }
+      toast('Changements récupérés');
+      await Promise.all([pollStatus(), api('GET', 'instances').then(l => { S.inst = l; }).catch(() => { })]);
+      const run = [];
+      if (S.status.state === 'online') run.push('lobby');
+      for (const i of S.inst || []) if (i.state === 'online' && i.id !== 'velocity') run.push(i.id);
+      if (run.length && await confirmBox('Relancer les serveurs ?', `Pour charger les nouveaux plugins, il faut redémarrer : <b>${esc(run.join(', '))}</b>.`, 'Redémarrer'))
+        for (const id of run) await instPower(id, 'restart').catch(() => { });
+    };
+    const tick = async () => {
+      if (route !== 'sync') { clearInterval(SY.timer); return; }
+      let j; try { j = await api('GET', 'git/job?since=' + next); } catch (e) { return; }
+      if (j.job !== lastJob) { lastJob = j.job; }
+      if (j.lines.length) {
+        const bottom = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 40;
+        for (const l of j.lines) {
+          const d = document.createElement('div');
+          d.textContent = l;
+          if (/^\[ERREUR\]|^--- Echec/.test(l)) d.style.color = 'var(--red)';
+          else if (/^\[!!\]/.test(l)) d.style.color = 'var(--amber)';
+          else if (/^\[OK\]|^--- Termine/.test(l)) d.style.color = 'var(--green)';
+          else if (/^===/.test(l)) d.style.fontWeight = '700';
+          logBox.appendChild(d);
+        }
+        if (bottom) logBox.scrollTop = logBox.scrollHeight;
+      }
+      next = j.next;
+      setBusy(j.running);
+      if (wasRunning && !j.running) afterJob(j.job, j.exit);
+      wasRunning = j.running;
+    };
+    const launch = async (path, body) => {
+      logBox.innerHTML = ''; next = 0;
+      try { await api('POST', path, body); wasRunning = true; setBusy(true); } catch (e) { toast(e.message, true); }
+    };
+    $('#syPush').onclick = () => {
+      const onBranch = !/^(main|\?)$/.test(($('#syState b') || {}).textContent || 'main');
+      modal(`<h3>Valider et envoyer</h3>
+        <div class="field"><label>Qu'est-ce que tu as changé ?</label><input class="input" id="mIn" placeholder="ex : boutique du lobby, correction des portes"></div>
+        ${onBranch ? '<label style="display:flex;gap:8px;align-items:center;margin:10px 0"><input type="checkbox" id="mMain"> Fusionner aussi dans <b>main</b> (c\'est testé, l\'autre peut le prendre)</label>' : ''}
+        <div class="row"><button class="btn" id="mNo">Annuler</button><button class="btn green" id="mYes">Envoyer</button></div>`);
+      const ok = () => {
+        const m = $('#mIn').value.trim();
+        if (m.length < 3) { toast('Écris un petit message', true); return; }
+        const main = !!($('#mMain') && $('#mMain').checked);
+        closeModal(); launch('git/valider', { message: m, main });
+      };
+      $('#mNo').onclick = closeModal; $('#mYes').onclick = ok;
+      $('#mIn').onkeydown = e => { if (e.key === 'Enter') ok(); };
+    };
+    $('#syPull').onclick = () => launch('git/recuperer');
+    $('#syRefresh').onclick = () => act(refresh);
+    $('#syBranch').onclick = async () => {
+      const b = await promptBox('Changer de branche', 'Nom (main, wane/ma-tache, zazou/ma-tache) — créée si elle n\'existe pas', '');
+      if (!b) return;
+      const r = await act(() => api('POST', 'git/branche', { branche: b }));
+      if (r) { toast((r.created ? 'Branche créée : ' : 'Branche : ') + r.branch); refresh(); }
+    };
+    await refresh();
+    await tick();
+    SY.timer = setInterval(tick, 1000);
   },
 };
 

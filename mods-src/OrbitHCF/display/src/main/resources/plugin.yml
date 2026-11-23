@@ -1,0 +1,15 @@
+name: OrbitHCF-Display
+version: '${version}'
+main: fr.orbitgames.hcf.display.OrbitHCFDisplayPlugin
+api-version: '1.21'
+author: OrbitGames
+description: Affichage HCF - scoreboard, nametags, tablist, action bars, bossbars.
+website: https://orbit-pvp.fr
+depend:
+  - OrbitHCF-API
+  - OrbitHCF-Core
+softdepend:
+  - OrbitHCF-Classes
+  - OrbitHCF-Combat
+  - OrbitHCF-Events
+  - PlaceholderAPI

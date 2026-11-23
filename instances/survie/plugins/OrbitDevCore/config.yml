@@ -1,0 +1,79 @@
+# ------------------------------------------------------------------
+#  OrbitDevCore — plugin core du serveur de dev ORBIT
+#  Rechargement : /orbitdev reload (pas besoin de /reload du serveur)
+# ------------------------------------------------------------------
+
+# Langue des messages : fr | en  (fichiers dans plugins/OrbitDevCore/lang/)
+language: fr
+
+spawn:
+  # Téléporte le joueur au spawn à chaque connexion.
+  teleport-on-join: true
+  # Fait réapparaître le joueur au spawn après une mort.
+  teleport-on-respawn: true
+
+compass:
+  # false : pas de boussole ici (reservee au lobby) ; /lobby pour y retourner.
+  enabled: false
+  # Donne la boussole à la connexion et à la réapparition (si le joueur ne l'a pas déjà).
+  give-on-join: true
+  # Case de la barre d'action (0 à 8). Si elle est occupée, la boussole va dans la première case libre.
+  slot: 4
+  # Matériau de l'objet (nom Bukkit, ex. COMPASS, RECOVERY_COMPASS, CLOCK).
+  material: COMPASS
+  # true : impossible de jeter la boussole, et elle n'est pas lâchée à la mort.
+  locked: true
+
+menu:
+  # Icône de l'entrée « Spawn » dans le menu de la boussole.
+  spawn-icon: BEACON
+  # Icône par défaut d'un warp créé sans icône.
+  default-warp-icon: ENDER_PEARL
+
+npc:
+  # Type d'entité par défaut pour /servernpc create (toute entité vivante : VILLAGER, ZOMBIE, ARMOR_STAND...).
+  default-type: VILLAGER
+  # Profession par défaut des villageois (none, librarian, cartographer, cleric, weaponsmith...).
+  default-profession: librarian
+  # true : un clic gauche sur le PNJ envoie aussi vers le serveur (en plus du clic droit).
+  left-click-connects: true
+  # Délai minimum entre deux clics sur un PNJ, en millisecondes.
+  click-cooldown-ms: 1000
+
+proxy:
+  # Laisser à false tant qu'il n'y a pas de proxy (Velocity / BungeeCord) devant le serveur :
+  # le clic sur un PNJ affiche alors seulement un message au lieu d'envoyer le joueur.
+  # À true, le plugin utilise le canal « BungeeCord » (compatible Velocity avec
+  # bungee-plugin-message-channel = true dans velocity.toml).
+  enabled: true
+  # Nom de CE serveur dans velocity.toml : marqué « Tu es ici » dans le menu de la boussole.
+  server-name: survie
+
+# Instances affichées dans le menu de la boussole (clic = envoi direct via le proxy).
+# Clé = nom du serveur dans velocity.toml. name : MiniMessage, icon : matériau Bukkit.
+# Exemple :
+#   servers:
+#     lobby:
+#       name: "<gold><bold>Lobby</bold></gold>"
+#       icon: NETHER_STAR
+servers:
+  lobby:
+    name: "<gold><bold>Lobby</bold></gold>"
+    icon: NETHER_STAR
+  reborn:
+    name: "<gradient:#00c6ff:#7b2ff7><bold>Reborn MC</bold></gradient>"
+    icon: GRASS_BLOCK
+  mapdev:
+    name: "<gradient:#00c6ff:#7b2ff7><bold>Map Dev</bold></gradient>"
+    icon: FILLED_MAP
+  musee:
+    name: "<gradient:#00c6ff:#7b2ff7><bold>Musée</bold></gradient>"
+    icon: BOOKSHELF
+
+cosmetics:
+  # false : cosmetiques coupes ici (reserves au lobby), la selection est gardee pour le lobby.
+  enabled: false
+  # Cosmetiques gratuits sur le reseau de dev (boutique ORBIT plus tard via l'API CosmeticAccess).
+  unlock-all: true
+  # Dossier partage par le lobby et les instances : on garde ses cosmetiques en changeant de serveur.
+  data-folder: "../../../../shared/cosmetics"

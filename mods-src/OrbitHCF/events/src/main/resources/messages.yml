@@ -1,0 +1,69 @@
+# ============================================================
+#  OrbitHCF-Events - Messages (FR)
+# ============================================================
+
+prefix: "&7[&5Events&7] &r"
+
+general:
+  no-permission: "&cVous n'avez pas la permission."
+  player-only: "&cCommande reservee aux joueurs."
+  invalid-duration: "&cDuree invalide : &f{valeur}"
+  unknown-zone: "&cZone introuvable : &f{zone}"
+  zone-incomplete: "&cLa zone &f{zone}&c n'a pas ses deux positions definies."
+
+zone:
+  created: "&aZone &f{zone}&a creee ({type}). Definissez pos1 et pos2."
+  deleted: "&cZone &f{zone}&c supprimee."
+  pos1: "&aPosition 1 de &f{zone}&a definie : {coords}"
+  pos2: "&aPosition 2 de &f{zone}&a definie : {coords}"
+  time-set: "&aTemps de capture de &f{zone}&a : {temps}"
+  list-header: "&6Zones d'evenement :"
+  list-entry: "&e- {zone} &7({type}, capture {temps})"
+  list-empty: "&7Aucune zone definie."
+
+koth:
+  started: "&6[KOTH] &e{koth}&6 a commence ! Capturez la zone pendant &e{temps}&6."
+  stopped: "&6[KOTH] &e{koth}&6 a ete arrete."
+  already-active: "&cUn evenement de capture est deja actif."
+  none-active: "&cAucun KOTH actif."
+  capturing: "&6[KOTH] &e{joueur}&6 capture &e{koth}&6 !"
+  contested: "&6[KOTH] &e{koth}&6 est conteste !"
+  reset: "&6[KOTH] &eLe timer de capture de {koth} a ete reinitialise."
+  captured: "&6[KOTH] &e{joueur}&6 ({faction}) a capture &e{koth}&6 !"
+  top-header: "&6Classement des captures :"
+  top-entry: "&e{rang}. {faction} &7- {captures} captures"
+  top-empty: "&7Aucune capture enregistree."
+
+citadel:
+  started: "&5[Citadel] &dLa Citadel &5{koth}&d est ouverte ! Capture : &5{temps}&d."
+  captured: "&5[Citadel] &d{joueur}&5 ({faction}) a capture la Citadel !"
+  history-header: "&5Historique des vainqueurs de la Citadel :"
+  history-entry: "&d- {date} : {faction}"
+  history-empty: "&7Aucun vainqueur enregistre."
+
+conquest:
+  started: "&3[Conquest] &bLe Conquest commence ! Premier a &3{score}&b points."
+  stopped: "&3[Conquest] &bConquest arrete."
+  none-active: "&cAucun Conquest actif."
+  need-zones: "&cAucune zone de type conquest n'est definie."
+  points: "&3[Conquest] &b{faction}&3 : {points}/{score} points"
+  won: "&3[Conquest] &bLa faction &3{faction}&b remporte le Conquest avec {score} points !"
+  score-header: "&3Scores du Conquest :"
+  score-entry: "&b{rang}. {faction} &7- {points} points"
+
+sotw:
+  started: "&a[SOTW] &2Le SOTW est actif pendant &a{temps}&2 : PvP desactive, pas de deathban, pas de perte de DTR."
+  ended: "&a[SOTW] &2Le SOTW est termine. Bonne chance !"
+  not-active: "&cAucun SOTW actif."
+  time: "&aSOTW restant : &f{temps}"
+  protection-removed: "&cVous avez retire votre protection SOTW. Vous pouvez attaquer et etre attaque."
+  already-removed: "&cVotre protection SOTW est deja retiree."
+  attacker-protected: "&cVous etes protege par le SOTW. Utilisez &f/sotw off&c pour combattre."
+  victim-protected: "&cCe joueur est protege par le SOTW."
+
+eotw:
+  started: "&4[EOTW] &cL'EOTW commence : plus de regeneration de DTR, protections reduites, PvP global !"
+  stopped: "&4[EOTW] &cL'EOTW est termine. Merci d'avoir joue cette saison !"
+  already-active: "&cL'EOTW est deja actif."
+  not-active: "&cAucun EOTW actif."
+  final-winner: "&4[EOTW] &cLa faction &4{faction}&c remporte l'evenement final de la saison !"

@@ -73,7 +73,10 @@ public final class PlayerListener implements Listener {
                 }
                 return;
             }
-            plugin.floors().teleport(p, plugin.floors().unlocked(d.floor) ? d.floor : 1, false);
+            // Déconnecté sur le continent : on y reste, sinon retour à la ville de son étage.
+            if (plugin.continent() == null || !plugin.continent().isContinent(p.getWorld())) {
+                plugin.floors().teleport(p, plugin.floors().unlocked(d.floor) ? d.floor : 1, false);
+            }
             prepareBody(p, d);
             if (plugin.progression().spec(d) == null && !d.buildMode) {
                 // Personnage créé avant le choix de spé à la création.
@@ -169,10 +172,19 @@ public final class PlayerListener implements Listener {
             return;
         }
         int floor = plugin.floors().unlocked(d.floor) ? d.floor : 1;
-        World w = plugin.floors().world(floor);
-        if (w != null) {
-            e.setRespawnLocation(plugin.floors().town(w));
+        // Tombé sur le continent : retour au lieu sûr le plus proche qui n'est pas à la faction adverse.
+        String[] place = new String[1];
+        org.bukkit.Location fallen = p.getLastDeathLocation() != null ? p.getLastDeathLocation() : p.getLocation();
+        org.bukkit.Location back = plugin.continent() == null ? null : plugin.continent().respawn(fallen, d.faction.id, place);
+        if (back != null) {
+            e.setRespawnLocation(back);
+        } else {
+            World w = plugin.floors().world(floor);
+            if (w != null) {
+                e.setRespawnLocation(plugin.floors().town(w));
+            }
         }
+        String where = back != null ? place[0] : plugin.floors().def(floor).town();
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (!p.isOnline()) {
                 return;
@@ -181,7 +193,7 @@ public final class PlayerListener implements Listener {
             Resource r = plugin.progression().resource(d);
             d.resource = r.startsFull ? r.max : 0;
             prepareBody(p, d);
-            Text.title(p, "<#FF5C5C><b>Vous êtes mort.</b>", "<#8C96A3>Réapparition à " + Text.esc(plugin.floors().def(floor).town()), 5, 50, 15);
+            Text.title(p, "<#FF5C5C><b>Vous êtes mort.</b>", "<#8C96A3>Réapparition à " + Text.esc(where), 5, 50, 15);
             Fx.teleport(p.getLocation());
         }, 2L);
     }

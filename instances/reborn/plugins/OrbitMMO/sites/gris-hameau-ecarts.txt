@@ -1,0 +1,37 @@
+Gris-Hameau : 27 blocs diffèrent du plan (9 à poser, 9 à retirer, 9 à remplacer).
+Par nature (les plus nombreux d'abord) :
+  7  à poser : cobblestone_slab
+  6  à retirer : short_grass
+  6  à remplacer : dirt_path par coarse_dirt
+  3  à retirer : cobblestone_slab
+  3  à remplacer : coarse_dirt par dirt_path
+  2  à poser : short_grass
+
+Détail (x y z : monde -> plan) :
+2372 68 719 : minecraft:coarse_dirt -> minecraft:dirt_path
+2372 68 720 : minecraft:dirt_path -> minecraft:coarse_dirt
+2373 68 720 : minecraft:coarse_dirt -> minecraft:dirt_path
+2374 68 720 : minecraft:coarse_dirt -> minecraft:dirt_path
+2371 68 721 : minecraft:dirt_path -> minecraft:coarse_dirt
+2372 68 721 : minecraft:dirt_path -> minecraft:coarse_dirt
+2374 68 721 : minecraft:dirt_path -> minecraft:coarse_dirt
+2379 68 721 : minecraft:short_grass -> minecraft:air
+2373 68 722 : minecraft:dirt_path -> minecraft:coarse_dirt
+2374 68 722 : minecraft:dirt_path -> minecraft:coarse_dirt
+2377 68 723 : minecraft:short_grass -> minecraft:air
+2380 68 723 : minecraft:air -> minecraft:short_grass
+2382 68 723 : minecraft:short_grass -> minecraft:air
+2379 68 724 : minecraft:air -> minecraft:short_grass
+2384 68 724 : minecraft:short_grass -> minecraft:air
+2361 69 715 : minecraft:short_grass -> minecraft:air
+2361 69 716 : minecraft:short_grass -> minecraft:air
+2372 69 719 : minecraft:cobblestone_slab[type=bottom,waterlogged=false] -> minecraft:air
+2372 69 720 : minecraft:air -> minecraft:cobblestone_slab
+2373 69 720 : minecraft:cobblestone_slab[type=bottom,waterlogged=false] -> minecraft:air
+2374 69 720 : minecraft:cobblestone_slab[type=bottom,waterlogged=false] -> minecraft:air
+2371 69 721 : minecraft:air -> minecraft:cobblestone_slab
+2372 69 721 : minecraft:air -> minecraft:cobblestone_slab
+2373 69 721 : minecraft:air -> minecraft:cobblestone_slab
+2374 69 721 : minecraft:air -> minecraft:cobblestone_slab
+2373 69 722 : minecraft:air -> minecraft:cobblestone_slab
+2374 69 722 : minecraft:air -> minecraft:cobblestone_slab

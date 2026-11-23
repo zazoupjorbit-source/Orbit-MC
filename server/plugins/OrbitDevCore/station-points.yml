@@ -1,0 +1,77 @@
+monde: station
+points:
+  spawn:
+    x: 0.5
+    y: 101.0
+    z: 13.5
+    yaw: 180.0
+  pnj_guide:
+    x: 4.5
+    y: 101.0
+    z: 13.5
+    yaw: 90.0
+  parcours_depart:
+    x: 0.5
+    y: 101.0
+    z: 11.5
+    yaw: 180.0
+  parcours_arrivee:
+    x: -11.5
+    y: 124.0
+    z: -1.5
+    yaw: 0.0
+  pnj_comptoir:
+    x: 13.0
+    y: 101.0
+    z: 13.5
+    yaw: 180.0
+  ecran_reseau:
+    x: -11.5
+    y: 103.2
+    z: 14.8
+    yaw: 180.0
+  porte_survie:
+    x: 0.5
+    y: 101.0
+    z: -81.5
+    yaw: 180.0
+  pnj_survie:
+    x: 0.5
+    y: 101.0
+    z: -78.5
+    yaw: 0.0
+  porte_extraction:
+    x: 82.5
+    y: 101.0
+    z: 0.5
+    yaw: 270.0
+  pnj_extraction:
+    x: 79.5
+    y: 101.0
+    z: 0.5
+    yaw: 90.0
+  ecran_elo:
+    x: 0.5
+    y: 117.0
+    z: 62.8
+    yaw: 180.0
+  porte_practice:
+    x: 0.5
+    y: 101.0
+    z: 84.5
+    yaw: 0.0
+  pnj_practice:
+    x: 0.5
+    y: 101.0
+    z: 81.5
+    yaw: 180.0
+  porte_mmo:
+    x: -81.5
+    y: 101.0
+    z: 0.5
+    yaw: 90.0
+  pnj_mmo:
+    x: -77.5
+    y: 101.0
+    z: 0.5
+    yaw: 270.0

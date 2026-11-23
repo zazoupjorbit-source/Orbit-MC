@@ -1,0 +1,15 @@
+# ============================================================
+#  OrbitHCF-Combat - Deathban et vies
+# ============================================================
+
+enabled: true
+
+# Duree du deathban (secondes)
+default-duration-seconds: 3600
+
+# Le deathban est desactive pendant le SOTW (si OrbitHCF-Events est present)
+sotw-disabled: true
+
+lives:
+  # Vies de depart d'un nouveau joueur
+  starting: 0

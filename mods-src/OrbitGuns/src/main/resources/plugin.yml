@@ -1,0 +1,15 @@
+name: OrbitGuns
+version: 0.1.0
+main: fr.orbit.guns.OrbitGuns
+api-version: "1.21"
+author: Orbit
+description: "Armes a feu : tir, chargeur, rechargement et munitions."
+commands:
+  gun:
+    description: Gestion des armes a feu.
+    usage: /gun <give|ammo|list|reload>
+    permission: orbitguns.admin
+permissions:
+  orbitguns.admin:
+    description: Administration des armes.
+    default: op

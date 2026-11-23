@@ -1,0 +1,25 @@
+# ============================================================
+#  OrbitHCF-Combat - Limites de potions
+#  Cle = effet (speed, strength, instant-health, regeneration,
+#  invisibility, ...). Les effets non listes sont autorises.
+# ============================================================
+
+potions:
+  speed:
+    enabled: true
+    maximum-level: 2
+
+  strength:
+    enabled: true
+    maximum-level: 1
+
+  instant-health:
+    enabled: true
+    maximum-level: 2
+
+  regeneration:
+    enabled: true
+    maximum-level: 1
+
+  invisibility:
+    enabled: false

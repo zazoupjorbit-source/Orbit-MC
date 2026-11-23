@@ -1,0 +1,48 @@
+# =====================================================================
+#  OrbitStaff - Environnement de developpement local
+#  Lancement :  docker compose --env-file ../.env up -d
+#  Arret     :  docker compose down
+#
+#  NOTE : Docker n'est pas installe sur le poste d'audit initial. Ce fichier
+#  est fourni pret a l'emploi ; l'installation de Docker Desktop est une action
+#  manuelle documentee (voir docs/development.md).
+# =====================================================================
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: orbitstaff-mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${ORBITSTAFF_DB_ROOT_PASSWORD:?Definir ORBITSTAFF_DB_ROOT_PASSWORD dans .env}
+      MARIADB_DATABASE: ${ORBITSTAFF_DB_NAME:-orbitstaff}
+      MARIADB_USER: ${ORBITSTAFF_DB_USER:-orbitstaff_app}
+      MARIADB_PASSWORD: ${ORBITSTAFF_DB_PASSWORD:?Definir ORBITSTAFF_DB_PASSWORD dans .env}
+    ports:
+      - "${ORBITSTAFF_DB_PORT:-3306}:3306"
+    volumes:
+      - orbitstaff_db:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Interface d'administration legere (facultatif, dev uniquement).
+  adminer:
+    image: adminer:4
+    container_name: orbitstaff-adminer
+    restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    ports:
+      - "8086:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: mariadb
+
+volumes:
+  orbitstaff_db:
+    name: orbitstaff_db

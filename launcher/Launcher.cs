@@ -3,30 +3,40 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-// Lanceur du serveur Minecraft de dev local (Paper 1.21.1 / Java 21).
+// Lanceur du serveur Minecraft de dev local (Paper 26.3 / Java 25).
 // Recompiler : build-launcher.bat
 class Launcher
 {
-    const string Root = @"C:\Users\Zazou\MinecraftDev";
+    // Racine du depot : trouvee en remontant depuis l'exe (dossier qui contient start-network.ps1). Rien en dur.
+    static readonly string Root = FindRoot();
+    static string FindRoot()
+    {
+        for (var d = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory); d != null; d = d.Parent)
+            if (File.Exists(Path.Combine(d.FullName, "start-network.ps1"))) return d.FullName;
+        Console.WriteLine("Dossier Orbit MC introuvable : lance cet exe depuis le dossier launcher du depot.");
+        Console.ReadKey(true);
+        Environment.Exit(1);
+        return null;
+    }
     static string ServerDir { get { return Path.Combine(Root, "server"); } }
 
     static string FindJava()
     {
         string javaDir = Path.Combine(Root, "java");
-        var jdk = Directory.GetDirectories(javaDir, "jdk-21*").OrderByDescending(d => d).FirstOrDefault();
-        if (jdk == null) throw new Exception("JDK 21 introuvable dans " + javaDir);
+        var jdk = Directory.GetDirectories(javaDir, "jdk-25*").OrderByDescending(d => d).FirstOrDefault();
+        if (jdk == null) throw new Exception("JDK 25 introuvable dans " + javaDir);
         return Path.Combine(jdk, "bin", "java.exe");
     }
 
     static int Main()
     {
-        Console.Title = "Minecraft Dev Server - Paper 1.21.1";
+        Console.Title = "Minecraft Dev Server - Paper 26.3";
         while (true)
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("===========================================");
-            Console.WriteLine("   SERVEUR DE DEV MINECRAFT  (Paper 1.21.1)");
+            Console.WriteLine("   SERVEUR DE DEV MINECRAFT  (Paper 26.3)");
             Console.WriteLine("===========================================");
             Console.ResetColor();
             Console.WriteLine("  Adresse en jeu : localhost");

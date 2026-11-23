@@ -1,0 +1,221 @@
+# ------------------------------------------------------------------
+#  Sites du continent : villages, entrées de donjon, camps de monstres,
+#  ruines et lieux de quête. Voir docs\continent.md.
+#
+#  Les capitales ont leur propre fichier (capitales.yml).
+#  Après modification : redémarrer, puis « /continent site <id> ecarts ».
+#  Un site déjà construit n'est jamais refait sans « generer confirmer ».
+# ------------------------------------------------------------------
+
+# Temps de travail par tic pendant une construction (millisecondes).
+budget-ms: 12
+
+# Villages et ville de la carte (continent.dat). Chaque lieu « village » ou « ville » en reçoit un.
+# rayon : palissade. style : lumiere, ombre, neutre, desert, givre, cendre, marais (par défaut, celui de la région).
+# services : bâtiments au bord de la place (auberge, forge, alchimie, comptoir, tour). raccord : largeur de la pente autour.
+villages:
+  defaut:
+    rayon: 36
+    services: [auberge, forge, alchimie, tour]
+  les-quatre-vents:
+    rayon: 52
+    style: neutre
+    services: [auberge, forge, alchimie, comptoir, tour]
+  guet-de-la-fournaise:
+    rayon: 28
+    services: [auberge, forge, tour]
+  les-pilotis:
+    services: [auberge, alchimie, tour]
+
+# Hameaux ajoutés à la carte. sur : rayon de la zone sûre. quete : chaîne dont le hameau porte les points.
+hameaux:
+  veillemont:
+    nom: "Veillemont"
+    faction: lumiere
+    x: -2383
+    z: 934
+    rayon: 30
+    sur: 60
+    style: lumiere
+    services: [auberge, forge, alchimie, tour]
+    quete: lumiere-depart
+  nidnoir:
+    nom: "Nidnoir"
+    faction: ombre
+    x: 2394
+    z: 666
+    rayon: 30
+    sur: 60
+    # À 122 blocs de Gris-Hameau : raccord plus court (30 par défaut) pour que les deux emprises ne se recouvrent pas.
+    raccord: 22
+    style: ombre
+    services: [auberge, forge, alchimie, tour]
+
+# Champs de cratères. pres : hameau autour duquel chercher un terrain plat et sec (distance en blocs).
+crateres:
+  champs-vitrifies:
+    nom: "Champs Vitrifiés"
+    faction: lumiere
+    pres: veillemont
+    distance: [130, 190]
+    rayon: 32
+    style: lumiere
+    quete: lumiere-depart
+  cratere-des-murmures:
+    nom: "Cratère des Murmures"
+    faction: ombre
+    pres: nidnoir
+    distance: [130, 190]
+    rayon: 32
+    style: ombre
+
+# Entrées de donjon de la carte. Un nom suivi de « (étage N) » ouvre son portail sur cet étage ; les autres sont scellés.
+# style : comme les villages, plus « englouti ».
+donjons:
+  defaut:
+    rayon: 13
+  temple-englouti: { style: englouti }
+  mine-du-ponant: { style: givre }
+  crypte-de-l-aube: { style: lumiere }
+  ruines-de-la-marche: { style: neutre }
+
+# Thèmes des camps : nom affiché et monstres qui y vivent.
+themes:
+  kobold: { nom: "Camp de kobolds", monstres: [kobold, kobold, kobold_garde] }
+  brigands: { nom: "Camp de brigands", monstres: [bandit, braconnier] }
+  glaneurs: { nom: "Camp de Glaneurs", monstres: [glaneur, glaneur, glaneur_guetteur] }
+  purificateurs: { nom: "Bivouac de Purificateurs", monstres: [purificateur, limier_aube, limier_aube] }
+  araignees: { nom: "Nid d'araignées", monstres: [araignee, araignee_geante] }
+  morts: { nom: "Cimetière oublié", monstres: [squelette, revenant] }
+  pillards: { nom: "Camp de pillards", monstres: [pillard, pillard_archer] }
+  givre: { nom: "Bivouac des Errants", monstres: [errant, loup_givre] }
+  cendres: { nom: "Camp des Calcinés", monstres: [cendreux, brute_calcinee] }
+  marais: { nom: "Camp des Noyés", monstres: [noye, archer_tourbe] }
+
+# Par région (lettres de la carte) : style des constructions, nombre de camps et de ruines, thèmes des camps,
+# faune sauvage, et monstres qui hantent les ruines.
+regions:
+  A: { style: lumiere, camps: 8, ruines: 4, themes: [kobold, brigands, glaneurs], faune: [sanglier, loup], hantes: [squelette] }
+  B: { style: lumiere, camps: 8, ruines: 4, themes: [araignees, glaneurs, brigands], faune: [loup, araignee, sanglier], hantes: [squelette, revenant] }
+  C: { style: lumiere, camps: 8, ruines: 4, themes: [brigands, kobold, morts], faune: [taureau, loup, ours_brun], hantes: [squelette, revenant] }
+  D: { style: ombre, camps: 8, ruines: 4, themes: [purificateurs, morts, araignees], faune: [loup_ombre, araignee], hantes: [squelette] }
+  E: { style: ombre, camps: 8, ruines: 4, themes: [araignees, purificateurs, morts], faune: [loup_ombre, araignee_geante, elfe_sombre], hantes: [squelette, revenant] }
+  F: { style: marais, camps: 8, ruines: 4, themes: [marais, morts, araignees], faune: [noye, araignee, archer_tourbe], hantes: [revenant, noye] }
+  G: { style: neutre, camps: 10, ruines: 5, themes: [brigands, pillards, morts], faune: [loup, taureau, sanglier], hantes: [squelette, revenant] }
+  H: { style: desert, camps: 8, ruines: 4, themes: [pillards, morts], faune: [scorpion, momie], hantes: [momie, squelette] }
+  J: { style: givre, camps: 8, ruines: 4, themes: [givre, morts], faune: [loup_givre, ours, errant], hantes: [errant, squelette] }
+  K: { style: cendre, camps: 8, ruines: 4, themes: [cendres, morts], faune: [cendreux, chien_cendre], hantes: [cendreux, revenant] }
+  L: { style: cendre, camps: 6, ruines: 3, themes: [cendres], faune: [chien_cendre, brute_calcinee, cendreux], hantes: [brute_calcinee] }
+
+# Faune du continent : densité et niveaux.
+faune:
+  # Monstres sauvages autour de chaque joueur, et plafond pour tout le continent.
+  par-joueur: 5
+  plafond: 160
+  # Monstres gardant un camp (ou hantant une ruine) quand un joueur approche.
+  par-camp: 5
+  par-ruine: 3
+  # Secondes avant qu'un gardien tué soit remplacé (un camp vidé reste calme ce temps-là).
+  retour-gardien: 30
+  # Le niveau monte du minimum au maximum de la région sur cette distance au lieu sûr le plus proche.
+  distance-niveau: 700
+
+# Monstres propres au continent (même format que « mobs » dans config.yml ; ceux de config.yml servent aussi ici).
+monstres:
+  bandit:
+    name: "Bandit de grand chemin"
+    type: PILLAGER
+    weapon: CROSSBOW
+    hp: 0.9
+    damage: 0.9
+    drop: { name: "Bourse volée", item: LEATHER, sell: 9, chance: 0.35 }
+  braconnier:
+    name: "Braconnier"
+    type: VINDICATOR
+    weapon: STONE_AXE
+    drop: { name: "Peau tannée", item: RABBIT_HIDE, sell: 8, chance: 0.35 }
+  glaneur:
+    name: "Glaneur d'Éclats"
+    type: ZOMBIE
+    weapon: IRON_PICKAXE
+    hp: 0.9
+    drop: { name: "Éclat terni", item: AMETHYST_SHARD, sell: 10, chance: 0.3 }
+  glaneur_guetteur:
+    name: "Guetteur glaneur"
+    type: SKELETON
+    weapon: BOW
+    hp: 0.8
+    damage: 0.9
+  purificateur:
+    name: "Purificateur"
+    type: VINDICATOR
+    weapon: GOLDEN_AXE
+    hp: 1.1
+    damage: 1.1
+    drop: { name: "Sceau de pureté", item: GOLD_NUGGET, sell: 12, chance: 0.3 }
+  limier_aube:
+    name: "Limier de l'Aube"
+    type: WOLF
+    scale: 1.2
+    speed: 1.15
+    hp: 0.8
+    drop: { name: "Collier de limier", item: LEAD, sell: 9, chance: 0.3 }
+  revenant:
+    name: "Revenant"
+    type: ZOMBIE
+    weapon: IRON_SHOVEL
+    hp: 1.15
+    speed: 0.9
+    drop: { name: "Linceul", item: STRING, sell: 8, chance: 0.4 }
+  ours_brun:
+    name: "Ours des collines"
+    type: POLAR_BEAR
+    hp: 1.4
+    damage: 1.15
+    drop: { name: "Fourrure d'ours", item: RABBIT_HIDE, sell: 12, chance: 0.4 }
+  noye:
+    name: "Noyé des tourbières"
+    type: DROWNED
+    hp: 1.1
+    drop: { name: "Algue noire", item: KELP, sell: 10, chance: 0.4 }
+  archer_tourbe:
+    name: "Archer des tourbes"
+    type: BOGGED
+    weapon: BOW
+    hp: 0.85
+    damage: 0.95
+    drop: { name: "Flèche moussue", item: ARROW, sell: 9, chance: 0.35 }
+  pillard:
+    name: "Pillard des dunes"
+    type: HUSK
+    weapon: IRON_SWORD
+    hp: 1.1
+    damage: 1.05
+    drop: { name: "Pièce d'ocre", item: GOLD_NUGGET, sell: 14, chance: 0.35 }
+  pillard_archer:
+    name: "Tireur des dunes"
+    type: PILLAGER
+    weapon: CROSSBOW
+    hp: 0.9
+    damage: 1.0
+  cendreux:
+    name: "Cendreux"
+    type: HUSK
+    hp: 1.2
+    damage: 1.1
+    drop: { name: "Cendre vive", item: GUNPOWDER, sell: 16, chance: 0.4 }
+  chien_cendre:
+    name: "Chien de cendre"
+    type: WOLF
+    scale: 1.3
+    speed: 1.15
+    damage: 1.1
+    drop: { name: "Croc brûlé", item: BONE, sell: 15, chance: 0.35 }
+  brute_calcinee:
+    name: "Brute calcinée"
+    type: WITHER_SKELETON
+    weapon: STONE_SWORD
+    scale: 1.15
+    hp: 1.5
+    damage: 1.25
+    drop: { name: "Os calciné", item: COAL, sell: 18, chance: 0.4 }

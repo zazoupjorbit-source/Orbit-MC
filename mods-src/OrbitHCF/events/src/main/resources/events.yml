@@ -1,0 +1,45 @@
+# ============================================================
+#  OrbitHCF-Events - Evenements HCF
+# ============================================================
+
+koth:
+  # Duree de capture par defaut (secondes)
+  default-capture-seconds: 300
+  # La presence d'un ennemi dans la zone conteste la capture (timer en pause)
+  contest-enabled: true
+
+citadel:
+  # Duree de capture par defaut de la Citadel (secondes)
+  default-capture-seconds: 900
+
+conquest:
+  # Score a atteindre pour gagner
+  target-score: 300
+  # Points attribues par zone tenue a chaque intervalle
+  points-per-interval: 1
+  # Intervalle d'attribution des points (secondes)
+  interval-seconds: 30
+
+eotw:
+  # Reduction progressive du DTR de toutes les factions
+  dtr-reduction-per-interval: 0.5
+  reduction-interval-minutes: 10
+  # KOTH final lance automatiquement (nom de zone, vide = aucun)
+  final-koth: ""
+
+# Calendrier des evenements (heure locale du serveur)
+# type : koth | citadel | conquest
+schedule: []
+# Exemple :
+# schedule:
+#   - day: SATURDAY
+#     time: "18:00"
+#     type: koth
+#     name: End
+#   - day: SUNDAY
+#     time: "17:00"
+#     type: citadel
+#     name: Citadel
+
+# Zones d'evenement (gerees par /koth, /citadel, /conquest - ne pas editer a la main)
+zones: {}

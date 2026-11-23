@@ -1,0 +1,34 @@
+# ============================================================
+#  OrbitHCF-Classes - Messages (FR)
+# ============================================================
+
+prefix: "&7[&bClasses&7] &r"
+
+class:
+  activated: "&aClasse &f{classe}&a activee."
+  deactivated: "&cClasse &f{classe}&c desactivee."
+  current: "&eClasse active : &f{classe}"
+  none: "&eAucune classe active. Portez une armure complete."
+
+bard:
+  no-energy: "&cEnergie insuffisante : {cout} requis, {energie} disponible."
+  cooldown: "&cCapacite en cooldown : &f{temps}"
+  used: "&aEffet &f{effet}&a applique a votre equipe ({cout} energie)."
+  used-offensive: "&aEffet &f{effet}&a applique aux ennemis proches ({cout} energie)."
+
+archer:
+  tagged: "&eVous avez marque &c{joueur}&e : +{bonus}% de degats pendant {temps}."
+  tagged-victim: "&cVous etes marque par un Archer : +{bonus}% de degats subis pendant {temps} !"
+  too-close: "&cCible trop proche pour l'Archer Tag."
+
+rogue:
+  backstab: "&aBackstab reussi sur &c{joueur}&a !"
+  backstab-victim: "&cVous avez ete backstab par &f{joueur}&c !"
+  cooldown: "&cBackstab en cooldown : &f{temps}"
+
+miner:
+  invisible: "&7Vous etes maintenant invisible (Miner)."
+  revealed: "&eVous n'etes plus invisible."
+
+restrictions:
+  blocked-item: "&cVotre classe ne peut pas utiliser cet objet."

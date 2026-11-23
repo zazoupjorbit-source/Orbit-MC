@@ -1,0 +1,55 @@
+# ============================================================
+#  OrbitHCF-Combat - Regles de combat
+# ============================================================
+
+combat-tag:
+  duration-seconds: 30
+  # Bloquer les commandes pendant le combat
+  block-commands: true
+  # Commandes autorisees pendant le combat (prefixes, sans /)
+  allowed-commands:
+    - "f who"
+    - "f map"
+    - "msg"
+    - "r"
+    - "tell"
+    - "reply"
+  # Interdire l'entree en safezone pendant le combat
+  deny-safezone-entry: true
+  # Sanction de deconnexion en combat
+  logout-sanction:
+    # Drop l'inventaire au sol et applique la perte de DTR
+    kill: true
+    # Applique aussi le deathban
+    deathban: true
+
+ender-pearl:
+  cooldown-seconds: 16
+  # Interdire les perles vers la safezone en combat
+  block-safezone-when-tagged: true
+  # Rembourser le cooldown si la perle est annulee
+  refund-on-cancel: true
+
+golden-apple:
+  cooldown-seconds: 15
+
+enchanted-golden-apple:
+  cooldown-seconds: 21600
+
+pvp-timer:
+  enabled: true
+  duration-seconds: 1800
+  # Le timer se met en pause quand le joueur se deconnecte
+  pause-on-quit: true
+
+# Objets interdits (utilisation et pose bloquees)
+illegal-items:
+  - BEDROCK
+  - BARRIER
+  - COMMAND_BLOCK
+  - STRUCTURE_BLOCK
+  - SPAWNER
+
+death:
+  # Retirer le combat tag a la mort
+  clear-tag: true

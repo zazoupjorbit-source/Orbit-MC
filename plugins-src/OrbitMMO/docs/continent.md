@@ -1,7 +1,7 @@
 # Le continent d'Orbit MMO — plan des régions
 
 Carte validée par Zazou le 22/11/2026 (version 1). Elle remplacera les étages comme monde principal du MMO.
-Le terrain existe en jeu depuis le 22/11/2026 : monde `orbit_continent` sur l'instance locale `reborn`, entièrement pré-généré (voir « Le monde en jeu »). Les deux capitales y sont construites depuis le 22/11/2026, avec leurs PNJ de ville (voir « Les capitales »). Le reste est encore vide de constructions et de monstres, et le monde est réservé aux administrateurs ; les étages continuent de fonctionner à côté.
+Le terrain existe en jeu depuis le 22/11/2026 : monde `orbit_continent` sur l'instance locale `reborn`, entièrement pré-généré (voir « Le monde en jeu »). Les deux capitales y sont construites depuis le 22/11/2026, avec leurs PNJ de ville (voir « Les capitales »). Les villages, les entrées de donjon, les camps de monstres et les ruines sont construits et branchés sur le jeu depuis le 23/11/2026 (voir « Villages, donjons, camps et ruines »). Le monde reste réservé aux administrateurs : aucun chemin de jeu n'y mène encore, et les étages continuent de fonctionner à côté.
 
 ## Décisions
 
@@ -26,8 +26,9 @@ Tous les noms (capitales, régions, fleuves, villages, donjons) sont provisoires
 | `tools\continent\Cartographe.cs` | Le moteur (bruit, relief, fleuves, biomes, rendu des cartes). |
 | `tools\gen-continent.ps1` | Lance le moteur sur le dessin. Environ 1,5 s ; 5 s avec `-Donnees`. |
 | `src\main\resources\continent\continent.dat` | Les données lues par le plugin (18 Mo, 1 point tous les 2 blocs) : hauteurs, niveaux d'eau et de lave, biomes, régions, lieux, profil des routes. Écrites par `-Donnees`, embarquées dans le jar. |
-| `src\main\java\fr\orbit\mmo\continent\` | Le code du monde : `ContinentData` (lecture), `ContinentGenerator` (terrain, routes, ponts, végétation), `ContinentService` (monde, protections, pré-génération, aperçus), `ContinentCommand` (`/continent`), et pour les capitales `CapitalDesign` (le dessin de la ville), `CapitalPlan` (le plan en blocs), `CapitalService` (comparaison, construction, PNJ). |
+| `src\main\java\fr\orbit\mmo\continent\` | Le code du monde : `ContinentData` (lecture), `ContinentGenerator` (terrain, routes, ponts, végétation), `ContinentService` (monde, protections, pré-génération, aperçus), `ContinentCommand` (`/continent`), et pour les capitales `CapitalDesign` (le dessin de la ville), `CapitalPlan` (le plan en blocs), `CapitalService` (comparaison, construction, PNJ). Pour les autres sites : `SiteDesign` (le dessin d'un village, d'un donjon, d'un camp, d'une ruine, d'un champ de cratères), `SiteCatalog` (la liste des sites et leurs emplacements), `SiteService` (comparaison, construction, file d'attente), `ContinentFauna` (les monstres du continent). |
 | `src\main\resources\capitales.yml` | Réglages des capitales, copiés dans `plugins\OrbitMMO\capitales.yml` au premier démarrage : c'est ce dernier qu'on retouche. |
+| `src\main\resources\sites.yml` | Réglages des autres sites et des monstres du continent, copiés de la même façon dans `plugins\OrbitMMO\sites.yml`. |
 | `docs\continent\1-carte.png` | Carte du monde : biomes, relief ombré, fleuves, routes, lieux. |
 | `docs\continent\2-relief.png` | Relief en teintes d'altitude. |
 | `docs\continent\3-regions.png` | Régions, fleuves et lacs nommés, routes. |
@@ -161,7 +162,7 @@ Les niveaux des étages repris sont à recaler sur leur nouvelle région : l'ét
 ## Points encore ouverts
 
 - Les noms définitifs, et le nom du continent lui-même.
-- Les rayons des zones sûres et la règle des villages de faction, proposés ci-dessus mais pas discutés en détail.
+- Les rayons des zones sûres et la règle des villages de faction, proposés ci-dessus mais pas discutés en détail. En jeu, toutes les zones sûres valent aujourd'hui pour les deux factions.
 - L'accès inégal aux zones contestées : la Lumière a une route directe vers le désert (36–48), l'Ombre vers les Terres de Cendre (60–72).
 - Les deux donjons de départ : chaque faction a le sien (étage 1 pour la Lumière, étage 2 pour l'Ombre). Autre choix possible : un même donjon avec une entrée de chaque côté.
 - La Marche fait 16 % des terres pour une seule tranche de niveau : elle pourra être découpée en sous-zones.
@@ -178,7 +179,15 @@ Ce que le générateur pose :
 - **Végétation** : chênes, bouleaux, chênes noirs, sapins, arbres des marais, acacias de l'oasis ; herbes, fougères, fleurs, buissons, cactus, nénuphars. Aucun arbre sur les routes ni dans l'emprise des capitales, de la ville et des villages (85 % du rayon de la zone sûre), qui reste libre pour les constructions.
 - **Biomes du jeu** (couleur de l'herbe et de l'eau, brouillard, particules) : plaines, forêt, forêt sombre, taïga, prairie d'altitude, pics rocheux et gelés, désert, badlands, marais, deltas de basalte pour les cendres et le volcan.
 
-Règles du monde : bordure à 8000 blocs, pas de monstres naturels, pas de météo, rien ne pousse ni ne fane, l'eau et la lave ne coulent pas, aucun bloc ne se casse ni ne se pose (sauf administrateur en créatif). Le nom de la région ou du lieu s'affiche quand on y entre. Les zones sûres du continent sont reconnues par `FloorService.isSafe` : les PNJ de ville y ouvrent leurs menus comme dans les villes des étages. Les monstres et le PvP ne sont pas encore branchés sur ce monde.
+Règles du monde : bordure à 8000 blocs, pas de monstres naturels, pas de météo, rien ne pousse ni ne fane, l'eau et la lave ne coulent pas, aucun bloc ne se casse ni ne se pose (sauf administrateur en créatif). Le nom de la région ou du lieu s'affiche quand on y entre. Les zones sûres du continent sont reconnues par `FloorService.isSafe` : les PNJ de ville y ouvrent leurs menus comme dans les villes des étages.
+
+Depuis le 23/11/2026, le continent suit les mêmes règles de jeu que les étages (`OrbitMMO.inGame(monde)` vaut pour les deux) :
+
+- **PvP** entre factions partout hors des zones sûres ;
+- pas de faim (la barre suit l'endurance), pas d'usure des objets, aucun monstre autre que ceux du plugin ;
+- coffres, tonneaux, pots de fleurs et établis du décor ne s'ouvrent pas ; seul un administrateur en créatif peut retoucher le monde ;
+- **mort** : on réapparaît au lieu sûr le plus proche qui n'est pas à la faction adverse (capitale, ville, village, hameau construit). Un ancrage de quête garde la priorité ;
+- **connexion** : un joueur qui s'est déconnecté sur le continent y reste. Les autres reviennent à la ville de leur étage, comme avant.
 
 ### Commande `/continent` (permission `orbitmmo.admin`)
 
@@ -190,6 +199,8 @@ Règles du monde : bordure à 8000 blocs, pas de monstres naturels, pas de mét�
 | `/continent pregen` | Génère tous les chunks ; `etat` pour suivre, `stop` pour arrêter (reprise au même endroit), `refaire` pour recommencer |
 | `/continent apercu <lieu ou x z> [taille] [pas] [oblique]` | Image PNG du terrain réellement généré, écrite dans `plugins\OrbitMMO\apercus` : vue de dessus (1 pixel tous les `pas` blocs) ou vue oblique depuis le sud |
 | `/continent capitale …` | Plan, contrôle des écarts et construction des capitales (voir « Les capitales ») |
+| `/continent site …` | Les autres sites : liste, plan, écarts, construction (voir « Villages, donjons, camps et ruines ») |
+| `/continent quetes [poser \| retirer]` | Les points de quête dessinés par les sites, et leur inscription dans `quest-points.yml` |
 
 Les aperçus servent à contrôler le monde sans entrer en jeu. `docs\continent\monde\` en garde quelques-uns, dont la vue d'ensemble du monde généré.
 
@@ -252,18 +263,80 @@ Contrôles faits : aucun état de bloc inconnu en 26.3 ; `ecarts` répond « auc
 
 Pas encore vu en jeu : l'allure à hauteur d'homme, l'intérieur des maisons, et l'ouverture des menus des cinq PNJ dans les capitales.
 
+### Villages, donjons, camps et ruines
+
+Dessinés par code comme les capitales : `SiteDesign` reprend leurs maisons, leurs étals et leurs styles, et `SiteService` ne pose que les blocs qui diffèrent du plan. Tout se règle dans `plugins\OrbitMMO\sites.yml`. Il y a 147 sites :
+
+| Type | Nombre | Ce qui est posé |
+|---|---|---|
+| `village` | 13 | Les 10 villages et relais de la carte, la ville des Quatre-Vents, et deux hameaux de départ ajoutés : **Veillemont** (Lumière, −2383, 934) et **Nidnoir** (Ombre, 2394, 666). Palissade ronde, une porte par route qui arrive, place avec un Éclat d'ancrage (améthyste) et un puits, auberge, forge (Torvald), alchimie (Mirelle), tour de guet, 6 à 26 maisons, terrain raccordé en pente douce autour. Les Quatre-Vents ont en plus un comptoir de l'hôtel des ventes (Corvin). |
+| `donjon` | 11 | Une terrasse pavée de 13 blocs de rayon et une porte monumentale adossée à la pente, tournée vers le bas. 5 portails ouverts (étages 1 à 5) et 6 scellés par une maçonnerie. |
+| `camp` | 81 | Tentes, feu, pieux et bannière pour les kobolds, les brigands, les Glaneurs, les Purificateurs, les pillards, les Errants, les Calcinés et les Noyés ; nids d'araignées ; cimetières oubliés. |
+| `ruine` | 40 | Tours effondrées, cercles de pierres, chapelles en ruine. |
+| `crateres` | 2 | **Champs Vitrifiés** (−2253, 934, à 130 blocs de Veillemont) et **Cratère des Murmures** (2535, 615, près de Nidnoir) : un grand cratère au fond vitrifié, cinq plus petits, un Éclat planté à côté. |
+
+Les styles (`lumiere`, `ombre`, `neutre`, `desert`, `givre`, `cendre`, `marais`, `englouti`) changent les matériaux ; par défaut un site prend celui de sa région.
+
+**Emplacements.** Villages et donjons sont ceux de la carte. Les camps et les ruines sont tirés une fois par région (terrain presque plat, à plus de 20 blocs d'une route, à plus de 90 blocs d'une zone sûre, à 220 blocs les uns des autres), puis **figés** dans `plugins\OrbitMMO\sites-places.yml` : changer `sites.yml` ne les déplace plus. Le relief a laissé moins de place que demandé dans deux régions : 5 camps sur 8 et 2 ruines sur 4 aux Cimes de Givre (J), 2 camps sur 6 et 1 ruine sur 3 à la Fournaise (L).
+
+**Zones sûres.** Les villages de la carte gardent leur zone sûre (70 blocs, 60 au Guet de la Fournaise, 120 aux Quatre-Vents). Un hameau devient sûr sur 60 blocs une fois construit. Toutes les zones sûres valent pour les deux factions : la règle « un village de faction n'est sûr que pour sa faction » n'est pas faite.
+
+**Portails de donjon.** Passer sous la porte d'un donjon ouvert envoie à la ville de son étage, si cet étage est débloqué (boss de l'étage précédent vaincu). L'arche de téléportation de l'étage ramène alors devant le donjon au lieu d'ouvrir le choix de l'étage. Ce retour n'est retenu que pendant la session : après une déconnexion dans l'étage, l'arche reprend son usage habituel. Un portail scellé le dit quand on s'en approche. Le voile est en blocs `end_gateway` : un rayon de lumière le traverse quelques secondes toutes les deux minutes, c'est le bloc qui le fait.
+
+**Monstres** (`ContinentFauna`, réglages sous `faune` et `regions`) :
+
+- la **faune sauvage** d'une région apparaît entre 14 et 30 blocs d'un joueur, 5 au plus autour de lui et 160 sur tout le continent, jamais dans une zone sûre, sur une route ni au pied d'un site ;
+- le **niveau** va du minimum au maximum de la région à mesure qu'on s'éloigne du lieu sûr le plus proche (maximum atteint à 700 blocs), à un niveau près ;
+- chaque camp a 5 **gardiens** et chaque ruine 3, qui apparaissent quand un joueur est à moins de 56 blocs et sont retirés s'ils s'éloignent à plus de 48 blocs. Un gardien tué n'est remplacé qu'après 30 secondes (`retour-gardien`) : un camp peut être vidé ;
+- un monstre qui entre dans une zone sûre disparaît, et tous disparaissent quand plus aucun joueur n'est à 72 blocs ;
+- 15 monstres propres au continent sont décrits sous `monstres` dans `sites.yml` (bandits, Glaneurs, Purificateurs et Limiers de l'Aube, revenants, noyés, pillards, Calcinés…) ; ceux de `config.yml` servent aussi.
+
+**Quêtes.** Veillemont et les Champs Vitrifiés portent les 11 points de la chaîne `lumiere-depart` : `cratere_eveil`, `bord_cratere`, `eclat_eveil`, `maelis`, `teo`, `brune`, `mourant` aux cratères ; `varenne`, `orsan`, `ancre_veillemont` au hameau ; `rampants` hors de la zone sûre. `/continent quetes` les montre, avec leur état dans `quest-points.yml`. **Ils ne sont pas posés automatiquement** : dès qu'ils existent, la quête `l_eveil` démarre seule à la création d'un personnage de la Lumière et le téléporte au cratère. `/continent quetes poser` les inscrit (`poser confirmer` déplace ceux déjà posés ailleurs), `retirer` les enlève.
+
+Commande `/continent site` (l'identifiant peut être abrégé s'il reste unique) :
+
+| Commande | Effet |
+|---|---|
+| `/continent site` | Nombre de sites par type, construits ou non, et travail en cours |
+| `/continent site liste <type>` · `proche` | Les sites d'un type (`village`, `donjon`, `camp`, `ruine`, `crateres`), ou les six plus proches de soi |
+| `/continent site <id>` | Fiche du site : type, position, rayon, gardiens |
+| `/continent site <id> plan` | Écrit `site_<id>_plan.png` et `site_<id>_plan_oblique.png` dans `plugins\OrbitMMO\apercus`, sans toucher au monde |
+| `/continent site <id> ecarts` | Compare le monde au plan, sans rien changer ; détail dans `plugins\OrbitMMO\sites\<id>-ecarts.txt` |
+| `/continent site <id> generer [confirmer]` | Construit. Sur un site déjà construit qui diffère du plan, s'arrête et demande `confirmer` |
+| `/continent site <id> tp [point]` · `points` | S'y rendre (`spawn`, `ancre`, `auberge`, `forge`, `portail`, `entree`, `centre`, `cratere`, `quete-…`), lister les points |
+| `/continent site tout ecarts [type]` | Compare tous les sites à la suite |
+| `/continent site tout generer [type]` | Construit tous les sites à la suite. Un site déjà construit et retouché est **laissé tel quel** et cité dans le bilan |
+| `/continent site recharger` · `stop` | Relire `sites.yml`, arrêter le travail en cours |
+
+La règle des capitales vaut ici aussi : `ecarts` avant tout `generer` sur un site que Zazou a pu retoucher. L'état est gardé dans `plugins\OrbitMMO\sites-etat.yml` (construit, date, sol, points). Les PNJ portent les étiquettes `orbit_site` et `orbit_site_<id>`.
+
+Les plans se contrôlent aussi sans serveur : chaque site se recalcule en quelques millisecondes à partir de `continent.dat` et de `sites.yml`.
+
+Contrôles faits le 23/11/2026, hors serveur : les 147 plans se calculent sans erreur ; tous les monstres cités dans `sites.yml` existent ; les plans des deux capitales sont inchangés (mêmes empreintes qu'à leur construction). Quelques plans sont gardés dans `docs\continent\sites\` (`plan-<id>.png`, vue de dessus ou oblique).
+
+**Construits le 23/11/2026 sur `reborn`** : les 147 sites en 46 secondes, 910 647 blocs posés, 25 PNJ de ville (12 forgerons, 12 alchimistes, et Corvin aux Quatre-Vents ; Les Pilotis n'ont pas de forge, le Guet de la Fournaise pas d'alchimie). Contrôles faits par la console : `/continent site tout ecarts` répond « aucun écart » sur les 147 sites, après la construction et après un redémarrage ; `/continent capitale <nom> ecarts` répond « aucun écart » sur Auréval et Morneval ; aucun état de bloc inconnu en 26.3, aucune erreur dans le journal. Aperçus du monde construit dans `docs\continent\monde\site-*.png`.
+
+Nidnoir est à 122 blocs de Gris-Hameau, sur la même chaussée : son `raccord` est réduit à 22 blocs (30 par défaut) pour que les deux emprises ne se recouvrent pas. Si deux sites se recouvrent, le plugin l'écrit au démarrage et dans `/continent site` : ils se réécriraient l'un l'autre et `ecarts` ne serait jamais vide.
+
+**Pas encore vu ni essayé en jeu** (aucun joueur n'était sur le continent) : l'allure à hauteur d'homme des villages, des donjons et des camps ; l'apparition, le niveau et le comportement des monstres ; les portails de donjon et le retour par l'arche ; le PvP, la mort et la réapparition sur le continent ; l'ouverture des menus des PNJ dans les villages.
+
 ### Refaire le monde après une retouche du dessin
 
 1. `powershell -ExecutionPolicy Bypass -File tools\gen-continent.ps1 -Donnees`, puis `.\build.ps1 -NoDeploy` et copie du jar dans `instances\reborn\plugins`.
 2. Arrêter `reborn`.
-3. Supprimer le dossier `instances\reborn\world\dimensions\minecraft\orbit_continent` (seulement lui : les étages sont dans les dossiers voisins) et les fichiers `continent-etat.yml` et `capitales-etat.yml` de `instances\reborn\plugins\OrbitMMO`.
-4. Redémarrer, puis `/continent pregen`, puis `/continent capitale <nom> generer` pour chaque capitale.
+3. Supprimer le dossier `instances\reborn\world\dimensions\minecraft\orbit_continent` (seulement lui : les étages sont dans les dossiers voisins) et les fichiers `continent-etat.yml`, `capitales-etat.yml` et `sites-etat.yml` de `instances\reborn\plugins\OrbitMMO`. `sites-places.yml` peut rester si le relief n'a pas changé ; le supprimer fait retirer les emplacements des camps et des ruines.
+4. Redémarrer, puis `/continent pregen`, puis `/continent capitale <nom> generer` pour chaque capitale, puis `/continent site tout generer`.
+5. Si les points de quête étaient posés sur le continent : `/continent quetes poser confirmer` pour les remettre aux nouveaux emplacements.
 
-Si le dessin change sans que le monde soit refait, le plugin l'écrit en avertissement au démarrage : les chunks déjà générés gardent l'ancien relief. Refaire le monde efface tout ce qui a été retouché à la main : les capitales se reconstruisent par commande, mais pas les retouches. Une fois le travail à la main commencé, mieux vaut retoucher le terrain par zones que tout régénérer.
+Si le dessin change sans que le monde soit refait, le plugin l'écrit en avertissement au démarrage : les chunks déjà générés gardent l'ancien relief. Refaire le monde efface tout ce qui a été retouché à la main : les capitales et les sites se reconstruisent par commande, mais pas les retouches. Une fois le travail à la main commencé, mieux vaut retoucher le terrain par zones que tout régénérer.
 
 ## Étapes suivantes
 
 1. ~~Générateur de terrain et pré-génération~~ — fait le 22/11/2026.
 2. ~~Les deux capitales~~ — faites le 22/11/2026 (voir « Les capitales »). Reste à les voir en jeu, puis à décider de ce qui manque : intérieurs, quartiers, port, la ville neutre des Quatre-Vents.
-3. **Villages, ruines, entrées de donjon et camps de monstres**, branchés sur les quêtes et les zones sûres. `FloorService.isSafe` connaît déjà les zones sûres du continent ; les autres mécaniques du MMO testent encore `floors().floorOf(monde) > 0` : il faudra leur faire reconnaître le continent (`plugin.continent().isContinent(monde)`).
-4. Points de finition du terrain, à voir en jeu : cratère du volcan parfaitement rond, mesas aux bords nets, cascades statiques.
+3. ~~Villages, ruines, entrées de donjon et camps de monstres~~ — construits et branchés le 23/11/2026 (voir « Villages, donjons, camps et ruines »). Reste à les voir en jeu.
+4. **Ouvrir le continent aux joueurs** : poser les points de quête (`/continent quetes poser`), décider par où un nouveau personnage arrive (Veillemont pour la Lumière ; la chaîne de l'Ombre à Nidnoir reste à écrire), et garder ou non l'arrivée par les étages.
+5. Accorder les deux jeux de noms : le lore des quêtes parle du Bastion de l'Aube, de Veillemont et du Val d'Ardence ; la carte dit Auréval, Bourg des Pâtres et Prés d'Auréval.
+6. Les donjons scellés (6 sur 11) attendent leurs étages ; les niveaux des étages 4 et 5 sont à recaler sur leur région.
+7. Régler la faune en jeu : densité, niveaux, butin des 15 nouveaux monstres, monstres d'élite ou chefs de camp (Morvain au Bois des Pénitents).
+8. Points de finition du terrain, à voir en jeu : cratère du volcan parfaitement rond, mesas aux bords nets, cascades statiques.

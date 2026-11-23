@@ -19,7 +19,18 @@ namespace DevPanel
 {
     static class Paths
     {
-        public const string Root = @"C:\Users\Zazou\MinecraftDev";
+        // Racine du depot : trouvee en remontant depuis l'exe (dossier qui contient panel\web). Rien en dur.
+        public static readonly string Root = FindRoot();
+        static string FindRoot()
+        {
+            var env = Environment.GetEnvironmentVariable("ORBIT_MC_ROOT");
+            if (!string.IsNullOrEmpty(env) && Directory.Exists(Path.Combine(env, @"panel\web"))) return Path.GetFullPath(env).TrimEnd('\\');
+            for (var d = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory); d != null; d = d.Parent)
+                if (Directory.Exists(Path.Combine(d.FullName, @"panel\web"))) return d.FullName.TrimEnd('\\');
+            MessageBox.Show("Dossier Orbit MC introuvable.\nLance le panel depuis panel\\MinecraftDevPanel.exe (ou le raccourci du Bureau cree par panel\\build.bat).", "Minecraft Dev Panel");
+            Environment.Exit(1);
+            return null;
+        }
         public static string Server { get { return Path.Combine(Root, "server"); } }
         public static string Panel { get { return Path.Combine(Root, "panel"); } }
         public static string Web { get { return Path.Combine(Panel, "web"); } }
@@ -35,7 +46,23 @@ namespace DevPanel
     static class Database
     {
         public const int Port = 3318;
-        const string Mysqld = @"C:\Program Files\MariaDB 11.8\bin\mysqld.exe";
+        // MariaDB portable du depot (tools\mariadb, posee par installer.ps1) sinon celle installee sur le PC.
+        static string Mysqld
+        {
+            get
+            {
+                var dirs = new List<string> { Path.Combine(Paths.Root, @"tools\mariadb\bin") };
+                foreach (var pf in new[] { Environment.GetEnvironmentVariable("ProgramW6432"), Environment.GetEnvironmentVariable("ProgramFiles") })
+                {
+                    if (string.IsNullOrEmpty(pf) || !Directory.Exists(pf)) continue;
+                    try { dirs.AddRange(Directory.GetDirectories(pf, "MariaDB*").OrderByDescending(d => d).Select(d => Path.Combine(d, "bin"))); } catch { }
+                }
+                foreach (var d in dirs)
+                    foreach (var exe in new[] { "mysqld.exe", "mariadbd.exe" })
+                        if (File.Exists(Path.Combine(d, exe))) return Path.Combine(d, exe);
+                return Path.Combine(dirs[0], "mysqld.exe");
+            }
+        }
         static string Ini { get { return Path.Combine(Paths.Root, @"db\data\my.ini"); } }
         static readonly object sync = new object();
 
@@ -102,7 +129,7 @@ namespace DevPanel
         static void Main()
         {
             bool created;
-            var mutex = new Mutex(true, "MinecraftDevPanel_Zazou", out created);
+            var mutex = new Mutex(true, MutexName(), out created);
             if (!created)
             {
                 // Deja lance : on rouvre juste la fenetre.
@@ -190,6 +217,13 @@ namespace DevPanel
                 }
             }
             Process.Start(url);
+        }
+
+        // Un panel par dossier Orbit MC (deux clones peuvent tourner en meme temps sur des ports differents).
+        static string MutexName()
+        {
+            using (var md5 = MD5.Create())
+                return "MinecraftDevPanel_" + BitConverter.ToString(md5.ComputeHash(Encoding.UTF8.GetBytes(Paths.Root.ToLowerInvariant()))).Replace("-", "").Substring(0, 12);
         }
 
         static string NewToken()
@@ -770,6 +804,124 @@ namespace DevPanel
         }
     }
 
+    // ------------------------------------------------------------------ Synchronisation GitHub
+    // Le panel ne fait que lancer valider.ps1 / recuperer.ps1 (a la racine du depot) et afficher leur sortie.
+    static class GitSync
+    {
+        static readonly object sync = new object();
+        static readonly List<string> lines = new List<string>();
+        static Process proc;
+        static string name = "";
+        static int exitCode = -1;
+
+        static string GitExe()
+        {
+            foreach (var dir in (Environment.GetEnvironmentVariable("PATH") ?? "").Split(';'))
+            {
+                try { var p = Path.Combine(dir.Trim(), "git.exe"); if (File.Exists(p)) return p; } catch { }
+            }
+            foreach (var p in new[] { @"C:\Program Files\Git\cmd\git.exe", @"C:\Program Files (x86)\Git\cmd\git.exe",
+                         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Programs\Git\cmd\git.exe") })
+                if (File.Exists(p)) return p;
+            throw new ApiError(500, "Git introuvable. Installe Git for Windows.");
+        }
+
+        static string Run(string args)
+        {
+            var psi = new ProcessStartInfo(GitExe(), "-c core.quotepath=false " + args)
+            {
+                WorkingDirectory = Paths.Root, UseShellExecute = false, CreateNoWindow = true,
+                RedirectStandardOutput = true, RedirectStandardError = true, StandardOutputEncoding = Encoding.UTF8
+            };
+            using (var p = Process.Start(psi))
+            {
+                p.ErrorDataReceived += delegate { };
+                p.BeginErrorReadLine();
+                string o = p.StandardOutput.ReadToEnd();
+                p.WaitForExit(15000);
+                return o;
+            }
+        }
+
+        public static object Status()
+        {
+            var raw = Run("status --porcelain=v1 -b").Replace("\r", "").Split('\n').Where(l => l.Length > 0).ToList();
+            string branch = "?", track = "";
+            if (raw.Count > 0 && raw[0].StartsWith("## "))
+            {
+                string h = raw[0].Substring(3);
+                int b = h.IndexOf(" [");
+                if (b >= 0) { track = h.Substring(b + 2).TrimEnd(']'); h = h.Substring(0, b); }
+                int d = h.IndexOf("...");
+                branch = d >= 0 ? h.Substring(0, d) : h;
+                raw.RemoveAt(0);
+            }
+            bool busy; string n; int code;
+            lock (sync) { busy = proc != null && !proc.HasExited; n = name; code = exitCode; }
+            return new { branch = branch, track = track, count = raw.Count, changes = raw.Take(300).ToList(), running = busy, job = n, exit = code };
+        }
+
+        public static void Start(string script, string message, string extra)
+        {
+            lock (sync)
+            {
+                if (proc != null && !proc.HasExited) throw new ApiError(409, "Une operation est deja en cours.");
+                string file = Path.Combine(Paths.Root, script);
+                if (!File.Exists(file)) throw new ApiError(404, script + " introuvable a la racine du depot.");
+                lines.Clear(); name = script; exitCode = -1;
+                var psi = new ProcessStartInfo("powershell.exe", "-NoProfile -ExecutionPolicy Bypass -File \"" + file + "\" -DepuisPanel" + (extra ?? ""))
+                {
+                    WorkingDirectory = Paths.Root, UseShellExecute = false, CreateNoWindow = true,
+                    RedirectStandardOutput = true, RedirectStandardError = true, RedirectStandardInput = true,
+                    StandardOutputEncoding = Encoding.UTF8, StandardErrorEncoding = Encoding.UTF8
+                };
+                // Le message passe par une variable d'environnement : aucun souci de guillemets.
+                psi.EnvironmentVariables["ORBIT_MESSAGE"] = message ?? "";
+                psi.EnvironmentVariables["GIT_TERMINAL_PROMPT"] = "0";
+                var p = new Process { StartInfo = psi, EnableRaisingEvents = true };
+                DataReceivedEventHandler h = delegate (object s, DataReceivedEventArgs e) { if (e.Data != null) Add(e.Data); };
+                p.OutputDataReceived += h; p.ErrorDataReceived += h;
+                p.Exited += delegate
+                {
+                    int c; try { p.WaitForExit(); c = p.ExitCode; } catch { c = 1; }
+                    lock (sync) exitCode = c;
+                    Add(c == 0 ? "--- Termine. ---" : "--- Echec (code " + c + "). ---");
+                };
+                p.Start();
+                p.StandardInput.Close();
+                p.BeginOutputReadLine(); p.BeginErrorReadLine();
+                proc = p;
+            }
+            Program.Mc.Panel("Synchronisation : " + script + " lance.");
+        }
+
+        static void Add(string l) { lock (lines) { lines.Add(l); if (lines.Count > 4000) lines.RemoveRange(0, 1000); } }
+
+        public static object Job(int since)
+        {
+            bool busy; string n; int code;
+            lock (sync) { busy = proc != null && !proc.HasExited; n = name; code = exitCode; }
+            List<string> part; int total;
+            lock (lines) { total = lines.Count; part = lines.Skip(Math.Max(0, since)).ToList(); }
+            return new { running = busy, job = n, exit = code, next = total, lines = part };
+        }
+
+        static readonly System.Text.RegularExpressions.Regex BranchRx = new System.Text.RegularExpressions.Regex(@"^[A-Za-z0-9][A-Za-z0-9._/-]{0,60}$");
+
+        public static object Switch(string branch)
+        {
+            branch = (branch ?? "").Trim();
+            if (!BranchRx.IsMatch(branch) || branch.Contains("..") || branch.EndsWith("/")) throw new ApiError(400, "Nom de branche invalide (ex : wane/boutique, zazou/station).");
+            lock (sync) if (proc != null && !proc.HasExited) throw new ApiError(409, "Une operation est deja en cours.");
+            bool exists = Run("branch --list \"" + branch + "\"").Trim().Length > 0;
+            bool remote = !exists && Run("branch -r --list \"origin/" + branch + "\"").Trim().Length > 0;
+            Run(exists || remote ? "switch \"" + branch + "\"" : "switch -c \"" + branch + "\"");
+            string now = Run("rev-parse --abbrev-ref HEAD").Trim();
+            if (now != branch) throw new ApiError(409, "Impossible de passer sur " + branch + " (modifs en conflit ?). Valide ou range tes modifs d'abord.");
+            return new { ok = true, branch = now, created = !(exists || remote) };
+        }
+    }
+
     // ------------------------------------------------------------------ HTTP
     class HttpServer
     {
@@ -1215,6 +1367,36 @@ namespace DevPanel
                         result = Ok();
                         break;
                     }
+
+                // ---- Synchronisation GitHub (valider.ps1 / recuperer.ps1)
+                case "GET git/status": result = GitSync.Status(); break;
+
+                case "GET git/job":
+                    {
+                        int since; int.TryParse(q["since"], out since);
+                        result = GitSync.Job(since);
+                        break;
+                    }
+
+                case "POST git/valider":
+                    {
+                        var b = JBody(req);
+                        string msg = (Str(b, "message") ?? "").Trim();
+                        if (msg.Length < 3) throw new ApiError(400, "Ecris un message qui dit ce que tu as change.");
+                        object fm; bool merge = b.TryGetValue("main", out fm) && fm is bool && (bool)fm;
+                        GitSync.Start("valider.ps1", msg, merge ? " -FusionnerDansMain" : "");
+                        result = Ok();
+                        break;
+                    }
+
+                case "POST git/recuperer":
+                    GitSync.Start("recuperer.ps1", "", "");
+                    result = Ok();
+                    break;
+
+                case "POST git/branche":
+                    result = GitSync.Switch(Str(JBody(req), "branche"));
+                    break;
 
                 case "POST dev/deploy":
                     result = new { ok = true, files = DevWatcher.DeployAll() };

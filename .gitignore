@@ -43,9 +43,100 @@
 !/maquettes/
 !/setup/
 /setup/*.properties
+!/setup/*.properties.exemple
 
 # --- Jamais dans git ---
 *.env
 *.secret
 *.properties.local
 runtime.json
+
+# --- Scripts du projet, mods (sources) ---
+!/scripts/
+!/installer.ps1
+!/installer.bat
+!/valider.ps1
+!/recuperer.ps1
+!/compiler.ps1
+!/mondes.ps1
+!/versions.json
+!/mods-src/
+/mods-src/**/target/
+/mods-src/**/build/
+/mods-src/**/.gradle/
+/mods-src/**/node_modules/
+/mods-src/**/dist/
+*.jar
+
+# --- Proxy Velocity : config seulement (forwarding.secret reste local) ---
+!/proxy/
+/proxy/*
+!/proxy/velocity.toml
+
+# --- Lobby (server) : configs seulement, jamais les mondes ni les jars ---
+# Les fichiers qui contiennent un secret (server.properties, paper-global.yml, LuckPerms/config.yml)
+# ne sont suivis que sous forme de modele ".exemple" (voir scripts\commun.ps1).
+!/server/
+/server/*
+!/server/server.properties.exemple
+!/server/bukkit.yml
+!/server/spigot.yml
+!/server/commands.yml
+!/server/help.yml
+!/server/permissions.yml
+!/server/eula.txt
+!/server/config/
+/server/config/paper-global.yml
+!/server/plugins/
+/server/plugins/*
+!/server/plugins/OrbitDevCore/
+!/server/plugins/OrbitStaff/
+!/server/plugins/TAB/
+!/server/plugins/LuckPerms/
+/server/plugins/LuckPerms/*
+!/server/plugins/LuckPerms/config.yml.exemple
+
+# --- Instances : memes regles ---
+!/instances/
+!/instances/*/
+/instances/*/*
+!/instances/*/server.properties.exemple
+!/instances/*/bukkit.yml
+!/instances/*/spigot.yml
+!/instances/*/commands.yml
+!/instances/*/help.yml
+!/instances/*/permissions.yml
+!/instances/*/eula.txt
+!/instances/*/config/
+/instances/*/config/paper-global.yml
+!/instances/*/plugins/
+/instances/*/plugins/*
+!/instances/*/plugins/OrbitDevCore/
+!/instances/*/plugins/OrbitMMO/
+!/instances/*/plugins/OrbitExtraction/
+!/instances/*/plugins/LuckPerms/
+/instances/*/plugins/LuckPerms/*
+!/instances/*/plugins/LuckPerms/config.yml.exemple
+
+# --- Dans les dossiers de plugins : pas les donnees de jeu / des joueurs ---
+/server/plugins/**/cosmetics/
+/instances/*/plugins/**/cosmetics/
+**/plugins/*/players/
+**/plugins/*/joueurs/
+**/plugins/*/quests-joueurs/
+**/plugins/*/apercus/
+**/plugins/*/station-apercu*.png
+**/plugins/*/*-etat.yml
+**/plugins/OrbitMMO/state.yml
+**/plugins/OrbitMMO/sites-places.yml
+**/plugins/OrbitMMO/hdv.yml
+**/plugins/OrbitStaff/staff-state.yml
+**/plugins/TAB/playerdata.yml
+**/plugins/TAB/skincache.yml
+**/plugins/TAB/users.yml
+**/plugins/TAB/errors.log
+**/plugins/*/*.orig
+**/plugins/*/*.avant-*
+**/plugins/*/*.db
+**/plugins/*/*.gz
+*.log

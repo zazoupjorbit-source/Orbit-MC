@@ -1,0 +1,13 @@
+# ============================================================
+#  OrbitHCF-Display - Tablist (facultative)
+# ============================================================
+
+enabled: false
+update-interval-seconds: 5
+
+header:
+  - "&6&lORBIT HCF"
+  - "&7Bienvenue &f{joueur}"
+
+footer:
+  - "&eorbit-pvp.fr"

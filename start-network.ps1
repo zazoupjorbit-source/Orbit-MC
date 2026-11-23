@@ -19,7 +19,11 @@ $dbIni = Join-Path $root 'db\data\my.ini'
 if (Test-Port 3318) {
     Write-Host "Base MariaDB deja lancee (port 3318)."
 } elseif (Test-Path $dbIni) {
-    Start-Process 'C:\Program Files\MariaDB 11.8\bin\mysqld.exe' -ArgumentList "--defaults-file=`"$dbIni`"" -WindowStyle Hidden
+    # MariaDB du depot (tools\mariadb, posee par installer.ps1) sinon celle installee sur le PC.
+    $mysqld = @(Join-Path $root 'tools\mariadb\bin') + @(Get-ChildItem $env:ProgramFiles -Directory -Filter 'MariaDB*' -ErrorAction SilentlyContinue | Sort-Object Name -Descending | ForEach-Object { Join-Path $_.FullName 'bin' }) |
+        ForEach-Object { Join-Path $_ 'mysqld.exe'; Join-Path $_ 'mariadbd.exe' } | Where-Object { Test-Path $_ } | Select-Object -First 1
+    if (-not $mysqld) { throw "MariaDB introuvable (tools\mariadb ou Program Files\MariaDB*). Lance installer.ps1." }
+    Start-Process $mysqld -ArgumentList "--defaults-file=`"$dbIni`"" -WindowStyle Hidden
     $wait = (Get-Date).AddSeconds(20)
     while (-not (Test-Port 3318) -and (Get-Date) -lt $wait) { Start-Sleep -Milliseconds 300 }
     if (Test-Port 3318) { Write-Host "Base MariaDB demarree (port 3318)." } else { throw "La base MariaDB (port 3318) n'a pas demarre : voir db\data\*.err" }

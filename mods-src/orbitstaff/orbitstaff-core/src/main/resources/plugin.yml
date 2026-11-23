@@ -1,0 +1,97 @@
+name: OrbitStaff
+version: 0.1.0-SNAPSHOT
+main: games.orbit.orbitstaff.core.OrbitStaffPlugin
+api-version: '1.21'
+author: ORBIT FOUNDRY
+description: Gestion du staff (mode staff, freeze, inspection, dossier, sanctions) reliee a l'API OrbitStaff.
+folia-supported: false
+
+commands:
+  staff:
+    description: Active ou desactive le mode staff.
+    aliases: [staffmode, mod]
+    permission: orbitstaff.staffmode
+  warn:
+    description: Avertir un joueur.
+    usage: /warn <joueur> <motif>
+    permission: orbitstaff.warn
+  mute:
+    description: Reduire un joueur au silence.
+    usage: /mute <joueur> <duree> <motif>
+    permission: orbitstaff.mute
+  kick:
+    description: Expulser un joueur.
+    usage: /kick <joueur> <motif>
+    permission: orbitstaff.kick
+  tempban:
+    description: Bannir temporairement un joueur.
+    usage: /tempban <joueur> <duree> <motif>
+    permission: orbitstaff.tempban
+  ban:
+    description: Bannir un joueur.
+    usage: /ban <joueur> <motif>
+    permission: orbitstaff.ban
+  unban:
+    description: Annuler le bannissement d'un joueur.
+    usage: /unban <joueur> <motif>
+    permission: orbitstaff.unban
+  freeze:
+    description: Geler un joueur.
+    usage: /freeze <joueur> <motif>
+    permission: orbitstaff.freeze
+  unfreeze:
+    description: Degeler un joueur.
+    usage: /unfreeze <joueur> <motif>
+    permission: orbitstaff.freeze
+  note:
+    description: Ajouter une note interne.
+    usage: /note <joueur> <note>
+    permission: orbitstaff.notes.create
+  history:
+    description: Consulter l'historique de moderation.
+    usage: /history <joueur>
+    permission: orbitstaff.inspect
+  playerinfo:
+    description: Ouvrir le dossier d'un joueur.
+    usage: /playerinfo <joueur>
+    aliases: [inspect]
+    permission: orbitstaff.inspect
+  discord:
+    description: Lier son compte Discord.
+    usage: /discord link
+  orbitstaff:
+    description: Administration OrbitStaff.
+    usage: /orbitstaff <reload|status|integrations|diagnostics>
+    permission: orbitstaff.admin
+
+permissions:
+  orbitstaff.staffmode:
+    description: Activer le mode staff.
+    default: op
+  orbitstaff.inspect:
+    description: Inspecter un joueur / consulter un dossier.
+    default: op
+  orbitstaff.freeze:
+    description: Geler un joueur.
+    default: op
+  orbitstaff.warn:
+    default: op
+  orbitstaff.mute:
+    default: op
+  orbitstaff.kick:
+    default: op
+  orbitstaff.tempban:
+    default: op
+  orbitstaff.ban:
+    default: op
+  orbitstaff.unban:
+    default: op
+  orbitstaff.notes.create:
+    default: op
+  orbitstaff.notes.view:
+    default: op
+  orbitstaff.notes.delete:
+    default: op
+  orbitstaff.admin:
+    description: Administration OrbitStaff.
+    default: op

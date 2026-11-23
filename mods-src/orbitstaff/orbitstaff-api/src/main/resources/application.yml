@@ -1,0 +1,46 @@
+# =====================================================================
+#  OrbitStaff API - Configuration Spring Boot
+#  Aucun secret ici : tout provient de variables d'environnement (.env).
+# =====================================================================
+spring:
+  application:
+    name: orbitstaff-api
+  datasource:
+    url: "jdbc:mariadb://${ORBITSTAFF_DB_HOST:127.0.0.1}:${ORBITSTAFF_DB_PORT:3306}/${ORBITSTAFF_DB_NAME:orbitstaff}?useUnicode=true&characterEncoding=utf8"
+    username: "${ORBITSTAFF_DB_USER:orbitstaff_app}"
+    password: "${ORBITSTAFF_DB_PASSWORD:}"
+    hikari:
+      pool-name: orbitstaff-pool
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 5000
+      max-lifetime: 1800000
+  flyway:
+    enabled: true
+    locations: "classpath:db/migration"
+    baseline-on-migrate: false
+
+server:
+  port: "${ORBITSTAFF_API_PORT:8085}"
+  error:
+    include-message: never
+    include-stacktrace: never
+
+orbitstaff:
+  security:
+    # Cle HMAC pour signer / correler (jamais versionnee).
+    signing-secret: "${ORBITSTAFF_API_SIGNING_SECRET:}"
+  rate-limit:
+    # Requetes autorisees par compte de service et par fenetre.
+    permits-per-window: 120
+    window-seconds: 60
+  discord-link:
+    code-length: 6
+    code-ttl-minutes: 10
+    max-attempts: 5
+
+# Journalisation : jamais de secret dans les logs.
+logging:
+  level:
+    root: INFO
+    games.orbit.orbitstaff: INFO

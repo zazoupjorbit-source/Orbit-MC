@@ -1,0 +1,24 @@
+# ============================================================
+#  OrbitHCF-Core - Reglages des factions
+# ============================================================
+
+faction:
+  min-name-length: 3
+  max-name-length: 16
+  # Caracteres autorises dans les noms de faction
+  name-pattern: "[a-zA-Z0-9_]+"
+  max-members: 20
+  max-allies: 1
+  # Duree de validite d'une invitation (secondes)
+  invitation-expiry-seconds: 300
+
+timers:
+  # Delai avant teleportation au home (secondes)
+  home-warmup-seconds: 10
+  # Delai du /f stuck (secondes)
+  stuck-delay-seconds: 30
+  # Delai du /logout hors safezone (secondes)
+  logout-delay-seconds: 30
+
+focus:
+  enabled: true

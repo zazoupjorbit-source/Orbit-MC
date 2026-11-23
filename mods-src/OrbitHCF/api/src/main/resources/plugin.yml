@@ -1,0 +1,7 @@
+name: OrbitHCF-API
+version: '${version}'
+main: fr.orbitgames.hcf.api.OrbitHCFApiPlugin
+api-version: '1.21'
+author: OrbitGames
+description: API partagee du coeur HCF OrbitGames (interfaces, evenements, modeles).
+website: https://orbit-pvp.fr

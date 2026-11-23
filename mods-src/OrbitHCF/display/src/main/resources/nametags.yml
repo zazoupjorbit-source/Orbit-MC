@@ -1,0 +1,14 @@
+# ============================================================
+#  OrbitHCF-Display - Nametags par relation
+# ============================================================
+
+enabled: true
+update-interval-ticks: 40
+
+# Couleurs par relation (noms ChatColor)
+colors:
+  member: GREEN
+  ally: LIGHT_PURPLE
+  enemy: RED
+  neutral: GRAY
+  focus: GOLD

@@ -1,0 +1,40 @@
+{
+  "_note": "Versions exactes du reseau de dev Orbit MC. installer.ps1 telecharge ces fichiers depuis leurs sources officielles et verifie le SHA-256 quand il est indique. Pour monter de version : changer ici, valider, et l'autre relance installer.ps1.",
+  "jdk": {
+    "version": "25.0.5.1+2",
+    "dossier": "jdk-25.0.5.1+2",
+    "url": "https://api.adoptium.net/v3/binary/version/jdk-25.0.5.1%2B2/windows/x64/jdk/hotspot/normal/eclipse"
+  },
+  "paper": {
+    "version": "26.3",
+    "build": 257,
+    "url": "https://fill-data.papermc.io/v1/objects/64a5bd44910cb982b2648e9a35036cc95a6de4d561e15812aecf5411f84f7b01/paper-26.3-257.jar",
+    "sha256": "64a5bd44910cb982b2648e9a35036cc95a6de4d561e15812aecf5411f84f7b01"
+  },
+  "velocity": {
+    "version": "4.3.1",
+    "build": 45,
+    "url": "https://fill-data.papermc.io/v1/objects/0844bcabdcdb4f5b875906fd4c3365bc1bb76918e42bc595ed88ad195258dd75/velocity-4.3.1-45.jar",
+    "sha256": "0844bcabdcdb4f5b875906fd4c3365bc1bb76918e42bc595ed88ad195258dd75"
+  },
+  "luckperms": {
+    "version": "5.5.91",
+    "fichier": "LuckPerms-Bukkit-5.5.91.jar",
+    "url": "https://download.luckperms.net/1678/bukkit/loader/LuckPerms-Bukkit-5.5.91.jar",
+    "sha256": "2a6834c51830b133ec8763703391b20240f7a3b4748746503251a45d70cf1b39"
+  },
+  "tab": {
+    "version": "6.2.1",
+    "fichier": "TAB v6.2.1.jar",
+    "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/Bu3K2CAM/TAB%20v6.2.1.jar",
+    "sha256": "0b6a21af6fd3b113c05821daaed00ff92234a84ca94b29b3aec0ef1bd313b8a9"
+  },
+  "mariadb": {
+    "version": "11.8.2",
+    "url": "https://archive.mariadb.org/mariadb-11.8.2/winx64-packages/mariadb-11.8.2-winx64.zip"
+  },
+  "maven": {
+    "version": "3.9.16",
+    "url": "https://archive.apache.org/dist/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.zip"
+  }
+}

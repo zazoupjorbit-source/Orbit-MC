@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>games.orbit.orbitstaff</groupId>
+        <artifactId>orbitstaff-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>orbitstaff-core</artifactId>
+    <name>OrbitStaff Core (Paper plugin)</name>
+    <description>
+        Plugin Paper 1.21.1 : mode staff, freeze, inspection, dossier joueur,
+        commandes de sanction. Communique avec l'API en HTTPS (jamais avec MariaDB).
+        La logique metier vit dans l'API ; le plugin adapte l'entree/sortie en jeu.
+    </description>
+
+    <repositories>
+        <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Socle commun : embarque dans le jar final (shade). -->
+        <dependency>
+            <groupId>games.orbit.orbitstaff</groupId>
+            <artifactId>orbitstaff-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Integrations (LuckPerms/Vault... optionnelles) : embarquees dans le jar. -->
+        <dependency>
+            <groupId>games.orbit.orbitstaff</groupId>
+            <artifactId>orbitstaff-integrations</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- API Paper : fournie par le serveur, non embarquee. -->
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>${paper.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Gson : fourni par Paper au runtime (transitif de paper-api). -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.11.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>OrbitStaff-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <!-- Embarquer le socle commun et les integrations (paper-api/gson/APIs tierces sont provided). -->
+                            <artifactSet>
+                                <includes>
+                                    <include>games.orbit.orbitstaff:orbitstaff-common</include>
+                                    <include>games.orbit.orbitstaff:orbitstaff-integrations</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

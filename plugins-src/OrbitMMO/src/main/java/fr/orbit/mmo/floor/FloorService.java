@@ -277,7 +277,10 @@ public final class FloorService implements Listener {
             Long cd = gateCooldown.get(p.getUniqueId());
             if (cd == null || cd < now) {
                 gateCooldown.put(p.getUniqueId(), now + 4000);
-                Menus.floors(plugin, p, true);
+                // Entré par un donjon du continent : l'arche y ramène. Sinon, elle ouvre le choix de l'étage.
+                if (plugin.continent() == null || !plugin.continent().leaveFloor(p)) {
+                    Menus.floors(plugin, p, true);
+                }
             }
         }
     }

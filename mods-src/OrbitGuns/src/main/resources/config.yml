@@ -1,0 +1,406 @@
+# OrbitGuns — armes a feu (War Zombie). Modeles 3D via resource pack (item-model).
+# Tir : clic droit.  Rechargement : touche F.
+messages:
+  prefix: "&8[&cGuns&8] &r"
+
+guns:
+  g18:
+    display: "&f&lGlock 18"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/g18"
+    model-data: 1001
+    damage: 8.0
+    magazine: 15
+    reload-seconds: 1.5
+    fire-cooldown-ms: 280
+    ammo-item: IRON_NUGGET
+    range: 40
+    spread: 2.0
+    pellets: 1
+    headshot-mult: 1.6
+    sound: "entity.blaze.hurt"
+
+  c96:
+    display: "&f&lC96"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/c96"
+    model-data: 1002
+    damage: 8.0
+    magazine: 15
+    reload-seconds: 1.5
+    fire-cooldown-ms: 280
+    ammo-item: IRON_NUGGET
+    range: 40
+    spread: 2.0
+    pellets: 1
+    headshot-mult: 1.6
+    sound: "entity.blaze.hurt"
+
+  tec9:
+    display: "&f&lTec-9"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/tec9"
+    model-data: 1003
+    damage: 8.0
+    magazine: 15
+    reload-seconds: 1.5
+    fire-cooldown-ms: 280
+    ammo-item: IRON_NUGGET
+    range: 40
+    spread: 2.0
+    pellets: 1
+    headshot-mult: 1.6
+    sound: "entity.blaze.hurt"
+
+  elcovert:
+    display: "&f&lEl Covert"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/elcovert"
+    model-data: 1004
+    damage: 8.0
+    magazine: 15
+    reload-seconds: 1.5
+    fire-cooldown-ms: 280
+    ammo-item: IRON_NUGGET
+    range: 40
+    spread: 2.0
+    pellets: 1
+    headshot-mult: 1.6
+    sound: "entity.blaze.hurt"
+
+  ak12:
+    display: "&c&lAK-12"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/ak12"
+    model-data: 1005
+    damage: 10.0
+    magazine: 30
+    reload-seconds: 2.4
+    fire-cooldown-ms: 110
+    ammo-item: IRON_NUGGET
+    range: 55
+    spread: 2.6
+    pellets: 1
+    headshot-mult: 1.5
+    sound: "entity.blaze.hurt"
+
+  m4:
+    display: "&c&lM4"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/m4"
+    model-data: 1006
+    damage: 10.0
+    magazine: 30
+    reload-seconds: 2.4
+    fire-cooldown-ms: 110
+    ammo-item: IRON_NUGGET
+    range: 55
+    spread: 2.6
+    pellets: 1
+    headshot-mult: 1.5
+    sound: "entity.blaze.hurt"
+
+  scar:
+    display: "&c&lSCAR"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/scar"
+    model-data: 1007
+    damage: 10.0
+    magazine: 30
+    reload-seconds: 2.4
+    fire-cooldown-ms: 110
+    ammo-item: IRON_NUGGET
+    range: 55
+    spread: 2.6
+    pellets: 1
+    headshot-mult: 1.5
+    sound: "entity.blaze.hurt"
+
+  fal:
+    display: "&c&lFAL"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/fal"
+    model-data: 1008
+    damage: 10.0
+    magazine: 30
+    reload-seconds: 2.4
+    fire-cooldown-ms: 110
+    ammo-item: IRON_NUGGET
+    range: 55
+    spread: 2.6
+    pellets: 1
+    headshot-mult: 1.5
+    sound: "entity.blaze.hurt"
+
+  famas:
+    display: "&c&lFAMAS"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/famas"
+    model-data: 1009
+    damage: 10.0
+    magazine: 30
+    reload-seconds: 2.4
+    fire-cooldown-ms: 110
+    ammo-item: IRON_NUGGET
+    range: 55
+    spread: 2.6
+    pellets: 1
+    headshot-mult: 1.5
+    sound: "entity.blaze.hurt"
+
+  tavor:
+    display: "&c&lTavor"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/tavor"
+    model-data: 1010
+    damage: 10.0
+    magazine: 30
+    reload-seconds: 2.4
+    fire-cooldown-ms: 110
+    ammo-item: IRON_NUGGET
+    range: 55
+    spread: 2.6
+    pellets: 1
+    headshot-mult: 1.5
+    sound: "entity.blaze.hurt"
+
+  aug:
+    display: "&c&lAUG"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/aug"
+    model-data: 1011
+    damage: 10.0
+    magazine: 30
+    reload-seconds: 2.4
+    fire-cooldown-ms: 110
+    ammo-item: IRON_NUGGET
+    range: 55
+    spread: 2.6
+    pellets: 1
+    headshot-mult: 1.5
+    sound: "entity.blaze.hurt"
+
+  tactm4:
+    display: "&c&lM4 Tactique"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/tactm4"
+    model-data: 1012
+    damage: 10.0
+    magazine: 30
+    reload-seconds: 2.4
+    fire-cooldown-ms: 110
+    ammo-item: IRON_NUGGET
+    range: 55
+    spread: 2.6
+    pellets: 1
+    headshot-mult: 1.5
+    sound: "entity.blaze.hurt"
+
+  tactscar:
+    display: "&c&lSCAR Tactique"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/tactscar"
+    model-data: 1013
+    damage: 10.0
+    magazine: 30
+    reload-seconds: 2.4
+    fire-cooldown-ms: 110
+    ammo-item: IRON_NUGGET
+    range: 55
+    spread: 2.6
+    pellets: 1
+    headshot-mult: 1.5
+    sound: "entity.blaze.hurt"
+
+  impact:
+    display: "&c&lImpact"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/impact"
+    model-data: 1014
+    damage: 10.0
+    magazine: 30
+    reload-seconds: 2.4
+    fire-cooldown-ms: 110
+    ammo-item: IRON_NUGGET
+    range: 55
+    spread: 2.6
+    pellets: 1
+    headshot-mult: 1.5
+    sound: "entity.blaze.hurt"
+
+  p90:
+    display: "&e&lP90"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/p90"
+    model-data: 1015
+    damage: 7.0
+    magazine: 25
+    reload-seconds: 2.0
+    fire-cooldown-ms: 80
+    ammo-item: IRON_NUGGET
+    range: 35
+    spread: 4.0
+    pellets: 1
+    headshot-mult: 1.4
+    sound: "entity.blaze.hurt"
+
+  pdw:
+    display: "&e&lPDW"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/pdw"
+    model-data: 1016
+    damage: 7.0
+    magazine: 25
+    reload-seconds: 2.0
+    fire-cooldown-ms: 80
+    ammo-item: IRON_NUGGET
+    range: 35
+    spread: 4.0
+    pellets: 1
+    headshot-mult: 1.4
+    sound: "entity.blaze.hurt"
+
+  vector:
+    display: "&e&lVector"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/vector"
+    model-data: 1017
+    damage: 7.0
+    magazine: 25
+    reload-seconds: 2.0
+    fire-cooldown-ms: 80
+    ammo-item: IRON_NUGGET
+    range: 35
+    spread: 4.0
+    pellets: 1
+    headshot-mult: 1.4
+    sound: "entity.blaze.hurt"
+
+  combatsmg:
+    display: "&e&lCombat SMG"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/combatsmg"
+    model-data: 1018
+    damage: 7.0
+    magazine: 25
+    reload-seconds: 2.0
+    fire-cooldown-ms: 80
+    ammo-item: IRON_NUGGET
+    range: 35
+    spread: 4.0
+    pellets: 1
+    headshot-mult: 1.4
+    sound: "entity.blaze.hurt"
+
+  m24:
+    display: "&5&lM24"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/m24"
+    model-data: 1019
+    damage: 36.0
+    magazine: 5
+    reload-seconds: 3.2
+    fire-cooldown-ms: 1200
+    ammo-item: IRON_NUGGET
+    range: 120
+    spread: 0.2
+    pellets: 1
+    headshot-mult: 2.5
+    aim-zoom: -0.10
+    aim-spread-mult: 0.25
+    sound: "entity.generic.explode"
+
+  vssvintorez:
+    display: "&5&lVSS Vintorez"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/vssvintorez"
+    model-data: 1020
+    damage: 36.0
+    magazine: 5
+    reload-seconds: 3.2
+    fire-cooldown-ms: 1200
+    ammo-item: IRON_NUGGET
+    range: 120
+    spread: 0.2
+    pellets: 1
+    headshot-mult: 2.5
+    aim-zoom: -0.10
+    aim-spread-mult: 0.25
+    sound: "entity.generic.explode"
+
+  lmg:
+    display: "&6&lLMG"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/lmg"
+    model-data: 1021
+    damage: 11.0
+    magazine: 60
+    reload-seconds: 4.0
+    fire-cooldown-ms: 100
+    ammo-item: IRON_NUGGET
+    range: 55
+    spread: 3.5
+    pellets: 1
+    headshot-mult: 1.4
+    sound: "entity.blaze.hurt"
+
+  bfg:
+    display: "&4&lBFG"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/bfg"
+    model-data: 1022
+    damage: 28.0
+    magazine: 4
+    reload-seconds: 3.0
+    fire-cooldown-ms: 1400
+    ammo-item: IRON_NUGGET
+    range: 70
+    spread: 1.0
+    pellets: 1
+    headshot-mult: 2.0
+    sound: "entity.generic.explode"
+
+  grenadelauncher:
+    display: "&4&lLance-grenades"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/grenadelauncher"
+    model-data: 1023
+    damage: 28.0
+    magazine: 4
+    reload-seconds: 3.0
+    fire-cooldown-ms: 1400
+    ammo-item: IRON_NUGGET
+    range: 70
+    spread: 1.0
+    pellets: 1
+    headshot-mult: 2.0
+    sound: "entity.generic.explode"
+
+  crossbow:
+    display: "&a&lArbalete"
+    base-item: CARROT_ON_A_STICK
+    item-model: "gun/crossbow_loaded"
+    model-data: 1024
+    damage: 20.0
+    magazine: 1
+    reload-seconds: 2.0
+    fire-cooldown-ms: 1000
+    ammo-item: IRON_NUGGET
+    range: 60
+    spread: 0.5
+    pellets: 1
+    headshot-mult: 2.0
+    sound: "entity.arrow.shoot"
+
+# --- GRENADES (clic droit = lancer ; explosion custom en zone) ---
+grenades:
+  frag:
+    display: "&a&lGrenade"
+    base-item: FIREWORK_STAR
+    item-model: "gun/frag"
+    damage: 30.0
+    radius: 5.0
+    fuse-ticks: 20
+    throw-speed: 1.4
+    sound-throw: "entity.snowball.throw"
+    sound-explode: "entity.generic.explode"

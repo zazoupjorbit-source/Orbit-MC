@@ -1,0 +1,13 @@
+# ============================================================
+#  OrbitHCF-Core - Configuration generale
+# ============================================================
+
+# Mondes ou le HCF est actif (claims, protections, zones systeme)
+worlds:
+  - world
+
+# Sauvegarde automatique (secondes)
+autosave-seconds: 300
+
+# Diffuser les changements d'etat raidable dans le chat
+broadcast-raidable: true

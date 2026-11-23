@@ -1,0 +1,99 @@
+# Messages OrbitDevCore — format MiniMessage (https://docs.advntr.dev/minimessage/format.html)
+# <prefix> est remplacé par la valeur de « prefix ».
+prefix: "<dark_gray>[</dark_gray><gradient:#00c6ff:#7b2ff7>ORBIT</gradient><dark_gray>]</dark_gray> "
+
+general:
+  no-permission: "<prefix><red>Tu n'as pas la permission."
+  players-only: "<prefix><red>Cette commande est réservée aux joueurs."
+  player-not-found: "<prefix><red>Joueur introuvable : <white><player></white>."
+  usage: "<prefix><gray>Utilisation : <white><usage></white>"
+  reloaded: "<prefix><green>Configuration, messages, warps et PNJ rechargés."
+  info: "<prefix><gray>OrbitDevCore <white>v<version></white> — <white><warps></white> warp(s), <white><npcs></white> PNJ, proxy : <white><proxy></white>."
+
+spawn:
+  teleported: "<prefix><green>Téléporté au spawn."
+  teleported-other: "<prefix><green><white><player></white> a été téléporté au spawn."
+  set: "<prefix><green>Spawn défini à ta position."
+  missing: "<prefix><red>Aucun spawn utilisable (monde introuvable)."
+
+warp:
+  teleported: "<prefix><green>Téléporté au warp <white><name></white>."
+  not-found: "<prefix><red>Le warp <white><name></white> n'existe pas."
+  set: "<prefix><green>Warp <white><name></white> enregistré à ta position."
+  deleted: "<prefix><green>Warp <white><name></white> supprimé."
+  invalid-name: "<prefix><red>Nom invalide : lettres, chiffres, - et _ uniquement (32 caractères max)."
+  unknown-icon: "<prefix><red>Icône inconnue : <white><icon></white>."
+  world-missing: "<prefix><red>Le monde du warp <white><name></white> n'est pas chargé."
+
+world:
+  invalid-name: "<prefix><red>Nom de monde invalide : minuscules, chiffres, - et _ uniquement (32 caractères max)."
+  invalid-type: "<prefix><red>Type de monde inconnu : <white><type></white> (flat ou normal)."
+  creating: "<prefix><gray>Création / chargement du monde <white><world></white>..."
+  created: "<prefix><green>Monde <white><world></white> prêt (<type>). Il sera rechargé à chaque démarrage."
+  failed: "<prefix><red>Impossible de créer le monde <white><world></white> (voir la console)."
+  list-header: "<prefix><gray>Mondes chargés (<white><count></white>) :"
+  list-entry: " <dark_gray>•</dark_gray> <white><world></white> <dark_gray>(<type>, <players> joueur(s))</dark_gray>"
+
+compass:
+  name: "<gradient:#00c6ff:#7b2ff7><bold>Boussole de téléportation</bold></gradient>"
+  lore:
+    - "<gray>Clic droit pour ouvrir le menu des warps."
+  given: "<prefix><green>Boussole ajoutée à ton inventaire."
+  already: "<prefix><yellow>Tu as déjà la boussole."
+  inventory-full: "<prefix><red>Inventaire plein, impossible de te donner la boussole."
+
+menu:
+  title: "<dark_gray>Téléportation"
+  spawn-name: "<gold><bold>Spawn</bold>"
+  spawn-lore:
+    - "<gray>Retour au point de départ."
+    - ""
+    - "<yellow>Clic pour te téléporter"
+  server-lore:
+    - "<gray>Instance : <white><server></white>"
+    - ""
+    - "<yellow>Clic pour rejoindre"
+  server-current-lore:
+    - "<gray>Instance : <white><server></white>"
+    - ""
+    - "<green>Tu es ici"
+  already-here: "<prefix><yellow>Tu es déjà sur <white><server></white>."
+  warp-name: "<aqua><bold><name></bold>"
+  warp-lore:
+    - "<gray>Monde : <white><world></white>"
+    - "<gray>Position : <white><x> <y> <z></white>"
+    - ""
+    - "<yellow>Clic pour te téléporter"
+
+npc:
+  created: "<prefix><green>PNJ <white><id></white> créé, il envoie vers <white><target></white>."
+  exists: "<prefix><red>Un PNJ <white><id></white> existe déjà."
+  not-found: "<prefix><red>Aucun PNJ <white><id></white>."
+  invalid-id: "<prefix><red>Identifiant invalide : lettres, chiffres, - et _ uniquement (32 caractères max)."
+  invalid-type: "<prefix><red>Type d'entité invalide : <white><type></white> (il faut une entité vivante, ex. VILLAGER, ZOMBIE, ARMOR_STAND)."
+  removed: "<prefix><green>PNJ <white><id></white> supprimé."
+  moved: "<prefix><green>PNJ <white><id></white> déplacé à ta position."
+  teleported: "<prefix><green>Téléporté au PNJ <white><id></white>."
+  target-set: "<prefix><green>Le PNJ <white><id></white> envoie maintenant vers <white><target></white>."
+  world-missing: "<prefix><red>Le monde <white><world></white> n'est pas chargé (crée-le avec <white>/devworld create <world></white>)."
+  world-teleported: "<prefix><green>Bienvenue dans <white><world></white> !"
+  name-set: "<prefix><green>Nom du PNJ <white><id></white> mis à jour."
+  profession-set: "<prefix><green>Profession du PNJ <white><id></white> : <white><profession></white>."
+  unknown-profession: "<prefix><red>Profession inconnue : <white><profession></white>."
+  list-header: "<prefix><gray>PNJ de serveurs (<white><count></white>) :"
+  list-entry: " <dark_gray>•</dark_gray> <white><id></white> <dark_gray>→</dark_gray> <aqua><target></aqua> <dark_gray>(<type>, <world> <x> <y> <z>)</dark_gray>"
+  list-empty: "<prefix><gray>Aucun PNJ. Crée-en un avec <white>/servernpc create <id> <serveur|monde:nom></white>."
+  connecting: "<prefix><green>Connexion à <white><server></white>..."
+  no-proxy: "<prefix><yellow>Ce PNJ envoie vers <white><server></white>, mais aucun proxy n'est configuré sur le serveur de dev (proxy.enabled: false)."
+  help:
+    - "<gradient:#00c6ff:#7b2ff7><bold>PNJ de serveurs</bold></gradient>"
+    - "<white>/servernpc create <id> <serveur|monde:nom> [type]</white> <gray>— crée un PNJ à ta position"
+    - "<white>/servernpc remove <id></white> <gray>— supprime un PNJ"
+    - "<white>/servernpc list</white> <gray>— liste les PNJ"
+    - "<white>/servernpc tphere <id></white> <gray>— déplace un PNJ à ta position"
+    - "<white>/servernpc tp <id></white> <gray>— te téléporte au PNJ"
+    - "<white>/servernpc server <id> <serveur></white> <gray>— cible un serveur du proxy"
+    - "<white>/servernpc world <id> <monde></white> <gray>— cible un monde de ce serveur"
+    - "<white>/servernpc name <id> <nom MiniMessage></white> <gray>— change le nom affiché"
+    - "<white>/servernpc profession <id> <profession></white> <gray>— profession d'un villageois"
+    - "<dark_gray>Depuis la console, ajoute <white>@joueur</white> à create/tphere/tp pour utiliser la position de ce joueur."

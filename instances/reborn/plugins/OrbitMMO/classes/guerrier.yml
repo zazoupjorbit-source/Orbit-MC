@@ -1,0 +1,824 @@
+# ------------------------------------------------------------------
+#  Guerrier — combattant au corps à corps, ressource : Rage
+#  La rage monte en frappant (attaque de base) et en encaissant, retombe hors combat.
+#
+#  Sorts — clés utiles :
+#    type : FRAPPE, TOURBILLON, CHARGE, BOND, CRI, BUFF, PROJECTILE, SOIN, ZONE
+#    categorie : attaque | deplacement | buff (objet qui porte le sort ; absent = d'apres le type :
+#               CHARGE/BOND = deplacement, CRI/BUFF/SOIN = buff, le reste = attaque)
+#    spe : spécialisations qui ont le sort (absent = toute la classe) · niveau · talent: true (donné par un talent)
+#    cout / gain (ressource) · recharge / incantation / duree (secondes) · gcd: false (hors recharge globale)
+#    portee · portee-min · arc (degrés ; <= 60 = une seule cible) · zone (rayon) · coups · intervalle (ticks)
+#    puissance (x puissance de l'arme) · arme: [ONE_HANDED, TWO_HANDED…] · bouclier: true · condition: cible-pv<20
+#    effets ennemis : etourdir, peur, ralentir (s), saignement (s) + dot (coef/s), affaiblir (s), provocation,
+#                     repousser, soulever
+#    effets sur soi (et le groupe pour un CRI) : reduction, bonus-degats, bonus-crit (%), bouclier (% PV max),
+#                     soin (% PV max), soin-par-sec (% PV max/s), vitesse (niveau), soin-soi (% PV max), vol-de-vie (%)
+#
+#  Talents — palier 0 à 8, colonne 0 à 2, rangs. Paliers 0 à 5 ouverts à palier x 5 points dans l'arbre,
+#    paliers avancés 6, 7 et 8 à 35, 45 et 55 points (niveau max 80 = 71 points ; arbres de ~80 rangs).
+#    effets PAR RANG (clés : pv, degats, degats.<sort>, soins, crit, crit.<sort>, critdeg, armure, esquive,
+#    blocage, epines, vol-de-vie, soin-sur-kill, vitesse, ressource, rage-par-coup, recharge.<sort>,
+#    cout.<sort>, duree.<sort>, incantation.<sort>), requiert: <talent>, sort: <sort donné>.
+#    Dans la description, {clé} est remplacé par la valeur du rang.
+# ------------------------------------------------------------------
+
+nom: Guerrier
+couleur: "#C8A27A"
+icone: IRON_SWORD
+jouable: true
+ressource: RAGE
+armure: PLAQUES
+pv: 1.15
+arme: ONE_HANDED
+bouclier: true
+description:
+  - "Maître des armes et du corps à corps."
+  - "Sa rage monte à chaque coup donné ou reçu,"
+  - "puis se libère en techniques dévastatrices."
+
+specialisations:
+  rempart:
+    nom: Rempart
+    role: TANK
+    icone: SHIELD
+    couleur: "#7FB2FF"
+    arme: ONE_HANDED
+    bouclier: true
+    description:
+      - "Épée et bouclier. Provoque les ennemis,"
+      - "encaisse les coups et protège le groupe."
+    passifs: { pv: 20, armure: 10, blocage: 10 }
+    talents:
+      robustesse:
+        nom: Robustesse
+        icone: IRON_CHESTPLATE
+        palier: 0
+        colonne: 0
+        rangs: 5
+        effets: { pv: 2 }
+        description: "+{pv} % de points de vie."
+      reflexes:
+        nom: Réflexes de combat
+        icone: FEATHER
+        palier: 0
+        colonne: 1
+        rangs: 5
+        effets: { esquive: 1 }
+        description: "+{esquive} % de chances d'esquiver un coup de mêlée."
+      rage_endurcie:
+        nom: Rage endurcie
+        icone: BLAZE_POWDER
+        palier: 0
+        colonne: 2
+        rangs: 3
+        effets: { rage-par-coup: 1 }
+        description: "Chaque attaque de base rend {rage-par-coup} rage de plus."
+      heurt_ameliore:
+        nom: Heurt amélioré
+        icone: SHIELD
+        palier: 1
+        colonne: 0
+        rangs: 3
+        effets: { recharge.heurt_de_bouclier: 0.5 }
+        description: "Recharge de Heurt de bouclier réduite de {recharge.heurt_de_bouclier} s."
+      tonnerre_lourd:
+        nom: Tonnerre lourd
+        icone: LIGHTNING_ROD
+        palier: 1
+        colonne: 1
+        rangs: 3
+        effets: { degats.coup_de_tonnerre: 10 }
+        description: "Coup de tonnerre inflige {degats.coup_de_tonnerre} % de dégâts en plus."
+      bouclier_eprouve:
+        nom: Bouclier éprouvé
+        icone: IRON_DOOR
+        palier: 1
+        colonne: 2
+        rangs: 5
+        effets: { blocage: 2 }
+        description: "+{blocage} % de chances de bloquer la moitié d'un coup de mêlée."
+      revanche_affutee:
+        nom: Revanche affûtée
+        icone: BLAZE_POWDER
+        palier: 2
+        colonne: 0
+        rangs: 3
+        effets: { degats.revanche: 10 }
+        description: "Revanche inflige {degats.revanche} % de dégâts en plus."
+      dernier_rempart:
+        nom: Dernier rempart
+        icone: TOTEM_OF_UNDYING
+        palier: 2
+        colonne: 1
+        rangs: 1
+        sort: dernier_rempart
+        description: "Apprend Dernier rempart : rend 30 % des PV d'un coup."
+      provocation_rapide:
+        nom: Défi constant
+        icone: TARGET
+        palier: 2
+        colonne: 2
+        rangs: 2
+        effets: { recharge.provocation: 1.5 }
+        description: "Recharge de Provocation réduite de {recharge.provocation} s."
+      mur_renforce:
+        nom: Mur renforcé
+        icone: OBSIDIAN
+        palier: 3
+        colonne: 0
+        rangs: 3
+        effets: { recharge.mur_protecteur: 20 }
+        description: "Recharge de Mur protecteur réduite de {recharge.mur_protecteur} s."
+      epines:
+        nom: Plaques à pointes
+        icone: CACTUS
+        palier: 3
+        colonne: 1
+        rangs: 3
+        effets: { epines: 5 }
+        description: "Renvoie {epines} % des dégâts de mêlée subis à l'attaquant."
+      vigueur:
+        nom: Vigueur
+        icone: GOLDEN_APPLE
+        palier: 3
+        colonne: 2
+        rangs: 5
+        effets: { armure: 1 }
+        description: "Dégâts subis réduits de {armure} %."
+      gardien_inflexible:
+        nom: Gardien inflexible
+        icone: NETHERITE_CHESTPLATE
+        palier: 4
+        colonne: 0
+        rangs: 3
+        effets: { pv: 3 }
+        requiert: robustesse
+        description: "+{pv} % de points de vie supplémentaires."
+      heurt_tonnant:
+        nom: Heurt tonnant
+        icone: TRIDENT
+        palier: 4
+        colonne: 1
+        rangs: 3
+        effets: { crit.heurt_de_bouclier: 5, degats.heurt_de_bouclier: 5 }
+        requiert: heurt_ameliore
+        description: "Heurt de bouclier : +{crit.heurt_de_bouclier} % de critique et +{degats.heurt_de_bouclier} % de dégâts."
+      rage_de_combat:
+        nom: Rage de combat
+        icone: MAGMA_CREAM
+        palier: 4
+        colonne: 2
+        rangs: 3
+        effets: { ressource: 5 }
+        description: "+{ressource} % de rage générée."
+      onde_de_choc:
+        nom: Onde de choc
+        icone: HEAVY_CORE
+        palier: 5
+        colonne: 0
+        rangs: 1
+        sort: onde_de_choc
+        requiert: dernier_rempart
+        description: "Apprend Onde de choc : étourdit les ennemis devant vous pendant 3 s."
+      bastion:
+        nom: Bastion
+        icone: BEDROCK
+        palier: 5
+        colonne: 1
+        rangs: 2
+        effets: { armure: 2 }
+        description: "Dégâts subis réduits de {armure} % de plus."
+      defi:
+        nom: Défi du champion
+        icone: GOLDEN_SWORD
+        palier: 5
+        colonne: 2
+        rangs: 3
+        effets: { degats: 2 }
+        description: "+{degats} % de dégâts."
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      peau_de_pierre:
+        nom: Peau de pierre
+        icone: STONE
+        palier: 6
+        colonne: 0
+        rangs: 5
+        effets: { pv: 2 }
+        description: "+{pv} % de points de vie."
+      tonnerre_retentissant:
+        nom: Tonnerre retentissant
+        icone: BELL
+        palier: 6
+        colonne: 1
+        rangs: 3
+        effets: { recharge.coup_de_tonnerre: 1 }
+        description: "Recharge de Coup de tonnerre réduite de {recharge.coup_de_tonnerre} s."
+      parade_experte:
+        nom: Parade experte
+        icone: IRON_BARS
+        palier: 6
+        colonne: 2
+        rangs: 3
+        effets: { esquive: 1 }
+        description: "+{esquive} % de chances d'esquiver un coup de mêlée."
+      mur_eternel:
+        nom: Mur éternel
+        icone: CRYING_OBSIDIAN
+        palier: 7
+        colonne: 0
+        rangs: 2
+        effets: { duree.mur_protecteur: 2 }
+        requiert: mur_renforce
+        description: "Mur protecteur dure {duree.mur_protecteur} s de plus."
+      voix_du_gardien:
+        nom: Voix du gardien
+        icone: GOAT_HORN
+        palier: 7
+        colonne: 1
+        rangs: 3
+        effets: { recharge.cri_de_ralliement: 20 }
+        description: "Recharge de Cri de ralliement réduite de {recharge.cri_de_ralliement} s."
+      colosse:
+        nom: Colosse
+        icone: IRON_BLOCK
+        palier: 7
+        colonne: 2
+        rangs: 3
+        effets: { armure: 1 }
+        description: "Dégâts subis réduits de {armure} % de plus."
+      represailles:
+        nom: Représailles
+        icone: GOLDEN_AXE
+        palier: 8
+        colonne: 0
+        rangs: 3
+        effets: { degats: 3 }
+        description: "+{degats} % de dégâts."
+      egide_stellaire:
+        nom: Égide stellaire
+        icone: END_CRYSTAL
+        palier: 8
+        colonne: 1
+        rangs: 1
+        sort: egide_stellaire
+        requiert: bastion
+        description: "Apprend Égide stellaire : bouclier de 20 % des PV et −20 % de dégâts subis pour vous et votre groupe."
+      second_souffle:
+        nom: Second souffle
+        icone: GLISTERING_MELON_SLICE
+        palier: 8
+        colonne: 2
+        rangs: 3
+        effets: { recharge.dernier_rempart: 20 }
+        requiert: dernier_rempart
+        description: "Recharge de Dernier rempart réduite de {recharge.dernier_rempart} s."
+
+  carnage:
+    nom: Carnage
+    role: DEGATS
+    icone: NETHERITE_AXE
+    couleur: "#FF5C5C"
+    arme: TWO_HANDED
+    description:
+      - "Arme à deux mains. Gros coups, tourbillons"
+      - "et saignements : tout balayer, vite."
+    passifs: { degats: 10, crit: 5 }
+    talents:
+      cruaute:
+        nom: Cruauté
+        icone: IRON_AXE
+        palier: 0
+        colonne: 0
+        rangs: 5
+        effets: { crit: 1 }
+        description: "+{crit} % de chances de coup critique."
+      force_brute:
+        nom: Force brute
+        icone: ANVIL
+        palier: 0
+        colonne: 1
+        rangs: 5
+        effets: { degats: 1 }
+        description: "+{degats} % de dégâts."
+      rage_sanguine:
+        nom: Rage sanguine
+        icone: BLAZE_POWDER
+        palier: 0
+        colonne: 2
+        rangs: 3
+        effets: { rage-par-coup: 1 }
+        description: "Chaque attaque de base rend {rage-par-coup} rage de plus."
+      frappe_amelioree:
+        nom: Frappe mortelle améliorée
+        icone: NETHERITE_AXE
+        palier: 1
+        colonne: 0
+        rangs: 3
+        effets: { degats.frappe_mortelle: 6 }
+        description: "Frappe mortelle inflige {degats.frappe_mortelle} % de dégâts en plus."
+      tourbillon_furieux:
+        nom: Tourbillon furieux
+        icone: WIND_CHARGE
+        palier: 1
+        colonne: 1
+        rangs: 3
+        effets: { degats.tourbillon: 8 }
+        description: "Tourbillon inflige {degats.tourbillon} % de dégâts en plus."
+      pourfendre_profond:
+        nom: Plaies profondes
+        icone: REDSTONE
+        palier: 1
+        colonne: 2
+        rangs: 3
+        effets: { degats.pourfendre: 15 }
+        description: "Le saignement de Pourfendre inflige {degats.pourfendre} % de dégâts en plus."
+      sanguinaire_affame:
+        nom: Soif de sang
+        icone: BEETROOT
+        palier: 2
+        colonne: 0
+        rangs: 3
+        effets: { soin-sur-kill: 3 }
+        description: "Tuer un ennemi rend {soin-sur-kill} % de vos PV."
+      deferlement:
+        nom: Déferlement
+        icone: CLOCK
+        palier: 2
+        colonne: 1
+        rangs: 2
+        effets: { recharge.frappe_mortelle: 0.5 }
+        description: "Recharge de Frappe mortelle réduite de {recharge.frappe_mortelle} s."
+      impitoyable:
+        nom: Impitoyable
+        icone: DIAMOND_AXE
+        palier: 2
+        colonne: 2
+        rangs: 3
+        effets: { critdeg: 10 }
+        description: "Coups critiques : +{critdeg} % de dégâts."
+      execution_rapide:
+        nom: Exécuteur
+        icone: WITHER_SKELETON_SKULL
+        palier: 3
+        colonne: 0
+        rangs: 3
+        effets: { cout.execution: 3 }
+        description: "Exécution coûte {cout.execution} rage de moins."
+      vitesse_martiale:
+        nom: Élan martial
+        icone: SUGAR
+        palier: 3
+        colonne: 1
+        rangs: 3
+        effets: { vitesse: 2 }
+        description: "+{vitesse} % de vitesse de déplacement."
+      vol_de_vie:
+        nom: Lame avide
+        icone: GHAST_TEAR
+        palier: 3
+        colonne: 2
+        rangs: 3
+        effets: { vol-de-vie: 1 }
+        description: "{vol-de-vie} % des dégâts infligés vous soignent."
+      temerite_accrue:
+        nom: Témérité accrue
+        icone: FIRE_CHARGE
+        palier: 4
+        colonne: 0
+        rangs: 3
+        effets: { recharge.temerite: 15 }
+        description: "Recharge de Témérité réduite de {recharge.temerite} s."
+      tempete_de_lames:
+        nom: Tempête de lames
+        icone: NETHERITE_SWORD
+        palier: 4
+        colonne: 1
+        rangs: 1
+        sort: tempete_de_lames
+        requiert: tourbillon_furieux
+        description: "Apprend Tempête de lames : 6 tourbillons d'affilée."
+      seuil_de_douleur:
+        nom: Seuil de douleur
+        icone: LEATHER_CHESTPLATE
+        palier: 4
+        colonne: 2
+        rangs: 3
+        effets: { armure: 1 }
+        description: "Dégâts subis réduits de {armure} %."
+      massacre:
+        nom: Massacre
+        icone: WITHER_ROSE
+        palier: 5
+        colonne: 0
+        rangs: 2
+        effets: { degats.execution: 20 }
+        requiert: execution_rapide
+        description: "Exécution inflige {degats.execution} % de dégâts en plus."
+      rage_sans_fin:
+        nom: Rage sans fin
+        icone: NETHER_STAR
+        palier: 5
+        colonne: 1
+        rangs: 3
+        effets: { degats: 2 }
+        description: "+{degats} % de dégâts."
+      boucherie:
+        nom: Boucherie
+        icone: PORKCHOP
+        palier: 5
+        colonne: 2
+        rangs: 3
+        effets: { crit.tourbillon: 5, crit.tempete_de_lames: 5 }
+        description: "Tourbillon et Tempête de lames : +{crit.tourbillon} % de critique."
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      tranchant_aiguise:
+        nom: Tranchant aiguisé
+        icone: DIAMOND_SWORD
+        palier: 6
+        colonne: 0
+        rangs: 3
+        effets: { crit.frappe_mortelle: 4 }
+        description: "Frappe mortelle : +{crit.frappe_mortelle} % de critique."
+      fureur_aveugle:
+        nom: Fureur aveugle
+        icone: FERMENTED_SPIDER_EYE
+        palier: 6
+        colonne: 1
+        rangs: 5
+        effets: { critdeg: 6 }
+        description: "Coups critiques : +{critdeg} % de dégâts."
+      hemorragie:
+        nom: Hémorragie
+        icone: REDSTONE_BLOCK
+        palier: 6
+        colonne: 2
+        rangs: 3
+        effets: { duree.pourfendre: 2 }
+        requiert: pourfendre_profond
+        description: "Le saignement de Pourfendre dure {duree.pourfendre} s de plus."
+      ivresse_du_combat:
+        nom: Ivresse du combat
+        icone: BLAZE_ROD
+        palier: 7
+        colonne: 0
+        rangs: 2
+        effets: { duree.temerite: 2 }
+        requiert: temerite_accrue
+        description: "Témérité dure {duree.temerite} s de plus."
+      danse_des_lames:
+        nom: Danse des lames
+        icone: BREEZE_ROD
+        palier: 7
+        colonne: 1
+        rangs: 3
+        effets: { cout.tourbillon: 3 }
+        description: "Tourbillon coûte {cout.tourbillon} rage de moins."
+      carapace_de_rage:
+        nom: Carapace de rage
+        icone: NETHERITE_SCRAP
+        palier: 7
+        colonne: 2
+        rangs: 3
+        effets: { pv: 3 }
+        description: "+{pv} % de points de vie."
+      execution_sauvage:
+        nom: Exécution sauvage
+        icone: SKELETON_SKULL
+        palier: 8
+        colonne: 0
+        rangs: 2
+        effets: { crit.execution: 10 }
+        requiert: massacre
+        description: "Exécution : +{crit.execution} % de critique."
+      fracas_sismique:
+        nom: Fracas sismique
+        icone: MACE
+        palier: 8
+        colonne: 1
+        rangs: 1
+        sort: fracas_sismique
+        requiert: rage_sans_fin
+        description: "Apprend Fracas sismique : gros dégâts autour de vous, saignement et ralentissement."
+      soif_inextinguible:
+        nom: Soif inextinguible
+        icone: SWEET_BERRIES
+        palier: 8
+        colonne: 2
+        rangs: 3
+        effets: { vol-de-vie: 1 }
+        requiert: vol_de_vie
+        description: "{vol-de-vie} % des dégâts infligés vous soignent en plus."
+
+sorts:
+  # ---------------- Toute la classe ----------------
+  frappe_heroique:
+    nom: Frappe héroïque
+    type: FRAPPE
+    icone: IRON_SWORD
+    couleur: "#FFD66E"
+    niveau: 1
+    cout: 20
+    portee: 3.5
+    arc: 50
+    puissance: 1.8
+    description: "Un coup puissant sur la cible devant vous."
+  charge:
+    nom: Charge
+    type: CHARGE
+    icone: RABBIT_FOOT
+    couleur: "#FF8A3B"
+    niveau: 1
+    gain: 20
+    recharge: 15
+    portee: 20
+    portee-min: 4
+    puissance: 0.5
+    effets: { etourdir: 1 }
+    description: "Fonce sur l'ennemi visé, l'étourdit 1 s et génère de la rage."
+  fendoir:
+    nom: Fendoir
+    type: FRAPPE
+    icone: IRON_AXE
+    couleur: "#FFB347"
+    niveau: 4
+    cout: 20
+    recharge: 6
+    portee: 3.8
+    arc: 160
+    puissance: 1.2
+    description: "Un large coup qui touche tous les ennemis devant vous."
+  cri_de_guerre:
+    nom: Cri de guerre
+    type: CRI
+    icone: GOAT_HORN
+    couleur: "#FF8A3B"
+    niveau: 6
+    gain: 10
+    recharge: 60
+    gcd: false
+    zone: 15
+    duree: 30
+    effets: { bonus-degats: 10 }
+    description: "Vous et votre groupe infligez 10 % de dégâts en plus pendant 30 s."
+  execution:
+    nom: Exécution
+    type: FRAPPE
+    icone: WITHER_SKELETON_SKULL
+    couleur: "#FF3B3B"
+    niveau: 8
+    cout: 15
+    portee: 3.5
+    arc: 50
+    puissance: 3.5
+    condition: cible-pv<20
+    description: "Achève une cible à moins de 20 % de vie."
+  provocation:
+    nom: Provocation
+    type: CRI
+    icone: TARGET
+    couleur: "#FF5C5C"
+    niveau: 10
+    recharge: 8
+    gcd: false
+    zone: 10
+    puissance: 0
+    effets: { provocation: 1 }
+    description: "Force les ennemis proches à vous attaquer."
+  cri_demoralisant:
+    nom: Cri démoralisant
+    type: CRI
+    icone: SKELETON_SKULL
+    couleur: "#B36BFF"
+    niveau: 12
+    cout: 10
+    zone: 10
+    puissance: 0
+    effets: { affaiblir: 15 }
+    description: "Les ennemis proches infligent 20 % de dégâts en moins pendant 15 s."
+  bond_heroique:
+    nom: Bond héroïque
+    type: BOND
+    icone: FEATHER
+    couleur: "#FFE066"
+    niveau: 20
+    recharge: 30
+    portee: 15
+    zone: 4
+    puissance: 1.0
+    description: "Bondit vers le point visé et frappe tout à l'atterrissage."
+  cri_de_ralliement:
+    nom: Cri de ralliement
+    type: CRI
+    icone: RED_BANNER
+    couleur: "#5EE89A"
+    niveau: 30
+    recharge: 150
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { soin: 15, bouclier: 10 }
+    description: "Rend 15 % des PV au groupe et pose un bouclier de 10 % des PV."
+
+  # ---------------- Rempart ----------------
+  heurt_de_bouclier:
+    nom: Heurt de bouclier
+    type: FRAPPE
+    icone: SHIELD
+    couleur: "#7FB2FF"
+    spe: [rempart]
+    niveau: 2
+    gain: 15
+    recharge: 8
+    portee: 3.5
+    arc: 50
+    puissance: 2.0
+    bouclier: true
+    effets: { provocation: 1 }
+    description: "Frappe au bouclier qui génère de la rage et attire la cible sur vous."
+  revanche:
+    nom: Revanche
+    type: TOURBILLON
+    icone: BLAZE_POWDER
+    couleur: "#FFB347"
+    spe: [rempart]
+    niveau: 5
+    cout: 10
+    recharge: 5
+    portee: 3.5
+    puissance: 1.3
+    description: "Balaye tous les ennemis autour de vous."
+  coup_de_tonnerre:
+    nom: Coup de tonnerre
+    type: TOURBILLON
+    icone: LIGHTNING_ROD
+    couleur: "#9AD8FF"
+    spe: [rempart]
+    niveau: 9
+    cout: 10
+    recharge: 6
+    portee: 6
+    puissance: 0.9
+    effets: { ralentir: 4, provocation: 1 }
+    description: "Frappe le sol : dégâts et ralentissement autour de vous, les ennemis vous ciblent."
+  maitrise_du_blocage:
+    nom: Maîtrise du blocage
+    type: BUFF
+    icone: IRON_CHESTPLATE
+    couleur: "#E6C35C"
+    spe: [rempart]
+    niveau: 14
+    cout: 20
+    recharge: 15
+    gcd: false
+    duree: 6
+    bouclier: true
+    effets: { reduction: 40 }
+    description: "Dégâts subis réduits de 40 % pendant 6 s."
+  mur_protecteur:
+    nom: Mur protecteur
+    type: BUFF
+    icone: OBSIDIAN
+    couleur: "#FFF3B0"
+    spe: [rempart]
+    niveau: 30
+    recharge: 180
+    gcd: false
+    duree: 8
+    effets: { reduction: 60 }
+    description: "Dégâts subis réduits de 60 % pendant 8 s."
+  dernier_rempart:
+    nom: Dernier rempart
+    type: BUFF
+    icone: TOTEM_OF_UNDYING
+    couleur: "#5EE89A"
+    spe: [rempart]
+    talent: true
+    recharge: 120
+    gcd: false
+    effets: { soin: 30 }
+    description: "Rend 30 % de vos PV d'un coup."
+  onde_de_choc:
+    nom: Onde de choc
+    type: FRAPPE
+    icone: HEAVY_CORE
+    couleur: "#FFE066"
+    spe: [rempart]
+    talent: true
+    recharge: 30
+    portee: 8
+    arc: 70
+    puissance: 0.8
+    effets: { etourdir: 3 }
+    description: "Une onde devant vous qui étourdit les ennemis 3 s."
+  egide_stellaire:
+    nom: Égide stellaire
+    type: CRI
+    icone: END_CRYSTAL
+    couleur: "#9AD8FF"
+    spe: [rempart]
+    talent: true
+    recharge: 120
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { bouclier: 20, reduction: 20 }
+    description: "Vous et votre groupe : bouclier de 20 % des PV et dégâts subis réduits de 20 % pendant 10 s."
+
+  # ---------------- Carnage ----------------
+  frappe_mortelle:
+    nom: Frappe mortelle
+    type: FRAPPE
+    icone: NETHERITE_AXE
+    couleur: "#FF5C5C"
+    spe: [carnage]
+    niveau: 2
+    cout: 25
+    recharge: 6
+    portee: 3.8
+    arc: 50
+    puissance: 2.6
+    arme: [TWO_HANDED]
+    description: "Un coup dévastateur sur la cible."
+  tourbillon:
+    nom: Tourbillon
+    type: TOURBILLON
+    icone: WIND_CHARGE
+    couleur: "#FFB347"
+    spe: [carnage]
+    niveau: 5
+    cout: 25
+    portee: 5
+    coups: 2
+    intervalle: 5
+    puissance: 0.8
+    arme: [TWO_HANDED]
+    description: "Deux tours d'arme qui frappent tous les ennemis autour."
+  pourfendre:
+    nom: Pourfendre
+    type: FRAPPE
+    icone: REDSTONE
+    couleur: "#C0392B"
+    spe: [carnage]
+    niveau: 9
+    cout: 10
+    portee: 3.8
+    arc: 50
+    puissance: 0.4
+    effets: { saignement: 12, dot: 0.25 }
+    description: "Entaille la cible qui saigne pendant 12 s."
+  sanguinaire:
+    nom: Sanguinaire
+    type: FRAPPE
+    icone: BEETROOT
+    couleur: "#FF3B6B"
+    spe: [carnage]
+    niveau: 14
+    gain: 10
+    recharge: 4.5
+    portee: 3.8
+    arc: 50
+    puissance: 1.6
+    effets: { soin-soi: 3 }
+    description: "Frappe qui génère de la rage et vous rend 3 % de vos PV."
+  temerite:
+    nom: Témérité
+    type: BUFF
+    icone: FIRE_CHARGE
+    couleur: "#FF6A00"
+    spe: [carnage]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 12
+    effets: { bonus-degats: 25, bonus-crit: 20 }
+    description: "+25 % de dégâts et +20 % de critique pendant 12 s."
+  tempete_de_lames:
+    nom: Tempête de lames
+    type: TOURBILLON
+    icone: NETHERITE_SWORD
+    couleur: "#FF8A3B"
+    spe: [carnage]
+    talent: true
+    recharge: 60
+    portee: 5
+    coups: 6
+    intervalle: 10
+    puissance: 0.7
+    arme: [TWO_HANDED]
+    description: "Six tourbillons d'affilée sur tous les ennemis autour."
+  fracas_sismique:
+    nom: Fracas sismique
+    type: TOURBILLON
+    icone: MACE
+    couleur: "#FF3B3B"
+    spe: [carnage]
+    talent: true
+    cout: 30
+    recharge: 40
+    portee: 6
+    coups: 1
+    puissance: 3.2
+    arme: [TWO_HANDED]
+    effets: { saignement: 8, dot: 0.3, ralentir: 3 }
+    description: "Frappe le sol : gros dégâts autour de vous, les ennemis saignent 8 s et sont ralentis."

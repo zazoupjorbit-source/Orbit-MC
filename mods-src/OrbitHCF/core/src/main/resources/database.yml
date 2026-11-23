@@ -1,0 +1,21 @@
+# ============================================================
+#  OrbitHCF-Core - Stockage
+# ============================================================
+
+# Type de stockage : sqlite (defaut) | mysql | mariadb
+type: sqlite
+
+# Prefixe des tables OrbitHCF
+table-prefix: orbithcf_
+
+sqlite:
+  # Fichier cree dans plugins/OrbitHCF-Core/
+  file: data.db
+
+mysql:
+  host: localhost
+  port: 3306
+  database: orbithcf
+  user: root
+  password: ''
+  params: "?useSSL=false&autoReconnect=true&characterEncoding=utf8"

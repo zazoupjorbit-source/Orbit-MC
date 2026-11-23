@@ -1,0 +1,64 @@
+# =====================================================================
+#  OrbitStaff - Messages francais (MiniMessage)
+#  Aucun message n'est ecrit en dur dans le code : tout passe par ce fichier.
+#  Placeholders : <player>, <target>, <staff>, <reason>, <duration>, <case>, <type>
+# =====================================================================
+config-version: 1
+
+prefix: "<gradient:#5865F2:#57F287>OrbitStaff</gradient> <dark_gray>»</dark_gray> "
+
+general:
+  no-permission: "<red>Vous n'avez pas la permission d'effectuer cette action.</red>"
+  player-not-found: "<red>Joueur introuvable : <white><target></white></red>"
+  reason-required: "<red>Un motif est obligatoire.</red>"
+  invalid-duration: "<red>Duree invalide. Exemples : 30m, 2h, 3d, 2w, 1mo, permanent.</red>"
+  api-unavailable: "<red>Service OrbitStaff momentanement indisponible. Reessayez sous peu.</red>"
+  confirm-required: "<yellow>Action sensible. Confirmez avec <white>/orbitstaff confirm</white>.</yellow>"
+
+staff-mode:
+  enabled: "<green>Mode staff active.</green>"
+  disabled: "<gray>Mode staff desactive. Inventaire restaure.</gray>"
+  state-restored: "<gray>Votre etat de staff a ete restaure.</gray>"
+  vanish-on: "<aqua>Vous etes maintenant invisible.</aqua>"
+  vanish-off: "<aqua>Vous etes de nouveau visible.</aqua>"
+
+freeze:
+  frozen-target: "<red><bold>Vous etes gele.</bold></red> Ne vous deconnectez pas et suivez les instructions du staff."
+  frozen-staff: "<green><target> a ete gele.</green> Motif : <white><reason></white>"
+  unfrozen-target: "<green>Vous n'etes plus gele.</green>"
+  unfrozen-staff: "<green><target> a ete degele.</green>"
+  disconnect-alert: "<red><target> s'est deconnecte pendant un freeze.</red>"
+
+sanction:
+  created: |
+    <green>Sanction creee</green>
+    <gray>Joueur :</gray> <white><target></white>
+    <gray>Type :</gray> <white><type></white>
+    <gray>Duree :</gray> <white><duration></white>
+    <gray>Motif :</gray> <white><reason></white>
+    <gray>Dossier :</gray> <white>#<case></white>
+  revoked: "<green>Sanction annulee pour <white><target></white>.</green>"
+  target-banned: "<red>Vous avez ete banni.</red> Motif : <white><reason></white>"
+  target-muted: "<red>Vous avez ete rendu muet.</red> Motif : <white><reason></white>"
+
+note:
+  created: "<green>Note ajoutee au dossier de <white><target></white>.</green>"
+  # Une note interne n'est JAMAIS affichee au joueur concerne.
+
+player-info:
+  header: "<gradient:#5865F2:#57F287>Dossier de <target></gradient>"
+  section-identity: "<gold>Identite</gold>"
+  section-discipline: "<gold>Dossier disciplinaire</gold>"
+  section-integrations: "<gold>Donnees externes</gold>"
+  integration-unavailable: "<dark_gray>(integration indisponible)</dark_gray>"
+
+hotbar:
+  teleport: "<aqua>Teleportation</aqua>"
+  player-info: "<aqua>Informations joueur</aqua>"
+  freeze: "<aqua>Geler</aqua>"
+  inventory: "<aqua>Inventaire</aqua>"
+  enderchest: "<aqua>Ender Chest</aqua>"
+  file: "<aqua>Dossier disciplinaire</aqua>"
+  sanction: "<aqua>Sanction</aqua>"
+  online-staff: "<aqua>Staff en ligne</aqua>"
+  exit: "<aqua>Quitter le mode staff</aqua>"

@@ -1,0 +1,41 @@
+# --- Secrets (JAMAIS commit) ---
+.env
+*.env
+!.env.example
+*.key
+*.pem
+secrets/
+
+# --- Java / Maven ---
+target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+dependency-reduced-pom.xml
+.mvn/timing.properties
+
+# --- Node / Bot ---
+node_modules/
+dist/
+npm-debug.log*
+yarn-error.log
+
+# --- IDE ---
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# --- OS ---
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# --- Runtime / logs ---
+logs/
+*.log
+run/
+data/
+evidence-store/

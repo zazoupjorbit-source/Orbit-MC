@@ -3,3 +3,14 @@
 *.bat text eol=crlf
 *.png binary
 *.woff2 binary
+# Fichiers reecrits par Paper / les plugins / les outils avec des fins de ligne LF : on garde LF partout,
+# sinon git les montre "modifies" alors que rien n'a change.
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.exemple text eol=lf
+*.sql text eol=lf
+*.jar binary
+*.pdf binary
+*.ico binary

@@ -1,0 +1,16 @@
+# ============================================================
+#  OrbitHCF-Combat - Limites d'enchantements
+#  0 = interdit, -1 = illimite
+# ============================================================
+
+limits:
+  protection: 2
+  sharpness: 2
+  power: 4
+  feather-falling: 4
+  efficiency: 5
+  unbreaking: 3
+  fire-aspect: 0
+  knockback: 0
+  punch: 0
+  thorns: 0

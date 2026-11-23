@@ -1,0 +1,48 @@
+# ============================================================
+#  OrbitHCF-Core - Claims et zones systeme
+# ============================================================
+#  Geometrie (centree sur x=0, z=0) :
+#    - Safezone : carre de rayon safezone.radius
+#    - Roads    : couloirs le long des axes X et Z
+#    - Warzone  : carre de rayon warzone.radius (hors safezone/roads)
+#    - Au-dela  : Wilderness (claimable)
+# ============================================================
+
+safezone:
+  radius: 64
+
+warzone:
+  radius: 800
+
+road:
+  half-width: 8
+
+claims:
+  # Nombre maximum de chunks revendicables par faction
+  max-per-faction: 8
+  # Les nouveaux claims doivent toucher un claim existant de la faction
+  require-adjacent: true
+  # Distance minimale (en chunks) des claims d'une autre faction
+  buffer-chunks: 1
+  # Rang minimum pour claim/unclaim : MEMBER, OFFICER, COLEADER, LEADER
+  min-role: OFFICER
+
+protection:
+  # Les allies peuvent-ils construire dans les claims ?
+  allow-ally-build: false
+  # Proteger les conteneurs (coffres, tonneaux, hoppers...)
+  protect-containers: true
+  # Proteger portes, trappes et boutons
+  protect-doors: true
+  # Construction en Wilderness
+  wilderness-build: true
+  # Construction en Warzone
+  warzone-build: false
+  # Construction sur les routes
+  road-build: false
+  # Annuler tous les degats en Safezone
+  safezone-cancel-damage: true
+  # Annuler la faim en Safezone
+  safezone-cancel-hunger: true
+  # Les explosions ne cassent des blocs que dans les claims raidables et la wilderness
+  explosion-protection: true

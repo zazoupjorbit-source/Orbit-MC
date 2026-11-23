@@ -1,0 +1,56 @@
+# ============================================================
+#  OrbitHCF-Combat - Messages (FR)
+# ============================================================
+
+prefix: "&7[&cCombat&7] &r"
+
+general:
+  no-permission: "&cVous n'avez pas la permission."
+  player-only: "&cCommande reservee aux joueurs."
+  unknown-player: "&cJoueur introuvable : &f{joueur}"
+  invalid-number: "&cNombre invalide : &f{valeur}"
+
+tag:
+  tagged: "&cVous etes en combat pendant &f{temps}&c. Ne vous deconnectez pas !"
+  expired: "&aVous n'etes plus en combat."
+  command-blocked: "&cCommande bloquee pendant le combat ({temps} restant)."
+  safezone-blocked: "&cVous ne pouvez pas entrer en safezone en combat ({temps} restant)."
+  logout-broadcast: "&4{joueur}&c s'est deconnecte en combat et a ete sanctionne !"
+  logged-sanction: "&cVous avez ete sanctionne pour deconnexion en combat."
+
+pearl:
+  cooldown: "&cEnder pearl en cooldown : &f{temps}"
+  safezone-blocked: "&cPerle annulee : safezone interdite en combat."
+
+gapple:
+  cooldown: "&cGolden apple en cooldown : &f{temps}"
+  egapple-cooldown: "&cEnchanted golden apple en cooldown : &f{temps}"
+
+pvptimer:
+  granted: "&aVous etes protege du PvP pendant &f{temps}&a. Utilisez &f/pvp enable&a pour retirer la protection."
+  remaining: "&eProtection PvP restante : &f{temps}"
+  removed: "&cVotre protection PvP est terminee. Bonne chance !"
+  none: "&cVous n'avez pas de protection PvP."
+  attacker-protected: "&cVous ne pouvez pas attaquer avec une protection PvP. Faites &f/pvp enable&c pour la retirer."
+  victim-protected: "&cCe joueur est protege par un PvP Timer."
+
+deathban:
+  banned-kick: "&cVous etes deathban pendant &f{temps}&c.\n&7Un allie peut vous revive avec /revive."
+  banned-join: "&cVous etes deathban pendant encore &f{temps}&c.\n&7Vies disponibles pour /revive : {vies}"
+  revived: "&aVous avez ete revive par &f{joueur}&a."
+  revive-success: "&aVous avez revive &f{joueur}&a (1 vie consommee)."
+  not-banned: "&cCe joueur n'est pas deathban."
+  no-lives: "&cVous n'avez pas de vie a utiliser."
+
+lives:
+  balance: "&eVies : &f{vies}"
+  balance-other: "&eVies de {joueur} : &f{vies}"
+  given: "&a{nombre} vie(s) donnee(s) a {joueur}."
+  received: "&aVous avez recu {nombre} vie(s)."
+  sent: "&a{nombre} vie(s) envoyee(s) a {joueur}."
+  not-enough: "&cVous n'avez pas assez de vies."
+
+limits:
+  enchant-removed: "&cEnchantement limite : {enchant} reduit/retire."
+  potion-blocked: "&cCette potion est interdite ou depasse le niveau maximum."
+  illegal-item: "&cCet objet est interdit."

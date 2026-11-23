@@ -1,0 +1,27 @@
+# ============================================================
+#  OrbitHCF-Core - DTR (Deaths Til Raidable)
+# ============================================================
+
+dtr:
+  # DTR maximum par membre
+  per-member: 1.1
+  # Plafond global du DTR
+  max: 5.5
+  # Plancher du DTR
+  min: -1.0
+  # DTR perdu par mort
+  loss-per-death: 1.0
+  # La perte de DTR est bloquee pendant le SOTW (si OrbitHCF-Events est present)
+  sotw-blocks-loss: true
+
+freeze:
+  # Duree du gel de DTR apres une mort (minutes)
+  duration-minutes: 45
+
+regen:
+  # DTR regenere par heure
+  per-hour: 2.0
+  # Au moins un membre doit etre connecte pour regenerer
+  require-online-member: true
+  # Intervalle d'application de la regeneration (secondes)
+  interval-seconds: 30

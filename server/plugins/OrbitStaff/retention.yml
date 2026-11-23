@@ -1,0 +1,42 @@
+# =====================================================================
+#  OrbitStaff - Politique de retention et de protection des donnees
+#  Applique par l'API (purge planifiee). Valeurs = jours (0 = conservation
+#  illimitee, a eviter). La collecte est limitee aux donnees utiles.
+# =====================================================================
+config-version: 1
+
+retention-days:
+  player-sessions: 90
+  audit-events: 365
+  # Les sanctions expirees restent longtemps (antecedents serveur).
+  expired-sanctions: 1095
+  revoked-sanctions: 365
+  internal-notes: 730
+  evidence: 365
+  inventory-snapshots: 180
+  discord-link-codes: 1     # codes de liaison purges tres vite
+
+# Suppression logique privilegiee : purge physique differee.
+soft-delete:
+  notes: true
+  evidence: true
+
+# Vie privee (section 28).
+privacy:
+  # Aucune collecte d'IP par defaut. Si activee un jour : retention courte,
+  # acces restreint, jamais affichee dans Discord.
+  collect-ip: false
+  ip-retention-days: 7
+  # Anonymisation possible sur demande (droit a l'effacement).
+  allow-anonymization: true
+
+# Export reserve aux responsables (grade MANAGER), journalise.
+export:
+  formats: ["CSV", "JSON"]
+  min-role: MANAGER
+  log-exports: true
+
+# Purge planifiee (cron cote API).
+purge:
+  enabled: true
+  schedule-cron: "0 30 4 * * *"   # tous les jours a 04h30 UTC

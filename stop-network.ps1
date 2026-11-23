@@ -36,7 +36,11 @@ function Stop-OrbitDb {
     }
     $props = @{}
     Get-Content (Join-Path $PSScriptRoot 'setup\db-root.properties') | Where-Object { $_ -match '^(\w+)=(.*)$' } | ForEach-Object { $props[$Matches[1]] = $Matches[2] }
-    & 'C:\Program Files\MariaDB 11.8\bin\mariadb-admin.exe' -h 127.0.0.1 -P 3318 -u root "-p$($props.password)" shutdown
+    # MariaDB du depot (tools\mariadb) sinon celle installee sur le PC.
+    $admin = @(Join-Path $PSScriptRoot 'tools\mariadb\bin') + @(Get-ChildItem $env:ProgramFiles -Directory -Filter 'MariaDB*' -ErrorAction SilentlyContinue | Sort-Object Name -Descending | ForEach-Object { Join-Path $_.FullName 'bin' }) |
+        ForEach-Object { Join-Path $_ 'mariadb-admin.exe'; Join-Path $_ 'mysqladmin.exe' } | Where-Object { Test-Path $_ } | Select-Object -First 1
+    if (-not $admin) { Write-Warning "mariadb-admin introuvable : base laissee allumee."; return }
+    & $admin -h 127.0.0.1 -P 3318 -u root "-p$($props.password)" shutdown
     Write-Host "Base MariaDB arretee."
 }
 

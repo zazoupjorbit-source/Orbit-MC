@@ -1,0 +1,173 @@
+# ============================================================
+#  OrbitHCF-Core - Messages (FR)
+#  Placeholders : {joueur}, {faction}, {temps}, etc.
+# ============================================================
+
+prefix: "&7[&6Orbit&fHCF&7] &r"
+
+general:
+  no-permission: "&cVous n'avez pas la permission."
+  player-only: "&cCommande reservee aux joueurs."
+  unknown-player: "&cJoueur introuvable : &f{joueur}"
+  unknown-faction: "&cFaction introuvable : &f{faction}"
+  not-in-faction: "&cVous n'appartenez a aucune faction."
+  insufficient-rank: "&cVotre rang de faction est insuffisant."
+  invalid-duration: "&cDuree invalide : &f{valeur}"
+  invalid-number: "&cNombre invalide : &f{valeur}"
+
+faction:
+  created: "&aFaction &f{faction}&a creee."
+  created-broadcast: "&e{joueur}&7 a cree la faction &e{faction}&7."
+  disbanded: "&cFaction &f{faction}&c dissoute."
+  disbanded-broadcast: "&7La faction &e{faction}&7 a ete dissoute par &e{joueur}&7."
+  name-invalid: "&cNom invalide. Caracteres autorises : lettres, chiffres, underscore."
+  name-length: "&cLe nom doit faire entre {min} et {max} caracteres."
+  name-taken: "&cCe nom de faction est deja pris."
+  already-in-faction: "&cVous etes deja dans une faction."
+  target-already-in-faction: "&cCe joueur est deja dans une faction."
+  invited: "&aInvitation envoyee a &f{joueur}&a."
+  invite-received: "&eVous etes invite dans la faction &6{faction}&e. Utilisez &6/f join {faction}&e pour accepter."
+  already-invited: "&cCe joueur est deja invite."
+  not-invited: "&cCe joueur n'est pas invite."
+  invite-revoked: "&cInvitation de &f{joueur}&c annulee."
+  no-invite: "&cVous n'avez pas d'invitation pour cette faction."
+  full: "&cCette faction est complete ({max} membres)."
+  joined: "&aVous avez rejoint &f{faction}&a."
+  joined-broadcast: "&e{joueur}&a a rejoint la faction."
+  left: "&cVous avez quitte &f{faction}&c."
+  left-broadcast: "&e{joueur}&c a quitte la faction."
+  leader-cannot-leave: "&cTransferez d'abord le lead (&f/f leader <joueur>&c) ou dissolvez la faction."
+  kicked: "&a{joueur} a ete exclu de la faction."
+  kicked-target: "&cVous avez ete exclu de la faction &f{faction}&c."
+  kicked-broadcast: "&e{joueur}&c a ete exclu de la faction par &e{par}&c."
+  cannot-kick-higher: "&cVous ne pouvez pas exclure un joueur de rang superieur ou egal."
+  not-a-member: "&cCe joueur n'est pas membre de votre faction."
+  promoted: "&a{joueur} est maintenant &f{rang}&a."
+  demoted: "&c{joueur} est retrograde &f{rang}&c."
+  cannot-promote: "&cImpossible de promouvoir ce joueur davantage."
+  cannot-demote: "&cImpossible de retrograder ce joueur davantage."
+  new-leader: "&e{joueur}&a est le nouveau leader de la faction."
+  renamed: "&aFaction renommee en &f{faction}&a."
+  system-faction: "&cCette action est impossible sur une faction systeme."
+
+home:
+  set: "&aHome de faction defini."
+  must-be-in-claim: "&cLe home doit etre place dans un claim de votre faction."
+  none: "&cVotre faction n'a pas de home."
+  teleporting: "&eTeleportation au home dans &6{temps}&e... Ne bougez pas."
+  teleported: "&aTeleporte au home de la faction."
+  cancelled: "&cTeleportation annulee."
+
+stuck:
+  start: "&eTeleportation de secours dans &6{temps}&e... Ne bougez pas."
+  teleported: "&aVous avez ete teleporte en zone sure."
+  cancelled: "&cTeleportation de secours annulee."
+  failed: "&cAucune zone sure trouvee a proximite."
+
+logout:
+  start: "&eDeconnexion securisee dans &6{temps}&e... Ne bougez pas."
+  cancelled: "&cDeconnexion securisee annulee."
+  success: "&aDeconnexion securisee."
+  already: "&cUne deconnexion securisee est deja en cours."
+
+claim:
+  claimed: "&aChunk revendique ({x}, {z})."
+  unclaimed: "&cChunk abandonne ({x}, {z})."
+  unclaimed-all: "&cTous les claims de la faction ont ete abandonnes."
+  already-claimed: "&cCe chunk est deja revendique par &f{faction}&c."
+  not-claimable-zone: "&cImpossible de claim ici (zone systeme)."
+  wrong-world: "&cLes claims sont desactives dans ce monde."
+  max-claims: "&cVotre faction a atteint la limite de {max} claims."
+  not-adjacent: "&cLe claim doit toucher un claim existant de votre faction."
+  too-close: "&cTrop proche du claim d'une autre faction."
+  not-your-claim: "&cCe chunk n'appartient pas a votre faction."
+  no-claim-here: "&cAucun claim ici."
+
+protection:
+  deny-build: "&cVous ne pouvez pas construire sur le territoire de &f{faction}&c."
+  deny-interact: "&cVous ne pouvez pas interagir sur le territoire de &f{faction}&c."
+  deny-safezone: "&cAction impossible en Safezone."
+
+dtr:
+  raidable-broadcast: "&4[Raidable] &cLa faction &f{faction}&c est maintenant raidable !"
+  unraidable-broadcast: "&a[DTR] &7La faction &f{faction}&7 n'est plus raidable."
+  frozen: "&cLe DTR de votre faction est gele pendant encore &f{temps}&c."
+
+ally:
+  request-sent: "&aDemande d'alliance envoyee a &f{faction}&a."
+  request-received: "&eLa faction &6{faction}&e propose une alliance. Faites &6/f ally {faction}&e pour accepter."
+  added: "&aVotre faction est maintenant alliee avec &f{faction}&a."
+  removed: "&cAlliance rompue avec &f{faction}&c."
+  max: "&cVotre faction a atteint la limite de {max} alliance(s)."
+  self: "&cVous ne pouvez pas vous allier a votre propre faction."
+  already: "&cVous etes deja allie avec cette faction."
+  not-ally: "&cVous n'etes pas allie avec cette faction."
+
+focus:
+  set: "&eVotre faction focus maintenant &c{faction}&e."
+  removed: "&eFocus retire."
+  disabled: "&cLe focus est desactive."
+  none: "&cAucune faction focus."
+
+list:
+  header: "&6=== Factions ({page}/{pages}) ==="
+  entry: "&e{rang}. &f{faction} &7- &a{online}&7/{total} en ligne &7- {dtr} DTR"
+  empty: "&7Aucune faction."
+
+who:
+  header: "&7&m----------&r &6{faction} &7[{online}/{total}] &7&m----------"
+  system: "&7Faction systeme : &f{type}"
+  leader: "&eLeader : &f{joueur}"
+  members: "&eMembres : &f{liste}"
+  dtr: "&eDTR : {couleur}{dtr}&7/{max} {gel}"
+  dtr-frozen-suffix: "&c(gele {temps})"
+  raidable: "&4RAIDABLE"
+  home: "&eHome : &f{coords}"
+  home-none: "&eHome : &7Aucun"
+  points: "&ePoints : &f{points}"
+  allies: "&eAllies : &f{liste}"
+  focus: "&eFocus : &c{faction}"
+  created: "&eCreee le : &f{date}"
+
+map:
+  header: "&6=== Carte des claims (vous etes en {x}, {z}) ==="
+  legend: "&aVous &7| &cEnnemi &7| &dAllie &7| &6Zone systeme &7| &8Wilderness"
+
+admin:
+  dtr-set: "&aDTR de {faction} defini a {dtr}."
+  frozen: "&aDTR de {faction} gele pour {temps}."
+  unfrozen: "&aDTR de {faction} degele."
+  points-added: "&a{points} points ajoutes a {faction}."
+  bypass-on: "&aMode bypass active."
+  bypass-off: "&cMode bypass desactive."
+
+help:
+  - "&6&m--------&r &6 OrbitHCF - Aide ({page}/{pages}) &6&m--------"
+  - "&6/f create <nom> &7- Creer une faction"
+  - "&6/f invite <joueur> &7- Inviter un joueur"
+  - "&6/f join <faction> &7- Rejoindre une faction"
+  - "&6/f leave &7- Quitter votre faction"
+  - "&6/f who [faction] &7- Informations de faction"
+  - "&6/f claim &7- Revendiquer le chunk courant"
+  - "&6/f unclaim &7- Abandonner le chunk courant"
+  - "&6/f home &7- Teleportation au home"
+  - "&6/f sethome &7- Definir le home"
+  - "&6/f ally <faction> &7- Proposer une alliance"
+  - "&6/f focus <faction> &7- Focus une faction ennemie"
+  - "&6/f stuck &7- Teleportation de secours"
+  - "&6/f list &7- Liste des factions"
+  - "&6/f map &7- Carte des claims proches"
+  - "&6/f promote|demote <joueur> &7- Gerer les rangs"
+  - "&6/f leader <joueur> &7- Transferer le lead"
+  - "&6/f kick <joueur> &7- Exclure un membre"
+  - "&6/f rename <nom> &7- Renommer la faction"
+  - "&6/f disband &7- Dissoudre la faction"
+
+help-admin:
+  - "&4&m--------&r &4 OrbitHCF - Admin &4&m--------"
+  - "&c/f setdtr <faction> <valeur> &7- Definir le DTR"
+  - "&c/f freeze <faction> <duree> &7- Geler le DTR"
+  - "&c/f unfreeze <faction> &7- Degeler le DTR"
+  - "&c/f points <faction> <n> &7- Ajouter des points"
+  - "&c/f disband <faction> &7- Dissoudre une faction"
+  - "&c/f bypass &7- Ignorer les protections"

@@ -26,6 +26,8 @@ public final class MobState {
     public UUID lastSkillBy;
     public long lastSkillAt;
     public boolean dead;
+    /** Retiré sans avoir été tué (plus de joueur à portée, entrée en zone sûre). */
+    public boolean despawned;
     public boolean revealed;
 
     MobState(LivingEntity entity, MobDef def, int level, int floor, BossDef boss, double maxHp) {

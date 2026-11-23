@@ -1,0 +1,18 @@
+name: OrbitHCF-Classes
+version: '${version}'
+main: fr.orbitgames.hcf.classes.OrbitHCFClassesPlugin
+api-version: '1.21'
+author: OrbitGames
+description: Classes HCF - Diamond, Bard, Archer, Rogue, Miner.
+website: https://orbit-pvp.fr
+depend:
+  - OrbitHCF-API
+  - OrbitHCF-Core
+commands:
+  class:
+    description: Affiche votre classe HCF active.
+    usage: /class
+permissions:
+  orbithcf.classes.admin:
+    description: Administration du module Classes.
+    default: op

@@ -1,0 +1,766 @@
+# ------------------------------------------------------------------
+#  Mage — deux formes selon la faction. Ressource : Mana.
+#  Lumière : feu et foudre (Pyromancien, Foudroyeur).
+#  Ombre : nécromancie et poisons (Nécromancien, Pestilence).
+#  Le mana remonte lentement en combat : sorts de base peu chers, gros sorts sur recharge,
+#  et « Puiser dans l'Éclat » pour se recharger.
+#  Format des sorts et des talents : voir guerrier.yml.
+#  Les morts-vivants du Nécromancien ne sont pas (encore) de vraies créatures : ils agissent à travers ses sorts.
+# ------------------------------------------------------------------
+
+nom: Mage
+couleur: "#4FA3FF"
+icone: BLAZE_ROD
+jouable: true
+ressource: MANA
+armure: TISSU
+pv: 0.85
+arme: STAFF
+formes:
+  lumiere: "Mage de Lumière"
+  ombre: "Mage de l'Ombre"
+description:
+  - "Lumière : feu, foudre et bonne magie."
+  - "Ombre : magie noire, nécromancie et poisons."
+
+specialisations:
+  pyromancien:
+    nom: Pyromancien
+    role: DEGATS
+    faction: lumiere
+    icone: FIRE_CHARGE
+    couleur: "#FF8A3B"
+    arme: STAFF
+    description:
+      - "Feu : brûlures dans le temps"
+      - "et grosses explosions."
+    passifs: { degats: 5, critdeg: 10 }
+    talents:
+      flammes_vives: { nom: "Flammes vives", icone: BLAZE_POWDER, palier: 0, colonne: 0, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      etincelles: { nom: "Étincelles", icone: FIREWORK_STAR, palier: 0, colonne: 1, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      braise_interieure: { nom: "Braise intérieure", icone: CAMPFIRE, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 4 }, description: "+{ressource} % de mana régénéré." }
+      boule_de_feu_rapide: { nom: "Incantation ardente", icone: CLOCK, palier: 1, colonne: 0, rangs: 3, effets: { incantation.boule_de_feu: 0.15 }, description: "Incantation de Boule de feu réduite de {incantation.boule_de_feu} s." }
+      deflagration_amelioree: { nom: "Déflagration brûlante", icone: FIRE_CHARGE, palier: 1, colonne: 1, rangs: 3, effets: { degats.deflagration: 8 }, description: "Déflagration inflige {degats.deflagration} % de dégâts en plus." }
+      peau_de_salamandre: { nom: "Peau de salamandre", icone: MAGMA_CREAM, palier: 1, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      immolation: { nom: "Immolation", icone: LAVA_BUCKET, palier: 2, colonne: 0, rangs: 1, sort: immolation, description: "Apprend Immolation : la cible brûle longtemps et fort." }
+      brulure_tenace: { nom: "Brûlure tenace", icone: SOUL_CAMPFIRE, palier: 2, colonne: 1, rangs: 3, effets: { duree.boule_de_feu: 2 }, description: "La brûlure de Boule de feu dure {duree.boule_de_feu} s de plus." }
+      pluie_nourrie: { nom: "Pluie nourrie", icone: MAGMA_BLOCK, palier: 2, colonne: 2, rangs: 3, effets: { degats.pluie_de_flammes: 10 }, description: "Pluie de flammes inflige {degats.pluie_de_flammes} % de dégâts en plus." }
+      combustion: { nom: "Combustion", icone: TNT, palier: 3, colonne: 0, rangs: 3, effets: { critdeg: 8 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      boule_de_feu_vorace: { nom: "Boule de feu vorace", icone: FIRE_CHARGE, palier: 3, colonne: 1, rangs: 3, effets: { degats.boule_de_feu: 6 }, description: "Boule de feu inflige {degats.boule_de_feu} % de dégâts en plus." }
+      souffle_ardent_ameliore: { nom: "Souffle du brasier", icone: BLAZE_ROD, palier: 3, colonne: 2, rangs: 2, effets: { recharge.souffle_ardent: 2 }, description: "Recharge de Souffle ardent réduite de {recharge.souffle_ardent} s." }
+      feu_devorant: { nom: "Feu dévorant", icone: LAVA_BUCKET, palier: 4, colonne: 0, rangs: 3, requiert: immolation, effets: { degats.immolation: 12 }, description: "Immolation inflige {degats.immolation} % de dégâts en plus." }
+      embrasement_prolonge: { nom: "Embrasement prolongé", icone: BLAZE_POWDER, palier: 4, colonne: 1, rangs: 2, effets: { duree.embrasement: 2 }, description: "Embrasement dure {duree.embrasement} s de plus." }
+      flamme_econome: { nom: "Flamme économe", icone: HONEYCOMB, palier: 4, colonne: 2, rangs: 3, effets: { cout.pluie_de_flammes: 2 }, description: "Pluie de flammes coûte {cout.pluie_de_flammes} mana de moins." }
+      colonne_de_feu: { nom: "Colonne de feu", icone: MAGMA_BLOCK, palier: 5, colonne: 0, rangs: 1, sort: colonne_de_feu, requiert: pluie_nourrie, description: "Apprend Colonne de feu : un pilier de flammes jaillit et étourdit." }
+      maitre_du_feu: { nom: "Maître du feu", icone: NETHER_STAR, palier: 5, colonne: 1, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      chaleur_vitale: { nom: "Chaleur vitale", icone: GOLDEN_APPLE, palier: 5, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      fournaise: { nom: "Fournaise", icone: BLAST_FURNACE, palier: 6, colonne: 0, rangs: 3, effets: { crit.boule_de_feu: 4 }, description: "Boule de feu : +{crit.boule_de_feu} % de critique." }
+      brasier_eternel: { nom: "Brasier éternel", icone: SOUL_CAMPFIRE, palier: 6, colonne: 1, rangs: 3, requiert: immolation, effets: { duree.immolation: 2 }, description: "Immolation dure {duree.immolation} s de plus." }
+      cendres: { nom: "Cendres", icone: GUNPOWDER, palier: 6, colonne: 2, rangs: 3, effets: { cout.boule_de_feu: 1 }, description: "Boule de feu coûte {cout.boule_de_feu} mana de moins." }
+      colonne_rapide: { nom: "Colonne rapide", icone: CLOCK, palier: 7, colonne: 0, rangs: 2, requiert: colonne_de_feu, effets: { recharge.colonne_de_feu: 5 }, description: "Recharge de Colonne de feu réduite de {recharge.colonne_de_feu} s." }
+      enfer: { nom: "Enfer", icone: FIRE_CORAL, palier: 7, colonne: 1, rangs: 5, effets: { critdeg: 5 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      bouclier_de_braises: { nom: "Bouclier de braises", icone: SHIELD, palier: 7, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      soleil_captif: { nom: "Soleil captif", icone: SHROOMLIGHT, palier: 8, colonne: 0, rangs: 1, sort: soleil_captif, requiert: colonne_de_feu, description: "Apprend Soleil captif : un fragment de la lumière de l'Astre qui explose en un brasier." }
+      embrasement_total: { nom: "Embrasement total", icone: FIRE_CHARGE, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      coeur_ardent: { nom: "Cœur ardent", icone: BLAZE_POWDER, palier: 8, colonne: 2, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+
+  foudroyeur:
+    nom: Foudroyeur
+    role: DEGATS
+    faction: lumiere
+    icone: LIGHTNING_ROD
+    couleur: "#9AD8FF"
+    arme: WAND
+    description:
+      - "Électricité : sorts rapides, chaînes"
+      - "d'éclairs, étourdissements."
+    passifs: { degats: 5, crit: 5 }
+    talents:
+      tension: { nom: "Tension", icone: REDSTONE_TORCH, palier: 0, colonne: 0, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      etincelle_vive: { nom: "Étincelle vive", icone: GLOWSTONE_DUST, palier: 0, colonne: 1, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      courant_continu: { nom: "Courant continu", icone: COPPER_INGOT, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 4 }, description: "+{ressource} % de mana régénéré." }
+      eclair_rapide: { nom: "Éclair rapide", icone: CLOCK, palier: 1, colonne: 0, rangs: 3, effets: { incantation.eclair: 0.1 }, description: "Incantation d'Éclair réduite de {incantation.eclair} s." }
+      arc_ramifie: { nom: "Arc ramifié", icone: LIGHTNING_ROD, palier: 1, colonne: 1, rangs: 3, effets: { degats.arc_electrique: 8 }, description: "Arc électrique inflige {degats.arc_electrique} % de dégâts en plus." }
+      reflexes_galvanises: { nom: "Réflexes galvanisés", icone: FEATHER, palier: 1, colonne: 2, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      foudre_en_boule: { nom: "Foudre en boule", icone: HEART_OF_THE_SEA, palier: 2, colonne: 0, rangs: 1, sort: foudre_en_boule, description: "Apprend Foudre en boule : une sphère électrique qui éclate en zone." }
+      decharge_rapide: { nom: "Décharge rapide", icone: CLOCK, palier: 2, colonne: 1, rangs: 3, effets: { recharge.decharge: 2 }, description: "Recharge de Décharge réduite de {recharge.decharge} s." }
+      eclair_puissant: { nom: "Éclair puissant", icone: LIGHTNING_ROD, palier: 2, colonne: 2, rangs: 3, effets: { degats.eclair: 6 }, description: "Éclair inflige {degats.eclair} % de dégâts en plus." }
+      orage_violent: { nom: "Orage violent", icone: TRIDENT, palier: 3, colonne: 0, rangs: 3, effets: { degats.orage: 10 }, description: "Orage inflige {degats.orage} % de dégâts en plus." }
+      haute_tension: { nom: "Haute tension", icone: REDSTONE_BLOCK, palier: 3, colonne: 1, rangs: 3, effets: { critdeg: 8 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      isolation: { nom: "Isolation", icone: WHITE_WOOL, palier: 3, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      boule_instable: { nom: "Boule instable", icone: HEART_OF_THE_SEA, palier: 4, colonne: 0, rangs: 3, requiert: foudre_en_boule, effets: { degats.foudre_en_boule: 10 }, description: "Foudre en boule inflige {degats.foudre_en_boule} % de dégâts en plus." }
+      surcharge_prolongee: { nom: "Surcharge prolongée", icone: GLOWSTONE, palier: 4, colonne: 1, rangs: 2, effets: { duree.surcharge: 2 }, description: "Surcharge dure {duree.surcharge} s de plus." }
+      arc_econome: { nom: "Arc économe", icone: HONEYCOMB, palier: 4, colonne: 2, rangs: 3, effets: { cout.arc_electrique: 2 }, description: "Arc électrique coûte {cout.arc_electrique} mana de moins." }
+      champ_statique: { nom: "Champ statique", icone: LIGHTNING_ROD, palier: 5, colonne: 0, rangs: 1, sort: champ_statique, requiert: orage_violent, description: "Apprend Champ statique : des décharges autour de vous qui étourdissent." }
+      maitre_de_la_foudre: { nom: "Maître de la foudre", icone: NETHER_STAR, palier: 5, colonne: 1, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      vigueur_electrique: { nom: "Vigueur électrique", icone: GOLDEN_APPLE, palier: 5, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      foudre_precise: { nom: "Foudre précise", icone: TARGET, palier: 6, colonne: 0, rangs: 3, effets: { crit.eclair: 4 }, description: "Éclair : +{crit.eclair} % de critique." }
+      orage_persistant: { nom: "Orage persistant", icone: TRIDENT, palier: 6, colonne: 1, rangs: 3, requiert: orage_violent, effets: { duree.orage: 1 }, description: "Orage dure {duree.orage} s de plus." }
+      eclair_econome: { nom: "Éclair économe", icone: HONEYCOMB, palier: 6, colonne: 2, rangs: 3, effets: { cout.eclair: 1 }, description: "Éclair coûte {cout.eclair} mana de moins." }
+      champ_rapide: { nom: "Champ rapide", icone: CLOCK, palier: 7, colonne: 0, rangs: 2, requiert: champ_statique, effets: { recharge.champ_statique: 5 }, description: "Recharge de Champ statique réduite de {recharge.champ_statique} s." }
+      foudre_aveuglante: { nom: "Foudre aveuglante", icone: GLOWSTONE_DUST, palier: 7, colonne: 1, rangs: 5, effets: { critdeg: 5 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      bouclier_d_ions: { nom: "Bouclier d'ions", icone: SHIELD, palier: 7, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      colere_du_ciel: { nom: "Colère du ciel", icone: LIGHTNING_ROD, palier: 8, colonne: 0, rangs: 1, sort: colere_du_ciel, requiert: champ_statique, description: "Apprend Colère du ciel : la foudre s'abat sans relâche sur une large zone." }
+      tempete_vivante: { nom: "Tempête vivante", icone: TRIDENT, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      arc_parfait: { nom: "Arc parfait", icone: ENDER_EYE, palier: 8, colonne: 2, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+
+  necromancien:
+    nom: Nécromancien
+    role: DEGATS
+    faction: ombre
+    icone: WITHER_SKELETON_SKULL
+    couleur: "#8E6BFF"
+    arme: GRIMOIRE
+    description:
+      - "Invoque et renforce une armée"
+      - "de morts-vivants."
+    passifs: { degats: 5, vol-de-vie: 2 }
+    talents:
+      os_affutes: { nom: "Os affûtés", icone: BONE, palier: 0, colonne: 0, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      regard_mort: { nom: "Regard mort", icone: ENDER_EYE, palier: 0, colonne: 1, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      souffle_froid: { nom: "Souffle froid", icone: SOUL_LANTERN, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 4 }, description: "+{ressource} % de mana régénéré." }
+      main_rapide: { nom: "Main rapide", icone: CLOCK, palier: 1, colonne: 0, rangs: 3, effets: { incantation.main_squelettique: 0.15 }, description: "Incantation de Main squelettique réduite de {incantation.main_squelettique} s." }
+      moisson_avide: { nom: "Moisson avide", icone: SOUL_LANTERN, palier: 1, colonne: 1, rangs: 3, effets: { degats.moisson_d_ames: 8 }, description: "Moisson d'âmes inflige {degats.moisson_d_ames} % de dégâts en plus." }
+      chair_morte: { nom: "Chair morte", icone: ROTTEN_FLESH, palier: 1, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      armure_d_os: { nom: "Armure d'os", icone: BONE_BLOCK, palier: 2, colonne: 0, rangs: 1, sort: armure_d_os, description: "Apprend Armure d'os : un bouclier de 25 % de vos PV." }
+      morts_nombreux: { nom: "Morts nombreux", icone: ZOMBIE_HEAD, palier: 2, colonne: 1, rangs: 3, effets: { degats.les_morts_surgissent: 10 }, description: "Les morts surgissent inflige {degats.les_morts_surgissent} % de dégâts en plus." }
+      lance_d_os_affutee: { nom: "Lance d'os affûtée", icone: BONE, palier: 2, colonne: 2, rangs: 3, effets: { degats.lance_d_os: 8 }, description: "Lance d'os inflige {degats.lance_d_os} % de dégâts en plus." }
+      festin_des_morts: { nom: "Festin des morts", icone: ROTTEN_FLESH, palier: 3, colonne: 0, rangs: 3, effets: { soin-sur-kill: 3 }, description: "Tuer un ennemi rend {soin-sur-kill} % de vos PV." }
+      appel_rapide: { nom: "Appel rapide", icone: CLOCK, palier: 3, colonne: 1, rangs: 3, effets: { recharge.les_morts_surgissent: 2 }, description: "Recharge de Les morts surgissent réduite de {recharge.les_morts_surgissent} s." }
+      froid_du_tombeau: { nom: "Froid du tombeau", icone: PACKED_ICE, palier: 3, colonne: 2, rangs: 3, effets: { critdeg: 8 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      os_renforces: { nom: "Os renforcés", icone: BONE_BLOCK, palier: 4, colonne: 0, rangs: 3, requiert: armure_d_os, effets: { recharge.armure_d_os: 8 }, description: "Recharge d'Armure d'os réduite de {recharge.armure_d_os} s." }
+      liche_prolongee: { nom: "Liche prolongée", icone: WITHER_SKELETON_SKULL, palier: 4, colonne: 1, rangs: 2, effets: { duree.forme_de_liche: 2 }, description: "Forme de liche dure {duree.forme_de_liche} s de plus." }
+      drain_vorace: { nom: "Drain vorace", icone: GHAST_TEAR, palier: 4, colonne: 2, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+      horde_affamee: { nom: "Horde affamée", icone: ZOMBIE_HEAD, palier: 5, colonne: 0, rangs: 1, sort: horde_affamee, requiert: morts_nombreux, description: "Apprend Horde affamée : une horde de morts dévore la zone visée." }
+      maitre_des_tombes: { nom: "Maître des tombes", icone: NETHER_STAR, palier: 5, colonne: 1, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      peau_cireuse: { nom: "Peau cireuse", icone: CANDLE, palier: 5, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      main_implacable: { nom: "Main implacable", icone: SKELETON_SKULL, palier: 6, colonne: 0, rangs: 3, effets: { crit.main_squelettique: 4 }, description: "Main squelettique : +{crit.main_squelettique} % de critique." }
+      horde_tenace: { nom: "Horde tenace", icone: ZOMBIE_HEAD, palier: 6, colonne: 1, rangs: 3, requiert: horde_affamee, effets: { duree.horde_affamee: 1 }, description: "Horde affamée dure {duree.horde_affamee} s de plus." }
+      main_econome: { nom: "Main économe", icone: HONEYCOMB, palier: 6, colonne: 2, rangs: 3, effets: { cout.main_squelettique: 1 }, description: "Main squelettique coûte {cout.main_squelettique} mana de moins." }
+      os_eternels: { nom: "Os éternels", icone: BONE_BLOCK, palier: 7, colonne: 0, rangs: 2, requiert: os_renforces, effets: { duree.armure_d_os: 3 }, description: "Armure d'os dure {duree.armure_d_os} s de plus." }
+      ames_damnees: { nom: "Âmes damnées", icone: SOUL_SAND, palier: 7, colonne: 1, rangs: 5, effets: { critdeg: 5 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      linceul: { nom: "Linceul", icone: WHITE_WOOL, palier: 7, colonne: 2, rangs: 3, effets: { pv: 3 }, description: "+{pv} % de points de vie." }
+      armee_des_oublies: { nom: "Armée des Oubliés", icone: WITHER_SKELETON_SKULL, palier: 8, colonne: 0, rangs: 1, sort: armee_des_oublies, requiert: horde_affamee, description: "Apprend Armée des Oubliés : les morts de la Chute se relèvent et ravagent une large zone." }
+      seigneur_des_morts: { nom: "Seigneur des morts", icone: NETHERITE_HELMET, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      soif_d_ames: { nom: "Soif d'âmes", icone: GHAST_TEAR, palier: 8, colonne: 2, rangs: 3, requiert: drain_vorace, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+
+  pestilence:
+    nom: Pestilence
+    role: DEGATS
+    faction: ombre
+    icone: SPIDER_EYE
+    couleur: "#6EFF6E"
+    arme: STAFF
+    description:
+      - "Poisons, maladies et malédictions"
+      - "qui se cumulent."
+    passifs: { degats: 8 }
+    talents:
+      venin_concentre: { nom: "Venin concentré", icone: SPIDER_EYE, palier: 0, colonne: 0, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      oeil_malade: { nom: "Œil malade", icone: FERMENTED_SPIDER_EYE, palier: 0, colonne: 1, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      miasme_nourricier: { nom: "Miasme nourricier", icone: SLIME_BALL, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 4 }, description: "+{ressource} % de mana régénéré." }
+      venin_virulent: { nom: "Venin virulent", icone: POISONOUS_POTATO, palier: 1, colonne: 0, rangs: 3, effets: { degats.venin: 12 }, description: "Le poison de Venin inflige {degats.venin} % de dégâts en plus." }
+      trait_rapide: { nom: "Trait rapide", icone: CLOCK, palier: 1, colonne: 1, rangs: 3, effets: { incantation.trait_pestilentiel: 0.15 }, description: "Incantation de Trait pestilentiel réduite de {incantation.trait_pestilentiel} s." }
+      immunite: { nom: "Immunité", icone: MILK_BUCKET, palier: 1, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      corruption: { nom: "Corruption", icone: WITHER_ROSE, palier: 2, colonne: 0, rangs: 1, sort: corruption, description: "Apprend Corruption : un mal du Néant qui ronge longtemps la cible." }
+      venin_lent: { nom: "Venin lent", icone: SPIDER_EYE, palier: 2, colonne: 1, rangs: 3, effets: { duree.venin: 2 }, description: "Le poison de Venin dure {duree.venin} s de plus." }
+      nuee_dense: { nom: "Nuée dense", icone: SLIME_BALL, palier: 2, colonne: 2, rangs: 3, effets: { degats.nuee_pestilentielle: 10 }, description: "Nuée pestilentielle inflige {degats.nuee_pestilentielle} % de dégâts en plus." }
+      fievre: { nom: "Fièvre", icone: MAGMA_CREAM, palier: 3, colonne: 0, rangs: 3, effets: { critdeg: 8 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      fletrissure_amelioree: { nom: "Flétrissure profonde", icone: DEAD_BUSH, palier: 3, colonne: 1, rangs: 3, effets: { degats.fletrissure: 12 }, description: "Flétrissure inflige {degats.fletrissure} % de dégâts en plus." }
+      nuee_rapide: { nom: "Nuée rapide", icone: CLOCK, palier: 3, colonne: 2, rangs: 2, effets: { recharge.nuee_pestilentielle: 2 }, description: "Recharge de Nuée pestilentielle réduite de {recharge.nuee_pestilentielle} s." }
+      corruption_profonde: { nom: "Corruption profonde", icone: WITHER_ROSE, palier: 4, colonne: 0, rangs: 3, requiert: corruption, effets: { degats.corruption: 12 }, description: "Corruption inflige {degats.corruption} % de dégâts en plus." }
+      fleau_prolonge: { nom: "Fléau prolongé", icone: BLAZE_POWDER, palier: 4, colonne: 1, rangs: 2, effets: { duree.fleau_incarne: 2 }, description: "Fléau incarné dure {duree.fleau_incarne} s de plus." }
+      venin_econome: { nom: "Venin économe", icone: HONEYCOMB, palier: 4, colonne: 2, rangs: 3, effets: { cout.venin: 1 }, description: "Venin coûte {cout.venin} mana de moins." }
+      miasmes: { nom: "Miasmes", icone: SLIME_BALL, palier: 5, colonne: 0, rangs: 1, sort: miasmes, requiert: nuee_dense, description: "Apprend Miasmes : un nuage autour de vous qui empoisonne et ralentit." }
+      maitre_des_fleaux: { nom: "Maître des fléaux", icone: NETHER_STAR, palier: 5, colonne: 1, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      corps_immunise: { nom: "Corps immunisé", icone: GOLDEN_APPLE, palier: 5, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      corruption_tenace: { nom: "Corruption tenace", icone: WITHER_ROSE, palier: 6, colonne: 0, rangs: 3, requiert: corruption, effets: { duree.corruption: 2 }, description: "Corruption dure {duree.corruption} s de plus." }
+      contagion: { nom: "Contagion", icone: SPIDER_EYE, palier: 6, colonne: 1, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      trait_econome: { nom: "Trait économe", icone: HONEYCOMB, palier: 6, colonne: 2, rangs: 3, effets: { cout.trait_pestilentiel: 1 }, description: "Trait pestilentiel coûte {cout.trait_pestilentiel} mana de moins." }
+      miasmes_rapides: { nom: "Miasmes rapides", icone: CLOCK, palier: 7, colonne: 0, rangs: 2, requiert: miasmes, effets: { recharge.miasmes: 5 }, description: "Recharge de Miasmes réduite de {recharge.miasmes} s." }
+      pourriture: { nom: "Pourriture", icone: ROTTEN_FLESH, palier: 7, colonne: 1, rangs: 5, effets: { critdeg: 5 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      sang_vicie: { nom: "Sang vicié", icone: FERMENTED_SPIDER_EYE, palier: 7, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      grande_peste: { nom: "Grande Peste", icone: WITHER_ROSE, palier: 8, colonne: 0, rangs: 1, sort: grande_peste, requiert: miasmes, description: "Apprend Grande Peste : une épidémie qui ronge et affaiblit toute une zone." }
+      pandemie: { nom: "Pandémie", icone: SLIME_BLOCK, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      sang_noir: { nom: "Sang noir", icone: GHAST_TEAR, palier: 8, colonne: 2, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+
+sorts:
+  # ---------------- Toute la classe (les deux formes) ----------------
+  pas_astral:
+    nom: Pas astral
+    type: BOND
+    icone: ENDER_PEARL
+    couleur: "#9AD8FF"
+    niveau: 4
+    cout: 5
+    recharge: 15
+    portee: 12
+    zone: 3
+    puissance: 0.2
+    description: "Un bond porté par la magie vers le point visé."
+  puiser_dans_l_eclat:
+    nom: Puiser dans l'Éclat
+    type: BUFF
+    icone: AMETHYST_SHARD
+    couleur: "#4FA3FF"
+    niveau: 12
+    gain: 40
+    recharge: 90
+    gcd: false
+    description: "Puise dans la puissance de votre Marque : rend 40 points de mana."
+  cristallisation:
+    nom: Cristallisation
+    type: BUFF
+    icone: AMETHYST_BLOCK
+    couleur: "#CFA8FF"
+    niveau: 20
+    recharge: 120
+    gcd: false
+    duree: 4
+    effets: { reduction: 80 }
+    description: "Vous enferme dans un cristal d'Éclat : dégâts subis réduits de 80 % pendant 4 s."
+
+  # ---------------- Mage de Lumière ----------------
+  etincelle_astrale:
+    nom: Étincelle astrale
+    type: PROJECTILE
+    icone: GLOWSTONE_DUST
+    couleur: "#FFD66E"
+    faction: lumiere
+    niveau: 1
+    cout: 4
+    incantation: 1.5
+    portee: 30
+    puissance: 1.6
+    description: "Un trait de lumière brûlante sur la cible visée."
+  barriere_de_l_aube:
+    nom: Barrière de l'Aube
+    type: BUFF
+    icone: SHIELD
+    couleur: "#FFE9A8"
+    faction: lumiere
+    niveau: 2
+    cout: 10
+    recharge: 30
+    gcd: false
+    duree: 10
+    effets: { bouclier: 20 }
+    description: "Un bouclier doré de 20 % de vos PV pendant 10 s."
+  clarte_de_l_astre:
+    nom: Clarté de l'Astre
+    type: CRI
+    icone: SUNFLOWER
+    couleur: "#FFD66E"
+    faction: lumiere
+    niveau: 6
+    cout: 10
+    recharge: 60
+    gcd: false
+    zone: 20
+    duree: 60
+    effets: { bonus-crit: 5 }
+    description: "Vous et votre groupe gagnez 5 % de critique pendant 60 s."
+  eclair_aveuglant:
+    nom: Éclair aveuglant
+    type: CRI
+    icone: GLOWSTONE
+    couleur: "#FFFFFF"
+    faction: lumiere
+    niveau: 8
+    cout: 10
+    recharge: 25
+    zone: 6
+    puissance: 0.3
+    effets: { etourdir: 2 }
+    description: "Un flash de lumière étourdit les ennemis autour de vous pendant 2 s."
+
+  # ---------------- Mage de l'Ombre ----------------
+  trait_d_ombre:
+    nom: Trait d'ombre
+    type: PROJECTILE
+    icone: ECHO_SHARD
+    couleur: "#B36BFF"
+    faction: ombre
+    niveau: 1
+    cout: 4
+    incantation: 1.5
+    portee: 30
+    puissance: 1.6
+    description: "Un trait de ténèbres sur la cible visée."
+  voile_du_neant:
+    nom: Voile du Néant
+    type: BUFF
+    icone: BLACK_STAINED_GLASS
+    couleur: "#8E6BFF"
+    faction: ombre
+    niveau: 2
+    cout: 10
+    recharge: 30
+    gcd: false
+    duree: 10
+    effets: { bouclier: 20 }
+    description: "Un voile de Néant absorbe 20 % de vos PV de dégâts pendant 10 s."
+  pacte_du_neant:
+    nom: Pacte du Néant
+    type: CRI
+    icone: WITHER_ROSE
+    couleur: "#B36BFF"
+    faction: ombre
+    niveau: 6
+    cout: 10
+    recharge: 60
+    gcd: false
+    zone: 20
+    duree: 60
+    effets: { bonus-degats: 5 }
+    description: "Vous et votre groupe infligez 5 % de dégâts en plus pendant 60 s."
+  hurlement_d_effroi:
+    nom: Hurlement d'effroi
+    type: CRI
+    icone: SCULK_SHRIEKER
+    couleur: "#5A3A8C"
+    faction: ombre
+    niveau: 8
+    cout: 10
+    recharge: 30
+    zone: 8
+    puissance: 0
+    effets: { peur: 3 }
+    description: "Un cri d'outre-tombe : les ennemis proches fuient pendant 3 s."
+
+  # ---------------- Pyromancien ----------------
+  boule_de_feu:
+    nom: Boule de feu
+    type: PROJECTILE
+    icone: FIRE_CHARGE
+    couleur: "#FF8A3B"
+    spe: [pyromancien]
+    niveau: 2
+    cout: 8
+    incantation: 2.0
+    portee: 30
+    zone: 2
+    puissance: 2.6
+    effets: { saignement: 6, dot: 0.15 }
+    description: "Une boule de feu qui explose et fait brûler les ennemis touchés pendant 6 s."
+  deflagration:
+    nom: Déflagration
+    type: PROJECTILE
+    icone: BLAZE_POWDER
+    couleur: "#FF5C2B"
+    spe: [pyromancien]
+    niveau: 5
+    cout: 6
+    recharge: 8
+    portee: 30
+    puissance: 1.8
+    description: "Une explosion instantanée sur la cible."
+  pluie_de_flammes:
+    nom: Pluie de flammes
+    type: ZONE
+    icone: MAGMA_BLOCK
+    couleur: "#FF6A00"
+    spe: [pyromancien]
+    niveau: 9
+    cout: 18
+    recharge: 15
+    portee: 25
+    zone: 4
+    duree: 5
+    puissance: 0.6
+    description: "Des flammes tombent sur la zone visée pendant 5 s."
+  souffle_ardent:
+    nom: Souffle ardent
+    type: FRAPPE
+    icone: BLAZE_ROD
+    couleur: "#FFB347"
+    spe: [pyromancien]
+    niveau: 14
+    cout: 10
+    recharge: 10
+    portee: 7
+    arc: 90
+    puissance: 1.4
+    effets: { repousser: 0.8 }
+    description: "Un cône de flammes devant vous qui repousse les ennemis."
+  embrasement:
+    nom: Embrasement
+    type: BUFF
+    icone: FIRE_CORAL
+    couleur: "#FF3B3B"
+    spe: [pyromancien]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 12
+    effets: { bonus-crit: 30, bonus-degats: 10 }
+    description: "+30 % de critique et +10 % de dégâts pendant 12 s."
+  immolation:
+    nom: Immolation
+    type: PROJECTILE
+    icone: LAVA_BUCKET
+    couleur: "#FF3B00"
+    spe: [pyromancien]
+    talent: true
+    cout: 10
+    recharge: 15
+    portee: 30
+    puissance: 0.5
+    effets: { saignement: 12, dot: 0.4 }
+    description: "La cible s'embrase et brûle fortement pendant 12 s."
+  colonne_de_feu:
+    nom: Colonne de feu
+    type: ZONE
+    icone: MAGMA_BLOCK
+    couleur: "#FF8A3B"
+    spe: [pyromancien]
+    talent: true
+    cout: 15
+    recharge: 30
+    portee: 25
+    zone: 3
+    duree: 2
+    puissance: 2.0
+    effets: { etourdir: 1 }
+    description: "Un pilier de flammes jaillit au point visé : gros dégâts et étourdissement."
+  soleil_captif:
+    nom: Soleil captif
+    type: PROJECTILE
+    icone: SHROOMLIGHT
+    couleur: "#FFF3B0"
+    spe: [pyromancien]
+    talent: true
+    cout: 30
+    recharge: 60
+    incantation: 2.5
+    portee: 35
+    zone: 6
+    puissance: 5.0
+    effets: { saignement: 8, dot: 0.3 }
+    description: "Un fragment de la lumière de l'Astre explose en un brasier qui brûle 8 s."
+
+  # ---------------- Foudroyeur ----------------
+  eclair:
+    nom: Éclair
+    type: PROJECTILE
+    icone: LIGHTNING_ROD
+    couleur: "#9AD8FF"
+    spe: [foudroyeur]
+    niveau: 2
+    cout: 5
+    incantation: 1.2
+    portee: 30
+    puissance: 1.9
+    description: "Un éclair rapide sur la cible visée."
+  arc_electrique:
+    nom: Arc électrique
+    type: FRAPPE
+    icone: IRON_BARS
+    couleur: "#7FD4FF"
+    spe: [foudroyeur]
+    niveau: 5
+    cout: 10
+    recharge: 6
+    portee: 10
+    arc: 80
+    puissance: 1.3
+    description: "Un arc de foudre qui saute entre tous les ennemis devant vous."
+  decharge:
+    nom: Décharge
+    type: PROJECTILE
+    icone: GLOWSTONE_DUST
+    couleur: "#FFE066"
+    spe: [foudroyeur]
+    niveau: 9
+    cout: 8
+    recharge: 15
+    portee: 25
+    puissance: 1.0
+    effets: { etourdir: 2 }
+    description: "Une décharge qui étourdit la cible pendant 2 s."
+  orage:
+    nom: Orage
+    type: ZONE
+    icone: TRIDENT
+    couleur: "#9AD8FF"
+    spe: [foudroyeur]
+    niveau: 14
+    cout: 20
+    recharge: 20
+    portee: 25
+    zone: 4
+    duree: 5
+    puissance: 0.7
+    description: "La foudre frappe la zone visée chaque seconde pendant 5 s."
+  surcharge:
+    nom: Surcharge
+    type: BUFF
+    icone: GLOWSTONE
+    couleur: "#FFFFFF"
+    spe: [foudroyeur]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 12
+    effets: { bonus-degats: 20, vitesse: 1 }
+    description: "+20 % de dégâts et vitesse accrue pendant 12 s."
+  foudre_en_boule:
+    nom: Foudre en boule
+    type: PROJECTILE
+    icone: HEART_OF_THE_SEA
+    couleur: "#7FD4FF"
+    spe: [foudroyeur]
+    talent: true
+    cout: 10
+    recharge: 10
+    portee: 30
+    zone: 3
+    puissance: 2.2
+    description: "Une sphère de foudre qui éclate sur tous les ennemis proches."
+  champ_statique:
+    nom: Champ statique
+    type: TOURBILLON
+    icone: LIGHTNING_ROD
+    couleur: "#9AD8FF"
+    spe: [foudroyeur]
+    talent: true
+    cout: 15
+    recharge: 30
+    portee: 6
+    coups: 3
+    intervalle: 10
+    puissance: 1.0
+    effets: { etourdir: 1 }
+    description: "Trois décharges autour de vous qui étourdissent les ennemis."
+  colere_du_ciel:
+    nom: Colère du ciel
+    type: ZONE
+    icone: LIGHTNING_ROD
+    couleur: "#FFFFFF"
+    spe: [foudroyeur]
+    talent: true
+    cout: 30
+    recharge: 60
+    portee: 30
+    zone: 6
+    duree: 4
+    puissance: 1.8
+    description: "La foudre s'abat sans relâche sur une large zone pendant 4 s."
+
+  # ---------------- Nécromancien ----------------
+  main_squelettique:
+    nom: Main squelettique
+    type: PROJECTILE
+    icone: SKELETON_SKULL
+    couleur: "#8E6BFF"
+    spe: [necromancien]
+    niveau: 2
+    cout: 5
+    incantation: 1.5
+    portee: 30
+    puissance: 1.8
+    description: "Une main d'os jaillit et frappe la cible visée."
+  moisson_d_ames:
+    nom: Moisson d'âmes
+    type: PROJECTILE
+    icone: SOUL_LANTERN
+    couleur: "#7FE0D8"
+    spe: [necromancien]
+    niveau: 5
+    cout: 8
+    recharge: 8
+    portee: 25
+    puissance: 1.6
+    effets: { vol-de-vie: 50 }
+    description: "Arrache un morceau d'âme à la cible : la moitié des dégâts vous soigne."
+  les_morts_surgissent:
+    nom: Les morts surgissent
+    type: ZONE
+    icone: ZOMBIE_HEAD
+    couleur: "#6E8E5A"
+    spe: [necromancien]
+    niveau: 9
+    cout: 18
+    recharge: 18
+    portee: 20
+    zone: 4
+    duree: 6
+    puissance: 0.6
+    effets: { ralentir: 1 }
+    description: "Des morts sortent de terre au point visé et agrippent les ennemis pendant 6 s."
+  lance_d_os:
+    nom: Lance d'os
+    type: PROJECTILE
+    icone: BONE
+    couleur: "#E8E0D0"
+    spe: [necromancien]
+    niveau: 14
+    cout: 10
+    recharge: 10
+    portee: 30
+    puissance: 2.6
+    description: "Une lance d'os acérée projetée sur la cible."
+  forme_de_liche:
+    nom: Forme de liche
+    type: BUFF
+    icone: WITHER_SKELETON_SKULL
+    couleur: "#5A3A8C"
+    spe: [necromancien]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 12
+    effets: { bonus-degats: 20, reduction: 20 }
+    description: "Devient liche : +20 % de dégâts et −20 % de dégâts subis pendant 12 s."
+  armure_d_os:
+    nom: Armure d'os
+    type: BUFF
+    icone: BONE_BLOCK
+    couleur: "#E8E0D0"
+    spe: [necromancien]
+    talent: true
+    cout: 10
+    recharge: 45
+    gcd: false
+    duree: 12
+    effets: { bouclier: 25 }
+    description: "Des os vous entourent : bouclier de 25 % de vos PV pendant 12 s."
+  horde_affamee:
+    nom: Horde affamée
+    type: ZONE
+    icone: ZOMBIE_HEAD
+    couleur: "#8E6BFF"
+    spe: [necromancien]
+    talent: true
+    cout: 20
+    recharge: 40
+    portee: 20
+    zone: 5
+    duree: 6
+    puissance: 1.0
+    description: "Une horde de morts dévore la zone visée pendant 6 s."
+  armee_des_oublies:
+    nom: Armée des Oubliés
+    type: ZONE
+    icone: WITHER_SKELETON_SKULL
+    couleur: "#B36BFF"
+    spe: [necromancien]
+    talent: true
+    cout: 35
+    recharge: 90
+    portee: 25
+    zone: 7
+    duree: 8
+    puissance: 1.4
+    effets: { ralentir: 1 }
+    description: "Les morts de la Chute se relèvent et ravagent une large zone pendant 8 s."
+
+  # ---------------- Pestilence ----------------
+  venin:
+    nom: Venin
+    type: PROJECTILE
+    icone: SPIDER_EYE
+    couleur: "#6EFF6E"
+    spe: [pestilence]
+    niveau: 2
+    cout: 5
+    portee: 30
+    puissance: 0.4
+    effets: { saignement: 12, dot: 0.3 }
+    description: "Empoisonne la cible pendant 12 s."
+  trait_pestilentiel:
+    nom: Trait pestilentiel
+    type: PROJECTILE
+    icone: SLIME_BALL
+    couleur: "#9EE84A"
+    spe: [pestilence]
+    niveau: 5
+    cout: 5
+    incantation: 1.5
+    portee: 30
+    puissance: 1.7
+    description: "Un trait de maladie sur la cible visée."
+  nuee_pestilentielle:
+    nom: Nuée pestilentielle
+    type: ZONE
+    icone: SLIME_BLOCK
+    couleur: "#6EFF6E"
+    spe: [pestilence]
+    niveau: 9
+    cout: 16
+    recharge: 15
+    portee: 25
+    zone: 4
+    duree: 6
+    puissance: 0.5
+    description: "Un nuage de peste empoisonne la zone visée pendant 6 s."
+  fletrissure:
+    nom: Flétrissure
+    type: PROJECTILE
+    icone: DEAD_BUSH
+    couleur: "#8C7A3A"
+    spe: [pestilence]
+    niveau: 14
+    cout: 8
+    recharge: 12
+    portee: 30
+    puissance: 0.3
+    effets: { affaiblir: 15, saignement: 8, dot: 0.15 }
+    description: "Une malédiction : la cible inflige moins de dégâts pendant 15 s et dépérit."
+  fleau_incarne:
+    nom: Fléau incarné
+    type: BUFF
+    icone: WITHER_ROSE
+    couleur: "#3A8C3A"
+    spe: [pestilence]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 12
+    effets: { bonus-degats: 20, bonus-crit: 10 }
+    description: "+20 % de dégâts et +10 % de critique pendant 12 s."
+  corruption:
+    nom: Corruption
+    type: PROJECTILE
+    icone: WITHER_ROSE
+    couleur: "#5A3A8C"
+    spe: [pestilence]
+    talent: true
+    cout: 8
+    recharge: 12
+    portee: 30
+    puissance: 0.3
+    effets: { saignement: 18, dot: 0.35 }
+    description: "Un mal du Néant qui ronge la cible pendant 18 s."
+  miasmes:
+    nom: Miasmes
+    type: TOURBILLON
+    icone: SLIME_BALL
+    couleur: "#9EE84A"
+    spe: [pestilence]
+    talent: true
+    cout: 15
+    recharge: 25
+    portee: 6
+    puissance: 0.5
+    effets: { saignement: 8, dot: 0.25, ralentir: 3 }
+    description: "Un nuage autour de vous : les ennemis sont empoisonnés 8 s et ralentis."
+  grande_peste:
+    nom: Grande Peste
+    type: ZONE
+    icone: WITHER_ROSE
+    couleur: "#3A8C3A"
+    spe: [pestilence]
+    talent: true
+    cout: 30
+    recharge: 60
+    portee: 25
+    zone: 7
+    duree: 8
+    puissance: 0.9
+    effets: { saignement: 6, dot: 0.3, affaiblir: 8 }
+    description: "Une épidémie ronge et affaiblit tous les ennemis d'une large zone pendant 8 s."

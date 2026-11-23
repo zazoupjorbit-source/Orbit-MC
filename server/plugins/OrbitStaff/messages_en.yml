@@ -1,0 +1,64 @@
+# =====================================================================
+#  OrbitStaff - English messages (MiniMessage)
+#  No message is hardcoded: everything goes through this file.
+#  Placeholders: <player>, <target>, <staff>, <reason>, <duration>, <case>, <type>
+# =====================================================================
+config-version: 1
+
+prefix: "<gradient:#5865F2:#57F287>OrbitStaff</gradient> <dark_gray>»</dark_gray> "
+
+general:
+  no-permission: "<red>You don't have permission to perform this action.</red>"
+  player-not-found: "<red>Player not found: <white><target></white></red>"
+  reason-required: "<red>A reason is required.</red>"
+  invalid-duration: "<red>Invalid duration. Examples: 30m, 2h, 3d, 2w, 1mo, permanent.</red>"
+  api-unavailable: "<red>OrbitStaff service is temporarily unavailable. Please try again shortly.</red>"
+  confirm-required: "<yellow>Sensitive action. Confirm with <white>/orbitstaff confirm</white>.</yellow>"
+
+staff-mode:
+  enabled: "<green>Staff mode enabled.</green>"
+  disabled: "<gray>Staff mode disabled. Inventory restored.</gray>"
+  state-restored: "<gray>Your staff state has been restored.</gray>"
+  vanish-on: "<aqua>You are now invisible.</aqua>"
+  vanish-off: "<aqua>You are visible again.</aqua>"
+
+freeze:
+  frozen-target: "<red><bold>You are frozen.</bold></red> Do not disconnect and follow staff instructions."
+  frozen-staff: "<green><target> has been frozen.</green> Reason: <white><reason></white>"
+  unfrozen-target: "<green>You are no longer frozen.</green>"
+  unfrozen-staff: "<green><target> has been unfrozen.</green>"
+  disconnect-alert: "<red><target> disconnected while frozen.</red>"
+
+sanction:
+  created: |
+    <green>Sanction created</green>
+    <gray>Player:</gray> <white><target></white>
+    <gray>Type:</gray> <white><type></white>
+    <gray>Duration:</gray> <white><duration></white>
+    <gray>Reason:</gray> <white><reason></white>
+    <gray>Case:</gray> <white>#<case></white>
+  revoked: "<green>Sanction revoked for <white><target></white>.</green>"
+  target-banned: "<red>You have been banned.</red> Reason: <white><reason></white>"
+  target-muted: "<red>You have been muted.</red> Reason: <white><reason></white>"
+
+note:
+  created: "<green>Note added to <white><target></white>'s file.</green>"
+  # An internal note is NEVER shown to the player.
+
+player-info:
+  header: "<gradient:#5865F2:#57F287><target>'s file</gradient>"
+  section-identity: "<gold>Identity</gold>"
+  section-discipline: "<gold>Moderation history</gold>"
+  section-integrations: "<gold>External data</gold>"
+  integration-unavailable: "<dark_gray>(integration unavailable)</dark_gray>"
+
+hotbar:
+  teleport: "<aqua>Teleport</aqua>"
+  player-info: "<aqua>Player info</aqua>"
+  freeze: "<aqua>Freeze</aqua>"
+  inventory: "<aqua>Inventory</aqua>"
+  enderchest: "<aqua>Ender Chest</aqua>"
+  file: "<aqua>Disciplinary file</aqua>"
+  sanction: "<aqua>Sanction</aqua>"
+  online-staff: "<aqua>Online staff</aqua>"
+  exit: "<aqua>Exit staff mode</aqua>"

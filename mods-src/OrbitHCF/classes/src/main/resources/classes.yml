@@ -1,0 +1,118 @@
+# ============================================================
+#  OrbitHCF-Classes - Configuration des classes
+#  Effets au format "effet:niveau" (niveau humain : 1 = I)
+# ============================================================
+
+classes:
+  diamond:
+    enabled: true
+    # Prefixe de matiere de l'armure (DIAMOND_HELMET, ...)
+    armor: DIAMOND
+    passives: []
+    restrictions:
+      blocked-items: []
+
+  bard:
+    enabled: true
+    armor: GOLDEN
+    passives:
+      - "speed:2"
+      - "regeneration:1"
+    restrictions:
+      blocked-items: []
+    energy:
+      max: 100.0
+      regen-per-second: 1.0
+    # Portee des effets d'equipe
+    range: 20.0
+    # Les allies profitent-ils des effets du Bard ?
+    affect-allies: false
+    # Cooldown global entre deux capacites actives (secondes)
+    global-cooldown-seconds: 10
+    # Intervalle d'application des auras (secondes)
+    aura-interval-seconds: 2
+    items:
+      blaze_powder:
+        aura: "strength:1"
+        active: "strength:2"
+        active-duration-seconds: 8
+        energy-cost: 45
+      sugar:
+        aura: "speed:2"
+        active: "speed:3"
+        active-duration-seconds: 8
+        energy-cost: 20
+      feather:
+        aura: "jump_boost:2"
+        active: "jump_boost:4"
+        active-duration-seconds: 10
+        energy-cost: 25
+      ghast_tear:
+        aura: "regeneration:1"
+        active: "regeneration:3"
+        active-duration-seconds: 6
+        energy-cost: 40
+      magma_cream:
+        aura: "fire_resistance:1"
+        active: "fire_resistance:1"
+        active-duration-seconds: 45
+        energy-cost: 25
+      iron_ingot:
+        aura: "resistance:1"
+        active: "resistance:2"
+        active-duration-seconds: 6
+        energy-cost: 40
+      spider_eye:
+        offensive: true
+        active: "wither:2"
+        active-duration-seconds: 6
+        energy-cost: 50
+
+  archer:
+    enabled: true
+    armor: LEATHER
+    passives:
+      - "speed:2"
+      - "jump_boost:2"
+    restrictions:
+      blocked-items: []
+    tag:
+      duration-seconds: 10
+      # Multiplicateur de degats subis par la cible marquee
+      damage-multiplier: 1.25
+      # Distance minimale de tir pour marquer (0 = aucune)
+      min-distance: 0.0
+
+  rogue:
+    enabled: true
+    armor: CHAINMAIL
+    passives:
+      - "speed:2"
+      - "jump_boost:2"
+    restrictions:
+      blocked-items: []
+    backstab:
+      weapon: GOLDEN_SWORD
+      # Angle minimal entre le regard de la victime et l'attaquant (degres)
+      angle-degrees: 110
+      # Degats bonus (1.0 = un demi-coeur)
+      bonus-damage: 6.0
+      break-sword: true
+      cooldown-seconds: 8
+
+  miner:
+    enabled: true
+    armor: IRON
+    passives:
+      - "haste:2"
+      - "fire_resistance:1"
+    restrictions:
+      blocked-items: []
+    invisibility:
+      enabled: true
+      # Invisible sous cette hauteur
+      below-y: 30
+      # Un ennemi a cette distance revele le Miner
+      enemy-check-radius: 24.0
+      # Le combat tag revele le Miner (necessite OrbitHCF-Combat)
+      revealed-in-combat: true

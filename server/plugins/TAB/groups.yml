@@ -1,0 +1,8 @@
+# Les prefixes des roles sont geres dans LuckPerms (lp group <role> meta setprefix ...).
+# TAB les lit via %luckperms-prefix% : un seul endroit a modifier par role.
+_DEFAULT_:
+  tabprefix: "%luckperms-prefix%"
+  tagprefix: "%luckperms-prefix%"
+  customtabname: "%player%"
+  tabsuffix: "%luckperms-suffix%"
+  tagsuffix: "%luckperms-suffix%"

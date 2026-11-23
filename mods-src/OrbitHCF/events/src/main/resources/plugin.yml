@@ -1,0 +1,33 @@
+name: OrbitHCF-Events
+version: '${version}'
+main: fr.orbitgames.hcf.events.OrbitHCFEventsPlugin
+api-version: '1.21'
+author: OrbitGames
+description: Evenements HCF - KOTH, Citadel, Conquest, SOTW, EOTW.
+website: https://orbit-pvp.fr
+depend:
+  - OrbitHCF-API
+  - OrbitHCF-Core
+softdepend:
+  - OrbitHCF-Combat
+  - OrbitHCF-Classes
+commands:
+  koth:
+    description: Gestion des KOTH.
+    usage: /koth <create|pos1|pos2|time|delete|start|stop|list|top>
+  citadel:
+    description: Gestion de la Citadel.
+    usage: /citadel <create|pos1|pos2|time|start|stop|history>
+  conquest:
+    description: Gestion du Conquest.
+    usage: /conquest <create|pos1|pos2|delete|start|stop|score>
+  sotw:
+    description: Gestion du SOTW (/sotw off pour retirer sa protection).
+    usage: /sotw <start|stop|off|time>
+  eotw:
+    description: Gestion de l'EOTW.
+    usage: /eotw <start|stop>
+permissions:
+  orbithcf.events.admin:
+    description: Administration des evenements HCF.
+    default: op

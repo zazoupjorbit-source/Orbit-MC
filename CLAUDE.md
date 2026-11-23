@@ -25,3 +25,17 @@ Réseau Minecraft de l'univers **ORBIT** (cofondé par Zazou et Wane). Objectif 
 - Boutique future : respecter les règles **Mojang** → **aucun pay-to-win** (cosmétiques seulement).
 - DA d'Orbit MC : bleu + or.
 - Textes en jeu en français (anglais en second si prévu).
+
+## Dépôt partagé (Zazou + Wane) — depuis le 23/11/2026
+- Le dépôt est **portable** : aucun chemin en dur. Panel et scripts retrouvent la racine depuis leur emplacement
+  (`Paths.Root` dans `panel/src/Panel.cs`, `$Racine` dans `scripts/commun.ps1`). Ne jamais réécrire `C:\Users\...` dans le code ou une config.
+- `installer.ps1` monte tout le réseau sur un clone neuf (versions exactes dans `versions.json`). MariaDB : `tools\mariadb` (portable) sinon celle du PC.
+- Synchronisation : `valider.ps1` (compile → contrôle anti-secret → commit → push) et `recuperer.ps1` (pull → configs → compile → jars),
+  aussi en boutons dans le panel (page Synchronisation). **L'envoi sur GitHub reste une décision explicite, jamais automatique.**
+- Git suit les **configs** des serveurs (liste blanche dans `.gitignore`), jamais jars / mondes / données joueurs.
+- Fichiers à secret (`server.properties`, `config/paper-global.yml`, `plugins/LuckPerms/config.yml`) : seul le modèle `.exemple` est suivi
+  (règles dans `scripts/commun.ps1`, `$ReglesModeles`). Nouveau fichier avec un secret → ajouter une règle + l'ignorer dans `.gitignore`.
+- Nouveau plugin à compiler/déployer : l'ajouter à `$Plugins` dans `scripts/commun.ps1`.
+- Grades LuckPerms partagés via `setup/02-luckperms-groupes.sql` (exporté par valider, importé par recuperer). Les joueurs ne sont pas partagés.
+- Mondes : hors git, `mondes.ps1 -Exporter` / `-Importer` (zip transmis à la main).
+- `mods-src/` : sources d'OrbitHCF, OrbitVersus, NarutoCore, OrbitGuns, orbitstaff (pas encore portés en 26.3 sauf orbitstaff).

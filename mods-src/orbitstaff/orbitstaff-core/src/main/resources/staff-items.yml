@@ -1,0 +1,46 @@
+# =====================================================================
+#  OrbitStaff - Objets de la hotbar staff (configurable)
+#  Les materiaux sont des noms Bukkit ; les noms affiches viennent des
+#  fichiers de langue (cle name-key). slot : 0 a 8.
+#  Ce fichier documente la disposition ; HotbarLayout.defaultLayout()
+#  fournit la valeur par defaut chargee par le plugin.
+# =====================================================================
+config-version: 1
+
+items:
+  - slot: 0
+    material: COMPASS
+    action: TELEPORT_PLAYER
+    name-key: hotbar.teleport
+  - slot: 1
+    material: BOOK
+    action: PLAYER_INFO
+    name-key: hotbar.player-info
+  - slot: 2
+    material: ICE
+    action: FREEZE
+    name-key: hotbar.freeze
+  - slot: 3
+    material: CHEST
+    action: INSPECT_INVENTORY
+    name-key: hotbar.inventory
+  - slot: 4
+    material: ENDER_CHEST
+    action: INSPECT_ENDERCHEST
+    name-key: hotbar.enderchest
+  - slot: 5
+    material: PAPER
+    action: DISCIPLINARY_FILE
+    name-key: hotbar.file
+  - slot: 6
+    material: IRON_AXE
+    action: SANCTION
+    name-key: hotbar.sanction
+  - slot: 7
+    material: PLAYER_HEAD
+    action: ONLINE_STAFF
+    name-key: hotbar.online-staff
+  - slot: 8
+    material: LIME_DYE
+    action: EXIT_STAFF_MODE
+    name-key: hotbar.exit

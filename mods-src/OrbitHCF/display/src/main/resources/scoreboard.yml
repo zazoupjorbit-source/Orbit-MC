@@ -1,0 +1,63 @@
+# ============================================================
+#  OrbitHCF-Display - Scoreboard, action bar, bossbars
+#  Les lignes des modules absents sont automatiquement masquees.
+# ============================================================
+
+enabled: true
+update-interval-ticks: 10
+title: "&6&lORBIT &f&lHCF"
+
+lines:
+  header:
+    - "&7&m--------------------"
+  footer:
+    - "&7&m--------------------"
+    - "&eorbit-pvp.fr"
+
+faction:
+  line-name: "&6Faction: &f{faction}"
+  line-dtr: "&6DTR: {couleur}{dtr}&7/{max}{gel}"
+  frozen-suffix: " &b(gel {temps})"
+  line-focus: "&6Focus: &c{faction}"
+
+class:
+  enabled: true
+  line: "&6Classe: &f{classe}"
+  bard-energy: "&6Energie: &e{energie}&7/{max}"
+
+# Formats des timers (cle = cle de timer OrbitHCF)
+timers:
+  combat_tag: "&cCombat: &f{temps}"
+  ender_pearl: "&dPearl: &f{temps}"
+  golden_apple: "&6Gapple: &f{temps}"
+  enchanted_golden_apple: "&6E-Gapple: &f{temps}"
+  pvp_timer: "&aPvP Timer: &f{temps}"
+  home: "&eHome: &f{temps}"
+  stuck: "&eStuck: &f{temps}"
+  logout: "&eLogout: &f{temps}"
+  archer_tag: "&eArcher Tag: &f{temps}"
+  bard_ability: "&bBard: &f{temps}"
+  rogue_ability: "&bRogue: &f{temps}"
+
+events:
+  koth: "&6KOTH {koth}: &f{temps}"
+  koth-contested: "&6KOTH {koth}: &cConteste"
+  citadel: "&5Citadel {koth}: &f{temps}"
+  sotw: "&aSOTW: &f{temps}"
+  eotw: "&4EOTW actif"
+
+actionbar:
+  enabled: true
+  # Priorite : combat puis pearl
+  combat: "&cCombat: &f{temps}"
+  pearl: "&dPearl: &f{temps}"
+
+bossbar:
+  koth:
+    enabled: true
+    title: "&6KOTH {koth} &7- &f{temps}"
+    color: YELLOW
+  sotw:
+    enabled: true
+    title: "&aSOTW &7- &f{temps}"
+    color: GREEN

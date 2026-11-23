@@ -1,0 +1,24 @@
+name: OrbitHCF-Core
+version: '${version}'
+main: fr.orbitgames.hcf.core.OrbitHCFCorePlugin
+api-version: '1.21'
+author: OrbitGames
+description: Coeur HCF OrbitGames - factions, claims, DTR, timers, stockage.
+website: https://orbit-pvp.fr
+depend:
+  - OrbitHCF-API
+commands:
+  f:
+    description: Commande principale des factions.
+    aliases: [faction, fac, team]
+    usage: /f help
+  logout:
+    description: Deconnexion securisee.
+    usage: /logout
+permissions:
+  orbithcf.admin:
+    description: Acces aux commandes d'administration OrbitHCF.
+    default: op
+  orbithcf.bypass:
+    description: Ignore les protections de claims.
+    default: op

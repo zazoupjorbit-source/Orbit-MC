@@ -1,0 +1,8 @@
+# ============================================================
+#  OrbitHCF-Display - Messages (FR)
+# ============================================================
+
+prefix: "&7[&eDisplay&7] &r"
+
+general:
+  no-permission: "&cVous n'avez pas la permission."

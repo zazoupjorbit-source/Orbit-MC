@@ -1,0 +1,27 @@
+# ============================================================
+#  OrbitHCF-Events - Recompenses
+#  Placeholders : {joueur} (captureur), {faction}
+#  Les commandes sont executees par la console.
+# ============================================================
+
+koth:
+  # Points de faction gagnes
+  points: 10
+  # Commandes executees pour le captureur
+  commands:
+    - "give {joueur} golden_apple 16"
+    - "give {joueur} experience_bottle 32"
+
+citadel:
+  points: 30
+  commands:
+    - "give {joueur} golden_apple 32"
+    - "give {joueur} enchanted_golden_apple 2"
+    - "give {joueur} experience_bottle 64"
+
+conquest:
+  points: 50
+  # Commandes executees pour chaque membre en ligne de la faction gagnante
+  commands:
+    - "give {joueur} golden_apple 16"
+    - "give {joueur} experience_bottle 32"

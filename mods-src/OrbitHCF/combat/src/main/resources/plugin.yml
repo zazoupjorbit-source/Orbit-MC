@@ -1,0 +1,29 @@
+name: OrbitHCF-Combat
+version: '${version}'
+main: fr.orbitgames.hcf.combat.OrbitHCFCombatPlugin
+api-version: '1.21'
+author: OrbitGames
+description: Regles de combat HCF - combat tag, pearls, gapples, deathban, limites.
+website: https://orbit-pvp.fr
+depend:
+  - OrbitHCF-API
+  - OrbitHCF-Core
+softdepend:
+  - OrbitHCF-Classes
+commands:
+  pvp:
+    description: Gestion du PvP Timer.
+    usage: /pvp [time|enable]
+  lives:
+    description: Gestion des vies.
+    usage: /lives [give|send] [joueur] [nombre]
+  revive:
+    description: Revive un joueur deathban (consomme une vie).
+    usage: /revive <joueur>
+permissions:
+  orbithcf.combat.admin:
+    description: Administration du module Combat (lives, deathban).
+    default: op
+  orbithcf.combat.deathban.bypass:
+    description: Immunise contre le deathban.
+    default: false

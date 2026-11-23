@@ -1,0 +1,773 @@
+# ------------------------------------------------------------------
+#  Prêtre (Lumière) / Oracle (Ombre) — le soigneur. Ressource : Mana.
+#  Lumière : soins sacrés (Sacré) ou lumière qui brûle (Châtiment).
+#  Ombre : soins par les âmes (Âmes) ou drains et peur (Malédictions).
+#  Format des sorts et des talents : voir guerrier.yml.
+#  Pas de résurrection pour l'instant : un Marqué tombé se reforme à l'Éclat d'ancrage.
+# ------------------------------------------------------------------
+
+nom: Prêtre
+couleur: "#F5F0E0"
+icone: GOLDEN_APPLE
+jouable: true
+ressource: MANA
+armure: TISSU
+pv: 0.9
+arme: GRIMOIRE
+formes:
+  lumiere: "Prêtre"
+  ombre: "Oracle"
+description:
+  - "Le soigneur du groupe : garde ses alliés"
+  - "en vie et punit ceux qui les menacent."
+
+specialisations:
+  sacre:
+    nom: Sacré
+    role: SOIN
+    faction: lumiere
+    icone: GOLDEN_APPLE
+    couleur: "#FFE9A8"
+    arme: GRIMOIRE
+    description:
+      - "Gros soins, soins de groupe,"
+      - "boucliers de lumière."
+    passifs: { soins: 10 }
+    talents:
+      grace: { nom: "Grâce", icone: GOLDEN_CARROT, palier: 0, colonne: 0, rangs: 5, effets: { soins: 1 }, description: "+{soins} % de soins." }
+      esprit_clair: { nom: "Esprit clair", icone: LIGHT_BLUE_DYE, palier: 0, colonne: 1, rangs: 5, effets: { ressource: 2 }, description: "+{ressource} % de mana régénéré." }
+      foi_robuste: { nom: "Foi robuste", icone: IRON_CHESTPLATE, palier: 0, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      grand_soin_rapide: { nom: "Prière fluide", icone: CLOCK, palier: 1, colonne: 0, rangs: 3, effets: { incantation.grand_soin: 0.25 }, description: "Incantation de Grand soin réduite de {incantation.grand_soin} s." }
+      soin_rapide_ameliore: { nom: "Mains bénies", icone: GOLDEN_APPLE, palier: 1, colonne: 1, rangs: 3, effets: { soins.soin_rapide: 6 }, description: "Soin rapide soigne {soins.soin_rapide} % de plus." }
+      lumiere_divine: { nom: "Lumière divine", icone: GLOWSTONE_DUST, palier: 1, colonne: 2, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de soin critique." }
+      cercle_de_lumiere: { nom: "Cercle de lumière", icone: SUNFLOWER, palier: 2, colonne: 0, rangs: 1, sort: cercle_de_lumiere, description: "Apprend Cercle de lumière : un soin de groupe instantané." }
+      priere_economisee: { nom: "Prière économe", icone: HONEYCOMB, palier: 2, colonne: 1, rangs: 3, effets: { cout.priere_de_soins: 2 }, description: "Prière de soins coûte {cout.priere_de_soins} mana de moins." }
+      renouvellement_long: { nom: "Renouvellement durable", icone: CLOCK, palier: 2, colonne: 2, rangs: 3, effets: { duree.renouvellement: 1 }, description: "Renouvellement dure {duree.renouvellement} s de plus." }
+      grand_soin_puissant: { nom: "Grand soin béni", icone: ENCHANTED_GOLDEN_APPLE, palier: 3, colonne: 0, rangs: 3, effets: { soins.grand_soin: 6 }, description: "Grand soin soigne {soins.grand_soin} % de plus." }
+      priere_rapide: { nom: "Prière rapide", icone: CLOCK, palier: 3, colonne: 1, rangs: 3, effets: { recharge.priere_de_soins: 1 }, description: "Recharge de Prière de soins réduite de {recharge.priere_de_soins} s." }
+      robe_benie: { nom: "Robe bénie", icone: WHITE_WOOL, palier: 3, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      cercle_elargi: { nom: "Cercle élargi", icone: SUNFLOWER, palier: 4, colonne: 0, rangs: 3, requiert: cercle_de_lumiere, effets: { soins.cercle_de_lumiere: 10 }, description: "Cercle de lumière soigne {soins.cercle_de_lumiere} % de plus." }
+      hymne_prolonge: { nom: "Hymne prolongé", icone: BELL, palier: 4, colonne: 1, rangs: 2, effets: { duree.hymne_de_l_aube: 2 }, description: "Hymne de l'Aube dure {duree.hymne_de_l_aube} s de plus." }
+      soin_econome: { nom: "Soin économe", icone: HONEYCOMB, palier: 4, colonne: 2, rangs: 3, effets: { cout.soin_rapide: 1 }, description: "Soin rapide coûte {cout.soin_rapide} mana de moins." }
+      bouclier_sacre: { nom: "Bouclier sacré", icone: SHIELD, palier: 5, colonne: 0, rangs: 1, sort: bouclier_sacre, description: "Apprend Bouclier sacré : bouclier de 20 % des PV sur vous et votre groupe." }
+      saintete: { nom: "Sainteté", icone: NETHER_STAR, palier: 5, colonne: 1, rangs: 3, effets: { soins: 2 }, description: "+{soins} % de soins." }
+      priere_profonde: { nom: "Prière profonde", icone: LIGHT_BLUE_DYE, palier: 5, colonne: 2, rangs: 3, effets: { recharge.priere_silencieuse: 10 }, description: "Recharge de Prière silencieuse réduite de {recharge.priere_silencieuse} s." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      aura_de_paix: { nom: "Aura de paix", icone: WHITE_TULIP, palier: 6, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de soin critique." }
+      cercle_rapide: { nom: "Cercle rapide", icone: CLOCK, palier: 6, colonne: 1, rangs: 3, requiert: cercle_de_lumiere, effets: { recharge.cercle_de_lumiere: 2 }, description: "Recharge de Cercle de lumière réduite de {recharge.cercle_de_lumiere} s." }
+      source_de_foi: { nom: "Source de foi", icone: WATER_BUCKET, palier: 6, colonne: 2, rangs: 5, effets: { ressource: 2 }, description: "+{ressource} % de mana régénéré." }
+      bouclier_durable: { nom: "Bouclier durable", icone: SHIELD, palier: 7, colonne: 0, rangs: 2, requiert: bouclier_sacre, effets: { duree.bouclier_sacre: 3 }, description: "Bouclier sacré dure {duree.bouclier_sacre} s de plus." }
+      benediction_totale: { nom: "Bénédiction totale", icone: GOLDEN_CARROT, palier: 7, colonne: 1, rangs: 3, effets: { soins: 2 }, description: "+{soins} % de soins." }
+      ame_inebranlable: { nom: "Âme inébranlable", icone: IRON_CHESTPLATE, palier: 7, colonne: 2, rangs: 3, effets: { pv: 3 }, description: "+{pv} % de points de vie." }
+      miracle_de_l_aube: { nom: "Miracle de l'Aube", icone: BEACON, palier: 8, colonne: 0, rangs: 1, sort: miracle_de_l_aube, requiert: bouclier_sacre, description: "Apprend Miracle de l'Aube : rend 40 % des PV au groupe et le protège." }
+      main_de_l_astre: { nom: "Main de l'Astre", icone: NETHER_STAR, palier: 8, colonne: 1, rangs: 3, effets: { soins.grand_soin: 8 }, description: "Grand soin soigne {soins.grand_soin} % de plus." }
+      gardien_de_la_foi: { nom: "Gardien de la foi", icone: TOTEM_OF_UNDYING, palier: 8, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+
+  chatiment:
+    nom: Châtiment
+    role: DEGATS
+    faction: lumiere
+    icone: GLOWSTONE_DUST
+    couleur: "#FFD66E"
+    arme: WAND
+    description:
+      - "La lumière sacrée qui brûle,"
+      - "avec de petits soins au passage."
+    passifs: { degats: 5, vol-de-vie: 3 }
+    talents:
+      zele: { nom: "Zèle", icone: BLAZE_POWDER, palier: 0, colonne: 0, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      oeil_du_juge: { nom: "Œil du juge", icone: ENDER_EYE, palier: 0, colonne: 1, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      meditation_ardente: { nom: "Méditation ardente", icone: LIGHT_BLUE_DYE, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 4 }, description: "+{ressource} % de mana régénéré." }
+      chatiment_rapide: { nom: "Sentence rapide", icone: CLOCK, palier: 1, colonne: 0, rangs: 3, effets: { incantation.chatiment: 0.15 }, description: "Incantation de Châtiment réduite de {incantation.chatiment} s." }
+      flamme_ardente: { nom: "Flamme ardente", icone: SOUL_TORCH, palier: 1, colonne: 1, rangs: 3, effets: { degats.flamme_sacree: 12 }, description: "Flamme sacrée inflige {degats.flamme_sacree} % de dégâts en plus." }
+      foi_robuste_c: { nom: "Foi robuste", icone: IRON_CHESTPLATE, palier: 1, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      penitence: { nom: "Pénitence", icone: GOLDEN_SWORD, palier: 2, colonne: 0, rangs: 1, sort: penitence, description: "Apprend Pénitence : un rayon qui punit la cible et vous soigne." }
+      sol_consacre: { nom: "Sol consacré", icone: GOLD_BLOCK, palier: 2, colonne: 1, rangs: 3, effets: { degats.consecration: 10 }, description: "Consécration inflige {degats.consecration} % de dégâts en plus." }
+      flamme_durable: { nom: "Flamme durable", icone: CLOCK, palier: 2, colonne: 2, rangs: 3, effets: { duree.flamme_sacree: 2 }, description: "Flamme sacrée dure {duree.flamme_sacree} s de plus." }
+      lance_aceree: { nom: "Lance acérée", icone: SPECTRAL_ARROW, palier: 3, colonne: 0, rangs: 3, effets: { degats.lance_de_lumiere: 8 }, description: "Lance de lumière inflige {degats.lance_de_lumiere} % de dégâts en plus." }
+      jugement: { nom: "Jugement", icone: GOLDEN_AXE, palier: 3, colonne: 1, rangs: 3, effets: { critdeg: 8 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      robe_consacree: { nom: "Robe consacrée", icone: WHITE_WOOL, palier: 3, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      penitence_profonde: { nom: "Pénitence profonde", icone: GOLDEN_SWORD, palier: 4, colonne: 0, rangs: 3, requiert: penitence, effets: { degats.penitence: 10 }, description: "Pénitence inflige {degats.penitence} % de dégâts en plus." }
+      courroux_prolonge: { nom: "Courroux prolongé", icone: BLAZE_POWDER, palier: 4, colonne: 1, rangs: 2, effets: { duree.courroux_divin: 2 }, description: "Courroux divin dure {duree.courroux_divin} s de plus." }
+      lumiere_nourriciere: { nom: "Lumière nourricière", icone: GHAST_TEAR, palier: 4, colonne: 2, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+      nova_sacree: { nom: "Nova sacrée", icone: END_ROD, palier: 5, colonne: 0, rangs: 1, sort: nova_sacree, requiert: sol_consacre, description: "Apprend Nova sacrée : une explosion de lumière autour de vous qui vous soigne." }
+      ardeur: { nom: "Ardeur", icone: NETHER_STAR, palier: 5, colonne: 1, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      consecration_rapide: { nom: "Consécration rapide", icone: CLOCK, palier: 5, colonne: 2, rangs: 3, effets: { recharge.consecration: 2 }, description: "Recharge de Consécration réduite de {recharge.consecration} s." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      verdict: { nom: "Verdict", icone: TARGET, palier: 6, colonne: 0, rangs: 3, effets: { crit.chatiment: 4 }, description: "Châtiment : +{crit.chatiment} % de critique." }
+      nova_eclatante: { nom: "Nova éclatante", icone: END_ROD, palier: 6, colonne: 1, rangs: 3, requiert: nova_sacree, effets: { degats.nova_sacree: 10 }, description: "Nova sacrée inflige {degats.nova_sacree} % de dégâts en plus." }
+      chatiment_econome: { nom: "Châtiment économe", icone: HONEYCOMB, palier: 6, colonne: 2, rangs: 3, effets: { cout.chatiment: 1 }, description: "Châtiment coûte {cout.chatiment} mana de moins." }
+      nova_rapide: { nom: "Nova rapide", icone: CLOCK, palier: 7, colonne: 0, rangs: 2, requiert: nova_sacree, effets: { recharge.nova_sacree: 5 }, description: "Recharge de Nova sacrée réduite de {recharge.nova_sacree} s." }
+      feu_de_l_aube: { nom: "Feu de l'Aube", icone: SHROOMLIGHT, palier: 7, colonne: 1, rangs: 5, effets: { critdeg: 5 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      armure_de_foi: { nom: "Armure de foi", icone: GOLDEN_CHESTPLATE, palier: 7, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      rayon_de_l_astre: { nom: "Rayon de l'Astre", icone: BEACON, palier: 8, colonne: 0, rangs: 1, sort: rayon_de_l_astre, requiert: nova_sacree, description: "Apprend Rayon de l'Astre : un rayon de lumière brûle longtemps une large zone." }
+      main_vengeresse: { nom: "Main vengeresse", icone: GOLDEN_SWORD, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      flamme_purificatrice: { nom: "Flamme purificatrice", icone: SOUL_TORCH, palier: 8, colonne: 2, rangs: 3, requiert: lumiere_nourriciere, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+
+  ames:
+    nom: Âmes
+    role: SOIN
+    faction: ombre
+    icone: SOUL_LANTERN
+    couleur: "#7FE0D8"
+    arme: GRIMOIRE
+    description:
+      - "Soigne le groupe en volant"
+      - "la vie des ennemis."
+    passifs: { soins: 8, vol-de-vie: 3 }
+    talents:
+      ame_fervente: { nom: "Âme fervente", icone: SOUL_TORCH, palier: 0, colonne: 0, rangs: 5, effets: { soins: 1 }, description: "+{soins} % de soins." }
+      murmures: { nom: "Murmures", icone: ECHO_SHARD, palier: 0, colonne: 1, rangs: 5, effets: { ressource: 2 }, description: "+{ressource} % de mana régénéré." }
+      ame_tenace: { nom: "Âme tenace", icone: IRON_CHESTPLATE, palier: 0, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      lien_renforce: { nom: "Lien renforcé", icone: LEAD, palier: 1, colonne: 0, rangs: 3, effets: { soins.lien_d_ame: 6 }, description: "Lien d'âme soigne {soins.lien_d_ame} % de plus." }
+      siphon_vorace: { nom: "Siphon vorace", icone: GHAST_TEAR, palier: 1, colonne: 1, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+      presage_heureux: { nom: "Présage heureux", icone: ENDER_EYE, palier: 1, colonne: 2, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de soin critique." }
+      esprit_gardien: { nom: "Esprit gardien", icone: SOUL_LANTERN, palier: 2, colonne: 0, rangs: 1, sort: esprit_gardien, description: "Apprend Esprit gardien : un esprit veille sur l'allié visé et le soigne." }
+      chant_prolonge: { nom: "Chant prolongé", icone: NOTE_BLOCK, palier: 2, colonne: 1, rangs: 3, effets: { duree.chant_des_ames: 1 }, description: "Chant des âmes dure {duree.chant_des_ames} s de plus." }
+      transfert_rapide: { nom: "Transfert rapide", icone: CLOCK, palier: 2, colonne: 2, rangs: 3, effets: { incantation.transfert_d_ame: 0.25 }, description: "Incantation de Transfert d'âme réduite de {incantation.transfert_d_ame} s." }
+      transfert_puissant: { nom: "Transfert puissant", icone: SOUL_LANTERN, palier: 3, colonne: 0, rangs: 3, effets: { soins.transfert_d_ame: 6 }, description: "Transfert d'âme soigne {soins.transfert_d_ame} % de plus." }
+      chant_econome: { nom: "Chant économe", icone: HONEYCOMB, palier: 3, colonne: 1, rangs: 3, effets: { cout.chant_des_ames: 2 }, description: "Chant des âmes coûte {cout.chant_des_ames} mana de moins." }
+      voile_sombre: { nom: "Voile sombre", icone: BLACK_WOOL, palier: 3, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      esprit_vigilant: { nom: "Esprit vigilant", icone: SOUL_LANTERN, palier: 4, colonne: 0, rangs: 3, requiert: esprit_gardien, effets: { soins.esprit_gardien: 10 }, description: "Esprit gardien soigne {soins.esprit_gardien} % de plus." }
+      communion_prolongee: { nom: "Communion prolongée", icone: BELL, palier: 4, colonne: 1, rangs: 2, effets: { duree.communion_des_ames: 2 }, description: "Communion des âmes dure {duree.communion_des_ames} s de plus." }
+      siphon_rapide: { nom: "Siphon rapide", icone: CLOCK, palier: 4, colonne: 2, rangs: 3, effets: { recharge.siphon_d_ame: 1 }, description: "Recharge de Siphon d'âme réduite de {recharge.siphon_d_ame} s." }
+      voile_des_ames: { nom: "Voile des âmes", icone: SOUL_SAND, palier: 5, colonne: 0, rangs: 1, sort: voile_des_ames, description: "Apprend Voile des âmes : bouclier de 15 % des PV sur vous et votre groupe." }
+      lien_eternel: { nom: "Lien éternel", icone: NETHER_STAR, palier: 5, colonne: 1, rangs: 3, effets: { soins: 2 }, description: "+{soins} % de soins." }
+      ame_economisee: { nom: "Âme économe", icone: HONEYCOMB, palier: 5, colonne: 2, rangs: 3, effets: { cout.lien_d_ame: 1 }, description: "Lien d'âme coûte {cout.lien_d_ame} mana de moins." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      vision_du_neant: { nom: "Vision du Néant", icone: ENDER_EYE, palier: 6, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de soin critique." }
+      voile_epais: { nom: "Voile épais", icone: SOUL_SAND, palier: 6, colonne: 1, rangs: 3, requiert: voile_des_ames, effets: { recharge.voile_des_ames: 8 }, description: "Recharge de Voile des âmes réduite de {recharge.voile_des_ames} s." }
+      puits_d_ames: { nom: "Puits d'âmes", icone: SCULK, palier: 6, colonne: 2, rangs: 5, effets: { ressource: 2 }, description: "+{ressource} % de mana régénéré." }
+      esprit_fidele: { nom: "Esprit fidèle", icone: CLOCK, palier: 7, colonne: 0, rangs: 2, requiert: esprit_vigilant, effets: { duree.esprit_gardien: 2 }, description: "Esprit gardien dure {duree.esprit_gardien} s de plus." }
+      chorale_des_morts: { nom: "Chorale des morts", icone: NOTE_BLOCK, palier: 7, colonne: 1, rangs: 3, effets: { soins: 2 }, description: "+{soins} % de soins." }
+      ame_de_fer: { nom: "Âme de fer", icone: IRON_CHESTPLATE, palier: 7, colonne: 2, rangs: 3, effets: { pv: 3 }, description: "+{pv} % de points de vie." }
+      moisson_du_neant: { nom: "Moisson du Néant", icone: WITHER_ROSE, palier: 8, colonne: 0, rangs: 1, sort: moisson_du_neant, requiert: voile_des_ames, description: "Apprend Moisson du Néant : arrache la vie des ennemis autour et la rend au groupe." }
+      passeur_d_ames: { nom: "Passeur d'âmes", icone: SOUL_LANTERN, palier: 8, colonne: 1, rangs: 3, effets: { soins.transfert_d_ame: 8 }, description: "Transfert d'âme soigne {soins.transfert_d_ame} % de plus." }
+      soif_eternelle: { nom: "Soif éternelle", icone: GHAST_TEAR, palier: 8, colonne: 2, rangs: 3, requiert: siphon_vorace, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+
+  maledictions:
+    nom: Malédictions
+    role: DEGATS
+    faction: ombre
+    icone: FERMENTED_SPIDER_EYE
+    couleur: "#B36BFF"
+    arme: WAND
+    description:
+      - "Drains, peur, une cible qui"
+      - "s'affaiblit avec le temps."
+    passifs: { degats: 5, vol-de-vie: 3 }
+    talents:
+      haine: { nom: "Haine", icone: FERMENTED_SPIDER_EYE, palier: 0, colonne: 0, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      mauvais_oeil: { nom: "Mauvais œil", icone: SPIDER_EYE, palier: 0, colonne: 1, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      soif_de_mana: { nom: "Soif de mana", icone: ECHO_SHARD, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 4 }, description: "+{ressource} % de mana régénéré." }
+      drain_rapide: { nom: "Drain rapide", icone: CLOCK, palier: 1, colonne: 0, rangs: 3, effets: { incantation.drain_de_vie: 0.15 }, description: "Incantation de Drain de vie réduite de {incantation.drain_de_vie} s." }
+      mal_virulent: { nom: "Mal virulent", icone: WITHER_ROSE, palier: 1, colonne: 1, rangs: 3, effets: { degats.mal_du_neant: 12 }, description: "Mal du Néant inflige {degats.mal_du_neant} % de dégâts en plus." }
+      ame_tenace_m: { nom: "Âme tenace", icone: IRON_CHESTPLATE, palier: 1, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      drain_d_essence: { nom: "Drain d'essence", icone: GHAST_TEAR, palier: 2, colonne: 0, rangs: 1, sort: drain_d_essence, description: "Apprend Drain d'essence : vole une grande part de vie à la cible." }
+      mal_tenace: { nom: "Mal tenace", icone: CLOCK, palier: 2, colonne: 1, rangs: 3, effets: { duree.mal_du_neant: 2 }, description: "Mal du Néant dure {duree.mal_du_neant} s de plus." }
+      agonie_lente: { nom: "Agonie lente", icone: DEAD_BUSH, palier: 2, colonne: 2, rangs: 3, effets: { degats.agonie: 12 }, description: "Agonie inflige {degats.agonie} % de dégâts en plus." }
+      terreur_rapide: { nom: "Terreur rapide", icone: CLOCK, palier: 3, colonne: 0, rangs: 3, effets: { recharge.terreur: 3 }, description: "Recharge de Terreur réduite de {recharge.terreur} s." }
+      malefice: { nom: "Maléfice", icone: FERMENTED_SPIDER_EYE, palier: 3, colonne: 1, rangs: 3, effets: { critdeg: 8 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      voile_sombre_m: { nom: "Voile sombre", icone: BLACK_WOOL, palier: 3, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      essence_volee: { nom: "Essence volée", icone: GHAST_TEAR, palier: 4, colonne: 0, rangs: 3, requiert: drain_d_essence, effets: { degats.drain_d_essence: 10 }, description: "Drain d'essence inflige {degats.drain_d_essence} % de dégâts en plus." }
+      avatar_prolonge: { nom: "Avatar prolongé", icone: CRYING_OBSIDIAN, palier: 4, colonne: 1, rangs: 2, effets: { duree.avatar_du_neant: 2 }, description: "Avatar du Néant dure {duree.avatar_du_neant} s de plus." }
+      drain_avide: { nom: "Drain avide", icone: GHAST_TEAR, palier: 4, colonne: 2, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+      cercle_de_maledictions: { nom: "Cercle de malédictions", icone: WITHER_ROSE, palier: 5, colonne: 0, rangs: 1, sort: cercle_de_maledictions, requiert: agonie_lente, description: "Apprend Cercle de malédictions : maudit et affaiblit tous les ennemis autour de vous." }
+      noirceur: { nom: "Noirceur", icone: NETHER_STAR, palier: 5, colonne: 1, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      drain_econome: { nom: "Drain économe", icone: HONEYCOMB, palier: 5, colonne: 2, rangs: 3, effets: { cout.drain_de_vie: 1 }, description: "Drain de vie coûte {cout.drain_de_vie} mana de moins." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      sentence: { nom: "Sentence", icone: TARGET, palier: 6, colonne: 0, rangs: 3, effets: { crit.drain_de_vie: 4 }, description: "Drain de vie : +{crit.drain_de_vie} % de critique." }
+      cercle_maudit: { nom: "Cercle maudit", icone: WITHER_ROSE, palier: 6, colonne: 1, rangs: 3, requiert: cercle_de_maledictions, effets: { degats.cercle_de_maledictions: 10 }, description: "Cercle de malédictions inflige {degats.cercle_de_maledictions} % de dégâts en plus." }
+      agonie_econome: { nom: "Agonie économe", icone: HONEYCOMB, palier: 6, colonne: 2, rangs: 3, effets: { cout.agonie: 2 }, description: "Agonie coûte {cout.agonie} mana de moins." }
+      cercle_rapide_m: { nom: "Cercle rapide", icone: CLOCK, palier: 7, colonne: 0, rangs: 2, requiert: cercle_de_maledictions, effets: { recharge.cercle_de_maledictions: 5 }, description: "Recharge de Cercle de malédictions réduite de {recharge.cercle_de_maledictions} s." }
+      desespoir: { nom: "Désespoir", icone: SCULK, palier: 7, colonne: 1, rangs: 5, effets: { critdeg: 5 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      ame_de_fer_m: { nom: "Âme de fer", icone: IRON_CHESTPLATE, palier: 7, colonne: 2, rangs: 3, effets: { pv: 3 }, description: "+{pv} % de points de vie." }
+      damnation: { nom: "Damnation", icone: WITHER_SKELETON_SKULL, palier: 8, colonne: 0, rangs: 1, sort: damnation, requiert: cercle_de_maledictions, description: "Apprend Damnation : une malédiction qui éclate, ronge et terrifie." }
+      voix_du_neant: { nom: "Voix du Néant", icone: SCULK_SHRIEKER, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      vampirisme: { nom: "Vampirisme", icone: GHAST_TEAR, palier: 8, colonne: 2, rangs: 3, requiert: drain_avide, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+
+sorts:
+  # ---------------- Toute la classe (les deux formes) ----------------
+  pas_ethere:
+    nom: Pas éthéré
+    type: BUFF
+    icone: FEATHER
+    couleur: "#E0F0FF"
+    niveau: 4
+    recharge: 30
+    gcd: false
+    duree: 8
+    effets: { vitesse: 2 }
+    description: "Vitesse de déplacement fortement augmentée pendant 8 s."
+  priere_silencieuse:
+    nom: Prière silencieuse
+    type: BUFF
+    icone: LIGHT_BLUE_DYE
+    couleur: "#4FA3FF"
+    niveau: 12
+    gain: 40
+    recharge: 90
+    gcd: false
+    description: "Un instant de recueillement : rend 40 points de mana."
+  renouveau:
+    nom: Renouveau
+    type: BUFF
+    icone: GOLDEN_APPLE
+    couleur: "#5EE89A"
+    niveau: 20
+    recharge: 120
+    gcd: false
+    effets: { soin: 20 }
+    description: "Rend 20 % de vos PV d'un coup."
+
+  # ---------------- Prêtre (Lumière) ----------------
+  trait_sacre:
+    nom: Trait sacré
+    type: PROJECTILE
+    icone: GLOWSTONE_DUST
+    couleur: "#FFE9A8"
+    faction: lumiere
+    niveau: 1
+    cout: 4
+    incantation: 1.5
+    portee: 30
+    puissance: 1.5
+    description: "Un trait de lumière sacrée sur la cible visée."
+  lumiere_apaisante:
+    nom: Lumière apaisante
+    type: SOIN
+    icone: GOLDEN_CARROT
+    couleur: "#FFE9A8"
+    faction: lumiere
+    niveau: 2
+    cout: 8
+    incantation: 1.5
+    portee: 25
+    puissance: 2.0
+    description: "Soigne l'allié visé (ou vous)."
+  benediction_de_l_aube:
+    nom: Bénédiction de l'Aube
+    type: CRI
+    icone: SUNFLOWER
+    couleur: "#FFD66E"
+    faction: lumiere
+    niveau: 6
+    cout: 10
+    recharge: 60
+    gcd: false
+    zone: 20
+    duree: 60
+    effets: { reduction: 5 }
+    description: "Vous et votre groupe subissez 5 % de dégâts en moins pendant 60 s."
+  sceau_sacre:
+    nom: Sceau sacré
+    type: CRI
+    icone: GOLD_NUGGET
+    couleur: "#FFFFFF"
+    faction: lumiere
+    niveau: 8
+    cout: 10
+    recharge: 25
+    zone: 6
+    puissance: 0
+    effets: { etourdir: 2 }
+    description: "Un sceau de lumière étourdit les ennemis autour de vous pendant 2 s."
+  egide_de_foi:
+    nom: Égide de foi
+    type: CRI
+    icone: SHIELD
+    couleur: "#FFE9A8"
+    faction: lumiere
+    niveau: 16
+    cout: 15
+    recharge: 45
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { bouclier: 10 }
+    description: "Bouclier de 10 % des PV sur vous et votre groupe pendant 10 s."
+
+  # ---------------- Oracle (Ombre) ----------------
+  murmure_du_neant:
+    nom: Murmure du Néant
+    type: PROJECTILE
+    icone: ECHO_SHARD
+    couleur: "#B36BFF"
+    faction: ombre
+    niveau: 1
+    cout: 4
+    incantation: 1.5
+    portee: 30
+    puissance: 1.5
+    description: "Un murmure du Néant qui blesse l'esprit de la cible."
+  souffle_d_ame:
+    nom: Souffle d'âme
+    type: SOIN
+    icone: SOUL_LANTERN
+    couleur: "#7FE0D8"
+    faction: ombre
+    niveau: 2
+    cout: 8
+    incantation: 1.5
+    portee: 25
+    puissance: 2.0
+    description: "Insuffle une âme errante à l'allié visé (ou à vous) pour le soigner."
+  presage:
+    nom: Présage
+    type: CRI
+    icone: ENDER_EYE
+    couleur: "#B36BFF"
+    faction: ombre
+    niveau: 6
+    cout: 10
+    recharge: 60
+    gcd: false
+    zone: 20
+    duree: 60
+    effets: { bonus-crit: 5 }
+    description: "L'Oracle voit les coups à venir : le groupe gagne 5 % de critique pendant 60 s."
+  cri_psychique:
+    nom: Cri psychique
+    type: CRI
+    icone: SCULK_SHRIEKER
+    couleur: "#5A3A8C"
+    faction: ombre
+    niveau: 8
+    cout: 10
+    recharge: 30
+    zone: 8
+    puissance: 0
+    effets: { peur: 3 }
+    description: "Les ennemis proches sont pris de terreur et fuient pendant 3 s."
+  linceul_d_ombre:
+    nom: Linceul d'ombre
+    type: CRI
+    icone: BLACK_WOOL
+    couleur: "#8E6BFF"
+    faction: ombre
+    niveau: 16
+    cout: 15
+    recharge: 45
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { bouclier: 10 }
+    description: "Un linceul d'ombre absorbe 10 % des PV de dégâts pour vous et votre groupe pendant 10 s."
+
+  # ---------------- Sacré ----------------
+  soin_rapide:
+    nom: Soin rapide
+    type: SOIN
+    icone: GOLDEN_APPLE
+    couleur: "#FFE9A8"
+    spe: [sacre]
+    niveau: 3
+    cout: 8
+    portee: 25
+    puissance: 1.6
+    description: "Un soin instantané sur l'allié visé."
+  grand_soin:
+    nom: Grand soin
+    type: SOIN
+    icone: ENCHANTED_GOLDEN_APPLE
+    couleur: "#FFF3B0"
+    spe: [sacre]
+    niveau: 5
+    cout: 14
+    incantation: 2.5
+    portee: 25
+    puissance: 4.0
+    description: "Un soin très puissant, long à incanter (immobile)."
+  priere_de_soins:
+    nom: Prière de soins
+    type: CRI
+    icone: SUNFLOWER
+    couleur: "#FFD66E"
+    spe: [sacre]
+    niveau: 9
+    cout: 20
+    recharge: 10
+    zone: 15
+    effets: { soin: 12 }
+    description: "Rend 12 % des PV à vous et à votre groupe."
+  renouvellement:
+    nom: Renouvellement
+    type: SOIN
+    icone: GLOW_BERRIES
+    couleur: "#5EE89A"
+    spe: [sacre]
+    niveau: 14
+    cout: 8
+    portee: 25
+    puissance: 0.5
+    duree: 12
+    effets: { soin-par-sec: 2 }
+    description: "Petit soin puis 2 % des PV rendus par seconde pendant 12 s."
+  hymne_de_l_aube:
+    nom: Hymne de l'Aube
+    type: CRI
+    icone: BELL
+    couleur: "#FFF3B0"
+    spe: [sacre]
+    niveau: 30
+    recharge: 180
+    gcd: false
+    zone: 20
+    duree: 8
+    effets: { soin: 35, soin-par-sec: 2 }
+    description: "Rend 35 % des PV au groupe, puis 2 % par seconde pendant 8 s."
+  cercle_de_lumiere:
+    nom: Cercle de lumière
+    type: CRI
+    icone: SUNFLOWER
+    couleur: "#FFE066"
+    spe: [sacre]
+    talent: true
+    cout: 15
+    recharge: 15
+    gcd: false
+    zone: 12
+    effets: { soin: 10 }
+    description: "Un soin de groupe instantané : 10 % des PV."
+  bouclier_sacre:
+    nom: Bouclier sacré
+    type: CRI
+    icone: SHIELD
+    couleur: "#FFE9A8"
+    spe: [sacre]
+    talent: true
+    cout: 15
+    recharge: 45
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { bouclier: 20 }
+    description: "Bouclier de 20 % des PV sur vous et votre groupe pendant 10 s."
+  miracle_de_l_aube:
+    nom: Miracle de l'Aube
+    type: CRI
+    icone: BEACON
+    couleur: "#FFFFFF"
+    spe: [sacre]
+    talent: true
+    recharge: 180
+    gcd: false
+    zone: 20
+    duree: 10
+    effets: { soin: 40, bouclier: 15 }
+    description: "Rend 40 % des PV au groupe et pose un bouclier de 15 % des PV pendant 10 s."
+
+  # ---------------- Châtiment ----------------
+  chatiment:
+    nom: Châtiment
+    type: PROJECTILE
+    icone: GOLDEN_SWORD
+    couleur: "#FFD66E"
+    spe: [chatiment]
+    niveau: 3
+    cout: 6
+    incantation: 1.8
+    portee: 30
+    puissance: 2.4
+    description: "Un trait de lumière qui punit la cible."
+  flamme_sacree:
+    nom: Flamme sacrée
+    type: PROJECTILE
+    icone: SOUL_TORCH
+    couleur: "#FFB347"
+    spe: [chatiment]
+    niveau: 5
+    cout: 6
+    portee: 30
+    puissance: 0.5
+    effets: { saignement: 10, dot: 0.25 }
+    description: "La cible brûle d'une flamme sacrée pendant 10 s."
+  consecration:
+    nom: Consécration
+    type: ZONE
+    icone: GOLD_BLOCK
+    couleur: "#FFE066"
+    spe: [chatiment]
+    niveau: 9
+    cout: 15
+    recharge: 15
+    portee: 15
+    zone: 4
+    duree: 6
+    puissance: 0.6
+    description: "Consacre le sol visé : les ennemis dessus brûlent pendant 6 s."
+  lance_de_lumiere:
+    nom: Lance de lumière
+    type: PROJECTILE
+    icone: SPECTRAL_ARROW
+    couleur: "#FFF3B0"
+    spe: [chatiment]
+    niveau: 14
+    cout: 8
+    recharge: 10
+    portee: 30
+    puissance: 2.0
+    effets: { vol-de-vie: 30 }
+    description: "Une lance de lumière : 30 % des dégâts vous soignent."
+  courroux_divin:
+    nom: Courroux divin
+    type: BUFF
+    icone: BLAZE_POWDER
+    couleur: "#FFD66E"
+    spe: [chatiment]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 12
+    effets: { bonus-degats: 20, bonus-crit: 10 }
+    description: "+20 % de dégâts et +10 % de critique pendant 12 s."
+  penitence:
+    nom: Pénitence
+    type: PROJECTILE
+    icone: GOLDEN_SWORD
+    couleur: "#FFE066"
+    spe: [chatiment]
+    talent: true
+    cout: 8
+    recharge: 12
+    portee: 30
+    puissance: 2.4
+    effets: { vol-de-vie: 40 }
+    description: "Un rayon qui punit la cible : 40 % des dégâts vous soignent."
+  nova_sacree:
+    nom: Nova sacrée
+    type: TOURBILLON
+    icone: END_ROD
+    couleur: "#FFFFFF"
+    spe: [chatiment]
+    talent: true
+    cout: 15
+    recharge: 25
+    portee: 6
+    puissance: 1.5
+    effets: { soin-soi: 5 }
+    description: "Une explosion de lumière autour de vous qui vous rend 5 % de vos PV."
+  rayon_de_l_astre:
+    nom: Rayon de l'Astre
+    type: ZONE
+    icone: BEACON
+    couleur: "#FFF3B0"
+    spe: [chatiment]
+    talent: true
+    cout: 30
+    recharge: 60
+    portee: 30
+    zone: 5
+    duree: 5
+    puissance: 1.6
+    description: "Un rayon de lumière de l'Astre brûle une large zone pendant 5 s."
+
+  # ---------------- Âmes ----------------
+  lien_d_ame:
+    nom: Lien d'âme
+    type: SOIN
+    icone: LEAD
+    couleur: "#7FE0D8"
+    spe: [ames]
+    niveau: 3
+    cout: 8
+    portee: 25
+    puissance: 1.8
+    description: "Un soin instantané : vous liez votre âme à celle de l'allié visé."
+  siphon_d_ame:
+    nom: Siphon d'âme
+    type: PROJECTILE
+    icone: GHAST_TEAR
+    couleur: "#7FE0D8"
+    spe: [ames]
+    niveau: 5
+    cout: 6
+    recharge: 6
+    portee: 25
+    puissance: 1.4
+    effets: { vol-de-vie: 80 }
+    description: "Arrache la vie de la cible : 80 % des dégâts vous soignent."
+  chant_des_ames:
+    nom: Chant des âmes
+    type: CRI
+    icone: NOTE_BLOCK
+    couleur: "#7FE0D8"
+    spe: [ames]
+    niveau: 9
+    cout: 18
+    recharge: 12
+    zone: 15
+    duree: 8
+    effets: { soin-par-sec: 1.5 }
+    description: "Les âmes chantent autour de vous : le groupe récupère 1,5 % des PV par seconde pendant 8 s."
+  transfert_d_ame:
+    nom: Transfert d'âme
+    type: SOIN
+    icone: SOUL_LANTERN
+    couleur: "#A8FFF5"
+    spe: [ames]
+    niveau: 14
+    cout: 14
+    incantation: 2.5
+    portee: 25
+    puissance: 4.0
+    description: "Transfère une âme entière à l'allié visé : gros soin, long à incanter (immobile)."
+  communion_des_ames:
+    nom: Communion des âmes
+    type: CRI
+    icone: BELL
+    couleur: "#A8FFF5"
+    spe: [ames]
+    niveau: 30
+    recharge: 180
+    gcd: false
+    zone: 20
+    duree: 8
+    effets: { soin: 30, soin-par-sec: 2 }
+    description: "Rend 30 % des PV au groupe, puis 2 % par seconde pendant 8 s."
+  esprit_gardien:
+    nom: Esprit gardien
+    type: SOIN
+    icone: SOUL_LANTERN
+    couleur: "#7FE0D8"
+    spe: [ames]
+    talent: true
+    cout: 10
+    recharge: 15
+    portee: 25
+    puissance: 2.5
+    duree: 6
+    effets: { soin-par-sec: 3 }
+    description: "Un esprit veille sur l'allié visé : soin, puis 3 % des PV par seconde pendant 6 s."
+  voile_des_ames:
+    nom: Voile des âmes
+    type: CRI
+    icone: SOUL_SAND
+    couleur: "#7FE0D8"
+    spe: [ames]
+    talent: true
+    cout: 15
+    recharge: 60
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { bouclier: 15 }
+    description: "Bouclier de 15 % des PV sur vous et votre groupe pendant 10 s."
+  moisson_du_neant:
+    nom: Moisson du Néant
+    type: CRI
+    icone: WITHER_ROSE
+    couleur: "#B36BFF"
+    spe: [ames]
+    talent: true
+    cout: 20
+    recharge: 120
+    zone: 10
+    puissance: 1.5
+    effets: { affaiblir: 8, soin: 25 }
+    description: "Arrache la vie des ennemis autour (dégâts, affaiblis 8 s) et rend 25 % des PV au groupe."
+
+  # ---------------- Malédictions ----------------
+  drain_de_vie:
+    nom: Drain de vie
+    type: PROJECTILE
+    icone: GHAST_TEAR
+    couleur: "#B36BFF"
+    spe: [maledictions]
+    niveau: 3
+    cout: 5
+    incantation: 1.5
+    portee: 30
+    puissance: 1.6
+    effets: { vol-de-vie: 30 }
+    description: "Draine la vie de la cible : 30 % des dégâts vous soignent."
+  mal_du_neant:
+    nom: Mal du Néant
+    type: PROJECTILE
+    icone: WITHER_ROSE
+    couleur: "#5A3A8C"
+    spe: [maledictions]
+    niveau: 5
+    cout: 5
+    portee: 30
+    puissance: 0.3
+    effets: { saignement: 14, dot: 0.3 }
+    description: "Le Néant ronge la cible pendant 14 s."
+  agonie:
+    nom: Agonie
+    type: PROJECTILE
+    icone: DEAD_BUSH
+    couleur: "#8E6BFF"
+    spe: [maledictions]
+    niveau: 9
+    cout: 8
+    recharge: 12
+    portee: 30
+    puissance: 0.3
+    effets: { affaiblir: 15, saignement: 10, dot: 0.2 }
+    description: "Une malédiction : la cible inflige moins de dégâts pendant 15 s et souffre."
+  terreur:
+    nom: Terreur
+    type: PROJECTILE
+    icone: SCULK_SHRIEKER
+    couleur: "#5A3A8C"
+    spe: [maledictions]
+    niveau: 14
+    cout: 8
+    recharge: 20
+    portee: 25
+    puissance: 0.5
+    effets: { peur: 4 }
+    description: "La cible est prise de terreur et fuit pendant 4 s."
+  avatar_du_neant:
+    nom: Avatar du Néant
+    type: BUFF
+    icone: CRYING_OBSIDIAN
+    couleur: "#B36BFF"
+    spe: [maledictions]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 12
+    effets: { bonus-degats: 20, reduction: 10 }
+    description: "+20 % de dégâts et −10 % de dégâts subis pendant 12 s."
+  drain_d_essence:
+    nom: Drain d'essence
+    type: PROJECTILE
+    icone: GHAST_TEAR
+    couleur: "#CFA8FF"
+    spe: [maledictions]
+    talent: true
+    cout: 8
+    recharge: 12
+    portee: 30
+    puissance: 2.2
+    effets: { vol-de-vie: 60 }
+    description: "Vole une grande part de vie à la cible : 60 % des dégâts vous soignent."
+  cercle_de_maledictions:
+    nom: Cercle de malédictions
+    type: TOURBILLON
+    icone: WITHER_ROSE
+    couleur: "#8E6BFF"
+    spe: [maledictions]
+    talent: true
+    cout: 15
+    recharge: 25
+    portee: 6
+    puissance: 0.4
+    effets: { saignement: 8, dot: 0.25, affaiblir: 8 }
+    description: "Maudit tous les ennemis autour de vous : ils souffrent et sont affaiblis 8 s."
+  damnation:
+    nom: Damnation
+    type: PROJECTILE
+    icone: WITHER_SKELETON_SKULL
+    couleur: "#5A3A8C"
+    spe: [maledictions]
+    talent: true
+    cout: 30
+    recharge: 60
+    portee: 30
+    zone: 5
+    puissance: 3.0
+    effets: { saignement: 10, dot: 0.4, peur: 2 }
+    description: "Une malédiction qui éclate : gros dégâts, la zone est rongée 10 s et terrifiée 2 s."
