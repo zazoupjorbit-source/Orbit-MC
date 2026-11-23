@@ -1,0 +1,27 @@
+name: NarutoCore
+version: 0.1.0
+main: fr.naruto.core.NarutoCore
+api-version: '1.21'
+authors: [ORBIT, Claude]
+description: Systeme de chakra et de jutsu pour serveur Naruto RP.
+folia-supported: false
+
+commands:
+  ninja:
+    description: Ton profil ninja (element, clan, rang, chakra).
+    aliases: [profil, nin]
+  jutsu:
+    description: Ouvre le menu des jutsu.
+    aliases: [j, techniques]
+  chakra:
+    description: Affiche/gere le chakra.
+  narutoadmin:
+    description: Administration NarutoCore (op).
+    aliases: [na]
+    permission: naruto.admin
+    usage: /narutoadmin <element|clan|rank|chakra|reset> <joueur> [valeur]
+
+permissions:
+  naruto.admin:
+    description: Administrer NarutoCore.
+    default: op

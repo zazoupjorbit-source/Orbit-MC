@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page { size: A4; margin: 14mm 14mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #1c1c22; font-size: 11px; line-height: 1.45;
+    background: #fff;
+  }
+  .hero {
+    background: linear-gradient(120deg, #E8650A 0%, #FF3B3B 100%);
+    color: #fff; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px;
+  }
+  .hero h1 { font-size: 26px; letter-spacing: .5px; }
+  .hero .sub { font-size: 12px; opacity: .95; margin-top: 4px; }
+  .hero .tag {
+    display: inline-block; margin-top: 10px; background: rgba(255,255,255,.2);
+    padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 600;
+  }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .card {
+    border: 1px solid #eee; border-left: 4px solid #E8650A; border-radius: 8px;
+    padding: 12px 14px; background: #fcfcfd; break-inside: avoid;
+  }
+  .card.red { border-left-color: #FF3B3B; }
+  .card h2 { font-size: 13px; color: #E8650A; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .card.red h2 { color: #FF3B3B; }
+  .card ul { list-style: none; }
+  .card li { padding: 2px 0 2px 16px; position: relative; }
+  .card li::before { content: '▸'; position: absolute; left: 0; color: #E8650A; font-size: 10px; }
+  .card.red li::before { color: #FF3B3B; }
+  code {
+    background: #1c1c22; color: #ffb347; padding: 1px 6px; border-radius: 4px;
+    font-family: 'Consolas', monospace; font-size: 10px;
+  }
+  .flow {
+    display: flex; gap: 6px; margin: 6px 0 2px; flex-wrap: wrap;
+  }
+  .step {
+    background: #fff3e9; border: 1px solid #f3d3ba; border-radius: 20px;
+    padding: 3px 11px; font-size: 10px; font-weight: 600; color: #b64f08;
+  }
+  .arrow { color: #E8650A; font-weight: 700; align-self: center; }
+  .full { grid-column: 1 / 3; }
+  .setup {
+    background: #1c1c22; color: #eee; border-radius: 8px; padding: 12px 14px; margin-top: 12px;
+  }
+  .setup h2 { color: #ffb347; font-size: 13px; margin-bottom: 8px; }
+  .setup code { background: #2c2c34; }
+  .setup ol { margin-left: 18px; } .setup li { padding: 2px 0; }
+  .foot { margin-top: 12px; font-size: 9px; color: #999; text-align: center; }
+  .warn { background: #fff8e6; border: 1px solid #f0dca0; border-radius: 6px; padding: 8px 11px; font-size: 10px; margin-top: 10px; }
+  .badge { color: #16a34a; font-weight: 700; }
+</style>
+</head>
+<body>
+  <div class="hero">
+    <h1>⚔ ORBIT&nbsp;VERSUS</h1>
+    <div class="sub">Mode Versus — PvP compétitif · matchmaking 1v1 & 2v2 · arènes · Best-of-3 · Elo</div>
+    <span class="tag">Plugin Paper 1.21.8 · installé sur le serveur ✓</span>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>🎯 Trouver un combat</h2>
+      <ul>
+        <li><b>PNJ Mode Versus</b> : clic droit → menu 1v1 / 2v2</li>
+        <li><code>/1v1</code> — file solo · <code>/1v1 leave</code> pour annuler</li>
+        <li><code>/1v1 &lt;pseudo&gt;</code> — défi direct (départ si défi mutuel)</li>
+        <li><code>/2v2 &lt;équipe&gt;</code> — même nom = coéquipier</li>
+      </ul>
+      <div class="flow">
+        <span class="step">File</span><span class="arrow">→</span>
+        <span class="step">Adversaire + Elo</span><span class="arrow">→</span>
+        <span class="step">Arène aléatoire</span>
+      </div>
+    </div>
+
+    <div class="card red">
+      <h2>🥊 Le combat (Best-of-3)</h2>
+      <ul>
+        <li>Décompte <b>3‑2‑1‑GO</b> puis PvP</li>
+        <li>1<sup>re</sup> équipe à <b>2 manches</b> gagne</li>
+        <li>Élimination <b>sans vraie mort</b> → aucun item perdu</li>
+        <li>Tir allié désactivé · déco = défaite par forfait</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>🏆 Progression & social</h2>
+      <ul>
+        <li><b>Classement Elo</b> (K=32, moyenne d'équipe en 2v2) — <code>/versus top</code></li>
+        <li><b>Historique</b> des 8 derniers combats — <code>/combats</code></li>
+        <li><b>Spectateur</b> — <code>/spec &lt;pseudo&gt;</code></li>
+      </ul>
+    </div>
+
+    <div class="card red">
+      <h2>💰 Paris</h2>
+      <ul>
+        <li><code>/versus bet &lt;montant&gt;</code> avant la file</li>
+        <li>Mise équilibrée : le vainqueur remporte le pot</li>
+        <li><b>Inactif pour l'instant</b> (nécessite Vault / bridge éco OrbitCore)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="setup">
+    <h2>⚙️ Mise en place (op) — à faire une fois en jeu</h2>
+    <ol>
+      <li>Au 1<sup>er</sup> spawn de l'arène : <code>/versus arena a arene1</code></li>
+      <li>Au 2<sup>e</sup> spawn (en face) : <code>/versus arena b arene1</code> &nbsp;<span style="opacity:.7">(répète pour arene2, arene3…)</span></li>
+      <li>Poser le PNJ : <code>/versus npc</code></li>
+    </ol>
+    <div style="margin-top:6px; opacity:.8; font-size:10px;">Admin : <code>/versus arena list|remove</code> · <code>/versus reload</code> — permission <code>orbitversus.admin</code></div>
+  </div>
+
+  <div class="warn">
+    <b>État :</b> <span class="badge">Installé & en ligne</span> sur le serveur local (avec OrbitCore & NarutoCore).
+    Build + démarrage vérifiés sur Paper 1.21.8. Reste à tester en combat réel (il faut 2 joueurs + une arène).
+  </div>
+
+  <div class="foot">ORBIT Games — OrbitVersus v0.1.0 · récapitulatif généré le 01/07/2026</div>
+</body>
+</html>

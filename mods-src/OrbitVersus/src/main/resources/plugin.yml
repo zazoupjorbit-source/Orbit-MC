@@ -1,0 +1,28 @@
+name: OrbitVersus
+version: 0.1.0
+main: fr.orbitversus.OrbitVersus
+api-version: '1.21'
+author: Orbit Games
+description: "Mode Versus - matchmaking 1v1/2v2, arenes, Bo3, Elo, paris, spectate, historique."
+softdepend: [Vault]
+commands:
+  versus:
+    description: "Administration du Mode Versus (arenes, pnj, pari)."
+    usage: "/versus <arena|npc|bet|reload> ..."
+    aliases: [vs]
+  1v1:
+    description: "File 1v1, ou defier un joueur."
+    usage: "/1v1 [pseudo|leave]"
+  2v2:
+    description: "File 2v2 avec une equipe nommee."
+    usage: "/2v2 <nom equipe>"
+  spec:
+    description: "Observer le combat d'un joueur."
+    usage: "/spec <pseudo>"
+  combats:
+    description: "Ton historique de combats recents."
+    aliases: [historique, history]
+permissions:
+  orbitversus.admin:
+    description: "Administration OrbitVersus."
+    default: op

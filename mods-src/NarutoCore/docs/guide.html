@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>NarutoCore — Guide</title>
+<style>
+  @page { margin: 15mm 13mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: #1c1c22; font-size: 12px; line-height: 1.5; margin: 0; }
+  h1 { font-size: 30px; margin: 0 0 2px; letter-spacing: .04em; }
+  h2 { font-size: 17px; margin: 20px 0 7px; padding-bottom: 4px; border-bottom: 2px solid #E8650A; color: #B4460A; }
+  h3 { font-size: 13px; margin: 12px 0 4px; color: #B4460A; }
+  .cover { background: linear-gradient(135deg,#1b1430,#0d0e15); color: #fff; padding: 28px 24px; border-radius: 14px; margin-bottom: 16px; }
+  .cover .mark { font-size: 34px; font-weight: 700; letter-spacing:.18em; background: linear-gradient(135deg,#E8650A,#FFB347); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .cover .sub { color: #c7ccda; margin-top: 6px; font-size: 13px; }
+  .cover .tag { display:inline-block; margin-top:12px; background:#241a10; color:#FFB347; font-size:11px; padding:4px 10px; border-radius:6px; }
+  p { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 4px; font-size: 10.5px; }
+  th { background: #241a10; color: #FFB347; text-align: left; padding: 5px 7px; }
+  td { border-bottom: 1px solid #e5e2da; padding: 4px 7px; vertical-align: top; }
+  tr:nth-child(even) td { background: #faf6f0; }
+  td.n { text-align: center; white-space: nowrap; }
+  code, .cmd { background: #f1efe8; padding: 1px 5px; border-radius: 4px; font-family: Consolas, monospace; font-size: 11px; color: #B4460A; }
+  .note { background: #fff6ec; border-left: 3px solid #E8650A; padding: 8px 12px; border-radius: 0 6px 6px 0; margin: 9px 0; }
+  ul { margin: 4px 0 8px; padding-left: 18px; }
+  li { margin: 3px 0; }
+  .el { font-weight: 600; }
+  .foot { margin-top: 18px; padding-top: 8px; border-top: 1px solid #ddd; color:#888; font-size: 10px; text-align:center; }
+  .avoid-break { page-break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="mark">NARUTOCORE</div>
+  <div class="sub">Guide d'utilisation — Système de chakra &amp; jutsu pour serveur RP</div>
+  <div class="tag">Version 0.1.0 • 54 jutsu • Minecraft Paper 1.21.8</div>
+</div>
+
+<p>NarutoCore ajoute un système de combat ninja : chaque joueur a une réserve de <b>chakra</b>,
+une <b>affinité élémentaire</b>, un <b>clan</b> (Kekkei Genkai) et un <b>rang</b>. Les techniques
+(<b>jutsu</b>) s'obtiennent sous forme de <b>parchemins</b> et se lancent d'un <b>clic droit</b>.</p>
+
+<h2>1. Installation</h2>
+<ul>
+  <li>Serveur <b>Paper 1.21.8</b> (Java 21).</li>
+  <li>Place le fichier <code>NarutoCore-0.1.0.jar</code> <b>directement</b> dans le dossier <code>plugins/</code> (pas le dossier de code source).</li>
+  <li>Redémarre le serveur. La base <code>plugins/NarutoCore/naruto.db</code> est créée automatiquement.</li>
+</ul>
+
+<h2>2. Première connexion</h2>
+<p>Un menu s'ouvre pour choisir <b>ton affinité</b> (Katon, Suiton, Fūton, Doton, Raiton) puis <b>ton clan</b>.
+Une <b>barre de chakra</b> apparaît en haut de l'écran (elle se recharge toute seule).</p>
+
+<h2>3. Obtenir et lancer un jutsu</h2>
+<ol>
+  <li>Tape <span class="cmd">/jutsu</span> : le menu affiche les techniques de ton élément et ton rang.</li>
+  <li><b>Clique une technique</b> → tu reçois un <b>parchemin</b> (item) dans ton inventaire.</li>
+  <li><b>Tiens le parchemin en main</b> et fais un <b>clic droit</b> pour lancer le jutsu.</li>
+</ol>
+<div class="note">Constitue-toi une <b>barre d'action</b> avec tes parchemins préférés. Chaque jutsu
+coûte du chakra et a un temps de recharge (indiqués sur le parchemin). Vise ce que tu veux toucher :
+la plupart des techniques ciblent l'entité ou le point que tu regardes.</div>
+
+<h2>4. Le roster — 54 jutsu</h2>
+<p><b>Rangs requis :</b> t1 = Genin, t2 = Chūnin, t3 = Jōnin. Chakra = coût, CD = recharge.</p>
+
+<h3 class="el">🔥 Katon (Feu) — 10</h3>
+<table class="avoid-break">
+  <tr><th>Jutsu</th><th>Chakra</th><th>CD</th><th>Rang</th><th>Effet</th></tr>
+  <tr><td>Gōkakyū no Jutsu</td><td class="n">30</td><td class="n">4s</td><td class="n">t1</td><td>Grande boule de feu (brûle + repousse).</td></tr>
+  <tr><td>Endan</td><td class="n">18</td><td class="n">3s</td><td class="n">t1</td><td>Balle de feu rapide.</td></tr>
+  <tr><td>Hōsenka no Jutsu</td><td class="n">22</td><td class="n">4s</td><td class="n">t1</td><td>Volée de flammes en éventail.</td></tr>
+  <tr><td>Ryūka no Jutsu</td><td class="n">30</td><td class="n">5s</td><td class="n">t2</td><td>Flamme du dragon.</td></tr>
+  <tr><td>Karyū Endan</td><td class="n">55</td><td class="n">9s</td><td class="n">t3</td><td>Dragon de feu dévastateur.</td></tr>
+  <tr><td>Gōka Messhitsu</td><td class="n">45</td><td class="n">8s</td><td class="n">t2</td><td>Mer de flammes (zone).</td></tr>
+  <tr><td>Haisekishō</td><td class="n">28</td><td class="n">5s</td><td class="n">t2</td><td>Nuage de cendres aveuglant.</td></tr>
+  <tr><td>Bakufū Ranbu</td><td class="n">40</td><td class="n">7s</td><td class="n">t2</td><td>Vague de feu qui repousse.</td></tr>
+  <tr><td>Gōryūka no Jutsu</td><td class="n">35</td><td class="n">6s</td><td class="n">t2</td><td>Missile enflammé explosif.</td></tr>
+  <tr><td>Armure de feu</td><td class="n">25</td><td class="n">10s</td><td class="n">t1</td><td>Aura : force + résistance au feu.</td></tr>
+</table>
+
+<h3 class="el">💧 Suiton (Eau) — 10</h3>
+<table class="avoid-break">
+  <tr><th>Jutsu</th><th>Chakra</th><th>CD</th><th>Rang</th><th>Effet</th></tr>
+  <tr><td>Suidan no Jutsu</td><td class="n">25</td><td class="n">3s</td><td class="n">t1</td><td>Balle d'eau puissante.</td></tr>
+  <tr><td>Teppōdama</td><td class="n">16</td><td class="n">3s</td><td class="n">t1</td><td>Volée de balles d'eau.</td></tr>
+  <tr><td>Suiryūdan no Jutsu</td><td class="n">45</td><td class="n">7s</td><td class="n">t2</td><td>Dragon d'eau.</td></tr>
+  <tr><td>Daibakufu no Jutsu</td><td class="n">55</td><td class="n">9s</td><td class="n">t3</td><td>Grande cascade (zone).</td></tr>
+  <tr><td>Bakusui Shōha</td><td class="n">40</td><td class="n">7s</td><td class="n">t2</td><td>Torrent qui balaie.</td></tr>
+  <tr><td>Suijinheki</td><td class="n">30</td><td class="n">8s</td><td class="n">t2</td><td>Mur d'eau glacée (8s).</td></tr>
+  <tr><td>Suiben</td><td class="n">20</td><td class="n">4s</td><td class="n">t1</td><td>Fouet d'eau : attire la cible.</td></tr>
+  <tr><td>Mizu Bunshin</td><td class="n">25</td><td class="n">8s</td><td class="n">t2</td><td>Clone d'eau : résistance.</td></tr>
+  <tr><td>Kirigakure no Jutsu</td><td class="n">22</td><td class="n">9s</td><td class="n">t2</td><td>Brume : invisibilité + ralentit.</td></tr>
+  <tr><td>Grâce aquatique</td><td class="n">15</td><td class="n">8s</td><td class="n">t1</td><td>Rapidité aquatique + apnée.</td></tr>
+</table>
+
+<h3 class="el">🌪️ Fūton (Vent) — 10</h3>
+<table class="avoid-break">
+  <tr><th>Jutsu</th><th>Chakra</th><th>CD</th><th>Rang</th><th>Effet</th></tr>
+  <tr><td>Reppūshō</td><td class="n">20</td><td class="n">4s</td><td class="n">t1</td><td>Paume de vent.</td></tr>
+  <tr><td>Daitoppa</td><td class="n">28</td><td class="n">5s</td><td class="n">t1</td><td>Grande percée : forte poussée.</td></tr>
+  <tr><td>Kazekiri no Jutsu</td><td class="n">30</td><td class="n">5s</td><td class="n">t2</td><td>Lames de vent tranchantes.</td></tr>
+  <tr><td>Shinkūha</td><td class="n">26</td><td class="n">4s</td><td class="n">t2</td><td>Onde de vide coupante.</td></tr>
+  <tr><td>Rasenshuriken</td><td class="n">60</td><td class="n">10s</td><td class="n">t3</td><td>Shuriken tourbillonnant dévastateur.</td></tr>
+  <tr><td>Kamikaze</td><td class="n">18</td><td class="n">6s</td><td class="n">t1</td><td>Bourrasque : dash + rapidité.</td></tr>
+  <tr><td>Tatsumaki</td><td class="n">40</td><td class="n">8s</td><td class="n">t2</td><td>Tornade : soulève les ennemis.</td></tr>
+  <tr><td>Renkūdan</td><td class="n">24</td><td class="n">4s</td><td class="n">t1</td><td>Bullet d'air perforant (zone).</td></tr>
+  <tr><td>Armure de vent</td><td class="n">22</td><td class="n">9s</td><td class="n">t2</td><td>Légèreté : saut + chute lente.</td></tr>
+  <tr><td>Shinkū Taigyoku</td><td class="n">50</td><td class="n">9s</td><td class="n">t3</td><td>Sphère de vide (grosse zone).</td></tr>
+</table>
+
+<h3 class="el">🪨 Doton (Terre) — 10</h3>
+<table class="avoid-break">
+  <tr><th>Jutsu</th><th>Chakra</th><th>CD</th><th>Rang</th><th>Effet</th></tr>
+  <tr><td>Doryūheki</td><td class="n">35</td><td class="n">9s</td><td class="n">t2</td><td>Mur de terre (10s).</td></tr>
+  <tr><td>Tsuchi Kabe</td><td class="n">25</td><td class="n">7s</td><td class="n">t1</td><td>Muraille de pierre (8s).</td></tr>
+  <tr><td>Doryūdan</td><td class="n">40</td><td class="n">7s</td><td class="n">t2</td><td>Dragon de terre (projectile).</td></tr>
+  <tr><td>Iwa Yari</td><td class="n">22</td><td class="n">4s</td><td class="n">t1</td><td>Lances de pierre.</td></tr>
+  <tr><td>Ganban Kyū</td><td class="n">45</td><td class="n">8s</td><td class="n">t2</td><td>Écrasement rocheux (zone).</td></tr>
+  <tr><td>Doryō Dango</td><td class="n">55</td><td class="n">10s</td><td class="n">t3</td><td>Boulet de terre colossal.</td></tr>
+  <tr><td>Yomi Numa</td><td class="n">35</td><td class="n">8s</td><td class="n">t2</td><td>Marais : englue les ennemis proches.</td></tr>
+  <tr><td>Retsudo Tenshō</td><td class="n">40</td><td class="n">8s</td><td class="n">t2</td><td>Séisme : projette autour.</td></tr>
+  <tr><td>Armure de terre</td><td class="n">22</td><td class="n">10s</td><td class="n">t1</td><td>Peau de pierre : résistance.</td></tr>
+  <tr><td>Moguragakure</td><td class="n">20</td><td class="n">8s</td><td class="n">t2</td><td>Taupe : disparais brièvement.</td></tr>
+</table>
+
+<h3 class="el">⚡ Raiton (Foudre) — 10</h3>
+<table class="avoid-break">
+  <tr><th>Jutsu</th><th>Chakra</th><th>CD</th><th>Rang</th><th>Effet</th></tr>
+  <tr><td>Chidori</td><td class="n">45</td><td class="n">8s</td><td class="n">t2</td><td>Charge foudroyante (cible proche).</td></tr>
+  <tr><td>Gian</td><td class="n">26</td><td class="n">4s</td><td class="n">t1</td><td>Lance électrique.</td></tr>
+  <tr><td>Raikō</td><td class="n">35</td><td class="n">6s</td><td class="n">t2</td><td>Éclair sur la cible visée.</td></tr>
+  <tr><td>Jibashi</td><td class="n">30</td><td class="n">5s</td><td class="n">t2</td><td>Onde électrique paralysante.</td></tr>
+  <tr><td>Raijū Hashiri</td><td class="n">40</td><td class="n">7s</td><td class="n">t2</td><td>Bête-foudre : dash + éclair.</td></tr>
+  <tr><td>Rairyūdan</td><td class="n">50</td><td class="n">8s</td><td class="n">t3</td><td>Dragon de foudre.</td></tr>
+  <tr><td>Kaminari</td><td class="n">32</td><td class="n">6s</td><td class="n">t2</td><td>Fracas électrique (autour).</td></tr>
+  <tr><td>Byakurai</td><td class="n">30</td><td class="n">5s</td><td class="n">t2</td><td>Foudre blanche perçante.</td></tr>
+  <tr><td>Armure de foudre</td><td class="n">25</td><td class="n">10s</td><td class="n">t2</td><td>Manteau : vitesse + force.</td></tr>
+  <tr><td>Kirin</td><td class="n">70</td><td class="n">12s</td><td class="n">t3</td><td>Foudre céleste dévastatrice.</td></tr>
+</table>
+
+<h3 class="el">🍃 Généraux (tout élément) — 4</h3>
+<table class="avoid-break">
+  <tr><th>Jutsu</th><th>Chakra</th><th>CD</th><th>Rang</th><th>Effet</th></tr>
+  <tr><td>Kawarimi no Jutsu</td><td class="n">15</td><td class="n">6s</td><td class="n">t1</td><td>Substitution : recule de 5 blocs + résistance.</td></tr>
+  <tr><td>Shunshin no Jutsu</td><td class="n">12</td><td class="n">4s</td><td class="n">t1</td><td>Corps scintillant : dash rapide.</td></tr>
+  <tr><td>Kage Bunshin no Jutsu</td><td class="n">30</td><td class="n">10s</td><td class="n">t1</td><td>Clones : résistance + vitesse.</td></tr>
+  <tr><td>Kai (Libération)</td><td class="n">10</td><td class="n">8s</td><td class="n">t1</td><td>Dissipe les effets négatifs + soin.</td></tr>
+</table>
+
+<h2>5. Clans &amp; Kekkei Genkai</h2>
+<table>
+  <tr><th>Clan</th><th>Kekkei Genkai</th><th>Passif</th></tr>
+  <tr><td>Uchiha</td><td>Sharingan</td><td>+20 chakra max</td></tr>
+  <tr><td>Hyūga</td><td>Byakugan</td><td>+10 chakra max</td></tr>
+  <tr><td>Uzumaki</td><td>Chakra colossal</td><td>+80 chakra max</td></tr>
+  <tr><td>Nara</td><td>Kagemane</td><td>+15 chakra max</td></tr>
+  <tr><td>Senju</td><td>Vitalité Senju</td><td>+30 chakra max, meilleure régén</td></tr>
+  <tr><td>Aburame</td><td>Kikaichū</td><td>+25 chakra max</td></tr>
+</table>
+<div class="note">Les <b>bonus de chakra/régén</b> des clans sont actifs. Les pouvoirs <b>actifs</b> des Kekkei
+Genkai (Sharingan, Byakugan, Kagemane, Kikaichū) arrivent dans une prochaine mise à jour.</div>
+
+<h2>6. Rangs</h2>
+<table>
+  <tr><th>Rang</th><th>Chakra max de base</th><th>Débloque</th></tr>
+  <tr><td>Genin</td><td class="n">100</td><td>jutsu t1</td></tr>
+  <tr><td>Chūnin</td><td class="n">150</td><td>jutsu t1-t2</td></tr>
+  <tr><td>Jōnin</td><td class="n">220</td><td>tous (t1-t3)</td></tr>
+  <tr><td>ANBU</td><td class="n">300</td><td>tous</td></tr>
+  <tr><td>Kage</td><td class="n">400</td><td>tous</td></tr>
+</table>
+<p>Chakra maximum = base du rang <b>+</b> bonus de clan.</p>
+
+<h2>7. Commandes</h2>
+<table>
+  <tr><th>Commande</th><th>Effet</th></tr>
+  <tr><td class="cmd">/ninja</td><td>Ton profil (élément, clan, rang, chakra, XP).</td></tr>
+  <tr><td class="cmd">/jutsu</td><td>Menu des jutsu (clique = reçois le parchemin). <code>/jutsu &lt;id&gt;</code> lance directement.</td></tr>
+  <tr><td class="cmd">/chakra</td><td>Affiche ton chakra. <code>/chakra full</code> (op) recharge.</td></tr>
+  <tr><td class="cmd">/narutoadmin</td><td>(Op) <code>element|clan|rank|chakra|reset &lt;joueur&gt; [valeur]</code></td></tr>
+</table>
+<h3>Exemples admin</h3>
+<ul>
+  <li><span class="cmd">/narutoadmin rank Zazou KAGE</span> — débloque tous les jutsu.</li>
+  <li><span class="cmd">/narutoadmin element Zazou RAITON</span> — change l'affinité.</li>
+  <li><span class="cmd">/narutoadmin chakra Zazou full</span> — recharge le chakra.</li>
+  <li><span class="cmd">/narutoadmin reset Zazou</span> — réinitialise le profil.</li>
+</ul>
+
+<h2>8. Bon à savoir</h2>
+<ul>
+  <li>Le chakra se <b>régénère automatiquement</b> — gère-le comme une ressource en combat.</li>
+  <li>Fais-toi une barre d'action de parchemins : <b>offensif + mobilité + protection</b> (mur, Kawarimi).</li>
+  <li>Les jutsu de <b>zone</b> (Messhitsu, Daibakufu, Kirin) touchent plusieurs ennemis autour du point visé.</li>
+  <li>Les jutsu <b>armure</b> (feu/terre/foudre) et <b>Kai</b> sont défensifs/utilitaires.</li>
+</ul>
+
+<h2>9. À venir</h2>
+<ul>
+  <li><b>Dojutsu actifs</b> : Sharingan, Byakugan, et pouvoirs de clan (Kagemane, Kikaichū).</li>
+  <li><b>Progression</b> : XP, montée en rang, apprentissage de jutsu, missions, villages.</li>
+  <li>Vrais projectiles et signes de main optionnels.</li>
+</ul>
+
+<div class="foot">NarutoCore v0.1.0 — 54 jutsu. Guide généré pour un serveur Naruto RP. Dattebayo !</div>
+
+</body>
+</html>
