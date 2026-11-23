@@ -62,6 +62,7 @@ public final class OrbitDevCore extends JavaPlugin {
     private ShopMenu shopMenu;
     private FireworkGame fireworkGame;
     private fr.orbit.devcore.anneau.Anneaux anneaux;
+    private fr.orbit.devcore.chat.Annonces annonces;
 
     @Override
     public void onEnable() {
@@ -108,6 +109,8 @@ public final class OrbitDevCore extends JavaPlugin {
         fireworkGame = new FireworkGame(this);
         pm.registerEvents(fireworkGame, this); // après PlayerListener : la boussole prend sa case d'abord
         fireworkGame.start();
+        annonces = new fr.orbit.devcore.chat.Annonces(this);
+        annonces.start();
 
         SpawnCommand spawn = new SpawnCommand(this);
         register("spawn", spawn);
@@ -136,6 +139,9 @@ public final class OrbitDevCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (annonces != null) {
+            annonces.stop();
+        }
         if (anneaux != null) {
             anneaux.stop();
         }
@@ -168,6 +174,7 @@ public final class OrbitDevCore extends JavaPlugin {
         reloadConfig();
         messages.load();
         chat.load(getConfig().getConfigurationSection("chat"));
+        annonces.start();
         worlds.load();
         station.load();
         locations.load();

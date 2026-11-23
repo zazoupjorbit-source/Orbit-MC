@@ -552,8 +552,77 @@ final class Iles {
 
     // ------------------------------------------------------------------ Mobzone : la ceinture des ombres
 
+    // ------------------------------------------------------------------ Mobzone : 11 parts (une par mob de l'épée)
+
+    /** Rayon de la place centrale (statue + mur) : pas de part, pas de spawner. */
+    static final double PLACE = 52;
+    /** Écart entre deux spawners et nombre de mobs par apparition (spawner « pack » x10). */
+    static final int ECART_SPAWNERS = 7, PACK_SPAWNER = 10;
+
+    /** Nombre de parts = nombre de ressources de l'épée (une part par mob). */
+    private int nbParts() { return Math.max(1, p.plugin.ressources().liste(Outil.Mode.EPEE).size()); }
+
+    /** Part (0..n-1) d'un point de la Mobzone ; la part 0 est centrée vers le spawn (là où on arrive). -1 : place centrale. */
+    static int partMobzone(Zone z, double x, double zc, int n) {
+        double dx = x - z.cx, dz = zc - z.cz;
+        if (dx * dx + dz * dz < PLACE * PLACE) return -1;
+        double t = (Math.atan2(dz, dx) - versSpawn(z)) / (2 * Math.PI) * n + 0.5;
+        return Math.floorMod((int) Math.floor(t), n);
+    }
+
+    /** Angle du milieu de la part 0 (vers le spawn) ; les parts suivantes tournent de 2π/n. */
+    static double angleParts(Zone z) { return versSpawn(z); }
+
+    /** Distance (blocs) de (dx, dz) à la limite entre deux parts la plus proche. */
+    static double distanceLimite(Zone z, double dx, double dz, int n) {
+        double best = Double.MAX_VALUE;
+        for (int k = 0; k < n; k++) {
+            double a = versSpawn(z) + (k + 0.5) * 2 * Math.PI / n;
+            double along = dx * Math.cos(a) + dz * Math.sin(a);
+            if (along > 0) best = Math.min(best, Math.abs(-dx * Math.sin(a) + dz * Math.cos(a)));
+        }
+        return best;
+    }
+
+    /** Ouverture du mur de la place, face au milieu de chaque part. */
+    private static boolean ouverture(Zone z, int dx, int dz, int n) {
+        for (int k = 0; k < n; k++) {
+            double a = versSpawn(z) + k * 2 * Math.PI / n;
+            double along = dx * Math.cos(a) + dz * Math.sin(a), perp = Math.abs(-dx * Math.sin(a) + dz * Math.cos(a));
+            if (along > 0 && perp < 3.5) return true;
+        }
+        return false;
+    }
+
+    /** Sol de la Mobzone (hors bordure) : dalles sombres, ligne d'or entre deux parts. */
+    private static Material solMobzone(Zone z, int dx, int dz, double d, int n) {
+        int x = z.cx + dx, zz = z.cz + dz;
+        if (d >= PLACE && d < z.rayon - 3 && distanceLimite(z, dx, dz, n) < 0.75) return Material.GOLD_BLOCK;
+        int h = hash(x, 9, zz);
+        if (d < 2.5) return Material.CRYING_OBSIDIAN;
+        if (d < 6) return Material.CHISELED_POLISHED_BLACKSTONE;
+        if (Math.abs(d - 20) < 0.6 || Math.abs(d - 120) < 0.6) return Material.GILDED_BLACKSTONE;
+        if (Math.abs(d - 121.2) < 0.6) return Material.RED_NETHER_BRICKS;
+        if (h < 15) return Material.SHROOMLIGHT;
+        if (h < 165) return Material.CRACKED_POLISHED_BLACKSTONE_BRICKS;
+        if (h < 315) return Material.BLACKSTONE;
+        if (h < 415) return Material.POLISHED_BASALT;
+        if (h < 515) return Material.DEEPSLATE_TILES;
+        return Material.POLISHED_BLACKSTONE_BRICKS;
+    }
+
+    /** Mur de la place centrale (anneau 50..51.6), avec une ouverture par part. */
+    private static boolean mur(double d) { return d >= 50 && d <= 51.6; }
+
+    private void poserMur(Chantier c, Zone z, int dx, int dz, int n) {
+        int x = z.cx + dx, zz = z.cz + dz;
+        if (ouverture(z, dx, dz, n)) return;
+        for (int y = Y + 1; y <= Y + 5; y++) c.set(x, y, zz, Material.POLISHED_BLACKSTONE_BRICKS);
+        c.set(x, Y + 6, zz, Material.GILDED_BLACKSTONE);
+    }
+
     private void mobzone(Chantier c, Zone z) {
-        int R = z.rayon;
+        int R = z.rayon, n = nbParts();
         double a0 = versSpawn(z);
         p.disque(c, z.cx, z.cz, R, (dx, dz, d) -> {
             int x = z.cx + dx, zz = z.cz + dz;
@@ -567,43 +636,11 @@ final class Iles {
                 if (arc % 16 < 1.2) c.set(x, Y + 6, zz, Material.SOUL_LANTERN);
                 return;
             }
-            Material sol;
-            int h = hash(x, 9, zz);
-            if (d < 2.5) sol = Material.CRYING_OBSIDIAN;
-            else if (d < 6) sol = Material.CHISELED_POLISHED_BLACKSTONE;
-            else if (Math.abs(d - 20) < 0.6 || Math.abs(d - 120) < 0.6) sol = Material.GILDED_BLACKSTONE;
-            else if (Math.abs(d - 121.2) < 0.6) sol = Material.RED_NETHER_BRICKS;
-            else if (h < 15) sol = Material.SHROOMLIGHT;
-            else if (h < 165) sol = Material.CRACKED_POLISHED_BLACKSTONE_BRICKS;
-            else if (h < 315) sol = Material.BLACKSTONE;
-            else if (h < 415) sol = Material.POLISHED_BASALT;
-            else if (h < 515) sol = Material.DEEPSLATE_TILES;
-            else sol = Material.POLISHED_BLACKSTONE_BRICKS;
-            c.set(x, Y, zz, sol);
-            // Mur de l'arène centrale, 4 entrées.
-            if (d >= 50 && d <= 51.6) {
-                boolean entree = false;
-                for (int k = 0; k < 4; k++) {
-                    double a = a0 + Math.toRadians(k * 90);
-                    double along = dx * Math.cos(a) + dz * Math.sin(a), perp = Math.abs(-dx * Math.sin(a) + dz * Math.cos(a));
-                    if (along > 0 && perp < 3.5) entree = true;
-                }
-                if (!entree) {
-                    for (int y = Y + 1; y <= Y + 5; y++) c.set(x, y, zz, Material.POLISHED_BLACKSTONE_BRICKS);
-                    c.set(x, Y + 6, zz, Material.GILDED_BLACKSTONE);
-                }
-            }
+            c.set(x, Y, zz, solMobzone(z, dx, dz, d, n));
+            if (mur(d)) poserMur(c, z, dx, dz, n);
         });
-
-        // Autel central.
-        c.etape(() -> {
-            for (int k = 0; k < 4; k++) {
-                double a = Math.toRadians(k * 90 + 45);
-                c.set(z.cx + (int) Math.round(Math.cos(a) * 4), Y + 1, z.cz + (int) Math.round(Math.sin(a) * 4), Material.SOUL_CAMPFIRE);
-            }
-            for (int y = Y + 1; y <= Y + 3; y++) c.set(z.cx, y, z.cz, y == Y + 3 ? Material.GOLD_BLOCK : Material.CRYING_OBSIDIAN);
-        });
-        p.holo(c, z.id, z.cx + 0.5, Y + 7, z.cz + 0.5, "<#FF4D4D><bold>Arène des ombres</bold>", 2.5f);
+        // Statue de l'astronaute au centre de la place, tournée vers l'arrivée.
+        new Statue().dessiner(c, z.cx, z.cz, Y, versSpawn(z));
 
         // Ruines : piliers brisés.
         Random rnd = new Random(41);
@@ -620,9 +657,6 @@ final class Iles {
                 if (lanterne) c.set(x, Y + h + 1, zz, Material.SOUL_LANTERN);
             });
         }
-        // Spawners dans le sol, partout sur l'île : chacun peut faire apparaître tous les monstres.
-        spawners(c, z);
-
         // Pylônes corrompus.
         for (int k = 1; k < 6; k++) {
             double a = a0 + Math.toRadians(k * 60);
@@ -637,30 +671,46 @@ final class Iles {
                 c.set(x, Y + 22, zz, Material.SOUL_CAMPFIRE);
             });
         }
+        // Une part par mob de l'épée : panneaux + spawners x10 tous les 7 blocs (après les ruines et pylônes).
+        parts(c, z);
     }
 
-    /** Un spawner tous les 15 blocs, chacun d'un mob différent (rotation sur tous les mobs du jeu). */
-    static final int ECART_SPAWNERS = 15;
-
-    private void spawners(Chantier c, Zone z) {
-        int R = z.rayon;
-        java.util.List<org.bukkit.entity.EntityType> mobs = Piles.mobsDeSpawner();
+    /** Panneaux de chaque part (près du mur et vers le bord) puis spawners. Renvoie le nombre de spawners posés (rempli pendant le chantier). */
+    int[] parts(Chantier c, Zone z) {
+        int R = z.rayon, n = nbParts();
+        java.util.List<org.bukkit.entity.EntityType> mobs = p.plugin.ressources().mobsDesParts();
+        java.util.List<Ressources.Palier> liste = p.plugin.ressources().liste(Outil.Mode.EPEE);
+        String tag = z.id + "-parts";
+        c.etape(() -> {
+            for (int k = 0; k < n; k++) {
+                double a = versSpawn(z) + k * 2 * Math.PI / n;
+                int q = p.plugin.ressources().quete(k);
+                String texte = (k == 0 ? "<#7CFC9A>" : "<#FF4D4D>") + "<bold>Part " + (k + 1) + " · " + liste.get(k).nom() + "</bold>\n"
+                        + (k == 0 ? "<gray>Libre" : q > 0 ? "<gray>Épée · <#E0B864>Prestige " + q : "<gray>Pas encore disponible");
+                for (double r : new double[]{57, R - 30})
+                    p.holoImmediat(c.world(), tag, z.cx + Math.cos(a) * r + 0.5, Y + 4.2, z.cz + Math.sin(a) * r + 0.5,
+                            Navigateur.texte(texte), 1.6f, 1.5f);
+            }
+        });
         org.bukkit.block.spawner.SpawnRule regle = new org.bukkit.block.spawner.SpawnRule(0, 15, 0, 15);   // de jour comme de nuit
         org.bukkit.NamespacedKey clePile = Piles.clePile(p.plugin);
         var arrivee = z.arrivee(c.world());
-        int[] rang = {0};
-        p.plugin.getLogger().info("Mobzone : " + mobs.size() + " types de mobs dans les spawners.");
-        for (int gx = -R; gx <= R; gx += ECART_SPAWNERS) {
+        int[] poses = {0};
+        int debut = -(R / ECART_SPAWNERS) * ECART_SPAWNERS;
+        for (int gx = debut; gx <= R; gx += ECART_SPAWNERS) {
             final int dx = gx;
             c.etape(() -> {
-                for (int dz = -R; dz <= R; dz += ECART_SPAWNERS) {
+                for (int dz = debut; dz <= R; dz += ECART_SPAWNERS) {
                     double d = Math.sqrt(dx * dx + dz * dz);
-                    if (d < 9 || d > R - 8 || (d > 46 && d < 55)) continue;
+                    if (d < PLACE + 4 || d > R - 8) continue;
+                    if (distanceLimite(z, dx, dz, n) < 3) continue;          // pas sur la ligne entre deux parts
                     int x = z.cx + dx, zz = z.cz + dz;
-                    if (Math.hypot(x - arrivee.getX(), zz - arrivee.getZ()) < 30) continue;
+                    if (Math.hypot(x - arrivee.getX(), zz - arrivee.getZ()) < 25) continue;
+                    int part = partMobzone(z, x, zz, n);
+                    org.bukkit.entity.EntityType type = part < 0 || part >= mobs.size() ? null : mobs.get(part);
+                    if (type == null) continue;
                     org.bukkit.block.Block b = c.world().getBlockAt(x, Y, zz);
-                    if (!b.getRelative(0, 1, 0).getType().isAir()) continue;   // pas sous une ruine
-                    org.bukkit.entity.EntityType type = mobs.get(rang[0]++ % mobs.size());
+                    if (b.getType().isAir() || !b.getRelative(0, 1, 0).getType().isAir()) continue;   // pas sous une ruine
                     org.bukkit.block.spawner.SpawnerEntry entree;
                     try {
                         entree = new org.bukkit.block.spawner.SpawnerEntry(
@@ -669,7 +719,6 @@ final class Iles {
                         p.plugin.getLogger().warning("Spawner : " + type + " ignoré (" + ex.getMessage() + ").");
                         continue;
                     }
-                    int niveau = Math.max(1, Math.min(5, 1 + (int) ((1 - d / R) * 5)));   // x5 au cœur, x1 au bord
                     c.set(x, Y, zz, Material.SPAWNER);
                     if (!(b.getState() instanceof org.bukkit.block.CreatureSpawner s)) continue;
                     s.setPotentialSpawns(java.util.List.of(entree));
@@ -680,13 +729,45 @@ final class Iles {
                     s.setMinSpawnDelay(160);
                     s.setMaxSpawnDelay(360);
                     s.setDelay(40 + hash(x, 14, zz) % 200);
-                    s.getPersistentDataContainer().set(clePile, org.bukkit.persistence.PersistentDataType.INTEGER, niveau);
+                    s.getPersistentDataContainer().set(clePile, org.bukkit.persistence.PersistentDataType.INTEGER, PACK_SPAWNER);
                     s.update(true, false);
-                    p.holoImmediat(c.world(), z.id, x + 0.5, Y + 1.6, zz + 0.5, Piles.etiquetteSpawner(type, niveau), 0.9f, 0.4f);
+                    p.holoImmediat(c.world(), tag, x + 0.5, Y + 1.6, zz + 0.5, Piles.etiquetteSpawner(type, PACK_SPAWNER), 0.9f, 0.4f);
                     c.compter(120);
+                    poses[0]++;
                 }
             });
         }
+        return poses;
+    }
+
+    /**
+     * Mobzone déjà construite → nouvelle version (parts), sans toucher aux ruines ni au dessous de l'île :
+     * anciens spawners remis en sol, lignes d'or entre les parts, place centrale vidée, mur à une ouverture par part,
+     * statue, panneaux et nouveaux spawners. Les anciennes étiquettes et les mobs sont retirés à part (entités).
+     */
+    int[] refaireMobzone(Chantier c, Zone z) {
+        int R = z.rayon, n = nbParts();
+        p.disque(c, z.cx, z.cz, R - 3, (dx, dz, d) -> {
+            int x = z.cx + dx, zz = z.cz + dz;
+            org.bukkit.block.Block sol = c.world().getBlockAt(x, Y, zz);
+            if (d < 48.6) {                                   // place centrale : on repart de zéro
+                for (int y = Y + 1; y <= Y + Statue.HAUT; y++) c.vider(x, y, zz);
+                c.set(x, Y, zz, solMobzone(z, dx, dz, d, n));
+                return;
+            }
+            if (d < 53) {                                     // ancien mur à 4 entrées → nouveau mur
+                for (int y = Y + 1; y <= Y + 6; y++) c.vider(x, y, zz);
+                c.set(x, Y, zz, solMobzone(z, dx, dz, d, n));
+                if (mur(d)) poserMur(c, z, dx, dz, n);
+                return;
+            }
+            boolean libre = sol.getRelative(0, 1, 0).getType().isAir();
+            if (sol.getType() == Material.SPAWNER || (libre && sol.getType() != Material.GOLD_BLOCK
+                    && distanceLimite(z, dx, dz, n) < 0.75))
+                c.set(x, Y, zz, solMobzone(z, dx, dz, d, n));
+        });
+        new Statue().dessiner(c, z.cx, z.cz, Y, versSpawn(z));
+        return parts(c, z);
     }
 
     // ------------------------------------------------------------------ Mine : l'astéroïde minier
@@ -710,7 +791,7 @@ final class Iles {
         return Math.abs(v) < 0.2 || hash(x, y, z) < 25;
     }
 
-    private static Material roche(int etage, int x, int y, int z) {
+    static Material roche(int etage, int x, int y, int z) {
         int h = hash(x, y + 7, z);
         if (etage <= 4) return h < 180 ? Material.ANDESITE : Material.STONE;
         return h < 150 ? Material.TUFF : Material.DEEPSLATE;

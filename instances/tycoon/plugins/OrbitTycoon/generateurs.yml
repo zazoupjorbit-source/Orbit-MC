@@ -1,0 +1,11 @@
+debloque:
+  '1': 1
+poses:
+  1001_101_-2:
+    type: ble
+    pile: 1
+    ile: 1
+  1000_101_-2:
+    type: ble
+    pile: 1
+    ile: 1

@@ -63,6 +63,8 @@ final class Monnaies implements Listener {
     private final Map<UUID, int[]> generateurs = new ConcurrentHashMap<>();
     /** Quêtes de prestige récupérées, par outil (paliers 10, 20…). */
     private final Map<UUID, EnumMap<Outil.Mode, java.util.Set<Integer>>> quetes = new ConcurrentHashMap<>();
+    /** Ressource choisie par outil (index dans la liste ressources.<outil> de config.yml ; 0 = origine). */
+    private final Map<UUID, EnumMap<Outil.Mode, Integer>> ressources = new ConcurrentHashMap<>();
     private BukkitTask sauvegardeAuto;
 
     Monnaies(OrbitTycoon plugin) {
@@ -219,6 +221,26 @@ final class Monnaies implements Listener {
         modifies.put(id, true);
     }
 
+    /** Test : remplace les quêtes récupérées de cet outil (sans donner de récompense). */
+    void definirQuetes(UUID id, Outil.Mode outil, java.util.Collection<Integer> paliers) {
+        soldes.computeIfAbsent(id, this::lire);
+        quetes.computeIfAbsent(id, k -> new EnumMap<>(Outil.Mode.class)).put(outil, new java.util.TreeSet<>(paliers));
+        modifies.put(id, true);
+    }
+
+    /** Ressource choisie pour cet outil (0 = origine). */
+    int ressource(UUID id, Outil.Mode outil) {
+        soldes.computeIfAbsent(id, this::lire);
+        EnumMap<Outil.Mode, Integer> m = ressources.get(id);
+        return m == null ? 0 : m.getOrDefault(outil, 0);
+    }
+
+    void definirRessource(UUID id, Outil.Mode outil, int index) {
+        soldes.computeIfAbsent(id, this::lire);
+        ressources.computeIfAbsent(id, k -> new EnumMap<>(Outil.Mode.class)).put(outil, Math.max(0, index));
+        modifies.put(id, true);
+    }
+
     /** Crédits orbitaux de tous les joueurs (fichiers + mémoire) : sert au classement global. Hors thread principal. */
     Map<UUID, Long> tousLesCredits() {
         Map<UUID, Long> tout = new java.util.HashMap<>();
@@ -285,6 +307,9 @@ final class Monnaies implements Listener {
                 rc.put(o, Math.max(0, y.getLong("outils." + o.id + ".recoltes", 0)));
                 qu.put(o, new java.util.TreeSet<>(y.getIntegerList("quetes." + o.id)));
             }
+            EnumMap<Outil.Mode, Integer> rs = new EnumMap<>(Outil.Mode.class);
+            for (Outil.Mode o : Outil.Mode.values()) rs.put(o, Math.max(0, y.getInt("ressources." + o.id, 0)));
+            ressources.put(id, rs);
             niveaux.put(id, nv);
             quetes.put(id, qu);
             recoltes.put(id, rc);
@@ -320,6 +345,8 @@ final class Monnaies implements Listener {
             y.set("outils." + o.id + ".recoltes", rc == null ? 0L : rc.getOrDefault(o, 0L));
             java.util.Set<Integer> s = qu == null ? null : qu.get(o);
             y.set("quetes." + o.id, s == null ? java.util.List.of() : new java.util.ArrayList<>(s));
+            EnumMap<Outil.Mode, Integer> rs = ressources.get(id);
+            y.set("ressources." + o.id, rs == null ? 0 : rs.getOrDefault(o, 0));
         }
         y.set("ile.nom", iles.get(id));
         int[] g = generateurs.get(id);
@@ -348,7 +375,7 @@ final class Monnaies implements Listener {
         UUID id = e.getPlayer().getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             sauver(id);
-            if (Bukkit.getPlayer(id) == null) { soldes.remove(id); prestiges.remove(id); prestigesOutils.remove(id); iles.remove(id); niveaux.remove(id); quetes.remove(id); recoltes.remove(id); generateurs.remove(id); }
+            if (Bukkit.getPlayer(id) == null) { soldes.remove(id); prestiges.remove(id); prestigesOutils.remove(id); iles.remove(id); niveaux.remove(id); quetes.remove(id); ressources.remove(id); recoltes.remove(id); generateurs.remove(id); }
         });
     }
 
@@ -365,22 +392,33 @@ final class Monnaies implements Listener {
      * (sections flux-stellaire / credit-orbital, clé = nom du bloc, du poisson ou du mob), puis affichés en barre d'action.
      */
     void recompenser(Player p, Outil.Mode outil, String cle, int quantite) {
+        // Ressource choisie dans le panneau de l'outil (pêche, mobzone) : elle remplace les gains d'origine.
+        Ressources.Palier choisie = outil == null ? null : plugin.ressources().choisie(p.getUniqueId(), outil);
+        if (choisie != null && (choisie.origine() || !Ressources.convertible(outil, cle))) choisie = null;
+        recompenser(p, outil, cle, quantite, choisie);
+    }
+
+    /** Idem, avec la ressource dont le joueur touche les gains ({@code choisie} null = barème de {@code cle}). */
+    void recompenser(Player p, Outil.Mode outil, String cle, int quantite, Ressources.Palier choisie) {
         var cfg = plugin.getConfig();
         StringBuilder texte = new StringBuilder();
+        if (choisie != null) texte.append("<white>").append(choisie.nom()).append(" <dark_gray>· ");
+        int debut = texte.length();
         for (Monnaie m : new Monnaie[]{Monnaie.FLUX, Monnaie.CREDIT}) {
             String section = m == Monnaie.FLUX ? "flux-stellaire" : "credit-orbital";
-            long gain = (long) cfg.getInt(section + ".ressources." + cle, cfg.getInt(section + ".defaut", 1)) * quantite;
+            long gain = choisie != null ? (m == Monnaie.FLUX ? choisie.flux() : choisie.credit()) * quantite
+                    : (long) cfg.getInt(section + ".ressources." + cle, cfg.getInt(section + ".defaut", 1)) * quantite;
             if (gain <= 0) continue;
             ajouter(p.getUniqueId(), m, gain);
-            if (!texte.isEmpty()) texte.append("   ");
+            if (texte.length() > debut) texte.append("   ");
             texte.append("<").append(m.couleur).append(">+").append(gain).append(" ").append(m.symbole).append(" ")
                     .append(gain > 1 ? m.pluriel : m.nom).append("</").append(m.couleur).append(">");
         }
         if (outil != null) {
             ajouterRecoltes(p.getUniqueId(), outil, quantite);
-            String xp = plugin.progression().gagner(p, outil, cle, quantite);
+            String xp = choisie != null ? plugin.progression().gagner(p, outil, choisie.xp() * quantite) : plugin.progression().gagner(p, outil, cle, quantite);
             if (xp != null) {
-                if (!texte.isEmpty()) texte.append("   ");
+                if (texte.length() > debut) texte.append("   ");
                 texte.append(xp);
             }
         }

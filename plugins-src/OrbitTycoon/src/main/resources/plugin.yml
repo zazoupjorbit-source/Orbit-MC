@@ -65,9 +65,26 @@ commands:
     description: Le livre-guide d'Orbit Tycoon (le reprendre, le lire ou le jeter).
     usage: /guide [lire|jeter]
     aliases: [livre]
+  gen:
+    description: Menu des générateurs de ressources (achat, débloquage, vente).
+    usage: /gen
+    aliases: [generateurs, generateur, gens]
+  vendre:
+    description: Vend la ressource de générateur en main, ou tout l'inventaire.
+    usage: /vendre [tout]
+    aliases: [sell]
+  ressources:
+    description: Panneau des ressources de l'outil (débloquées par les quêtes de prestige).
+    usage: /ressources [pioche|hache|houe|peche|epee]
+    aliases: [ressource, resources]
+  donner:
+    description: Donne une monnaie (credit, flux, plasma) ou un objet du Tycoon (clés, générateurs, ressources, collecteur, outil...).
+    usage: /donner <joueur|*> <quoi> [quantité]
+    aliases: [tgive, tdonner]
+    permission: orbittycoon.admin
   tycoon:
     description: Administration du Tycoon.
-    usage: /tycoon <generer|tp|equiper|reload|monnaie|tuto>
+    usage: /tycoon <generer|tp|equiper|reload|monnaie|tuto|nettoyage|voteparty>
     permission: orbittycoon.admin
 
 permissions:

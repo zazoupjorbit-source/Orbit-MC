@@ -1,7 +1,289 @@
 # Orbit Tycoon — réglages.
 # Après une modification : /tycoon reload (jamais /reload du serveur).
 
+voteparty:
+  coffre-collecteur:
+    prix-credits: 10000
+  actif: true
+  objectif: 100
+  recompenses:
+  - tycoon cle 1 {joueur} 1
+nettoyage:
+  barre-secondes: 60
+  actif: true
+  intervalle-minutes: 15
+  avertissements-secondes:
+  - 60
+  - 10
+  garder-ressources-generateurs: true
 generateurs:
+  collecteur:
+    prix-plasma: 500
+    balayage-secondes: 10 # ramassage des ressources déjà au sol dans le chunk
+  intervalle-secondes: 30
+  pile-max: 64
+  emplacements:
+  - 8
+  - 10
+  - 12
+  - 15
+  - 18
+  - 22
+  - 25
+  max-au-sol: 512
+  liste:
+  - id: ble
+    nom: Blé
+    bloc: HAY_BLOCK
+    objet: WHEAT
+    prix: 240
+    vente: 1
+  - id: carotte
+    nom: Carotte
+    bloc: ORANGE_TERRACOTTA
+    objet: CARROT
+    prix: 280
+    vente: 1.12
+  - id: pomme_de_terre
+    nom: Pomme de terre
+    bloc: BROWN_TERRACOTTA
+    objet: POTATO
+    prix: 320
+    vente: 1.25
+  - id: betterave
+    nom: Betterave
+    bloc: RED_TERRACOTTA
+    objet: BEETROOT
+    prix: 360
+    vente: 1.4
+  - id: canne_a_sucre
+    nom: Canne à sucre
+    bloc: GREEN_TERRACOTTA
+    objet: SUGAR_CANE
+    prix: 410
+    vente: 1.57
+  - id: bambou
+    nom: Bambou
+    bloc: BAMBOO_BLOCK
+    objet: BAMBOO
+    prix: 480
+    vente: 1.76
+  - id: citrouille
+    nom: Citrouille
+    bloc: PUMPKIN
+    objet: PUMPKIN
+    prix: 540
+    vente: 1.97
+  - id: pasteque
+    nom: Pastèque
+    bloc: MELON
+    objet: MELON_SLICE
+    prix: 620
+    vente: 2.21
+  - id: cactus
+    nom: Cactus
+    bloc: GREEN_GLAZED_TERRACOTTA
+    objet: CACTUS
+    prix: 710
+    vente: 2.48
+  - id: cacao
+    nom: Cacao
+    bloc: BROWN_GLAZED_TERRACOTTA
+    objet: COCOA_BEANS
+    prix: 810
+    vente: 2.77
+  - id: champignon_rouge
+    nom: Champignon rouge
+    bloc: RED_MUSHROOM_BLOCK
+    objet: RED_MUSHROOM
+    prix: 930
+    vente: 3.11
+  - id: champignon_brun
+    nom: Champignon brun
+    bloc: BROWN_MUSHROOM_BLOCK
+    objet: BROWN_MUSHROOM
+    prix: 1100
+    vente: 3.48
+  - id: verrue
+    nom: Verrue du Nether
+    bloc: NETHER_WART_BLOCK
+    objet: NETHER_WART
+    prix: 1200
+    vente: 3.9
+  - id: chene
+    nom: Chêne
+    bloc: OAK_WOOD
+    objet: OAK_LOG
+    prix: 1400
+    vente: 4.36
+  - id: bouleau
+    nom: Bouleau
+    bloc: BIRCH_WOOD
+    objet: BIRCH_LOG
+    prix: 1600
+    vente: 4.89
+  - id: epicea
+    nom: Épicéa
+    bloc: SPRUCE_WOOD
+    objet: SPRUCE_LOG
+    prix: 1800
+    vente: 5.47
+  - id: acajou
+    nom: Acajou
+    bloc: JUNGLE_WOOD
+    objet: JUNGLE_LOG
+    prix: 2100
+    vente: 6.13
+  - id: acacia
+    nom: Acacia
+    bloc: ACACIA_WOOD
+    objet: ACACIA_LOG
+    prix: 2300
+    vente: 6.87
+  - id: chene_noir
+    nom: Chêne noir
+    bloc: DARK_OAK_WOOD
+    objet: DARK_OAK_LOG
+    prix: 2700
+    vente: 7.69
+  - id: mangrove
+    nom: Palétuvier
+    bloc: MANGROVE_WOOD
+    objet: MANGROVE_LOG
+    prix: 3000
+    vente: 8.61
+  - id: cerisier
+    nom: Cerisier
+    bloc: CHERRY_WOOD
+    objet: CHERRY_LOG
+    prix: 3500
+    vente: 9.65
+  - id: os
+    nom: Os
+    bloc: BONE_BLOCK
+    objet: BONE
+    prix: 4000
+    vente: 10.8
+  - id: ficelle
+    nom: Ficelle
+    bloc: WHITE_WOOL
+    objet: STRING
+    prix: 4500
+    vente: 12.1
+  - id: poudre
+    nom: Poudre à canon
+    bloc: GRAY_GLAZED_TERRACOTTA
+    objet: GUNPOWDER
+    prix: 5100
+    vente: 13.55
+  - id: miel
+    nom: Rayon de miel
+    bloc: HONEYCOMB_BLOCK
+    objet: HONEYCOMB
+    prix: 5800
+    vente: 15.18
+  - id: slime
+    nom: Boule de slime
+    bloc: SLIME_BLOCK
+    objet: SLIME_BALL
+    prix: 6600
+    vente: 17
+  - id: perle
+    nom: Perle de l'Ender
+    bloc: PURPUR_BLOCK
+    objet: ENDER_PEARL
+    prix: 7500
+    vente: 19.04
+  - id: blaze
+    nom: Bâton de blaze
+    bloc: ORANGE_GLAZED_TERRACOTTA
+    objet: BLAZE_ROD
+    prix: 8600
+    vente: 21.32
+  - id: charbon
+    nom: Charbon
+    bloc: COAL_BLOCK
+    objet: COAL
+    prix: 9700
+    vente: 23.88
+  - id: cuivre
+    nom: Cuivre
+    bloc: WAXED_COPPER_BLOCK
+    objet: COPPER_INGOT
+    prix: 11000
+    vente: 26.75
+  - id: fer
+    nom: Fer
+    bloc: IRON_BLOCK
+    objet: IRON_INGOT
+    prix: 13000
+    vente: 29.96
+  - id: lapis
+    nom: Lapis-lazuli
+    bloc: LAPIS_BLOCK
+    objet: LAPIS_LAZULI
+    prix: 14000
+    vente: 33.56
+  - id: redstone
+    nom: Redstone
+    bloc: REDSTONE_BLOCK
+    objet: REDSTONE
+    prix: 16000
+    vente: 37.58
+  - id: quartz
+    nom: Quartz
+    bloc: QUARTZ_BLOCK
+    objet: QUARTZ
+    prix: 18000
+    vente: 42.09
+  - id: or
+    nom: Or
+    bloc: GOLD_BLOCK
+    objet: GOLD_INGOT
+    prix: 21000
+    vente: 47.14
+  - id: amethyste
+    nom: Améthyste
+    bloc: AMETHYST_BLOCK
+    objet: AMETHYST_SHARD
+    prix: 24000
+    vente: 52.8
+  - id: glowstone
+    nom: Glowstone
+    bloc: GLOWSTONE
+    objet: GLOWSTONE_DUST
+    prix: 27000
+    vente: 59.14
+  - id: prismarine
+    nom: Prismarine
+    bloc: PRISMARINE
+    objet: PRISMARINE_SHARD
+    prix: 31000
+    vente: 66.23
+  - id: obsidienne
+    nom: Obsidienne
+    bloc: OBSIDIAN
+    objet: OBSIDIAN
+    prix: 35000
+    vente: 74.18
+  - id: diamant
+    nom: Diamant
+    bloc: DIAMOND_BLOCK
+    objet: DIAMOND
+    prix: 39000
+    vente: 83.08
+  - id: emeraude
+    nom: Émeraude
+    bloc: EMERALD_BLOCK
+    objet: EMERALD
+    prix: 45000
+    vente: 93.05
+  - id: netherite
+    nom: Netherite
+    bloc: NETHERITE_BLOCK
+    objet: NETHERITE_SCRAP
+    prix: 51000
+    vente: 104.22
   depart: 10
 progression:
   niveau-max: 100
@@ -65,6 +347,315 @@ quetes:
   #   tous:
   #     50: {credit: 50000, texte: "1 clé de coffre n°3", commandes: ["tycoon cle 3 %joueur% 1"]}
   recompenses: {}
+# Ressources des outils (panneau « Ressources » : bouton dans l'interface de l'outil, ou /ressources [outil]).
+# La 1re de chaque liste (origine: true) = la zone telle qu'elle est construite, avec ses gains habituels.
+# Chaque quête de prestige récupérée (quetes.pas : 10, 20… 100) débloque la ressource suivante, dans l'ordre.
+# Mine, Bûcheron, Agriculture : vue perso, le joueur voit les blocs de farm changés en sa ressource (lui seul).
+# Pêche et Mobzone : gains seulement (chaque prise compte comme la ressource choisie).
+# Champs : nom, bloc (bloc affiché ; pour pêche/mobzone, juste l'icône), icone (si le bloc n'est pas un objet),
+# feuilles (bûcheron), mur (agriculture : bloc affiché quand la culture est mûre), credit, flux, xp (gains par récolte).
+# Mine : les minerais « deepslate » prennent la version deepslate du bloc si elle existe. /tycoon reload après un changement.
+ressources:
+  pioche:
+  - nom: Charbon
+    bloc: COAL_ORE
+    credit: 8
+    flux: 10
+    xp: 2
+  - nom: Cuivre
+    bloc: COPPER_ORE
+    credit: 12
+    flux: 15
+    xp: 2
+  - nom: Fer
+    bloc: IRON_ORE
+    credit: 16
+    flux: 20
+    xp: 3
+  - nom: Lapis-lazuli
+    bloc: LAPIS_ORE
+    credit: 24
+    flux: 30
+    xp: 3
+  - nom: Redstone
+    bloc: REDSTONE_ORE
+    credit: 32
+    flux: 40
+    xp: 4
+  - nom: Or
+    bloc: GOLD_ORE
+    credit: 44
+    flux: 55
+    xp: 5
+  - nom: Quartz
+    bloc: NETHER_QUARTZ_ORE
+    credit: 60
+    flux: 75
+    xp: 6
+  - nom: Améthyste
+    bloc: AMETHYST_BLOCK
+    credit: 80
+    flux: 100
+    xp: 7
+  - nom: Diamant
+    bloc: DIAMOND_ORE
+    credit: 108
+    flux: 135
+    xp: 8
+  - nom: Émeraude
+    bloc: EMERALD_ORE
+    credit: 140
+    flux: 175
+    xp: 10
+  - nom: Débris antiques
+    bloc: ANCIENT_DEBRIS
+    credit: 180
+    flux: 225
+    xp: 12
+  hache:
+  - nom: Chêne
+    origine: true
+    icone: OAK_LOG
+  - nom: Bouleau
+    bloc: BIRCH_LOG
+    feuilles: BIRCH_LEAVES
+    credit: 2
+    flux: 2
+    xp: 2
+  - nom: Épicéa
+    bloc: SPRUCE_LOG
+    feuilles: SPRUCE_LEAVES
+    credit: 3
+    flux: 3
+    xp: 2
+  - nom: Acajou
+    bloc: JUNGLE_LOG
+    feuilles: JUNGLE_LEAVES
+    credit: 4
+    flux: 4
+    xp: 3
+  - nom: Acacia
+    bloc: ACACIA_LOG
+    feuilles: ACACIA_LEAVES
+    credit: 6
+    flux: 6
+    xp: 3
+  - nom: Chêne noir
+    bloc: DARK_OAK_LOG
+    feuilles: DARK_OAK_LEAVES
+    credit: 8
+    flux: 8
+    xp: 4
+  - nom: Palétuvier
+    bloc: MANGROVE_LOG
+    feuilles: MANGROVE_LEAVES
+    credit: 11
+    flux: 11
+    xp: 5
+  - nom: Cerisier
+    bloc: CHERRY_LOG
+    feuilles: CHERRY_LEAVES
+    credit: 15
+    flux: 15
+    xp: 6
+  - nom: Chêne pâle
+    bloc: PALE_OAK_LOG
+    feuilles: PALE_OAK_LEAVES
+    credit: 20
+    flux: 20
+    xp: 7
+  - nom: Carmin
+    bloc: CRIMSON_STEM
+    feuilles: NETHER_WART_BLOCK
+    credit: 27
+    flux: 27
+    xp: 8
+  - nom: Biscornu
+    bloc: WARPED_STEM
+    feuilles: WARPED_WART_BLOCK
+    credit: 35
+    flux: 35
+    xp: 10
+  houe:
+  - nom: Blé
+    origine: true
+    icone: WHEAT
+  - nom: Carotte
+    bloc: CARROTS
+    icone: CARROT
+    credit: 2
+    flux: 2
+    xp: 2
+  - nom: Pomme de terre
+    bloc: POTATOES
+    icone: POTATO
+    credit: 3
+    flux: 3
+    xp: 2
+  - nom: Betterave
+    bloc: BEETROOTS
+    icone: BEETROOT
+    credit: 4
+    flux: 4
+    xp: 3
+  - nom: Canne à sucre
+    bloc: SUGAR_CANE
+    credit: 6
+    flux: 6
+    xp: 3
+  - nom: Champignon brun
+    bloc: BROWN_MUSHROOM
+    credit: 8
+    flux: 8
+    xp: 4
+  - nom: Champignon rouge
+    bloc: RED_MUSHROOM
+    credit: 11
+    flux: 11
+    xp: 5
+  - nom: Verrue du Nether
+    bloc: NETHER_WART
+    credit: 15
+    flux: 15
+    xp: 6
+  - nom: Fleur-torche
+    bloc: TORCHFLOWER_CROP
+    mur: TORCHFLOWER
+    icone: TORCHFLOWER
+    credit: 20
+    flux: 20
+    xp: 7
+  - nom: Champignon carmin
+    bloc: CRIMSON_FUNGUS
+    credit: 27
+    flux: 27
+    xp: 8
+  - nom: Champignon biscornu
+    bloc: WARPED_FUNGUS
+    credit: 35
+    flux: 35
+    xp: 10
+  peche:
+  - nom: Poissons du lac
+    origine: true
+    icone: COD
+  - nom: Saumon
+    bloc: SALMON
+    credit: 6
+    flux: 6
+    xp: 2
+  - nom: Poisson-globe
+    bloc: PUFFERFISH
+    credit: 9
+    flux: 9
+    xp: 2
+  - nom: Poisson tropical
+    bloc: TROPICAL_FISH
+    credit: 12
+    flux: 12
+    xp: 3
+  - nom: Encre de calamar
+    bloc: INK_SAC
+    credit: 18
+    flux: 18
+    xp: 3
+  - nom: Encre luisante
+    bloc: GLOW_INK_SAC
+    credit: 24
+    flux: 24
+    xp: 4
+  - nom: Éclat de prismarine
+    bloc: PRISMARINE_SHARD
+    credit: 33
+    flux: 33
+    xp: 5
+  - nom: Cristaux de prismarine
+    bloc: PRISMARINE_CRYSTALS
+    credit: 45
+    flux: 45
+    xp: 6
+  - nom: Coquille de nautile
+    bloc: NAUTILUS_SHELL
+    credit: 60
+    flux: 60
+    xp: 7
+  - nom: Cœur de la mer
+    bloc: HEART_OF_THE_SEA
+    credit: 81
+    flux: 81
+    xp: 8
+  - nom: Trident abyssal
+    bloc: TRIDENT
+    credit: 105
+    flux: 105
+    xp: 10
+  epee:
+  - nom: Zombies
+    mob: ZOMBIE
+    bloc: ROTTEN_FLESH
+    credit: 4
+    flux: 5
+    xp: 1
+  - nom: Squelettes
+    mob: SKELETON
+    bloc: BONE
+    credit: 6
+    flux: 8
+    xp: 2
+  - nom: Araignées
+    mob: SPIDER
+    bloc: SPIDER_EYE
+    credit: 9
+    flux: 12
+    xp: 2
+  - nom: Creepers
+    mob: CREEPER
+    bloc: GUNPOWDER
+    credit: 12
+    flux: 16
+    xp: 3
+  - nom: Endermen
+    mob: ENDERMAN
+    bloc: ENDER_PEARL
+    credit: 18
+    flux: 24
+    xp: 3
+  - nom: Sorcières
+    mob: WITCH
+    bloc: GLASS_BOTTLE
+    credit: 24
+    flux: 32
+    xp: 4
+  - nom: Blazes
+    mob: BLAZE
+    bloc: BLAZE_ROD
+    credit: 33
+    flux: 44
+    xp: 5
+  - nom: Wither squelettes
+    mob: WITHER_SKELETON
+    bloc: WITHER_SKELETON_SKULL
+    credit: 45
+    flux: 60
+    xp: 6
+  - nom: Évocateurs
+    mob: EVOKER
+    bloc: TOTEM_OF_UNDYING
+    credit: 60
+    flux: 80
+    xp: 7
+  - nom: Ravageurs
+    mob: RAVAGER
+    bloc: SADDLE
+    credit: 81
+    flux: 108
+    xp: 8
+  - nom: Gardiens du vide
+    mob: SHULKER
+    bloc: SHULKER_SHELL
+    credit: 105
+    flux: 140
+    xp: 10
 hdv:
   taxe: 5 # % retenu sur chaque vente
   max-offres: 10 # par joueur, expirées comprises
@@ -208,8 +799,8 @@ outil:
 
 # Repousse des blocs farmés (en secondes).
 repousse:
-  bucheron: 30
-  agriculture: 20
+  bucheron: 15
+  agriculture: 15
   mine: 15
 
 # Mobzone : les monstres apparaissent autour des joueurs présents dans l'arène.
