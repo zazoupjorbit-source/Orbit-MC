@@ -1,0 +1,84 @@
+name: OrbitTycoon
+version: '0.1.0'
+main: fr.orbit.tycoon.OrbitTycoon
+api-version: '1.21'
+description: Orbit Tycoon — base spatiale, zones de farm (pêche, bûcheron, agriculture, mobzone).
+authors: [ORBIT]
+
+commands:
+  zones:
+    description: Ouvre le menu de téléportation vers les zones.
+    usage: /zones
+    aliases: [navigateur]
+  solde:
+    description: Affiche tes Crédits orbitaux, ton Flux stellaire et ton Plasma.
+    usage: /solde
+    aliases: [monnaie, argent, money, balance]
+  is:
+    description: Ton ile (creer, rejoindre, inviter, agrandir).
+    usage: /is <create/home/invite/join/leave/level/upgrade/promote/demote/kick/ban/unban/visit/nom>
+    aliases: [ile, island]
+  classements:
+    description: Classement prestige d'un outil (houe, pioche, peche, epee, hache).
+    usage: /classements <houe|pioche|peche|epee|hache>
+    aliases: [top]
+  classement:
+    description: Seul, te téléporte au pavillon du classement prestige ; avec un outil, affiche son classement.
+    usage: /classement [houe|pioche|peche|epee|hache]
+  coffres:
+    description: Te téléporte à l'espace des coffres orbitaux.
+    usage: /coffres
+  boutique:
+    description: Ouvre la boutique Orbit (aussi via le PNJ Boutique au spawn).
+    usage: /boutique
+    aliases: [shop]
+  observatoire:
+    description: Te téléporte à l'Observatoire (animaux spatiaux).
+    usage: /observatoire
+    aliases: [obs]
+  marchand:
+    description: Te téléporte au Marché orbital, devant le Marchand (hôtel des ventes).
+    usage: /marchand
+    aliases: [marche]
+  forgeron:
+    description: Te téléporte à l'Atelier des outils, devant le Forgeron.
+    usage: /forgeron
+    aliases: [atelier]
+  quetes:
+    description: Te téléporte au pavillon des Quêtes de la station, devant l'Aventurier.
+    usage: /quetes
+    aliases: [quests]
+  tuto:
+    description: Revoir la consigne du tuto, le passer ou le recommencer.
+    usage: /tuto [passer|recommencer]
+    aliases: [tutoriel, tutorial]
+  hdv:
+    description: Hôtel des ventes (achat et vente entre joueurs en Crédits orbitaux).
+    usage: /hdv [vendre <prix>|ventes|aide]
+    aliases: [ah, hoteldesventes]
+  staff:
+    description: Modération du Tycoon (mode staff, joueurs, geler, inspecter, mute, kick, ban, journal).
+    usage: /staff [joueurs|tp|geler|inv|ender|mute|demute|kick|ban|deban|chat|journal]
+    aliases: [mod]
+    permission: orbittycoon.staff
+  guide:
+    description: Le livre-guide d'Orbit Tycoon (le reprendre, le lire ou le jeter).
+    usage: /guide [lire|jeter]
+    aliases: [livre]
+  tycoon:
+    description: Administration du Tycoon.
+    usage: /tycoon <generer|tp|equiper|reload|monnaie|tuto>
+    permission: orbittycoon.admin
+
+permissions:
+  orbittycoon.admin:
+    description: Commandes d'administration du Tycoon et droit de construire partout.
+    default: op
+  orbittycoon.staff:
+    description: /staff (mode staff, geler, inspecter, mute, kick, journal, chat staff).
+    default: op
+  orbittycoon.staff.ban:
+    description: /staff ban et /staff deban.
+    default: op
+    children:
+      orbittycoon.staff: true

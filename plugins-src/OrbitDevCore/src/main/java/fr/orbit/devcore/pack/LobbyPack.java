@@ -91,12 +91,14 @@ public final class LobbyPack implements Listener {
             throw new IllegalStateException(e);
         }
         packId = UUID.nameUUIDFromBytes(("orbitdev:" + hash).getBytes(StandardCharsets.UTF_8));
-        if (publicUrl.isEmpty() && !startHttp()) {
+        // serve-local: false (autres serveurs du réseau) : le pack, identique, est déjà servi par le lobby sur ce port.
+        boolean serve = c.getBoolean("resource-pack.serve-local", true);
+        if (publicUrl.isEmpty() && serve && !startHttp()) {
             return;
         }
         enabled = true;
         plugin.getLogger().info("Pack du lobby prêt (" + (zip.length / 1024) + " Ko, sha1 " + hash.substring(0, 12) + ") — "
-                + (publicUrl.isEmpty() ? "servi sur le port " + port : "URL publique " + publicUrl) + ".");
+                + (publicUrl.isEmpty() ? (serve ? "servi sur le port " : "servi par le lobby sur le port ") + port : "URL publique " + publicUrl) + ".");
     }
 
     private boolean startHttp() {
@@ -201,7 +203,7 @@ public final class LobbyPack implements Listener {
                 .packs(info)
                 .replace(false)
                 .required(required)
-                .prompt(Messages.mini("<#8DB8FF><b>ORBIT</b></#8DB8FF>\n<#D7DCE2>Interface des menus du lobby (boussole, boutique)."))
+                .prompt(Messages.mini("<#8DB8FF><b>ORBIT</b></#8DB8FF>\n<#D7DCE2>Menus du lobby et anneaux-portails du réseau."))
                 .callback((id, status, audience) -> {
                     if (status.intermediate()) {
                         return;

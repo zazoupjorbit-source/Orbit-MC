@@ -1,0 +1,14 @@
+{
+  "textures": {"0": "orbittycoon:item/portail", "particle": "orbittycoon:item/portail"},
+  "elements": [
+    {
+      "from": [0, 0, 0], "to": [16, 16, 16],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "north": {"uv": [0, 0, 16, 16], "texture": "#0"},
+        "south": {"uv": [0, 0, 16, 16], "texture": "#0"}
+      }
+    }
+  ]
+}

@@ -68,6 +68,18 @@ servers:
     name: "<gradient:#00c6ff:#7b2ff7><bold>Musée</bold></gradient>"
     icon: BOOKSHELF
 
+# Mode affiché au centre du menu de la boussole (entre les 4 cartes, sur le conduit). Clic = warp (devant son PNJ
+# dans la Station) ; sans warp, envoi direct sur le serveur du proxy (velocity.toml).
+# Le nom « TYCOON » est dessiné dans la texture (OrbitGuiGen, drawNav).
+mode-centre:
+  name: "<#22C7D9><bold>Tycoon</bold>"
+  icon: GOLDEN_PICKAXE
+  warp: tycoon
+  server: tycoon
+  description:
+    - "<gray>Ta base spatiale."
+    - "<gray>Farme, améliore tes outils, prospère."
+
 # Modes de jeu en haut du menu de la boussole, dans cet ordre.
 # warp = warp de la porte (aile de la Station) ; description = lignes MiniMessage.
 modes:

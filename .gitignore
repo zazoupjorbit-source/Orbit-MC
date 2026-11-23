@@ -114,6 +114,7 @@ runtime.json
 !/instances/*/plugins/OrbitDevCore/
 !/instances/*/plugins/OrbitMMO/
 !/instances/*/plugins/OrbitExtraction/
+!/instances/*/plugins/OrbitTycoon/
 !/instances/*/plugins/LuckPerms/
 /instances/*/plugins/LuckPerms/*
 !/instances/*/plugins/LuckPerms/config.yml.exemple
@@ -140,3 +141,17 @@ runtime.json
 **/plugins/*/*.db
 **/plugins/*/*.gz
 *.log
+# Kit Claude (local)
+.claude-kit/
+# Etat de generation du monde tycoon (lie au monde, pas partage)
+/instances/*/plugins/OrbitTycoon/donnees.yml
+# Îles des joueurs (données de jeu, pas partagées)
+/instances/*/plugins/OrbitTycoon/iles.yml
+/instances/*/plugins/OrbitTycoon/deco-spawn.txt
+
+# Mode staff du Tycoon (inventaires mis de cote, mutes) : donnees de jeu
+/instances/*/plugins/OrbitTycoon/staff/
+/instances/*/plugins/OrbitTycoon/staff-mutes.yml
+# Hotel des ventes et avancement du tuto : donnees des joueurs
+/instances/*/plugins/OrbitTycoon/hdv.yml
+/instances/*/plugins/OrbitTycoon/tuto.yml

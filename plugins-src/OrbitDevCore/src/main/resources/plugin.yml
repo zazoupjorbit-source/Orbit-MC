@@ -54,6 +54,13 @@ commands:
     description: Ouvre le menu de la boutique.
     usage: /boutique
     aliases: [shop, store]
+  vote:
+    description: Affiche les sites où voter pour le serveur.
+    usage: /vote
+    aliases: [voter, votes]
+  anneau:
+    description: Anneaux-portails vers les autres serveurs (style Orbit).
+    usage: /anneau <creer|retour|retirer|liste>
   orbitdev:
     description: Administration d'OrbitDevCore.
     usage: /orbitdev <reload|info|pack|feu>
@@ -73,6 +80,9 @@ permissions:
     default: true
   orbitdev.cosmetics:
     description: Ouvrir le menu des cosmétiques (/cosmetiques et bouton de la boussole).
+    default: true
+  orbitdev.vote:
+    description: Voir les liens de vote (/vote).
     default: true
   orbitdev.shop:
     description: Ouvrir le menu de la boutique (/boutique et bouton de la boussole).

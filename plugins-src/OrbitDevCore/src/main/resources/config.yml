@@ -39,6 +39,8 @@ resource-pack:
   # Port du mini serveur HTTP intégré qui distribue le pack (8790 = OrbitMMO, 8791 = OrbitExtraction).
   # Les joueurs le téléchargent à l'adresse utilisée pour se connecter : ouvre ce port (TCP) comme celui du jeu.
   port: 8792
+  # false : ne lance pas le serveur HTTP ici, le pack (identique) est servi par le lobby sur ce port (autres serveurs du réseau).
+  serve-local: true
   # URL publique du pack (CDN, site...) : si renseignée, le serveur HTTP intégré n'est pas lancé.
   public-url: ""
   # true : un joueur qui refuse le pack est déconnecté.
@@ -122,6 +124,11 @@ links:
   discord: "https://discord.gg/SCuRFgjNQ7"
   website: "https://projet-orbit.fr"
 
+# /vote : sites de vote (nom affiché: lien), envoyés en liens cliquables. Vide = « les votes ouvriront au lancement ».
+# Exemple :  "Serveurs-Minecraft.org": "https://..."
+vote:
+  sites: {}
+
 cosmetics:
   # false : cosmétiques coupés sur ce serveur (rien d'affiché, menus et /monture refusés) ;
   # la sélection n'est pas effacée. À laisser à true sur le lobby seulement.
@@ -174,6 +181,18 @@ chat:
 #       name: "<gold><bold>Lobby</bold></gold>"
 #       icon: NETHER_STAR
 servers: {}
+
+# Mode affiché au centre du menu de la boussole (entre les 4 cartes, sur le conduit). Clic = warp (devant son PNJ
+# dans la Station) ; sans warp, envoi direct sur le serveur du proxy (velocity.toml).
+# Le nom « TYCOON » est dessiné dans la texture (OrbitGuiGen, drawNav).
+mode-centre:
+  name: "<#22C7D9><bold>Tycoon</bold>"
+  icon: GOLDEN_PICKAXE
+  warp: tycoon
+  server: tycoon
+  description:
+    - "<gray>Ta base spatiale."
+    - "<gray>Farme, améliore tes outils, prospère."
 
 # Modes de jeu du menu de la boussole : les 4 premiers, dans cet ordre (haut gauche, haut droite,
 # bas gauche, bas droite). Leurs noms sont dessinés dans la texture du menu : si tu changes de mode,

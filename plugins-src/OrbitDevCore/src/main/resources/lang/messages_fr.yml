@@ -405,3 +405,10 @@ firework:
     volley:
       name: "Salve"
       hint: "<gray>Chaque tir part en salve de 3 fusées."
+
+vote:
+  header: "<prefix><#E0B864><bold>Vote pour Orbit MC</bold> <gray>(clic sur un lien) :"
+  line: "  <dark_gray>• <#62CFF4><site> <dark_gray>» "
+  footer: "<gray>Merci, chaque vote fait grandir l'univers ORBIT !"
+  soon: "<prefix><gray>Les votes ouvriront au lancement d'Orbit MC."
+  soon-website: "<prefix><gray>Les votes ouvriront au lancement d'Orbit MC. En attendant : "

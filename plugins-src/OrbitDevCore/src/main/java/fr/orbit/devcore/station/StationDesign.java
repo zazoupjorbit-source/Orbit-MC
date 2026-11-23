@@ -3,6 +3,7 @@ package fr.orbit.devcore.station;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import fr.orbit.devcore.anneau.RingShape;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
@@ -24,7 +25,7 @@ import java.util.Set;
  */
 public final class StationDesign {
 
-    public static final List<String> ZONES = List.of("atrium", "serre", "sas", "arene", "portail", "reliques", "passerelles");
+    public static final List<String> ZONES = List.of("atrium", "serre", "sas", "arene", "portail", "reliques", "tycoon", "passerelles");
 
     public static final int NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3;
     private static final int[][] FWD = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
@@ -36,6 +37,16 @@ public final class StationDesign {
     private static final int CH = 7;
     /** Hauteur du mur d'enceinte de l'arène : la verrière part de là. */
     private static final int ARENA_WALL = 9;
+
+    // Aile Tycoon, sur la diagonale sud-ouest. Repère : u le long de la diagonale en s'éloignant de l'atrium,
+    // v vers la droite. L'axe passe 3,5 blocs à l'ouest du centre pour laisser libre l'écran du réseau.
+    private static final double S2 = Math.sqrt(2);
+    private static final double TY_OX = -3.5, TY_OZ = -3.5;
+    /** Distance du centre du dôme sur l'axe : le dôme est centré sur le bloc (-57, 49). */
+    private static final double TY_U = 53 * S2;
+    private static final int TY_R = 20, TY_WALL = 9, TY_DOME = 10;
+    /** Demi-largeur intérieure de la passerelle diagonale, et jusqu'où va sa paroi. */
+    private static final double TY_IN = 4.3, TY_OUT = 5.9;
 
     private final ConfigurationSection cfg;
     private final StationPlan plan = new StationPlan();
@@ -103,6 +114,7 @@ public final class StationDesign {
                 case "arene" -> arene();
                 case "portail" -> portail();
                 case "reliques" -> reliques();
+                case "tycoon" -> tycoon();
                 case "passerelles" -> passerelles();
                 default -> { }
             }
@@ -127,7 +139,7 @@ public final class StationDesign {
 
     /** Demi-côté de l'emprise de la station (le dôme de l'île du MMO est ce qui dépasse le plus). */
     public int reach() {
-        return Math.max(centerD + islandR() + 3, obD + 3);
+        return Math.max(Math.max(centerD + islandR() + 3, obD + 3), (int) Math.ceil(TY_U / Math.sqrt(2) + 3.5 + TY_R + 3));
     }
 
     public int minY() {
@@ -404,6 +416,193 @@ public final class StationDesign {
                 }
             }
         }
+        // passerelle de l'aile Tycoon, en diagonale : elle perce le pan sud-ouest de l'atrium et la paroi du dôme.
+        // Paroi épaisse de 1,6 en travers de la diagonale : pas de fuite par les coins des marches d'escalier.
+        Material gold = pal("or", Material.GOLD_BLOCK);
+        double uEnd = TY_U - TY_R + 2.5;
+        for (int x = -90; x <= 0; x++) {
+            for (int z = 0; z <= 90; z++) {
+                double u = tyU(x, z), v = Math.abs(tyV(x, z));
+                if (u < 22.6 || u > uEnd || v > TY_OUT) {
+                    continue;
+                }
+                boolean ribRow = Math.floorMod((int) Math.floor(u), 4) == 0;
+                boolean door = u < 24.6;
+                set(x, -1, z, trim);
+                if (v > TY_IN) {
+                    set(x, 0, z, trim);
+                    for (int y = 1; y <= CH; y++) {
+                        set(x, y, z, y == 1 ? trim : y == CH ? accent : ribRow ? rib : glassShare > 0.05 ? glass : hull);
+                    }
+                    set(x, CH + 1, z, door ? gold : hull);
+                } else {
+                    set(x, 0, z, v > TY_IN - 0.8 ? trim : v < 0.4 ? (Math.floorMod((int) Math.floor(u), 5) == 0 ? light : accent) : floor);
+                    for (int y = 1; y <= CH; y++) {
+                        set(x, y, z, Material.AIR);
+                    }
+                    set(x, CH + 1, z, door ? gold : ribRow ? rib : v <= TY_IN - 2 && glassShare > 0.05 ? glass : hull);
+                }
+            }
+        }
+    }
+
+    // ------------------------------------------------------------------ Tycoon : l'aile de la base (sud-ouest)
+
+    private void tycoon() {
+        Material floor = pal("sol", Material.WHITE_CONCRETE);
+        Material trim = pal("bordure", Material.SMOOTH_QUARTZ);
+        Material accent = pal("accent", Material.LIGHT_BLUE_CONCRETE);
+        Material gold = pal("or", Material.GOLD_BLOCK);
+        Material glass = pal("verre", Material.GLASS);
+        Material tinted = pal("verre-teinte", Material.LIGHT_BLUE_STAINED_GLASS);
+        Material light = pal("lumiere", Material.SEA_LANTERN);
+        Material under = pal("dessous", Material.LIGHT_GRAY_CONCRETE);
+        double cx = tyX(TY_U, 0), cz = tyZ(TY_U, 0);
+        int bx0 = (int) Math.floor(cx), bz0 = (int) Math.floor(cz);
+        double R = TY_R + 0.3;
+
+        // dôme : sol, paroi de verre à piliers, calotte à 8 nervures dorées
+        for (int dx = -TY_R - 2; dx <= TY_R + 2; dx++) {
+            for (int dz = -TY_R - 2; dz <= TY_R + 2; dz++) {
+                int x = bx0 + dx, z = bz0 + dz;
+                double r = Math.hypot(x + 0.5 - cx, z + 0.5 - cz);
+                if (r > R) {
+                    continue;
+                }
+                boolean edge = r > TY_R - 1.2;
+                double th = Math.atan2(z + 0.5 - cz, x + 0.5 - cx);
+                Material f = r > TY_R - 2.2 ? trim : Math.abs(r - 7.5) < 0.5 ? gold : Math.abs(r - (TY_R - 4)) < 0.5 ? accent : floor;
+                set(x, 0, z, f);
+                set(x, -1, z, under);
+                if (r < TY_R - 2) {
+                    set(x, -2, z, under);
+                }
+                if (r < TY_R - 8) {
+                    set(x, -3, z, Math.floorMod(x, 4) == 0 && Math.floorMod(z, 4) == 0 ? light : under);
+                }
+                if (edge) {
+                    boolean pillar = Math.floorMod((int) Math.round(th * TY_R), 6) == 0;
+                    for (int y = 1; y <= TY_WALL; y++) {
+                        Material m = y == 1 ? trim : y == 2 || y == TY_WALL - 1 ? accent : y == TY_WALL ? gold
+                                : pillar || glassShare <= 0.05 ? trim : glass;
+                        set(x, y, z, m);
+                    }
+                }
+                int top = TY_WALL + cap(r, R, TY_DOME);
+                int low = top;
+                for (int[] n : N4) {
+                    double nr = Math.hypot(x + n[0] + 0.5 - cx, z + n[1] + 0.5 - cz);
+                    int nt = nr <= R ? TY_WALL + cap(nr, R, TY_DOME) : TY_WALL;
+                    low = Math.min(low, nt + 1);
+                }
+                low = edge ? TY_WALL + 1 : Math.max(low, TY_WALL + 1);
+                double off = r * Math.abs(Math.sin(th - Math.round(th / (Math.PI / 4)) * (Math.PI / 4)));
+                for (int y = Math.min(low, top); y <= top; y++) {
+                    if (y > TY_WALL) {
+                        set(x, y, z, r < 2.2 ? light : off < 0.6 ? gold : r > R * 0.75 ? tinted : glass);
+                    }
+                }
+            }
+        }
+
+        // maquette des 5 îles : une table noire (l'espace) cerclée d'or, la base au centre, les îles autour
+        for (int dx = -7; dx <= 7; dx++) {
+            for (int dz = -7; dz <= 7; dz++) {
+                double r = Math.hypot(bx0 + dx + 0.5 - cx, bz0 + dz + 0.5 - cz);
+                if (r <= 6.5) {
+                    set(bx0 + dx, 1, bz0 + dz, r > 5.6 ? gold : Material.BLACK_CONCRETE);
+                }
+            }
+        }
+        set(bx0, 2, bz0, gold);
+        set(bx0, 3, bz0, light);
+        String[] islands = {"Pêche", "Bûcheron", "Agriculture", "Mobzone", "Mine"};
+        int[] islandColors = {0x3FA9F5, 0xC8894B, 0xF5D442, 0xFF4D4D, 0xB0BEC5};
+        Material[] arms = {Material.PRISMARINE_BRICKS, Material.MOSS_BLOCK, Material.GRASS_BLOCK,
+                Material.POLISHED_BLACKSTONE_BRICKS, Material.COBBLED_DEEPSLATE};
+        Material[] cores = {Material.WATER, Material.OAK_LOG, Material.HAY_BLOCK, Material.CRYING_OBSIDIAN, Material.DEEPSLATE_DIAMOND_ORE};
+        for (int i = 0; i < islands.length; i++) {
+            double ang = Math.toRadians(i * 72);
+            int ix = (int) Math.floor(tyX(TY_U + 3.6 * Math.cos(ang), 3.6 * Math.sin(ang)));
+            int iz = (int) Math.floor(tyZ(TY_U + 3.6 * Math.cos(ang), 3.6 * Math.sin(ang)));
+            for (int[] n : N4) {
+                set(ix + n[0], 2, iz + n[1], arms[i]);
+            }
+            set(ix, 2, iz, cores[i]);
+            double h = 4.6;
+            switch (i) {
+                case 1 -> {
+                    set(ix, 3, iz, Material.OAK_LOG);
+                    plan.set(ix, 4, iz, data("minecraft:azalea_leaves[persistent=true]"));
+                    h = 5.6;
+                }
+                case 2 -> set(ix, 3, iz, Material.HAY_BLOCK);
+                case 3 -> set(ix, 3, iz, Material.REDSTONE_BLOCK);
+                case 4 -> set(ix, 3, iz, Material.RAW_GOLD_BLOCK);
+                default -> { }
+            }
+            holo(ix + 0.5, h, iz + 0.5, label(islands[i], islandColors[i], true), 0.8f);
+        }
+        holo(cx, 7.6, cz, label("ORBIT TYCOON", ICE, true), 2.2f);
+        holo(cx, 6.5, cz, label("la base et ses 5 îles", GOLD, false), 0.9f);
+
+        // pets spatiaux : modèles du pack sur des socles, ils tournent lentement
+        String[] pets = {"pet_robot", "pet_drone", "pet_chat", "pet_meduse", "pet_satellite"};
+        String[] petNames = {"MINI-ROBOT", "DRONE ÉCLAIREUR", "ASTRO-CHAT", "MÉDUSE COSMIQUE", "PETIT SATELLITE"};
+        double[] petAngles = {-135, -90, -45, 45, 90};
+        for (int i = 0; i <= pets.length; i++) {
+            double ang = Math.toRadians(i < pets.length ? petAngles[i] : 135);
+            int px = (int) Math.floor(tyX(TY_U + 12 * Math.cos(ang), 12 * Math.sin(ang)));
+            int pz = (int) Math.floor(tyZ(TY_U + 12 * Math.cos(ang), 12 * Math.sin(ang)));
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    set(px + dx, 1, pz + dz, dx != 0 && dz != 0 ? gold : dx == 0 && dz == 0 ? accent : trim);
+                }
+            }
+            set(px, 2, pz, light);
+            if (i < pets.length) {
+                plan.model(zone, px + 0.5, 3.75, pz + 0.5, pets[i], 1.2f);
+                holo(px + 0.5, 5.0, pz + 0.5, label(petNames[i], ICE, true), 0.8f);
+            } else {
+                holo(px + 0.5, 4.3, pz + 0.5, label("COMPAGNONS", GOLD, true), 1.1f);
+                holo(px + 0.5, 3.6, pz + 0.5, label("les pets d'Orbit Tycoon", 0xD7DCE2, false), 0.7f);
+            }
+        }
+
+        // lampadaires dorés
+        for (double deg : new double[]{-157.5, -112.5, -67.5, 67.5, 112.5, 157.5}) {
+            double ang = Math.toRadians(deg);
+            int lx = (int) Math.floor(tyX(TY_U + 17 * Math.cos(ang), 17 * Math.sin(ang)));
+            int lz = (int) Math.floor(tyZ(TY_U + 17 * Math.cos(ang), 17 * Math.sin(ang)));
+            set(lx, 1, lz, gold);
+            for (int y = 2; y <= 4; y++) {
+                set(lx, y, lz, Material.END_ROD);
+            }
+            set(lx, 5, lz, light);
+            set(lx, 6, lz, Material.LIGHT_WEIGHTED_PRESSURE_PLATE);
+        }
+
+        // anneau-portail vers le serveur tycoon, au fond du dôme, et son PNJ devant
+        double fx = -1 / S2, fz = 1 / S2;
+        double rr = 3.6;
+        ringAt(tyX(TY_U + 14, 0), tyZ(TY_U + 14, 0), fx, fz, rr, "tycoon", gold, light);
+        double ringTop = 1 + 2 * rr + 1.4;
+        holo(tyX(TY_U + 13.4, 0), ringTop + 1.6, tyZ(TY_U + 13.4, 0), label("TYCOON", GOLD, true), 2.4f);
+        holo(tyX(TY_U + 13.4, 0), ringTop + 0.7, tyZ(TY_U + 13.4, 0), label("Traverse l'anneau", ICE, false), 0.9f);
+        plan.point("porte.tycoon", tyX(TY_U + 13, 0), 1, tyZ(TY_U + 13, 0), yawOf(fx, fz));
+        plan.point("pnj.tycoon", tyX(TY_U + 10, 0), 1, tyZ(TY_U + 10, 0), yawOf(-fx, -fz));
+
+        // panneau au-dessus de l'entrée, côté atrium
+        holo(tyX(21.5, 0), CH + 2.4, tyZ(21.5, 0), label("TYCOON", GOLD, true), 2.0f);
+
+        for (int dx = -TY_R; dx <= TY_R; dx += 4) {
+            for (int dz = -TY_R; dz <= TY_R; dz += 4) {
+                if (Math.hypot(dx, dz) < TY_R - 2) {
+                    light(bx0 + dx, 2, bz0 + dz, 15);
+                    light(bx0 + dx, 8, bz0 + dz, 14);
+                }
+            }
+        }
     }
 
     // ------------------------------------------------------------------ Survie : la serre
@@ -506,7 +705,7 @@ public final class StationDesign {
                 }
             }
         }
-        gate(dir, "survie", "SURVIE", WARM, gateU, 10, false, base, Material.OAK_LOG, pal("rideau", Material.ORANGE_STAINED_GLASS), warm);
+        gate(dir, "survie", "survie", "SURVIE", WARM, gateU, 10, false, 4.0, base, warm);
     }
 
     private void tree(int dir, int u, int v) {
@@ -649,7 +848,7 @@ public final class StationDesign {
             wlight(dir, u, 3, 0, 15);
         }
 
-        gate(dir, "extraction", "EXTRACTION", RED, gateU, 8, true, metal, brick, pal("rideau", Material.RED_STAINED_GLASS), Material.REDSTONE_BLOCK);
+        gate(dir, "extraction", "extraction", "EXTRACTION", RED, gateU, 8, true, RingShape.fit(1, 8), metal, Material.REDSTONE_BLOCK);
     }
 
     // ------------------------------------------------------------------ Practice : l'arène
@@ -756,7 +955,7 @@ public final class StationDesign {
                 }
             }
         }
-        gate(dir, "practice", "PRACTICE", ICE, gateU, 9, false, accent, stand, pal("rideau", Material.CYAN_STAINED_GLASS), light);
+        gate(dir, "practice", "practice", "PRACTICE", ICE, gateU, 9, false, 3.2, accent, light);
     }
 
     // ------------------------------------------------------------------ MMO : le portail
@@ -842,23 +1041,15 @@ public final class StationDesign {
                 }
             }
         }
-        // portail ancien : anneau de pierre et rideau violet
-        Material curtain = pal("rideau", Material.PURPLE_STAINED_GLASS);
-        int yc = 8;
+        // portail : anneau-portail Orbit (l'ancien anneau de pierre et son rideau violet sont vidés)
         for (int v = -8; v <= 8; v++) {
             for (int y = 1; y <= 16; y++) {
-                double d = Math.hypot(v, y - yc);
-                if (d > 7.2) {
-                    continue;
-                }
-                if (d >= 5.5) {
-                    double h = hash(v, y, 15);
-                    wset(dir, gateU, y, v, h < 0.15 ? gold : h < 0.55 ? Material.CRYING_OBSIDIAN : Material.CHISELED_DEEPSLATE);
-                } else {
-                    wset(dir, gateU, y, v, curtain);
+                if (Math.hypot(v, y - 8) <= 7.2) {
+                    wset(dir, gateU, y, v, Material.AIR);
                 }
             }
         }
+        ring(dir, gateU, 5.0, "reborn", Material.CHISELED_DEEPSLATE, gold);
         for (int side : new int[]{-1, 1}) {
             for (int y = 1; y <= 12; y++) {
                 wset(dir, gateU, y, side * 10, y == 12 ? gold : y % 4 == 0 ? Material.CHISELED_STONE_BRICKS : Material.STONE_BRICKS);
@@ -971,15 +1162,18 @@ public final class StationDesign {
 
     // ------------------------------------------------------------------ porte d'embarquement
 
-    private void gate(int dir, String id, String title, int color, int gateU, int height, boolean indoor,
-                      Material frame, Material pillar, Material curtain, Material keystone) {
+    /**
+     * Porte d'embarquement d'une aile : un anneau-portail de rayon r (traverser le disque = envoi vers {@code server}).
+     * L'ancienne porte vitrée (rideau entre deux piliers) est vidée pour qu'une régénération partielle la retire.
+     */
+    private void gate(int dir, String id, String server, String title, int color, int gateU, int height, boolean indoor,
+                      double r, Material frame, Material keystone) {
         for (int v = -hw; v <= hw; v++) {
             for (int y = 1; y <= height; y++) {
-                boolean side = Math.abs(v) == hw;
-                Material m = v == 0 && y == height ? keystone : y == height ? frame : side ? pillar : curtain;
-                wset(dir, gateU, y, v, m);
+                wset(dir, gateU, y, v, Material.AIR);
             }
         }
+        ring(dir, gateU, r, server, frame, keystone);
         for (int v : new int[]{-2, 2}) {
             wlight(dir, gateU - 1, 3, v, 15);
             wlight(dir, gateU - 1, 6, v, 15);
@@ -992,6 +1186,28 @@ public final class StationDesign {
         }
         wpoint(dir, "porte." + id, gateU - 1, 1, 0, 1, 0);
         wpoint(dir, "pnj." + id, gateU - 4, 1, 0, -1, 0);
+    }
+
+    /** Anneau-portail dans le plan de la porte d'une aile (centré sur l'axe de la passerelle). */
+    private void ring(int dir, int gateU, double r, String server, Material frame, Material keystone) {
+        double du = centerD + gateU;
+        ringAt(du * FWD[dir][0] + 0.5, du * FWD[dir][1] + 0.5, FWD[dir][0], FWD[dir][1], r, server, frame, keystone);
+    }
+
+    /**
+     * Anneau-portail posé sur le sol (dessus du sol à y = 1) : couronne de blocs, ligne au sol sous l'anneau
+     * (pointe au centre), et disque animé ajouté au plan. (cx, cz) centre, (nx, nz) sens de passage.
+     */
+    private void ringAt(double cx, double cz, double nx, double nz, double r, String server, Material frame, Material keystone) {
+        double cy = RingShape.centerY(1, r);
+        RingShape.draw(cx, cy, cz, r, nx, nz, 1, this::set);
+        double len = Math.hypot(nx, nz);
+        double tx = -nz / len, tz = nx / len;
+        int span = (int) Math.ceil(RingShape.outer(r));
+        for (int s = -span; s <= span; s++) {
+            set((int) Math.floor(cx + tx * s), 0, (int) Math.floor(cz + tz * s), s == 0 ? keystone : frame);
+        }
+        plan.ring(zone, cx, cy, cz, nx / len, nz / len, r, server);
     }
 
     // ------------------------------------------------------------------ outils
@@ -1048,6 +1264,23 @@ public final class StationDesign {
         double dz = lookU * FWD[dir][1] + lookV * RIGHT[dir][1];
         plan.point(name, du * FWD[dir][0] + v * RIGHT[dir][0] + 0.5, y, du * FWD[dir][1] + v * RIGHT[dir][1] + 0.5,
                 yawOf(dx, dz));
+    }
+
+    /** Repère de l'aile Tycoon (diagonale sud-ouest) : u et v du centre d'un bloc, et retour vers x / z. */
+    private static double tyU(int x, int z) {
+        return ((z + 0.5 - TY_OZ) - (x + 0.5 - TY_OX)) / S2;
+    }
+
+    private static double tyV(int x, int z) {
+        return -((x + 0.5 - TY_OX) + (z + 0.5 - TY_OZ)) / S2;
+    }
+
+    private static double tyX(double u, double v) {
+        return TY_OX + (-u - v) / S2;
+    }
+
+    private static double tyZ(double u, double v) {
+        return TY_OZ + (u - v) / S2;
     }
 
     private static int wx(int dir, int u, int v) {

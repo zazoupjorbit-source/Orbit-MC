@@ -61,6 +61,7 @@ public final class OrbitDevCore extends JavaPlugin {
     private LobbyPack lobbyPack;
     private ShopMenu shopMenu;
     private FireworkGame fireworkGame;
+    private fr.orbit.devcore.anneau.Anneaux anneaux;
 
     @Override
     public void onEnable() {
@@ -101,6 +102,9 @@ public final class OrbitDevCore extends JavaPlugin {
         pm.registerEvents(shopMenu, this);
         pm.registerEvents(lobbyPack, this);
         pm.registerEvents(station, this);
+        anneaux = new fr.orbit.devcore.anneau.Anneaux(this);
+        pm.registerEvents(anneaux, this);
+        anneaux.start();
         fireworkGame = new FireworkGame(this);
         pm.registerEvents(fireworkGame, this); // après PlayerListener : la boussole prend sa case d'abord
         fireworkGame.start();
@@ -121,6 +125,8 @@ public final class OrbitDevCore extends JavaPlugin {
         register("orbitdev", new AdminCommand(this));
         register("station", new StationCommand(this));
         register("boutique", new ShopCommand(this));
+        register("vote", new fr.orbit.devcore.command.VoteCommand(this));
+        register("anneau", new fr.orbit.devcore.command.AnneauCommand(this));
 
         npcs.spawnAllLoaded();
         cosmetics.start();
@@ -130,6 +136,9 @@ public final class OrbitDevCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (anneaux != null) {
+            anneaux.stop();
+        }
         if (fireworkGame != null) {
             fireworkGame.stop();
         }
@@ -254,6 +263,10 @@ public final class OrbitDevCore extends JavaPlugin {
 
     public ShopMenu shopMenu() {
         return shopMenu;
+    }
+
+    public fr.orbit.devcore.anneau.Anneaux anneaux() {
+        return anneaux;
     }
 
     public FireworkGame fireworkGame() {

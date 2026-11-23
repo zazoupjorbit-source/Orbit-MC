@@ -59,6 +59,9 @@ public final class WarpMenu implements Listener {
     private static final int COSMETICS_SLOT = 49;
     private static final int WEBSITE_SLOT = 51;
     private static final int CLOSE_SLOT = 53;
+    /** Mode du centre (Tycoon) : icône sur le conduit, plaque du nom juste en dessous. */
+    private static final int CENTER_ICON_SLOT = 22;
+    private static final int CENTER_PLATE_SLOT = 31;
 
     /** Cases de chaque carte de mode ; la première reçoit l'icône du mode. */
     private static final int[][] CARDS = {
@@ -73,6 +76,7 @@ public final class WarpMenu implements Listener {
 
     private static final String SPAWN = "spawn";
     private static final String WARP = "warp:";
+    private static final String SERVER = "server:";
     private static final String DISCORD = "link:discord";
     private static final String WEBSITE = "link:website";
     private static final String COSMETICS = "cosmetics";
@@ -138,6 +142,21 @@ public final class WarpMenu implements Listener {
                         : GuiTextures.zone(textured, CARD_GLASS[i], name, lore));
                 holder.actions.put(slot, WARP + warp);
             }
+        }
+
+        // --- Centre : mode-centre (Tycoon) : warp devant son PNJ, sinon envoi direct sur son serveur
+        ConfigurationSection centre = plugin.getConfig().getConfigurationSection("mode-centre");
+        String centreWarp = centre == null ? "" : centre.getString("warp", "");
+        String centreServer = centre == null ? "" : centre.getString("server", "");
+        String centreAction = !centreWarp.isBlank() ? WARP + centreWarp
+                : !centreServer.isBlank() ? SERVER + centreServer : null;
+        if (centreAction != null) {
+            Component name = modeName(centre, centreWarp.isBlank() ? centreServer : centreWarp);
+            List<Component> lore = modeLore(centre);
+            inv.setItem(CENTER_ICON_SLOT, item(icon(centre.getString("icon"), Material.GOLDEN_PICKAXE), name, lore, false));
+            inv.setItem(CENTER_PLATE_SLOT, GuiTextures.zone(textured, Material.CYAN_STAINED_GLASS_PANE, name, lore));
+            holder.actions.put(CENTER_ICON_SLOT, centreAction);
+            holder.actions.put(CENTER_PLATE_SLOT, centreAction);
         }
 
         // --- Rangée 5 : Hall central / Discord / Cosmétiques / Site / Fermer
@@ -248,6 +267,8 @@ public final class WarpMenu implements Listener {
 
         if (action.startsWith(WARP)) {
             teleportToWarp(player, action.substring(WARP.length()));
+        } else if (action.startsWith(SERVER)) {
+            plugin.connector().send(player, action.substring(SERVER.length()));
         } else if (action.equals(SPAWN)) {
             Location spawn = plugin.locations().spawn();
             if (spawn == null) {

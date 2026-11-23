@@ -405,3 +405,10 @@ firework:
     volley:
       name: "Volley"
       hint: "<gray>Every shot fires 3 rockets."
+
+vote:
+  header: "<prefix><#E0B864><bold>Vote for Orbit MC</bold> <gray>(click a link):"
+  line: "  <dark_gray>• <#62CFF4><site> <dark_gray>» "
+  footer: "<gray>Thanks, every vote helps the ORBIT universe grow!"
+  soon: "<prefix><gray>Voting opens when Orbit MC launches."
+  soon-website: "<prefix><gray>Voting opens when Orbit MC launches. Meanwhile: "

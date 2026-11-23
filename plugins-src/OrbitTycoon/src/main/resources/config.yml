@@ -1,0 +1,285 @@
+# Orbit Tycoon — réglages.
+# Après une modification : /tycoon reload (jamais /reload du serveur).
+
+# Navigateur orbital : l'item lié qui ouvre le menu des zones.
+navigateur:
+  slot: 8
+
+# Outil orbital : pioche, hache, houe, canne et épée en un seul objet lié (Shift + clic droit = interface, Shift + F = outil suivant).
+outil:
+  slot: 0
+
+# Repousse des blocs farmés (en secondes).
+repousse:
+  bucheron: 30
+  agriculture: 20
+  mine: 15
+
+# Récompenses : toute ressource récoltée (bloc cassé, poisson pêché, mob tué) disparaît
+# et rapporte directement du Flux stellaire ET des Crédits orbitaux. Rien ne tombe au sol, pas d'XP.
+# Clé = nom Minecraft du bloc (OAK_LOG), du poisson (COD) ou du mob (ZOMBIE).
+# « defaut » s'applique à toute ressource absente de la liste (0 = ne rapporte rien).
+flux-stellaire:
+  defaut: 1
+  ressources:
+    OAK_LEAVES: 0
+    COD: 2
+    SALMON: 3
+    PUFFERFISH: 5
+    TROPICAL_FISH: 12
+    ZOMBIE: 3
+    SKELETON: 3
+    SPIDER: 3
+    CREEPER: 4
+    ENDERMAN: 6
+    WITCH: 6
+    BLAZE: 6
+    WITHER_SKELETON: 8
+    RAVAGER: 15
+    EVOKER: 12
+    MELON: 2
+    PUMPKIN: 2
+    STONE: 1
+    COBBLESTONE: 1
+    COAL_ORE: 2
+    COPPER_ORE: 3
+    IRON_ORE: 4
+    DEEPSLATE_IRON_ORE: 4
+    GOLD_ORE: 6
+    DEEPSLATE_GOLD_ORE: 6
+    REDSTONE_ORE: 6
+    DEEPSLATE_REDSTONE_ORE: 6
+    LAPIS_ORE: 7
+    DEEPSLATE_LAPIS_ORE: 7
+    DEEPSLATE_DIAMOND_ORE: 12
+    DEEPSLATE_EMERALD_ORE: 15
+    AMETHYST_BLOCK: 10
+    NETHER_QUARTZ_ORE: 8
+    ANCIENT_DEBRIS: 25
+
+credit-orbital:
+  defaut: 1
+  ressources:
+    OAK_LEAVES: 0
+    STONE: 0
+    COBBLESTONE: 0
+    COAL_ORE: 1
+    COPPER_ORE: 2
+    IRON_ORE: 3
+    DEEPSLATE_IRON_ORE: 3
+    GOLD_ORE: 5
+    DEEPSLATE_GOLD_ORE: 5
+    REDSTONE_ORE: 4
+    DEEPSLATE_REDSTONE_ORE: 4
+    LAPIS_ORE: 5
+    DEEPSLATE_LAPIS_ORE: 5
+    DEEPSLATE_DIAMOND_ORE: 10
+    DEEPSLATE_EMERALD_ORE: 12
+    AMETHYST_BLOCK: 8
+    NETHER_QUARTZ_ORE: 6
+    ANCIENT_DEBRIS: 20
+    MELON: 2
+    PUMPKIN: 2
+    COD: 2
+    SALMON: 3
+    PUFFERFISH: 4
+    TROPICAL_FISH: 10
+    ZOMBIE: 2
+    SKELETON: 2
+    SPIDER: 2
+    CREEPER: 3
+    ENDERMAN: 5
+    WITCH: 5
+    BLAZE: 5
+    WITHER_SKELETON: 7
+    RAVAGER: 12
+    EVOKER: 10
+
+# Mobzone : les monstres viennent des spawners posés dans le sol (tous les monstres, de jour comme de nuit).
+# Apparition automatique en plus, autour des joueurs : max > 0 pour l'activer (0 = coupée).
+mobzone:
+  max: 0
+  intervalle: 4
+  par-vague: 5
+  types: [ZOMBIE, SKELETON, SPIDER, HUSK]
+  # Empilement : nombre max de mobs dans une pile, et distance de fusion (blocs).
+  pile-max: 50
+  pile-rayon: 8
+
+# Hauteur sous laquelle un joueur qui tombe dans le vide est ramené à l'arrivée de sa zone.
+vide-y: 0
+
+# Générateurs de l'île : nombre qu'un joueur peut poser en arrivant sur le Tycoon (affiché « posés / max » dans le HUD).
+generateurs:
+  depart: 10
+
+# HUD permanent à droite de l'écran (pseudo, grade, monnaies, outil, prestige, classement, île, générateurs).
+hud:
+  # Le classement global (aux Crédits orbitaux) est recalculé toutes les X secondes.
+  classement-secondes: 60
+  # Grades LuckPerms, du plus haut au plus bas (clé = nom du groupe). Le premier que le joueur a est affiché.
+  grades:
+    fondateur: "<b><gradient:#FF3B3B:#FF8A3B>ꜰᴏɴᴅᴀᴛᴇᴜʀ</gradient></b>"
+    cofondateur: "<b><gradient:#FF8A3B:#FFC83B>ᴄᴏ-ꜰᴏɴᴅᴀᴛᴇᴜʀ</gradient></b>"
+    admin: "<b><gradient:#E0245E:#FF5C8A>ᴀᴅᴍɪɴ</gradient></b>"
+    dev: "<b><gradient:#3A7FFF:#7FB2FF>ᴅᴇᴠ</gradient></b>"
+    modo: "<b><gradient:#1FBF6A:#5EE89A>ᴍᴏᴅᴏ</gradient></b>"
+    helpeur: "<b><gradient:#22C1D6:#7FE7F2>ʜᴇʟᴘᴇᴜʀ</gradient></b>"
+    builder: "<b><gradient:#F5B400:#FFE066>ʙᴜɪʟᴅᴇʀ</gradient></b>"
+    orbit: "<b><gradient:#62CFF4:#E0B864>ᴏʀʙɪᴛ</gradient></b>"
+    vipplus: "<b><#E0B864>ᴠɪᴘ+</b>"
+    vip: "<b><#62CFF4>ᴠɪᴘ</b>"
+  grade-defaut: "<b><gradient:#8C96A3:#B8C0CA>ᴊᴏᴜᴇᴜʀ</gradient></b>"
+
+# Pack de ressources du Tycoon (disque animé des anneaux-portails).
+pack:
+  actif: true
+  # Port du petit serveur HTTP local qui sert le pack.
+  port: 8794
+  # Si les joueurs passent par un tunnel : URL publique du pack (vide = serveur local ci-dessus).
+  url-publique: ""
+
+# Îles des joueurs (/is) : monde vide « iles_joueurs », une île par équipe.
+# tailles = côté de la zone (en blocs) à chaque niveau ; couts = prix en Crédits orbitaux pour atteindre ce niveau
+# (le premier coût, 0, est celui de l'île de départ). Mur invisible au bord de la zone.
+iles:
+  tailles: [100, 125, 150, 200, 250, 300, 400]
+  couts: [0, 25000, 100000, 300000, 750000, 2000000, 5000000]
+
+# Classement prestige au spawn : un panneau Top 10 à côté de chaque anneau-portail + podium des 3 meilleurs (skins).
+# Les socles et le podium se posent une fois avec « /tycoon classement poser ».
+classement:
+  periode-secondes: 60
+  podium:
+    angle: 108   # direction depuis le centre du spawn (degrés), entre deux avenues
+    rayon: 97    # distance au centre (97 = dans le pavillon « Classement »)
+
+# Baie des coffres au spawn : 5 coffres au décor différent (dans l'ordre : Cryo, Solaire, Nébuleuse, Astéroïde, Réacteur).
+# Changer un nom : le modifier ici, puis /tycoon reload. Les blocs se posent une fois avec « /tycoon coffres poser ».
+coffres:
+  noms: ["Vote", "Farm", "Event", "Saturne", "Neptune"]   # la clé s'appelle « Clé » + nom
+  angle: 36    # direction depuis le centre du spawn (degrés), entre deux avenues
+  rayon: 36
+  # Clic gauche sur un coffre = aperçu du contenu ; clic droit avec la bonne clé en main = ouverture.
+  # Contenu de chaque coffre (1 à 5), à remplir plus tard. Vide = « contenu bientôt dévoilé ».
+  # Format : objet (nom Bukkit), nombre, chance (poids relatif), nom affiché (optionnel). Exemple :
+  #   1:
+  #     - {objet: DIAMOND, nombre: 3, chance: 10, nom: "Diamants"}
+  #     - {objet: IRON_INGOT, nombre: 16, chance: 90}
+  loots: {}
+
+# Boutique du spawn : avenues (identifiants de zone) qui ont un PNJ astronaute sous une arche.
+# Après un changement : /tycoon reload, puis /tycoon boutique poser (nouvelles arches) ou retirer (arches en trop).
+boutique:
+  avenues: [mobzone]   # une seule arche : face aux coffres
+
+# Tuto guidé (1re connexion) : /solde, Navigateur, Outil orbital, récolte, découverte des îles, coffres, /vote.
+# Avancement des joueurs dans tuto.yml. /tuto (consigne), /tuto passer, /tuto recommencer ; admin : /tycoon tuto reset <joueur>.
+tuto:
+  actif: true
+  recoltes: 10             # ressources à récolter à l'étape 5
+  zones: 5                 # îles de farm à visiter à l'étape 6 (1 à 5)
+  cle-coffre: 1            # coffre (1 à 5) dont la clé est offerte à l'étape 7
+  recompense-credits: 500  # Crédits orbitaux donnés une seule fois à la fin du tuto
+
+# Niveaux, XP et prestige des outils (fiche d'outil : Shift + clic droit, puis clic droit sur un outil).
+progression:
+  niveau-max: 100
+  prestige-max: 100
+  # XP pour passer du niveau N au suivant = (xp-base + xp-par-niveau × (N - 1)) × (1 + xp-bonus-prestige × prestige)
+  xp-base: 25
+  xp-par-niveau: 5
+  xp-bonus-prestige: 0.10
+  # XP gagnée par ressource récoltée (clé = nom du bloc, du poisson ou du mob, comme pour les monnaies).
+  xp:
+    defaut: 1
+    ressources: {}
+  # Coût pour passer prestige = prestige-cout-base × (prestige actuel + 1), en Crédits orbitaux.
+  prestige-cout-base: 10000
+  # Cases d'amélioration (9 par outil), noms et prérequis à définir. Une liste par outil possible :
+  # ameliorations.pioche, .hache, .houe, .peche, .epee ; sinon .defaut. Champs : nom, objet, description, prerequis.
+  ameliorations:
+    defaut:
+      - {nom: "Amélioration 1", objet: GRAY_DYE, description: "À définir", prerequis: "À définir"}
+      - {nom: "Amélioration 2", objet: GRAY_DYE, description: "À définir", prerequis: "À définir"}
+      - {nom: "Amélioration 3", objet: GRAY_DYE, description: "À définir", prerequis: "À définir"}
+      - {nom: "Amélioration 4", objet: GRAY_DYE, description: "À définir", prerequis: "À définir"}
+      - {nom: "Amélioration 5", objet: GRAY_DYE, description: "À définir", prerequis: "À définir"}
+      - {nom: "Amélioration 6", objet: GRAY_DYE, description: "À définir", prerequis: "À définir"}
+      - {nom: "Amélioration 7", objet: GRAY_DYE, description: "À définir", prerequis: "À définir"}
+      - {nom: "Amélioration 8", objet: GRAY_DYE, description: "À définir", prerequis: "À définir"}
+      - {nom: "Amélioration 9", objet: GRAY_DYE, description: "À définir", prerequis: "À définir"}
+
+# Quêtes de prestige (PNJ Aventurier) : une quête par outil tous les « pas » prestiges, jusqu'à progression.prestige-max.
+quetes:
+  pas: 10
+  # Récompense PROVISOIRE si rien n'est réglé ci-dessous : palier × credit-par-palier Crédits orbitaux.
+  credit-par-palier: 500
+  # Vraies récompenses (à définir) : recompenses.<outil>.<palier> ou recompenses.tous.<palier>.
+  # Champs : credit, flux, texte (affiché), commandes (console, %joueur% = pseudo). Exemple :
+  #   tous:
+  #     50: {credit: 50000, texte: "1 clé de coffre n°3", commandes: ["tycoon cle 3 %joueur% 1"]}
+  recompenses: {}
+
+# Hôtel des ventes (/hdv, PNJ Marchand) : ventes entre joueurs en Crédits orbitaux.
+hdv:
+  taxe: 5               # % retenu sur chaque vente
+  max-offres: 10        # par joueur, expirées comprises
+  duree-heures: 48      # après, l'objet revient dans « Mes ventes »
+  prix-min: 1
+  prix-max: 1000000000000
+
+# Générateurs de ressources (/gen) : un bloc posé sur son île /is qui fait apparaître sa ressource dessus.
+# Production : 1 objet par générateur toutes les « intervalle-secondes », seulement si le chunk est chargé et
+# qu'un membre de l'île est connecté. Jusqu'à « pile-max » générateurs du même type empilés sur un bloc (clic droit).
+# Débloqués dans l'ordre de la liste : poser un générateur débloque le suivant pour toute l'île.
+# Objets produits vendus avec /vendre (main) ou /vendre tout : « vente » Crédits orbitaux par objet.
+# Barème : vente × 1,12 par niveau ; prix = rentabilisé en 2 h (blé) à 4 h (netherite). /tycoon reload après un changement.
+generateurs:
+  intervalle-secondes: 30
+  pile-max: 64
+  emplacements: [8, 10, 12, 15, 18, 22, 25]   # blocs générateurs par île, selon le palier de /is upgrade
+  max-au-sol: 512          # au-delà, le générateur attend qu'on ramasse (anti-lag)
+  liste:
+    - {id: ble, nom: "Blé", bloc: HAY_BLOCK, objet: WHEAT, prix: 240, vente: 1}
+    - {id: carotte, nom: "Carotte", bloc: ORANGE_TERRACOTTA, objet: CARROT, prix: 280, vente: 1.12}
+    - {id: pomme_de_terre, nom: "Pomme de terre", bloc: BROWN_TERRACOTTA, objet: POTATO, prix: 320, vente: 1.25}
+    - {id: betterave, nom: "Betterave", bloc: RED_TERRACOTTA, objet: BEETROOT, prix: 360, vente: 1.4}
+    - {id: canne_a_sucre, nom: "Canne à sucre", bloc: GREEN_TERRACOTTA, objet: SUGAR_CANE, prix: 410, vente: 1.57}
+    - {id: bambou, nom: "Bambou", bloc: BAMBOO_BLOCK, objet: BAMBOO, prix: 480, vente: 1.76}
+    - {id: citrouille, nom: "Citrouille", bloc: PUMPKIN, objet: PUMPKIN, prix: 540, vente: 1.97}
+    - {id: pasteque, nom: "Pastèque", bloc: MELON, objet: MELON_SLICE, prix: 620, vente: 2.21}
+    - {id: cactus, nom: "Cactus", bloc: GREEN_GLAZED_TERRACOTTA, objet: CACTUS, prix: 710, vente: 2.48}
+    - {id: cacao, nom: "Cacao", bloc: BROWN_GLAZED_TERRACOTTA, objet: COCOA_BEANS, prix: 810, vente: 2.77}
+    - {id: champignon_rouge, nom: "Champignon rouge", bloc: RED_MUSHROOM_BLOCK, objet: RED_MUSHROOM, prix: 930, vente: 3.11}
+    - {id: champignon_brun, nom: "Champignon brun", bloc: BROWN_MUSHROOM_BLOCK, objet: BROWN_MUSHROOM, prix: 1100, vente: 3.48}
+    - {id: verrue, nom: "Verrue du Nether", bloc: NETHER_WART_BLOCK, objet: NETHER_WART, prix: 1200, vente: 3.9}
+    - {id: chene, nom: "Chêne", bloc: OAK_WOOD, objet: OAK_LOG, prix: 1400, vente: 4.36}
+    - {id: bouleau, nom: "Bouleau", bloc: BIRCH_WOOD, objet: BIRCH_LOG, prix: 1600, vente: 4.89}
+    - {id: epicea, nom: "Épicéa", bloc: SPRUCE_WOOD, objet: SPRUCE_LOG, prix: 1800, vente: 5.47}
+    - {id: acajou, nom: "Acajou", bloc: JUNGLE_WOOD, objet: JUNGLE_LOG, prix: 2100, vente: 6.13}
+    - {id: acacia, nom: "Acacia", bloc: ACACIA_WOOD, objet: ACACIA_LOG, prix: 2300, vente: 6.87}
+    - {id: chene_noir, nom: "Chêne noir", bloc: DARK_OAK_WOOD, objet: DARK_OAK_LOG, prix: 2700, vente: 7.69}
+    - {id: mangrove, nom: "Palétuvier", bloc: MANGROVE_WOOD, objet: MANGROVE_LOG, prix: 3000, vente: 8.61}
+    - {id: cerisier, nom: "Cerisier", bloc: CHERRY_WOOD, objet: CHERRY_LOG, prix: 3500, vente: 9.65}
+    - {id: os, nom: "Os", bloc: BONE_BLOCK, objet: BONE, prix: 4000, vente: 10.8}
+    - {id: ficelle, nom: "Ficelle", bloc: WHITE_WOOL, objet: STRING, prix: 4500, vente: 12.1}
+    - {id: poudre, nom: "Poudre à canon", bloc: GRAY_GLAZED_TERRACOTTA, objet: GUNPOWDER, prix: 5100, vente: 13.55}
+    - {id: miel, nom: "Rayon de miel", bloc: HONEYCOMB_BLOCK, objet: HONEYCOMB, prix: 5800, vente: 15.18}
+    - {id: slime, nom: "Boule de slime", bloc: SLIME_BLOCK, objet: SLIME_BALL, prix: 6600, vente: 17}
+    - {id: perle, nom: "Perle de l'Ender", bloc: PURPUR_BLOCK, objet: ENDER_PEARL, prix: 7500, vente: 19.04}
+    - {id: blaze, nom: "Bâton de blaze", bloc: ORANGE_GLAZED_TERRACOTTA, objet: BLAZE_ROD, prix: 8600, vente: 21.32}
+    - {id: charbon, nom: "Charbon", bloc: COAL_BLOCK, objet: COAL, prix: 9700, vente: 23.88}
+    - {id: cuivre, nom: "Cuivre", bloc: WAXED_COPPER_BLOCK, objet: COPPER_INGOT, prix: 11000, vente: 26.75}
+    - {id: fer, nom: "Fer", bloc: IRON_BLOCK, objet: IRON_INGOT, prix: 13000, vente: 29.96}
+    - {id: lapis, nom: "Lapis-lazuli", bloc: LAPIS_BLOCK, objet: LAPIS_LAZULI, prix: 14000, vente: 33.56}
+    - {id: redstone, nom: "Redstone", bloc: REDSTONE_BLOCK, objet: REDSTONE, prix: 16000, vente: 37.58}
+    - {id: quartz, nom: "Quartz", bloc: QUARTZ_BLOCK, objet: QUARTZ, prix: 18000, vente: 42.09}
+    - {id: or, nom: "Or", bloc: GOLD_BLOCK, objet: GOLD_INGOT, prix: 21000, vente: 47.14}
+    - {id: amethyste, nom: "Améthyste", bloc: AMETHYST_BLOCK, objet: AMETHYST_SHARD, prix: 24000, vente: 52.8}
+    - {id: glowstone, nom: "Glowstone", bloc: GLOWSTONE, objet: GLOWSTONE_DUST, prix: 27000, vente: 59.14}
+    - {id: prismarine, nom: "Prismarine", bloc: PRISMARINE, objet: PRISMARINE_SHARD, prix: 31000, vente: 66.23}
+    - {id: obsidienne, nom: "Obsidienne", bloc: OBSIDIAN, objet: OBSIDIAN, prix: 35000, vente: 74.18}
+    - {id: diamant, nom: "Diamant", bloc: DIAMOND_BLOCK, objet: DIAMOND, prix: 39000, vente: 83.08}
+    - {id: emeraude, nom: "Émeraude", bloc: EMERALD_BLOCK, objet: EMERALD, prix: 45000, vente: 93.05}
+    - {id: netherite, nom: "Netherite", bloc: NETHERITE_BLOCK, objet: NETHERITE_SCRAP, prix: 51000, vente: 104.22}

@@ -77,3 +77,11 @@ cosmetics:
   unlock-all: true
   # Dossier partage par le lobby et les instances : on garde ses cosmetiques en changeant de serveur.
   data-folder: "../../../../shared/cosmetics"
+
+# Pack du lobby (textures des anneaux-portails) : le même pack, servi par le lobby (port 8792).
+resource-pack:
+  enabled: true
+  port: 8792
+  serve-local: false
+  public-url: ""
+  required: false

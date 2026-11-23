@@ -567,7 +567,7 @@ public final class StationService implements Listener {
                 finish(world, chunks);
                 long seconds = Math.max(1, (System.currentTimeMillis() - started) / 1000);
                 say(sender, build ? "La Station est prête : " + state[1] + " blocs posés, " + state[2] + " retirés, "
-                        + spawned + " hologrammes et créatures sur " + (plan.texts().size() + plan.creatures().size())
+                        + spawned + " hologrammes, créatures, anneaux et pets sur " + (plan.texts().size() + plan.creatures().size() + plan.rings().size() + plan.models().size())
                         + ", en " + seconds + " s. /station tp pour la visiter."
                         : "Emprise vidée : " + state[2] + " blocs retirés.", GOLD);
                 // une retouche de la station en place : on dit ce qui a bougé (inutile pour une première pose)
@@ -676,6 +676,19 @@ public final class StationService implements Listener {
                 count++;
             }
         }
+        for (StationPlan.Ring r : plan.rings()) {
+            if (plugin.anneaux().spawnDisc(world, ox + r.x(), oy + r.y(), oz + r.z(), r.nx(), r.nz(), r.r(), r.server(),
+                    List.of(TAG, TAG + "_" + r.zone())).isValid()) {
+                count++;
+            }
+        }
+        for (StationPlan.Model m : plan.models()) {
+            if (plugin.anneaux().spawnModel(world, ox + m.x(), oy + m.y(), oz + m.z(),
+                    new org.bukkit.NamespacedKey("orbitdev", m.model()), m.scale(), List.of(TAG, TAG + "_" + m.zone())).isValid()) {
+                count++;
+            }
+        }
+        plugin.anneaux().rescan();
         return count;
     }
 
@@ -716,6 +729,7 @@ public final class StationService implements Listener {
             icons.put("extraction", Material.CROSSBOW);
             icons.put("practice", Material.DIAMOND_SWORD);
             icons.put("mmo", Material.ENDER_EYE);
+            icons.put("tycoon", Material.GOLD_INGOT);
             for (Map.Entry<String, Material> e : icons.entrySet()) {
                 StationPlan.Point p = plan.points().get("pnj." + e.getKey());
                 if (p != null) {

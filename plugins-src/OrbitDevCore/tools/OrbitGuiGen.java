@@ -546,9 +546,10 @@ public class OrbitGuiGen {
     static final Mode EXTRACTION = new Mode("EXTRACTION", new int[]{0xFF4A0E0E, 0xFF7A1717, 0xFFB32525, 0xFFE23B3B, 0xFFFF6B6B, 0xFFFFC2C2}, true);
     static final Mode PRACTICE = new Mode("PRACTICE", new int[]{0xFF122A6B, 0xFF1C3F99, 0xFF2F6AE0, 0xFF3A7FFF, 0xFF6EA2FF, 0xFFC4DAFF}, true);
     static final Mode MMO = new Mode("MMO", new int[]{0xFF5A3A06, 0xFF8A5A0C, 0xFFC48A17, 0xFFF5C542, 0xFFFFDD7A, 0xFFFFF2C4}, false);
+    static final Mode TYCOON = new Mode("TYCOON", new int[]{0xFF0A3F47, 0xFF0F6470, 0xFF169DAD, 0xFF22C7D9, 0xFF7FEBF7, 0xFFD2FAFF}, false);
 
     static final int[][] NAV_ITEMS = {{0, 0, 0xFFE0B894}, {8, 0, 0xFFF5C542},
-            {0, 1, 0xFF3FC46A}, {5, 1, 0xFFE23B3B}, {0, 3, 0xFF3A7FFF}, {5, 3, 0xFFF5C542},
+            {0, 1, 0xFF3FC46A}, {5, 1, 0xFFE23B3B}, {0, 3, 0xFF3A7FFF}, {5, 3, 0xFFF5C542}, {4, 2, 0xFF22C7D9},
             {0, 5, 0xFFB57BFF}, {2, 5, 0xFF5865F2}, {4, 5, 0xFFFF4FD8}, {6, 5, 0xFF22C7D9}, {8, 5, 0xFFE2524A}};
 
     /** Carte de mode : 4 colonnes x 2 lignes ; slot de l'icône en haut à gauche, planète du mode, plaque du nom. */
@@ -593,14 +594,18 @@ public class OrbitGuiGen {
             double t = (Math.sin(j * 0.3) + 1) / 2;
             px(173 + i, 77 + j, pick(new int[]{0xFF0C1430, BLUE_LO, BLUE, BLUE_HI}, t * (i == 0 || i == 5 ? 0.6 : 1), 173 + i, 77 + j));
         }
-        int hy = sy(3) * S - 2;
-        disc(176, hy, 11, OUT);
-        for (int x = -10; x <= 10; x++) for (int y = -10; y <= 10; y++) {
-            double d = Math.sqrt(x * x + y * y);
-            if (d <= 10) px(176 + x, hy + y, d > 6.5 ? pick(new int[]{METAL[3], METAL[1], METAL_HI}, 0.5 - 0.5 * (x + y) / 12.0, 176 + x, hy + y)
-                    : d > 5.5 ? OUT : pick(new int[]{BLUE_LO, BLUE, BLUE_HI, BLUE_HI2}, 1 - d / 5.5, 176 + x, hy + y));
+        // au centre, sur le conduit : le Tycoon (icône en (4,2), plaque du nom en (4,3)) — WarpMenu « mode-centre »
+        int[] tp = TYCOON.pal();
+        int ty = sy(2) * S - 6;
+        shape(157, ty, 39, 84, 4, new int[]{mix(tp[1], 0xFF0A0A0F, 0.55), mix(tp[0], 0xFF0A0A0F, 0.6), mix(tp[0], 0xFF0A0A0F, 0.8)},
+                OUT, mix(tp[2], 0xFF0A0A0F, 0.3), mix(tp[0], 0xFF000000, 0.5));
+        accentSlot(4, 2, tp[3]);
+        int ny = sy(3) * S + 10;
+        text(176 - textW("TYCOON", 1, 5) / 2, ny, "TYCOON", 1, 5, new int[]{0xFFFFFFFF, tp[5], tp[4]}, OUT, 0, 0);
+        for (int k = -1; k <= 1; k++) {   // trois crédits orbitaux sous le nom
+            int cx = 176 + k * 9, cy = ny + 16;
+            disc(cx, cy, 3, OUT); disc(cx, cy, 2, 0xFFE0B864); px(cx - 1, cy - 1, 0xFFFFF2C4);
         }
-        px(174, hy - 2, 0xFFFFFFFF);
 
         // ligne 5 : Station / Discord / Cosmétiques / Site / Fermer, reliés par un rail
         int ry = sy(5) * S + 15;

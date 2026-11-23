@@ -47,3 +47,15 @@ npcs:
       z: -80.88560081712441
       yaw: -0.749664306640625
       pitch: 0.6001094579696655
+  tycoon:
+    server: tycoon
+    name: <gradient:#62CFF4:#E0B864><bold>TYCOON</bold></gradient>
+    type: VILLAGER
+    profession: cartographer
+    location:
+      world: station
+      x: -63.57
+      y: 101.0
+      z: 56.57
+      yaw: -135.0
+      pitch: 0.0

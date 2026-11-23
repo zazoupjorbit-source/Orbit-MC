@@ -1,0 +1,244 @@
+# Orbit Tycoon — réglages.
+# Après une modification : /tycoon reload (jamais /reload du serveur).
+
+generateurs:
+  depart: 10
+progression:
+  niveau-max: 100
+  prestige-max: 100
+  # XP pour passer du niveau N au suivant = (xp-base + xp-par-niveau × (N - 1)) × (1 + xp-bonus-prestige × prestige)
+  xp-base: 25
+  xp-par-niveau: 5
+  xp-bonus-prestige: 0.1
+  # XP gagnée par ressource récoltée (clé = nom du bloc, du poisson ou du mob, comme pour les monnaies).
+  xp:
+    defaut: 1
+    ressources: {}
+  # Coût pour passer prestige = prestige-cout-base × (prestige actuel + 1), en Crédits orbitaux.
+  prestige-cout-base: 10000
+  # Cases d'amélioration (9 par outil), noms et prérequis à définir. Une liste par outil possible :
+  # ameliorations.pioche, .hache, .houe, .peche, .epee ; sinon .defaut. Champs : nom, objet, description, prerequis.
+  ameliorations:
+    defaut:
+    - nom: Amélioration 1
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 2
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 3
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 4
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 5
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 6
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 7
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 8
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+    - nom: Amélioration 9
+      objet: GRAY_DYE
+      description: À définir
+      prerequis: À définir
+quetes:
+  pas: 10
+  # Récompense PROVISOIRE si rien n'est réglé ci-dessous : palier × credit-par-palier Crédits orbitaux.
+  credit-par-palier: 500
+  # Vraies récompenses (à définir) : recompenses.<outil>.<palier> ou recompenses.tous.<palier>.
+  # Champs : credit, flux, texte (affiché), commandes (console, %joueur% = pseudo). Exemple :
+  #   tous:
+  #     50: {credit: 50000, texte: "1 clé de coffre n°3", commandes: ["tycoon cle 3 %joueur% 1"]}
+  recompenses: {}
+hdv:
+  taxe: 5 # % retenu sur chaque vente
+  max-offres: 10 # par joueur, expirées comprises
+  duree-heures: 48 # après, l'objet revient dans « Mes ventes »
+  prix-min: 1
+  prix-max: 1000000000000
+tuto:
+  actif: true
+  recoltes: 10 # ressources à récolter à l'étape 5
+  zones: 5 # îles de farm à visiter à l'étape 6 (1 à 5)
+  cle-coffre: 1 # coffre (1 à 5) dont la clé est offerte à l'étape 7
+  recompense-credits: 500 # Crédits orbitaux donnés une seule fois à la fin du tuto
+coffres:
+  loots: {}
+  noms:
+  - Vote
+  - Farm
+  - Event
+  - Saturne
+  - Neptune
+  angle: 36 # direction depuis le centre du spawn (degrés), entre deux avenues
+  rayon: 36
+classement:
+  periode-secondes: 60
+  podium:
+    angle: 108 # direction depuis le centre du spawn (degrés), entre deux avenues
+    rayon: 97 # distance au centre (97 = dans le pavillon « Classement »)
+iles:
+  tailles:
+  - 100
+  - 125
+  - 150
+  - 200
+  - 250
+  - 300
+  - 400
+  couts:
+  - 0
+  - 25000
+  - 100000
+  - 300000
+  - 750000
+  - 2000000
+  - 5000000
+hud:
+  # Le classement global (aux Crédits orbitaux) est recalculé toutes les X secondes.
+  classement-secondes: 60
+  # Grades LuckPerms, du plus haut au plus bas (clé = nom du groupe). Le premier que le joueur a est affiché.
+  grades:
+    fondateur: <b><gradient:#FF3B3B:#FF8A3B>ꜰᴏɴᴅᴀᴛᴇᴜʀ</gradient></b>
+    cofondateur: <b><gradient:#FF8A3B:#FFC83B>ᴄᴏ-ꜰᴏɴᴅᴀᴛᴇᴜʀ</gradient></b>
+    admin: <b><gradient:#E0245E:#FF5C8A>ᴀᴅᴍɪɴ</gradient></b>
+    dev: <b><gradient:#3A7FFF:#7FB2FF>ᴅᴇᴠ</gradient></b>
+    modo: <b><gradient:#1FBF6A:#5EE89A>ᴍᴏᴅᴏ</gradient></b>
+    helpeur: <b><gradient:#22C1D6:#7FE7F2>ʜᴇʟᴘᴇᴜʀ</gradient></b>
+    builder: <b><gradient:#F5B400:#FFE066>ʙᴜɪʟᴅᴇʀ</gradient></b>
+    orbit: <b><gradient:#62CFF4:#E0B864>ᴏʀʙɪᴛ</gradient></b>
+    vipplus: <b><#E0B864>ᴠɪᴘ+</b>
+    vip: <b><#62CFF4>ᴠɪᴘ</b>
+  grade-defaut: <b><gradient:#8C96A3:#B8C0CA>ᴊᴏᴜᴇᴜʀ</gradient></b>
+flux-stellaire:
+  defaut: 1
+  ressources:
+    OAK_LEAVES: 0
+    COD: 2
+    SALMON: 3
+    PUFFERFISH: 5
+    TROPICAL_FISH: 12
+    ZOMBIE: 3
+    SKELETON: 3
+    SPIDER: 3
+    CREEPER: 4
+    ENDERMAN: 6
+    WITCH: 6
+    BLAZE: 6
+    WITHER_SKELETON: 8
+    RAVAGER: 15
+    EVOKER: 12
+    MELON: 2
+    PUMPKIN: 2
+    STONE: 1
+    COBBLESTONE: 1
+    COAL_ORE: 2
+    COPPER_ORE: 3
+    IRON_ORE: 4
+    DEEPSLATE_IRON_ORE: 4
+    GOLD_ORE: 6
+    DEEPSLATE_GOLD_ORE: 6
+    REDSTONE_ORE: 6
+    DEEPSLATE_REDSTONE_ORE: 6
+    LAPIS_ORE: 7
+    DEEPSLATE_LAPIS_ORE: 7
+    DEEPSLATE_DIAMOND_ORE: 12
+    DEEPSLATE_EMERALD_ORE: 15
+    AMETHYST_BLOCK: 10
+    NETHER_QUARTZ_ORE: 8
+    ANCIENT_DEBRIS: 25
+credit-orbital:
+  defaut: 1
+  ressources:
+    OAK_LEAVES: 0
+    STONE: 0
+    COBBLESTONE: 0
+    COAL_ORE: 1
+    COPPER_ORE: 2
+    IRON_ORE: 3
+    DEEPSLATE_IRON_ORE: 3
+    GOLD_ORE: 5
+    DEEPSLATE_GOLD_ORE: 5
+    REDSTONE_ORE: 4
+    DEEPSLATE_REDSTONE_ORE: 4
+    LAPIS_ORE: 5
+    DEEPSLATE_LAPIS_ORE: 5
+    DEEPSLATE_DIAMOND_ORE: 10
+    DEEPSLATE_EMERALD_ORE: 12
+    AMETHYST_BLOCK: 8
+    NETHER_QUARTZ_ORE: 6
+    ANCIENT_DEBRIS: 20
+    MELON: 2
+    PUMPKIN: 2
+    COD: 2
+    SALMON: 3
+    PUFFERFISH: 4
+    TROPICAL_FISH: 10
+    ZOMBIE: 2
+    SKELETON: 2
+    SPIDER: 2
+    CREEPER: 3
+    ENDERMAN: 5
+    WITCH: 5
+    BLAZE: 5
+    WITHER_SKELETON: 7
+    RAVAGER: 12
+    EVOKER: 10
+navigateur:
+  slot: 8
+
+# Outil orbital : pioche, hache, houe, canne et épée en un seul objet lié (Shift + clic droit = interface, Shift + F = outil suivant).
+outil:
+  slot: 0
+
+# Repousse des blocs farmés (en secondes).
+repousse:
+  bucheron: 30
+  agriculture: 20
+  mine: 15
+
+# Mobzone : les monstres apparaissent autour des joueurs présents dans l'arène.
+mobzone:
+  max: 0
+  intervalle: 4
+  par-vague: 5
+  types:
+  - ZOMBIE
+  - SKELETON
+  - SPIDER
+  - HUSK
+  # Empilement : nombre max de mobs dans une pile, et distance de fusion (blocs).
+  pile-max: 50
+  pile-rayon: 8
+
+# Hauteur sous laquelle un joueur qui tombe dans le vide est ramené à l'arrivée de sa zone.
+vide-y: 0
+
+# Pack de ressources du Tycoon (disque animé des anneaux-portails).
+pack:
+  actif: true
+  # Port du petit serveur HTTP local qui sert le pack.
+  port: 8794
+  # Si les joueurs passent par un tunnel : URL publique du pack (vide = serveur local ci-dessus).
+  url-publique: ''
+
+# Boutique du spawn : avenues (identifiants de zone) qui ont un PNJ astronaute sous une arche.
+# Après un changement : /tycoon reload, puis /tycoon boutique poser (nouvelles arches) ou retirer (arches en trop).
+boutique:
+  avenues:
+  - mobzone
