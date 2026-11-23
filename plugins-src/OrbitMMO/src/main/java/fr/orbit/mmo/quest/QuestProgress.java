@@ -16,6 +16,10 @@ public final class QuestProgress {
     public static final class Active {
         public int step;
         public int count;
+        /** Marques de l'étape en cours (indices d'enquête trouvés). Vidées à chaque nouvelle étape. */
+        public final Set<String> marks = new LinkedHashSet<>();
+        /** Contre la montre : fin du compte à rebours (heure, en ms) ; 0 = pas de chrono. */
+        public long deadline;
 
         Active(int step, int count) {
             this.step = step;
@@ -28,6 +32,8 @@ public final class QuestProgress {
     public Faction faction;
     public final Map<String, Active> active = new LinkedHashMap<>();
     public final Set<String> done = new LinkedHashSet<>();
+    /** Réponses des dialogues à choix : id du choix → id de la réponse. Gardées après la quête (branches, conditions). */
+    public final Map<String, String> choices = new LinkedHashMap<>();
     /** Éclat d'ancrage choisi (nom de point) : lieu de réapparition. */
     public String anchor;
     /** Quête suivie (celle que la traînée de guidage montre) ; null = la première en cours. */
@@ -49,6 +55,7 @@ public final class QuestProgress {
     public void clear() {
         active.clear();
         done.clear();
+        choices.clear();
         anchor = null;
         tracked = null;
         dirty = true;
@@ -65,7 +72,16 @@ public final class QuestProgress {
         ConfigurationSection a = y.getConfigurationSection("en-cours");
         if (a != null) {
             for (String k : a.getKeys(false)) {
-                active.put(k, new Active(a.getInt(k + ".etape"), a.getInt(k + ".compteur")));
+                Active act = new Active(a.getInt(k + ".etape"), a.getInt(k + ".compteur"));
+                act.marks.addAll(a.getStringList(k + ".marques"));
+                act.deadline = a.getLong(k + ".limite");
+                active.put(k, act);
+            }
+        }
+        ConfigurationSection c = y.getConfigurationSection("choix");
+        if (c != null) {
+            for (String k : c.getKeys(false)) {
+                choices.put(k, c.getString(k));
             }
         }
     }
@@ -80,6 +96,15 @@ public final class QuestProgress {
         for (Map.Entry<String, Active> e : active.entrySet()) {
             y.set("en-cours." + e.getKey() + ".etape", e.getValue().step);
             y.set("en-cours." + e.getKey() + ".compteur", e.getValue().count);
+            if (!e.getValue().marks.isEmpty()) {
+                y.set("en-cours." + e.getKey() + ".marques", java.util.List.copyOf(e.getValue().marks));
+            }
+            if (e.getValue().deadline > 0) {
+                y.set("en-cours." + e.getKey() + ".limite", e.getValue().deadline);
+            }
+        }
+        for (Map.Entry<String, String> e : choices.entrySet()) {
+            y.set("choix." + e.getKey(), e.getValue());
         }
     }
 }

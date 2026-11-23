@@ -175,6 +175,7 @@ public final class Combat {
         double dmg = power(p, d) * ratio * d.mods.mult("degats", null) * auraDamageMult(p);
         if (random.nextDouble() < critChance(d, null) + plugin.auras().sum(p.getUniqueId(), "bonus-crit") / 100.0) {
             dmg *= critMult(d);
+            markCrit(p);
         }
         Resource r = plugin.progression().resource(d);
         if (r == Resource.RAGE) {
@@ -185,9 +186,29 @@ public final class Combat {
         return dmg;
     }
 
+    /** Coup critique en cours (attaquant, tick) : le prochain chiffre de dégâts de cet attaquant sera doré. */
+    private java.util.UUID critBy;
+    private int critTick;
+
+    private void markCrit(Player p) {
+        critBy = p.getUniqueId();
+        critTick = org.bukkit.Bukkit.getCurrentTick();
+    }
+
+    private boolean takeCrit(Player p) {
+        boolean crit = p.getUniqueId().equals(critBy) && critTick == org.bukkit.Bukkit.getCurrentTick();
+        if (crit) {
+            critBy = null;
+        }
+        return crit;
+    }
+
     private void deal(Player p, PlayerData d, LivingEntity target, double dmg, boolean crit, double lifesteal) {
         MobState ms = plugin.mobs().state(target);
         hitFx(target, crit);
+        if (crit) {
+            markCrit(p);
+        }
         if (ms != null) {
             damageMob(p, ms, dmg);
         } else if (target instanceof Player v) {
@@ -302,6 +323,9 @@ public final class Combat {
         ms.hp -= dmg;
         if (dmg > 0) {
             plugin.spells().control().damaged(ms.entity);
+            if (attacker != null) {
+                plugin.damageNumbers().show(attacker, ms.entity, dmg, takeCrit(attacker));
+            }
         }
         if (attacker != null) {
             ms.damagers.merge(attacker.getUniqueId(), dmg, Double::sum);
@@ -386,6 +410,9 @@ public final class Combat {
         d.lastCombat = now;
         if (dmg > 0) {
             plugin.spells().control().damaged(v);
+            if (attacker != null) {
+                plugin.damageNumbers().show(attacker, v, dmg, takeCrit(attacker));
+            }
         }
         if (attacker != null) {
             d.lastAttacker = attacker.getUniqueId();

@@ -29,6 +29,9 @@ commands:
   monture:
     description: Appeler ou renvoyer sa monture, ouvrir l'écurie.
     aliases: [mount, ecurie]
+  carte:
+    description: Carte du continent en main secondaire ; /carte zoom pour changer l'échelle.
+    aliases: [minicarte, minimap]
   langue:
     description: Langue des dialogues et des quêtes (fr, en, auto) · Language of dialogues and quests.
     aliases: [language, lang]

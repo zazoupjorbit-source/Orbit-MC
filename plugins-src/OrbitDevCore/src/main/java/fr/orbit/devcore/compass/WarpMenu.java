@@ -43,7 +43,8 @@ import static fr.orbit.devcore.gui.Menus.item;
  * (fond : tools/OrbitGuiGen.java, drawNav) :
  * <pre>
  *  rangée 0    : profil (tête) | « MODES DE JEU » | Boutique
- *  rangées 1-4 : 4 cartes de mode de 4 x 2 cases (icône en haut à gauche), colonne centrale décorative
+ *  rangées 1-4 : 4 cartes de mode de 4 x 2 cases (icône en haut à gauche) ; colonne centrale : Tycoon
+ *                (cases 13/22) et Créatif (cases 31/40), config « modes-centre »
  *  rangée 5    : Hall central | Discord | Cosmétiques | Site | Fermer
  * </pre>
  * Les 4 cartes reprennent les 4 premiers modes de config.yml « modes », dans l'ordre ; leurs noms sont
@@ -59,9 +60,9 @@ public final class WarpMenu implements Listener {
     private static final int COSMETICS_SLOT = 49;
     private static final int WEBSITE_SLOT = 51;
     private static final int CLOSE_SLOT = 53;
-    /** Mode du centre (Tycoon) : icône sur le conduit, plaque du nom juste en dessous. */
-    private static final int CENTER_ICON_SLOT = 22;
-    private static final int CENTER_PLATE_SLOT = 31;
+    /** Modes du centre, sur le conduit : {icône, plaque du nom juste en dessous}. Tycoon en haut, Créatif en bas. */
+    private static final int[][] CENTER_SLOTS = {{13, 22}, {31, 40}};
+    private static final Material[] CENTER_GLASS = {Material.CYAN_STAINED_GLASS_PANE, Material.PURPLE_STAINED_GLASS_PANE};
 
     /** Cases de chaque carte de mode ; la première reçoit l'icône du mode. */
     private static final int[][] CARDS = {
@@ -144,19 +145,32 @@ public final class WarpMenu implements Listener {
             }
         }
 
-        // --- Centre : mode-centre (Tycoon) : warp devant son PNJ, sinon envoi direct sur son serveur
-        ConfigurationSection centre = plugin.getConfig().getConfigurationSection("mode-centre");
-        String centreWarp = centre == null ? "" : centre.getString("warp", "");
-        String centreServer = centre == null ? "" : centre.getString("server", "");
-        String centreAction = !centreWarp.isBlank() ? WARP + centreWarp
-                : !centreServer.isBlank() ? SERVER + centreServer : null;
-        if (centreAction != null) {
+        // --- Centre : « modes-centre » (Tycoon en haut, Créatif en bas) : warp devant son PNJ,
+        //     sinon envoi direct sur son serveur. Ancienne clé « mode-centre » (un seul mode) encore lue.
+        List<ConfigurationSection> centres = new ArrayList<>();
+        ConfigurationSection centreList = plugin.getConfig().getConfigurationSection("modes-centre");
+        if (centreList != null) {
+            for (String id : centreList.getKeys(false)) {
+                ConfigurationSection s = centreList.getConfigurationSection(id);
+                if (s != null) centres.add(s);
+            }
+        } else if (plugin.getConfig().getConfigurationSection("mode-centre") != null) {
+            centres.add(plugin.getConfig().getConfigurationSection("mode-centre"));
+        }
+        for (int i = 0; i < Math.min(centres.size(), CENTER_SLOTS.length); i++) {
+            ConfigurationSection centre = centres.get(i);
+            String centreWarp = centre.getString("warp", "");
+            String centreServer = centre.getString("server", "");
+            String centreAction = !centreWarp.isBlank() ? WARP + centreWarp
+                    : !centreServer.isBlank() ? SERVER + centreServer : null;
+            if (centreAction == null) continue;
             Component name = modeName(centre, centreWarp.isBlank() ? centreServer : centreWarp);
             List<Component> lore = modeLore(centre);
-            inv.setItem(CENTER_ICON_SLOT, item(icon(centre.getString("icon"), Material.GOLDEN_PICKAXE), name, lore, false));
-            inv.setItem(CENTER_PLATE_SLOT, GuiTextures.zone(textured, Material.CYAN_STAINED_GLASS_PANE, name, lore));
-            holder.actions.put(CENTER_ICON_SLOT, centreAction);
-            holder.actions.put(CENTER_PLATE_SLOT, centreAction);
+            int iconSlot = CENTER_SLOTS[i][0], plateSlot = CENTER_SLOTS[i][1];
+            inv.setItem(iconSlot, item(icon(centre.getString("icon"), Material.GOLDEN_PICKAXE), name, lore, false));
+            inv.setItem(plateSlot, GuiTextures.zone(textured, CENTER_GLASS[i], name, lore));
+            holder.actions.put(iconSlot, centreAction);
+            holder.actions.put(plateSlot, centreAction);
         }
 
         // --- Rangée 5 : Hall central / Discord / Cosmétiques / Site / Fermer

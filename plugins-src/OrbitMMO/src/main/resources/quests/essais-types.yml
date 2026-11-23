@@ -1,0 +1,556 @@
+# ------------------------------------------------------------------
+#  Zone d'essai des types de quêtes — réservée à l'administration (admin: true).
+#  Points relatifs : /quetes admin poser essais-types sur un terrain plat d'environ 90 × 90 blocs.
+#  FICHIER GÉNÉRÉ par tools\quetes\gen-quetes.js depuis tools\quetes\zones\essais-types.js : modifier la source, pas ce fichier.
+# ------------------------------------------------------------------
+
+pnj:
+  essayeur:
+    nom: "L'Essayeur"
+    nom-en: "The Tester"
+    titre: "Quêtes d'essai"
+    titre-en: "Test quests"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: steve
+    point: essayeur
+    repliques:
+      - "Une quête par type, proposées l'une après l'autre. Pour en choisir une : /quetes admin demarrer."
+    repliques-en:
+      - "One quest per type, offered one after another. To pick one: /quetes admin demarrer."
+  messager_essai:
+    nom: "Messagère"
+    nom-en: "Messenger"
+    titre: "Livraisons et enquêtes"
+    titre-en: "Deliveries and investigations"
+    couleur: "#9FD8FF"
+    type: MANNEQUIN
+    visage: alex
+    point: messager_essai
+    repliques:
+      - "J'attends des lettres. Et des conclusions."
+    repliques-en:
+      - "I am waiting for letters. And conclusions."
+  pelerin_essai:
+    nom: "Pèlerin"
+    nom-en: "Pilgrim"
+    titre: "À escorter"
+    titre-en: "To escort"
+    couleur: "#C9D6A3"
+    type: MANNEQUIN
+    visage: sunny
+    point: pelerin_essai
+    repliques:
+      - "Je n'irai pas seul jusqu'au col."
+    repliques-en:
+      - "I will not go to the pass alone."
+
+monstres:
+  essai_rodeur:
+    nom: "Rôdeur d'essai"
+    type: HUSK
+    pv: 0.6
+    degats: 0.6
+    vitesse: 1
+  essai_garde:
+    nom: "Garde d'essai"
+    type: VINDICATOR
+    pv: 1
+    degats: 0.8
+    vitesse: 0.9
+  essai_sentinelle:
+    nom: "Sentinelle d'essai"
+    type: HUSK
+    taille: 1.15
+    pv: 1
+    degats: 0.8
+    vitesse: 0.9
+
+apparitions:
+  essai_gardes_camp:
+    point: garde_camp
+    monstre: essai_garde
+    niveau: 3
+    nombre: 3
+    rayon: 4
+  essai_sentinelles:
+    point: deguise_camp
+    monstre: essai_sentinelle
+    niveau: 3
+    nombre: 4
+    rayon: 5
+
+points-relatifs:
+  essayeur: [0, 0, 0]
+  messager_essai: [4, 0, 6]
+  pelerin_essai: [6, 0, -4]
+  escorte_1: [20, 0, -4]
+  escorte_2: [20, 0, -20]
+  escorte_fin: [36, 0, -20]
+  defense_porte: [-20, 0, 0]
+  defense_entree: [-36, 0, 0]
+  indice_1: [-8, 0, 14]
+  indice_2: [-14, 0, 20]
+  indice_3: [-4, 0, 24]
+  infiltre_depart: [10, 0, 26]
+  garde_camp: [20, 0, 36]
+  infiltre_but: [30, 0, 44]
+  trace_1: [-18, 0, -12]
+  trace_2: [-28, 0, -20]
+  trace_3: [-24, 0, -32]
+  trace_fin: [-40, 0, -40]
+  chrono_but: [0, 0, -34]
+  deguise_camp: [28, 0, 14]
+  deguise_but: [34, 0, 12]
+  survie_centre: [-30, 0, 40]
+  transport_depart: [8, 0, -10]
+  transport_but: [44, 0, 0]
+
+quetes:
+
+  # ================================================================ ESSAIS — UNE QUÊTE PAR TYPE
+
+  t_escorte:
+    nom: "Essai : escorte"
+    nom-en: "Test: escort"
+    admin: true
+    niveau: 1
+    donneur: essayeur
+    resume:
+      - "Escorter le Pèlerin jusqu'au col."
+    resume-en:
+      - "Escort the Pilgrim to the pass."
+    offre:
+      - "essayeur: Le Pèlerin part vers le col. Deux embuscades l'attendent. S'il tombe, il repart du début."
+    offre-en:
+      - "essayeur: The Pilgrim is heading for the pass. Two ambushes await. If he falls, he starts over."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter le Pèlerin"
+        texte-en: "Escort the Pilgrim"
+        pnj: pelerin_essai
+        chemin: [escorte_1, escorte_2, escorte_fin]
+        monstres: [essai_rodeur]
+        nombre: 2
+        vagues: 2
+        pv: 80
+        degats: 4
+        apres:
+          - "pelerin_essai: Merci. Je n'y serais jamais arrivé seul."
+        apres-en:
+          - "pelerin_essai: Thank you. I would never have made it alone."
+    recompenses:
+      xp: 50
+      or: 10
+
+  t_defense:
+    nom: "Essai : défense"
+    nom-en: "Test: defence"
+    admin: true
+    niveau: 1
+    donneur: essayeur
+    resume:
+      - "Tenir la porte pendant trois vagues."
+    resume-en:
+      - "Hold the gate for three waves."
+    offre:
+      - "essayeur: La porte, à l'ouest. Trois vagues. Si elle tombe, on recommence."
+    offre-en:
+      - "essayeur: The gate, to the west. Three waves. If it falls, we start again."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre la porte"
+        texte-en: "Defend the gate"
+        point: defense_porte
+        monstres: [essai_rodeur]
+        nombre: 3
+        vagues: 3
+        apparition: defense_entree
+        pv: 150
+        degats: 5
+        cible: "La porte"
+        cible-en: "The gate"
+        apres:
+          - "La dernière vague se disperse. La porte tient."
+        apres-en:
+          - "The last wave scatters. The gate holds."
+    recompenses:
+      xp: 50
+      or: 10
+
+  t_choix:
+    nom: "Essai : dialogue à choix"
+    nom-en: "Test: choice dialogue"
+    admin: true
+    niveau: 1
+    donneur: essayeur
+    resume:
+      - "Répondre à l'Essayeur. La suite dépend de la réponse."
+    resume-en:
+      - "Answer the Tester. What follows depends on the answer."
+    offre:
+      - "essayeur: Une question, et votre réponse comptera."
+    offre-en:
+      - "essayeur: One question, and your answer will matter."
+    etapes:
+      - type: CHOIX
+        texte: "Répondre à l'Essayeur"
+        texte-en: "Answer the Tester"
+        pnj: essayeur
+        choix: essai-pacte
+        question: "Que faites-vous ?"
+        question-en: "What do you do?"
+        reponses:
+          - id: aider
+            texte: "Je l'aide."
+            texte-en: "I help him."
+            reponse:
+              - "essayeur: Généreux. On s'en souviendra."
+            reponse-en:
+              - "essayeur: Generous. It will be remembered."
+            xp: 20
+          - id: refuser
+            texte: "Je le laisse."
+            texte-en: "I leave him."
+            reponse:
+              - "essayeur: Prudent. On s'en souviendra aussi."
+            reponse-en:
+              - "essayeur: Careful. That will be remembered too."
+            or: 15
+        dialogue:
+          - "essayeur: Un inconnu demande de l'aide. Il porte la marque de l'autre camp."
+        dialogue-en:
+          - "essayeur: A stranger asks for help. He bears the mark of the other side."
+      - type: PARLER
+        texte: "Annoncer votre aide à la Messagère"
+        texte-en: "Tell the Messenger you helped"
+        pnj: messager_essai
+        dialogue:
+          - "messager_essai: Vous l'avez aidé ? Alors une suite vous attend chez l'Essayeur."
+        dialogue-en:
+          - "messager_essai: You helped him? Then a follow-up awaits you with the Tester."
+        si: "essai-pacte=aider"
+      - type: PARLER
+        texte: "Rendre compte à la Messagère"
+        texte-en: "Report to the Messenger"
+        pnj: messager_essai
+        dialogue:
+          - "messager_essai: Vous l'avez laissé. Pas de suite, cette fois."
+        dialogue-en:
+          - "messager_essai: You left him. No follow-up this time."
+        si: "essai-pacte=refuser"
+    recompenses:
+      xp: 50
+      or: 10
+
+  t_choix_suite:
+    nom: "Essai : suite du choix"
+    nom-en: "Test: choice follow-up"
+    admin: true
+    niveau: 1
+    requiert: [t_choix, "choix:essai-pacte=aider"]
+    donneur: essayeur
+    resume:
+      - "Seulement si vous avez aidé l'inconnu."
+    resume-en:
+      - "Only if you helped the stranger."
+    offre:
+      - "essayeur: L'inconnu vous remercie. Cette quête n'existe que parce que vous l'avez aidé."
+    offre-en:
+      - "essayeur: The stranger thanks you. This quest only exists because you helped him."
+    etapes:
+      - type: PARLER
+        texte: "Recevoir le remerciement"
+        texte-en: "Receive the thanks"
+        pnj: essayeur
+        dialogue:
+          - "essayeur: Branche vérifiée."
+        dialogue-en:
+          - "essayeur: Branch checked."
+    recompenses:
+      xp: 20
+      or: 5
+
+  t_livraison:
+    nom: "Essai : livraison"
+    nom-en: "Test: delivery"
+    admin: true
+    niveau: 1
+    donneur: essayeur
+    resume:
+      - "Porter une lettre à la Messagère."
+    resume-en:
+      - "Carry a letter to the Messenger."
+    offre:
+      - "essayeur: Cette lettre, pour la Messagère. Elle ne se jette pas, et si vous la perdez, on vous en refait une."
+    offre-en:
+      - "essayeur: This letter, for the Messenger. It cannot be thrown away, and if you lose it, you get another."
+    etapes:
+      - type: LIVRER
+        texte: "Remettre la lettre à la Messagère"
+        texte-en: "Deliver the letter to the Messenger"
+        pnj: messager_essai
+        materiau: PAPER
+        objet: "Lettre de l'Essayeur"
+        objet-en: "The Tester's letter"
+        dialogue:
+          - "messager_essai: Une lettre ! Merci."
+        dialogue-en:
+          - "messager_essai: A letter! Thank you."
+    recompenses:
+      xp: 50
+      or: 10
+
+  t_enquete:
+    nom: "Essai : enquête"
+    nom-en: "Test: investigation"
+    admin: true
+    niveau: 1
+    donneur: essayeur
+    resume:
+      - "Trois indices, dans le désordre, puis conclure."
+    resume-en:
+      - "Three clues, in any order, then conclude."
+    offre:
+      - "essayeur: Trois indices au sud. L'ordre n'a pas d'importance. Puis allez conclure chez la Messagère."
+    offre-en:
+      - "essayeur: Three clues to the south. Order does not matter. Then go and conclude with the Messenger."
+    etapes:
+      - type: ENQUETE
+        texte: "Examiner les indices"
+        texte-en: "Examine the clues"
+        pnj: messager_essai
+        indices:
+          - point: indice_1
+            texte: "Une empreinte de botte"
+            texte-en: "A boot print"
+            apres:
+              - "Une botte ferrée. Lourde."
+            apres-en:
+              - "An iron-shod boot. Heavy."
+          - point: indice_2
+            texte: "Un bout de tissu"
+            texte-en: "A scrap of cloth"
+            apres:
+              - "Du tissu teint en rouge. L'uniforme d'une garde."
+            apres-en:
+              - "Cloth dyed red. A guard's uniform."
+          - point: indice_3
+            texte: "Une lame brisée"
+            texte-en: "A broken blade"
+            apres:
+              - "La lame porte un poinçon."
+            apres-en:
+              - "The blade bears a hallmark."
+        dialogue:
+          - "joueur: Une garde, en bottes ferrées, lame brisée."
+          - "messager_essai: Bien vu. Enquête close."
+        dialogue-en:
+          - "joueur: A guard, in iron-shod boots, broken blade."
+          - "messager_essai: Well spotted. Case closed."
+    recompenses:
+      xp: 50
+      or: 10
+
+  t_infiltration:
+    nom: "Essai : infiltration"
+    nom-en: "Test: infiltration"
+    admin: true
+    niveau: 1
+    donneur: essayeur
+    resume:
+      - "Traverser le camp sans être vu."
+    resume-en:
+      - "Cross the camp unseen."
+    offre:
+      - "essayeur: Des gardes au sud-est. Passez derrière eux, accroupi. S'ils vous voient, retour au départ."
+    offre-en:
+      - "essayeur: Guards to the south-east. Go behind them, sneaking. If they see you, back to the start."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre l'entrée du camp"
+        texte-en: "Reach the camp entrance"
+        point: infiltre_depart
+        rayon: 3
+      - type: INFILTRER
+        texte: "Traverser le camp sans être vu"
+        texte-en: "Cross the camp unseen"
+        point: infiltre_but
+        depart: infiltre_depart
+        monstres: [essai_garde]
+        vue: 10
+        rayon: 3
+        apres:
+          - "Personne ne vous a vu."
+        apres-en:
+          - "Nobody saw you."
+    recompenses:
+      xp: 50
+      or: 10
+
+  t_pistage:
+    nom: "Essai : pistage"
+    nom-en: "Test: tracking"
+    admin: true
+    niveau: 1
+    donneur: essayeur
+    resume:
+      - "Suivre les traces au sol."
+    resume-en:
+      - "Follow the tracks on the ground."
+    offre:
+      - "essayeur: Des traces partent au nord-ouest. Suivez-les, une à une."
+    offre-en:
+      - "essayeur: Tracks lead north-west. Follow them, one by one."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les traces"
+        texte-en: "Follow the tracks"
+        traces: [trace_1, trace_2, trace_3, trace_fin]
+        apres:
+          - "Les traces s'arrêtent ici. Quelque chose a été enterré."
+        apres-en:
+          - "The tracks stop here. Something was buried."
+    recompenses:
+      xp: 50
+      or: 10
+
+  t_chrono:
+    nom: "Essai : contre la montre"
+    nom-en: "Test: against the clock"
+    admin: true
+    niveau: 1
+    donneur: essayeur
+    resume:
+      - "Courir au nord en 30 secondes."
+    resume-en:
+      - "Run north within 30 seconds."
+    offre:
+      - "essayeur: Au nord, une balise. Trente secondes. Partez !"
+    offre-en:
+      - "essayeur: To the north, a beacon. Thirty seconds. Go!"
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la balise à temps"
+        texte-en: "Reach the beacon in time"
+        point: chrono_but
+        rayon: 3
+        apres:
+          - "Juste à temps."
+        apres-en:
+          - "Just in time."
+        chrono: 30
+        echec:
+          - "essayeur: Trop lent. On recommence."
+        echec-en:
+          - "essayeur: Too slow. Again."
+    recompenses:
+      xp: 50
+      or: 10
+
+  t_deguisement:
+    nom: "Essai : déguisement"
+    nom-en: "Test: disguise"
+    admin: true
+    niveau: 1
+    donneur: essayeur
+    resume:
+      - "Entrer dans le camp des sentinelles, déguisé."
+    resume-en:
+      - "Enter the sentries' camp in disguise."
+    offre:
+      - "essayeur: Portez cette tenue : les sentinelles vous laisseront passer. Frappez-en une, et le déguisement tombe."
+    offre-en:
+      - "essayeur: Wear this outfit: the sentries will let you through. Strike one, and the disguise is blown."
+    etapes:
+      - type: DEGUISEMENT
+        texte: "Entrer dans le camp déguisé"
+        texte-en: "Enter the camp in disguise"
+        point: deguise_but
+        monstres: [essai_sentinelle]
+        materiau: LEATHER_CHESTPLATE
+        couleur: "#6B4A2B"
+        objet: "Tenue de sentinelle"
+        objet-en: "Sentry outfit"
+        apres:
+          - "Personne ne vous a reconnu."
+        apres-en:
+          - "Nobody recognised you."
+    recompenses:
+      xp: 50
+      or: 10
+
+  t_survie:
+    nom: "Essai : survie"
+    nom-en: "Test: survival"
+    admin: true
+    niveau: 1
+    donneur: essayeur
+    resume:
+      - "Tenir dans une zone qui se resserre, puis qui brûle."
+    resume-en:
+      - "Hold out in a zone that shrinks, then burns."
+    offre:
+      - "essayeur: Au sud-ouest, un cercle. Il va se resserrer. Puis le sol va brûler. Ne mourez pas."
+    offre-en:
+      - "essayeur: To the south-west, a circle. It will shrink. Then the ground will burn. Do not die."
+    etapes:
+      - type: SURVIE
+        texte: "Tenir dans le cercle"
+        texte-en: "Hold out in the circle"
+        point: survie_centre
+        rayon: 14
+        duree: 30
+        mode: resserre
+        rayon-fin: 4
+        degats: 5
+      - type: SURVIE
+        texte: "Esquiver les foyers"
+        texte-en: "Dodge the fires"
+        point: survie_centre
+        rayon: 12
+        duree: 30
+        mode: brule
+        degats: 5
+        monstres: [essai_rodeur]
+        nombre: 1
+        intervalle: 15
+        apres:
+          - "Le feu retombe."
+        apres-en:
+          - "The fire dies down."
+    recompenses:
+      xp: 50
+      or: 10
+
+  t_transport:
+    nom: "Essai : transport"
+    nom-en: "Test: transport"
+    admin: true
+    niveau: 1
+    donneur: essayeur
+    resume:
+      - "Ramener une caisse à dos de monture."
+    resume-en:
+      - "Bring back a crate on a mount."
+    offre:
+      - "essayeur: Une caisse au nord-est, à charger sur votre monture. Un coup, ou pied à terre, et elle tombe."
+    offre-en:
+      - "essayeur: A crate to the north-east, to load on your mount. One hit, or getting off, and it falls."
+    etapes:
+      - type: TRANSPORT
+        texte: "Ramener la caisse à dos de monture"
+        texte-en: "Bring the crate back on a mount"
+        point: transport_but
+        depart: transport_depart
+        materiau: BARREL
+        rayon: 4
+        objet: "Caisse de vivres"
+        objet-en: "Supply crate"
+        apres:
+          - "La caisse arrive intacte."
+        apres-en:
+          - "The crate arrives intact."
+    recompenses:
+      xp: 50
+      or: 10

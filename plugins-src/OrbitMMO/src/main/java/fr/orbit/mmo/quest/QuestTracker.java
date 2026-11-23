@@ -84,6 +84,8 @@ final class QuestTracker {
             case DISTANCE -> "<#8C96A3>  " + ARROWS.charAt(Math.floorMod(r.arrow(), 8)) + " " + t;
             case HERE -> "<#5EE89A>  " + t;
             case ELSEWHERE, MORE -> "<#8C96A3>  " + t;
+            case STATUS -> "<#E8C77A>  " + t;
+            case ALERT -> "<#FF8A7A>  " + t;
             case SEPARATOR -> " ";
         };
     }

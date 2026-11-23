@@ -233,8 +233,9 @@ public final class TownMenus {
         Menu m = new Menu(3, title("#B36BFF", "Échoppe de Mirelle", d)).skin("Alchimie", "Mirelle", Menus.gold(d));
         product(plugin, m, p, d, 10, Items.potion(1), Items.POTION_PRICE, "Rend 35 % des PV en 5 secondes.", n -> Items.potion(n), TownMenus::alchemist);
         product(plugin, m, p, d, 11, Items.manaPotion(1), Items.MANA_POTION_PRICE, "Rend 50 % de votre ressource.", n -> Items.manaPotion(n), TownMenus::alchemist);
-        product(plugin, m, p, d, 12, Items.tpCrystal(), Items.TP_CRYSTAL_PRICE, "Ramène en ville (clic droit).",
-                n -> amount(Items.tpCrystal(), n), TownMenus::alchemist);
+        // Le cristal de téléportation n'est plus vendu : réutilisable, chacun a le sien (l'aubergiste le lie et le rend).
+        m.set(12, Items.icon(Material.PRISMARINE_CRYSTALS, "<#7FD4FF>Cristal de téléportation",
+                "<#8C96A3>Réutilisable : chacun a le sien.", "<#5A6270>L'aubergiste le lie à son auberge."), null);
         if (d.level >= 5) {
             product(plugin, m, p, d, 13, Items.healCrystal(), Items.HEAL_CRYSTAL_PRICE, "Soin d'urgence (clic droit).",
                     n -> amount(Items.healCrystal(), n), TownMenus::alchemist);

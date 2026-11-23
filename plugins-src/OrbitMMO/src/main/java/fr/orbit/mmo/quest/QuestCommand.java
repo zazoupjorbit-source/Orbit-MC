@@ -96,6 +96,28 @@ public final class QuestCommand implements TabExecutor {
         }
         String sub = args[1].toLowerCase(Locale.ROOT);
         switch (sub) {
+            case "poser" -> {
+                // Pose d'un coup les points relatifs d'un fichier de quêtes (zone d'essai) autour de l'admin.
+                Map<String, Map<String, double[]>> rel = svc.registry().relative();
+                if (!(sender instanceof Player p) || args.length < 3 || !rel.containsKey(args[2])) {
+                    Text.msg(sender, "<#8C96A3>/quetes admin poser <fichier> <white>— pose ses points autour de vous ; fichiers : "
+                            + (rel.isEmpty() ? "aucun" : String.join(", ", rel.keySet())));
+                    return true;
+                }
+                Location base = p.getLocation();
+                int n = 0;
+                for (Map.Entry<String, double[]> e : rel.get(args[2]).entrySet()) {
+                    double[] d = e.getValue();
+                    double x = base.getX() + d[0];
+                    double z = base.getZ() + d[2];
+                    double y = QuestTrials.ground(base.getWorld(), x, z, base.getY() + d[1] + 3);
+                    Location l = new Location(base.getWorld(), Math.floor(x) + 0.5,
+                            Double.isNaN(y) ? base.getY() + d[1] : y, Math.floor(z) + 0.5, 0f, 0f);
+                    svc.points().set(e.getKey(), l);
+                    n++;
+                }
+                Text.msg(p, "<#5EE89A>" + n + " point(s) de <white>" + Text.esc(args[2]) + "</white> posés autour de vous.");
+            }
             case "point" -> {
                 if (!(sender instanceof Player p) || args.length < 3) {
                     Text.msg(sender, "<#8C96A3>/quetes admin point <nom> <white>— pose le point à votre position");
@@ -241,6 +263,7 @@ public final class QuestCommand implements TabExecutor {
         Text.msg(s, "<#FFD66E>Quêtes — administration");
         String[][] lines = {
                 {"point <nom>", "pose un point à votre position"},
+                {"poser <fichier>", "pose tous les points relatifs d'un fichier autour de vous (zone d'essai)"},
                 {"supprimer <nom>", "retire un point"},
                 {"points", "liste des points posés"},
                 {"tp <nom>", "se téléporter à un point"},

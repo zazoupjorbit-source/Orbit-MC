@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {"layer0": "orbitcasino:item/card_13h"},
+  "gui_light": "front",
+  "display": {
+    "gui": {"rotation": [0, 0, 0], "translation": [0.00, 0, 0], "scale": [2.050, 2.050, 1]}
+  }
+}

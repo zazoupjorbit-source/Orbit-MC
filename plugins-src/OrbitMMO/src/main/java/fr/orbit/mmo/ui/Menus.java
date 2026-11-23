@@ -237,7 +237,7 @@ public final class Menus {
         p.closeInventory();
         plugin.progression().learnNew(p, d, java.util.Set.of("*"));
         Items.give(p, Items.potion(5));
-        Items.give(p, Items.tpCrystal());
+        Items.give(p, plugin.inns().crystal(p, d));
         plugin.playerListener().prepareBody(p, d);
         Fx.teleport(p.getLocation());
         // Départ : là où commence la quête d'introduction de sa faction s'il y en a une (elle mène ensuite à la capitale),
@@ -316,8 +316,11 @@ public final class Menus {
                 t -> party(plugin, p));
         m.set(15, Items.icon(Material.EMERALD, "<#FFD66E><b>Hôtel des ventes</b>", "<#8C96A3>Achat et vente entre joueurs,",
                 "<#8C96A3>(le butin se revend au forgeron)", "<#5A6270>Uniquement en ville"), t -> MarketMenus.open(plugin, p));
-        m.set(16, Items.icon(Material.PRISMARINE_CRYSTALS, "<#7FD4FF><b>Retour en ville</b>",
-                "<#8C96A3>Utilise un cristal de téléportation."), t -> {
+        List<String> crystalLore = new java.util.ArrayList<>();
+        crystalLore.add("<#8C96A3>Utilise votre cristal de téléportation.");
+        crystalLore.addAll(plugin.inns().status(d));
+        crystalLore.add("<#5A6270>Un aubergiste le lie à son auberge.");
+        m.set(16, Items.icon(Material.PRISMARINE_CRYSTALS, "<#7FD4FF><b>Retour à l'auberge</b>", crystalLore), t -> {
             p.closeInventory();
             useTpCrystal(plugin, p, d);
         });
@@ -362,18 +365,13 @@ public final class Menus {
 
     private static void useTpCrystal(OrbitMMO plugin, Player p, PlayerData d) {
         ItemStack[] contents = p.getInventory().getContents();
-        for (int i = 0; i < contents.length; i++) {
-            if ("tp_crystal".equals(Items.type(contents[i]))) {
-                if (System.currentTimeMillis() - d.lastCombat < 5000) {
-                    Text.msg(p, "<#FF5C5C>Impossible en plein combat.");
-                    return;
-                }
-                contents[i].setAmount(contents[i].getAmount() - 1);
-                plugin.hud().flash(p, "<#7FD4FF><b>Téléportation !</b> <#D7DCE2>" + Text.esc(plugin.floors().recall(p, d)), 40);
+        for (ItemStack it : contents) {
+            if ("tp_crystal".equals(Items.type(it))) {
+                plugin.inns().use(p, d, it);
                 return;
             }
         }
-        Text.msg(p, "<#FF5C5C>Aucun cristal de téléportation (en vente chez l'alchimiste).");
+        Text.msg(p, "<#FF5C5C>Vous n'avez plus votre cristal de téléportation : un aubergiste vous le rend.");
     }
 
     static ItemStack head(Player p, String name, List<String> lore) {

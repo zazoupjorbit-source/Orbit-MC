@@ -6,6 +6,8 @@ import fr.orbit.mmo.item.Items;
 import fr.orbit.mmo.mob.MobKilledEvent;
 import fr.orbit.mmo.mob.MobState;
 import fr.orbit.mmo.player.PlayerData;
+import fr.orbit.mmo.quest.QuestDefs.Choice;
+import fr.orbit.mmo.quest.QuestDefs.Clue;
 import fr.orbit.mmo.quest.QuestDefs.ItemReward;
 import fr.orbit.mmo.quest.QuestDefs.Line;
 import fr.orbit.mmo.quest.QuestDefs.NpcDef;
@@ -72,6 +74,8 @@ public final class QuestService implements Listener {
     private final QuestStore store;
     private final Dialogue dialogue;
     private final QuestNpcs npcs;
+    /** Épreuves en direct des types du 23/11 (escorte, défense, survie…) et objets de quête. */
+    private final QuestTrials trials;
     private final QuestTracker tracker = new QuestTracker();
     /** Traînée de guidage vers l'objectif de la quête suivie. */
     private final QuestGuide trail = new QuestGuide(this);
@@ -89,22 +93,26 @@ public final class QuestService implements Listener {
         this.store = new QuestStore(plugin);
         this.dialogue = new Dialogue(plugin, registry, this::lang);
         this.npcs = new QuestNpcs(plugin, registry, points);
+        this.trials = new QuestTrials(plugin, this, npcs);
     }
 
     public void enable() {
         registry.load();
         points.load();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        plugin.getServer().getPluginManager().registerEvents(trials, plugin);
         for (World w : Bukkit.getWorlds()) {
             npcs.purge(w.getEntities());
         }
         plugin.getServer().getScheduler().runTaskTimer(plugin, this::tick, 20L, 10L);
         plugin.getServer().getScheduler().runTaskTimer(plugin, trail::tick, 40L, 4L);
+        plugin.getServer().getScheduler().runTaskTimer(plugin, trials::tick, 30L, QuestTrials.PERIOD);
         plugin.getServer().getScheduler().runTaskTimer(plugin, store::saveDirty, 1200L, 1200L);
     }
 
     public void shutdown() {
         dialogue.cancelAll();
+        trials.shutdown();
         tracker.hideAll();
         npcs.removeAll();
         for (List<MobState> list : spawned.values()) {
@@ -198,11 +206,18 @@ public final class QuestService implements Listener {
 
     /** Objectifs vérifiés en continu : atteindre un lieu, lancer un sort. */
     private void checkSteps(Player p, PlayerData d, QuestProgress pr) {
+        if (ticks % 4 == 0) {
+            trials.checkItems(p, pr);
+        }
         for (Map.Entry<String, Active> e : new ArrayList<>(pr.active.entrySet())) {
             QuestDef q = registry.quest(e.getKey());
             StepDef s = step(q, e.getValue());
             if (s == null) {
                 continue;
+            }
+            if (e.getValue().deadline > 0 && System.currentTimeMillis() > e.getValue().deadline) {
+                timeUp(p, q, e.getValue(), s);
+                return;
             }
             if (s.type() == StepType.ATTEINDRE) {
                 Location at = points.location(s.point());
@@ -225,10 +240,26 @@ public final class QuestService implements Listener {
     private void guide(Player p, QuestProgress pr) {
         for (Map.Entry<String, Active> e : pr.active.entrySet()) {
             StepDef s = step(registry.quest(e.getKey()), e.getValue());
+            if (s != null && s.type() == StepType.ENQUETE) {
+                // Indices pas encore examinés : une lueur sur chacun.
+                for (Clue c : s.x().clues()) {
+                    Location at = e.getValue().marks.contains(c.id()) ? null : points.location(c.point());
+                    if (at != null && at.getWorld().equals(p.getWorld()) && at.distanceSquared(p.getLocation()) <= 48 * 48) {
+                        Location fx = at.clone().add(0, 1, 0);
+                        p.spawnParticle(Particle.END_ROD, fx, 3, 0.2, 0.4, 0.2, 0.01);
+                        p.spawnParticle(Particle.DUST, fx, 4, 0.3, 0.4, 0.3, 0, new Particle.DustOptions(Fx.color("#9FD8FF"), 1.1f));
+                    }
+                }
+                continue;
+            }
             if (s == null || s.point() == null) {
                 continue;
             }
-            if (s.type() != StepType.ATTEINDRE && s.type() != StepType.INTERAGIR && s.type() != StepType.ANCRAGE) {
+            boolean area = switch (s.type()) {
+                case ATTEINDRE, DEGUISEMENT, INFILTRER, TRANSPORT -> true;
+                default -> false;
+            };
+            if (!area && s.type() != StepType.INTERAGIR && s.type() != StepType.ANCRAGE) {
                 continue;
             }
             Location at = points.location(s.point());
@@ -236,7 +267,7 @@ public final class QuestService implements Listener {
                 continue;
             }
             Location c = at.clone().add(0, 1, 0);
-            if (s.type() == StepType.ATTEINDRE) {
+            if (area) {
                 p.spawnParticle(Particle.END_ROD, c, 4, s.radius() * 0.3, 0.8, s.radius() * 0.3, 0.01);
             } else {
                 p.spawnParticle(Particle.END_ROD, c, 6, 0.25, 0.6, 0.25, 0.02);
@@ -247,18 +278,69 @@ public final class QuestService implements Listener {
     }
 
     private void markers(Player p, PlayerData d, QuestProgress pr) {
-        Set<String> talk = new HashSet<>();
+        // « ? » : vert si lui parler termine la quête (dernière étape), sinon doré (principale) ou bleu (annexe).
+        Map<String, QuestNpcs.Mark> talk = new java.util.HashMap<>();
         for (Map.Entry<String, Active> e : pr.active.entrySet()) {
-            StepDef s = step(registry.quest(e.getKey()), e.getValue());
-            if (s != null && s.type() == StepType.PARLER && s.npc() != null) {
-                talk.add(s.npc());
+            QuestDef q = registry.quest(e.getKey());
+            StepDef s = step(q, e.getValue());
+            if (s == null || s.npc() == null) {
+                continue;
+            }
+            boolean waiting = switch (s.type()) {
+                case PARLER, CHOIX, LIVRER -> true;
+                case ENQUETE -> cluesFound(s, e.getValue()) >= s.x().clues().size();
+                default -> false;
+            };
+            if (waiting) {
+                QuestNpcs.Mark m = e.getValue().step >= q.steps().size() - 1 ? QuestNpcs.Mark.TURN_IN
+                        : registry.isSide(q.id()) ? QuestNpcs.Mark.TALK_SIDE : QuestNpcs.Mark.TALK_MAIN;
+                talk.merge(s.npc(), m, (a, b) -> a.ordinal() >= b.ordinal() ? a : b);
             }
         }
         for (String id : npcs.liveIds()) {
-            QuestNpcs.Mark m = talk.contains(id) ? QuestNpcs.Mark.TALK
-                    : offerOf(d, pr, id) != null ? QuestNpcs.Mark.OFFER : QuestNpcs.Mark.NONE;
-            npcs.mark(p, id, m);
+            QuestNpcs.Mark m = talk.get(id);
+            npcs.mark(p, id, m != null ? m : offerMark(d, pr, id));
         }
+    }
+
+    /** « ! » au-dessus d'un donneur : doré s'il a une quête principale à proposer, bleu s'il n'a que des annexes. */
+    private QuestNpcs.Mark offerMark(PlayerData d, QuestProgress pr, String npcId) {
+        QuestNpcs.Mark best = QuestNpcs.Mark.NONE;
+        for (QuestDef q : registry.quests()) {
+            if (!q.auto() && npcId.equals(q.giver()) && available(d, pr, q) && ready(q)) {
+                if (!registry.isSide(q.id())) {
+                    return QuestNpcs.Mark.OFFER_MAIN;
+                }
+                best = QuestNpcs.Mark.OFFER_SIDE;
+            }
+        }
+        return best;
+    }
+
+    /**
+     * Un PNJ de quête sur la mini-carte : position et couleur de son marqueur pour ce joueur
+     * (« principale », « annexe », « finie » ou « aucun »).
+     */
+    public record MapNpc(Location at, String kind) {
+    }
+
+    /** Les PNJ de quête posés dans le monde du joueur, avec la couleur du marqueur qu'il voit au-dessus d'eux. */
+    public java.util.List<MapNpc> mapNpcs(Player p) {
+        java.util.List<MapNpc> out = new java.util.ArrayList<>();
+        for (String id : npcs.liveIds()) {
+            Location at = npcs.liveLocation(id);
+            if (at == null || at.getWorld() != p.getWorld()) {
+                continue;
+            }
+            String kind = switch (npcs.shown(p.getUniqueId(), id)) {
+                case OFFER_MAIN, TALK_MAIN -> "principale";
+                case OFFER_SIDE, TALK_SIDE -> "annexe";
+                case TURN_IN -> "finie";
+                case NONE -> "aucun";
+            };
+            out.add(new MapNpc(at, kind));
+        }
+        return out;
     }
 
     // ------------------------------------------------------------------ Règles
@@ -278,15 +360,102 @@ public final class QuestService implements Listener {
         if (q.faction() != null && q.faction() != d.faction) {
             return false;
         }
+        if (q.admin()) {
+            Player p = Bukkit.getPlayer(d.id);
+            if (p == null || !p.hasPermission("orbitmmo.admin")) {
+                return false;
+            }
+        }
         if (d.level < q.level()) {
             return false;
         }
         for (String r : q.requires()) {
-            if (!pr.done.contains(r)) {
+            if (r.startsWith("choix:") || r.startsWith("!choix:")) {
+                if (!conditionMet(pr, r)) {
+                    return false;
+                }
+            } else if (!pr.done.contains(r)) {
                 return false;
             }
         }
         return true;
+    }
+
+    /**
+     * Condition sur une réponse de dialogue à choix : « choix=réponse », « !choix=réponse » (toute autre réponse, ou
+     * pas encore répondu), avec ou sans « choix: » devant. Vide = toujours vraie.
+     */
+    static boolean conditionMet(QuestProgress pr, String cond) {
+        if (cond == null || cond.isBlank()) {
+            return true;
+        }
+        String c = cond.trim();
+        boolean neg = c.startsWith("!");
+        if (neg) {
+            c = c.substring(1).trim();
+        }
+        if (c.startsWith("choix:")) {
+            c = c.substring(6).trim();
+        }
+        int i = c.indexOf('=');
+        if (i < 0) {
+            // « choix:pacte » seul : il suffit d'avoir répondu.
+            return neg != pr.choices.containsKey(c);
+        }
+        boolean eq = c.substring(i + 1).trim().equals(pr.choices.get(c.substring(0, i).trim()));
+        return neg != eq;
+    }
+
+    /** Indices de l'enquête déjà examinés (seuls comptent ceux de l'étape). */
+    static int cluesFound(StepDef s, Active a) {
+        int n = 0;
+        for (Clue c : s.x().clues()) {
+            if (a.marks.contains(c.id())) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /**
+     * Entrée dans l'étape a.step : saute les étapes dont la condition « si » n'est pas remplie, remet à zéro compteur,
+     * indices et chrono, remet les objets (livraison, tenue). Faux si la quête est au bout.
+     */
+    private boolean enter(Player p, QuestDef q, Active a) {
+        QuestProgress pr = store.get(p.getUniqueId());
+        while (a.step < q.steps().size() && !conditionMet(pr, q.steps().get(a.step).condition())) {
+            a.step++;
+        }
+        a.count = 0;
+        a.marks.clear();
+        a.deadline = 0;
+        pr.dirty = true;
+        trials.clear(p);
+        if (a.step >= q.steps().size()) {
+            return false;
+        }
+        trials.enter(p, q, q.steps().get(a.step), a.step);
+        return true;
+    }
+
+    /** Contre la montre perdu : texte d'échec, puis reprise de l'étape (ou de l'étape « reprise »). */
+    private void timeUp(Player p, QuestDef q, Active a, StepDef s) {
+        QuestProgress pr = store.get(p.getUniqueId());
+        a.deadline = 0;
+        if (s.retry() > 0) {
+            a.step = Math.min(q.steps().size() - 1, s.retry() - 1);
+        }
+        enter(p, q, a);
+        pr.lastGcdSeen = 0;
+        Text.title(p, "<#FF5C5C><b>" + ui(p, "Temps écoulé", "Time's up") + "</b>",
+                "<#A9B1BC>" + ui(p, "On recommence.", "Try again."), 5, 50, 15);
+        p.playSound(p.getLocation(), Sound.BLOCK_BELL_USE, 0.8f, 0.6f);
+        dialogue.play(p, s.fail(), () -> announce(p, q));
+    }
+
+    /** Le dialogue du joueur est en cours (les épreuves attendent qu'il finisse). */
+    boolean talking(Player p) {
+        return dialogue.busy(p);
     }
 
     /**
@@ -342,33 +511,48 @@ public final class QuestService implements Listener {
     public void start(Player p, QuestDef q) {
         QuestProgress pr = store.get(p.getUniqueId());
         pr.done.remove(q.id());
-        pr.active.put(q.id(), new Active(0, 0));
+        Active first = new Active(0, 0);
+        pr.active.put(q.id(), first);
         // La dernière quête prise est celle que la traînée de guidage suit (le journal permet d'en changer).
         pr.tracked = q.id();
         pr.dirty = true;
         pr.lastGcdSeen = 0;
+        boolean any = enter(p, q, first);
         Location dep = points.location(q.startPoint());
         if (dep != null) {
             p.teleport(dep);
         }
         Text.title(p, "<#FFD66E><b>" + Text.esc(tr(p, q.name())) + "</b>", "<#A9B1BC>" + ui(p, "Nouvelle quête", "New quest"), 10, 60, 20);
         p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.6f, 1.4f);
-        dialogue.play(p, q.intro(), () -> announce(p, q));
+        dialogue.play(p, q.intro(), () -> {
+            if (any) {
+                announce(p, q);
+            } else {
+                finish(p, q);
+            }
+        });
     }
 
     private void announce(Player p, QuestDef q) {
         QuestProgress pr = store.get(p.getUniqueId());
-        StepDef s = step(q, pr.active.get(q.id()));
+        Active a = pr.active.get(q.id());
+        StepDef s = step(q, a);
         if (s == null) {
             return;
         }
         Text.msg(p, "<#FFD66E>" + ui(p, "Objectif", "Objective") + "</#FFD66E> <#5A6270>·</#5A6270> <white>"
-                + Text.esc(objective(p, s, pr.active.get(q.id()))));
+                + Text.esc(objective(p, s, a)));
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 0.6f, 1.6f);
+        // Contre la montre : le compte à rebours part quand l'objectif est annoncé (après les dialogues).
+        if (s.timer() > 0 && a.deadline == 0) {
+            a.deadline = System.currentTimeMillis() + s.timer() * 1000L;
+            pr.dirty = true;
+            Text.msg(p, "<#FF8A5C>⏱ " + ui(p, "Vous avez ", "You have ") + QuestTrials.clock(s.timer()) + ui(p, " !", "!"));
+        }
     }
 
     /** L'étape en cours est réussie : texte d'après, puis étape suivante ou fin de la quête. */
-    private void completeStep(Player p, QuestDef q) {
+    void completeStep(Player p, QuestDef q) {
         QuestProgress pr = store.get(p.getUniqueId());
         Active a = pr.active.get(q.id());
         StepDef s = step(q, a);
@@ -378,11 +562,10 @@ public final class QuestService implements Listener {
         // On passe tout de suite à l'étape suivante (un objectif ne peut pas être validé deux fois),
         // le texte « après » est joué ensuite.
         a.step++;
-        a.count = 0;
-        pr.dirty = true;
+        boolean more = enter(p, q, a);
         pr.lastGcdSeen = 0;
         p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.7f, 1.2f);
-        if (a.step >= q.steps().size()) {
+        if (!more) {
             dialogue.play(p, s.after(), () -> finish(p, q));
         } else {
             plugin.hud().flash(p, "<#5EE89A>✔ " + Text.esc(tr(p, s.text())), 50);
@@ -398,6 +581,7 @@ public final class QuestService implements Listener {
         pr.done.add(q.id());
         pr.dirty = true;
         store.save(pr);
+        trials.removeQuestItems(p, q.id());
         dialogue.play(p, q.outro(), () -> reward(p, q));
     }
 
@@ -451,15 +635,22 @@ public final class QuestService implements Listener {
         QuestProgress pr = store.get(p.getUniqueId());
         dialogue.cancel(p.getUniqueId());
         pr.done.remove(q.id());
-        pr.active.put(q.id(), new Active(Math.max(0, Math.min(q.steps().size() - 1, step)), 0));
+        Active a = new Active(Math.max(0, Math.min(q.steps().size() - 1, step)), 0);
+        pr.active.put(q.id(), a);
         pr.dirty = true;
         pr.lastGcdSeen = 0;
-        announce(p, q);
+        if (enter(p, q, a)) {
+            announce(p, q);
+        } else {
+            finish(p, q);
+        }
     }
 
     public void reset(Player p, QuestDef q) {
         QuestProgress pr = store.get(p.getUniqueId());
         dialogue.cancel(p.getUniqueId());
+        trials.clear(p);
+        trials.removeQuestItems(p, q == null ? null : q.id());
         if (q == null) {
             pr.clear();
         } else {
@@ -480,6 +671,8 @@ public final class QuestService implements Listener {
         dialogue.cancel(id);
         trailTest.remove(id);
         tracker.hide(p);
+        trials.clear(p);
+        trials.removeQuestItems(p, null);
         QuestProgress pr = store.get(id);
         pr.clear();
         pr.faction = null;
@@ -499,13 +692,45 @@ public final class QuestService implements Listener {
         if (s.counted()) {
             return text + " (" + Math.min(a == null ? 0 : a.count, s.count()) + "/" + s.count() + ")";
         }
+        if (s.type() == StepType.ENQUETE && !s.x().clues().isEmpty()) {
+            return text + " (" + (a == null ? 0 : cluesFound(s, a)) + "/" + s.x().clues().size() + ")";
+        }
+        if (s.type() == StepType.PISTER && s.x().path().size() > 1) {
+            return text + " (" + Math.min(a == null ? 0 : a.count, s.x().path().size()) + "/" + s.x().path().size() + ")";
+        }
         return text;
+    }
+
+    /** Lieu à indiquer pour l'étape de ce joueur : suit ce qui bouge (escorté, cargaison tombée, prochain indice). */
+    Location target(Player p, String questId, StepDef s, Active a) {
+        Location live = trials.target(p, questId, s, a);
+        if (live != null) {
+            return live;
+        }
+        if (s.type() == StepType.ENQUETE && a != null) {
+            Location best = null;
+            for (Clue c : s.x().clues()) {
+                Location at = a.marks.contains(c.id()) ? null : points.location(c.point());
+                if (at != null && (best == null || (at.getWorld().equals(p.getWorld())
+                        && (!best.getWorld().equals(p.getWorld()) || at.distanceSquared(p.getLocation()) < best.distanceSquared(p.getLocation()))))) {
+                    best = at;
+                }
+            }
+            if (best != null || s.npc() == null) {
+                return best;
+            }
+            return npcs.location(s.npc());
+        }
+        return target(s);
     }
 
     /** Lieu à indiquer pour l'étape (PNJ, point, zone d'apparition). */
     Location target(StepDef s) {
-        if (s.type() == StepType.PARLER) {
+        if (s.type() == StepType.PARLER || s.type() == StepType.CHOIX || s.type() == StepType.LIVRER) {
             return npcs.location(s.npc());
+        }
+        if (s.type() == StepType.SURVIE || s.type() == StepType.DEFENSE) {
+            return points.location(s.point());
         }
         if (s.point() != null) {
             return points.location(s.point());
@@ -600,6 +825,25 @@ public final class QuestService implements Listener {
         return null;
     }
 
+    /**
+     * Lieu marqué sur la carte du joueur (hud/MiniMap) : objectif de la quête suivie, sinon le personnage le plus proche
+     * qui propose une quête. Même règle que la traînée, même quand la traînée est éteinte. Null : rien à marquer.
+     */
+    public Location mapTarget(Player p) {
+        PlayerData d = plugin.players().loaded(p.getUniqueId());
+        if (d == null || d.buildMode || !plugin.progression().valid(d)) {
+            return null;
+        }
+        QuestProgress pr = store.get(p.getUniqueId());
+        String id = trackedId(pr);
+        if (id == null) {
+            NpcDef giver = nextGiver(p, d, pr);
+            return giver == null ? null : npcs.location(giver.id());
+        }
+        StepDef s = step(registry.quest(id), pr.active.get(id));
+        return s == null ? null : target(p, id, s, pr.active.get(id));
+    }
+
     /** Lieu vers lequel mène la traînée du joueur ; null s'il n'y a rien à montrer. */
     Location trailTarget(Player p) {
         Location test = trailTest.get(p.getUniqueId());
@@ -621,7 +865,7 @@ public final class QuestService implements Listener {
             return giver == null ? null : npcs.location(giver.id());
         }
         StepDef s = step(registry.quest(id), pr.active.get(id));
-        return s == null ? null : target(s);
+        return s == null ? null : target(p, id, s, pr.active.get(id));
     }
 
     /** Personnage le plus proche qui propose une quête à ce joueur (même monde) ; null s'il n'y en a pas. */
@@ -747,7 +991,8 @@ public final class QuestService implements Listener {
             boolean main = skinned ? shown == 0 : mark && e.getKey().equals(followed);
             lines.add(QuestPanel.Row.of(main ? QuestPanel.Kind.QUEST_MAIN : QuestPanel.Kind.QUEST, tr(p, q.name())));
             addObjective(lines, objective(p, s, e.getValue()), skinned);
-            Location at = target(s);
+            trials.status(p, e.getKey(), s, e.getValue(), lines);
+            Location at = target(p, e.getKey(), s, e.getValue());
             if (at != null) {
                 if (at.getWorld().equals(p.getWorld())) {
                     lines.add(distanceRow(p, at));
@@ -883,6 +1128,7 @@ public final class QuestService implements Listener {
         dialogue.cancel(id);
         tracker.quit(id);
         trail.quit(id);
+        trials.quit(id);
         trailTest.remove(id);
         npcs.quit(id);
         store.unload(id);
@@ -932,6 +1178,9 @@ public final class QuestService implements Listener {
         for (Map.Entry<String, Active> en : new ArrayList<>(pr.active.entrySet())) {
             QuestDef q = registry.quest(en.getKey());
             StepDef s = step(q, en.getValue());
+            if (s != null && npcId.equals(s.npc()) && talkStep(p, q, s, en.getValue())) {
+                return;
+            }
             if (s != null && s.type() == StepType.PARLER && npcId.equals(s.npc())) {
                 int stepAt = en.getValue().step;
                 dialogue.play(p, s.dialogue(), () -> {
@@ -962,8 +1211,118 @@ public final class QuestService implements Listener {
         }
     }
 
-    /** Boutons « Accepter » / « Plus tard » dans le chat. */
+    /** Parler au PNJ d'une étape CHOIX, LIVRER ou ENQUETE. Vrai si le clic est traité. */
+    private boolean talkStep(Player p, QuestDef q, StepDef s, Active a) {
+        int stepAt = a.step;
+        Runnable done = () -> {
+            Active now = store.get(p.getUniqueId()).active.get(q.id());
+            if (now != null && now.step == stepAt) {
+                completeStep(p, q);
+            }
+        };
+        switch (s.type()) {
+            case CHOIX -> {
+                dialogue.play(p, s.dialogue(), () -> ask(p, q, stepAt));
+                return true;
+            }
+            case LIVRER -> {
+                if (!trials.hasQuestItem(p, q.id(), stepAt)) {
+                    trials.giveItem(p, q, s, stepAt, true);
+                    return true;
+                }
+                dialogue.play(p, s.dialogue(), () -> {
+                    Active now = store.get(p.getUniqueId()).active.get(q.id());
+                    if (now != null && now.step == stepAt && trials.takeQuestItem(p, q.id(), stepAt)) {
+                        p.playSound(p.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.8f, 0.9f);
+                        completeStep(p, q);
+                    }
+                });
+                return true;
+            }
+            case ENQUETE -> {
+                int found = cluesFound(s, a);
+                int total = s.x().clues().size();
+                if (found < total) {
+                    Text.msg(p, "<#9FD8FF>" + ui(p, "Il vous manque des indices", "You are missing clues")
+                            + " <white>(" + found + "/" + total + ")</white><#9FD8FF>.");
+                    return true;
+                }
+                dialogue.play(p, s.dialogue(), done);
+                return true;
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
+
+    /** Dialogue à choix : les réponses, cliquables dans le chat. */
+    private void ask(Player p, QuestDef q, int stepAt) {
+        QuestProgress pr = store.get(p.getUniqueId());
+        Active a = pr.active.get(q.id());
+        StepDef s = step(q, a);
+        if (s == null || a.step != stepAt || s.type() != StepType.CHOIX || !p.isOnline()) {
+            return;
+        }
+        ClickCallback.Options once = ClickCallback.Options.builder().uses(1).lifetime(Duration.ofMinutes(10)).build();
+        String question = s.x().question() == null ? ui(p, "Que répondez-vous ?", "What do you answer?") : tr(p, s.x().question());
+        p.sendMessage(Text.mm(" "));
+        Text.msg(p, "<#FFD66E>❖ " + Text.esc(question));
+        int i = 1;
+        for (Choice c : s.x().choices()) {
+            p.sendMessage(Text.mm("  <#7FD4FF><b>[" + i + "]</b></#7FD4FF> <white>" + Text.esc(tr(p, c.text())))
+                    .hoverEvent(HoverEvent.showText(Text.mm("<#D7DCE2>" + ui(p, "Répondre ceci", "Answer this"))))
+                    .clickEvent(ClickEvent.callback(au -> choose(p, q, stepAt, c), once)));
+            i++;
+        }
+        Text.title(p, "", "<#FFD66E>" + ui(p, "Cliquez une réponse dans le chat", "Click an answer in the chat"), 5, 50, 10);
+        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 0.6f, 1.2f);
+    }
+
+    private void choose(Player p, QuestDef q, int stepAt, Choice c) {
+        QuestProgress pr = store.get(p.getUniqueId());
+        Active a = pr.active.get(q.id());
+        StepDef s = step(q, a);
+        if (!p.isOnline() || s == null || a.step != stepAt || s.type() != StepType.CHOIX || dialogue.busy(p)) {
+            return;
+        }
+        pr.choices.put(s.x().choiceId(), c.id());
+        pr.dirty = true;
+        Text.msg(p, "<#7FD4FF>" + ui(p, "Vous", "You") + "</#7FD4FF> <#5A6270>»</#5A6270> <#D7DCE2>" + Text.esc(tr(p, c.text())));
+        PlayerData d = plugin.players().get(p);
+        if (c.xp() > 0) {
+            plugin.progression().addXp(p, d, c.xp());
+        }
+        if (c.gold() > 0) {
+            d.gold += c.gold();
+            Text.msg(p, "<#FFD66E>+" + Text.num(c.gold()) + " or");
+        }
+        dialogue.play(p, c.reply(), () -> {
+            Active now = store.get(p.getUniqueId()).active.get(q.id());
+            if (now != null && now.step == stepAt) {
+                completeStep(p, q);
+            }
+        });
+    }
+
+    /** Fenêtre d'offre de quête dans le HUD (créée au premier usage). */
+    private QuestOffer offers;
+
+    /** Fiche de quête dans le HUD (Maj = accepter) ; sans le pack, boutons « Accepter » / « Plus tard » dans le chat. */
     private void propose(Player p, QuestDef q) {
+        if (offers == null) {
+            offers = new QuestOffer(plugin, this);
+        }
+        Runnable acceptNow = () -> {
+            PlayerData d = plugin.players().get(p);
+            QuestProgress pr = store.get(p.getUniqueId());
+            if (p.isOnline() && available(d, pr, q) && ready(q) && !dialogue.busy(p)) {
+                start(p, q);
+            }
+        };
+        if (offers.show(p, q, acceptNow)) {
+            return;
+        }
         ClickCallback.Options once = ClickCallback.Options.builder().uses(1).lifetime(Duration.ofMinutes(10)).build();
         String title = Text.esc(tr(p, q.name()));
         Component accept = Text.mm("<#5EE89A><b>[ " + ui(p, "Accepter", "Accept") + " ]</b>")
@@ -996,6 +1355,9 @@ public final class QuestService implements Listener {
         for (Map.Entry<String, Active> en : new ArrayList<>(pr.active.entrySet())) {
             QuestDef q = registry.quest(en.getKey());
             StepDef s = step(q, en.getValue());
+            if (s != null && s.type() == StepType.ENQUETE && examine(p, e, pr, q, s, en.getValue())) {
+                return;
+            }
             if (s == null || (s.type() != StepType.INTERAGIR && s.type() != StepType.ANCRAGE)) {
                 continue;
             }
@@ -1017,6 +1379,47 @@ public final class QuestService implements Listener {
             completeStep(p, q);
             return;
         }
+    }
+
+    /** Enquête : clic droit près d'un indice pas encore examiné. Vrai si un indice a été trouvé. */
+    private boolean examine(Player p, PlayerInteractEvent e, QuestProgress pr, QuestDef q, StepDef s, Active a) {
+        for (Clue c : s.x().clues()) {
+            if (a.marks.contains(c.id())) {
+                continue;
+            }
+            Location at = points.location(c.point());
+            if (at == null || !near(p, at, c.radius() + 1.5)) {
+                continue;
+            }
+            if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                e.setCancelled(true);
+            }
+            a.marks.add(c.id());
+            pr.dirty = true;
+            Location fx = at.clone().add(0, 1, 0);
+            p.spawnParticle(Particle.END_ROD, fx, 30, 0.3, 0.6, 0.3, 0.08);
+            p.playSound(fx, Sound.ITEM_BOOK_PAGE_TURN, 1f, 1.1f);
+            int found = cluesFound(s, a);
+            int total = s.x().clues().size();
+            plugin.hud().flash(p, "<#9FD8FF>" + ui(p, "Indice", "Clue") + " <white>" + found + "/" + total
+                    + "</white> <#D7DCE2>" + Text.esc(tr(p, c.text())), 60);
+            int stepAt = a.step;
+            dialogue.play(p, c.after(), () -> {
+                Active now = store.get(p.getUniqueId()).active.get(q.id());
+                if (now == null || now.step != stepAt || cluesFound(s, now) < total) {
+                    return;
+                }
+                if (s.npc() == null) {
+                    completeStep(p, q);
+                } else {
+                    NpcDef n = registry.npc(s.npc());
+                    Text.msg(p, "<#9FD8FF>" + ui(p, "Tous les indices sont réunis.", "All clues found.") + "</#9FD8FF> <white>"
+                            + ui(p, "Allez voir ", "Go and see ") + Text.esc(n == null ? s.npc() : tr(p, n.name())) + ".");
+                }
+            });
+            return true;
+        }
+        return false;
     }
 
     @EventHandler

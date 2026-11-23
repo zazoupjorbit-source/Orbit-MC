@@ -46,6 +46,12 @@ public final class Keys {
     public static NamespacedKey RUNES;
     /** Objet rune : « feu:2 ». */
     public static NamespacedKey RUNE;
+    /** Item lié : UUID du propriétaire (cristal de téléportation). */
+    public static NamespacedKey OWNER;
+    /** Entité : aubergiste, id du lieu (capitale ou village) de son auberge. */
+    public static NamespacedKey INN;
+    /** Groupe de recharge du cristal de téléportation (affiché sur l'icône). */
+    public static NamespacedKey TP_CRYSTAL_COOLDOWN;
 
     private Keys() {
     }
@@ -75,6 +81,9 @@ public final class Keys {
         SOCKETS = new NamespacedKey(plugin, "sockets");
         RUNES = new NamespacedKey(plugin, "runes");
         RUNE = new NamespacedKey(plugin, "rune");
+        OWNER = new NamespacedKey(plugin, "owner");
+        INN = new NamespacedKey(plugin, "inn");
+        TP_CRYSTAL_COOLDOWN = new NamespacedKey(plugin, "tp_crystal");
     }
 
     /** Groupe de recharge (affiché sur l'icône de la barre) d'un sort. */

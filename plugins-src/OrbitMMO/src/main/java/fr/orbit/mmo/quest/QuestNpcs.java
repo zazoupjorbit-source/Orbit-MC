@@ -32,35 +32,52 @@ import java.util.UUID;
 
 /**
  * PNJ de quête : posés sur leur point, recréés s'ils disparaissent (chunk déchargé, rechargement).
- * Au-dessus de la tête, « ! » (quête à prendre) ou « ? » (quelque chose à lui dire),
- * visibles seulement par les joueurs concernés.
+ * Au-dessus de la tête, « ! » (quête à prendre) ou « ? » (quelque chose à lui dire), visibles seulement par les
+ * joueurs concernés : doré pour une quête principale, bleu pour une annexe, vert quand la quête se termine en lui parlant.
  */
 final class QuestNpcs {
 
-    /** Marqueur à afficher pour un joueur. */
-    enum Mark { NONE, OFFER, TALK }
+    /** Marqueur à afficher pour un joueur, du moins au plus important (le plus important l'emporte). */
+    enum Mark {
+        NONE(null), OFFER_SIDE("<#5AB4FF><b>!</b>"), OFFER_MAIN("<#FFD66E><b>!</b>"),
+        TALK_SIDE("<#5AB4FF><b>?</b>"), TALK_MAIN("<#FFD66E><b>?</b>"), TURN_IN("<#5EE89A><b>?</b>");
+
+        final String text;
+
+        Mark(String text) {
+            this.text = text;
+        }
+    }
 
     private static final class Live {
         final NpcDef def;
         final LivingEntity entity;
-        final TextDisplay offer;
-        final TextDisplay talk;
+        /** Un marqueur par couleur (une entité ne peut pas montrer un texte différent à chaque joueur). */
+        final Map<Mark, TextDisplay> marks;
 
-        Live(NpcDef def, LivingEntity entity, TextDisplay offer, TextDisplay talk) {
+        Live(NpcDef def, LivingEntity entity, Map<Mark, TextDisplay> marks) {
             this.def = def;
             this.entity = entity;
-            this.offer = offer;
-            this.talk = talk;
+            this.marks = marks;
         }
 
         boolean valid() {
-            return entity.isValid() && offer.isValid() && talk.isValid();
+            if (!entity.isValid()) {
+                return false;
+            }
+            for (TextDisplay d : marks.values()) {
+                if (!d.isValid()) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         void remove() {
             entity.remove();
-            offer.remove();
-            talk.remove();
+            for (TextDisplay d : marks.values()) {
+                d.remove();
+            }
         }
     }
 
@@ -130,9 +147,29 @@ final class QuestNpcs {
         Entity raw = at.getWorld().spawn(at, cls, ent -> setup((LivingEntity) ent, def));
         LivingEntity body = (LivingEntity) raw;
         double top = body.getHeight() + 0.75;
-        TextDisplay offer = marker(at.clone().add(0, top, 0), "<#FFD66E><b>!</b>");
-        TextDisplay talk = marker(at.clone().add(0, top, 0), "<#FFD66E><b>?</b>");
-        return new Live(def, body, offer, talk);
+        Map<Mark, TextDisplay> marks = new java.util.EnumMap<>(Mark.class);
+        for (Mark m : Mark.values()) {
+            if (m.text != null) {
+                marks.put(m, marker(at.clone().add(0, top, 0), m.text));
+            }
+        }
+        return new Live(def, body, marks);
+    }
+
+    /**
+     * Double du PNJ pour une escorte : même apparence, sans marqueur, retiré au redémarrage (étiquette « #escorte »).
+     * Il ne bouge pas seul : QuestTrials le fait marcher.
+     */
+    LivingEntity spawnWalker(NpcDef def, Location at) {
+        Class<? extends Entity> cls = def.type().getEntityClass();
+        if (cls == null || !LivingEntity.class.isAssignableFrom(cls)) {
+            cls = Mannequin.class;
+        }
+        Entity raw = at.getWorld().spawn(at, cls, ent -> {
+            setup((LivingEntity) ent, def);
+            ent.getPersistentDataContainer().set(npcKey, PersistentDataType.STRING, "#escorte");
+        });
+        return (LivingEntity) raw;
     }
 
     private void setup(LivingEntity e, NpcDef def) {
@@ -204,20 +241,30 @@ final class QuestNpcs {
             return;
         }
         mine.put(npcId, mark);
-        if (mark == Mark.OFFER) {
-            p.showEntity(plugin, l.offer);
-        } else {
-            p.hideEntity(plugin, l.offer);
-        }
-        if (mark == Mark.TALK) {
-            p.showEntity(plugin, l.talk);
-        } else {
-            p.hideEntity(plugin, l.talk);
+        for (Map.Entry<Mark, TextDisplay> e : l.marks.entrySet()) {
+            if (e.getKey() == mark) {
+                p.showEntity(plugin, e.getValue());
+            } else {
+                p.hideEntity(plugin, e.getValue());
+            }
         }
     }
 
     Collection<String> liveIds() {
         return live.keySet();
+    }
+
+    /** Marqueur montré à ce joueur au-dessus de ce PNJ (NONE si aucun). */
+    Mark shown(UUID player, String npcId) {
+        Map<String, Mark> mine = shown.get(player);
+        Mark m = mine == null ? null : mine.get(npcId);
+        return m == null ? Mark.NONE : m;
+    }
+
+    /** Position actuelle d'un PNJ posé (null s'il n'est pas dans le monde). */
+    Location liveLocation(String npcId) {
+        Live l = live.get(npcId);
+        return l == null || !l.entity.isValid() ? null : l.entity.getLocation();
     }
 
     private void forget(String npcId) {
@@ -260,7 +307,7 @@ final class QuestNpcs {
             }
             boolean ours = false;
             for (Live l : live.values()) {
-                if (l.entity.equals(e) || l.offer.equals(e) || l.talk.equals(e)) {
+                if (l.entity.equals(e) || l.marks.containsValue(e)) {
                     ours = true;
                     break;
                 }

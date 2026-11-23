@@ -66,6 +66,11 @@ public final class TownFolk implements Listener {
 
     /** Pose le mannequin d'un PNJ de ville : immobile, invulnérable, enregistré avec le monde. */
     public static Mannequin spawn(Location at, String tag, Component name) {
+        return spawn(at, tag, name, tag, HANDS.get(tag));
+    }
+
+    /** Même chose avec un skin du pack et un objet en main choisis (aubergistes : skin de villageois de leur faction). */
+    public static Mannequin spawn(Location at, String tag, Component name, String skin, Material hand) {
         return at.getWorld().spawn(at, Mannequin.class, m -> {
             m.getPersistentDataContainer().set(Keys.NPC, PersistentDataType.STRING, tag);
             m.setInvulnerable(true);
@@ -77,7 +82,7 @@ public final class TownFolk implements Listener {
             m.setCustomNameVisible(true);
             m.setDescription(Component.empty());
             try {
-                m.setProfile(Looks.skin(tag));
+                m.setProfile(Looks.skin(skin));
                 m.setSkinParts(com.destroystokyo.paper.SkinParts.allParts());
             } catch (RuntimeException ex) {
                 Bukkit.getLogger().warning("[OrbitMMO] PNJ " + tag + " : skin refusé (" + ex.getMessage() + ").");
@@ -86,7 +91,6 @@ public final class TownFolk implements Listener {
             if (scale != null) {
                 scale.setBaseValue(SCALE);
             }
-            Material hand = HANDS.get(tag);
             if (hand != null && m.getEquipment() != null) {
                 m.getEquipment().setItemInMainHand(new ItemStack(hand));
             }

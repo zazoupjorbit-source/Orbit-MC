@@ -44,6 +44,14 @@ Ni la Lumière ni l'Ombre ne connaissent toute la vérité. Le joueur la reconst
 - **Le Pacte des Deux Ciels.** Accord secret entre **Vharos** (Citadelle d'Obsidienne) et la Haute-Prélate **Séraphine**, par l'intermédiaire de **Maître Orsan** (« O. »). L'Aube vend à la Citadelle le surplus de lumière en fioles (adressées « Pour V. »), qui garde ses Creux debout et retient le Néant ; la Citadelle paie en **Éclats noirs**, qui remplissent le Reliquaire. Les deux camps se battent le jour et se partagent les Marqués la nuit.
 - **L'Éclat-Cœur** : l'Éclat immense tombé la Nuit des Étoiles Filantes dans les Ruines de la Marche, doré d'un côté, violet de l'autre. Il parle avec les deux voix à la fois : l'Astre coupé en deux. Il ne veut ni être vengé ni être rallumé en cage : il veut être **rassemblé, et libre**. Celui qui le tient tient l'Astre en laisse.
 
+### Les secrets des actes IV à VII (validés le 23/11/2026, détail dans [GRANDE-TRAME.md](GRANDE-TRAME.md))
+- **Les Hôtes.** Avant l'Aube et l'Ombre, un peuple du Désert d'Ocre accueillait l'Astre comme un invité : il descendait se poser chez eux, puis repartait. Leurs descendants, les **Astréens**, vivent encore en nomades autour de l'Oasis d'Ambre et ne servent aucun des deux camps.
+- **Aurélien le Premier était un Hôte.** Il a trahi son peuple parce qu'il ne supportait pas que l'Astre reparte. L'Ordre de l'Aube est né de cette trahison ; Vharos le sait depuis longtemps.
+- **L'amnésie des Marqués.** Quand un Éclat touche un Marqué, il lui prend ses souvenirs et laisse à leur place **un souvenir de l'Astre**. Chaque Marqué porte une page de la mémoire de l'Astre : c'est pour ça que les deux chefs veulent les Marqués.
+- **Morvain est le premier Marqué.** Écuyer d'Aurélien, il a forgé les chaînes de lumière à la Forge éteinte et a été touché par un Éclat la nuit de la Chute, il y a mille ans. Il ne vieillit plus et cherche à réparer ce qu'il a fait.
+- **L'Éclat-Cœur s'en va.** La nuit qui suit la révélation du Pacte, il quitte les Ruines de la Marche de lui-même et part vers le sud, vers le Tombeau du Premier Hôte. L'Astre a choisi une deuxième fois.
+- **Les Sans-Bannière.** Des Marqués qui refusent l'Aube et la Citadelle. Ce n'est pas une faction : à partir de l'acte VI, un joueur peut leur prêter allégeance en secret tout en restant Lumière ou Ombre.
+
 ---
 
 ## 3. L'événement déclencheur : la Nuit des Étoiles Filantes
@@ -156,3 +164,8 @@ La trame en 7 étapes :
 | **Le Pacte des Deux Ciels** | L'accord secret entre Vharos et Séraphine pour se partager les Marqués et leur lumière. |
 | **L'Éclat-Cœur** | L'Éclat immense des Ruines de la Marche : l'Astre coupé en deux. |
 | **Les Quatre-Vents** | La ville neutre aux portes de la Marche. On n'y tire pas l'épée. |
+| **Les Hôtes** | Le peuple d'avant l'Aube et l'Ombre, qui accueillait l'Astre sans vouloir le posséder. |
+| **Astréens** | Les descendants des Hôtes, nomades du Désert d'Ocre. |
+| **L'Oasis d'Ambre** | Le hub des Astréens, dans le Désert d'Ocre. |
+| **Le Tombeau du Premier Hôte** | Le lieu du désert où l'Astre se posait autrefois (ancien « Tombeau du Pharaon »). |
+| **Les Sans-Bannière** | Les Marqués qui refusent les deux camps. Allégeance secrète, pas une faction. |

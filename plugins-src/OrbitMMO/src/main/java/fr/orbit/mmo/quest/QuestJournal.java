@@ -57,7 +57,7 @@ final class QuestJournal {
                     lore.add("<#5A6270>• ???");
                 }
             }
-            Location at = current == null ? null : svc.target(current);
+            Location at = current == null ? null : svc.target(p, q.id(), current, a);
             if (at != null) {
                 lore.add(at.getWorld().equals(p.getWorld())
                         ? "<#8C96A3>  à " + Math.round(at.distance(p.getLocation())) + " m"

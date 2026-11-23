@@ -74,7 +74,11 @@ public final class QuestPanel {
         /** « +n autre(s) ». */
         MORE,
         /** Trait entre deux quêtes. */
-        SEPARATOR
+        SEPARATOR,
+        /** État d'une épreuve sous l'objectif (PV de l'escorté, temps restant, cargaison…). */
+        STATUS,
+        /** État qui demande d'agir vite (PV bas, chrono presque fini, tenue pas portée). */
+        ALERT
     }
 
     public record Row(Kind kind, String text, int arrow) {
@@ -145,6 +149,13 @@ public final class QuestPanel {
                 x = 19;
                 String t = fit(r.text(), W - x - MARGIN, false);
                 b.append(text(t, GREEN, false, false));
+                x += width(t, false);
+            }
+            case STATUS, ALERT -> {
+                b.append(glyphs(HpGlyphs.space(9), NamedTextColor.WHITE));
+                x = 9;
+                String t = fit(r.text(), W - x - MARGIN, false);
+                b.append(text(t, r.kind() == Kind.ALERT ? TextColor.color(0xFF8A7A) : TextColor.color(0xE8C77A), false, false));
                 x += width(t, false);
             }
             default -> {

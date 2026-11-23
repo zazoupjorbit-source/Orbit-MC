@@ -982,6 +982,10 @@ for ($i = 0; $i -lt 8; $i++) { $providers += (Glyph "quest_arrow_$i" 7 7 (One (0
 # Titre du suivi en image (W - 1 px, avance W) : francais E740, anglais E741 (haut 1 px au-dessus du titre).
 $providers += (Glyph 'quest_title_fr' 8 9 (One 0xE740))
 $providers += (Glyph 'quest_title_en' 8 9 (One 0xE741))
+# Barre de vie au-dessus des creatures et des joueurs (hud/Nameplates) : cadre E7A0, remplissages 1 et 8 px E7A1 / E7A2.
+$providers += (Glyph 'plate_frame' 5 6 (One 0xE7A0))
+$providers += (Glyph 'hud_fill4_1' 4 4 (One 0xE7A1))
+$providers += (Glyph 'hud_fill4_8' 4 4 (One 0xE7A2))
 Save-Text 'assets/orbitmmo/font/hud.json' ("{`n  ""providers"": [`n" + ($providers -join ",`n") + "`n  ]`n}`n")
 [IO.File]::WriteAllText((Join-Path $root 'src\main\resources\hud-tiles.txt'), ('# code premiereTuile colonnes rangees largeur (tools/gen-hud.ps1)' + "`n" + (($script:tileLines -join "`n") + "`n")), $utf8)
 # Les images d'origine decoupees ne servent plus (seules les tuiles sont dans hud.json).

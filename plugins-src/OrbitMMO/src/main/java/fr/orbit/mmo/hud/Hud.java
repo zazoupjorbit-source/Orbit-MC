@@ -367,6 +367,12 @@ public final class Hud {
         }
     }
 
+    /** La boîte de dialogue affiche-t-elle encore exactement ce titre (pas remplacé par un autre dialogue) ? */
+    public boolean dialogueShowing(Player p, Component title) {
+        BossBar bar = dialogues.get(p.getUniqueId());
+        return bar != null && bar.name() == title;
+    }
+
     public void dialogueEnd(Player p) {
         BossBar bar = dialogues.remove(p.getUniqueId());
         if (bar != null) {

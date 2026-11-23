@@ -1,0 +1,94 @@
+# ------------------------------------------------------------------
+#  OrbitCasino — le casino caché de La Station + les Orbit Coins (OC)
+#
+#  RÈGLE D'OR : les Orbit Coins du casino ne s'achètent JAMAIS, ni directement ni via un grade,
+#  une box ou un pack payant, et ne s'échangent jamais contre de l'argent réel. Sinon le casino
+#  devient un jeu d'argent (interdit sans licence ANJ, et contraire aux règles de Mojang).
+#  On les gagne en jouant ; ils servent seulement à acheter des cosmétiques.
+# ------------------------------------------------------------------
+
+base:
+  # Accès MariaDB du réseau. « auto » cherche ../setup/db.properties puis ../../setup/db.properties.
+  fichier: auto
+
+casino:
+  # Salle et jeux : auto = seulement sur le serveur qui a le monde « station » (le lobby).
+  actif: auto
+  # Monde vide de la salle (créé par le plugin).
+  monde: casino
+  # Entrée secrète : bouton posé dans la station (/casino bouton pour la déplacer sur le bloc visé).
+  entree:
+    monde: station
+    x: 15
+    y: 101
+    z: 14
+    # Où l'on ressort dans la station (derrière le comptoir).
+    sortie: [13.5, 101.0, 12.5, 0.0]
+
+portefeuille:
+  # Orbit Coins offerts à la création du compte.
+  depart: 2000
+  # Ration quotidienne, versée à la première connexion de la journée (n'importe quel serveur).
+  ration: 1000
+  # Récompense de temps de jeu : tant d'OC toutes les N minutes passées sur le réseau.
+  temps-de-jeu:
+    minutes: 30
+    gain: 100
+
+machines:
+  mises: [10, 50, 100, 250, 500]
+  # Part de chaque mise versée au gros lot commun à toutes les machines (en %).
+  part-jackpot: 3
+  jackpot-depart: 10000
+  # Symboles : poids (chance sur chaque rouleau) et gain pour 3 identiques (multiplicateur de la mise).
+  # Deux identiques : remboursé (x1), x3 pour sept, étoile et ORBIT. Trois « orbit » = gros lot.
+  symboles:
+    coeur:   {poids: 30, gain: 4}
+    trefle:  {poids: 25, gain: 8}
+    carreau: {poids: 18, gain: 15}
+    soleil:  {poids: 12, gain: 30}
+    etoile:  {poids: 8,  gain: 60}
+    sept:    {poids: 5,  gain: 150}
+    orbit:   {poids: 2,  gain: 300}
+
+blackjack:
+  mises: [10, 50, 100, 250, 500, 1000]
+  mise-max: 1000
+  # Secondes pour miser après la première mise, puis pour jouer chaque main.
+  attente-mises: 15
+  temps-de-jeu: 30
+
+roulette:
+  jetons: [10, 50, 100, 500, 1000]
+  # Total des mises d'un joueur sur un tour.
+  mise-max: 5000
+  attente-mises: 30
+
+poker:
+  # Secondes pour jouer avant de se coucher (ou parole) d'office.
+  temps-de-jeu: 30
+  # Deux comptes de la même adresse IP ne s'assoient pas à la même table (anti passe-jetons).
+  meme-ip-interdite: true
+  tables:
+    nebuleuse: {nom: "Table Nébuleuse", petite-blinde: 10, grosse-blinde: 20}
+    supernova: {nom: "Table Supernova", petite-blinde: 50, grosse-blinde: 100}
+
+boutique:
+  # true = ne pas brancher la boutique sur les cosmétiques d'OrbitDevCore (tout reste débloqué comme avant).
+  debloquer-tout: false
+  # Prix des cosmétiques du lobby selon leur rareté (cosmetics.yml d'OrbitDevCore).
+  prix:
+    common: 2500
+    rare: 7500
+    epic: 20000
+    legendary: 50000
+  # Titres affichés devant le pseudo dans le chat, sur tous les serveurs du réseau.
+  titres:
+    chanceux:   {texte: "<#7BD88F>[Chanceux]", prix: 5000}
+    flambeur:   {texte: "<#E0484A>[Flambeur]", prix: 10000}
+    as-de-pique: {texte: "<#D7DCE2>[As de Pique]", prix: 15000}
+    croupier:   {texte: "<#62CFF4>[Croupier]", prix: 20000}
+    high-roller: {texte: "<gradient:#E0B864:#FFF3C4>[High Roller]</gradient>", prix: 40000}
+    roi-du-poker: {texte: "<#C79BFF>[Roi du Poker]", prix: 60000}
+    jackpot:    {texte: "<gradient:#E0484A:#E0B864>[Jackpot]</gradient>", prix: 100000}
+    legende:    {texte: "<gradient:#3A7FFF:#C79BFF>[Légende d'ORBIT]</gradient>", prix: 250000}

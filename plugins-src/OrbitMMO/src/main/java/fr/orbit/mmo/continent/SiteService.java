@@ -155,6 +155,20 @@ public final class SiteService {
         return out;
     }
 
+    /** Un site construit, pour la carte : genre (village, donjon, camp, ruine…), nom, centre. */
+    public record Spot(String kind, String name, int x, int z) {
+    }
+
+    /** Les sites construits (carte du joueur). */
+    public List<Spot> spots() {
+        List<Spot> out = new ArrayList<>();
+        for (Built b : built.values()) {
+            SiteDesign.Site s = b.site();
+            out.add(new Spot(s.kind(), s.name(), s.x(), s.z()));
+        }
+        return out;
+    }
+
     public Built built(String id) {
         return built.get(id);
     }

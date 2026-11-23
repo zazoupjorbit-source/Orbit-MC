@@ -43,9 +43,25 @@ public final class ContinentCommand implements TabExecutor {
             case "site", "sites" -> site(sender, args);
             case "quetes", "quêtes" -> quests(sender, args);
             case "ambiance" -> ambient(sender, args);
+            case "aubergistes", "aubergiste" -> innkeepers(sender, args);
             default -> help(sender);
         }
         return true;
+    }
+
+    /** « /continent aubergistes [poser | retirer] » : un aubergiste par capitale et par village (cristal de téléportation). */
+    private void innkeepers(CommandSender s, String[] args) {
+        fr.orbit.mmo.inn.InnService inns = org.bukkit.plugin.java.JavaPlugin.getPlugin(fr.orbit.mmo.OrbitMMO.class).inns();
+        String sub = args.length < 2 ? "" : args[1].toLowerCase(Locale.ROOT);
+        if (!sub.equals("poser") && !sub.equals("retirer")) {
+            Text.msg(s, "<#FFD66E>/continent aubergistes poser <#D7DCE2>pose (ou repose) l'aubergiste de chaque capitale et village, sans toucher un bloc");
+            Text.msg(s, "<#FFD66E>/continent aubergistes retirer <#D7DCE2>les retire tous");
+            return;
+        }
+        String error = inns.place(s, sub.equals("retirer"));
+        if (error != null) {
+            Text.msg(s, "<#FF5C5C>" + Text.esc(error));
+        }
     }
 
     private void help(CommandSender s) {
@@ -59,6 +75,7 @@ public final class ContinentCommand implements TabExecutor {
         Text.msg(s, "<#FFD66E>/continent site <#D7DCE2>villages, donjons, camps, ruines et cratères");
         Text.msg(s, "<#FFD66E>/continent quetes <#D7DCE2>poser les points de quête dessinés par les sites");
         Text.msg(s, "<#FFD66E>/continent ambiance <#D7DCE2>gardes, villageois, bétail et voyageurs (sans quête)");
+        Text.msg(s, "<#FFD66E>/continent aubergistes <poser | retirer> <#D7DCE2>aubergistes des capitales et villages (cristal)");
     }
 
     /** « /continent ambiance » : état des PNJ d'ambiance, essai sans joueur, relecture de ambiance.yml. */
@@ -610,7 +627,9 @@ public final class ContinentCommand implements TabExecutor {
         String last = args.length == 0 ? "" : args[args.length - 1].toLowerCase(Locale.ROOT);
         List<String> options = new ArrayList<>();
         if (args.length <= 1) {
-            options.addAll(List.of("info", "lieux", "tp", "pregen", "apercu", "capitale", "site", "quetes", "ambiance"));
+            options.addAll(List.of("info", "lieux", "tp", "pregen", "apercu", "capitale", "site", "quetes", "ambiance", "aubergistes"));
+        } else if (args[0].equalsIgnoreCase("aubergistes") && args.length == 2) {
+            options.addAll(List.of("poser", "retirer"));
         } else if (args[0].equalsIgnoreCase("pregen") && args.length == 2) {
             options.addAll(List.of("stop", "etat", "refaire"));
         } else if ((args[0].equalsIgnoreCase("tp") || args[0].equalsIgnoreCase("apercu")) && args.length == 2) {

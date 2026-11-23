@@ -335,6 +335,9 @@
     {"type": "bitmap", "file": "orbitmmo:font/tiles/quest_title_fr_0_2.png", "ascent": 8, "height": 9, "chars": ["\uF0CB"]},
     {"type": "bitmap", "file": "orbitmmo:font/tiles/quest_title_en_0_0.png", "ascent": 8, "height": 9, "chars": ["\uF0CC"]},
     {"type": "bitmap", "file": "orbitmmo:font/tiles/quest_title_en_0_1.png", "ascent": 8, "height": 9, "chars": ["\uF0CD"]},
-    {"type": "bitmap", "file": "orbitmmo:font/tiles/quest_title_en_0_2.png", "ascent": 8, "height": 9, "chars": ["\uF0CE"]}
+    {"type": "bitmap", "file": "orbitmmo:font/tiles/quest_title_en_0_2.png", "ascent": 8, "height": 9, "chars": ["\uF0CE"]},
+    {"type": "bitmap", "file": "orbitmmo:font/plate_frame.png", "ascent": 5, "height": 6, "chars": ["\uE7A0"]},
+    {"type": "bitmap", "file": "orbitmmo:font/hud_fill4_1.png", "ascent": 4, "height": 4, "chars": ["\uE7A1"]},
+    {"type": "bitmap", "file": "orbitmmo:font/hud_fill4_8.png", "ascent": 4, "height": 4, "chars": ["\uE7A2"]}
   ]
 }

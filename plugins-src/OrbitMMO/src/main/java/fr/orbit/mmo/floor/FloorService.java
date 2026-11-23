@@ -358,6 +358,13 @@ public final class FloorService implements Listener {
             return;
         }
         Player p = e.getPlayer();
+        // Aubergiste (inn.InnService) : sa réplique et son menu (lier le cristal de téléportation).
+        if (tag.equals(fr.orbit.mmo.inn.InnService.TAG)) {
+            if (plugin.inns() != null) {
+                plugin.inns().talk(p, e.getRightClicked());
+            }
+            return;
+        }
         // La phrase du PNJ est préparée avant d'ouvrir son menu : avec le pack, le menu l'affiche dans sa carte.
         Greeting greeting = prepareGreeting(p, tag);
         switch (tag) {
@@ -548,7 +555,8 @@ public final class FloorService implements Listener {
         // Étiquette de Torvald posée avant le rachat du butin : on la met à jour.
         for (org.bukkit.entity.TextDisplay t : w.getNearbyEntitiesByType(org.bukkit.entity.TextDisplay.class,
                 new Location(w, -7.5, y + 3.05, 7.5), 0.6)) {
-            if (!net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(t.text()).contains("Rachat")) {
+            if (!t.getScoreboardTags().contains(fr.orbit.mmo.hud.Nameplates.TAG) && !t.getScoreboardTags().contains(fr.orbit.mmo.hud.DamageNumbers.TAG)
+                    && !net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(t.text()).contains("Rachat")) {
                 t.text(Text.mm(FloorBuilder.FORGE_LABEL));
             }
         }

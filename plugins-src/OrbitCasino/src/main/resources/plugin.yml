@@ -1,0 +1,25 @@
+name: OrbitCasino
+version: '0.1.0'
+main: fr.orbit.casino.OrbitCasino
+api-version: '1.21'
+description: Casino caché de La Station (machines à sous, blackjack, poker, roulette) et Orbit Coins de jeu, échangés contre des cosmétiques sur tout le réseau. Aucun achat réel.
+authors: [ORBIT]
+softdepend: [OrbitDevCore, LuckPerms]
+
+commands:
+  orbitcoins:
+    description: Ton solde d'Orbit Coins, la boutique de cosmétiques et le classement.
+    usage: /oc [boutique|titres|top|ration]
+    aliases: [oc, coins]
+  table:
+    description: Actions à une table du casino (les boutons du chat l'utilisent).
+    usage: /table <action> [montant]
+  casino:
+    description: Administration du casino.
+    usage: /casino <generer|tp|bouton|donner|retirer|solde|recharger>
+    permission: orbitcasino.admin
+
+permissions:
+  orbitcasino.admin:
+    description: Générer la salle, poser l'entrée secrète, donner ou retirer des Orbit Coins.
+    default: op

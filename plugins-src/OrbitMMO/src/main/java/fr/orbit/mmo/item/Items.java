@@ -227,17 +227,63 @@ public final class Items {
         return it;
     }
 
-    public static ItemStack tpCrystal() {
+    /**
+     * Cristal de téléportation, réutilisable et lié à son propriétaire (voir inn.InnService) : il ne se donne pas,
+     * ne se jette pas et reste à la mort. Il ramène à l'auberge liée chez un aubergiste, sinon à la capitale.
+     *
+     * @param owner       propriétaire
+     * @param destination nom affiché de l'auberge liée (null : aucune)
+     * @param recharge    durée de recharge (secondes)
+     */
+    public static ItemStack tpCrystal(java.util.UUID owner, String destination, int recharge) {
         ItemStack it = new ItemStack(Material.PRISMARINE_CRYSTALS);
         ItemMeta meta = it.getItemMeta();
         meta.displayName(Text.item("<#7FD4FF>Cristal de téléportation"));
-        meta.lore(Text.lore(List.of("<#8C96A3>Ramène à votre capitale.", "<#8C96A3>Dans le Pilier : à la ville de l'étage.",
-                "<#5A6270>[Clic droit] « Téléportation ! »")));
+        List<String> lore = new ArrayList<>();
+        lore.add("<#8C96A3>Lié à vous · réutilisable.");
+        lore.add(destination == null ? "<#8C96A3>Destination : <white>votre capitale"
+                : "<#8C96A3>Destination : <white>" + Text.esc(destination));
+        lore.add("<#8C96A3>Recharge : <white>" + duration(recharge * 1000L));
+        lore.add(destination == null ? "<#5A6270>Parlez à un aubergiste pour le lier à son auberge."
+                : "<#5A6270>Un autre aubergiste peut le lier ailleurs.");
+        lore.add("<#5A6270>[Clic droit] « Téléportation ! »");
+        meta.lore(Text.lore(lore));
+        meta.setMaxStackSize(1);
         meta.setEnchantmentGlintOverride(true);
-        meta.getPersistentDataContainer().set(Keys.ITEM, PersistentDataType.STRING, "tp_crystal");
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        pdc.set(Keys.ITEM, PersistentDataType.STRING, "tp_crystal");
+        pdc.set(Keys.OWNER, PersistentDataType.STRING, owner.toString());
         it.setItemMeta(meta);
         model(it, "tp_crystal");
+        // Groupe de recharge : le jeu dessine le temps restant sur l'icône (Player#setCooldown).
+        it.setData(DataComponentTypes.USE_COOLDOWN, io.papermc.paper.datacomponent.item.UseCooldown
+                .useCooldown(Math.max(1f, recharge)).cooldownGroup(Keys.TP_CRYSTAL_COOLDOWN).build());
         return it;
+    }
+
+    /** Propriétaire d'un cristal lié (null : ancien cristal à usage unique, ou autre objet). */
+    public static java.util.UUID owner(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) {
+            return null;
+        }
+        String s = item.getItemMeta().getPersistentDataContainer().get(Keys.OWNER, PersistentDataType.STRING);
+        try {
+            return s == null ? null : java.util.UUID.fromString(s);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    /** « 9 min 05 s », « 42 s », « 1 h 05 min ». */
+    public static String duration(long millis) {
+        long s = Math.max(0, (millis + 999) / 1000);
+        if (s >= 3600) {
+            return (s / 3600) + " h " + String.format(java.util.Locale.ROOT, "%02d", (s % 3600) / 60) + " min";
+        }
+        if (s >= 60) {
+            return (s / 60) + " min" + (s % 60 == 0 ? "" : " " + String.format(java.util.Locale.ROOT, "%02d", s % 60) + " s");
+        }
+        return s + " s";
     }
 
     public static ItemStack material(DropDef drop) {
@@ -336,7 +382,7 @@ public final class Items {
             case "potion" -> POTION_PRICE / 2;
             case "mana_potion" -> MANA_POTION_PRICE / 2;
             case "heal_crystal" -> HEAL_CRYSTAL_PRICE / 2;
-            case "tp_crystal" -> TP_CRYSTAL_PRICE / 2;
+            case "tp_crystal" -> 0; // lié au joueur depuis le 23/11 : ni revendu, ni mis en vente
             default -> {
                 Boost b = Boost.byItemType(kind);
                 yield b == null ? 0 : b.price / 2;

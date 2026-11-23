@@ -2,6 +2,9 @@ package fr.orbit.mmo.quest;
 
 import fr.orbit.mmo.OrbitMMO;
 import fr.orbit.mmo.classes.Faction;
+import fr.orbit.mmo.quest.QuestDefs.Choice;
+import fr.orbit.mmo.quest.QuestDefs.Clue;
+import fr.orbit.mmo.quest.QuestDefs.Extra;
 import fr.orbit.mmo.quest.QuestDefs.ItemReward;
 import fr.orbit.mmo.quest.QuestDefs.Line;
 import fr.orbit.mmo.quest.QuestDefs.NpcDef;
@@ -42,6 +45,12 @@ public final class QuestRegistry {
     private final Map<String, NpcDef> npcs = new LinkedHashMap<>();
     private final Map<String, MobDef> mobs = new LinkedHashMap<>();
     private final Map<String, SpawnDef> spawns = new LinkedHashMap<>();
+    /**
+     * Quêtes annexes (secondaires). Lu dans les titres de section des fichiers (« # ==== … ANNEXES — … » : annexes,
+     * « … QUÊTES PRINCIPALES » : principales, que gen-quetes.js écrit aussi) ; la clé « annexe: true/false » d'une quête
+     * l'emporte. Sans titre de section, une quête est principale, sauf dans un fichier « admin » (essais).
+     */
+    private final java.util.Set<String> side = new java.util.HashSet<>();
     /**
      * Traductions anglaises : texte français → texte anglais. Dans les fichiers de quêtes, chaque clé de texte peut
      * avoir sa jumelle « -en » (nom-en, titre-en, repliques-en, resume-en, intro-en, offre-en, fin-en, texte-en,
@@ -161,6 +170,8 @@ public final class QuestRegistry {
 
     public void load() {
         quests.clear();
+        side.clear();
+        relative.clear();
         english.clear();
         portraits.clear();
         faces.clear();
@@ -181,13 +192,17 @@ public final class QuestRegistry {
             java.util.Arrays.sort(files);
             for (File f : files) {
                 try {
-                    read(f.getName().substring(0, f.getName().length() - 4), YamlConfiguration.loadConfiguration(f));
+                    YamlConfiguration y = YamlConfiguration.loadConfiguration(f);
+                    sections(f, y.getBoolean("admin", false));
+                    read(f.getName().substring(0, f.getName().length() - 4), y);
                 } catch (RuntimeException e) {
                     plugin.getLogger().severe("Fichier de quêtes " + f.getName() + " illisible : " + e.getMessage());
                 }
             }
         }
-        plugin.getLogger().info(quests.size() + " quêtes, " + npcs.size() + " PNJ de quête, " + mobs.size()
+        side.retainAll(quests.keySet());
+        plugin.getLogger().info(quests.size() + " quêtes (" + (quests.size() - side.size()) + " principales, " + side.size()
+                + " annexes), " + npcs.size() + " PNJ de quête, " + mobs.size()
                 + " monstres de quête, " + spawns.size() + " zones d'apparition chargés ; " + english.size()
                 + " texte(s) traduit(s) en anglais.");
     }
@@ -195,6 +210,7 @@ public final class QuestRegistry {
     // ------------------------------------------------------------------ Lecture
 
     private void read(String file, ConfigurationSection y) {
+        readRelative(file, y);
         ConfigurationSection ns = y.getConfigurationSection("pnj");
         if (ns != null) {
             for (String id : ns.getKeys(false)) {
@@ -265,11 +281,39 @@ public final class QuestRegistry {
                 }
                 List<String> stepMobs = st.isList("monstres") ? st.getStringList("monstres")
                         : st.getString("monstre") == null ? List.of() : List.of(st.getString("monstre"));
-                steps.add(new StepDef(steps.size(), type, st.getString("texte", type.name()), st.getString("pnj"),
-                        st.getString("point"), st.getDouble("rayon", type == StepType.ATTEINDRE ? 4 : 3), stepMobs,
-                        Math.max(1, st.getInt("nombre", 1)), st.getDouble("chance", 1), st.getString("objet"),
-                        lines(st.getStringList("dialogue")), lines(st.getStringList("apres"))));
                 String where = "quête " + id + ", étape " + (i + 1);
+                Extra extra = extra(type, st, where);
+                double defRadius = switch (type) {
+                    case ATTEINDRE, INFILTRER, DEGUISEMENT, TRANSPORT -> 4;
+                    case DEFENSE -> 14;
+                    case SURVIE -> 16;
+                    default -> 3;
+                };
+                int defCount = switch (type) {
+                    case ESCORTE -> 3;
+                    case DEFENSE -> 4;
+                    default -> 1;
+                };
+                steps.add(new StepDef(steps.size(), type, st.getString("texte", type.name()), st.getString("pnj"),
+                        st.getString("point"), st.getDouble("rayon", defRadius), stepMobs,
+                        Math.max(1, st.getInt("nombre", defCount)), st.getDouble("chance", 1), st.getString("objet"),
+                        lines(st.getStringList("dialogue")), lines(st.getStringList("apres")),
+                        st.getString("si"), Math.max(0, st.getInt("chrono")), lines(st.getStringList("echec")),
+                        Math.max(0, st.getInt("reprise")), extra));
+                check(steps.get(steps.size() - 1), where);
+                pairs(st.getStringList("echec"), st.getStringList("echec-en"), true, where + ", echec");
+                pair(st.getString("question"), st.getString("question-en"));
+                pair(st.getString("cible"), st.getString("cible-en"));
+                for (Map<?, ?> m : st.getMapList("reponses")) {
+                    YamlConfiguration r = section(m);
+                    pair(r.getString("texte"), r.getString("texte-en"));
+                    pairs(r.getStringList("reponse"), r.getStringList("reponse-en"), true, where + ", reponse");
+                }
+                for (Map<?, ?> m : st.getMapList("indices")) {
+                    YamlConfiguration r = section(m);
+                    pair(r.getString("texte"), r.getString("texte-en"));
+                    pairs(r.getStringList("apres"), r.getStringList("apres-en"), true, where + ", indice");
+                }
                 pair(st.getString("texte"), st.getString("texte-en"));
                 pair(st.getString("objet"), st.getString("objet-en"));
                 pairs(st.getStringList("dialogue"), st.getStringList("dialogue-en"), true, where + ", dialogue");
@@ -299,11 +343,112 @@ public final class QuestRegistry {
             pairs(s.getStringList("fin"), s.getStringList("fin-en"), true, "quête " + id + ", fin");
             RewardDef reward = new RewardDef(s.getLong("recompenses.xp"), s.getLong("recompenses.or"), items);
             String giver = s.getString("donneur");
+            if (s.isBoolean("annexe")) {
+                if (s.getBoolean("annexe")) {
+                    side.add(id);
+                } else {
+                    side.remove(id);
+                }
+            }
             quests.put(id, new QuestDef(id, file, s.getString("nom", id), Faction.byId(s.getString("faction")),
                     Math.max(1, s.getInt("niveau", 1)), s.getStringList("requiert"), giver,
                     giver == null || s.getBoolean("auto", false), s.getString("depart"), s.getStringList("resume"),
                     lines(s.getStringList("offre")), lines(s.getStringList("intro")), List.copyOf(steps),
-                    lines(s.getStringList("fin")), reward));
+                    lines(s.getStringList("fin")), reward, s.getBoolean("admin", y.getBoolean("admin", false))));
+        }
+    }
+
+    /** Points relatifs de chaque fichier (clé « points-relatifs » : nom → [dx, dy, dz]), posés par /quetes admin poser. */
+    private final Map<String, Map<String, double[]>> relative = new LinkedHashMap<>();
+
+    private void readRelative(String file, ConfigurationSection y) {
+        ConfigurationSection rs = y.getConfigurationSection("points-relatifs");
+        if (rs == null) {
+            return;
+        }
+        Map<String, double[]> m = new LinkedHashMap<>();
+        for (String name : rs.getKeys(false)) {
+            List<Double> v = rs.getDoubleList(name);
+            if (v.size() >= 3) {
+                m.put(name, new double[]{v.get(0), v.get(1), v.get(2)});
+            }
+        }
+        relative.put(file, m);
+    }
+
+    /** Fichiers qui ont des points relatifs, et leurs points. */
+    public Map<String, Map<String, double[]>> relative() {
+        return Collections.unmodifiableMap(relative);
+    }
+
+    private static YamlConfiguration section(Map<?, ?> raw) {
+        YamlConfiguration y = new YamlConfiguration();
+        for (Map.Entry<?, ?> e : raw.entrySet()) {
+            y.set(String.valueOf(e.getKey()), e.getValue());
+        }
+        return y;
+    }
+
+    /** Réglages des types d'étapes du 23/11 (null pour les types d'avant : rien à lire). */
+    private Extra extra(StepType type, ConfigurationSection st, String where) {
+        if (type.ordinal() <= StepType.ANCRAGE.ordinal()) {
+            return null;
+        }
+        List<String> path = new ArrayList<>(st.getStringList(type == StepType.PISTER ? "traces" : "chemin"));
+        List<Clue> clues = new ArrayList<>();
+        List<Map<?, ?>> rawClues = st.getMapList("indices");
+        for (int k = 0; k < rawClues.size(); k++) {
+            YamlConfiguration c = section(rawClues.get(k));
+            String pt = c.getString("point");
+            if (pt == null) {
+                plugin.getLogger().warning(where + " : indice " + (k + 1) + " sans « point », ignoré.");
+                continue;
+            }
+            clues.add(new Clue(c.getString("id", pt), pt, c.getDouble("rayon", 2.5), c.getString("texte", pt),
+                    lines(c.getStringList("apres"))));
+        }
+        List<Choice> choices = new ArrayList<>();
+        List<Map<?, ?>> rawChoices = st.getMapList("reponses");
+        for (int k = 0; k < rawChoices.size(); k++) {
+            YamlConfiguration c = section(rawChoices.get(k));
+            choices.add(new Choice(c.getString("id", String.valueOf(k + 1)), c.getString("texte", "…"),
+                    lines(c.getStringList("reponse")), c.getLong("xp"), c.getLong("or")));
+        }
+        int waves = st.getInt("vagues", type == StepType.DEFENSE && st.getInt("duree") <= 0 ? 3 : 0);
+        return new Extra(List.copyOf(path), List.copyOf(clues), st.getString("choix"), st.getString("question"),
+                List.copyOf(choices), st.getString("depart"), st.getString("apparition"), st.getString("cible"),
+                Math.max(1, st.getDouble("pv", type == StepType.DEFENSE ? 200 : 100)),
+                Math.max(0, st.getDouble("degats", type == StepType.SURVIE ? 6 : type == StepType.DEFENSE ? 5 : 4)),
+                Math.max(0, waves), Math.max(0, st.getInt("duree", type == StepType.SURVIE ? 60 : 0)),
+                Math.max(3, st.getInt("intervalle", 20)), Math.max(0.5, st.getDouble("vitesse", 2.5)),
+                Math.max(2, st.getDouble("vue", 10)), Math.max(1, st.getDouble("rayon-fin", 5)),
+                st.getString("mode", "resserre").toLowerCase(Locale.ROOT),
+                material(st.getString("materiau"), type == StepType.LIVRER ? Material.PAPER
+                        : type == StepType.DEGUISEMENT ? Material.LEATHER_CHESTPLATE : Material.BARREL),
+                st.getString("couleur"), Math.max(0, st.getInt("niveau")));
+    }
+
+    /** Ce qui manque pour qu'une étape fonctionne : un avertissement dans la console au chargement. */
+    private void check(StepDef s, String where) {
+        Extra x = s.x();
+        String miss = switch (s.type()) {
+            case ESCORTE -> s.npc() == null ? "pnj" : x.path().isEmpty() ? "chemin" : null;
+            case DEFENSE, INFILTRER, DEGUISEMENT, TRANSPORT -> s.point() == null ? "point" : null;
+            case SURVIE -> s.point() == null ? "point" : null;
+            case CHOIX -> s.npc() == null ? "pnj" : x.choiceId() == null ? "choix" : x.choices().size() < 2 ? "reponses (2 au moins)" : null;
+            case LIVRER -> s.npc() == null ? "pnj" : s.item() == null ? "objet" : null;
+            case ENQUETE -> x.clues().isEmpty() ? "indices" : null;
+            case PISTER -> x.path().isEmpty() ? "traces" : null;
+            default -> null;
+        };
+        if (miss != null) {
+            plugin.getLogger().warning(where + " (" + s.type() + ") : « " + miss + " » manquant, l'étape ne pourra pas se finir.");
+        }
+        if (s.type() == StepType.DEGUISEMENT && s.mobs().isEmpty()) {
+            plugin.getLogger().warning(where + " (DEGUISEMENT) : « monstres » vide, la tenue ne calme personne.");
+        }
+        if (s.condition() != null && !s.condition().contains("=")) {
+            plugin.getLogger().warning(where + " : condition « si: " + s.condition() + " » sans « = » (forme : choix=réponse).");
         }
     }
 
@@ -354,6 +499,51 @@ public final class QuestRegistry {
         return Collections.unmodifiableCollection(quests.values());
     }
 
+    /** Quête annexe (secondaire) ? Sinon principale. */
+    public boolean isSide(String questId) {
+        return questId != null && side.contains(questId);
+    }
+
+    /** Lit les titres de section du fichier pour ranger ses quêtes en principales ou annexes. */
+    private void sections(File f, boolean admin) {
+        List<String> lines;
+        try {
+            lines = java.nio.file.Files.readAllLines(f.toPath(), java.nio.charset.StandardCharsets.UTF_8);
+        } catch (java.io.IOException | RuntimeException e) {
+            return;
+        }
+        boolean inQuests = false;
+        boolean annex = admin;
+        java.util.regex.Pattern key = java.util.regex.Pattern.compile("^  ([A-Za-z0-9_\\-]+):\\s*(#.*)?$");
+        for (String line : lines) {
+            if (!line.startsWith(" ") && !line.startsWith("#") && !line.isBlank()) {
+                inQuests = line.startsWith("quetes:");
+                continue;
+            }
+            if (!inQuests) {
+                continue;
+            }
+            String t = line.trim();
+            if (t.startsWith("# ====")) {
+                String up = t.toUpperCase(java.util.Locale.ROOT);
+                if (up.contains("ANNEXE")) {
+                    annex = true;
+                } else if (up.contains("PRINCIPAL")) {
+                    annex = false;
+                }
+                continue;
+            }
+            java.util.regex.Matcher m = key.matcher(line);
+            if (m.matches()) {
+                if (annex) {
+                    side.add(m.group(1));
+                } else {
+                    side.remove(m.group(1));
+                }
+            }
+        }
+    }
+
     public NpcDef npc(String id) {
         return id == null ? null : npcs.get(id);
     }
@@ -385,6 +575,18 @@ public final class QuestRegistry {
         for (StepDef s : q.steps()) {
             if (s.point() != null) {
                 out.add(s.point());
+            }
+            if (s.x() != null) {
+                out.addAll(s.x().path());
+                for (Clue c : s.x().clues()) {
+                    out.add(c.point());
+                }
+                if (s.x().start() != null) {
+                    out.add(s.x().start());
+                }
+                if (s.x().spawnPoint() != null) {
+                    out.add(s.x().spawnPoint());
+                }
             }
             NpcDef n = npc(s.npc());
             if (n != null) {

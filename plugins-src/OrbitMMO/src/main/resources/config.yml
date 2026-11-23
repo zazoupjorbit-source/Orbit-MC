@@ -285,3 +285,8 @@ bosses:
     bars: 5
     adds: loup_givre
     lab: { kind: armor, name: "Cuirasse de givre", item: IRON_CHESTPLATE, value: 12 }
+
+# Cristal de teleportation (reutilisable, lie au joueur ; un aubergiste le lie a son auberge).
+# recharge-secondes : temps entre deux usages (0 = aucune recharge).
+cristal:
+  recharge-secondes: 600

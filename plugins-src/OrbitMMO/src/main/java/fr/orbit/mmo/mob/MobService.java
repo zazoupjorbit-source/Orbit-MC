@@ -147,17 +147,12 @@ public final class MobService implements Listener {
         inst.setBaseValue(multiply ? inst.getBaseValue() * value : value);
     }
 
-    /** Nom au-dessus de la tête : nom, niveau, et barre de vie une fois touché. */
+    /** Plus de nom vanilla : le nom, le niveau et la barre de vie sont affichés par hud/Nameplates. */
     public void updateName(MobState ms) {
-        String name = ms.boss != null
-                ? "<#FF3B3B><b>" + Text.esc(ms.def.name()) + "</b></#FF3B3B>"
-                : "<#FF8A7A>" + Text.esc(ms.def.name()) + "</#FF8A7A>";
-        String text = name + " <#8C96A3>Lv." + ms.level + "</#8C96A3>";
-        if (ms.revealed) {
-            text += " " + Text.hpBar(ms.hp / ms.maxHp, 10);
+        if (ms.entity.customName() != null) {
+            ms.entity.customName(null);
         }
-        ms.entity.customName(Text.mm(text));
-        ms.entity.setCustomNameVisible(ms.revealed || ms.boss != null);
+        ms.entity.setCustomNameVisible(false);
     }
 
     /** Mort : éclats, récompenses, retrait. */

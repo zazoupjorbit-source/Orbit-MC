@@ -55,6 +55,10 @@ public final class OrbitMMO extends JavaPlugin {
     private fr.orbit.mmo.guild.GuildService guilds;
     private fr.orbit.mmo.hud.TabList tab;
     private fr.orbit.mmo.mount.MountService mounts;
+    private fr.orbit.mmo.hud.Nameplates nameplates;
+    private fr.orbit.mmo.hud.DamageNumbers damageNumbers;
+    private fr.orbit.mmo.hud.MiniMap miniMap;
+    private fr.orbit.mmo.inn.InnService inns;
 
     @Override
     public void onEnable() {
@@ -79,6 +83,8 @@ public final class OrbitMMO extends JavaPlugin {
         spells = new SpellEngine(this);
         bar = new SpellBar(this);
         hud = new Hud(this);
+        nameplates = new fr.orbit.mmo.hud.Nameplates(this);
+        damageNumbers = new fr.orbit.mmo.hud.DamageNumbers(this);
         playerListener = new PlayerListener(this);
         gear = new fr.orbit.mmo.item.Gear(this);
         market = new fr.orbit.mmo.market.Market(this);
@@ -115,6 +121,11 @@ public final class OrbitMMO extends JavaPlugin {
         mobs.start();
         bosses.start();
         hud.start();
+        nameplates.start();
+        damageNumbers.start();
+        miniMap = new fr.orbit.mmo.hud.MiniMap(this);
+        miniMap.start();
+        register("carte", miniMap);
         tab = new fr.orbit.mmo.hud.TabList(this);
         tab.start();
         combat.start();
@@ -141,6 +152,11 @@ public final class OrbitMMO extends JavaPlugin {
         pm.registerEvents(mounts, this);
         register("monture", new fr.orbit.mmo.mount.MountCommand(this, mounts));
 
+        // Auberges (paquet fr.orbit.mmo.inn) : cristal de téléportation réutilisable et lié, aubergistes (/continent aubergistes).
+        inns = new fr.orbit.mmo.inn.InnService(this);
+        inns.enable();
+        pm.registerEvents(inns, this);
+
         for (Player p : getServer().getOnlinePlayers()) {
             playerListener.join(p);
             if (pack.enabled()) {
@@ -153,6 +169,9 @@ public final class OrbitMMO extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (nameplates != null) {
+            nameplates.stop();
+        }
         if (spells != null) {
             spells.stop();
         }
@@ -283,6 +302,11 @@ public final class OrbitMMO extends JavaPlugin {
         return mounts;
     }
 
+    /** Chiffres de dégâts flottants, visibles du seul attaquant. */
+    public fr.orbit.mmo.hud.DamageNumbers damageNumbers() {
+        return damageNumbers;
+    }
+
     public Hud hud() {
         return hud;
     }
@@ -313,5 +337,10 @@ public final class OrbitMMO extends JavaPlugin {
     /** Hôtel des ventes entre joueurs. */
     public fr.orbit.mmo.market.Market market() {
         return market;
+    }
+
+    /** Auberges et cristal de téléportation. */
+    public fr.orbit.mmo.inn.InnService inns() {
+        return inns;
     }
 }

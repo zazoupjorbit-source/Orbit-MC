@@ -699,11 +699,9 @@ public final class SpellBar implements Listener {
                 plugin.hud().flash(p, "<#FF8AD8><b>Soin !</b>", 30);
             }
             case "tp_crystal" -> {
-                if (now - d.lastCombat < 5000) {
-                    deny(p, "Impossible en plein combat");
-                    return;
-                }
-                plugin.hud().flash(p, "<#7FD4FF><b>Téléportation !</b> <#D7DCE2>" + Text.esc(plugin.floors().recall(p, d)), 40);
+                // Réutilisable et lié depuis le 23/11 : la recharge remplace la consommation (inn.InnService).
+                plugin.inns().use(p, d, item);
+                return;
             }
             default -> {
                 return;

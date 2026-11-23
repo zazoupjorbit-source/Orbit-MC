@@ -363,6 +363,27 @@ public static class HudHd
         Save(c, fontDir + "/hud_cast.png", true);
     }
 
+    /**
+     * Cadre de la barre de vie au-dessus des creatures et des joueurs (hud/Nameplates) : 42 x 6, interieur creuse
+     * de 40 x 4 en (1, 1) ou se pose le remplissage teinte, liseré d'or tres fin.
+     */
+    static void PlateFrame()
+    {
+        Canvas c = New(42, 6);
+        Graphics g = c.G;
+        using (GraphicsPath o = RR(0.15f, 0.15f, 41.7f, 5.7f, 1.4f))
+        {
+            using (SolidBrush b = new SolidBrush(Color.FromArgb(235, OUT))) g.FillPath(b, o);
+            Stroke(g, o, Color.FromArgb(210, GOLD_D), 0.35f);
+        }
+        using (GraphicsPath hl = RR(0.55f, 0.45f, 40.9f, 1.2f, 0.6f))
+        using (LinearGradientBrush b = new LinearGradientBrush(new RectangleF(0, 0.44f, 42, 1.22f), Color.FromArgb(90, GOLD_L), Color.FromArgb(0, GOLD_L), 90f))
+            g.FillPath(b, hl);
+        FillRectV(g, 1, 1, 40, 4, H("0A1226", 235), H("17223F", 235));
+        FillRectV(g, 1, 1, 40, 1f, Color.FromArgb(160, 0, 0, 0), Color.FromArgb(0, 0, 0, 0));
+        Save(c, fontDir + "/plate_frame.png", true);
+    }
+
     /** Remplissages blancs (teintes par la couleur du texte) : degrade vertical avec reflet en haut. */
     static void Fills()
     {
@@ -1015,6 +1036,7 @@ public static class HudHd
         Bridge();
         Cast();
         Fills();
+        PlateFrame();
         Emblems();
         ZoneIcons();
         Hotbar();

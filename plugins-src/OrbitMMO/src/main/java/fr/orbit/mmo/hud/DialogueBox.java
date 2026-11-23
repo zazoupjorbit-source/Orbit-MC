@@ -50,6 +50,14 @@ public final class DialogueBox {
      */
     public static Component build(String name, TextColor nameColor, List<String> lines, int shown, TextColor textColor,
                                   boolean italic, String hint, boolean slot, String portrait) {
+        TextColor[] colors = new TextColor[LINES];
+        java.util.Arrays.fill(colors, textColor);
+        return build(name, nameColor, lines, shown, colors, italic, hint, slot, portrait);
+    }
+
+    /** Même boîte, une couleur par ligne (fenêtre d'offre de quête : résumé, puis récompenses). */
+    public static Component build(String name, TextColor nameColor, List<String> lines, int shown, TextColor[] colors,
+                                  boolean italic, String hint, boolean slot, String portrait) {
         Console c = new Console();
         int total = FRAME_WIDTH + (slot ? GAP + SLOT_WIDTH : 0);
         int left = -total / 2;
@@ -76,7 +84,7 @@ public final class DialogueBox {
             if (part.isEmpty()) {
                 continue;
             }
-            c.plain(textLeft, Component.text(part).font(LINE_FONTS[i]).color(textColor).decoration(TextDecoration.BOLD, false)
+            c.plain(textLeft, Component.text(part).font(LINE_FONTS[i]).color(colors[Math.min(i, colors.length - 1)]).decoration(TextDecoration.BOLD, false)
                     .decoration(TextDecoration.ITALIC, italic), FontWidths.width(part, false));
         }
         if (hint != null && !hint.isEmpty()) {

@@ -152,6 +152,9 @@ public final class Market implements Listener {
         if (SpellBar.isLocked(it)) {
             return "Les objets de sort et « Mon personnage » ne se vendent pas.";
         }
+        if (fr.orbit.mmo.inn.InnService.isCrystal(it)) {
+            return "Votre cristal de téléportation est lié à vous : il ne se vend pas.";
+        }
         if ("weapon".equals(Items.type(it))) {
             int weapons = 0;
             for (ItemStack o : p.getInventory().getStorageContents()) {
