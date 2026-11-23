@@ -129,7 +129,7 @@ public final class Combat {
         if (!plugin.getConfig().getBoolean("pvp.enabled", true)) {
             return false;
         }
-        if (!a.getWorld().equals(v.getWorld()) || plugin.floors().floorOf(a.getWorld()) <= 0) {
+        if (!a.getWorld().equals(v.getWorld()) || !plugin.inGame(a.getWorld())) {
             return false;
         }
         if (!fighting(a) || !fighting(v)) {

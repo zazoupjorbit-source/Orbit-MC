@@ -17,7 +17,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
-/** Les étages sont protégés : pas de construction (sauf mode construction admin), pas de faim, pas de météo. */
+/**
+ * Les étages et le continent sont protégés : pas de construction (sauf mode construction admin dans un étage,
+ * administrateur en créatif sur le continent), pas de faim, pas de météo.
+ */
 public final class WorldListener implements Listener {
 
     private final OrbitMMO plugin;
@@ -27,6 +30,9 @@ public final class WorldListener implements Listener {
     }
 
     private boolean protectedFor(Player p) {
+        if (plugin.continent() != null && plugin.continent().isContinent(p.getWorld())) {
+            return !fr.orbit.mmo.continent.ContinentService.builder(p);
+        }
         if (plugin.floors().floorOf(p.getWorld()) <= 0) {
             return false;
         }
@@ -96,7 +102,7 @@ public final class WorldListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onFood(FoodLevelChangeEvent e) {
-        if (plugin.floors().floorOf(e.getEntity().getWorld()) > 0) {
+        if (plugin.inGame(e.getEntity().getWorld())) {
             e.setCancelled(true);
             // La barre de faim suit l'endurance (Stamina) : jamais de vraie faim dans les étages.
             fr.orbit.mmo.player.PlayerData d = plugin.players().loaded(e.getEntity().getUniqueId());
@@ -106,21 +112,21 @@ public final class WorldListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onExplode(EntityExplodeEvent e) {
-        if (plugin.floors().floorOf(e.getEntity().getWorld()) > 0) {
+        if (plugin.inGame(e.getEntity().getWorld())) {
             e.blockList().clear();
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onWeather(WeatherChangeEvent e) {
-        if (e.toWeatherState() && plugin.floors().floorOf(e.getWorld()) > 0) {
+        if (e.toWeatherState() && plugin.inGame(e.getWorld())) {
             e.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onItemDamage(PlayerItemDamageEvent e) {
-        if (plugin.floors().floorOf(e.getPlayer().getWorld()) > 0) {
+        if (plugin.inGame(e.getPlayer().getWorld())) {
             e.setCancelled(true);
         }
     }
@@ -128,7 +134,7 @@ public final class WorldListener implements Listener {
     /** Seuls les monstres du plugin apparaissent (pas de jockeys, renforts ni apparition naturelle). */
     @EventHandler(ignoreCancelled = true)
     public void onSpawn(CreatureSpawnEvent e) {
-        if (plugin.floors().floorOf(e.getLocation().getWorld()) <= 0) {
+        if (!plugin.inGame(e.getLocation().getWorld())) {
             return;
         }
         switch (e.getSpawnReason()) {

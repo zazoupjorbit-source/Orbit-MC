@@ -64,8 +64,13 @@ public final class ContinentService implements Listener {
     private int parallel = 64;
     private Job job;
     private CapitalService capitals;
+    private SiteService sites;
+    private ContinentFauna fauna;
     /** Dernière zone annoncée à chaque joueur. */
     private final Map<UUID, String> zones = new HashMap<>();
+    /** Entrée de donjon par laquelle chaque joueur est passé (pour l'y ramener à la sortie de l'étage). */
+    private final Map<UUID, String> cameFrom = new HashMap<>();
+    private final Map<UUID, Long> portalCooldown = new HashMap<>();
     private final Map<Material, Integer> colors = new EnumMap<>(Material.class);
 
     public ContinentService(OrbitMMO plugin) {
@@ -75,6 +80,10 @@ public final class ContinentService implements Listener {
 
     public boolean ready() {
         return world != null;
+    }
+
+    OrbitMMO plugin() {
+        return plugin;
     }
 
     public ContinentData data() {
@@ -98,9 +107,22 @@ public final class ContinentService implements Listener {
         return capitals;
     }
 
-    /** Zone sûre du continent : l'emprise d'une capitale, de la ville ou d'un village. */
+    /** Les autres sites (villages, donjons, camps, ruines, cratères), ou null si le continent n'est pas chargé. */
+    public SiteService sites() {
+        return sites;
+    }
+
+    /** La faune du continent, ou null si le continent n'est pas chargé. */
+    public ContinentFauna fauna() {
+        return fauna;
+    }
+
+    /** Zone sûre du continent : l'emprise d'une capitale, de la ville, d'un village ou d'un hameau construit. */
     public boolean isSafe(Location l) {
-        return l != null && isContinent(l.getWorld()) && data.placeAt(l.getBlockX(), l.getBlockZ()) != null;
+        if (l == null || !isContinent(l.getWorld())) {
+            return false;
+        }
+        return data.placeAt(l.getBlockX(), l.getBlockZ()) != null || (sites != null && sites.safeAt(l.getBlockX(), l.getBlockZ()) != null);
     }
 
     /** Charge les données et le monde. Sans effet si « continent.enabled » est à false. */
@@ -150,6 +172,9 @@ public final class ContinentService implements Listener {
         plugin.getServer().getScheduler().runTaskTimer(plugin, this::pump, 20L, 1L);
         capitals = new CapitalService(plugin, this);
         capitals.load();
+        sites = new SiteService(plugin, this);
+        sites.load();
+        fauna = new ContinentFauna(plugin, this);
         plugin.getLogger().info("Continent « " + name + " » chargé en " + (System.currentTimeMillis() - t0) + " ms : "
                 + data.size + " x " + data.size + " blocs, " + data.regions.size() + " régions, " + data.places.size()
                 + " lieux, " + data.roads.size() + " routes.");
@@ -193,6 +218,9 @@ public final class ContinentService implements Listener {
         if (capitals != null) {
             capitals.shutdown();
         }
+        if (sites != null) {
+            sites.shutdown();
+        }
         if (job != null) {
             job.cancelled = true;
             job.end(false);
@@ -207,7 +235,78 @@ public final class ContinentService implements Listener {
         if (built != null) {
             return built;
         }
+        built = sites == null ? null : sites.arrival(x, z);
+        if (built != null) {
+            return built;
+        }
         return new Location(world, x + 0.5, generator.standY(x, z), z + 0.5);
+    }
+
+    private static boolean hostile(String placeFaction, String faction) {
+        return (placeFaction.equals("lumiere") && "ombre".equals(faction)) || (placeFaction.equals("ombre") && "lumiere".equals(faction));
+    }
+
+    /**
+     * Où réapparaît un joueur tombé sur le continent : le lieu sûr le plus proche qui n'est pas à la faction adverse.
+     *
+     * @param name reçoit en [0] le nom du lieu
+     * @return null si la mort n'a pas eu lieu sur le continent
+     */
+    public Location respawn(Location death, String faction, String[] name) {
+        if (death == null || !isContinent(death.getWorld())) {
+            return null;
+        }
+        int x = death.getBlockX(), z = death.getBlockZ();
+        double best = Double.MAX_VALUE;
+        ContinentData.Place nearest = null;
+        for (ContinentData.Place p : data.places) {
+            double d = Math.hypot(x - p.x(), z - p.z());
+            if (p.safe() > 0 && !hostile(p.faction(), faction) && d < best) {
+                best = d;
+                nearest = p;
+            }
+        }
+        Location out = null;
+        if (nearest != null) {
+            out = arrival(nearest.x(), nearest.z());
+            name[0] = nearest.name();
+        }
+        if (sites != null) {
+            for (SiteService.Built b : sites.built()) {
+                SiteDesign.Site s = b.site();
+                double d = Math.hypot(x - s.x(), z - s.z());
+                Location spawn = b.points().get("spawn");
+                if (s.safe() > 0 && s.kind().equals("village") && spawn != null && !hostile(s.faction(), faction) && d < best) {
+                    best = d;
+                    out = spawn.clone();
+                    name[0] = s.name();
+                }
+            }
+        }
+        return out;
+    }
+
+    /**
+     * Sortie d'un étage par son arche : ramène devant le donjon du continent par lequel le joueur était entré.
+     *
+     * @return false s'il n'était pas entré par un donjon (l'arche garde alors son usage habituel)
+     */
+    public boolean leaveFloor(Player p) {
+        String id = cameFrom.remove(p.getUniqueId());
+        Location back = id == null || sites == null ? null : sites.point(id, "entree");
+        if (back == null) {
+            return false;
+        }
+        portalCooldown.put(p.getUniqueId(), System.currentTimeMillis() + 4000);
+        fr.orbit.mmo.util.Fx.teleport(p.getLocation());
+        SiteDesign.Site s = sites.site(id);
+        p.teleportAsync(back.clone()).thenAccept(ok -> {
+            if (ok && p.isOnline()) {
+                fr.orbit.mmo.util.Fx.teleport(back);
+                Text.title(p, "<#7FD4FF><b>" + Text.esc(s.name()) + "</b>", "<#D7DCE2>De retour sur le continent", 5, 40, 15);
+            }
+        });
+        return true;
     }
 
     // ------------------------------------------------------------------ État (empreinte du dessin, avancée de la pré-génération)
@@ -228,7 +327,8 @@ public final class ContinentService implements Listener {
         return world != null && world.equals(w);
     }
 
-    private static boolean builder(Player p) {
+    /** Administrateur en créatif : le seul à pouvoir retoucher le continent à la main. */
+    public static boolean builder(Player p) {
         return p.getGameMode() == GameMode.CREATIVE && p.hasPermission("orbitmmo.admin");
     }
 
@@ -340,6 +440,9 @@ public final class ContinentService implements Listener {
         }
         Location from = e.getFrom();
         Player p = e.getPlayer();
+        if (to.getBlockX() != from.getBlockX() || to.getBlockZ() != from.getBlockZ() || to.getBlockY() != from.getBlockY()) {
+            portal(p, to);
+        }
         if ((to.getBlockX() >> 2) == (from.getBlockX() >> 2) && (to.getBlockZ() >> 2) == (from.getBlockZ() >> 2)
                 && zones.containsKey(p.getUniqueId())) {
             return;
@@ -347,8 +450,28 @@ public final class ContinentService implements Listener {
         int x = to.getBlockX(), z = to.getBlockZ();
         ContinentData.Place place = data.placeAt(x, z);
         ContinentData.Region region = data.region(x, z);
-        String key = place != null ? "lieu:" + place.name() : (region != null ? "region:" + region.id() : "mer");
+        SiteService.Built here = place != null || sites == null ? null : sites.near(x, z, 80, null);
+        if (here != null) {
+            SiteDesign.Site s = here.site();
+            boolean hamlet = s.safe() > 0 && s.kind().equals("village");
+            if (Math.hypot(x - s.x(), z - s.z()) > (hamlet ? s.safe() : s.radius() + 4)) {
+                here = null;
+            }
+        }
+        String key = place != null ? "lieu:" + place.name() : (here != null ? "site:" + here.site().id() : (region != null ? "region:" + region.id() : "mer"));
         if (key.equals(zones.put(p.getUniqueId(), key))) {
+            return;
+        }
+        if (here != null) {
+            SiteDesign.Site s = here.site();
+            String what = switch (s.kind()) {
+                case "village" -> "Hameau <#5A6270>·</#5A6270> zone sûre";
+                case "donjon" -> s.floor() > 0 ? "Donjon <#5A6270>·</#5A6270> étage " + s.floor() : "Donjon <#5A6270>·</#5A6270> portail scellé";
+                case "camp" -> "Camp de monstres <#5A6270>·</#5A6270> niveau " + Math.min(s.levelMax(), fauna.levelAt(s.x(), s.z()) + 1);
+                case "ruine" -> "Ruine";
+                default -> factionName(s.faction());
+            };
+            Text.title(p, factionColor(s.kind().equals("camp") ? "neutre" : s.faction()) + "<b>" + Text.esc(s.name()) + "</b>", "<#D7DCE2>" + what, 8, 50, 16);
             return;
         }
         if (place != null) {
@@ -361,9 +484,44 @@ public final class ContinentService implements Listener {
         }
     }
 
+    /** Portail d'un donjon construit : ouvert, il mène à la ville de son étage ; scellé, il le dit. */
+    private void portal(Player p, Location to) {
+        if (sites == null) {
+            return;
+        }
+        SiteService.Built b = sites.near(to.getBlockX(), to.getBlockZ(), 24, "donjon");
+        Location gate = b == null ? null : b.points().get("portail");
+        if (gate == null || Math.abs(to.getY() - gate.getY()) > 7 || Math.hypot(to.getX() - gate.getX(), to.getZ() - gate.getZ()) > 2.4) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        Long cd = portalCooldown.get(p.getUniqueId());
+        if (cd != null && cd > now) {
+            return;
+        }
+        portalCooldown.put(p.getUniqueId(), now + 4000);
+        SiteDesign.Site s = b.site();
+        fr.orbit.mmo.player.PlayerData d = plugin.players().loaded(p.getUniqueId());
+        if (d == null || d.classId == null) {
+            return;
+        }
+        if (s.floor() <= 0) {
+            plugin.hud().flash(p, "<#8C96A3>Le portail de <white>" + Text.esc(s.name()) + "</white> est scellé.", 50);
+            return;
+        }
+        if (!plugin.floors().unlocked(s.floor())) {
+            plugin.hud().flash(p, "<#FF8A3B>Ce portail s'ouvrira quand le boss de l'étage " + (s.floor() - 1) + " sera vaincu.", 60);
+            return;
+        }
+        cameFrom.put(p.getUniqueId(), s.id());
+        plugin.floors().teleport(p, s.floor(), true);
+    }
+
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         zones.remove(e.getPlayer().getUniqueId());
+        cameFrom.remove(e.getPlayer().getUniqueId());
+        portalCooldown.remove(e.getPlayer().getUniqueId());
     }
 
     public static String factionColor(String faction) {
@@ -614,6 +772,9 @@ public final class ContinentService implements Listener {
         }
         if (capitals != null && capitals.busy()) {
             return "Une capitale est en travaux : " + capitals.status() + ".";
+        }
+        if (sites != null && sites.busy()) {
+            return "Des sites sont en travaux : " + sites.status() + ".";
         }
         YamlConfiguration state = state();
         if (!restart && state.getBoolean("pregen.fini")) {
@@ -869,6 +1030,9 @@ public final class ContinentService implements Listener {
         }
         if (capitals != null && capitals.busy()) {
             return "Une capitale est en travaux : " + capitals.status() + ".";
+        }
+        if (sites != null && sites.busy()) {
+            return "Des sites sont en travaux : " + sites.status() + ".";
         }
         step = Math.max(1, Math.min(16, step));
         size = Math.max(64, Math.min(oblique ? 1024 : 2048 * step, size));

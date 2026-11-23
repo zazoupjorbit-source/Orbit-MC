@@ -90,7 +90,10 @@ public final class ResourcePackService implements Listener {
             throw new IllegalStateException(e);
         }
         packId = UUID.nameUUIDFromBytes(("orbitmmo:" + hash).getBytes(StandardCharsets.UTF_8));
-        if (publicUrl.isEmpty() && !startHttp()) {
+        // Le serveur intégré reste lancé avec une URL publique : elle peut pointer sur un tunnel
+        // (Cloudflare, etc.) qui relaie vers ce port. serve-local: false pour un vrai CDN.
+        boolean serveLocal = c.getBoolean("resource-pack.serve-local", true);
+        if (serveLocal && !startHttp() && publicUrl.isEmpty()) {
             return;
         }
         enabled = true;

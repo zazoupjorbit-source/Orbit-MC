@@ -356,6 +356,6 @@ public final class ContinentData {
 
     public static String plain(String s) {
         String d = Normalizer.normalize(s, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
-        return d.toLowerCase(Locale.ROOT).replace('œ', 'o').replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
+        return d.toLowerCase(Locale.ROOT).replace("œ", "oe").replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
     }
 }

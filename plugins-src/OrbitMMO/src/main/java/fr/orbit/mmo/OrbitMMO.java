@@ -255,6 +255,15 @@ public final class OrbitMMO extends JavaPlugin {
     }
 
     /** Le continent (monde ouvert). */
+    public fr.orbit.mmo.quest.QuestService quests() {
+        return quests;
+    }
+
+    /** Monde de jeu : un étage ou le continent (mêmes règles de faim, d'usure, d'apparition et de PvP). */
+    public boolean inGame(org.bukkit.World w) {
+        return floors.floorOf(w) > 0 || (continent != null && continent.isContinent(w));
+    }
+
     public fr.orbit.mmo.continent.ContinentService continent() {
         return continent;
     }

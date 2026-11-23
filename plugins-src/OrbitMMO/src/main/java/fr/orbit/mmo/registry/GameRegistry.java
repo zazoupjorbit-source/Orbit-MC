@@ -38,25 +38,11 @@ public final class GameRegistry {
         bosses.clear();
         floors.clear();
 
-        ConfigurationSection ms = c.getConfigurationSection("mobs");
-        if (ms != null) {
-            for (String id : ms.getKeys(false)) {
-                ConfigurationSection s = ms.getConfigurationSection(id);
-                EntityType type = entity(s == null ? null : s.getString("type"));
-                if (s == null || type == null || !type.isAlive()) {
-                    plugin.getLogger().warning("Monstre « " + id + " » ignoré : type d'entité invalide.");
-                    continue;
-                }
-                DropDef drop = null;
-                ConfigurationSection dr = s.getConfigurationSection("drop");
-                if (dr != null) {
-                    drop = new DropDef(dr.getString("name", "Matériau"), material(dr.getString("item"), Material.PAPER),
-                            dr.getInt("sell", 5), dr.getDouble("chance", 0.3));
-                }
-                mobs.put(id, new MobDef(id, s.getString("name", id), type, s.getDouble("hp", 1), s.getDouble("damage", 1),
-                        s.getDouble("speed", 1), s.getDouble("scale", 1), s.getDouble("xp", 1), s.getDouble("col", 1),
-                        material(s.getString("weapon"), null), drop));
-            }
+        addMobs(c.getConfigurationSection("mobs"), true);
+        // Monstres du continent (sites.yml) : relus ici pour survivre à un rechargement de la configuration.
+        java.io.File sites = new java.io.File(plugin.getDataFolder(), "sites.yml");
+        if (sites.isFile()) {
+            addMobs(org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(sites).getConfigurationSection("monstres"), false);
         }
 
         ConfigurationSection bs = c.getConfigurationSection("bosses");
@@ -112,6 +98,37 @@ public final class GameRegistry {
 
     public MobDef mob(String id) {
         return id == null ? null : mobs.get(id);
+    }
+
+    /**
+     * Ajoute des monstres décrits comme dans « mobs » (config.yml).
+     *
+     * @param replace false pour ne pas remplacer un monstre déjà défini
+     */
+    public void addMobs(ConfigurationSection ms, boolean replace) {
+        if (ms == null) {
+            return;
+        }
+        for (String id : ms.getKeys(false)) {
+            if (!replace && mobs.containsKey(id)) {
+                continue;
+            }
+            ConfigurationSection s = ms.getConfigurationSection(id);
+            EntityType type = entity(s == null ? null : s.getString("type"));
+            if (s == null || type == null || !type.isAlive()) {
+                plugin.getLogger().warning("Monstre « " + id + " » ignoré : type d'entité invalide.");
+                continue;
+            }
+            DropDef drop = null;
+            ConfigurationSection dr = s.getConfigurationSection("drop");
+            if (dr != null) {
+                drop = new DropDef(dr.getString("name", "Matériau"), material(dr.getString("item"), Material.PAPER),
+                        dr.getInt("sell", 5), dr.getDouble("chance", 0.3));
+            }
+            mobs.put(id, new MobDef(id, s.getString("name", id), type, s.getDouble("hp", 1), s.getDouble("damage", 1),
+                    s.getDouble("speed", 1), s.getDouble("scale", 1), s.getDouble("xp", 1), s.getDouble("col", 1),
+                    material(s.getString("weapon"), null), drop));
+        }
     }
 
     public BossDef boss(String id) {

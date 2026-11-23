@@ -175,6 +175,7 @@ public final class MobService implements Listener {
     /** Retire sans récompense (dépop, réinitialisation d'un boss). */
     public void remove(MobState ms) {
         ms.dead = true;
+        ms.despawned = true;
         tracked.remove(ms.entity.getUniqueId());
         ms.entity.remove();
     }
@@ -253,9 +254,13 @@ public final class MobService implements Listener {
                 }
             }
         }
+        // Le continent a sa propre faune (régions, camps, ruines).
+        if (plugin.continent() != null && plugin.continent().fauna() != null) {
+            plugin.continent().fauna().spawnTick();
+        }
     }
 
-    private boolean eligible(Player p) {
+    public boolean eligible(Player p) {
         if (p.getGameMode() != GameMode.SURVIVAL && p.getGameMode() != GameMode.ADVENTURE) {
             return false;
         }
@@ -263,7 +268,18 @@ public final class MobService implements Listener {
         return d != null && d.classId != null;
     }
 
-    private int countNear(Location l, double r) {
+    /** Nombre de monstres (hors boss) dans ce monde. */
+    public int count(World w) {
+        int n = 0;
+        for (MobState ms : tracked.values()) {
+            if (ms.boss == null && ms.entity.getWorld().equals(w)) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    public int countNear(Location l, double r) {
         int n = 0;
         double r2 = r * r;
         for (MobState ms : tracked.values()) {
@@ -335,8 +351,13 @@ public final class MobService implements Listener {
                 continue;
             }
             Location l = e.getLocation();
+            boolean onContinent = plugin.continent() != null && plugin.continent().isContinent(l.getWorld());
+            if (onContinent && plugin.continent().fauna() != null && plugin.continent().fauna().stray(ms)) {
+                remove(ms);
+                continue;
+            }
             double d = Math.sqrt(l.getX() * l.getX() + l.getZ() * l.getZ());
-            if (d < townR) {
+            if (!onContinent && d < townR) {
                 // Les monstres n'entrent pas en ville.
                 Vector out = new Vector(l.getX(), 0, l.getZ());
                 if (out.lengthSquared() < 1.0E-4) {
