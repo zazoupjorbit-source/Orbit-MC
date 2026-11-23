@@ -31,7 +31,8 @@
   },
   "mariadb": {
     "version": "11.8.2",
-    "url": "https://archive.mariadb.org/mariadb-11.8.2/winx64-packages/mariadb-11.8.2-winx64.zip"
+    "url": "https://archive.mariadb.org/mariadb-11.8.2/winx64-packages/mariadb-11.8.2-winx64.zip",
+    "sha256": "e93ae57c8b5dc424778ba428a762a4cd4ec62f8ffd15db0bbd9e01660ce06416"
   },
   "maven": {
     "version": "3.9.16",

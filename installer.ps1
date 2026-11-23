@@ -13,14 +13,49 @@ $cache = Join-Path $Racine 'tools\telechargements'
 New-Item -ItemType Directory -Force $cache | Out-Null
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
-function Telecharger([string]$url, [string]$nom, [string]$sha256) {
+# Telecharge en plusieurs morceaux en parallele (serveurs qui brident chaque connexion, ex. archive.mariadb.org).
+# Renvoie $false si ce n'est pas possible : on retombe alors sur le telechargement simple.
+function Telecharger-EnMorceaux([string]$url, [string]$tmp, [int]$morceaux) {
+    $curl = Join-Path $env:SystemRoot 'System32\curl.exe'
+    if (-not (Test-Path $curl)) { return $false }
+    $old = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    $tete = & $curl -sIL --max-time 30 $url 2>$null | ForEach-Object { "$_" }
+    $ErrorActionPreference = $old
+    $taille = 0
+    foreach ($l in $tete) { if ($l -match '^content-length:\s*(\d+)') { $taille = [long]$matches[1] } }
+    if ($taille -lt 20MB -or -not ($tete -match '^accept-ranges:\s*bytes')) { return $false }
+    $pas = [long][Math]::Ceiling($taille / $morceaux)
+    $procs = @(); $parts = @()
+    for ($i = 0; $i -lt $morceaux; $i++) {
+        $debut = $i * $pas; $finO = [Math]::Min($taille, ($i + 1) * $pas) - 1
+        $part = "$tmp.$i"; $parts += $part
+        if (Test-Path $part) { Remove-Item $part -Force }
+        $procs += Start-Process $curl -ArgumentList '-L', '--fail', '--silent', '--retry', '5', '--retry-all-errors', '-r', "$debut-$finO", '-o', "`"$part`"", "`"$url`"" -WindowStyle Hidden -PassThru
+    }
+    $procs | ForEach-Object { $_.WaitForExit() }
+    $ok = $true
+    for ($i = 0; $i -lt $morceaux; $i++) {
+        $attendu = [Math]::Min($taille, ($i + 1) * $pas) - ($i * $pas)
+        if (-not (Test-Path $parts[$i]) -or (Get-Item $parts[$i]).Length -ne $attendu) { $ok = $false }
+    }
+    if ($ok) {
+        $sortie = [IO.File]::Create($tmp)
+        try { foreach ($p in $parts) { $e = [IO.File]::OpenRead($p); try { $e.CopyTo($sortie) } finally { $e.Close() } } } finally { $sortie.Close() }
+    }
+    $parts | Where-Object { Test-Path $_ } | Remove-Item -Force
+    return $ok
+}
+
+function Telecharger([string]$url, [string]$nom, [string]$sha256, [int]$Morceaux = 1) {
     $dest = Join-Path $cache $nom
     if ((Test-Path $dest) -and $sha256 -and ((Get-FileHash $dest -Algorithm SHA256).Hash -ne $sha256.ToUpper())) { Remove-Item $dest -Force }
     if (-not (Test-Path $dest)) {
         Info "Telechargement de $nom ..."
         $tmp = "$dest.part"
         $curl = Join-Path $env:SystemRoot 'System32\curl.exe'
-        if (Test-Path $curl) {
+        if ($Morceaux -gt 1 -and (Telecharger-EnMorceaux $url $tmp $Morceaux)) {
+            # fait
+        } elseif (Test-Path $curl) {
             & $curl -L --fail --silent --show-error --retry 3 -o $tmp $url
             if ($LASTEXITCODE -ne 0) { throw "Telechargement en echec : $url" }
         } else {
@@ -110,7 +145,7 @@ Etape "4/8  Base MariaDB locale (port $PortBase, donnees dans db\data)"
 $bin = Get-MariaBin
 if ($MariaPortable -and -not (Test-Path (Join-Path $Racine 'tools\mariadb\bin'))) { $bin = $null }
 if (-not $bin) {
-    $zip = Telecharger $v.mariadb.url "mariadb-$($v.mariadb.version)-winx64.zip" $null
+    $zip = Telecharger $v.mariadb.url "mariadb-$($v.mariadb.version)-winx64.zip" $v.mariadb.sha256 8
     Info "Decompression de MariaDB (un peu long)..."
     Dezipper-Vers $zip (Join-Path $Racine 'tools\mariadb')
     $bin = Get-MariaBin
