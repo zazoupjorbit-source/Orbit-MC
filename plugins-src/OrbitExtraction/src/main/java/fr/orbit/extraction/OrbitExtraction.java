@@ -57,6 +57,7 @@ public final class OrbitExtraction extends JavaPlugin {
     private fr.orbit.extraction.armor.Armors armors;
     private fr.orbit.extraction.event.RaidEvents events;
     private fr.orbit.extraction.phone.Market market;
+    private fr.orbit.extraction.hud.Hud hud;
 
     @Override
     public void onEnable() {
@@ -91,6 +92,7 @@ public final class OrbitExtraction extends JavaPlugin {
         events = new fr.orbit.extraction.event.RaidEvents(this);
         market = new fr.orbit.extraction.phone.Market(this);
         market.loadData();
+        hud = new fr.orbit.extraction.hud.Hud(this);
 
         mags.load();
         loadSettings();
@@ -111,6 +113,7 @@ public final class OrbitExtraction extends JavaPlugin {
         pm.registerEvents(ranks, this);
         pm.registerEvents(miniMap, this);
         pm.registerEvents(vehicles, this);
+        pm.registerEvents(hud, this);
         miniMap.enable();
         pack.enable();
 
@@ -133,12 +136,16 @@ public final class OrbitExtraction extends JavaPlugin {
         market.start();
         ranks.start();
         vehicles.start();
+        hud.start();
         getServer().getScheduler().runTaskTimerAsynchronously(this, mags::save, 1200L, 1200L);
         getLogger().info("Orbit Extraction prêt.");
     }
 
     @Override
     public void onDisable() {
+        if (hud != null) {
+            hud.shutdown();    // tableaux de score rendus, messages de barre d'action remis à la normale
+        }
         if (pack != null) {
             pack.shutdown();
         }
@@ -296,5 +303,9 @@ public final class OrbitExtraction extends JavaPlugin {
 
     public fr.orbit.extraction.phone.Market market() {
         return market;
+    }
+
+    public fr.orbit.extraction.hud.Hud hud() {
+        return hud;
     }
 }

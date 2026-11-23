@@ -85,6 +85,9 @@ public final class GunListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onSwap(PlayerSwapHandItemsEvent e) {
+        if (e.isCancelled()) {
+            return;    // Maj + F : fiche de l'opérateur (hud/Hud.java)
+        }
         if (guns.reloadKey(e.getPlayer())) {
             e.setCancelled(true);
         }

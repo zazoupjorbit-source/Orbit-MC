@@ -12,6 +12,7 @@ import net.kyori.adventure.resource.ResourcePackStatus;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
@@ -197,11 +198,11 @@ public final class LobbyPack implements Listener {
         return h.contains(":") ? "[" + h + "]" : h;
     }
 
-    private ResourcePackRequest request(UUID player, String host, CompletableFuture<Void> done) {
+    private ResourcePackRequest request(UUID player, String host, CompletableFuture<Void> done, boolean replace) {
         ResourcePackInfo info = ResourcePackInfo.resourcePackInfo(packId, URI.create(url(host)), hash);
         return ResourcePackRequest.resourcePackRequest()
                 .packs(info)
-                .replace(false)
+                .replace(replace)
                 .required(required)
                 .prompt(Messages.mini("<#8DB8FF><b>ORBIT</b></#8DB8FF>\n<#D7DCE2>Menus du lobby et anneaux-portails du réseau."))
                 .callback((id, status, audience) -> {
@@ -221,7 +222,7 @@ public final class LobbyPack implements Listener {
     }
 
     /** Phase de configuration : le pack est chargé pendant l'écran de connexion. */
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onConfigure(AsyncPlayerConnectionConfigureEvent event) {
         if (!enabled) {
             return;
@@ -232,7 +233,9 @@ public final class LobbyPack implements Listener {
             return;
         }
         CompletableFuture<Void> done = new CompletableFuture<>();
-        conn.getAudience().sendResourcePacks(request(player, host(conn.getVirtualHost()), done));
+        // Connexion à ce serveur : retire les packs des serveurs précédents (via le proxy, le client les garde),
+        // le pack du mode éventuel s'ajoute ensuite par-dessus (son écouteur est en priorité HIGH).
+        conn.getAudience().sendResourcePacks(request(player, host(conn.getVirtualHost()), done, true));
         try {
             done.get(WAIT_SECONDS, TimeUnit.SECONDS);
         } catch (TimeoutException e) {
@@ -248,7 +251,7 @@ public final class LobbyPack implements Listener {
     /** Renvoi manuel (joueurs déjà connectés au rechargement, ou /orbitdev pack). */
     public void send(Player p) {
         if (enabled) {
-            p.sendResourcePacks(request(p.getUniqueId(), host(p.getVirtualHost()), null));
+            p.sendResourcePacks(request(p.getUniqueId(), host(p.getVirtualHost()), null, false));
         }
     }
 

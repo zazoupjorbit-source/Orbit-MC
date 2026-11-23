@@ -1,0 +1,33 @@
+{
+  "providers": [
+    {"type": "space", "advances": {"\uF801": -1, "\uF821": 1, "\uF802": -2, "\uF822": 2, "\uF803": -4, "\uF823": 4, "\uF804": -8, "\uF824": 8, "\uF805": -16, "\uF825": 16, "\uF806": -32, "\uF826": 32, "\uF807": -64, "\uF827": 64, "\uF808": -128, "\uF828": 128}},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_tiny.png", "ascent": -37, "height": 7, "chars": ["\uE100\uE101\uE102\uE103\uE104\uE105\uE106\uE107\uE108\uE109\uE10A\uE10B\uE10C\uE10D\uE10E\uE10F", "\uE110\uE111\uE112\uE113\uE114\uE115\uE116\uE117\uE118\uE119\uE11A\uE11B\uE11C\uE11D\uE11E\uE11F", "\uE120\uE121\uE122\uE123\uE124\uE125\uE126\uE127\uE128\uE129\uE12A\uE12B\uE12C\uE12D\uE12E\uE12F", "\uE130\uE131\uE132\uE133\uE134\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_tiny.png", "ascent": -46, "height": 7, "chars": ["\uE140\uE141\uE142\uE143\uE144\uE145\uE146\uE147\uE148\uE149\uE14A\uE14B\uE14C\uE14D\uE14E\uE14F", "\uE150\uE151\uE152\uE153\uE154\uE155\uE156\uE157\uE158\uE159\uE15A\uE15B\uE15C\uE15D\uE15E\uE15F", "\uE160\uE161\uE162\uE163\uE164\uE165\uE166\uE167\uE168\uE169\uE16A\uE16B\uE16C\uE16D\uE16E\uE16F", "\uE170\uE171\uE172\uE173\uE174\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_tiny.png", "ascent": -51, "height": 7, "chars": ["\uE180\uE181\uE182\uE183\uE184\uE185\uE186\uE187\uE188\uE189\uE18A\uE18B\uE18C\uE18D\uE18E\uE18F", "\uE190\uE191\uE192\uE193\uE194\uE195\uE196\uE197\uE198\uE199\uE19A\uE19B\uE19C\uE19D\uE19E\uE19F", "\uE1A0\uE1A1\uE1A2\uE1A3\uE1A4\uE1A5\uE1A6\uE1A7\uE1A8\uE1A9\uE1AA\uE1AB\uE1AC\uE1AD\uE1AE\uE1AF", "\uE1B0\uE1B1\uE1B2\uE1B3\uE1B4\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_tiny.png", "ascent": -56, "height": 7, "chars": ["\uE1C0\uE1C1\uE1C2\uE1C3\uE1C4\uE1C5\uE1C6\uE1C7\uE1C8\uE1C9\uE1CA\uE1CB\uE1CC\uE1CD\uE1CE\uE1CF", "\uE1D0\uE1D1\uE1D2\uE1D3\uE1D4\uE1D5\uE1D6\uE1D7\uE1D8\uE1D9\uE1DA\uE1DB\uE1DC\uE1DD\uE1DE\uE1DF", "\uE1E0\uE1E1\uE1E2\uE1E3\uE1E4\uE1E5\uE1E6\uE1E7\uE1E8\uE1E9\uE1EA\uE1EB\uE1EC\uE1ED\uE1EE\uE1EF", "\uE1F0\uE1F1\uE1F2\uE1F3\uE1F4\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_tiny_cast.png", "ascent": 17, "height": 17, "chars": ["\uE200\uE201\uE202\uE203\uE204\uE205\uE206\uE207\uE208\uE209\uE20A\uE20B\uE20C\uE20D\uE20E\uE20F", "\uE210\uE211\uE212\uE213\uE214\uE215\uE216\uE217\uE218\uE219\uE21A\uE21B\uE21C\uE21D\uE21E\uE21F", "\uE220\uE221\uE222\uE223\uE224\uE225\uE226\uE227\uE228\uE229\uE22A\uE22B\uE22C\uE22D\uE22E\uE22F", "\uE230\uE231\uE232\uE233\uE234\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_wing_l_0.png", "ascent": -34, "height": 31, "chars": ["\uE300"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_wing_l_1.png", "ascent": -34, "height": 31, "chars": ["\uE301"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_wing_l_hole_0.png", "ascent": -34, "height": 31, "chars": ["\uE302"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_wing_l_hole_1.png", "ascent": -34, "height": 31, "chars": ["\uE303"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_wing_r_0.png", "ascent": -34, "height": 31, "chars": ["\uE304"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_wing_r_1.png", "ascent": -34, "height": 31, "chars": ["\uE305"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_bridge_0.png", "ascent": -35, "height": 7, "chars": ["\uE306"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_bridge_1.png", "ascent": -35, "height": 7, "chars": ["\uE307"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_bridge_2.png", "ascent": -35, "height": 7, "chars": ["\uE308"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_fill8_1.png", "ascent": -45, "height": 8, "chars": ["\uE310"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_fill8_8.png", "ascent": -45, "height": 8, "chars": ["\uE311"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_fill4_1.png", "ascent": -56, "height": 4, "chars": ["\uE312"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_fill4_8.png", "ascent": -56, "height": 4, "chars": ["\uE313"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_fill3_1.png", "ascent": -37, "height": 3, "chars": ["\uE314"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_fill3_8.png", "ascent": -37, "height": 3, "chars": ["\uE315"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_fillc_1.png", "ascent": 17, "height": 17, "chars": ["\uE316"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_fillc_8.png", "ascent": 17, "height": 17, "chars": ["\uE317"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_rank.png", "ascent": -46, "height": 16, "chars": ["\uE320"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_zone_safe.png", "ascent": -48, "height": 11, "chars": ["\uE330"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_zone_raid.png", "ascent": -48, "height": 11, "chars": ["\uE331"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_zone_extract.png", "ascent": -48, "height": 11, "chars": ["\uE332"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_cast_0.png", "ascent": 19, "height": 19, "chars": ["\uE340"]},
+    {"type": "bitmap", "file": "orbitextraction:font/hud_cast_1.png", "ascent": 19, "height": 19, "chars": ["\uE341"]}
+  ]
+}

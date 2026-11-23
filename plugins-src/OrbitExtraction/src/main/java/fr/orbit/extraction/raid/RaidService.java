@@ -58,6 +58,8 @@ public final class RaidService implements Listener {
 
     private final Map<UUID, BossBar> bars = new HashMap<>();
     private final Map<UUID, Integer> extracting = new HashMap<>();
+    /** Point d'extraction dans lequel se trouve chaque joueur en cours d'extraction (pour la console). */
+    private final Map<UUID, Extract> extractingAt = new HashMap<>();
     private final Map<UUID, BukkitTask> deploying = new HashMap<>();
     /** Joueurs dont on cherche encore le point d'apparition (chargement du chunk). */
     private final Set<UUID> locating = new HashSet<>();
@@ -138,6 +140,23 @@ public final class RaidService implements Listener {
 
     public boolean isExtracting(Player p) {
         return extracting.containsKey(p.getUniqueId());
+    }
+
+    /** Extraction en cours pour la console du HUD, null s'il n'y en a pas. */
+    public fr.orbit.extraction.hud.Cast extraction(Player p) {
+        Integer t = extracting.get(p.getUniqueId());
+        Extract ex = extractingAt.get(p.getUniqueId());
+        if (t == null || ex == null) {
+            return null;
+        }
+        int need = Math.max(1, ex.seconds() * 20);
+        return new fr.orbit.extraction.hud.Cast("<#2ECC71>Extraction</#2ECC71> <#D7DCE2>" + Text.esc(ex.name()),
+                t / (double) need, Math.max(0, (need - t) / 20.0), "#2ECC71");
+    }
+
+    /** Durée totale d'un raid (ms). */
+    public long durationMs() {
+        return durationMs;
     }
 
     public Location hideout() {
@@ -341,6 +360,7 @@ public final class RaidService implements Listener {
         pr.inRaid = false;
         pr.extracts = new ArrayList<>();
         extracting.remove(p.getUniqueId());
+        extractingAt.remove(p.getUniqueId());
         BossBar bar = bars.remove(p.getUniqueId());
         if (bar != null) {
             p.hideBossBar(bar);
@@ -427,6 +447,7 @@ public final class RaidService implements Listener {
         }
         UUID id = p.getUniqueId();
         if (inside == null || p.isDead()) {
+            extractingAt.remove(id);
             if (extracting.remove(id) != null) {
                 Text.bar(p, "<#C0392B>Extraction interrompue");
             }
@@ -438,7 +459,15 @@ public final class RaidService implements Listener {
             extract(p, inside.name());
             return;
         }
+        extractingAt.put(id, inside);
         double left = (need - t) / 20.0;
+        if (plugin.hud().drawn(p)) {
+            // Avec le pack : barre de progression de la console ; seul le son marque le temps.
+            if (t % 20 == 0) {
+                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 0.5f, 0.6f + (float) (t / (double) need));
+            }
+            return;
+        }
         Text.bar(p, "<#2ECC71>Extraction</#2ECC71> <#D7DCE2>" + Text.esc(inside.name()) + "</#D7DCE2>  "
                 + Text.gauge(t / (double) need, 14, "#2ECC71", "#3A3F47")
                 + "  <#8A919B>" + String.format(Locale.ROOT, "%.1f", left).replace('.', ',') + " s");
@@ -508,7 +537,7 @@ public final class RaidService implements Listener {
     }
 
     /** Flèche relative au regard du joueur vers une position. */
-    private static String arrow(Player p, Location to) {
+    public static String arrow(Player p, Location to) {
         double dx = to.getX() - p.getX();
         double dz = to.getZ() - p.getZ();
         double target = Math.toDegrees(Math.atan2(-dx, dz));
@@ -593,6 +622,7 @@ public final class RaidService implements Listener {
     public void onQuit(PlayerQuitEvent e) {
         UUID id = e.getPlayer().getUniqueId();
         extracting.remove(id);
+        extractingAt.remove(id);
         BossBar bar = bars.remove(id);
         if (bar != null) {
             e.getPlayer().hideBossBar(bar);

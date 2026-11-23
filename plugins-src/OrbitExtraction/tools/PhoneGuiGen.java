@@ -456,6 +456,53 @@ public class PhoneGuiGen {
         accentSlot(8, 5, accent);
     }
 
+    // =====================================================================================
+    // Fiche de l'opérateur (Maj + F) : quatre bandeaux de 8 cases, icône de section dessinée en tête de chacun
+    // =====================================================================================
+    static final int[] BAND_COLORS = {0xFFE8695C, 0xFF9AA4C0, 0xFF22C7D9, 0xFFF5C542};
+    static final String[] BAND_ICONS = {"kit", "shop", "stats", "stash"};
+
+    static int[][] profileItems() {
+        List<int[]> l = new ArrayList<>();
+        l.add(new int[]{8, 0, 0xFFF5C542});
+        for (int r = 1; r <= 4; r++) for (int c = 1; c <= 8; c++) l.add(new int[]{c, r, BAND_COLORS[r - 1]});
+        return l.toArray(new int[0][]);
+    }
+
+    static void drawProfile() {
+        frame("OPÉRATEUR", "kit", "stats");
+        iconSlot(0, 0, "back", RED_HI);
+        accentSlot(8, 0, 0xFFF5C542);
+        heading("MA FICHE");
+        for (int r = 1; r <= 4; r++) {
+            int acc = BAND_COLORS[r - 1];
+            int x = sx(0) * S - 6, y = sy(r) * S - 3, w = 9 * 36 + 8, h = 38;
+            shape(x, y, w, h, 4, new int[]{mix(acc, 0xFF0A0A0C, 0.8), mix(acc, 0xFF0A0A0C, 0.9)}, OUT, mix(acc, 0xFF0A0A0C, 0.45), 0xFF060607);
+            // filet de couleur derrière les huit cases du bandeau
+            for (int i = sx(1) * S - 4; i < sx(8) * S + 36; i++) px(i, y + h / 2, mix(acc, 0xFF0A0A0C, 0.65));
+            for (int c = 1; c <= 8; c++) slot(sx(c), sy(r));
+            iconSlot(0, r, BAND_ICONS[r - 1], acc);
+        }
+        // rail du bas et bouton « fermer » au centre
+        int ry = sy(5) * S + 15;
+        rect(46, ry - 1, 260, 4, OUT); rect(46, ry, 260, 1, METAL_HI); rect(46, ry + 1, 260, 1, METAL[2]);
+        accentSlot(4, 5, RED_HI);
+        icon(sx(4) * S + 4, sy(5) * S + 7, "close", 2, OUT, 0xFF020203, new int[]{0xFFFFFFFF, RED_HI2, RED_HI, RED});
+    }
+
+    static {
+        ICONS.put("close", new String[]{        // croix
+                ".##......##.",
+                "#ww#....#hm#",
+                ".#wh#..#hm#.",
+                "..#hh##mm#..",
+                "...#hmmd#...",
+                "..#hm##dd#..",
+                ".#hm#..#dd#.",
+                "#hm#....#dd#",
+                ".##......##."});
+    }
+
     // ---------- aperçu ----------
     static final String[] ITEM = {
             "................", "......####......", ".....#wwhh#.....", "....#wwhhhm#....", "...#wwhhhmmm#...", "..#whhhhmmmmd#..",
@@ -549,6 +596,8 @@ public class PhoneGuiGen {
         drawList("MARCHÉ", "tag", "HÔTEL DES VENTES", 0xFFE05CB8, false);
         for (int c : new int[]{2, 4, 6}) accentSlot(c, 5, 0xFFE05CB8);    // mes annonces, vendre, récupérer
         write("hdv", HDV_ITEMS, pack, previews);
+        drawProfile();
+        write("profil", profileItems(), pack, previews);
         writeFont(pack);
         System.out.println("OK " + SCREENS.size() + " ecrans du telephone");
     }

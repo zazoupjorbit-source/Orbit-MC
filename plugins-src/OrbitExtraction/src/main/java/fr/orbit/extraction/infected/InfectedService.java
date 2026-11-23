@@ -280,6 +280,7 @@ public final class InfectedService implements Listener {
                 attr(b, Attribute.SCALE, d.bodyScale());
             }, CreatureSpawnEvent.SpawnReason.CUSTOM);
             bodyTeam().addEntity(body);
+            plugin.hud().panel().mirrorEntry(BODY_TEAM, body.getUniqueId().toString());    // tableaux des joueurs (hud/Panel)
             inf.body = body;
             bodies.put(body.getUniqueId(), inf);
             inf.mob.setInvisible(true);

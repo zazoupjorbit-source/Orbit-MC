@@ -11,6 +11,7 @@ import net.kyori.adventure.resource.ResourcePackStatus;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -189,6 +190,7 @@ public final class ResourcePackService implements Listener {
         ResourcePackInfo info = ResourcePackInfo.resourcePackInfo(packId, URI.create(url(host)), hash);
         return ResourcePackRequest.resourcePackRequest()
                 .packs(info)
+                // Par-dessus le pack du lobby (envoyé avant, en LOWEST, qui retire ceux des serveurs précédents).
                 .replace(false)
                 .required(required)
                 .prompt(Text.mm("<#C0392B><b>Orbit Extraction</b></#C0392B>\n<#D7DCE2>Armes à feu en 3D, infectés, écrans du téléphone. "
@@ -217,7 +219,7 @@ public final class ResourcePackService implements Listener {
     }
 
     /** Phase de configuration : le pack est chargé pendant l'écran de connexion. */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onConfigure(AsyncPlayerConnectionConfigureEvent event) {
         if (!enabled) {
             return;

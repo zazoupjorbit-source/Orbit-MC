@@ -46,8 +46,22 @@ public final class Text {
         to.sendMessage(mm(PREFIX + mini));
     }
 
+    /**
+     * Destination des messages de barre d'action : la console du HUD (hud/Hud.java) les affiche sur sa ligne de
+     * texte quand elle est dessinée (renvoie true) ; sinon, barre d'action normale.
+     */
+    private static java.util.function.BiPredicate<Player, Component> barSink;
+
+    public static void barSink(java.util.function.BiPredicate<Player, Component> sink) {
+        barSink = sink;
+    }
+
     public static void bar(Player p, String mini) {
-        p.sendActionBar(mm(mini));
+        Component c = mm(mini);
+        if (barSink != null && barSink.test(p, c)) {
+            return;
+        }
+        p.sendActionBar(c);
     }
 
     public static void title(Player p, String title, String subtitle, int in, int stay, int out) {

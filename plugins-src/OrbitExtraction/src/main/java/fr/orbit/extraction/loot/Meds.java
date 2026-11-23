@@ -126,6 +126,27 @@ public final class Meds implements Listener {
         return a == null ? 20 : a.getValue();
     }
 
+    /** Soin en cours pour la console du HUD, null s'il n'y en a pas. */
+    public fr.orbit.extraction.hud.Cast progress(Player p) {
+        Use u = using.get(p.getUniqueId());
+        if (u == null) {
+            return null;
+        }
+        return new fr.orbit.extraction.hud.Cast("<#2ECC71>" + Text.esc(u.def.name()) + "</#2ECC71>",
+                u.elapsed / (double) Math.max(1, u.def.useTicks()), Math.max(0, (u.def.useTicks() - u.elapsed) / 20.0), "#2ECC71");
+    }
+
+    /** Nombre d'objets de soin dans l'inventaire. */
+    public int count(Player p) {
+        int n = 0;
+        for (ItemStack it : p.getInventory().getContents()) {
+            if (defOf(it) != null) {
+                n += it.getAmount();
+            }
+        }
+        return n;
+    }
+
     private void tick() {
         Iterator<Map.Entry<UUID, Use>> it = using.entrySet().iterator();
         while (it.hasNext()) {
@@ -154,8 +175,10 @@ public final class Meds implements Listener {
                 Text.bar(p, "<#2ECC71>+" + fmt(d.heal() / 2) + " ❤</#2ECC71> <#8A919B>" + Text.esc(d.name()));
                 continue;
             }
-            Text.bar(p, "<#E8695C>" + Text.esc(d.name()) + "</#E8695C>  " + Text.gauge(u.elapsed / (double) d.useTicks(), 16, "#2ECC71", "#3A3F47")
-                    + "  <#8A919B>" + fmt((d.useTicks() - u.elapsed) / 20.0) + " s");
+            if (!plugin.hud().drawn(p)) {    // avec le pack : barre de progression de la console
+                Text.bar(p, "<#E8695C>" + Text.esc(d.name()) + "</#E8695C>  " + Text.gauge(u.elapsed / (double) d.useTicks(), 16, "#2ECC71", "#3A3F47")
+                        + "  <#8A919B>" + fmt((d.useTicks() - u.elapsed) / 20.0) + " s");
+            }
             if (u.elapsed % 10 == 0) {
                 p.playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 0.5f, 1.3f);
             }

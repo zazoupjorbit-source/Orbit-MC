@@ -425,6 +425,33 @@ public final class GunService {
         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_IRON_TRAPDOOR_CLOSE, 0.7f, 1.8f);
     }
 
+    /**
+     * Arme en main pour la console du HUD.
+     *
+     * @param reload avancement du rechargement (0 à 1), -1 s'il n'y en a pas
+     */
+    public record GunStatus(String name, int mag, int magMax, int reserve, String ammo, double reload, double reloadLeft, boolean aiming) {
+    }
+
+    /** Arme tenue en main, null si le joueur ne tient pas d'arme à feu. */
+    public GunStatus status(Player p) {
+        ItemStack hand = p.getInventory().getItemInMainHand();
+        GunDef g = items.gunOf(hand);
+        if (g == null) {
+            return null;
+        }
+        AmmoDef a = plugin.guns().ammo(g.ammo());
+        Shooter s = shooters.get(p.getUniqueId());
+        double reload = -1, left = 0;
+        if (s != null && s.reloadEnd >= 0) {
+            int now = Bukkit.getCurrentTick();
+            reload = Math.max(0, Math.min(1, (now - s.reloadStart) / (double) Math.max(1, s.reloadEnd - s.reloadStart)));
+            left = Math.max(0, (s.reloadEnd - now) / 20.0);
+        }
+        return new GunStatus(g.name(), mags.get(items.uidOf(hand)), g.mag(), items.reserve(p, g.ammo()),
+                a == null ? g.ammo() : a.name(), reload, left, aiming.contains(p.getUniqueId()));
+    }
+
     private void hud(Player p, int now) {
         ItemStack hand = p.getInventory().getItemInMainHand();
         GunDef g = items.gunOf(hand);
@@ -434,8 +461,8 @@ public final class GunService {
         if (items.ensureModel(hand, g)) {
             p.getInventory().setItemInMainHand(hand);
         }
-        if (plugin.raid().isExtracting(p)) {
-            return;
+        if (plugin.raid().isExtracting(p) || plugin.hud().drawn(p)) {
+            return;    // avec le pack, les munitions sont dans la console (hud/Hud.java)
         }
         Shooter s = shooters.get(p.getUniqueId());
         if (s != null && s.reloadEnd >= 0) {

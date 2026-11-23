@@ -24,6 +24,10 @@
     {"type": "bitmap", "file": "orbitguns:gui/hdv.png", "height": 62, "ascent": 37, "chars": ["\uE250\uE251", "\u0000\u0000", "\u0000\u0000", "\u0000\u0000"]},
     {"type": "bitmap", "file": "orbitguns:gui/hdv.png", "height": 62, "ascent": -25, "chars": ["\u0000\u0000", "\uE252\uE253", "\u0000\u0000", "\u0000\u0000"]},
     {"type": "bitmap", "file": "orbitguns:gui/hdv.png", "height": 62, "ascent": -87, "chars": ["\u0000\u0000", "\u0000\u0000", "\uE254\uE255", "\u0000\u0000"]},
-    {"type": "bitmap", "file": "orbitguns:gui/hdv.png", "height": 62, "ascent": -149, "chars": ["\u0000\u0000", "\u0000\u0000", "\u0000\u0000", "\uE256\uE257"]}
+    {"type": "bitmap", "file": "orbitguns:gui/hdv.png", "height": 62, "ascent": -149, "chars": ["\u0000\u0000", "\u0000\u0000", "\u0000\u0000", "\uE256\uE257"]},
+    {"type": "bitmap", "file": "orbitguns:gui/profil.png", "height": 62, "ascent": 37, "chars": ["\uE260\uE261", "\u0000\u0000", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitguns:gui/profil.png", "height": 62, "ascent": -25, "chars": ["\u0000\u0000", "\uE262\uE263", "\u0000\u0000", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitguns:gui/profil.png", "height": 62, "ascent": -87, "chars": ["\u0000\u0000", "\u0000\u0000", "\uE264\uE265", "\u0000\u0000"]},
+    {"type": "bitmap", "file": "orbitguns:gui/profil.png", "height": 62, "ascent": -149, "chars": ["\u0000\u0000", "\u0000\u0000", "\u0000\u0000", "\uE266\uE267"]}
   ]
 }

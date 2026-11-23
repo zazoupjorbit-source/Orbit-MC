@@ -13,6 +13,7 @@ import net.kyori.adventure.resource.ResourcePackStatus;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
@@ -215,7 +216,7 @@ public final class ResourcePackService implements Listener {
     }
 
     /** Phase de configuration : le pack est chargé pendant l'écran de connexion. */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onConfigure(AsyncPlayerConnectionConfigureEvent event) {
         if (!enabled) {
             return;

@@ -869,7 +869,7 @@ $jdk = Get-ChildItem (Join-Path $dev 'java') -Directory | Where-Object Name -lik
 if (-not $jdk) { throw "JDK 25 introuvable dans $dev\java" }
 $java = Join-Path $jdk.FullName 'bin\java.exe'
 $previews = Join-Path $root 'maquettes'
-foreach ($tool in 'InfectedSkins.java', 'ArmorSkins.java', 'PhoneGuiGen.java', 'VehiclePreview.java') {
+foreach ($tool in 'InfectedSkins.java', 'ArmorSkins.java', 'PhoneGuiGen.java', 'VehiclePreview.java', 'HudGen.java') {
     & $java '-Dfile.encoding=UTF-8' (Join-Path $PSScriptRoot $tool) $out $previews
     if ($LASTEXITCODE -ne 0) { throw "Echec de $tool" }
 }

@@ -43,7 +43,7 @@ public final class PhoneMenu implements Listener {
     /** L'ordre fixe les points de code de la police : même ordre que dans PhoneGuiGen.main. */
     public enum Screen {
         HOME("Téléphone"), SHOP("Téléphone — boutique"), COLIS("Téléphone — colis"), MESSAGES("Téléphone — messages"),
-        KITS("Téléphone — kits"), HDV("Téléphone — hôtel des ventes");
+        KITS("Téléphone — kits"), HDV("Téléphone — hôtel des ventes"), PROFIL("Téléphone — fiche de l'opérateur");
 
         private final String plain;
 
@@ -197,6 +197,7 @@ public final class PhoneMenu implements Listener {
             case MESSAGES -> messages(p);
             case KITS -> kits(p);
             case HDV -> market(p, page);
+            case PROFIL -> profile(p);
         }
     }
 
@@ -257,7 +258,8 @@ public final class PhoneMenu implements Listener {
                 "<#8A919B>Raids : <#D7DCE2>" + pr.raids + "</#D7DCE2>  •  Extraits : <#2ECC71>" + pr.survived,
                 "<#8A919B>Morts : <#C0392B>" + pr.deaths,
                 "<#8A919B>Joueurs abattus : <#D7DCE2>" + pr.pvpKills,
-                "<#8A919B>Infectés abattus : <#D7DCE2>" + pr.infectedKills), e -> click(p));
+                "<#8A919B>Infectés abattus : <#D7DCE2>" + pr.infectedKills, "",
+                "<#5A6270>Clic : fiche de l'opérateur <#3A3F47>(Maj + F)"), e -> open(p, Screen.PROFIL));
 
         // Dernière ligne : trois boutons larges (3 cases chacun) : kits, hôtel des ventes, carte.
         Rank rank = plugin.ranks().of(p);
@@ -309,6 +311,241 @@ public final class PhoneMenu implements Listener {
                 set(h, r * 9 + c, it, action);
             }
         }
+    }
+
+    // ------------------------------------------------------------------ fiche de l'opérateur (Maj + F)
+
+    /**
+     * Fiche de l'opérateur, comme la fiche « Mon personnage » d'Orbit MMO : quatre bandeaux de huit cases, chacun
+     * précédé de son icône (dessinée dans la texture) : état, équipement porté, bilan, planque et compte.
+     */
+    private void profile(Player p) {
+        Holder h = create(p, Screen.PROFIL, 0);
+        boolean textured = plugin.pack().isLoaded(p.getUniqueId());
+        boolean raid = plugin.raid().inRaid(p);
+        Profile pr = plugin.profiles().get(p);
+        Rank rank = plugin.ranks().of(p);
+        set(h, 0, zone(textured, Material.ARROW, "<#E8695C>← Retour", List.of("<#8A919B>Écran d'accueil du téléphone")),
+                e -> open(p, Screen.HOME));
+        set(h, 8, creditsItem(p), null);
+
+        // --- Bandeau 1 : état
+        set(h, 9, zone(textured, Material.RED_STAINED_GLASS_PANE, "<#E8695C><b>État</b>",
+                List.of("<#8A919B>Ce que tu portes sur toi, maintenant.")), null);
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+        head.editMeta(SkullMeta.class, m -> {
+            m.setOwningPlayer(p);
+            m.displayName(Text.item("<#E8695C><b>" + Text.esc(p.getName()) + "</b>"));
+            m.lore(Text.lore(List.of(
+                    "<#8A919B>Rang : " + rank.tag(),
+                    "<#8A919B>Statut : " + (raid ? "<#E67E22>en raid" : "<#2ECC71>à la planque"),
+                    "<#8A919B>Crédits : <#F5C542>" + phone.credits(p))));
+        });
+        set(h, 10, head, null);
+
+        double max = maxHealth(p);
+        long hp = Math.round(Math.max(0, p.getHealth()) * 100 / Math.max(1, max));
+        String hpCol = hp > 50 ? "#2ECC71" : hp > 25 ? "#F1C40F" : "#E74C3C";
+        set(h, 11, icon(Material.GLISTERING_MELON_SLICE, "<#FF5C5C><b>Vie</b>", List.of(
+                "<#8A919B>Vie : <" + hpCol + ">" + hp + "</" + hpCol + "> <#5A6270>/ 100",
+                "<#5A6270>" + fmt(p.getHealth() / 2) + " coeurs sur " + fmt(max / 2), "",
+                "<#8A919B>Pas de régénération en raid :",
+                "<#8A919B>bandages et trousses de soin (clic droit).")), null);
+
+        org.bukkit.attribute.AttributeInstance armorAttr = p.getAttribute(org.bukkit.attribute.Attribute.ARMOR);
+        org.bukkit.attribute.AttributeInstance toughAttr = p.getAttribute(org.bukkit.attribute.Attribute.ARMOR_TOUGHNESS);
+        set(h, 12, icon(Material.SHIELD, "<#D7DCE2><b>Protection</b>", List.of(
+                "<#8A919B>Armure : <white>" + fmt(armorAttr == null ? 0 : armorAttr.getValue()),
+                "<#8A919B>Robustesse : <white>" + fmt(toughAttr == null ? 0 : toughAttr.getValue()), "",
+                "<#5A6270>Le chiffre de l'écrou, à gauche de la console.")), null);
+
+        int food = p.getFoodLevel();
+        set(h, 13, icon(Material.COOKED_BEEF, "<#E6A23C><b>Vivres</b>", List.of(
+                "<#8A919B>Faim : " + (food <= 6 ? "<#C0392B>" : "<white>") + food + " <#5A6270>/ 20",
+                food <= 6 ? "<#C0392B>Affamé : tu ne peux plus courir." : "<#5A6270>La petite barre sous la vie.")), null);
+
+        fr.orbit.extraction.gun.GunService.GunStatus g = plugin.gunService().status(p);
+        set(h, 14, g == null
+                ? icon(Material.IRON_HORSE_ARMOR, "<#D9C27A><b>Arme en main</b>", List.of("<#5A6270>Aucune arme à feu en main."))
+                : withLore(p.getInventory().getItemInMainHand(), List.of("", "<#D9C27A>Chargeur : <white>" + g.mag() + " <#5A6270>/ " + g.magMax(),
+                "<#D9C27A>Réserve : <white>" + g.reserve() + " <#5A6270>(" + g.ammo() + ")")), null);
+
+        int meds = plugin.meds().count(p);
+        set(h, 15, icon(Material.PAPER, "<#2ECC71><b>Soins</b>", List.of(
+                "<#8A919B>Dans le sac : <white>" + meds,
+                "<#5A6270>Clic droit avec l'objet, sans bouger", "<#5A6270>d'objet ni prendre de coup.")), null);
+
+        long left = raid ? Math.max(0, (pr.raidEnds - System.currentTimeMillis()) / 1000) : 0;
+        set(h, 16, icon(raid ? Material.CLOCK : Material.CAMPFIRE, raid ? "<#E67E22><b>Raid en cours</b>" : "<#2ECC71><b>À la planque</b>", raid
+                ? List.of("<#8A919B>Temps restant : <white>" + Text.clock(left),
+                "<#8A919B>Extractions : <#2ECC71>" + String.join("<#5A6270>, </#5A6270><#2ECC71>", pr.extracts), "",
+                "<#5A6270>Clic : distances et directions")
+                : List.of("<#8A919B>En sécurité. Prépare ton équipement,", "<#8A919B>puis pars en raid depuis le téléphone.")), e -> {
+            if (plugin.raid().inRaid(p)) {
+                p.closeInventory();
+                plugin.raid().info(p);
+            }
+        });
+
+        List<String> rankLore = new ArrayList<>();
+        rankLore.add("<#8A919B>Rang : " + rank.tag());
+        if (rank.creditBonus() > 0) {
+            rankLore.add("<#8A919B>Crédits gagnés : <#2ECC71>+" + Math.round(rank.creditBonus() * 100) + " %");
+        }
+        if (rank.shopDiscount() > 0) {
+            rankLore.add("<#8A919B>Boutique : <#2ECC71>-" + Math.round(rank.shopDiscount() * 100) + " %");
+        }
+        if (rank.parcelCut() > 0) {
+            rankLore.add("<#8A919B>Attente des colis : <#2ECC71>-" + Math.round(rank.parcelCut() * 100) + " %");
+        }
+        if (rankLore.size() == 1) {
+            rankLore.add("<#5A6270>Aucun avantage de rang.");
+        }
+        rankLore.add("");
+        rankLore.add("<#5A6270>Les rangs ne donnent que du confort :");
+        rankLore.add("<#5A6270>armes et tenues se trouvent en jeu.");
+        set(h, 17, icon(Material.NETHER_STAR, "<" + rank.color() + "><b>Rang</b>", rankLore), null);
+
+        // --- Bandeau 2 : équipement porté
+        set(h, 18, zone(textured, Material.GRAY_STAINED_GLASS_PANE, "<#B8C0CA><b>Équipement</b>",
+                List.of("<#8A919B>Tenue, armes et objets en main.")), null);
+        org.bukkit.inventory.PlayerInventory inv = p.getInventory();
+        worn(h, textured, 19, inv.getHelmet(), "Casque");
+        worn(h, textured, 20, inv.getChestplate(), "Plastron");
+        worn(h, textured, 21, inv.getLeggings(), "Jambières");
+        worn(h, textured, 22, inv.getBoots(), "Bottes");
+        set(h, 23, outfitIcon(p), null);
+        int grenades = 0;
+        for (ItemStack it : inv.getContents()) {
+            if (it != null && plugin.items().grenadeOf(it) != null) {
+                grenades += it.getAmount();
+            }
+        }
+        set(h, 24, icon(Material.FIREWORK_STAR, "<#E67E22><b>Grenades</b>", List.of("<#8A919B>Dans le sac : <white>" + grenades)), null);
+        worn(h, textured, 25, inv.getItemInMainHand(), "Main droite");
+        worn(h, textured, 26, inv.getItemInOffHand(), "Main gauche");
+
+        // --- Bandeau 3 : bilan
+        set(h, 27, zone(textured, Material.CYAN_STAINED_GLASS_PANE, "<#22C7D9><b>Bilan</b>",
+                List.of("<#8A919B>Tes statistiques depuis ton premier raid.")), null);
+        int survival = pr.raids == 0 ? 0 : (int) Math.round(pr.survived * 100.0 / pr.raids);
+        set(h, 28, stat(Material.COMPASS, "Raids", String.valueOf(pr.raids), "Largages sur l'île."), null);
+        set(h, 29, stat(Material.LIME_DYE, "Extractions", String.valueOf(pr.survived), "Raids terminés vivant, butin gardé."), null);
+        set(h, 30, stat(Material.EMERALD, "Taux de survie", survival + " %", "Extractions / raids."), null);
+        set(h, 31, stat(Material.SKELETON_SKULL, "Morts", String.valueOf(pr.deaths), "Tout l'inventaire reste sur place."), null);
+        set(h, 32, stat(Material.IRON_SWORD, "Joueurs abattus", String.valueOf(pr.pvpKills), "Opérateurs éliminés en raid."), null);
+        set(h, 33, stat(Material.ROTTEN_FLESH, "Infectés abattus", String.valueOf(pr.infectedKills), "Chaque infecté rapporte des crédits."), null);
+        String kd = String.format(java.util.Locale.ROOT, "%.2f", pr.pvpKills / (double) Math.max(1, pr.deaths)).replace('.', ',');
+        set(h, 34, stat(Material.TARGET, "Ratio J/M", kd, "Joueurs abattus par mort."), null);
+        set(h, 35, stat(Material.BONE, "Éliminations", String.valueOf(pr.pvpKills + pr.infectedKills), "Joueurs et infectés confondus."), null);
+
+        // --- Bandeau 4 : planque et compte
+        set(h, 36, zone(textured, Material.YELLOW_STAINED_GLASS_PANE, "<#F5C542><b>Planque</b>",
+                List.of("<#8A919B>Ton coffre, tes kits, tes échanges.")), null);
+        int used = 0;
+        for (String s : pr.stash) {
+            if (s != null && !s.isEmpty()) {
+                used++;
+            }
+        }
+        set(h, 37, icon(Material.CHEST, "<#A48CFF><b>Coffre</b>", List.of("<#8A919B>Cases occupées : <white>" + used + " <#5A6270>/ " + Profile.STASH_SIZE,
+                raid ? "<#C0392B>Inaccessible en raid." : "<#5A6270>Clic : ouvrir")), e -> {
+            if (plugin.raid().inRaid(p)) {
+                deny(p, "<#C0392B>Ton coffre est à la planque.</#C0392B> Extrais-toi d'abord.");
+                return;
+            }
+            p.closeInventory();
+            Bukkit.getScheduler().runTask(plugin, () -> plugin.stash().open(p));
+        });
+        int ready = 0;
+        for (Kit k : plugin.kits().all()) {
+            if (plugin.kits().unlocked(p, k) && plugin.kits().remaining(p, k) == 0) {
+                ready++;
+            }
+        }
+        set(h, 38, icon(Material.LEATHER_CHESTPLATE, "<#FF9A3D><b>Kits</b>", List.of(
+                ready > 0 ? "<#2ECC71>" + ready + " disponible" + (ready > 1 ? "s" : "") : "<#8A919B>Aucun kit disponible.", "<#5A6270>Clic : ouvrir")),
+                e -> open(p, Screen.KITS));
+        int unread = pr.unread();
+        set(h, 39, icon(Material.WRITABLE_BOOK, "<#6EA2FF><b>Messages</b>", List.of(
+                unread > 0 ? "<#6EA2FF>" + unread + " non lu" + (unread > 1 ? "s" : "") : "<#8A919B>Aucun nouveau message.", "<#5A6270>Clic : ouvrir")),
+                e -> open(p, Screen.MESSAGES));
+        Market market = plugin.market();
+        int mine = market.count(p.getUniqueId()), back = market.waiting(p.getUniqueId());
+        set(h, 40, icon(Material.GOLD_INGOT, "<#E05CB8><b>Hôtel des ventes</b>", List.of(
+                "<#8A919B>Tes annonces : <white>" + mine,
+                back > 0 ? "<#E67E22>" + back + " objet" + (back > 1 ? "s" : "") + " à récupérer" : "<#5A6270>Rien à récupérer.", "<#5A6270>Clic : ouvrir")),
+                e -> open(p, Screen.HDV));
+        set(h, 41, icon(Material.FILLED_MAP, "<#5CC8FF><b>Carte tactique</b>", List.of(
+                pr.minimap ? "<#2ECC71>Affichée en main gauche" : "<#C0392B>Rangée",
+                "<#5A6270>Clic : ranger / ressortir", "<#5A6270>Maj + clic : changer de zoom")), e -> {
+            if (e.isShiftClick()) {
+                plugin.miniMap().cycleZoom(p);
+            } else {
+                p.closeInventory();
+                plugin.miniMap().toggle(p);
+            }
+        });
+        set(h, 42, icon(Material.SUNFLOWER, "<#F5C542><b>Boutique</b>", List.of("<#8A919B>Armes, munitions, vivres.", "<#5A6270>Clic : ouvrir")),
+                e -> open(p, Screen.SHOP));
+        set(h, 43, icon(Material.BARREL, "<#3FC46A><b>Colis</b>", List.of("<#8A919B>Un largage près de toi, en plein raid.", "<#5A6270>Clic : ouvrir")),
+                e -> open(p, Screen.COLIS));
+        set(h, 44, icon(Material.EXPERIENCE_BOTTLE, "<#B8C0CA><b>Commandes</b>", List.of(
+                "<#D7DCE2>Clic droit <#8A919B>tirer  <#5A6270>·  <#D7DCE2>clic gauche <#8A919B>viser",
+                "<#D7DCE2>F <#8A919B>recharger (ou zoom de la carte)",
+                "<#D7DCE2>Maj + F <#8A919B>cette fiche",
+                "<#D7DCE2>/telephone <#8A919B>le téléphone")), null);
+
+        set(h, 49, zone(textured, Material.BARRIER, "<#E8695C>Fermer", List.of()), e -> p.closeInventory());
+        show(p, h);
+        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 0.6f, 1.6f);
+    }
+
+    /** Pièce portée (copie avec une ligne d'aide), ou case vide nommée. */
+    private void worn(Holder h, boolean textured, int slot, ItemStack it, String label) {
+        if (it == null || it.isEmpty()) {
+            set(h, slot, zone(textured, Material.LIGHT_GRAY_STAINED_GLASS_PANE, "<#5A6270>" + label + " : aucun", List.of()), null);
+            return;
+        }
+        set(h, slot, withLore(it, List.of("", "<#5A6270>" + label)), null);
+    }
+
+    private ItemStack outfitIcon(Player p) {
+        fr.orbit.extraction.armor.Armors.SetDef set = null;
+        for (ItemStack it : new ItemStack[]{p.getInventory().getChestplate(), p.getInventory().getHelmet(),
+                p.getInventory().getLeggings(), p.getInventory().getBoots()}) {
+            String key = plugin.armors().keyOf(it);
+            if (key != null) {
+                int sep = key.indexOf(':');
+                set = plugin.armors().def(sep < 0 ? key : key.substring(0, sep));
+                if (set != null) {
+                    break;
+                }
+            }
+        }
+        if (set == null) {
+            return icon(Material.LEATHER_CHESTPLATE, "<#5A6270><b>Sans tenue</b>", List.of(
+                    "<#8A919B>Les tenues (fortune → lourde) se trouvent", "<#8A919B>dans les caisses et à la boutique."));
+        }
+        List<String> lore = new ArrayList<>();
+        lore.add("<#8A919B>Niveau : <white>" + set.tier() + " <#5A6270>/ 5");
+        if (set.description() != null && !set.description().isEmpty()) {
+            lore.add("<#5A6270>" + set.description());
+        }
+        return icon(Material.NETHERITE_CHESTPLATE, "<" + set.color() + "><b>Tenue : " + Text.esc(set.name()) + "</b>", lore);
+    }
+
+    private static ItemStack stat(Material mat, String name, String value, String hint) {
+        return icon(mat, "<#22C7D9><b>" + name + "</b>", List.of("<white>" + value, "<#5A6270>" + hint));
+    }
+
+    private static double maxHealth(Player p) {
+        org.bukkit.attribute.AttributeInstance a = p.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
+        return a == null ? 20 : a.getValue();
+    }
+
+    private static String fmt(double v) {
+        return (v == Math.rint(v) ? String.valueOf((long) v) : String.format(java.util.Locale.ROOT, "%.1f", v)).replace('.', ',');
     }
 
     // ------------------------------------------------------------------ boutique

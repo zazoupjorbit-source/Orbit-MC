@@ -23,6 +23,11 @@ resource-pack:
   # true = refuser le pack expulse le joueur.
   required: false
 
+# HUD : avec le pack, la console du bas de l'écran remplace coeurs, faim et armure (toujours active).
+hud:
+  # Panneau latéral façon lobby (opérateur, raid ou planque, bilan, crédits), avec ou sans le pack.
+  panneau: true
+
 raid:
   # Durée d'un raid. À zéro : « porté disparu », tout l'inventaire est perdu.
   duree-minutes: 25
