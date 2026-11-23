@@ -77,12 +77,16 @@ final class Progression implements Listener {
      * Donne l'XP d'une récolte à l'outil ; renvoie le texte à ajouter à la barre d'action (null si rien).
      */
     String gagner(Player p, Outil.Mode outil, String cle, int quantite) {
+        return gagner(p, outil, (long) cfg().getInt("progression.xp.ressources." + cle, cfg().getInt("progression.xp.defaut", 1)) * quantite);
+    }
+
+    /** Donne {@code gain} XP à l'outil (ressource choisie dans le panneau Ressources). */
+    String gagner(Player p, Outil.Mode outil, long gain) {
         UUID id = p.getUniqueId();
         Monnaies mon = plugin.monnaies();
         int max = niveauMax();
         int niveau = Math.min(mon.niveau(id, outil), max);
         if (niveau >= max) return "<#E0B864>✪ Niveau max <dark_gray>(<gray>prestige !<dark_gray>)";
-        long gain = (long) cfg().getInt("progression.xp.ressources." + cle, cfg().getInt("progression.xp.defaut", 1)) * quantite;
         if (gain <= 0) return null;
         int prestige = mon.prestige(id, outil);
         long xp = mon.xp(id, outil) + gain;

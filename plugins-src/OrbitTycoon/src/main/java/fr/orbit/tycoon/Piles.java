@@ -83,6 +83,30 @@ final class Piles implements Listener {
         if (e instanceof Zombie z) z.setShouldBurnInDay(false);
         if (e instanceof AbstractSkeleton s) s.setShouldBurnInDay(false);
         if (e instanceof Phantom p) p.setShouldBurnInDay(false);
+        figer(e);
+    }
+
+    /**
+     * Mob de spawner : il reste planté là où il est apparu. Pas d'IA (ne marche pas, n'attaque pas, ne vole pas),
+     * aucun recul quand on le frappe ; la gravité reste (un blaze retombe au sol).
+     */
+    private static void figer(LivingEntity e) {
+        if (e instanceof Mob m) m.setAware(false);
+        var recul = e.getAttribute(org.bukkit.attribute.Attribute.KNOCKBACK_RESISTANCE);
+        if (recul != null) recul.setBaseValue(1.0);
+    }
+
+    /** Les mobs figés ne se téléportent pas non plus (endermen, shulkers frappés). */
+    @EventHandler(ignoreCancelled = true)
+    public void teleportation(org.bukkit.event.entity.EntityTeleportEvent e) {
+        if (e.getEntity().getPersistentDataContainer().has(cleNombre, PersistentDataType.INTEGER)) e.setCancelled(true);
+    }
+
+    /** Mobs déjà là avant la mise à jour (chargés avec leur chunk) : on les fige aussi. */
+    @EventHandler
+    public void chargement(org.bukkit.event.world.EntitiesLoadEvent e) {
+        for (Entity en : e.getEntities())
+            if (en instanceof LivingEntity le && le.getPersistentDataContainer().has(cleNombre, PersistentDataType.INTEGER)) figer(le);
     }
 
     /** Un spawner empilé fait apparaître une pile de N mobs, qui rejoint la pile voisine du même type si possible. */

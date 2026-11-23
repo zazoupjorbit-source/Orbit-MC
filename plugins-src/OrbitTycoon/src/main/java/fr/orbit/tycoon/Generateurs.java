@@ -72,7 +72,7 @@ final class Generateurs implements Listener {
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
     private static final String TAG = "orbit_generateur";
-    private static final int SLOT_INFO = 45, SLOT_VENDRE = 49, SLOT_FERMER = 53;
+    private static final int SLOT_INFO = 45, SLOT_COFFRE = 46, SLOT_COLLECTEUR = 47, SLOT_VENDRE = 49, SLOT_FERMER = 53;
 
     /** Un type de générateur (une ligne de generateurs.liste). */
     record Type(int rang, String id, String nom, Material bloc, Material objet, long prix, double vente) { }
@@ -245,7 +245,7 @@ final class Generateurs implements Listener {
     }
 
     /** Ressource produite (marquée : seule une ressource de générateur se vend avec /vendre). */
-    private ItemStack produit(Type t, int nombre) {
+    ItemStack produit(Type t, int nombre) {
         ItemStack it = new ItemStack(t.objet(), nombre);
         it.editMeta(m -> {
             m.lore(List.of(texte("<dark_gray>Générateur orbital"),
@@ -255,7 +255,7 @@ final class Generateurs implements Listener {
         return it;
     }
 
-    private static String vente(double v) {
+    static String vente(double v) {
         return v == Math.floor(v) ? Long.toString((long) v) : String.format(java.util.Locale.FRANCE, "%.2f", v);
     }
 
@@ -265,7 +265,7 @@ final class Generateurs implements Listener {
         return id == null ? null : parId.get(id);
     }
 
-    private Type typeProduit(ItemStack it) {
+    Type typeProduit(ItemStack it) {
         if (it == null || !it.hasItemMeta()) return null;
         String id = it.getItemMeta().getPersistentDataContainer().get(cleProduit, PersistentDataType.STRING);
         return id == null ? null : parId.get(id);
@@ -286,9 +286,9 @@ final class Generateurs implements Listener {
 
     // ------------------------------------------------------------------ îles
 
-    private IlesJoueurs iles() { return plugin.ilesJoueurs(); }
+    IlesJoueurs iles() { return plugin.ilesJoueurs(); }
 
-    private boolean membre(Player p, IlesJoueurs.Ile ile) {
+    boolean membre(Player p, IlesJoueurs.Ile ile) {
         return ile != null && ile.membres.containsKey(p.getUniqueId());
     }
 
@@ -328,10 +328,14 @@ final class Generateurs implements Listener {
             if (t == null) continue;
             int[] c = coords(e.getKey());
             if (!w.isChunkLoaded(c[0] >> 4, c[2] >> 4)) continue;
+            // Un collecteur dans le chunk : la production est vendue (Collecteur orbital) ou rangée (Coffre collecteur),
+            // sans objet au sol ; seul ce qui ne rentre pas dans un coffre plein tombe au sol.
+            int pile = plugin.collecteurs().absorber(c[0] >> 4, c[2] >> 4, g.ile, t, g.pile);
+            if (pile <= 0) continue;
             Location l = new Location(w, c[0] + 0.5, c[1] + 1.15, c[2] + 0.5);
             ItemStack modele = produit(t, 1);
             // On complète d'abord les tas déjà au sol (moins d'entités), dans la limite de max-au-sol.
-            int aDonner = g.pile, auSol = 0;
+            int aDonner = pile, auSol = 0;
             List<Item> tas = new ArrayList<>();
             for (Entity en : w.getNearbyEntities(l, 0.8, 0.8, 0.8, x -> x instanceof Item)) {
                 Item it = (Item) en;
@@ -432,8 +436,8 @@ final class Generateurs implements Listener {
         Player p = e.getPlayer();
         ItemStack main = p.getInventory().getItemInMainHand();
         Type enMain = typeGen(main);
-        // Shift avec un autre objet qu'un générateur : on laisse poser un bloc contre le générateur.
-        if (p.isSneaking() && enMain == null && !main.getType().isAir()) { e.setUseInteractedBlock(org.bukkit.event.Event.Result.DENY); return; }
+        // Shift avec un bloc (ou un autre type de générateur) : on le laisse se poser contre le générateur.
+        if (p.isSneaking() && (enMain == null ? !main.getType().isAir() : !enMain.id().equals(g.type))) { e.setUseInteractedBlock(org.bukkit.event.Event.Result.DENY); return; }
         e.setCancelled(true);
         Type t = parId.get(g.type);
         IlesJoueurs.Ile ile = iles().ileA(b.getX(), b.getZ());
@@ -605,6 +609,8 @@ final class Generateurs implements Listener {
         inv.setItem(SLOT_VENDRE, objet(Material.EMERALD, "<#E0B864><bold>Tout vendre", false,
                 "<gray>Vend toutes les ressources de", "<gray>générateur de ton inventaire.", "", "<dark_gray>(ou /vendre tout)"));
         inv.setItem(SLOT_FERMER, objet(Material.BARRIER, "<#FF4D4D>Fermer", false));
+        inv.setItem(SLOT_COFFRE, plugin.collecteurs().vitrineCoffre());
+        inv.setItem(SLOT_COLLECTEUR, plugin.collecteurs().vitrine());
         Habillage.fond(plugin, p, inv);
         p.openInventory(inv);
     }
@@ -617,6 +623,8 @@ final class Generateurs implements Listener {
         int slot = e.getSlot();
         if (slot == SLOT_FERMER) { p.closeInventory(); return; }
         if (slot == SLOT_VENDRE) { vendreTout(p); ouvrir(p); return; }
+        if (slot == SLOT_COLLECTEUR) { plugin.collecteurs().acheter(p); return; }
+        if (slot == SLOT_COFFRE) { plugin.collecteurs().acheterCoffre(p); return; }
         if (slot >= types.size() || slot >= 45 || slot > rangDebloque(p.getUniqueId())) return;
         Type t = types.get(slot);
         int n = e.isShiftClick() ? 64 : e.isRightClick() ? 8 : 1;
@@ -645,10 +653,16 @@ final class Generateurs implements Listener {
             StringBuilder b = new StringBuilder();
             for (Type t : types) b.append(t.id()).append(' ');
             OrbitTycoon.msg(s, types.size() + " générateurs : <white>" + b.toString().trim());
-            OrbitTycoon.msg(s, "Posés : <white>" + poses.size() + "<gray> blocs.");
+            OrbitTycoon.msg(s, "Posés : <white>" + poses.size() + "<gray> blocs, <white>" + plugin.collecteurs().nombre() + "<gray> collecteur(s).");
             return;
         }
-        if (args.length < 4 || !args[1].equalsIgnoreCase("donner")) { OrbitTycoon.msg(s, "Usage : /tycoon gen donner <joueur> <type> [nombre] · /tycoon gen liste"); return; }
+        if (args.length > 2 && (args[1].equalsIgnoreCase("collecteur") || args[1].equalsIgnoreCase("coffre"))) {
+            Player c = Bukkit.getPlayerExact(args[2]);
+            if (c == null) { OrbitTycoon.msg(s, "Joueur introuvable."); return; }
+            plugin.collecteurs().donner(s, c, args[1].equalsIgnoreCase("coffre"), args.length > 3 && args[3].matches("[0-9]{1,2}") ? Math.max(1, Integer.parseInt(args[3])) : 1);
+            return;
+        }
+        if (args.length < 4 || !args[1].equalsIgnoreCase("donner")) { OrbitTycoon.msg(s, "Usage : /tycoon gen donner <joueur> <type> [nombre] · /tycoon gen collecteur|coffre <joueur> [nombre] · /tycoon gen liste"); return; }
         Player cible = Bukkit.getPlayerExact(args[2]);
         Type t = parId.get(args[3].toLowerCase());
         if (cible == null || t == null) { OrbitTycoon.msg(s, "Joueur ou type introuvable (/tycoon gen liste)."); return; }
@@ -658,4 +672,7 @@ final class Generateurs implements Listener {
     }
 
     List<String> ids() { return types.stream().map(Type::id).toList(); }
+
+    /** Type de générateur par son id (null si inconnu). */
+    Type type(String id) { return id == null ? null : parId.get(id.toLowerCase(java.util.Locale.ROOT)); }
 }

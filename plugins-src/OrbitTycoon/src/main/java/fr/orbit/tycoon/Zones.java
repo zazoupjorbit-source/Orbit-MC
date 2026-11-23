@@ -50,6 +50,9 @@ final class Zones implements Listener {
         this.plugin = plugin;
     }
 
+    /** Blocs en train de repousser -> état d'origine (lecture seule, thread principal). */
+    Map<Block, BlockData> enAttente() { return java.util.Collections.unmodifiableMap(enAttente); }
+
     static boolean constructeur(Player p) {
         return p.getGameMode() == GameMode.CREATIVE && p.hasPermission("orbittycoon.admin");
     }
@@ -65,11 +68,12 @@ final class Zones implements Listener {
         if (enAttente.containsKey(b)) { e.setCancelled(true); return; }
         Zone z = Zone.at(b.getLocation());
         BlockData origine = b.getBlockData().clone();
+        plugin.ressources().rafraichir(b, 2); // vue perso : remet la ressource choisie après la récolte ou le refus
         Material t = b.getType();
 
         if (z == Zone.BUCHERON && (Tag.LOGS.isTagged(t) || Tag.LEAVES.isTagged(t))) {
             recolter(e, t, 1);
-            repousse(b, origine, null, plugin.getConfig().getInt("repousse.bucheron", 30));
+            repousse(b, origine, null, plugin.getConfig().getInt("repousse.bucheron", 15));
             return;
         }
         if (z == Zone.AGRICULTURE) {
@@ -78,18 +82,18 @@ final class Zones implements Listener {
                 Ageable jeune = (Ageable) a.clone();
                 jeune.setAge(0);
                 recolter(e, t, 1);
-                repousse(b, origine, jeune, plugin.getConfig().getInt("repousse.agriculture", 20));
+                repousse(b, origine, jeune, plugin.getConfig().getInt("repousse.agriculture", 15));
                 return;
             }
             if (t == Material.MELON || t == Material.PUMPKIN) {
                 recolter(e, t, 1);
-                repousse(b, origine, null, plugin.getConfig().getInt("repousse.agriculture", 20));
+                repousse(b, origine, null, plugin.getConfig().getInt("repousse.agriculture", 15));
                 return;
             }
             if (t == Material.SUGAR_CANE) {
                 // On garde la base : seuls les morceaux du dessus se récoltent, et toute la tige repousse.
                 if (b.getRelative(0, -1, 0).getType() != Material.SUGAR_CANE) { e.setCancelled(true); return; }
-                int sec = plugin.getConfig().getInt("repousse.agriculture", 20);
+                int sec = plugin.getConfig().getInt("repousse.agriculture", 15);
                 int morceaux = 0;
                 for (Block h = b; h.getType() == Material.SUGAR_CANE; h = h.getRelative(0, 1, 0)) {
                     if (enAttente.containsKey(h)) continue;
@@ -116,7 +120,10 @@ final class Zones implements Listener {
     private void recolter(BlockBreakEvent e, Material t, int quantite) {
         e.setDropItems(false);
         e.setExpToDrop(0);
-        plugin.monnaies().recompenser(e.getPlayer(), outilDe(Zone.at(e.getBlock().getLocation())), t.name(), quantite);
+        Zone z = Zone.at(e.getBlock().getLocation());
+        // Ce que le joueur voit : ressource débloquée de cette part de l'île, ou roche si le minerai est verrouillé.
+        Ressources.Recolte r = plugin.ressources().recolte(e.getPlayer(), z, e.getBlock(), t);
+        plugin.monnaies().recompenser(e.getPlayer(), outilDe(z), r.cle(), quantite, r.palier());
     }
 
     /** Outil qui gagne l'XP d'un bloc cassé, selon la zone. */
@@ -140,7 +147,14 @@ final class Zones implements Listener {
         e.getDrops().clear();
         e.setDroppedExp(0);
         Player tueur = e.getEntity().getKiller();
-        if (tueur != null) plugin.monnaies().recompenser(tueur, Outil.Mode.EPEE, e.getEntityType().name(), 1);
+        if (tueur == null) return;
+        // Épée : un mob pas encore débloqué ne rapporte rien ; sinon les gains de sa ressource.
+        Ressources.Recolte r = plugin.ressources().recolteMob(tueur, e.getEntityType());
+        if (r == null) {
+            tueur.sendActionBar(Navigateur.texte("<#FF4D4D>🔒 Mob pas encore débloqué pour ton épée : aucun gain."));
+            return;
+        }
+        plugin.monnaies().recompenser(tueur, Outil.Mode.EPEE, r.cle(), 1, r.palier());
     }
 
     /** Après la casse : pose l'état intermédiaire (pousse) puis remet l'origine après le délai. */
@@ -152,7 +166,10 @@ final class Zones implements Listener {
 
     private void restaurer(Block b) {
         BlockData origine = enAttente.remove(b);
-        if (origine != null) b.setBlockData(origine, false);
+        if (origine != null) {
+            b.setBlockData(origine, false);
+            plugin.ressources().rafraichir(b, 1);
+        }
     }
 
     /** À l'arrêt : tout repousse immédiatement, pour ne jamais laisser de trou. */
@@ -191,6 +208,17 @@ final class Zones implements Listener {
     public void mobPietine(EntityChangeBlockEvent e) {
         if (IlesJoueurs.estMonde(e.getBlock().getWorld())) return;
         if (e.getBlock().getType() == Material.FARMLAND || !(e.getEntity() instanceof Player)) e.setCancelled(true);
+    }
+
+    /** Creepers, TNT du décor… : les explosions ne cassent aucun bloc du Tycoon (hors îles des joueurs). */
+    @EventHandler(ignoreCancelled = true)
+    public void explosion(org.bukkit.event.entity.EntityExplodeEvent e) {
+        if (!IlesJoueurs.estMonde(e.getLocation().getWorld())) e.blockList().clear();
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void explosionBloc(org.bukkit.event.block.BlockExplodeEvent e) {
+        if (!IlesJoueurs.estMonde(e.getBlock().getWorld())) e.blockList().clear();
     }
 
     @EventHandler(ignoreCancelled = true)
