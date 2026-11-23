@@ -11,8 +11,8 @@ outil:
 
 # Repousse des blocs farmés (en secondes).
 repousse:
-  bucheron: 30
-  agriculture: 20
+  bucheron: 15
+  agriculture: 15
   mine: 15
 
 # Récompenses : toute ressource récoltée (bloc cassé, poisson pêché, mob tué) disparaît
@@ -221,6 +221,81 @@ quetes:
   #     50: {credit: 50000, texte: "1 clé de coffre n°3", commandes: ["tycoon cle 3 %joueur% 1"]}
   recompenses: {}
 
+# Ressources des outils (panneau « Ressources » : bouton dans l'interface de l'outil, ou /ressources [outil]).
+# La 1re de chaque liste (origine: true) = la zone telle qu'elle est construite, avec ses gains habituels.
+# Chaque quête de prestige récupérée (quetes.pas : 10, 20… 100) débloque la ressource suivante, dans l'ordre.
+# Mine, Bûcheron, Agriculture : vue perso, le joueur voit les blocs de farm changés en sa ressource (lui seul).
+# Pêche : gains seulement (chaque prise compte comme la ressource choisie). Mobzone : une part de l'île par mob.
+# Champs : nom, bloc (bloc affiché ; pour pêche/mobzone, juste l'icône), icone (si le bloc n'est pas un objet),
+# feuilles (bûcheron), mur (agriculture : bloc affiché quand la culture est mûre), credit, flux, xp (gains par récolte).
+# Mine, Bûcheron, Agriculture : tout ce qui est débloqué s'additionne. /tycoon reload après un changement.
+ressources:
+  # Pioche : un étage de la Mine = une ressource, dans l'ordre des étages (haut → fond). La 1re est libre,
+  # chaque quête de prestige débloque l'étage suivant. Les minerais verrouillés restent cachés dans la roche.
+  pioche:
+    - {nom: "Charbon", bloc: COAL_ORE, credit: 8, flux: 10, xp: 2}
+    - {nom: "Cuivre", bloc: COPPER_ORE, credit: 12, flux: 15, xp: 2}
+    - {nom: "Fer", bloc: IRON_ORE, credit: 16, flux: 20, xp: 3}
+    - {nom: "Lapis-lazuli", bloc: LAPIS_ORE, credit: 24, flux: 30, xp: 3}
+    - {nom: "Redstone", bloc: REDSTONE_ORE, credit: 32, flux: 40, xp: 4}
+    - {nom: "Or", bloc: GOLD_ORE, credit: 44, flux: 55, xp: 5}
+    - {nom: "Quartz", bloc: NETHER_QUARTZ_ORE, credit: 60, flux: 75, xp: 6}
+    - {nom: "Améthyste", bloc: AMETHYST_BLOCK, credit: 80, flux: 100, xp: 7}
+    - {nom: "Diamant", bloc: DIAMOND_ORE, credit: 108, flux: 135, xp: 8}
+    - {nom: "Émeraude", bloc: EMERALD_ORE, credit: 140, flux: 175, xp: 10}
+    - {nom: "Débris antiques", bloc: ANCIENT_DEBRIS, credit: 180, flux: 225, xp: 12}
+  hache:
+    - {nom: "Chêne", origine: true, icone: OAK_LOG}
+    - {nom: "Bouleau", bloc: BIRCH_LOG, feuilles: BIRCH_LEAVES, credit: 2, flux: 2, xp: 2}
+    - {nom: "Épicéa", bloc: SPRUCE_LOG, feuilles: SPRUCE_LEAVES, credit: 3, flux: 3, xp: 2}
+    - {nom: "Acajou", bloc: JUNGLE_LOG, feuilles: JUNGLE_LEAVES, credit: 4, flux: 4, xp: 3}
+    - {nom: "Acacia", bloc: ACACIA_LOG, feuilles: ACACIA_LEAVES, credit: 6, flux: 6, xp: 3}
+    - {nom: "Chêne noir", bloc: DARK_OAK_LOG, feuilles: DARK_OAK_LEAVES, credit: 8, flux: 8, xp: 4}
+    - {nom: "Palétuvier", bloc: MANGROVE_LOG, feuilles: MANGROVE_LEAVES, credit: 11, flux: 11, xp: 5}
+    - {nom: "Cerisier", bloc: CHERRY_LOG, feuilles: CHERRY_LEAVES, credit: 15, flux: 15, xp: 6}
+    - {nom: "Chêne pâle", bloc: PALE_OAK_LOG, feuilles: PALE_OAK_LEAVES, credit: 20, flux: 20, xp: 7}
+    - {nom: "Carmin", bloc: CRIMSON_STEM, feuilles: NETHER_WART_BLOCK, credit: 27, flux: 27, xp: 8}
+    - {nom: "Biscornu", bloc: WARPED_STEM, feuilles: WARPED_WART_BLOCK, credit: 35, flux: 35, xp: 10}
+  houe:
+    - {nom: "Blé", origine: true, icone: WHEAT}
+    - {nom: "Carotte", bloc: CARROTS, icone: CARROT, credit: 2, flux: 2, xp: 2}
+    - {nom: "Pomme de terre", bloc: POTATOES, icone: POTATO, credit: 3, flux: 3, xp: 2}
+    - {nom: "Betterave", bloc: BEETROOTS, icone: BEETROOT, credit: 4, flux: 4, xp: 3}
+    - {nom: "Canne à sucre", bloc: SUGAR_CANE, credit: 6, flux: 6, xp: 3}
+    - {nom: "Champignon brun", bloc: BROWN_MUSHROOM, credit: 8, flux: 8, xp: 4}
+    - {nom: "Champignon rouge", bloc: RED_MUSHROOM, credit: 11, flux: 11, xp: 5}
+    - {nom: "Verrue du Nether", bloc: NETHER_WART, credit: 15, flux: 15, xp: 6}
+    - {nom: "Fleur-torche", bloc: TORCHFLOWER_CROP, mur: TORCHFLOWER, icone: TORCHFLOWER, credit: 20, flux: 20, xp: 7}
+    - {nom: "Champignon carmin", bloc: CRIMSON_FUNGUS, credit: 27, flux: 27, xp: 8}
+    - {nom: "Champignon biscornu", bloc: WARPED_FUNGUS, credit: 35, flux: 35, xp: 10}
+  peche:
+    - {nom: "Poissons du lac", origine: true, icone: COD}
+    - {nom: "Saumon", bloc: SALMON, credit: 6, flux: 6, xp: 2}
+    - {nom: "Poisson-globe", bloc: PUFFERFISH, credit: 9, flux: 9, xp: 2}
+    - {nom: "Poisson tropical", bloc: TROPICAL_FISH, credit: 12, flux: 12, xp: 3}
+    - {nom: "Encre de calamar", bloc: INK_SAC, credit: 18, flux: 18, xp: 3}
+    - {nom: "Encre luisante", bloc: GLOW_INK_SAC, credit: 24, flux: 24, xp: 4}
+    - {nom: "Éclat de prismarine", bloc: PRISMARINE_SHARD, credit: 33, flux: 33, xp: 5}
+    - {nom: "Cristaux de prismarine", bloc: PRISMARINE_CRYSTALS, credit: 45, flux: 45, xp: 6}
+    - {nom: "Coquille de nautile", bloc: NAUTILUS_SHELL, credit: 60, flux: 60, xp: 7}
+    - {nom: "Cœur de la mer", bloc: HEART_OF_THE_SEA, credit: 81, flux: 81, xp: 8}
+    - {nom: "Trident abyssal", bloc: TRIDENT, credit: 105, flux: 105, xp: 10}
+  # Épée : une part de la Mobzone = un mob = une ressource, dans l'ordre (mob: type du mob des spawners).
+  # La 1re part est libre (c'est là qu'on arrive), chaque quête de prestige ouvre la suivante.
+  epee:
+    - {nom: "Zombies", mob: ZOMBIE, bloc: ROTTEN_FLESH, credit: 4, flux: 5, xp: 1}
+    - {nom: "Squelettes", mob: SKELETON, bloc: BONE, credit: 6, flux: 8, xp: 2}
+    - {nom: "Araignées", mob: SPIDER, bloc: SPIDER_EYE, credit: 9, flux: 12, xp: 2}
+    - {nom: "Creepers", mob: CREEPER, bloc: GUNPOWDER, credit: 12, flux: 16, xp: 3}
+    - {nom: "Endermen", mob: ENDERMAN, bloc: ENDER_PEARL, credit: 18, flux: 24, xp: 3}
+    - {nom: "Sorcières", mob: WITCH, bloc: GLASS_BOTTLE, credit: 24, flux: 32, xp: 4}
+    - {nom: "Blazes", mob: BLAZE, bloc: BLAZE_ROD, credit: 33, flux: 44, xp: 5}
+    - {nom: "Wither squelettes", mob: WITHER_SKELETON, bloc: WITHER_SKELETON_SKULL, credit: 45, flux: 60, xp: 6}
+    - {nom: "Évocateurs", mob: EVOKER, bloc: TOTEM_OF_UNDYING, credit: 60, flux: 80, xp: 7}
+    - {nom: "Ravageurs", mob: RAVAGER, bloc: SADDLE, credit: 81, flux: 108, xp: 8}
+    - {nom: "Gardiens du vide", mob: SHULKER, bloc: SHULKER_SHELL, credit: 105, flux: 140, xp: 10}
+
+
 # Hôtel des ventes (/hdv, PNJ Marchand) : ventes entre joueurs en Crédits orbitaux.
 hdv:
   taxe: 5               # % retenu sur chaque vente
@@ -283,3 +358,32 @@ generateurs:
     - {id: diamant, nom: "Diamant", bloc: DIAMOND_BLOCK, objet: DIAMOND, prix: 39000, vente: 83.08}
     - {id: emeraude, nom: "Émeraude", bloc: EMERALD_BLOCK, objet: EMERALD, prix: 45000, vente: 93.05}
     - {id: netherite, nom: "Netherite", bloc: NETHERITE_BLOCK, objet: NETHERITE_SCRAP, prix: 51000, vente: 104.22}
+  # Collecteur orbital (menu /gen) : coffre qui ramasse et vend tout seul les ressources de générateur de son chunk.
+  # ATTENTION : payé en Plasma (monnaie payante) = avantage de jeu → à valider avec Zazou avant toute mise en ligne (EULA Mojang).
+  collecteur:
+    prix-plasma: 500
+    balayage-secondes: 10    # ramassage des ressources déjà au sol dans le chunk
+
+# Clear lag : retire régulièrement les objets au sol, flèches plantées et orbes d'XP (tous les mondes).
+# Les ressources des générateurs sont gardées (revenu des joueurs, déjà plafonné par generateurs.max-au-sol).
+# /tycoon nettoyage (temps restant) ou /tycoon nettoyage maintenant ; /tycoon reload après un changement.
+nettoyage:
+  actif: true
+  intervalle-minutes: 15
+  avertissements-secondes: [60, 10]
+  barre-secondes: 60          # barre en haut de l'écran (compte à rebours) avant le passage ; 0 = pas de barre
+  garder-ressources-generateurs: true
+
+# Vote Party : barre permanente en haut de l'écran « Vote Party 0/100 ».
+# Les votes s'ajoutent avec « tycoon voteparty ajouter <n> » (console) : un futur plugin de votes (Votifier)
+# lancera cette commande à chaque vote. À l'objectif, chaque joueur connecté reçoit les récompenses
+# ({joueur} = son pseudo, commandes lancées par la console) et le compteur repart à 0.
+voteparty:
+  actif: true
+  objectif: 100
+  recompenses:
+    - "tycoon cle 1 {joueur} 1"     # une Clé Vote
+  # Coffre collecteur (menu /gen) : comme le Collecteur, mais il RANGE les ressources dans le coffre (ne vend pas).
+  # Coffre plein : le surplus tombe au sol à côté des générateurs.
+  coffre-collecteur:
+    prix-credits: 10000

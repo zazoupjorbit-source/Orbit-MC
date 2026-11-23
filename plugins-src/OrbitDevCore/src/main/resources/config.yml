@@ -140,6 +140,19 @@ links:
 vote:
   sites: {}
 
+# Annonces automatiques dans le chat (envoyées aux joueurs de ce serveur, seulement s'il y a du monde).
+# interval-minutes : délai entre deux envois ; lines : lignes MiniMessage (clic possible avec <click:run_command:/...>).
+# Changement pris en compte avec /orbitdev reload.
+annonces:
+  enabled: true
+  messages:
+    - interval-minutes: 10
+      lines:
+        - "<#E0B864>★</#E0B864> <#62CFF4>Soutiens Orbit MC :</#62CFF4> <gray>vote pour le serveur avec</gray> <click:run_command:/vote><hover:show_text:'<gray>Clique pour voir les sites de vote'><#E0B864><u>/vote</u></#E0B864></hover></click> <gray>!</gray>"
+    - interval-minutes: 15
+      lines:
+        - "<#E0B864>★</#E0B864> <#62CFF4>La boutique est disponible :</#62CFF4> <gray>cosmétiques, grades et plus avec</gray> <click:run_command:/boutique><hover:show_text:'<gray>Clique pour ouvrir la boutique'><#E0B864><u>/boutique</u></#E0B864></hover></click> <gray>!</gray>"
+
 cosmetics:
   # false : cosmétiques coupés sur ce serveur (rien d'affiché, menus et /monture refusés) ;
   # la sélection n'est pas effacée. À laisser à true sur le lobby seulement.

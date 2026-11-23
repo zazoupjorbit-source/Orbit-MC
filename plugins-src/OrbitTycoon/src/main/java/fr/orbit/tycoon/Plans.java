@@ -44,8 +44,36 @@ final class Plans {
 
     void dessiner(Chantier c, Zone z, boolean nettoyer) {
         retirerDeco(c, z.cx, z.cz, z.rayon + 10, z.id);
+        retirerDeco(c, z.cx, z.cz, z.rayon + 10, z.id + "-parts");
         if (nettoyer) nettoyer(c, z.cx, z.cz, z.rayon + 4, Y - 80, Y + 50);
         if (z == Zone.BASE) base(c); else iles.dessiner(c, z);
+    }
+
+    /** Mobzone déjà construite → version « une part par mob » (blocs seulement ; voir retirerEntitesMobzone). */
+    int[] refaireMobzone(Chantier c) { return iles.refaireMobzone(c, Zone.MOBZONE); }
+
+    /**
+     * Mobzone : retire les étiquettes des anciens spawners, celle de l'arène, les panneaux de parts et les mobs empilés.
+     * Les chunks doivent être chargés (entités comprises) : à appeler quelques ticks après les avoir chargés.
+     */
+    int retirerEntitesMobzone(Zone z, NamespacedKey cleMob) {
+        World w = plugin.monde();
+        int n = 0, rc = (z.rayon >> 4) + 2;
+        for (int qx = (z.cx >> 4) - rc; qx <= (z.cx >> 4) + rc; qx++)
+            for (int qz = (z.cz >> 4) - rc; qz <= (z.cz >> 4) + rc; qz++) {
+                if (!w.isChunkLoaded(qx, qz)) continue;
+                for (Entity e : w.getChunkAt(qx, qz).getEntities()) {
+                    if (z.distance(e.getX(), e.getZ()) > z.rayon + 2) continue;
+                    boolean retirer;
+                    if (e instanceof Display) {
+                        String tag = e.getPersistentDataContainer().get(cleDeco, PersistentDataType.STRING);
+                        boolean ancienne = z.id.equals(tag) && (Math.abs(e.getY() - (Y + 1.6)) < 0.05 || z.distance(e.getX(), e.getZ()) < 49);
+                        retirer = ancienne || (z.id + "-parts").equals(tag);
+                    } else retirer = !(e instanceof org.bukkit.entity.Player) && e.getPersistentDataContainer().has(cleMob, PersistentDataType.INTEGER);
+                    if (retirer) { e.remove(); n++; }
+                }
+            }
+        return n;
     }
 
     /** Efface l'ancienne version (îles à 400 blocs, petit spawn) : blocs + hologrammes. */

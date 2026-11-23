@@ -71,7 +71,7 @@ final class Outil implements Listener {
     }
 
     /** Emplacements du menu (3 lignes) : fiche en haut, les 5 outils au milieu, améliorations en bas. */
-    private static final int SLOT_FICHE = 4, SLOT_AMELIORATIONS = 22;
+    private static final int SLOT_FICHE = 4, SLOT_AMELIORATIONS = 22, SLOT_RESSOURCES = 23;
     private static final int[] SLOTS_OUTILS = {11, 12, 13, 14, 15};
 
     private final OrbitTycoon plugin;
@@ -192,6 +192,7 @@ final class Outil implements Listener {
         Mode[] modes = Mode.values();
         for (int i = 0; i < modes.length; i++) inv.setItem(SLOTS_OUTILS[i], iconeOutil(p, modes[i], modes[i] == actuel));
         inv.setItem(SLOT_AMELIORATIONS, iconeAmeliorations());
+        inv.setItem(SLOT_RESSOURCES, iconeRessources(p, actuel));
         p.openInventory(inv);
         p.playSound(p.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 0.5f, 1.6f);
     }
@@ -263,6 +264,24 @@ final class Outil implements Listener {
         return it;
     }
 
+    private ItemStack iconeRessources(Player p, Mode m) {
+        boolean cumul = Ressources.cumulatif(m);
+        List<Ressources.Palier> deb = plugin.ressources().debloquees(p.getUniqueId(), m);
+        Ressources.Palier r = cumul ? deb.get(deb.size() - 1) : plugin.ressources().choisie(p.getUniqueId(), m);
+        ItemStack it = new ItemStack(r.icone());
+        ItemMeta meta = it.getItemMeta();
+        meta.displayName(texte("<#62CFF4><bold>Ressources de l'outil"));
+        meta.lore(List.of(
+                texte(plugin.ressources().resume(p.getUniqueId(), m)),
+                texte("<gray>Chaque quête de prestige débloque"),
+                texte("<gray>une ressource qui rapporte plus."),
+                Component.empty(),
+                texte(cumul ? "<#E0B864>➜ Clic pour voir tes ressources" : "<#E0B864>➜ Clic pour changer de ressource")));
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        it.setItemMeta(meta);
+        return it;
+    }
+
     // ------------------------------------------------------------------ événements
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -297,6 +316,7 @@ final class Outil implements Listener {
         if (choisi == null) {
             Mode enMain = modeActuel(p);
             if (slot == SLOT_AMELIORATIONS && enMain != null) plugin.progression().ouvrir(p, enMain);
+            if (slot == SLOT_RESSOURCES && enMain != null) plugin.ressources().ouvrir(p, enMain);
             return;
         }
         if (e.isRightClick()) { plugin.progression().ouvrir(p, choisi); return; }

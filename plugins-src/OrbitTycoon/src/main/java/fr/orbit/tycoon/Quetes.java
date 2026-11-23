@@ -129,6 +129,8 @@ final class Quetes implements Listener {
         lore.add("");
         lore.add("<#E0B864>Récompense :");
         lore.addAll(description(recompense(m, palier)));
+        String ressource = plugin.ressources().debloquePar(m, palier);
+        if (ressource != null) lore.add("<dark_gray> • <#7CFC9A>Nouvelle ressource : <white>" + ressource);
         lore.add("");
         if (faites.contains(palier)) {
             lore.add("<#7CFC9A>✔ Déjà récupérée");
@@ -181,6 +183,10 @@ final class Quetes implements Listener {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c.replace("%joueur%", p.getName()).replace("%uuid%", id.toString()));
         OrbitTycoon.msg(p, "Quête <#E0B864>" + m.nom + " · Prestige " + palier + "</#E0B864> récupérée !");
         for (String l : description(r)) p.sendMessage(Navigateur.texte("  " + l));
+        String ressource = plugin.ressources().debloquePar(m, palier);
+        if (ressource != null) p.sendMessage(Navigateur.texte("  <dark_gray> • <#7CFC9A>Nouvelle ressource débloquée : <white>" + ressource
+                + " <gray>(<#E0B864>/ressources</#E0B864>)"));
+        plugin.ressources().actualiser(p, m); // mine / bûcheron / agriculture : la nouvelle ressource apparaît tout de suite
         p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.7f, 1.2f);
         ouvrir(p, m);
     }
