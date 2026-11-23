@@ -1,0 +1,758 @@
+# ------------------------------------------------------------------
+#  Ombre, acte II — la Sylve Noire (niv. 9 à 16)
+#  Hub : Sombrebois. Quêtes principales 12 à 18 et annexes.
+#  FICHIER GÉNÉRÉ par tools\quetes\gen-quetes.js depuis tools\quetes\zones\ombre-sylve-noire.js : modifier la source, pas ce fichier.
+# ------------------------------------------------------------------
+
+pnj:
+  varka:
+    nom: "Varka"
+    titre: "Cheffe de Sombrebois"
+    titre-en: "Chief of Sombrebois"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    visage: makena
+    point: varka
+    main: IRON_AXE
+    repliques:
+      - "La Sylve ne choisit pas de camp. Elle mange les deux."
+    repliques-en:
+      - "The Sylva doesn't pick a side. It eats both."
+  sylas:
+    nom: "Sylas"
+    titre: "Chasseur"
+    titre-en: "Hunter"
+    couleur: "#A8E6A1"
+    type: MANNEQUIN
+    visage: efe
+    point: sylas
+    main: BOW
+    repliques:
+      - "Dans la Sylve, on chasse ou on est chassé. Je préfère la première."
+    repliques-en:
+      - "In the Sylva, you hunt or you're hunted. I prefer the first."
+  ombline:
+    nom: "Mère Ombline"
+    nom-en: "Mother Ombline"
+    titre: "Herboriste"
+    titre-en: "Herbalist"
+    couleur: "#C9D6A3"
+    type: MANNEQUIN
+    visage: noor
+    point: ombline
+    repliques:
+      - "Le venin soigne, si on sait le doser. Comme le Néant."
+    repliques-en:
+      - "Venom heals, if you know the dose. Like the Void."
+
+monstres:
+  creux_errant:
+    nom: "Creux errant"
+    type: ZOMBIE
+    pv: 1.3
+    degats: 1
+    vitesse: 0.85
+  gardien_ecorce:
+    nom: "Gardien d'écorce"
+    type: WITHER_SKELETON
+    pv: 1.3
+    degats: 1.1
+    vitesse: 0.9
+    arme: STONE_AXE
+  ancien_sylve:
+    nom: "Ancien de la Sylve"
+    type: RAVAGER
+    taille: 1
+    pv: 8
+    degats: 1.3
+    vitesse: 0.9
+    xp: 12
+    or: 10
+
+apparitions:
+  creux_sylve:
+    point: cercle_sylve
+    monstre: creux_errant
+    niveau: [11, 12]
+    nombre: 5
+    rayon: 9
+  gardiens_ecorce:
+    point: coeur_sylve_seuil
+    monstre: gardien_ecorce
+    niveau: [12, 13]
+    nombre: 5
+    rayon: 9
+  affames_sylve:
+    point: chapelle_sylve
+    monstre: affame_neant
+    niveau: [13, 14]
+    nombre: 5
+    rayon: 9
+  ancien_antre:
+    point: antre_ancien
+    monstre: ancien_sylve
+    niveau: 17
+    nombre: 1
+    rayon: 4
+
+quetes:
+
+  # ================================================================ ACTE II — QUÊTES PRINCIPALES
+
+  o_la_route_de_la_sylve:
+    nom: "La route de la Sylve"
+    nom-en: "The Sylvan Road"
+    faction: ombre
+    niveau: 9
+    requiert: [o_le_serment_du_neant]
+    resume:
+      - "La route de l'Éclat immense traverse la Sylve Noire."
+      - "Sombrebois en garde l'entrée."
+    resume-en:
+      - "The road to the immense Shard runs through the Black Sylva."
+      - "Sombrebois guards its entrance."
+    intro:
+      - "Sous les arbres de la Sylve, la lumière renonce. Les troncs murmurent, comme toi."
+      - "Morvain t'a dit qu'un village tenait encore au cœur du bois : Sombrebois."
+    intro-en:
+      - "Beneath the trees of the Sylva, light gives up. The trunks whisper, like you."
+      - "Morvain told you a village still holds out in the heart of the wood: Sombrebois."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre Sombrebois"
+        texte-en: "Reach Sombrebois"
+        point: porte_sombrebois
+        rayon: 8
+      - type: PARLER
+        texte: "Parler à Varka"
+        texte-en: "Talk to Varka"
+        pnj: varka
+        dialogue:
+          - "varka: Un Marqué du Puits. Morvain m'a écrit. Il écrit rarement."
+          - "varka: Tu veux passer à l'ouest ? La Sylve est malade. Ses elfes tirent sur tout ce qui bouge, les Purificateurs brûlent ses arbres, et des Creux sans maître errent sous les branches."
+          - "jaro: Salut, toi. Grisolde m'a envoyé devant. Je connais un peu le coin. Un peu."
+          - "varka: Touche notre Éclat. Ici, on meurt vite."
+        dialogue-en:
+          - "varka: A Marked of the Well. Morvain wrote to me. He rarely writes."
+          - "varka: You want to go west? The Sylva is sick. Its elves shoot at anything that moves, the Purifiers burn its trees, and masterless Hollow wander beneath the branches."
+          - "jaro: Hey, you. Grisolde sent me ahead. I know the area a bit. A bit."
+          - "varka: Touch our Shard. Here, people die fast."
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage de Sombrebois"
+        texte-en: "Touch Sombrebois's anchoring Shard"
+        point: ancre_sombrebois
+        rayon: 4
+    recompenses:
+      xp: 1100
+      or: 120
+
+  o_les_veilleurs_d_ecorce:
+    nom: "Les Veilleurs d'écorce"
+    nom-en: "The Bark Watchers"
+    faction: ombre
+    niveau: 10
+    requiert: [o_la_route_de_la_sylve]
+    donneur: varka
+    resume:
+      - "Les elfes de la Sylve attaquent tout le monde"
+      - "depuis la nuit des étoiles."
+    resume-en:
+      - "The elves of the Sylva attack everyone"
+      - "since the night of the stars."
+    offre:
+      - "varka: Les elfes de la Sylve, on les appelle les Veilleurs d'écorce. Avant, ils nous ignoraient."
+      - "varka: Depuis les étoiles, le Néant leur parle trop fort. Ils tirent sur les Marqués à vue. Calme-les. Définitivement, s'il le faut."
+    offre-en:
+      - "varka: The elves of the Sylva, we call them the Bark Watchers. Before, they ignored us."
+      - "varka: Since the stars, the Void speaks to them too loudly. They shoot Marked on sight. Calm them. For good, if you must."
+    etapes:
+      - type: TUER
+        texte: "Repousser les elfes sombres"
+        texte-en: "Drive back the dark elves"
+        monstres: [elfe_sombre]
+        nombre: 10
+        apres:
+          - "Le dernier elfe murmure en mourant, dans une langue que tu ne connais pas. Ta Marque, elle, comprend : « Il a froid. »"
+        apres-en:
+          - "The last elf whispers as he dies, in a language you don't know. Your Mark understands: « It is cold. »"
+      - type: PARLER
+        texte: "Revenir voir Varka"
+        texte-en: "Return to Varka"
+        pnj: varka
+        dialogue:
+          - "varka: « Il a froid » ? Le Néant ? C'est ce que tu as entendu au Puits, non ?"
+          - "varka: Les elfes entendent la même voix que nous. Et elle les rend fous."
+        dialogue-en:
+          - "varka: « It is cold »? The Void? That's what you heard at the Well, isn't it?"
+          - "varka: The elves hear the same voice we do. And it drives them mad."
+    recompenses:
+      xp: 1300
+      or: 140
+
+  o_les_fioles:
+    nom: "Les fioles"
+    nom-en: "The Vials"
+    faction: ombre
+    niveau: 11
+    requiert: [o_les_veilleurs_d_ecorce]
+    donneur: jaro
+    resume:
+      - "Des Purificateurs campent au sud de Sombrebois"
+      - "avec d'étranges caisses."
+    resume-en:
+      - "Purifiers are camped south of Sombrebois"
+      - "with strange crates."
+    offre:
+      - "jaro: Des Purificateurs au sud, avec des caisses qu'ils protègent mieux que leurs prisonniers."
+      - "jaro: Je veux savoir ce qu'il y a dedans. Et je veux leur rendre la monnaie, pour mon bras."
+    offre-en:
+      - "jaro: Purifiers to the south, with crates they guard better than their prisoners."
+      - "jaro: I want to know what's inside. And I want to pay them back, for my arm."
+    etapes:
+      - type: TUER
+        texte: "Attaquer le bivouac des Purificateurs"
+        texte-en: "Attack the Purifiers' bivouac"
+        monstres: [purificateur, limier_aube]
+        nombre: 10
+        point: camp_purif_sylve
+      - type: INTERAGIR
+        texte: "Ouvrir les caisses"
+        texte-en: "Open the crates"
+        point: camp_purif_sylve
+        rayon: 6
+        apres:
+          - "Des fioles, par dizaines, rangées dans la paille. Dedans, une lumière dorée qui bouge comme si elle respirait."
+          - "Sur chaque caisse, le soleil du Cloître Blanc. Et une étiquette : « Livraison : Citadelle d'Obsidienne. Pour V. »"
+        apres-en:
+          - "Vials, by the dozen, packed in straw. Inside, a golden light that moves as if it were breathing."
+          - "On every crate, the sun of the White Cloister. And a label: « Delivery: Obsidian Citadel. For V. »"
+      - type: PARLER
+        texte: "Montrer l'étiquette à Jaro"
+        texte-en: "Show the label to Jaro"
+        pnj: jaro
+        dialogue:
+          - "jaro: La Citadelle ? Ils livrent la Citadelle ? Nos ennemis nous vendent… quoi, au juste ?"
+          - "jaro: V. … Vharos. Ça peut être que lui."
+          - "jaro: On le dit à personne. Pas encore."
+        dialogue-en:
+          - "jaro: The Citadel? They deliver to the Citadel? Our enemies are selling us… what, exactly?"
+          - "jaro: V. … Vharos. It can only be him."
+          - "jaro: We tell no one. Not yet."
+    recompenses:
+      xp: 1550
+      or: 160
+
+  o_les_creux_sans_maitre:
+    nom: "Les Creux sans maître"
+    nom-en: "The Masterless Hollow"
+    faction: ombre
+    niveau: 12
+    requiert: [o_les_fioles]
+    donneur: varka
+    resume:
+      - "Des Creux évadés de la Citadelle"
+      - "errent autour d'un cercle de pierres."
+    resume-en:
+      - "Hollow escaped from the Citadel"
+      - "wander around a stone circle."
+    offre:
+      - "varka: Au nord-est, un cercle de pierres. Des Creux y tournent en rond, avec des bouts de chaînes aux poignets. Des Creux de la Citadelle."
+      - "varka: Ils se sont enfuis. Les Creux ne s'enfuient pas. Ils n'ont rien pour vouloir quoi que ce soit."
+    offre-en:
+      - "varka: To the north-east, a stone circle. Hollow walk in circles there, with bits of chain on their wrists. Citadel Hollow."
+      - "varka: They ran away. Hollow don't run away. They have nothing left to want anything with."
+    etapes:
+      - type: TUER
+        texte: "Abattre les Creux errants"
+        texte-en: "Put down the wandering Hollow"
+        monstres: [creux_errant]
+        nombre: 8
+        point: cercle_sylve
+      - type: INTERAGIR
+        texte: "Examiner le dernier Creux"
+        texte-en: "Examine the last Hollow"
+        point: cercle_sylve
+        rayon: 6
+        apres:
+          - "Sur son bras, sous la chaîne, deux marques. Le sceau du Puits… et, en dessous, le soleil brûlé du Cloître."
+          - "Ce Creux a été purifié par l'Aube avant d'être enchaîné par la Citadelle."
+        apres-en:
+          - "On his arm, under the chain, two marks. The seal of the Well… and, beneath it, the burned sun of the Cloister."
+          - "This Hollow was purified by the Dawn before being chained by the Citadel."
+      - type: PARLER
+        texte: "Revenir voir Varka"
+        texte-en: "Return to Varka"
+        pnj: varka
+        dialogue:
+          - "varka: Purifié chez eux, enchaîné chez nous. Alors les Purifiés de l'Aube et nos Creux…"
+          - "varka: … c'est la même chose. Des Marqués à qui on a pris leur lumière."
+        dialogue-en:
+          - "varka: Purified by them, chained by us. So the Dawn's Purified and our Hollow…"
+          - "varka: … are the same thing. Marked whose light was taken."
+    recompenses:
+      xp: 1800
+      or: 180
+
+  o_le_coeur_de_la_sylve:
+    nom: "Le Cœur de la Sylve"
+    nom-en: "The Heart of the Sylva"
+    faction: ombre
+    niveau: 13
+    requiert: [o_les_creux_sans_maitre]
+    donneur: jaro
+    resume:
+      - "Les gardiens d'écorce se sont levés"
+      - "devant le Cœur de la Sylve."
+    resume-en:
+      - "The bark guardians have risen"
+      - "before the Heart of the Sylva."
+    offre:
+      - "jaro: Les elfes ont un lieu sacré, au nord-est : le Cœur de la Sylve. Une porte dans la colline. Ça vibre, là-bas."
+      - "jaro: Ses gardiens se sont réveillés. Si quelqu'un sait pourquoi la voix a froid, c'est eux."
+    offre-en:
+      - "jaro: The elves have a sacred place, to the north-east: the Heart of the Sylva. A door in the hill. It hums, out there."
+      - "jaro: Its guardians have woken up. If anyone knows why the voice is cold, it's them."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre le Cœur de la Sylve"
+        texte-en: "Reach the Heart of the Sylva"
+        point: coeur_sylve_seuil
+        rayon: 10
+      - type: TUER
+        texte: "Abattre les gardiens d'écorce"
+        texte-en: "Destroy the bark guardians"
+        monstres: [gardien_ecorce]
+        nombre: 8
+        point: coeur_sylve_seuil
+      - type: INTERAGIR
+        texte: "Poser la main sur la porte"
+        texte-en: "Lay your hand on the door"
+        point: coeur_sylve_portail
+        rayon: 5
+        apres:
+          - "Ta Marque s'ouvre, et le monde disparaît. Tu vois le ciel d'il y a mille ans. Un seul astre, immense, et des chaînes de lumière qui montent vers lui."
+          - "L'Astre se débat. Puis il cesse. Il ne se brise pas sous les chaînes : il se brise pour leur échapper. Il choisit."
+          - "Là où il brillait, il reste un trou noir. Et dans ce trou, un dernier souffle, très froid, qui attend."
+          - "Tu rouvres les yeux. Le murmure, en toi, se tait comme quelqu'un qui a été reconnu."
+        apres-en:
+          - "Your Mark opens, and the world disappears. You see the sky of a thousand years ago. A single star, immense, and chains of light rising toward it."
+          - "The Star struggles. Then it stops. It does not shatter under the chains: it shatters to escape them. It chooses."
+          - "Where it shone, a black hole remains. And in that hole, a last breath, very cold, waiting."
+          - "You open your eyes. The whisper, inside you, falls silent like someone who has been recognised."
+      - type: PARLER
+        texte: "Raconter la vision à Jaro"
+        texte-en: "Tell Jaro about the vision"
+        pnj: jaro
+        dialogue:
+          - "jaro: Attends. Le Néant, c'est pas le vide laissé par l'Astre…"
+          - "jaro: C'est ce qui reste de lui ? Le murmure… c'est l'Astre ?"
+          - "joueur: Je ne sais pas. Mais il a froid."
+        dialogue-en:
+          - "jaro: Wait. The Void isn't the emptiness left by the Star…"
+          - "jaro: It's what's left of it? The whisper… is the Star?"
+          - "joueur: I don't know. But it is cold."
+    recompenses:
+      xp: 2100
+      or: 210
+
+  o_le_marque_de_l_aube:
+    nom: "Le Marqué de l'Aube"
+    nom-en: "The Marked of the Dawn"
+    faction: ombre
+    niveau: 14
+    requiert: [o_le_coeur_de_la_sylve]
+    donneur: jaro
+    resume:
+      - "Morvain vous donne rendez-vous"
+      - "dans une chapelle en ruine, à l'ouest."
+    resume-en:
+      - "Morvain asks to meet you"
+      - "in a ruined chapel, to the west."
+    offre:
+      - "jaro: Un corbeau de Morvain. « La chapelle à l'ouest. J'ai vu le Marqué de l'Aube. Venez. »"
+    offre-en:
+      - "jaro: A raven from Morvain. « The chapel to the west. I have seen the Marked of the Dawn. Come. »"
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre Morvain à la chapelle"
+        texte-en: "Join Morvain at the chapel"
+        point: chapelle_sylve
+        rayon: 10
+      - type: INTERAGIR
+        texte: "Écouter Morvain"
+        texte-en: "Listen to Morvain"
+        point: chapelle_sylve
+        rayon: 8
+        apres:
+          - "morvain_mentor: Je l'ai vu, sur une colline du Bois de l'Aube. Seul. Il est venu seul, l'imbécile."
+          - "morvain_mentor: Je lui ai dit ce que le Néant mange. Il n'a pas fui. Il s'est battu à côté de moi."
+          - "morvain_mentor: Il a le même regard que vous. Celui de quelqu'un qui commence à comprendre que son camp lui ment."
+          - "morvain_mentor: … Les voilà. Les Affamés. Ils suivent les Marqués comme les loups suivent les troupeaux."
+        apres-en:
+          - "morvain_mentor: I saw him, on a hill in the Wood of the Dawn. Alone. He came alone, the fool."
+          - "morvain_mentor: I told him what the Void feeds on. He did not run. He fought beside me."
+          - "morvain_mentor: He has the same look as you. The look of someone who is beginning to understand that their side lies to them."
+          - "morvain_mentor: … Here they are. The Hungry. They follow the Marked the way wolves follow flocks."
+      - type: TUER
+        texte: "Repousser les Affamés du Néant"
+        texte-en: "Drive back the Hungry of the Void"
+        monstres: [affame_neant]
+        nombre: 8
+        point: chapelle_sylve
+        apres:
+          - "morvain_mentor: Ces choses ne sont ni à l'Aube ni à nous. Elles sont à ce qui a froid, là-haut."
+        apres-en:
+          - "morvain_mentor: These things belong neither to the Dawn nor to us. They belong to what is cold, up there."
+      - type: PARLER
+        texte: "Revenir voir Jaro"
+        texte-en: "Return to Jaro"
+        pnj: jaro
+        dialogue:
+          - "jaro: Morvain qui parle d'un Marqué de l'Aube comme d'un ami ? Le monde est à l'envers."
+        dialogue-en:
+          - "jaro: Morvain talking about a Marked of the Dawn like a friend? The world's upside down."
+    recompenses:
+      xp: 2400
+      or: 240
+
+  o_l_ancien_de_la_sylve:
+    nom: "L'Ancien de la Sylve"
+    nom-en: "The Elder of the Sylva"
+    faction: ombre
+    niveau: 15
+    requiert: [o_le_marque_de_l_aube]
+    donneur: varka
+    resume:
+      - "Au nord, l'Ancien de la Sylve garde un Éclat"
+      - "qui rend fous les elfes."
+    resume-en:
+      - "To the north, the Elder of the Sylva guards a Shard"
+      - "that drives the elves mad."
+    offre:
+      - "varka: Au nord, une bête plus vieille que le village s'est couchée sur un Éclat. Tant qu'elle vit, l'Éclat murmure, et les elfes deviennent fous."
+      - "varka: Tue-la. Rapporte-moi l'Éclat. Ensuite, la route de l'ouest sera à toi."
+    offre-en:
+      - "varka: To the north, a beast older than the village has lain down on a Shard. While it lives, the Shard whispers, and the elves go mad."
+      - "varka: Kill it. Bring me the Shard. Then the road west is yours."
+    etapes:
+      - type: TUER
+        texte: "Nettoyer les abords de l'antre"
+        texte-en: "Clear the approaches to the lair"
+        monstres: [araignee_geante, araignee]
+        nombre: 6
+        point: antre_ancien
+      - type: TUER
+        texte: "Vaincre l'Ancien de la Sylve"
+        texte-en: "Defeat the Elder of the Sylva"
+        monstres: [ancien_sylve]
+        point: antre_ancien
+      - type: INTERAGIR
+        texte: "Prendre l'Éclat de l'antre"
+        texte-en: "Take the Shard from the lair"
+        point: antre_ancien
+        rayon: 6
+        apres:
+          - "L'Éclat est noir et tiède. Quand tu le prends, toute la Sylve se tait d'un coup."
+        apres-en:
+          - "The Shard is black and warm. As you take it, the whole Sylva falls suddenly silent."
+      - type: PARLER
+        texte: "Rapporter l'Éclat à Varka"
+        texte-en: "Bring the Shard to Varka"
+        pnj: varka
+        dialogue:
+          - "varka: Tu entends ? Plus rien. Les elfes vont peut-être redevenir ce qu'ils étaient."
+          - "varka: Mais Les Pilotis, au sud, dans le marais, ne répondent plus. Et Vharos a quitté Nidnoir pour le marais il y a trois jours."
+          - "jaro: Et un passeur jure avoir vu un Creux qui parlait. Qui parlait, je te dis."
+        dialogue-en:
+          - "varka: Hear that? Nothing. Maybe the elves will become what they were."
+          - "varka: But Les Pilotis, to the south, in the marsh, no longer answer. And Vharos left Nidnoir for the marsh three days ago."
+          - "jaro: And a ferryman swears he saw a Hollow that spoke. That spoke, I tell you."
+    recompenses:
+      xp: 2900
+      or: 300
+      objets:
+        - materiau: BLACK_CANDLE
+          nom: "Cœur d'écorce"
+          nom-en: "Bark Heart"
+          description:
+            - "L'Éclat sur lequel dormait l'Ancien de la Sylve."
+          description-en:
+            - "The Shard on which the Elder of the Sylva slept."
+
+  # ================================================================ ANNEXES — SOMBREBOIS
+
+  o_s_les_loups_noirs:
+    nom: "Les loups noirs"
+    nom-en: "The Black Wolves"
+    faction: ombre
+    niveau: 10
+    requiert: [o_la_route_de_la_sylve]
+    donneur: sylas
+    resume:
+      - "Les loups de l'ombre rôdent autour de Sombrebois."
+    resume-en:
+      - "Shadow wolves prowl around Sombrebois."
+    offre:
+      - "sylas: Les loups de la Sylve chassent en meute, maintenant. Ils ont appris ça des elfes, ou du Néant."
+    offre-en:
+      - "sylas: The Sylva wolves hunt in packs now. They learned it from the elves, or from the Void."
+    etapes:
+      - type: TUER
+        texte: "Tuer des loups de l'ombre"
+        texte-en: "Kill shadow wolves"
+        monstres: [loup_ombre]
+        nombre: 10
+      - type: PARLER
+        texte: "Prévenir Sylas"
+        texte-en: "Tell Sylas"
+        pnj: sylas
+        dialogue:
+          - "sylas: Dix ? La meute réfléchira avant de revenir."
+        dialogue-en:
+          - "sylas: Ten? The pack will think twice before coming back."
+    recompenses:
+      xp: 900
+      or: 100
+
+  o_s_le_venin:
+    nom: "Le venin"
+    nom-en: "The Venom"
+    faction: ombre
+    niveau: 11
+    requiert: [o_la_route_de_la_sylve]
+    donneur: ombline
+    resume:
+      - "Mère Ombline a besoin de venin d'araignée géante."
+    resume-en:
+      - "Mother Ombline needs giant spider venom."
+    offre:
+      - "ombline: Le venin des araignées géantes, dosé juste, endort la douleur. Il m'en faut pour les blessés."
+    offre-en:
+      - "ombline: Giant spider venom, dosed right, puts pain to sleep. I need some for the wounded."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer des glandes de venin"
+        texte-en: "Collect venom glands"
+        monstres: [araignee_geante]
+        nombre: 6
+        chance: 0.5
+        objet: "Glande de venin"
+        objet-en: "Venom gland"
+      - type: PARLER
+        texte: "Rapporter le venin à Mère Ombline"
+        texte-en: "Bring the venom to Mother Ombline"
+        pnj: ombline
+        dialogue:
+          - "ombline: Parfait. Six blessés dormiront cette nuit."
+        dialogue-en:
+          - "ombline: Perfect. Six wounded will sleep tonight."
+    recompenses:
+      xp: 1100
+      or: 120
+
+  o_s_les_toiles_du_sud:
+    nom: "Les toiles du sud"
+    nom-en: "The Southern Webs"
+    faction: ombre
+    niveau: 12
+    requiert: [o_la_route_de_la_sylve]
+    donneur: ombline
+    resume:
+      - "Un nid d'araignées grandit au sud-ouest de Sombrebois."
+    resume-en:
+      - "A spider nest is growing south-west of Sombrebois."
+    offre:
+      - "ombline: Le nid du sud-ouest grossit. Bientôt, ses toiles toucheront nos murs."
+    offre-en:
+      - "ombline: The south-western nest is growing. Soon its webs will touch our walls."
+    etapes:
+      - type: TUER
+        texte: "Détruire le nid du sud-ouest"
+        texte-en: "Destroy the south-western nest"
+        monstres: [araignee, araignee_geante]
+        nombre: 12
+        point: toiles_sud_sylve
+      - type: PARLER
+        texte: "Revenir voir Mère Ombline"
+        texte-en: "Return to Mother Ombline"
+        pnj: ombline
+        dialogue:
+          - "ombline: Les toiles brûlent bien. Merci."
+        dialogue-en:
+          - "ombline: Webs burn well. Thank you."
+    recompenses:
+      xp: 1450
+      or: 150
+
+  o_s_le_cimetiere_de_l_est:
+    nom: "Le cimetière de l'est"
+    nom-en: "The Eastern Graveyard"
+    faction: ombre
+    niveau: 14
+    requiert: [o_la_route_de_la_sylve]
+    donneur: sylas
+    resume:
+      - "Un cimetière oublié s'est réveillé"
+      - "loin à l'est de la Sylve."
+    resume-en:
+      - "A forgotten graveyard has awoken"
+      - "far east of the Sylva."
+    offre:
+      - "sylas: Loin à l'est, près de la côte, un cimetière se vide. Le gibier fuit vers nous. Les morts le suivent."
+    offre-en:
+      - "sylas: Far to the east, near the coast, a graveyard is emptying. The game flees toward us. The dead follow it."
+    etapes:
+      - type: TUER
+        texte: "Rendre les morts à la terre"
+        texte-en: "Return the dead to the earth"
+        monstres: [squelette, revenant]
+        nombre: 10
+        point: cimetiere_est_sylve
+      - type: INTERAGIR
+        texte: "Refermer la fosse commune"
+        texte-en: "Close the mass grave"
+        point: cimetiere_est_sylve
+        rayon: 6
+        apres:
+          - "Au fond de la fosse, un Éclat minuscule. Les morts dormaient dessus depuis mille ans. Ils l'ont entendu se réveiller."
+        apres-en:
+          - "At the bottom of the pit, a tiny Shard. The dead had slept on it for a thousand years. They heard it wake up."
+      - type: PARLER
+        texte: "Revenir voir Sylas"
+        texte-en: "Return to Sylas"
+        pnj: sylas
+        dialogue:
+          - "sylas: Le gibier reviendra. Les morts, j'espère que non."
+        dialogue-en:
+          - "sylas: The game will come back. The dead, I hope not."
+    recompenses:
+      xp: 1800
+      or: 180
+
+  o_s_le_bivouac_de_l_ouest:
+    nom: "Le bivouac de l'ouest"
+    nom-en: "The Western Bivouac"
+    faction: ombre
+    niveau: 15
+    requiert: [o_les_fioles]
+    donneur: varka
+    resume:
+      - "Un bivouac de Purificateurs, loin à l'ouest,"
+      - "prépare un convoi de fioles."
+    resume-en:
+      - "A Purifier bivouac, far to the west,"
+      - "is preparing a convoy of vials."
+    offre:
+      - "varka: Mes éclaireurs ont trouvé un autre bivouac de Purificateurs, loin à l'ouest, sur les hauteurs. Avec des caisses."
+      - "varka: Brise-le. Et compte les fioles."
+    offre-en:
+      - "varka: My scouts found another Purifier bivouac, far to the west, on the heights. With crates."
+      - "varka: Break it. And count the vials."
+    etapes:
+      - type: TUER
+        texte: "Briser le bivouac de l'ouest"
+        texte-en: "Break the western bivouac"
+        monstres: [purificateur, limier_aube]
+        nombre: 12
+        point: bivouac_ouest_sylve
+      - type: INTERAGIR
+        texte: "Compter les fioles"
+        texte-en: "Count the vials"
+        point: bivouac_ouest_sylve
+        rayon: 6
+        apres:
+          - "Quarante fioles. Quarante Marqués vidés. Toutes adressées « Pour V. »."
+        apres-en:
+          - "Forty vials. Forty Marked emptied. All addressed « For V. »."
+      - type: PARLER
+        texte: "Revenir voir Varka"
+        texte-en: "Return to Varka"
+        pnj: varka
+        dialogue:
+          - "varka: Quarante… Et ce n'est qu'un convoi. Ce commerce dure depuis longtemps."
+        dialogue-en:
+          - "varka: Forty… And that's only one convoy. This trade has been going on for a long time."
+    recompenses:
+      xp: 2200
+      or: 220
+
+  o_s_la_tour_du_nord:
+    nom: "La tour du nord"
+    nom-en: "The Northern Tower"
+    faction: ombre
+    niveau: 15
+    requiert: [o_la_route_de_la_sylve]
+    donneur: sylas
+    resume:
+      - "Une tour en ruine, loin au nord-est,"
+      - "sert de repaire aux morts."
+    resume-en:
+      - "A ruined tower, far to the north-east,"
+      - "serves as a lair for the dead."
+    offre:
+      - "sylas: Au nord-est, une vieille tour. Les morts s'y entassent comme dans un grenier. Va vider le grenier."
+    offre-en:
+      - "sylas: To the north-east, an old tower. The dead pile up there like in an attic. Go empty the attic."
+    etapes:
+      - type: TUER
+        texte: "Abattre les morts de la tour"
+        texte-en: "Destroy the dead of the tower"
+        monstres: [squelette, revenant]
+        nombre: 8
+        point: tour_nord_sylve
+      - type: INTERAGIR
+        texte: "Fouiller le sommet de la tour"
+        texte-en: "Search the top of the tower"
+        point: tour_nord_sylve
+        rayon: 6
+        apres:
+          - "Une lunette d'astromancien, brisée, tournée vers le ciel. Gravé dessus : « O. »"
+        apres-en:
+          - "An astromancer's spyglass, broken, turned toward the sky. Engraved on it: « O. »"
+      - type: PARLER
+        texte: "Revenir voir Sylas"
+        texte-en: "Return to Sylas"
+        pnj: sylas
+        dialogue:
+          - "sylas: Un astromancien de l'Aube, ici ? Il regardait quoi, de si loin ?"
+        dialogue-en:
+          - "sylas: A Dawn astromancer, here? What was he looking at, from so far away?"
+    recompenses:
+      xp: 2100
+      or: 210
+
+  o_s_le_nid_de_l_ouest:
+    nom: "Le nid de l'ouest"
+    nom-en: "The Western Nest"
+    faction: ombre
+    niveau: 16
+    requiert: [o_s_les_toiles_du_sud]
+    donneur: ombline
+    resume:
+      - "Le plus grand nid de la Sylve"
+      - "se cache loin à l'ouest."
+    resume-en:
+      - "The largest nest in the Sylva"
+      - "is hidden far to the west."
+    offre:
+      - "ombline: Toutes les araignées du sud venaient d'un nid plus grand, loin à l'ouest. La mère est là-bas."
+    offre-en:
+      - "ombline: All the southern spiders came from a bigger nest, far to the west. The mother is out there."
+    etapes:
+      - type: TUER
+        texte: "Détruire le grand nid de l'ouest"
+        texte-en: "Destroy the great western nest"
+        monstres: [araignee, araignee_geante]
+        nombre: 14
+        point: nid_ouest_sylve
+      - type: PARLER
+        texte: "Revenir voir Mère Ombline"
+        texte-en: "Return to Mother Ombline"
+        pnj: ombline
+        dialogue:
+          - "ombline: La Sylve respire. Moi aussi."
+        dialogue-en:
+          - "ombline: The Sylva can breathe. So can I."
+    recompenses:
+      xp: 2400
+      or: 240

@@ -1,4 +1,4 @@
-# Fonctions communes aux scripts Orbit MC (installer / valider / recuperer / compiler / mondes).
+﻿# Fonctions communes aux scripts Orbit MC (installer / valider / recuperer / compiler / mondes).
 # A charger avec :  . "$PSScriptRoot\scripts\commun.ps1"
 # Compatible Windows PowerShell 5.1 (pas d'accents ici : evite les soucis d'encodage).
 $ErrorActionPreference = 'Stop'
@@ -240,6 +240,8 @@ $Plugins = @(
     @{ Nom = 'OrbitMMO';        Type = 'ps1';    Dossier = 'plugins-src\OrbitMMO';        Jar = 'plugins-src\OrbitMMO\target\OrbitMMO.jar';               Vers = @('instances\reborn') },
     @{ Nom = 'OrbitExtraction'; Type = 'ps1';    Dossier = 'plugins-src\OrbitExtraction'; Jar = 'plugins-src\OrbitExtraction\target\OrbitExtraction.jar'; Vers = @('instances\extraction') },
     @{ Nom = 'OrbitTycoon';     Type = 'ps1';    Dossier = 'plugins-src\OrbitTycoon';     Jar = 'plugins-src\OrbitTycoon\target\OrbitTycoon.jar';         Vers = @('instances\tycoon') },
+    @{ Nom = 'OrbitPractice';   Type = 'ps1';    Dossier = 'plugins-src\OrbitPractice';   Jar = 'plugins-src\OrbitPractice\target\OrbitPractice.jar';     Vers = @('instances\practice') },
+    @{ Nom = 'OrbitSurvie';     Type = 'ps1';    Dossier = 'plugins-src\OrbitSurvie';     Jar = 'plugins-src\OrbitSurvie\target\OrbitSurvie.jar';         Vers = @('instances\survie') },
     @{ Nom = 'PanelBridge';     Type = 'bridge'; Dossier = 'panel\bridge';                Jar = 'panel\bridge\PanelBridge.jar';                           Vers = @('server') },
     @{ Nom = 'OrbitStaff';      Type = 'maven';  Dossier = 'mods-src\orbitstaff';         Jar = 'mods-src\orbitstaff\orbitstaff-core\target\OrbitStaff-0.1.0-SNAPSHOT.jar'; Vers = @('server'); Optionnel = $true }
 )

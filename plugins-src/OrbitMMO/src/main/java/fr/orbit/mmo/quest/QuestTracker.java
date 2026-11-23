@@ -1,7 +1,10 @@
 package fr.orbit.mmo.quest;
 
+import fr.orbit.mmo.hud.QuestPanel;
+import fr.orbit.mmo.hud.QuestPanel.Row;
 import fr.orbit.mmo.util.Text;
 import io.papermc.paper.scoreboard.numbers.NumberFormat;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Criteria;
@@ -10,34 +13,44 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/** Suivi des quêtes à droite de l'écran (tableau latéral propre à chaque joueur). */
+/**
+ * Suivi des quêtes à droite de l'écran (tableau latéral propre à chaque joueur). Avec le pack : cadre du HUD
+ * ({@link QuestPanel}) ; sans : tableau du jeu en texte coloré.
+ */
 final class QuestTracker {
 
-    private static final int MAX_LINES = 14;
+    private static final int MAX_LINES = QuestPanel.MAX_ROWS;
+    private static final String ARROWS = "↑↗→↘↓↙←↖";
+
+    private record Shown(List<Row> rows, boolean skinned, String title) {
+    }
 
     private final Map<UUID, Scoreboard> boards = new HashMap<>();
-    private final Map<UUID, List<String>> last = new HashMap<>();
+    private final Map<UUID, Shown> last = new HashMap<>();
 
-    /** Lignes au format MiniMessage ; liste vide = tableau retiré. */
-    void show(Player p, List<String> lines) {
+    /** Liste vide = tableau retiré. */
+    void show(Player p, List<Row> rows, boolean skinned, String title) {
         UUID id = p.getUniqueId();
-        if (lines.isEmpty()) {
+        if (rows.isEmpty()) {
             hide(p);
             return;
         }
-        if (lines.equals(last.get(id)) && p.getScoreboard() == boards.get(id)) {
+        List<Row> lines = rows.size() > MAX_LINES ? new ArrayList<>(rows.subList(0, MAX_LINES)) : rows;
+        Shown now = new Shown(List.copyOf(lines), skinned, title);
+        if (now.equals(last.get(id)) && p.getScoreboard() == boards.get(id)) {
             return;
         }
-        last.put(id, List.copyOf(lines));
+        last.put(id, now);
         Scoreboard sb = boards.get(id);
         if (sb == null) {
             sb = Bukkit.getScoreboardManager().getNewScoreboard();
-            Objective o = sb.registerNewObjective("quetes", Criteria.DUMMY, Text.mm("<#FFD66E><b>✦ Quêtes ✦</b>"));
+            Objective o = sb.registerNewObjective("quetes", Criteria.DUMMY, Component.text(title));
             o.setDisplaySlot(DisplaySlot.SIDEBAR);
             o.numberFormat(NumberFormat.blank());
             boards.put(id, sb);
@@ -46,17 +59,33 @@ final class QuestTracker {
             p.setScoreboard(sb);
         }
         Objective o = sb.getObjective("quetes");
-        int n = Math.min(MAX_LINES, lines.size());
+        int n = lines.size();
+        o.displayName(skinned ? QuestPanel.title(n, title) : Text.mm("<#FFD66E><b>✦ " + Text.esc(title) + " ✦</b>"));
         for (int i = 0; i < MAX_LINES; i++) {
             String entry = entry(i);
             if (i < n) {
                 Score s = o.getScore(entry);
                 s.setScore(MAX_LINES - i);
-                s.customName(Text.mm(lines.get(i)));
+                s.customName(skinned ? QuestPanel.row(lines.get(i)) : Text.mm(plain(lines.get(i))));
             } else {
                 sb.resetScores(entry);
             }
         }
+    }
+
+    /** Ligne du tableau sans le pack (comme avant le cadre). */
+    private static String plain(Row r) {
+        String t = Text.esc(r.text());
+        return switch (r.kind()) {
+            case QUEST_MAIN -> "<#FFD66E>✦ <b>" + t + "</b>";
+            case QUEST -> "<#FFD66E><b>" + t + "</b>";
+            case OBJECTIVE -> "<#D7DCE2>▸ " + t;
+            case OBJECTIVE_MORE -> "<#D7DCE2>  " + t;
+            case DISTANCE -> "<#8C96A3>  " + ARROWS.charAt(Math.floorMod(r.arrow(), 8)) + " " + t;
+            case HERE -> "<#5EE89A>  " + t;
+            case ELSEWHERE, MORE -> "<#8C96A3>  " + t;
+            case SEPARATOR -> " ";
+        };
     }
 
     void hide(Player p) {

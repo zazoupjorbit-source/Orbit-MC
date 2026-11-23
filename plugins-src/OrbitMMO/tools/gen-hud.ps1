@@ -492,7 +492,10 @@ function Menu-Ornament($b, [int]$row, [int]$xa, [int]$xb) {
     }
     Menu-Diamond $b $xa $y $GOLD; Menu-Diamond $b $xb $y $GOLD
 }
+$script:menuSpecs = New-Object System.Collections.Generic.List[object]
 function New-MenuBg([int]$rows, [hashtable]$accent, [object[]]$ornaments, [string]$rel) {
+    # Redessine en haute definition par tools\hd\HudHd.cs (MenuBg) avec les memes donnees.
+    $script:menuSpecs.Add(@($rows, $accent, $ornaments, $rel))
     $imgH = 114 + 18 * $rows
     $b = New-Canvas 196 ($MY + $imgH + 4)
     # Panneau : contour, biseau, filet or interieur, degrade bleu nuit et etoiles.
@@ -566,12 +569,13 @@ function New-MenuBg([int]$rows, [hashtable]$accent, [object[]]$ornaments, [strin
     for ($c = 0; $c -lt 9; $c++) { Menu-Socket $b (7 + 18 * $c) ($invY + 57) $null }
     Save-Png $b $rel
 }
-# Menu [F] (3 rangees) : portrait, 7 boutons, guide, retour au lobby.
+# Menu [F] (3 rangees) : portrait, 7 boutons, quetes (case 21), guide, guilde (case 23, sous le groupe), langue (case 24), montures (case 25),
+# retour au lobby.
 New-MenuBg 3 @{ 4 = 'FFD66E'; 10 = '7FB2FF'; 11 = 'FFD66E'; 12 = '5EE89A'; 13 = '7FD4FF'; 14 = 'FFB347'; 15 = 'E6C35C'; 16 = '7FD4FF';
-    22 = 'D7DCE2'; 26 = 'FFD66E' } @(@(0, 12, 74), @(0, 101, 164), @(2, 12, 74), @(2, 101, 146)) "$fontDir/menu_main.png"
+    21 = 'FFD66E'; 22 = 'D7DCE2'; 23 = '6FE3C1'; 24 = '7FB2FF'; 25 = 'C9A26B'; 26 = 'FFD66E' } @(@(0, 12, 74), @(0, 101, 164), @(2, 12, 56)) "$fontDir/menu_main.png"
 # Fiche [Maj + F] (6 rangees) : portrait, 7 caracteristiques, 27 sorts, rangee d'actions.
 $prof = @{ 4 = 'FFD66E'; 10 = 'FF8A3B'; 11 = 'D7DCE2'; 12 = 'B36BFF'; 13 = '5EE89A'; 14 = '4FA3FF'; 15 = 'FF5C5C'; 16 = 'B8C0CA';
-    45 = 'B8C0CA'; 46 = '5EE89A'; 47 = 'FFB347'; 48 = 'D7DCE2'; 49 = '7FB2FF'; 53 = 'FFD66E' }
+    45 = 'B8C0CA'; 46 = '5EE89A'; 47 = 'FFB347'; 48 = 'D7DCE2'; 49 = '7FB2FF'; 50 = 'C9A26B'; 53 = 'FFD66E' }
 for ($s = 18; $s -le 44; $s++) { $prof[$s] = '3D5A8F' }
 New-MenuBg 6 $prof @(@(0, 12, 74), @(0, 101, 164), @(5, 101, 146)) "$fontDir/menu_profile.png"
 # Fonds generiques (3 a 6 rangees) pour tous les autres menus : les cases des boutons sont posees par MenuSkin.
@@ -590,6 +594,136 @@ for ($j = 0; $j -lt 18; $j++) {
     }
 }
 Save-Png $b "$fontDir/menu_socket.png" -NoForce
+
+# ------------------------------------------------------------------ Boite de dialogue des PNJ (barre de boss, haut de l'ecran)
+# Cadre 246 x 65 : bandeau du nom, filet or, zone de trois lignes de texte, ligne d'aide. Le titre d'une barre de
+# boss a son haut en y0 ; le cadre commence 1 px au-dessus (ascent 8). Positions : hud/DialogueBox.java.
+$b = New-Canvas 246 65
+Draw-Panel $b
+Rect $b 2 2 243 17 $HEAD
+Gold-Line $b 8 237 18
+Draw-Track $b 6 20 239 51
+Rivet $b 4 4; Rivet $b 240 4; Rivet $b 4 59; Rivet $b 240 59
+Save-Png $b "$fontDir/dialog_frame.png"
+
+# Case du portrait, a droite de la boite de dialogue : 54 x 65, le portrait (48 x 60) est pose en (3, 2).
+$b = New-Canvas 54 65
+Draw-Panel $b
+Draw-Track $b 2 1 51 63
+Save-Png $b "$fontDir/dialog_portrait.png"
+
+# Carte du PNJ, a droite des menus : 112 x 160. Portrait en (32, 8), nom centre (haut en y = 76), sept lignes de
+# texte de 94 px a partir de (9, 91), une tous les 9 px. Positions : hud/NpcCard.java.
+$b = New-Canvas 112 160
+Draw-Panel $b
+Draw-Track $b 29 5 82 70
+Rect $b 2 73 109 83 $HEAD
+Gold-Line $b 8 103 85
+Draw-Track $b 5 88 106 154
+Rivet $b 4 4; Rivet $b 106 4; Rivet $b 4 154; Rivet $b 106 154
+Save-Png $b "$fontDir/npc_card.png"
+
+# ------------------------------------------------------------------ Portraits des PNJ (visages lus dans le jar client)
+# Un portrait = le visage du modele du jeu, agrandi sans lissage dans une image de 48 x 60, colle en bas et centre.
+# L'ordre de $portraits est celui de hud/Portraits.java (KEYS) : ne pas le changer sans changer l'autre.
+function Get-Tex($z, [string]$path) {
+    $pe = $z.GetEntry("assets/minecraft/textures/entity/$path.png")
+    if (-not $pe) { throw "Texture introuvable dans le jar client : $path" }
+    $ms = New-Object IO.MemoryStream
+    $st = $pe.Open(); $st.CopyTo($ms); $st.Close(); $ms.Position = 0
+    $img = [System.Drawing.Image]::FromStream($ms)
+    $copy = New-Canvas $img.Width $img.Height
+    $g = [System.Drawing.Graphics]::FromImage($copy)
+    $g.DrawImage($img, 0, 0, $img.Width, $img.Height)
+    $g.Dispose(); $img.Dispose(); $ms.Dispose()
+    return $copy
+}
+function Blit($dst, $src, [int]$sx, [int]$sy, [int]$bw, [int]$bh, [int]$dx, [int]$dy) {
+    for ($j = 0; $j -lt $bh; $j++) {
+        for ($i = 0; $i -lt $bw; $i++) {
+            if ($sx + $i -ge $src.Width -or $sy + $j -ge $src.Height) { continue }
+            $c = $src.GetPixel($sx + $i, $sy + $j)
+            if ($c.A -lt 128) { continue }
+            $tx = $dx + $i; $ty = $dy + $j
+            if ($tx -ge 0 -and $ty -ge 0 -and $tx -lt $dst.Width -and $ty -lt $dst.Height) {
+                $dst.SetPixel($tx, $ty, [System.Drawing.Color]::FromArgb(255, $c.R, $c.G, $c.B))
+            }
+        }
+    }
+}
+function Save-Portrait($small, [string]$name) {
+    $scale = [int][Math]::Floor([Math]::Min(48 / $small.Width, 60 / $small.Height))
+    $pb = New-Canvas 48 60
+    $ox = [int][Math]::Floor((48 - $small.Width * $scale) / 2); $oy = 60 - $small.Height * $scale
+    for ($j = 0; $j -lt $small.Height; $j++) {
+        for ($i = 0; $i -lt $small.Width; $i++) {
+            $c = $small.GetPixel($i, $j)
+            if ($c.A -eq 0) { continue }
+            for ($v = 0; $v -lt $scale; $v++) { for ($u = 0; $u -lt $scale; $u++) { $pb.SetPixel($ox + $i * $scale + $u, $oy + $j * $scale + $v, $c) } }
+        }
+    }
+    Add-Outline $pb $C_OUT
+    $small.Dispose()
+    Save-Png $pb "$fontDir/portrait_$name.png"
+}
+# Villageois : tete 8 x 10 (visage en 8,8), coiffe (40,8), nez 2 x 4 (26,2) qui depasse d'un pixel sous le menton.
+function New-Villager($z, [string]$job) {
+    $s = New-Canvas 8 11
+    $layers = @('villager/villager', 'villager/type/plains')
+    if ($job) { $layers += "villager/profession/$job" }
+    $tex = @(); foreach ($l in $layers) { $tex += , (Get-Tex $z $l) }
+    foreach ($t in $tex) { Blit $s $t 8 8 8 10 0 0; Blit $s $t 40 8 8 10 0 0 }
+    foreach ($t in $tex) { Blit $s $t 26 2 2 4 3 7 }
+    foreach ($t in $tex) { $t.Dispose() }
+    return , $s
+}
+function New-Head($z, [string]$path, [int]$fh, [bool]$nose, [bool]$hat) {
+    $t = Get-Tex $z $path
+    $s = New-Canvas 8 ($fh + $(if ($nose) { 1 } else { 0 }))
+    Blit $s $t 8 8 8 $fh 0 0
+    if ($hat) { Blit $s $t 40 8 8 $fh 0 0 }
+    if ($nose) { Blit $s $t 26 2 2 4 3 7 }
+    $t.Dispose()
+    return , $s
+}
+# Les skins des PNJ, les tenues des monstres et les textures des betes sont dessines par gen-skins.ps1 dans pack\ :
+# on le lance ici (gen-pack.ps1 vide pack\ avant d'appeler ce script), puis les portraits reprennent ces visages.
+& (Join-Path $PSScriptRoot 'gen-skins.ps1')
+function Get-PackTex([string]$rel) {
+    $p = Join-Path $packDir "assets/$rel.png"
+    if (-not (Test-Path $p)) { throw "Texture absente du pack : $rel (tools\gen-skins.ps1)" }
+    $img = [System.Drawing.Image]::FromFile($p)
+    $copy = New-Canvas $img.Width $img.Height
+    $g = [System.Drawing.Graphics]::FromImage($copy)
+    $g.DrawImage($img, 0, 0, $img.Width, $img.Height)
+    $g.Dispose(); $img.Dispose()
+    return $copy
+}
+# Tete d'une texture deja lue : visage 8 x $fh en (8,8), coiffe en (40,8), nez de golem en (26,2).
+function New-HeadOf($t, [int]$fh, [bool]$nose, [bool]$hat) {
+    $s = New-Canvas 8 ($fh + $(if ($nose) { 1 } else { 0 }))
+    Blit $s $t 8 8 8 $fh 0 0
+    if ($hat) { Blit $s $t 40 8 8 $fh 0 0 }
+    if ($nose) { Blit $s $t 26 2 2 4 3 7 }
+    $t.Dispose()
+    return , $s
+}
+$faces = @('alex', 'ari', 'efe', 'kai', 'makena', 'noor', 'steve', 'sunny', 'zuri')
+# PNJ de ville et de quete qui ont leur skin dans le pack (assets/orbitmmo/textures/entity/npc/<nom>.png).
+$town = @('blacksmith', 'priest', 'runesmith', 'merchant', 'alchemist')
+$named = @('maelis', 'teo', 'brune', 'mourant', 'varenne', 'orsan', 'elwen', 'agathe', 'gilles', 'seraphine', 'morvain',
+    'tobias', 'hilde', 'bertin', 'fenouil', 'odile', 'gaspard', 'clotaire', 'bastien', 'hardouin', 'lise')
+$portraits = @('blacksmith', 'priest', 'runesmith', 'merchant', 'alchemist', 'tower', 'tower_ombre') + $faces + @('villager') + $named
+if ($portraits.Count -gt 64) { throw "Trop de portraits ($($portraits.Count)) : 64 au plus (plages E600 et E640)." }
+foreach ($n in ($town + $named)) { Save-Portrait (New-HeadOf (Get-PackTex "orbitmmo/textures/entity/npc/$n") 8 $false $true) $n }
+# Gardien du Pilier : le golem aux couleurs du pack. Veilleur du Pilier : le heaume de sa tenue.
+Save-Portrait (New-HeadOf (Get-PackTex 'minecraft/textures/entity/iron_golem/iron_golem') 10 $true $false) 'tower'
+Save-Portrait (New-HeadOf (Get-PackTex 'orbitmmo/textures/entity/equipment/humanoid/veilleur') 8 $false $false) 'tower_ombre'
+$zip = [IO.Compression.ZipFile]::OpenRead($clientJar)
+Save-Portrait (New-Villager $zip '') 'villager'
+foreach ($f in $faces) { Save-Portrait (New-Head $zip "player/wide/$f" 8 $false $true) $f }
+$zip.Dispose()
+Write-Host "Portraits : $($portraits.Count) visages ecrits."
 
 # ------------------------------------------------------------------ HUD vanilla rendu invisible (tailles lues dans le jar client)
 $zip = [IO.Compression.ZipFile]::OpenRead($clientJar)
@@ -623,10 +757,138 @@ foreach ($chk in @(@('hotbar', 182, 22), @('hotbar_selection', 24, 23), @('hotba
 $zip.Dispose()
 Write-Host "HUD : $hidden sprites vanilla masques."
 
+# ------------------------------------------------------------------ Suivi des quetes (droite de l'ecran)
+# Cadre pose par le titre du tableau lateral (hud/QuestPanel.java) : contenu $QW px, image $QW + 8 (6 px a gauche
+# du contenu, 2 px a droite) ; haut 12 px au-dessus de la premiere ligne (titre sur y 3 a 10, trait d'or en y 11),
+# 9 px par ligne, 3 px sous la derniere. Une image par nombre de lignes (1 a 14).
+$QW = 140
+function New-QuestPanel([int]$n, [string]$rel) {
+    $w = $QW + 8; $h = 9 * $n + 14
+    $b = New-Canvas $w $h
+    $rowCol = @{}
+    for ($y = 0; $y -lt $h; $y++) {
+        if ($y -le 10) { $rowCol[$y] = Mix '18243F' $HEAD (($y - 1) / 9.0) }
+        else { $rowCol[$y] = (Mix $BODY_T $BODY_B (($y - 12) / [double][Math]::Max(1, $h - 14))) + '/246' }
+    }
+    for ($y = 0; $y -lt $h; $y++) {
+        for ($x = 0; $x -lt $w; $x++) {
+            if (($x -eq 0 -or $x -eq $w - 1) -and ($y -eq 0 -or $y -eq $h - 1)) { continue }
+            if ($y -eq 11) { continue }
+            if ($x -eq 0 -or $y -eq 0 -or $x -eq $w - 1 -or $y -eq $h - 1) { $c = $C_OUT }
+            elseif ($y -eq 1) { $c = $BEV_L }
+            elseif ($x -eq 1) { $c = $BEV_L }
+            elseif ($x -eq $w - 2 -or $y -eq $h - 2) { $c = $BEV_D }
+            else { $c = $rowCol[$y] }
+            Px $b $x $y $c
+        }
+    }
+    Px $b 0 11 $C_OUT; Px $b ($w - 1) 11 $C_OUT
+    Gold-Line $b 1 ($w - 2) 11
+    Rivet $b 2 3; Rivet $b ($w - 4) 3
+    Save-Png $b $rel
+}
+for ($n = 1; $n -le 14; $n++) { New-QuestPanel $n "$fontDir/quest_panel_$n.png" }
+# Trait entre deux quetes (haut a 4 px sous le haut de la ligne).
+$b = New-Canvas ($QW - 4) 4
+for ($x = 4; $x -le $QW - 9; $x++) {
+    $t = [Math]::Abs($x - ($QW - 4) / 2.0) / (($QW - 12) / 2.0)
+    Px $b $x 0 ((Mix $GOLD $GOLD_D $t) + '/' + [int](230 - 170 * $t))
+}
+Save-Png $b "$fontDir/quest_sep.png"
+function New-Pix([string[]]$rows, [hashtable]$pal, [string]$rel) {
+    $b = New-Canvas $rows[0].Length $rows.Count
+    for ($y = 0; $y -lt $rows.Count; $y++) { for ($x = 0; $x -lt $rows[$y].Length; $x++) {
+        $ch = [string]$rows[$y][$x]
+        if ($pal.ContainsKey($ch)) { Px $b $x $y $pal[$ch] } } }
+    Save-Png $b $rel
+}
+function Rotate-Rows([string[]]$rows) {
+    $n = $rows.Count; $out = @()
+    for ($r = 0; $r -lt $n; $r++) { $s = ''; for ($c = 0; $c -lt $n; $c++) { $s += $rows[$n - 1 - $c][$r] }; $out += $s }
+    return , $out
+}
+$diamond = @('...o...', '..oGo..', '.oGHGo.', 'oGHLHGo', '.oGHGo.', '..oGo..', '...o...')
+New-Pix $diamond @{ 'o' = '7A5F22'; 'G' = 'C9A24A'; 'H' = 'FFD66E'; 'L' = 'FFF6C8' } "$fontDir/quest_mark_main.png"
+New-Pix $diamond @{ 'o' = '8A8A8A'; 'G' = 'C8C8C8'; 'H' = 'F0F0F0'; 'L' = 'FFFFFF' } "$fontDir/quest_mark.png"
+New-Pix @('.....', 'W....', 'WWW..', 'WWWWW', 'WWW..', 'W....', '.....') @{ 'W' = 'FFFFFF' } "$fontDir/quest_bullet.png"
+New-Pix @('.......', '......W', '.....WW', 'W...WW.', 'WW.WW..', '.WWW...', '..W....') @{ 'W' = 'FFFFFF' } "$fontDir/quest_here.png"
+# Fleches : 0 = devant, puis par huitiemes de tour dans le sens horaire.
+$up = @('...W...', '..WWW..', '.WWWWW.', 'WWWWWWW', '..WWW..', '..WWW..', '..WWW..')
+$ur = @('..WWWWW', '....WWW', '...WWWW', '..WWW.W', '.WWW...', 'WWW....', '.W.....')
+$arrows = @($up, $ur)
+for ($i = 2; $i -lt 8; $i++) { $arrows += , (Rotate-Rows $arrows[$i - 2]) }
+for ($i = 0; $i -lt 8; $i++) { New-Pix $arrows[$i] @{ 'W' = 'FFFFFF' } "$fontDir/quest_arrow_$i.png" }
+Write-Host 'HUD : cadre du suivi des quetes dessine.'
+
+# ------------------------------------------------------------------ Haute definition (tools\hd\HudHd.cs)
+# Redessine les images ci-dessus 4 fois plus finement (memes tailles affichees, memes positions : hud.json et
+# Console.java ne changent pas) et ecrit les polices lisses orbitmmo:qtext / qtext_b du suivi des quetes, avec
+# leurs largeurs dans src\main\resources\font-widths-hd.txt (lu par hud/HdText).
+Add-Type -AssemblyName PresentationCore, WindowsBase
+Add-Type -Path (Join-Path $PSScriptRoot 'hd\HudHd.cs') -ReferencedAssemblies System.Drawing, ([System.Windows.Media.GlyphTypeface].Assembly.Location), ([System.Windows.Point].Assembly.Location), System.Xaml
+[HudHd]::Run($packDir, (Join-Path $PSScriptRoot 'hd\fonts'), (Join-Path $root 'src\main\resources\font-widths-hd.txt'), $QW)
+foreach ($m in $script:menuSpecs) {
+    $slots = [int[]]@($m[1].Keys | Sort-Object)
+    $cols = [string[]]@(foreach ($s in $slots) { $m[1][$s] })
+    $orn = [int[]]@(foreach ($o in $m[2]) { $o[0]; $o[1]; $o[2] })
+    [HudHd]::MenuBg($m[0], $slots, $cols, $orn, $m[3])
+}
+Write-Host 'HUD : images en haute definition et polices lisses ecrites.'
+
 # ------------------------------------------------------------------ Police orbitmmo:hud
 function U([int]$code) { return $bs + 'u' + $code.ToString('X4') }
-function Glyph([string]$file, [int]$ascent, [int]$height, [string]$chars) {
+# Le client range les glyphes sur des pages de 256 x 256 px : une image plus grande (en haute definition) est refusee.
+# Une telle image est decoupee en tuiles de 63 px d'interface au plus (caracteres a partir de F000), et
+# src\main\resources\hud-tiles.txt dit a hud/HdTiles.java comment les recoller.
+$TILE_PX = 63
+$script:tileNext = 0xF000
+$script:tileLines = New-Object System.Collections.Generic.List[string]
+$script:tiledFiles = New-Object System.Collections.Generic.List[string]
+$tileDir = Join-Path $packDir "$fontDir/tiles"
+if (Test-Path $tileDir) { Remove-Item $tileDir -Recurse -Force }
+New-Item -ItemType Directory -Force $tileDir | Out-Null
+function Glyph-Raw([string]$file, [int]$ascent, [int]$height, [string]$chars) {
+    # Le jeu rejette TOUTE la police si un glyphe a un ascent plus grand que sa hauteur.
+    if ($ascent -gt $height) { throw "Glyphe $file : ascent $ascent plus grand que la hauteur $height" }
     return '    {"type": "bitmap", "file": "orbitmmo:font/' + $file + '.png", "ascent": ' + $ascent + ', "height": ' + $height + ', "chars": [' + $chars + ']}'
+}
+function Glyph([string]$file, [int]$ascent, [int]$height, [string]$chars) {
+    $png = Join-Path $packDir "$fontDir/$file.png"
+    $m = [regex]::Match($chars, '^"\\u([0-9A-Fa-f]{4})"$')
+    $img = [System.Drawing.Bitmap]::FromFile($png)
+    try {
+        if (-not $m.Success -or ($img.Width -le 254 -and $img.Height -le 254)) {
+            if ($m.Success -or ($img.Width / 16 -le 254)) { return (Glyph-Raw $file $ascent $height $chars) }
+            throw "Grille $file trop grande pour une page de police."
+        }
+        $s = $img.Height / $height
+        if ($s -ne [Math]::Floor($s) -or ($img.Width % $s) -ne 0) { throw "Image $file : echelle non entiere ($($img.Width)x$($img.Height), hauteur $height)." }
+        $s = [int]$s; $w = [int]($img.Width / $s)
+        $cols = [int][Math]::Ceiling($w / $TILE_PX); $rows = [int][Math]::Ceiling($height / $TILE_PX)
+        $first = $script:tileNext
+        $out = @()
+        for ($r = 0; $r -lt $rows; $r++) {
+            $th = [Math]::Min($TILE_PX, $height - $r * $TILE_PX)
+            for ($c = 0; $c -lt $cols; $c++) {
+                $tw = [Math]::Min($TILE_PX, $w - $c * $TILE_PX)
+                $rect = New-Object System.Drawing.Rectangle ($c * $TILE_PX * $s), ($r * $TILE_PX * $s), ($tw * $s), ($th * $s)
+                $tile = $img.Clone($rect, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+                # Derniere colonne marquee : avance = largeur de la tuile + 1.
+                $x = $tile.Width - 1; $used = $false
+                for ($y = 0; $y -lt $tile.Height; $y++) { if ($tile.GetPixel($x, $y).A -gt 0) { $used = $true; break } }
+                if (-not $used) { $tile.SetPixel($x, 0, [System.Drawing.Color]::FromArgb(1, 0, 0, 0)) }
+                $name = "tiles/${file}_${r}_$c"
+                $tile.Save((Join-Path $packDir "$fontDir/$name.png"), [System.Drawing.Imaging.ImageFormat]::Png)
+                $tile.Dispose()
+                $out += (Glyph-Raw $name ($ascent - $r * $TILE_PX) $th (One ($first + $r * $cols + $c)))
+            }
+        }
+        $script:tiledFiles.Add($png)
+        $script:tileNext += $rows * $cols
+        if ($script:tileNext -gt 0xF7FF) { throw 'Trop de tuiles (plage F000-F7FF).' }
+        $script:tileLines.Add($m.Groups[1].Value.ToUpper() + ' ' + $first.ToString('X4') + " $cols $rows $w")
+        return ($out -join ",`n")
+    } finally { $img.Dispose() }
 }
 function One([int]$code) { return '"' + (U $code) + '"' }
 function Tiny-Rows([int]$base) {
@@ -691,10 +953,110 @@ $providers = @(
     (Glyph 'menu_r3' 39 198 (One 0xE402)),
     (Glyph 'menu_r4' 39 216 (One 0xE403)),
     (Glyph 'menu_r5' 39 234 (One 0xE404)),
-    (Glyph 'menu_r6' 39 252 (One 0xE405))
+    (Glyph 'menu_r6' 39 252 (One 0xE405)),
+    # Boite de dialogue des PNJ : cadre, et police miniature de la ligne d'aide (haut a y0 + 52).
+    (Glyph 'dialog_frame' 8 65 (One 0xE500)),
+    (Glyph 'hud_tiny' -45 7 (Tiny-Rows 0xE540)),
+    # Case du portrait de la boite de dialogue ; carte du PNJ a droite des menus et police miniature de son nom.
+    (Glyph 'dialog_portrait' 8 65 (One 0xE501)),
+    (Glyph 'npc_card' 17 160 (One 0xE502)),
+    (Glyph 'hud_tiny' -59 7 (Tiny-Rows 0xE580))
 )
+# Portraits : une plage pour la carte des menus (haut en y = 4 de la fenetre), une pour la boite de dialogue.
+for ($i = 0; $i -lt $portraits.Count; $i++) {
+    $providers += (Glyph "portrait_$($portraits[$i])" 9 60 (One (0xE600 + $i)))
+    $providers += (Glyph "portrait_$($portraits[$i])" 6 60 (One (0xE640 + $i)))
+}
 for ($r = 0; $r -lt 6; $r++) {
     $providers += (Glyph 'menu_socket' (-4 - 18 * $r) 18 ('"' + (U (0xE410 + 2 * $r)) + (U (0xE411 + 2 * $r)) + '"'))
 }
+# Suivi des quetes (tableau lateral, hud/QuestPanel.java) : cadre porte par le titre (haut 3 px au-dessus du titre),
+# trait (y + 4), marques de quete, fleches et puce (y a y + 6). Le jeu refuse tout ascent plus grand que la hauteur.
+for ($n = 1; $n -le 14; $n++) { $providers += (Glyph "quest_panel_$n" 10 (9 * $n + 14) (One (0xE700 + $n))) }
+$providers += (Glyph 'quest_sep' 3 4 (One 0xE720))
+$providers += (Glyph 'quest_mark_main' 7 7 (One 0xE721))
+$providers += (Glyph 'quest_mark' 7 7 (One 0xE722))
+$providers += (Glyph 'quest_bullet' 7 7 (One 0xE723))
+$providers += (Glyph 'quest_here' 7 7 (One 0xE724))
+for ($i = 0; $i -lt 8; $i++) { $providers += (Glyph "quest_arrow_$i" 7 7 (One (0xE730 + $i))) }
+# Titre du suivi en image (W - 1 px, avance W) : francais E740, anglais E741 (haut 1 px au-dessus du titre).
+$providers += (Glyph 'quest_title_fr' 8 9 (One 0xE740))
+$providers += (Glyph 'quest_title_en' 8 9 (One 0xE741))
 Save-Text 'assets/orbitmmo/font/hud.json' ("{`n  ""providers"": [`n" + ($providers -join ",`n") + "`n  ]`n}`n")
-Write-Host 'HUD : police orbitmmo:hud ecrite.'
+[IO.File]::WriteAllText((Join-Path $root 'src\main\resources\hud-tiles.txt'), ('# code premiereTuile colonnes rangees largeur (tools/gen-hud.ps1)' + "`n" + (($script:tileLines -join "`n") + "`n")), $utf8)
+# Les images d'origine decoupees ne servent plus (seules les tuiles sont dans hud.json).
+foreach ($p in ($script:tiledFiles | Sort-Object -Unique)) { Remove-Item $p -Force }
+Write-Host "HUD : police orbitmmo:hud ecrite ($($script:tileLines.Count) images decoupees en tuiles)."
+
+# ------------------------------------------------------------------ Texte des dialogues : police du jeu abaissee
+# Le jeu refuse de remonter un texte, pas de l'abaisser : polices orbitmmo:txt<n> = la police par defaut du jeu
+# (memes images, memes caracteres) avec un ascent diminue de n px (hud/DialogueBox.java, hud/NpcCard.java).
+# Les largeurs exactes des caracteres sont ecrites dans src\main\resources\font-widths.txt (lu par hud/FontWidths).
+$zip = [IO.Compression.ZipFile]::OpenRead($clientJar)
+$e = $zip.GetEntry('assets/minecraft/font/include/default.json')
+if (-not $e) { throw 'Police par defaut introuvable dans le jar client.' }
+$sr = New-Object IO.StreamReader($e.Open(), [Text.Encoding]::UTF8); $raw = $sr.ReadToEnd(); $sr.Close()
+# Decalages : 6, 20, 30, 40 = boite de dialogue (nom, lignes 1 a 3) ; 81 a 135 = sept lignes de la carte du PNJ.
+Get-ChildItem (Join-Path $packDir 'assets\orbitmmo\font') -Filter 'dlg*.json' -ErrorAction SilentlyContinue | Remove-Item -Force
+foreach ($shift in @(6, 20, 30, 40, 81, 90, 99, 108, 117, 126, 135)) {
+    $script:dlgShift = $shift
+    $body = [regex]::Replace($raw, '"ascent"\s*:\s*(-?\d+)',
+        [System.Text.RegularExpressions.MatchEvaluator] { param($m) '"ascent": ' + ([int]$m.Groups[1].Value - $script:dlgShift) })
+    if ($body -eq $raw) { throw 'Police par defaut : aucun ascent trouve.' }
+    $body = ([regex]'"providers"\s*:\s*\[').Replace($body, '"providers": [ {"type": "reference", "id": "minecraft:include/space"},', 1)
+    $last = $body.LastIndexOf(']')
+    $body = $body.Substring(0, $last) + ', {"type": "reference", "id": "minecraft:include/unifont"} ' + $body.Substring($last)
+    Save-Text "assets/orbitmmo/font/txt$shift.json" $body
+}
+$def = $raw | ConvertFrom-Json
+$widths = @{}
+foreach ($p in $def.providers) {
+    if ($p.type -ne 'bitmap') { continue }
+    $file = [string]$p.file
+    $pe = $zip.GetEntry('assets/' + $file.Split(':')[0] + '/textures/' + $file.Split(':')[1])
+    if (-not $pe) { throw "Image de police introuvable : $file" }
+    $ms = New-Object IO.MemoryStream
+    $s = $pe.Open(); $s.CopyTo($ms); $s.Close(); $ms.Position = 0
+    $img = New-Object System.Drawing.Bitmap $ms
+    $rect = New-Object System.Drawing.Rectangle 0, 0, $img.Width, $img.Height
+    $data = $img.LockBits($rect, [System.Drawing.Imaging.ImageLockMode]::ReadOnly, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+    $stride = $data.Stride
+    $bytes = New-Object byte[] ($stride * $img.Height)
+    [System.Runtime.InteropServices.Marshal]::Copy($data.Scan0, $bytes, 0, $bytes.Length)
+    $img.UnlockBits($data)
+    $rows = @($p.chars)
+    $grid = @()
+    foreach ($row in $rows) {
+        $cps = New-Object System.Collections.Generic.List[int]
+        $str = [string]$row
+        for ($i = 0; $i -lt $str.Length; $i++) {
+            if ([char]::IsHighSurrogate($str[$i]) -and $i + 1 -lt $str.Length) { $cps.Add([char]::ConvertToUtf32($str[$i], $str[$i + 1])); $i++ }
+            else { $cps.Add([int]$str[$i]) }
+        }
+        $grid += , $cps
+    }
+    $cols = $grid[0].Count
+    $cellW = [int]($img.Width / $cols); $cellH = [int]($img.Height / $rows.Count)
+    $fh = if ($p.height) { [int]$p.height } else { 8 }
+    $scale = $fh / [double]$cellH
+    for ($r = 0; $r -lt $grid.Count; $r++) {
+        for ($c = 0; $c -lt $grid[$r].Count; $c++) {
+            $cp = $grid[$r][$c]
+            if ($cp -eq 0 -or $cp -gt 0xFFFF -or $widths.ContainsKey($cp)) { continue }
+            $w = 0
+            for ($x = $cellW - 1; $x -ge 0 -and $w -eq 0; $x--) {
+                for ($y = 0; $y -lt $cellH; $y++) {
+                    if ($bytes[($r * $cellH + $y) * $stride + ($c * $cellW + $x) * 4 + 3] -ne 0) { $w = $x + 1; break }
+                }
+            }
+            $widths[$cp] = [int][Math]::Floor(0.5 + $w * $scale) + 1
+        }
+    }
+    $img.Dispose(); $ms.Dispose()
+}
+$zip.Dispose()
+if ($widths[0x41] -ne 6 -or $widths[0x69] -ne 2 -or $widths[0x6C] -ne 3) { throw "Largeurs de police inattendues (A=$($widths[0x41]) i=$($widths[0x69]) l=$($widths[0x6C]))." }
+$lines = New-Object System.Collections.Generic.List[string]
+foreach ($k in ($widths.Keys | Sort-Object)) { $lines.Add(([int]$k).ToString('X4') + ' ' + $widths[$k]) }
+[IO.File]::WriteAllText((Join-Path $root 'src\main\resources\font-widths.txt'), (($lines -join "`n") + "`n"), $utf8)
+Write-Host "Dialogues : polices orbitmmo:txt<n> ecrites, $($widths.Count) largeurs de caracteres."

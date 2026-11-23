@@ -75,8 +75,8 @@ public final class OrbitHCFEventsPlugin extends JavaPlugin {
 
         OrbitHCF.register(EventsService.class, new EventsServiceImpl(this));
 
-        Bukkit.getPluginManager().registerEvents(new SotwListener(this), this);
-        Bukkit.getPluginManager().registerEvents(eotwManager, this);
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new SotwListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, eotwManager);
 
         // Restauration apres redemarrage
         sotwManager.restore();

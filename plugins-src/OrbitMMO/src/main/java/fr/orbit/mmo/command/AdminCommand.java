@@ -74,10 +74,13 @@ public final class AdminCommand implements TabExecutor {
                     Player t = target(sender, args, 1);
                     plugin.spells().interrupt(plugin.players().get(t));
                     plugin.players().reset(t);
+                    plugin.guilds().forget(t.getUniqueId()); // nouveau personnage, peut-être d'une autre faction
+                    plugin.quests().wipe(t); // l'histoire repart de zéro, même camp ou pas
                     t.getInventory().clear();
                     t.setGameMode(GameMode.ADVENTURE);
                     plugin.hud().quit(t);
-                    Menus.factionSelect(plugin, t);
+                    // Même déroulé qu'un tout premier passage : création aux Quatre-Vents, titre d'accueil, choix du camp.
+                    plugin.playerListener().join(t);
                     Text.msg(sender, "Personnage de " + Text.esc(t.getName()) + " réinitialisé.");
                 }
                 case "etage" -> {
@@ -91,9 +94,11 @@ public final class AdminCommand implements TabExecutor {
                 }
                 case "ouvrir" -> {
                     int n = Integer.parseInt(args[1]);
-                    plugin.floors().setHighestCleared(n - 1);
-                    plugin.floors().world(Math.min(n, plugin.floors().maxFloor()));
-                    Text.msg(sender, "Étages ouverts jusqu'au " + n + ".");
+                    // Socle commun : ouvert à tous, avec ou sans guilde. Les guildes gardent leur propre avancée
+                    // (/guilde admin etage <n> <guilde>).
+                    plugin.floors().setBase(n - 1);
+                    plugin.floors().world(Math.min(Math.max(1, n), plugin.floors().maxFloor()));
+                    Text.msg(sender, "Étages ouverts à tous jusqu'au " + Math.max(1, plugin.floors().base() + 1) + ".");
                 }
                 case "boss" -> {
                     Player p = self(sender);
@@ -188,7 +193,7 @@ public final class AdminCommand implements TabExecutor {
         String[] lines = {
                 "niveau <joueur> <niveau>", "or <joueur> <+/-montant>", "spe <joueur> <spécialisation>",
                 "ressource <#8C96A3>(remplit votre ressource)", "reset <joueur>",
-                "etage <n> <#8C96A3>(téléportation)", "ouvrir <n> <#8C96A3>(ouvre les étages jusqu'à n)",
+                "etage <n> <#8C96A3>(téléportation)", "ouvrir <n> <#8C96A3>(ouvre les étages à tous jusqu'à n)",
                 "boss <#8C96A3>(boss de l'étage disponible)", "construction <#8C96A3>(mode créatif, bâtir sur les étages)",
                 "spawn <monstre> [niveau]", "reload", "classes exporter"};
         for (String l : lines) {

@@ -66,6 +66,7 @@ public final class ContinentService implements Listener {
     private CapitalService capitals;
     private SiteService sites;
     private ContinentFauna fauna;
+    private fr.orbit.mmo.ambient.AmbientService ambient;
     /** Dernière zone annoncée à chaque joueur. */
     private final Map<UUID, String> zones = new HashMap<>();
     /** Entrée de donjon par laquelle chaque joueur est passé (pour l'y ramener à la sortie de l'étage). */
@@ -115,6 +116,34 @@ public final class ContinentService implements Listener {
     /** La faune du continent, ou null si le continent n'est pas chargé. */
     public ContinentFauna fauna() {
         return fauna;
+    }
+
+    /** Les PNJ d'ambiance (gardes, villageois, bétail, voyageurs), ou null si le continent n'est pas chargé. */
+    public fr.orbit.mmo.ambient.AmbientService ambient() {
+        return ambient;
+    }
+
+    /**
+     * Un lieu habité déjà construit : capitale ou village. {@code radius} est le rayon du rempart ou de la palissade,
+     * {@code points} ses points nommés (« spawn », « porte-… », « auberge »…).
+     */
+    public record Town(String id, String name, boolean capital, String faction, String style, int x, int z, int radius,
+                       Map<String, Location> points) {
+    }
+
+    /** Capitales et villages construits (rien tant que le continent n'est pas chargé). */
+    public java.util.List<Town> towns() {
+        java.util.List<Town> out = new java.util.ArrayList<>();
+        if (!ready()) {
+            return out;
+        }
+        if (capitals != null) {
+            out.addAll(capitals.towns());
+        }
+        if (sites != null) {
+            out.addAll(sites.towns());
+        }
+        return out;
     }
 
     /** Zone sûre du continent : l'emprise d'une capitale, de la ville, d'un village ou d'un hameau construit. */
@@ -175,6 +204,8 @@ public final class ContinentService implements Listener {
         sites = new SiteService(plugin, this);
         sites.load();
         fauna = new ContinentFauna(plugin, this);
+        ambient = new fr.orbit.mmo.ambient.AmbientService(plugin, this);
+        ambient.start();
         plugin.getLogger().info("Continent « " + name + " » chargé en " + (System.currentTimeMillis() - t0) + " ms : "
                 + data.size + " x " + data.size + " blocs, " + data.regions.size() + " régions, " + data.places.size()
                 + " lieux, " + data.roads.size() + " routes.");
@@ -215,6 +246,9 @@ public final class ContinentService implements Listener {
     }
 
     public void shutdown() {
+        if (ambient != null) {
+            ambient.shutdown();
+        }
         if (capitals != null) {
             capitals.shutdown();
         }
@@ -240,6 +274,58 @@ public final class ContinentService implements Listener {
             return built;
         }
         return new Location(world, x + 0.5, generator.standY(x, z), z + 0.5);
+    }
+
+    // ------------------------------------------------------------------ Foyer : la capitale de sa faction
+    /** Capitale d'une faction sur la carte (« lumiere » ou « ombre »), ou null. */
+    public ContinentData.Place capital(String faction) {
+        if (data == null || faction == null) {
+            return null;
+        }
+        for (ContinentData.Place p : data.places) {
+            if (p.kind().equals("capitale") && p.faction().equals(faction)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    /** Foyer d'une faction : la place de sa capitale. Null si le continent n'est pas chargé ou la faction sans capitale. */
+    public Location home(String faction) {
+        ContinentData.Place c = ready() ? capital(faction) : null;
+        return c == null ? null : arrival(c.x(), c.z());
+    }
+
+    /**
+     * Renvoie un joueur à la capitale de sa faction.
+     *
+     * @return le nom de la capitale, ou null si c'est impossible (le joueur n'a alors pas bougé)
+     */
+    public String sendHome(Player p, String faction, boolean effects) {
+        ContinentData.Place c = ready() ? capital(faction) : null;
+        if (c == null) {
+            return null;
+        }
+        Location to = arrival(c.x(), c.z());
+        if (effects) {
+            fr.orbit.mmo.util.Fx.teleport(p.getLocation());
+        }
+        p.teleportAsync(to).thenAccept(ok -> {
+            if (ok && p.isOnline() && effects) {
+                fr.orbit.mmo.util.Fx.teleport(to);
+                Text.title(p, factionColor(c.faction()) + "<b>" + Text.esc(c.name()) + "</b>", "<#D7DCE2>" + placeKind(c), 5, 50, 15);
+            }
+        });
+        return c.name();
+    }
+
+    /** Où l'on choisit son camp avant d'avoir un personnage : Les Quatre-Vents, la ville neutre. Null si le continent n'est pas chargé. */
+    public Location creation() {
+        if (!ready()) {
+            return null;
+        }
+        ContinentData.Place p = data.place("les-quatre-vents");
+        return p == null ? world.getSpawnLocation() : arrival(p.x(), p.z());
     }
 
     private static boolean hostile(String placeFaction, String faction) {
@@ -509,8 +595,8 @@ public final class ContinentService implements Listener {
             plugin.hud().flash(p, "<#8C96A3>Le portail de <white>" + Text.esc(s.name()) + "</white> est scellé.", 50);
             return;
         }
-        if (!plugin.floors().unlocked(s.floor())) {
-            plugin.hud().flash(p, "<#FF8A3B>Ce portail s'ouvrira quand le boss de l'étage " + (s.floor() - 1) + " sera vaincu.", 60);
+        if (!plugin.floors().unlocked(d, s.floor())) {
+            plugin.hud().flash(p, "<#FF8A3B>Ce portail s'ouvrira quand vous ou votre guilde aurez vaincu le boss de l'étage " + (s.floor() - 1) + ".", 60);
             return;
         }
         cameFrom.put(p.getUniqueId(), s.id());

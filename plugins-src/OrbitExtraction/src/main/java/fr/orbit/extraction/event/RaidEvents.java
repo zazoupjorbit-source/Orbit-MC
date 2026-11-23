@@ -207,6 +207,11 @@ public final class RaidEvents {
     }
 
     /** Déclenche un événement autour d'un joueur en raid (admin : /extraction evenement). */
+    /** Crash d'hélicoptère en cours le plus récent (copie), null s'il n'y en a pas. */
+    public Location lastCrash() {
+        return crashes.isEmpty() ? null : crashes.get(crashes.size() - 1).at.clone();
+    }
+
     public boolean trigger(String type, Player around, CommandSender feedback) {
         if (around == null || !plugin.raid().inRaid(around)) {
             if (feedback != null) {
@@ -318,6 +323,7 @@ public final class RaidEvents {
             return;
         }
         crashes.add(new Crash(at, System.currentTimeMillis() + (long) (crashMinutes * 60_000), random.nextFloat() * 360));
+        plugin.getLogger().info("Crash d'hélicoptère en " + at.getBlockX() + " " + at.getBlockY() + " " + at.getBlockZ() + " (/extraction evenement tp).");
         announce(at, "<#FF9A3D><b>CRASH D'HÉLICOPTÈRE</b>", "<#D7DCE2>Une épave pleine de matériel — et pas que toi dessus",
                 "<#FF9A3D><b>Un hélicoptère s'est écrasé</b></#FF9A3D>", Sound.ENTITY_GENERIC_EXPLODE, 0.55f);
     }

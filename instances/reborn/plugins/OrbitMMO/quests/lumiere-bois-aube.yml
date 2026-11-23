@@ -1,0 +1,793 @@
+# ------------------------------------------------------------------
+#  Lumière, acte II — le Bois de l'Aube (niv. 10 à 16)
+#  Suit lumiere-val-ardence.yml. Source narrative : lore/zones/LUMIERE-SUITE.md
+#  Hub : le Village Sylvestre. Quêtes principales 11 à 17 et quêtes annexes.
+#  Format : voir l'en-tête de lumiere-depart.yml. Après modification : /quetes admin recharger
+#  Le PNJ « tobias » est défini dans lumiere-val-ardence.yml (corps posé au Village Sylvestre).
+# ------------------------------------------------------------------
+
+pnj:
+  elwen:
+    nom: "Gardienne Elwen"
+    titre: "Gardienne du Bois de l'Aube"
+    nom-en: "Warden Elwen"
+    titre-en: "Warden of the Wood of the Dawn"
+    couleur: "#A8E6A1"
+    type: MANNEQUIN
+    visage: noor
+    point: elwen
+    repliques:
+      - "Les arbres se souviennent de tout. Même de ce que l'Ordre a oublié."
+      - "Écoute le bois. Il ne chante pas : il a mal."
+    repliques-en:
+      - "Trees remember everything. Even what the Order has forgotten."
+      - "Listen to the wood. It isn't singing: it's in pain."
+  agathe:
+    nom: "Agathe"
+    titre: "Bûcheronne"
+    titre-en: "Woodcutter"
+    couleur: "#D9B86C"
+    type: MANNEQUIN
+    visage: makena
+    point: agathe
+    main: IRON_AXE
+    repliques:
+      - "Ma hache rebondit sur les troncs, maintenant. Du cristal, sous l'écorce. Du cristal !"
+    repliques-en:
+      - "My axe bounces off the trunks now. Crystal, under the bark. Crystal!"
+  gilles:
+    nom: "Frère Gilles"
+    titre: "Pénitent"
+    nom-en: "Brother Gilles"
+    titre-en: "Penitent"
+    couleur: "#B8B0A0"
+    type: MANNEQUIN
+    visage: steve
+    point: gilles
+    repliques:
+      - "J'ai porté le sceau du Cloître. Je porte autre chose, maintenant."
+    repliques-en:
+      - "I wore the Cloister's seal. I carry something else now."
+
+monstres:
+  pretre_revenant:
+    nom: "Prêtre revenant"
+    type: ZOMBIE
+    pv: 1.2
+    degats: 1.05
+    vitesse: 0.9
+    arme: GOLDEN_SWORD
+  affame_neant:
+    nom: "Affamé du Néant"
+    type: ENDERMITE
+    taille: 3.0
+    pv: 1.0
+    degats: 1.1
+    vitesse: 1.1
+  reine_tisseuse:
+    nom: "Reine-Tisseuse"
+    type: SPIDER
+    taille: 2.6
+    pv: 8.0
+    degats: 1.3
+    vitesse: 0.95
+    xp: 12
+    or: 10
+
+apparitions:
+  revenants_crypte:
+    point: crypte_seuil
+    monstre: pretre_revenant
+    niveau: [13, 14]
+    nombre: 5
+    rayon: 9
+  affames_colline:
+    point: colline_morvain
+    monstre: affame_neant
+    niveau: [14, 15]
+    nombre: 5
+    rayon: 9
+  affames_cercle:
+    point: cercle_neant
+    monstre: affame_neant
+    niveau: [15, 16]
+    nombre: 5
+    rayon: 9
+  reine_nid:
+    point: nid_reine
+    monstre: reine_tisseuse
+    niveau: 17
+    nombre: 1
+    rayon: 4
+
+quetes:
+
+  # ================================================================ ACTE II — QUÊTES PRINCIPALES
+
+  # ---------------------------------------------------------------- 11 (démarre seule après le Serment)
+  la_route_de_l_aube:
+    nom: "La route de l'Aube"
+    nom-en: "The Road of the Dawn"
+    faction: lumiere
+    niveau: 9
+    requiert: [le_serment_de_l_aube]
+    resume:
+      - "La route de l'Éclat immense traverse le Bois de l'Aube."
+      - "Le Village Sylvestre en garde l'entrée."
+    resume-en:
+      - "The road to the immense Shard runs through the Wood of the Dawn."
+      - "Sylvan Village guards its entrance."
+    intro:
+      - "Le Chemin de l'Aube s'enfonce sous les arbres. Les troncs luisent faiblement, comme s'ils avaient avalé de la lumière."
+      - "On t'a dit qu'un village tenait encore, au cœur du bois. C'est là qu'il faut aller."
+    intro-en:
+      - "The Path of the Dawn plunges beneath the trees. The trunks glow faintly, as if they had swallowed light."
+      - "You were told a village still holds out, in the heart of the wood. That is where you must go."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre le Village Sylvestre"
+        texte-en: "Reach Sylvan Village"
+        point: porte_sylvestre
+        rayon: 8
+      - type: PARLER
+        texte: "Parler à la Gardienne Elwen"
+        texte-en: "Talk to Warden Elwen"
+        pnj: elwen
+        dialogue:
+          - "elwen: Un Marqué de l'Aube. Tu portes l'insigne du Serment comme un enfant porte un manteau trop grand."
+          - "elwen: Tu veux passer à l'est ? Le bois ne te laissera pas. Il est malade depuis la nuit des étoiles."
+          - "elwen: Aide-le, et il t'ouvrira la route. Commence par toucher notre Éclat : ici, on meurt vite."
+          - "tobias: Elle a raison. Salut, Marqué. Varenne m'a envoyé devant toi. Je connais le bois."
+        dialogue-en:
+          - "elwen: A Marked of the Dawn. You wear the Oath's insignia like a child wears a coat too big for him."
+          - "elwen: You want to go east? The wood won't let you. It has been sick since the night of the stars."
+          - "elwen: Help it, and it will open the road for you. Start by touching our Shard: here, people die fast."
+          - "tobias: She's right. Hey, Marked. Varenne sent me ahead of you. I know the wood."
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage du village"
+        texte-en: "Touch the village's anchoring Shard"
+        point: ancre_sylvestre
+        rayon: 4
+    recompenses:
+      xp: 1100
+      or: 120
+
+  # ---------------------------------------------------------------- 12
+  le_bois_qui_chante:
+    nom: "Le bois qui chante"
+    nom-en: "The Singing Wood"
+    faction: lumiere
+    niveau: 10
+    requiert: [la_route_de_l_aube]
+    donneur: elwen
+    resume:
+      - "Des araignées tissent une soie de verre"
+      - "à l'ouest du village."
+    resume-en:
+      - "Spiders are weaving a silk of glass"
+      - "west of the village."
+    offre:
+      - "elwen: À l'ouest, les araignées ont trouvé des Éclats. Elles en mangent la lumière, puis elles la tissent."
+      - "elwen: Leur soie étouffe les arbres. Tue-les, et rapporte-moi cette soie : je veux comprendre."
+    offre-en:
+      - "elwen: To the west, the spiders found Shards. They eat their light, then they weave it."
+      - "elwen: Their silk is choking the trees. Kill them, and bring me that silk: I want to understand."
+    etapes:
+      - type: TUER
+        texte: "Tuer les araignées du nid de l'ouest"
+        texte-en: "Kill the spiders of the western nest"
+        monstres: [araignee, araignee_geante]
+        point: camp_araignees_ouest
+        nombre: 10
+      - type: RAMASSER
+        texte: "Récupérer de la soie cristalline"
+        texte-en: "Collect crystalline silk"
+        monstres: [araignee, araignee_geante]
+        point: camp_araignees_ouest
+        nombre: 5
+        chance: 0.5
+        objet: "Soie cristalline"
+        objet-en: "Crystalline silk"
+      - type: PARLER
+        texte: "Apporter la soie à Elwen"
+        texte-en: "Bring the silk to Elwen"
+        pnj: elwen
+        dialogue:
+          - "elwen: Regarde : elle brille encore. La lumière des Éclats ne se perd pas. Elle passe de main en main."
+          - "elwen: Des araignées aux arbres. Des arbres à nous. De nous… à quoi ?"
+        dialogue-en:
+          - "elwen: Look: it still shines. The light of the Shards is never lost. It passes from hand to hand."
+          - "elwen: From the spiders to the trees. From the trees to us. From us… to what?"
+    recompenses:
+      xp: 1300
+      or: 140
+
+  # ---------------------------------------------------------------- 13
+  les_feux_de_la_lisiere:
+    nom: "Les feux de la lisière"
+    nom-en: "Fires at the Forest Edge"
+    faction: lumiere
+    niveau: 11
+    requiert: [le_bois_qui_chante]
+    donneur: tobias
+    resume:
+      - "Des Glaneurs campent au sud du village"
+      - "et coupent les arbres de cristal."
+    resume-en:
+      - "Gleaners are camped south of the village"
+      - "and are cutting down the crystal trees."
+    offre:
+      - "tobias: Des feux, au sud, à la lisière. Des Glaneurs. Ils abattent les arbres qui ont bu des Éclats."
+      - "tobias: Cette fois, c'est moi qui te montre le chemin. Et cette fois, je cours pas."
+    offre-en:
+      - "tobias: Fires, to the south, at the forest edge. Gleaners. They're felling the trees that drank Shards."
+      - "tobias: This time I'm the one showing you the way. And this time, I'm not running."
+    etapes:
+      - type: TUER
+        texte: "Chasser les Glaneurs de la lisière"
+        texte-en: "Drive off the Gleaners at the forest edge"
+        monstres: [glaneur, glaneur_guetteur]
+        point: camp_glaneurs_lisiere
+        nombre: 10
+      - type: INTERAGIR
+        texte: "Fouiller les caisses des Glaneurs"
+        texte-en: "Search the Gleaners' crates"
+        point: camp_glaneurs_lisiere
+        rayon: 6
+        apres:
+          - "Des caisses pleines d'écorce cristallisée. Sur le bois, un sceau. Pas le cercle déchiré de l'Ombre."
+          - "Un soleil levant : le sceau de l'Aube."
+        apres-en:
+          - "Crates full of crystallised bark. On the wood, a seal. Not the Shadow's torn circle."
+          - "A rising sun: the seal of the Dawn."
+      - type: PARLER
+        texte: "Montrer le sceau à Tobias"
+        texte-en: "Show the seal to Tobias"
+        pnj: tobias
+        dialogue:
+          - "tobias: Le sceau de l'Aube… sur des caisses de Glaneurs ?"
+          - "tobias: Soit ils les ont volées. Soit quelqu'un, chez nous, leur vend des caisses. Et peut-être ce qu'il y a dedans."
+          - "tobias: On le dit à personne. Pas encore."
+        dialogue-en:
+          - "tobias: The seal of the Dawn… on Gleaner crates?"
+          - "tobias: Either they stole them. Or someone, on our side, is selling them crates. And maybe what's inside."
+          - "tobias: We tell no one. Not yet."
+    recompenses:
+      xp: 1550
+      or: 160
+
+  # ---------------------------------------------------------------- 14
+  la_liste:
+    nom: "La liste"
+    nom-en: "The List"
+    faction: lumiere
+    niveau: 12
+    requiert: [les_feux_de_la_lisiere]
+    donneur: tobias
+    resume:
+      - "Une patrouille de l'Aube a disparu"
+      - "près de la vieille tour du bois."
+    resume-en:
+      - "A patrol of the Dawn has disappeared"
+      - "near the old tower in the wood."
+    offre:
+      - "tobias: Une patrouille de Purificateurs est passée il y a trois jours, vers la vieille tour à l'est. Elle est jamais ressortie du bois."
+      - "tobias: Les Purificateurs, c'est ceux qui conduisent les Marqués au Cloître. Je veux savoir ce qu'ils faisaient ici."
+    offre-en:
+      - "tobias: A patrol of Purifiers came through three days ago, toward the old tower to the east. It never came out of the wood."
+      - "tobias: The Purifiers are the ones who escort the Marked to the Cloister. I want to know what they were doing here."
+    etapes:
+      - type: TUER
+        texte: "Chasser les morts de la vieille tour"
+        texte-en: "Drive the dead from the old tower"
+        monstres: [squelette, revenant]
+        point: tour_du_bois
+        nombre: 6
+      - type: INTERAGIR
+        texte: "Fouiller le corps du Purificateur"
+        texte-en: "Search the Purifier's body"
+        point: tour_du_bois
+        rayon: 6
+        apres:
+          - "Un Purificateur, mort depuis des jours, la main crispée sur une sacoche. Dedans, une liste."
+          - "« Marqués instables, à conduire au Cloître Blanc. » Une vingtaine de noms. Des noms rendus à ceux qui avaient oublié le leur."
+          - "Le sixième : « Téo, Champs Vitrifiés. »"
+        apres-en:
+          - "A Purifier, dead for days, his hand clenched on a satchel. Inside, a list."
+          - "« Unstable Marked, to be escorted to the White Cloister. » About twenty names. Names given back to those who had forgotten their own."
+          - "The sixth: « Téo, Vitrified Fields. »"
+      - type: PARLER
+        texte: "Montrer la liste à Tobias"
+        texte-en: "Show the list to Tobias"
+        pnj: tobias
+        dialogue:
+          - "tobias: Téo… le gamin des Champs ? Celui qui se rappelait pas le nom de sa mère ?"
+          - "tobias: Il était pas instable. Il avait peur, c'est tout."
+          - "tobias: Garde la liste. Un jour, quelqu'un devra répondre de chaque nom qui est dessus."
+        dialogue-en:
+          - "tobias: Téo… the kid from the Fields? The one who couldn't remember his mother's name?"
+          - "tobias: He wasn't unstable. He was scared, that's all."
+          - "tobias: Keep the list. One day, someone will have to answer for every name on it."
+    recompenses:
+      xp: 1800
+      or: 180
+      objets:
+        - materiau: PAPER
+          nom: "Liste du Cloître"
+          nom-en: "The Cloister's List"
+          description:
+            - "Vingt noms. Le sixième est Téo."
+          description-en:
+            - "Twenty names. The sixth is Téo."
+
+  # ---------------------------------------------------------------- 15
+  ce_que_gardent_les_morts:
+    nom: "Ce que gardent les morts"
+    nom-en: "What the Dead Keep"
+    faction: lumiere
+    niveau: 13
+    requiert: [la_liste]
+    donneur: elwen
+    resume:
+      - "Les prêtres enterrés dans la Crypte de l'Aube"
+      - "se sont relevés."
+    resume-en:
+      - "The priests buried in the Crypt of the Dawn"
+      - "have risen."
+    offre:
+      - "elwen: À l'est dort la Crypte de l'Aube. Les premiers prêtres de l'Ordre y sont enterrés, avec leur fondateur."
+      - "elwen: Depuis la nuit des étoiles, ils marchent devant la porte. Ils gardent quelque chose. Va voir quoi."
+    offre-en:
+      - "elwen: To the east sleeps the Crypt of the Dawn. The Order's first priests are buried there, with their founder."
+      - "elwen: Since the night of the stars, they walk before the door. They are guarding something. Go and see what."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la Crypte de l'Aube"
+        texte-en: "Reach the Crypt of the Dawn"
+        point: crypte_seuil
+        rayon: 10
+      - type: TUER
+        texte: "Rendre le repos aux prêtres revenants"
+        texte-en: "Lay the revenant priests to rest"
+        monstres: [pretre_revenant]
+        point: crypte_seuil
+        nombre: 8
+      - type: INTERAGIR
+        texte: "Poser la main sur la porte scellée"
+        texte-en: "Lay your hand on the sealed door"
+        point: crypte_porte
+        rayon: 5
+        apres:
+          - "La pierre est chaude. Ta Marque s'embrase, et le monde disparaît."
+          - "Tu vois le ciel d'il y a mille ans. Un seul astre, immense. Sous lui, des milliers de prêtres en blanc, et un homme couronné de lumière."
+          - "« Si l'Astre ne veut pas nous garder, nous le garderons. » Des chaînes de lumière montent vers le ciel."
+          - "L'Astre se débat. Il se fend. Puis il se brise, et la nuit tombe sur le monde."
+          - "Tu rouvres les yeux devant la porte. Gravé dans la pierre : « Aurélien, premier de l'Aube. Il a aimé l'Astre plus que tout. »"
+        apres-en:
+          - "The stone is warm. Your Mark flares, and the world disappears."
+          - "You see the sky of a thousand years ago. A single star, immense. Beneath it, thousands of priests in white, and a man crowned with light."
+          - "« If the Star will not keep us, we will keep it. » Chains of light rise toward the sky."
+          - "The Star struggles. It cracks. Then it shatters, and night falls upon the world."
+          - "You open your eyes in front of the door. Carved in the stone: « Aurélien, first of the Dawn. He loved the Star above all things. »"
+      - type: PARLER
+        texte: "Raconter la vision à Elwen"
+        texte-en: "Tell Elwen about the vision"
+        pnj: elwen
+        dialogue:
+          - "elwen: Des chaînes… Les arbres ont toujours dit que l'Astre n'était pas tombé seul."
+          - "elwen: Ne répète ça à personne au Bastion. Pas parce que c'est faux. Parce que ça pourrait être vrai."
+        dialogue-en:
+          - "elwen: Chains… The trees always said the Star did not fall on its own."
+          - "elwen: Don't repeat this to anyone at the Bastion. Not because it's false. Because it might be true."
+    recompenses:
+      xp: 2100
+      or: 210
+
+  # ---------------------------------------------------------------- 16
+  l_homme_de_la_colline:
+    nom: "L'homme de la colline"
+    nom-en: "The Man on the Hill"
+    faction: lumiere
+    niveau: 14
+    requiert: [ce_que_gardent_les_morts]
+    donneur: tobias
+    resume:
+      - "Morvain veut vous parler, seul,"
+      - "sur la colline de la tour au nord."
+    resume-en:
+      - "Morvain wants to speak with you, alone,"
+      - "on the hill of the tower to the north."
+    offre:
+      - "tobias: Un corbeau est venu ce matin. Avec un mot pour toi. Signé « M. »"
+      - "tobias: « La tour sur la colline, au nord. Seul. Je ne suis pas venu me battre. » C'est un piège. Évidemment que c'est un piège."
+      - "tobias: … T'y vas quand même, hein ?"
+    offre-en:
+      - "tobias: A raven came this morning. With a note for you. Signed « M. »"
+      - "tobias: « The tower on the hill, to the north. Alone. I have not come to fight. » It's a trap. Of course it's a trap."
+      - "tobias: … You're going anyway, aren't you?"
+    etapes:
+      - type: ATTEINDRE
+        texte: "Monter à la tour sur la colline, au nord"
+        texte-en: "Climb to the tower on the hill, to the north"
+        point: colline_morvain
+        rayon: 10
+      - type: INTERAGIR
+        texte: "Écouter Morvain"
+        texte-en: "Listen to Morvain"
+        point: colline_morvain
+        rayon: 8
+        apres:
+          - "morvain: Vous êtes venu. Seul, en plus. L'Aube vous a mal appris la prudence."
+          - "morvain: Vous avez vu la Crypte, je le lis sur votre visage. Alors vous savez que vos prêtres n'ont pas toujours été des saints."
+          - "morvain: Le Néant grandit. Savez-vous de quoi il se nourrit ? De la lumière des Marques qui s'éteignent."
+          - "morvain: Ce que votre Cloître retire aux Marqués ne disparaît pas. Il fuit. Et là-haut, quelque chose a faim."
+          - "morvain: … Ah. Ils sont là. Vous allez voir de quoi je parle."
+          - "Autour de la tour, la terre se fend. Des formes sortent des fissures, pâles, sans yeux."
+        apres-en:
+          - "morvain: You came. Alone, even. The Dawn taught you caution poorly."
+          - "morvain: You have seen the Crypt, I can read it on your face. So you know your priests were not always saints."
+          - "morvain: The Void is growing. Do you know what it feeds on? The light of the Marks that go out."
+          - "morvain: What your Cloister takes from the Marked does not vanish. It leaks. And up there, something is hungry."
+          - "morvain: … Ah. They are here. You are about to see what I mean."
+          - "Around the tower, the earth splits. Shapes crawl out of the cracks, pale, eyeless."
+      - type: TUER
+        texte: "Repousser les Affamés du Néant"
+        texte-en: "Drive back the Hungry of the Void"
+        monstres: [affame_neant]
+        point: colline_morvain
+        nombre: 8
+        apres:
+          - "Quand le dernier tombe, Morvain essuie sa lame. Il ne dit rien. Puis il s'éloigne vers l'est, sans se retourner."
+        apres-en:
+          - "When the last one falls, Morvain wipes his blade. He says nothing. Then he walks away to the east, without looking back."
+      - type: PARLER
+        texte: "Revenir voir Tobias"
+        texte-en: "Return to Tobias"
+        pnj: tobias
+        dialogue:
+          - "tobias: T'es vivant. Il t'a rien fait ?"
+          - "joueur: Il s'est battu à côté de moi. Contre des choses sorties du Néant."
+          - "tobias: … Alors c'est pire que ce que je croyais. Si l'Ombre a peur, nous, on devrait être terrifiés."
+        dialogue-en:
+          - "tobias: You're alive. He didn't do anything to you?"
+          - "joueur: He fought beside me. Against things that came out of the Void."
+          - "tobias: … Then it's worse than I thought. If the Shadow is scared, we should be terrified."
+    recompenses:
+      xp: 2400
+      or: 240
+
+  # ---------------------------------------------------------------- 17
+  la_reine_tisseuse:
+    nom: "La Reine-Tisseuse"
+    nom-en: "The Weaver Queen"
+    faction: lumiere
+    niveau: 15
+    requiert: [l_homme_de_la_colline]
+    donneur: elwen
+    resume:
+      - "Au nord-ouest, la Reine-Tisseuse a fait son nid"
+      - "sur un Éclat. Tant qu'elle vit, le bois reste malade."
+    resume-en:
+      - "To the north-west, the Weaver Queen has nested"
+      - "on a Shard. While she lives, the wood stays sick."
+    offre:
+      - "elwen: Toutes les araignées du bois viennent d'un seul nid, au nord-ouest. Leur reine couve un Éclat."
+      - "elwen: Tue-la, et rapporte-moi le cœur de son nid. Alors le bois te laissera passer."
+    offre-en:
+      - "elwen: Every spider in the wood comes from a single nest, to the north-west. Their queen is brooding on a Shard."
+      - "elwen: Kill her, and bring me the heart of her nest. Then the wood will let you through."
+    etapes:
+      - type: TUER
+        texte: "Tuer les araignées géantes du nid"
+        texte-en: "Kill the giant spiders of the nest"
+        monstres: [araignee_geante, araignee]
+        point: nid_reine
+        nombre: 6
+      - type: TUER
+        texte: "Vaincre la Reine-Tisseuse"
+        texte-en: "Defeat the Weaver Queen"
+        monstres: [reine_tisseuse]
+        point: nid_reine
+      - type: INTERAGIR
+        texte: "Arracher le cœur de verre du nid"
+        texte-en: "Tear the glass heart from the nest"
+        point: nid_reine
+        rayon: 6
+        apres:
+          - "Sous la soie, un Éclat poli comme un œil. Quand tu le prends, la forêt entière soupire."
+        apres-en:
+          - "Beneath the silk, a Shard polished like an eye. As you take it, the whole forest sighs."
+      - type: PARLER
+        texte: "Rapporter le cœur de verre à Elwen"
+        texte-en: "Bring the glass heart to Elwen"
+        pnj: elwen
+        dialogue:
+          - "elwen: Tu entends ? Le bois se tait. Il dort, enfin."
+          - "elwen: La route de l'est est ouverte. Mais un messager est arrivé cette nuit : le Guet du Ponant, dans les collines du nord, ne répond plus."
+          - "tobias: Et un berger dit avoir vu un Marqué, là-haut, qui fuyait des Purificateurs. Un gamin. Sa Marque était à moitié éteinte."
+          - "joueur: Téo."
+          - "elwen: Va. Le bois se souviendra de toi."
+        dialogue-en:
+          - "elwen: Hear that? The wood is quiet. It sleeps, at last."
+          - "elwen: The road to the east is open. But a messenger arrived last night: the Ponant Watch, in the northern hills, no longer answers."
+          - "tobias: And a shepherd says he saw a Marked up there, fleeing from Purifiers. A kid. His Mark was half gone out."
+          - "joueur: Téo."
+          - "elwen: Go. The wood will remember you."
+    recompenses:
+      xp: 2900
+      or: 300
+      objets:
+        - materiau: AMETHYST_CLUSTER
+          nom: "Cœur de verre"
+          nom-en: "Glass Heart"
+          description:
+            - "L'Éclat que couvait la Reine-Tisseuse."
+          description-en:
+            - "The Shard the Weaver Queen was brooding on."
+
+  # ================================================================ ANNEXES — VILLAGE SYLVESTRE
+
+  s_bois_mort:
+    nom: "Bois mort"
+    nom-en: "Deadwood"
+    faction: lumiere
+    niveau: 10
+    requiert: [la_route_de_l_aube]
+    donneur: agathe
+    resume:
+      - "Les loups empêchent Agathe d'aller couper du bois."
+    resume-en:
+      - "Wolves keep Agathe from going out to cut wood."
+    offre:
+      - "agathe: Le seul bois encore coupable, c'est le bois mort. Et il est plein de loups."
+      - "agathe: Tu tues, je coupe. Marché conclu ?"
+    offre-en:
+      - "agathe: The only wood still worth cutting is deadwood. And it's full of wolves."
+      - "agathe: You kill, I chop. Deal?"
+    etapes:
+      - type: TUER
+        texte: "Tuer des loups dans le Bois de l'Aube"
+        texte-en: "Kill wolves in the Wood of the Dawn"
+        monstres: [loup]
+        nombre: 10
+      - type: PARLER
+        texte: "Prévenir Agathe"
+        texte-en: "Tell Agathe"
+        pnj: agathe
+        dialogue:
+          - "agathe: Dix ! Le village aura du feu cet hiver. Je te garde une place près de la cheminée."
+        dialogue-en:
+          - "agathe: Ten! The village will have fire this winter. I'll save you a spot by the hearth."
+    recompenses:
+      xp: 900
+      or: 100
+
+  s_la_caravane:
+    nom: "La caravane"
+    nom-en: "The Caravan"
+    faction: lumiere
+    niveau: 11
+    requiert: [la_route_de_l_aube]
+    donneur: agathe
+    resume:
+      - "Des brigands ont attaqué la caravane du village"
+      - "au nord du bois."
+    resume-en:
+      - "Brigands attacked the village's caravan"
+      - "north of the wood."
+    offre:
+      - "agathe: La caravane de sel n'est jamais arrivée. Des brigands, au nord. Mon frère conduisait la charrette."
+      - "agathe: Il s'en est tiré. Le sel, non. Va le reprendre."
+    offre-en:
+      - "agathe: The salt caravan never arrived. Brigands, to the north. My brother was driving the cart."
+      - "agathe: He got away. The salt didn't. Go and get it back."
+    etapes:
+      - type: TUER
+        texte: "Chasser les brigands du nord"
+        texte-en: "Drive off the northern brigands"
+        monstres: [bandit, braconnier]
+        point: camp_brigands_bois
+        nombre: 8
+      - type: INTERAGIR
+        texte: "Reprendre les sacs de sel"
+        texte-en: "Recover the bags of salt"
+        point: camp_brigands_bois
+        rayon: 6
+      - type: PARLER
+        texte: "Rapporter le sel à Agathe"
+        texte-en: "Bring the salt back to Agathe"
+        pnj: agathe
+        dialogue:
+          - "agathe: Tout le sel ! Mon frère va pleurer. De joie, cette fois."
+        dialogue-en:
+          - "agathe: All the salt! My brother is going to cry. Out of joy, this time."
+    recompenses:
+      xp: 1200
+      or: 140
+
+  s_toiles_de_l_est:
+    nom: "Toiles de l'est"
+    nom-en: "Webs of the East"
+    faction: lumiere
+    niveau: 13
+    requiert: [le_bois_qui_chante]
+    donneur: agathe
+    resume:
+      - "Un second nid d'araignées grandit"
+      - "loin à l'est du bois."
+    resume-en:
+      - "A second spider nest is growing"
+      - "far to the east of the wood."
+    offre:
+      - "agathe: Tu croyais avoir fini avec les araignées ? Y en a un autre nid, loin à l'est, vers la Marche."
+      - "agathe: Les charrettes passent par là. Passaient."
+    offre-en:
+      - "agathe: Thought you were done with spiders? There's another nest, far to the east, toward the March."
+      - "agathe: The carts go through there. Used to."
+    etapes:
+      - type: TUER
+        texte: "Détruire le nid de l'est"
+        texte-en: "Destroy the eastern nest"
+        monstres: [araignee, araignee_geante]
+        point: camp_araignees_est
+        nombre: 12
+      - type: PARLER
+        texte: "Revenir voir Agathe"
+        texte-en: "Return to Agathe"
+        pnj: agathe
+        dialogue:
+          - "agathe: Plus de toiles sur la route ? Alors les charrettes repartiront demain."
+        dialogue-en:
+          - "agathe: No more webs on the road? Then the carts leave again tomorrow."
+    recompenses:
+      xp: 1600
+      or: 170
+
+  s_la_chapelle_des_penitents:
+    nom: "La chapelle des Pénitents"
+    nom-en: "The Penitents' Chapel"
+    faction: lumiere
+    niveau: 13
+    requiert: [la_route_de_l_aube]
+    donneur: gilles
+    resume:
+      - "Frère Gilles veut qu'on rende la paix"
+      - "à la chapelle où il venait expier."
+    resume-en:
+      - "Brother Gilles wants peace restored"
+      - "to the chapel where he came to atone."
+    offre:
+      - "gilles: Loin au sud-est, il y a une chapelle où les pénitents venaient prier. J'y venais, moi aussi."
+      - "gilles: J'ai été Purificateur, avant. J'ai conduit des Marqués au Cloître. Je ne sais pas ce qu'ils sont devenus."
+      - "gilles: Les morts de la chapelle ne dorment plus. Rends-leur le repos. Moi, je n'y arrive pas."
+    offre-en:
+      - "gilles: Far to the south-east there is a chapel where penitents came to pray. I came there too."
+      - "gilles: I was a Purifier, before. I escorted Marked to the Cloister. I don't know what became of them."
+      - "gilles: The dead of the chapel no longer sleep. Give them rest. I can't."
+    etapes:
+      - type: TUER
+        texte: "Rendre le repos aux morts de la chapelle"
+        texte-en: "Give rest to the dead of the chapel"
+        monstres: [revenant, squelette]
+        point: chapelle_penitents
+        nombre: 8
+      - type: INTERAGIR
+        texte: "Rallumer la lampe de l'autel"
+        texte-en: "Relight the altar lamp"
+        point: chapelle_penitents
+        rayon: 6
+        apres:
+          - "La flamme prend. Sur l'autel, des dizaines de noms gravés au couteau. Des pénitents. Des Purificateurs."
+        apres-en:
+          - "The flame catches. On the altar, dozens of names carved with a knife. Penitents. Purifiers."
+      - type: PARLER
+        texte: "Revenir voir Frère Gilles"
+        texte-en: "Return to Brother Gilles"
+        pnj: gilles
+        dialogue:
+          - "gilles: La lampe brûle ? … Merci."
+          - "gilles: Au Cloître, on nous disait d'attendre dehors. On entendait chanter, puis plus rien. Puis on repartait en chercher d'autres."
+        dialogue-en:
+          - "gilles: The lamp is burning? … Thank you."
+          - "gilles: At the Cloister, they told us to wait outside. We heard singing, then nothing. Then we left to fetch more."
+    recompenses:
+      xp: 1600
+      or: 160
+
+  s_le_cercle_du_neant:
+    nom: "Le cercle du Néant"
+    nom-en: "The Circle of the Void"
+    faction: lumiere
+    niveau: 14
+    requiert: [s_la_chapelle_des_penitents]
+    donneur: gilles
+    resume:
+      - "Un cercle de pierres du bois"
+      - "s'est ouvert sur le Néant."
+    resume-en:
+      - "A stone circle in the wood"
+      - "has opened onto the Void."
+    offre:
+      - "gilles: Au sud-est, un cercle de pierres. Un Marqué s'y est éteint, la semaine dernière. Depuis, des choses en sortent."
+      - "gilles: Ferme ce qui s'est ouvert. Je prierai pour toi. C'est tout ce qu'il me reste à offrir."
+    offre-en:
+      - "gilles: To the south-east, a stone circle. A Marked went out there last week. Since then, things come out of it."
+      - "gilles: Close what has opened. I will pray for you. It is all I have left to offer."
+    etapes:
+      - type: TUER
+        texte: "Tuer les Affamés du cercle"
+        texte-en: "Kill the Hungry of the circle"
+        monstres: [affame_neant]
+        point: cercle_neant
+        nombre: 8
+      - type: INTERAGIR
+        texte: "Refermer la faille au centre du cercle"
+        texte-en: "Close the rift at the centre of the circle"
+        point: cercle_neant
+        rayon: 6
+        apres:
+          - "Tu poses la main sur la faille. Ta Marque brûle. La faille se referme, lentement, comme une plaie qui cicatrise."
+          - "Tu as donné un peu de ta lumière. Tu le sens. Elle reviendra."
+        apres-en:
+          - "You lay your hand on the rift. Your Mark burns. The rift closes, slowly, like a wound healing."
+          - "You gave a little of your light. You can feel it. It will come back."
+      - type: PARLER
+        texte: "Revenir voir Frère Gilles"
+        texte-en: "Return to Brother Gilles"
+        pnj: gilles
+        dialogue:
+          - "gilles: Tu l'as refermée avec ta propre lumière ? Alors c'est ça… Une Marque peut nourrir le Néant, ou le refermer."
+          - "gilles: Le Cloître le sait-il ? Je crains que oui."
+        dialogue-en:
+          - "gilles: You closed it with your own light? So that's it… A Mark can feed the Void, or seal it."
+          - "gilles: Does the Cloister know? I fear it does."
+    recompenses:
+      xp: 1900
+      or: 190
+
+  s_le_camp_de_la_crete:
+    nom: "Le camp de la crête"
+    nom-en: "The Ridge Camp"
+    faction: lumiere
+    niveau: 15
+    requiert: [les_feux_de_la_lisiere]
+    donneur: tobias
+    resume:
+      - "Le dernier camp de Glaneurs du bois"
+      - "tient une crête loin au nord-est."
+    resume-en:
+      - "The last Gleaner camp in the wood"
+      - "holds a ridge far to the north-east."
+    offre:
+      - "tobias: J'ai suivi les charrettes des Glaneurs. Elles montent toutes au même endroit : une crête, loin au nord-est."
+      - "tobias: C'est leur dernier camp dans le bois. Après, c'est les collines. On le prend ?"
+    offre-en:
+      - "tobias: I followed the Gleaners' carts. They all climb to the same place: a ridge, far to the north-east."
+      - "tobias: It's their last camp in the wood. After that, it's the hills. Shall we take it?"
+    etapes:
+      - type: TUER
+        texte: "Prendre le camp de la crête"
+        texte-en: "Take the ridge camp"
+        monstres: [glaneur, glaneur_guetteur]
+        point: camp_glaneurs_crete
+        nombre: 12
+      - type: INTERAGIR
+        texte: "Fouiller la tente du chef"
+        texte-en: "Search the leader's tent"
+        point: camp_glaneurs_crete
+        rayon: 6
+        apres:
+          - "Une carte. Des routes tracées à l'encre violette, vers les collines du Ponant. Et un cercle autour du Guet."
+        apres-en:
+          - "A map. Roads traced in violet ink, toward the Ponant hills. And a circle around the Watch."
+      - type: PARLER
+        texte: "Montrer la carte à Tobias"
+        texte-en: "Show the map to Tobias"
+        pnj: tobias
+        dialogue:
+          - "tobias: Le Guet du Ponant… Ils y vont tous. Qu'est-ce qu'il y a, là-haut ?"
+        dialogue-en:
+          - "tobias: The Ponant Watch… They're all heading there. What's up there?"
+    recompenses:
+      xp: 2300
+      or: 230

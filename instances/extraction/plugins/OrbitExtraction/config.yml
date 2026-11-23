@@ -341,13 +341,13 @@ kits:
 caisses:
   actives-en-jeu: true
   # Nombre de caisses présentes en même temps sur l'île (hors caisses d'événement).
-  nombre: 32
+  nombre: 44
   # Une caisse non vidée est déplacée après ce temps.
   duree-minutes: 12
   # Délai avant qu'une caisse retirée soit remplacée.
-  reapparition-secondes: 20
+  reapparition-secondes: 15
   # Distance minimale entre deux caisses.
-  distance-min: 55
+  distance-min: 45
   # La caisse et son faisceau n'existent que lorsqu'un joueur est à moins de cette distance.
   distance-affichage: 150
   bruit: 30
@@ -363,7 +363,7 @@ caisses:
       faisceau: WHITE_STAINED_GLASS
       banniere: WHITE
       poids: 40
-      tirages: 4-5
+      tirages: 5-7
       butin:
         - { objet: "munition:9mm:10-24", poids: 30 }
         - { objet: "munition:12g:4-8", poids: 14 }
@@ -381,7 +381,7 @@ caisses:
       faisceau: LIME_STAINED_GLASS
       banniere: LIME
       poids: 28
-      tirages: 5-6
+      tirages: 6-8
       butin:
         - { objet: "munition:9mm:20-40", poids: 26 }
         - { objet: "munition:5-56:10-25", poids: 16 }
@@ -404,7 +404,7 @@ caisses:
       faisceau: LIGHT_BLUE_STAINED_GLASS
       banniere: LIGHT_BLUE
       poids: 18
-      tirages: 5-7
+      tirages: 7-9
       butin:
         - { objet: "munition:5-56:20-40", poids: 22 }
         - { objet: "munition:7-62:10-20", poids: 14 }
@@ -430,7 +430,7 @@ caisses:
       faisceau: PURPLE_STAINED_GLASS
       banniere: PURPLE
       poids: 10
-      tirages: 6-7
+      tirages: 8-10
       butin:
         - { objet: "munition:5-56:40-60", poids: 20 }
         - { objet: "munition:7-62:20-40", poids: 18 }
@@ -457,7 +457,7 @@ caisses:
       faisceau: RED_STAINED_GLASS
       banniere: RED
       poids: 4
-      tirages: 7-8
+      tirages: 9-11
       annonce: true
       butin:
         - { objet: "munition:5-56:60", poids: 16 }
@@ -493,7 +493,7 @@ caisses:
       faisceau: ORANGE_STAINED_GLASS
       banniere: ORANGE
       poids: 0
-      tirages: 8-9
+      tirages: 10-12
       butin:
         - { objet: "munition:5-56:60", poids: 16 }
         - { objet: "munition:7-62:40", poids: 16 }
@@ -522,7 +522,7 @@ caisses:
       faisceau: YELLOW_STAINED_GLASS
       banniere: YELLOW
       poids: 0
-      tirages: 6-7
+      tirages: 8-10
       butin:
         - { objet: "munition:9mm:40-60", poids: 16 }
         - { objet: "munition:5-56:40-60", poids: 18 }
@@ -540,6 +540,121 @@ caisses:
         - { objet: "arme:ak12", poids: 5 }
         - { objet: "arme:pompe", poids: 5 }
         - { objet: "arme:p90", poids: 4 }
+
+# ------------------------------------------------------------------ fouille
+# Tout conteneur de butin se fouille : son contenu est caché et se révèle case par case tant que le joueur garde
+# l'inventaire ouvert (barre « Fouille » dans la console du HUD). S'applique aux caisses de butin et aux coffres /
+# tonneaux de la carte.
+fouille:
+  active: true
+  # Multiplicateur de vitesse (2 = deux fois plus rapide).
+  vitesse: 1.0
+  # Secondes pour révéler un objet, selon son type (le début de la spec : arme, armure, munition...).
+  secondes:
+    arme: 2.2
+    armure: 1.6
+    grenade: 1.3
+    soin: 1.1
+    vehicule: 1.2
+    munition: 0.8
+    defaut: 0.7
+  # Coffres et tonneaux de la carte : chacun devient un conteneur à fouiller pendant un raid (pas dans la planque).
+  # Le contenu est tiré à la première ouverture puis se regarnit après reapparition-minutes (+0 à 2 min).
+  conteneurs-actifs: true
+  reapparition-minutes: 15
+  # Rayon d'alerte des infectés à l'ouverture d'un conteneur neuf.
+  bruit: 12
+  # Par bloc : tables possibles et leur poids.
+  blocs:
+    BARREL: { tonneau: 70, caisse-outils: 20, trousse: 10 }
+    CHEST: { coffre: 70, coffre-militaire: 15, trousse: 10, caisse-outils: 5 }
+    TRAPPED_CHEST: { coffre-militaire: 100 }
+  # Par table : vide = % de chances qu'il n'y ait rien ; tirages = objets tirés (a-b) ; butin = objets et leur poids.
+  tables:
+    tonneau:
+      nom: "Tonneau"
+      couleur: "#A8754A"
+      vide: 40
+      tirages: 1-2
+      butin:
+        - { objet: "objet:BREAD:1-3", poids: 24 }
+        - { objet: "objet:COOKED_BEEF:1-2", poids: 12 }
+        - { objet: "objet:COPPER_INGOT:1-4", poids: 18 }
+        - { objet: "objet:IRON_INGOT:1-2", poids: 10 }
+        - { objet: "munition:9mm:6-14", poids: 16 }
+        - { objet: "munition:12g:2-5", poids: 8 }
+        - { objet: "soin:bandage:1", poids: 10 }
+        - { objet: "vehicule:jerrican:1", poids: 8 }
+    coffre:
+      nom: "Coffre"
+      couleur: "#C9A86A"
+      vide: 25
+      tirages: 2-3
+      butin:
+        - { objet: "munition:9mm:10-24", poids: 22 }
+        - { objet: "munition:12g:4-8", poids: 12 }
+        - { objet: "munition:5-56:8-16", poids: 10 }
+        - { objet: "objet:BREAD:2-4", poids: 14 }
+        - { objet: "objet:IRON_INGOT:1-3", poids: 12 }
+        - { objet: "objet:GOLD_INGOT:1-2", poids: 6 }
+        - { objet: "soin:bandage:1-2", poids: 14 }
+        - { objet: "armure:fortune:casque", poids: 5 }
+        - { objet: "armure:fortune:plastron", poids: 4 }
+        - { objet: "armure:fortune:jambieres", poids: 4 }
+        - { objet: "armure:fortune:bottes", poids: 5 }
+        - { objet: "armure:police:casque", poids: 2 }
+        - { objet: "vehicule:jerrican:1", poids: 6 }
+        - { objet: "arme:c96", poids: 4 }
+        - { objet: "arme:g18", poids: 3 }
+        - { objet: "arme:tec9", poids: 2 }
+    coffre-militaire:
+      nom: "Coffre militaire"
+      couleur: "#6E8B3D"
+      vide: 10
+      tirages: 3-4
+      butin:
+        - { objet: "munition:5-56:15-30", poids: 20 }
+        - { objet: "munition:7-62:10-20", poids: 14 }
+        - { objet: "munition:9mm:20-35", poids: 14 }
+        - { objet: "munition:12g:6-10", poids: 10 }
+        - { objet: "grenade:frag:1", poids: 10 }
+        - { objet: "soin:bandage:1-2", poids: 10 }
+        - { objet: "soin:medkit:1", poids: 5 }
+        - { objet: "armure:police:casque", poids: 6 }
+        - { objet: "armure:police:plastron", poids: 5 }
+        - { objet: "armure:police:jambieres", poids: 5 }
+        - { objet: "armure:police:bottes", poids: 6 }
+        - { objet: "armure:emeute:casque", poids: 2 }
+        - { objet: "armure:emeute:plastron", poids: 2 }
+        - { objet: "arme:pdw", poids: 4 }
+        - { objet: "arme:combatsmg", poids: 4 }
+        - { objet: "arme:pompe", poids: 4 }
+        - { objet: "arme:m4", poids: 2 }
+        - { objet: "arme:ak12", poids: 2 }
+    trousse:
+      nom: "Trousse de secours"
+      couleur: "#E74C3C"
+      vide: 15
+      tirages: 2-3
+      butin:
+        - { objet: "soin:bandage:1-3", poids: 40 }
+        - { objet: "soin:medkit:1", poids: 18 }
+        - { objet: "objet:GOLDEN_APPLE:1", poids: 6 }
+        - { objet: "objet:COOKED_BEEF:2-3", poids: 16 }
+        - { objet: "objet:BREAD:2-4", poids: 14 }
+    caisse-outils:
+      nom: "Caisse à outils"
+      couleur: "#F39C12"
+      vide: 20
+      tirages: 2-3
+      butin:
+        - { objet: "vehicule:jerrican:1-2", poids: 30 }
+        - { objet: "vehicule:reparation:1", poids: 18 }
+        - { objet: "objet:IRON_INGOT:2-4", poids: 18 }
+        - { objet: "objet:COPPER_INGOT:3-6", poids: 16 }
+        - { objet: "objet:GOLD_INGOT:1-2", poids: 6 }
+        - { objet: "munition:12g:3-6", poids: 8 }
+        - { objet: "grenade:frag:1", poids: 3 }
 
 # ------------------------------------------------------------------ événements de raid
 # Tirés au hasard dès qu'il y a assez de joueurs en raid. Test : /extraction evenement <crash|horde|largage>.
@@ -660,7 +775,7 @@ vehicules:
   abandon-minutes: 10
   reapparition-secondes: 60
   # Distance minimale entre deux véhicules garés par le serveur.
-  distance-min: 70
+  distance-min: 55
   # Plafond de vol (altitude Y) et marge autour de l'île au-delà de laquelle on ne peut plus avancer.
   altitude-max: 220
   marge-zone: 150
@@ -680,7 +795,7 @@ vehicules:
     moto:
       nom: "Moto"
       icone: MINECART
-      nombre: 5
+      nombre: 10
       echelle: 1.25
       places: [[0, 0.78, -0.31], [0, 0.8, -0.74]]
       vitesse: 19
@@ -704,7 +819,7 @@ vehicules:
     voiture:
       nom: "Voiture"
       icone: CHEST_MINECART
-      nombre: 4
+      nombre: 8
       echelle: 1.75
       places: [[-0.38, 0.6, 0.27], [0.38, 0.6, 0.27], [-0.38, 0.6, -0.82], [0.38, 0.6, -0.82]]
       vitesse: 16
@@ -728,7 +843,7 @@ vehicules:
     humvee:
       nom: "Humvee"
       icone: TNT_MINECART
-      nombre: 2
+      nombre: 4
       echelle: 2.0
       places: [[-0.5, 0.875, 0.44], [0.5, 0.875, 0.44], [-0.5, 0.875, -0.41], [0.5, 0.875, -0.41]]
       vitesse: 12.5
@@ -753,7 +868,7 @@ vehicules:
       nom: "Hélicoptère"
       icone: ELYTRA
       volant: true
-      nombre: 1
+      nombre: 2
       echelle: 2.5
       # Le mât du rotor est en avant du centre du modèle : on recule le modèle pour pivoter autour du mât.
       decalage: -1.72

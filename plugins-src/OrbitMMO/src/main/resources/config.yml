@@ -24,6 +24,20 @@ pvp:
 party:
   max-size: 6
 
+guildes:
+  # Guildes (/guilde, fichier plugins/OrbitMMO/guildes.yml) : une seule faction par guilde, chef · officiers · membres.
+  cout-creation: 1000   # or payé par le fondateur
+  max-membres: 20
+  # Prime versée dans la banque de la première guilde du serveur à franchir un étage du Pilier des Astres :
+  # prime-base + prime-par-etage × numéro de l'étage (étage 1 : 750 or, étage 10 : 3 000 or).
+  prime-base: 500
+  prime-par-etage: 250
+
+quetes:
+  # Traînée de guidage (chemin de particules au sol vers l'objectif de la quête suivie) : allumée ou éteinte pour
+  # un joueur qui n'a encore rien choisi. Chacun la règle ensuite dans le journal (/quetes) ou par /quetes trainee.
+  trainee-par-defaut: true
+
 hdv:
   # Hôtel des ventes entre joueurs (PNJ Corvin, ex-marchand). Annonces dans plugins/OrbitMMO/hdv.yml.
   taxe: 5            # % retenu sur le prix à la vente
@@ -160,7 +174,7 @@ mobs:
     drop: { name: "Fil de soie", item: STRING, sell: 5, chance: 0.5 }
   elfe_sombre:
     name: "Elfe sombre"
-    type: VINDICATOR
+    type: SKELETON
     weapon: IRON_AXE
     hp: 1.1
     damage: 1.15
@@ -182,7 +196,7 @@ mobs:
     drop: { name: "Bandelette", item: PAPER, sell: 10, chance: 0.4 }
   scorpion:
     name: "Scorpion des sables"
-    type: SILVERFISH
+    type: ENDERMITE
     scale: 3.0
     hp: 0.9
     damage: 1.1
@@ -242,7 +256,7 @@ bosses:
     lab: { kind: weapon, name: "Corne du titan", value: 6 }
   treant:
     name: "Tréant corrompu"
-    type: VINDICATOR
+    type: ZOMBIE
     scale: 2.4
     hp: 18
     damage: 2.0

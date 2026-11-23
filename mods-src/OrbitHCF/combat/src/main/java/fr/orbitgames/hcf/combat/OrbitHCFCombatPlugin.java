@@ -61,14 +61,14 @@ public final class OrbitHCFCombatPlugin extends JavaPlugin {
         combatManager = new CombatManager(this, combatDb);
         OrbitHCF.register(CombatService.class, combatManager);
 
-        Bukkit.getPluginManager().registerEvents(new CombatTagListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new PvpTimerListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new PearlListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new GappleListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new RestrictionListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new EnchantLimiter(this), this);
-        Bukkit.getPluginManager().registerEvents(new PotionLimiter(this), this);
-        Bukkit.getPluginManager().registerEvents(new DeathbanListener(this), this);
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new CombatTagListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new PvpTimerListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new PearlListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new GappleListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new RestrictionListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new EnchantLimiter(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new PotionLimiter(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new DeathbanListener(this));
 
         PluginCommand pvp = getCommand("pvp");
         if (pvp != null) {

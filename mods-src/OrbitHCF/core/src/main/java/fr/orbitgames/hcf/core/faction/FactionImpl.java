@@ -108,7 +108,7 @@ public class FactionImpl implements Faction {
         List<Player> online = new ArrayList<>();
         for (UUID uuid : members.keySet()) {
             Player player = Bukkit.getPlayer(uuid);
-            if (player != null && player.isOnline()) {
+            if (player != null && player.isOnline() && fr.orbitgames.hcf.api.HcfWorlds.isHcf(player)) {
                 online.add(player);
             }
         }

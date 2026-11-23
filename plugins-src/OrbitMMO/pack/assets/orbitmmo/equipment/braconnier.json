@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [ { "texture": "orbitmmo:braconnier" } ],
+    "humanoid_leggings": [ { "texture": "orbitmmo:braconnier" } ]
+  }
+}

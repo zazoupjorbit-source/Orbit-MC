@@ -367,6 +367,9 @@ $gfx.Dispose(); $src.Dispose()
 $icon.Save((Join-Path $out 'pack.png'), [System.Drawing.Imaging.ImageFormat]::Png)
 $icon.Dispose()
 
+# Montures (modeles 3D orbitmmo:mount/*).
+& (Join-Path $PSScriptRoot 'gen-mounts.ps1')
+
 # Console du HUD (police orbitmmo:hud, barre d'action redessinee, HUD du jeu masque).
 & (Join-Path $PSScriptRoot 'gen-hud.ps1')
 

@@ -1,0 +1,251 @@
+ancre_veillemont:
+  monde: orbit_continent
+  x: -2382.5
+  y: 69.0
+  z: 936.5
+  yaw: 180.0
+  pitch: 0.0
+bord_cratere:
+  monde: orbit_continent
+  x: -2262.5
+  y: 67.0
+  z: 934.5
+  yaw: 90.0
+  pitch: 0.0
+brune:
+  monde: orbit_continent
+  x: -2243.5
+  y: 65.0
+  z: 954.5
+  yaw: 155.0
+  pitch: 0.0
+cratere_eveil:
+  monde: orbit_continent
+  x: -2252.5
+  y: 64.0
+  z: 934.5
+  yaw: 90.0
+  pitch: 0.0
+eclat_eveil:
+  monde: orbit_continent
+  x: -2261.5
+  y: 67.0
+  z: 926.5
+  yaw: -50.0
+  pitch: 0.0
+maelis:
+  monde: orbit_continent
+  x: -2265.5
+  y: 67.0
+  z: 940.5
+  yaw: -115.0
+  pitch: 0.0
+mourant:
+  monde: orbit_continent
+  x: -2226.5
+  y: 68.0
+  z: 948.5
+  yaw: 118.80999755859375
+  pitch: 0.0
+orsan:
+  monde: orbit_continent
+  x: -2384.5
+  y: 69.0
+  z: 937.5
+  yaw: -146.30999755859375
+  pitch: 0.0
+rampants:
+  monde: orbit_continent
+  x: -2449.5
+  y: 69.0
+  z: 970.5
+  yaw: 0.0
+  pitch: 0.0
+teo:
+  monde: orbit_continent
+  x: -2242.5
+  y: 68.0
+  z: 917.5
+  yaw: 30.0
+  pitch: 0.0
+varenne:
+  monde: orbit_continent
+  x: -2373.82
+  y: 69.0
+  z: 955.94
+  yaw: -28.25
+  pitch: 0.0
+hilde: {monde: orbit_continent, x: -2379.5, y: 69.0, z: 931.5, yaw: 31.0, pitch: 0.0}
+fenouil: {monde: orbit_continent, x: -2385.5, y: 69.0, z: 931.5, yaw: -31.0, pitch: 0.0}
+bertin: {monde: orbit_continent, x: -2386.5, y: 69.0, z: 940.5, yaw: -135.0, pitch: 0.0}
+carquois_tobias: {monde: orbit_continent, x: -2289.5, y: 68.0, z: 830.5, yaw: 0.0, pitch: 0.0}
+sang_tobias: {monde: orbit_continent, x: -2189.5, y: 68.0, z: 720.5, yaw: 0.0, pitch: 0.0}
+pierre_marquee: {monde: orbit_continent, x: -2089.5, y: 69.0, z: 640.5, yaw: 0.0, pitch: 0.0}
+tour_brisee: {monde: orbit_continent, x: -2016.5, y: 70.0, z: 571.5, yaw: 0.0, pitch: 0.0}
+porte_sud_aureval: {monde: orbit_continent, x: -2516.5, y: 67.0, z: 608.5, yaw: 159.5, pitch: 0.0}
+pont_aureval: {monde: orbit_continent, x: -2549.5, y: 69.0, z: 519.5, yaw: 180.0, pitch: 0.0}
+seraphine: {monde: orbit_continent, x: -2545.5, y: 67.0, z: 469.5, yaw: 24.0, pitch: 0.0}
+stele_bastion: {monde: orbit_continent, x: -2549.5, y: 67.0, z: 478.5, yaw: 180.0, pitch: 0.0}
+porte_nord_aureval: {monde: orbit_continent, x: -2519.5, y: 67.0, z: 431.5, yaw: 18.6, pitch: 0.0}
+camp_glaneurs_nord: {monde: orbit_continent, x: -2601.5, y: 66.0, z: 12.5, yaw: 0.0, pitch: 0.0}
+morvain_ombre: {monde: orbit_continent, x: -2584.5, y: 66.0, z: -4.5, yaw: 0.0, pitch: 0.0}
+chapelle_entree: {monde: orbit_continent, x: -3333.5, y: 64.0, z: 1165.5, yaw: 180.0, pitch: 0.0}
+chapelle_coeur: {monde: orbit_continent, x: -3333.5, y: 64.0, z: 1157.5, yaw: 0.0, pitch: 0.0}
+camp_brigands_est: {monde: orbit_continent, x: -2094.5, y: 65.0, z: 879.5, yaw: 0.0, pitch: 0.0}
+odile: {monde: orbit_continent, x: -2246.5, y: 70.0, z: 1146.5, yaw: 27.0, pitch: 0.0}
+gaspard: {monde: orbit_continent, x: -2245.5, y: 70.0, z: 1155.5, yaw: 127.0, pitch: 0.0}
+clotaire: {monde: orbit_continent, x: -2253.5, y: 70.0, z: 1155.5, yaw: -127.0, pitch: 0.0}
+ancre_bourg: {monde: orbit_continent, x: -2249.5, y: 70.0, z: 1152.5, yaw: 0.0, pitch: 0.0}
+paturages: {monde: orbit_continent, x: -2179.5, y: 69.0, z: 1250.5, yaw: 0.0, pitch: 0.0}
+tour_des_morts: {monde: orbit_continent, x: -2066.5, y: 69.0, z: 1371.5, yaw: 0.0, pitch: 0.0}
+camp_kobolds_sud: {monde: orbit_continent, x: -2535.5, y: 68.0, z: 1618.5, yaw: 0.0, pitch: 0.0}
+terrier_entree: {monde: orbit_continent, x: -2749.5, y: 70.0, z: 1349.5, yaw: 0.0, pitch: 0.0}
+bastien: {monde: orbit_continent, x: -2556.5, y: 67.0, z: 572.5, yaw: -54.0, pitch: 0.0}
+lise: {monde: orbit_continent, x: -2542.5, y: 67.0, z: 572.5, yaw: 54.0, pitch: 0.0}
+hardouin: {monde: orbit_continent, x: -2549.5, y: 67.0, z: 564.5, yaw: 180.0, pitch: 0.0}
+forge_aureval: {monde: orbit_continent, x: -2560.5, y: 67.0, z: 577.5, yaw: 90.0, pitch: 0.0}
+alchimie_aureval: {monde: orbit_continent, x: -2538.5, y: 67.0, z: 576.5, yaw: -90.0, pitch: 0.0}
+hdv_aureval: {monde: orbit_continent, x: -2549.5, y: 67.0, z: 580.5, yaw: 0.0, pitch: 0.0}
+runes_aureval: {monde: orbit_continent, x: -2538.5, y: 67.0, z: 476.5, yaw: -90.0, pitch: 0.0}
+pilier_aureval: {monde: orbit_continent, x: -2549.5, y: 67.0, z: 458.5, yaw: 180.0, pitch: 0.0}
+camp_kobolds_nord: {monde: orbit_continent, x: -2850.5, y: 71.0, z: -162.5, yaw: 0.0, pitch: 0.0}
+cercle_pierres: {monde: orbit_continent, x: -3163.5, y: 67.0, z: 982.5, yaw: 0.0, pitch: 0.0}
+elwen: {monde: orbit_continent, x: -1952.5, y: 73.0, z: -744.5, yaw: -135.0, pitch: 0.0}
+tobias: {monde: orbit_continent, x: -1946.5, y: 73.0, z: -746.5, yaw: 108.0, pitch: 0.0}
+agathe: {monde: orbit_continent, x: -1952.5, y: 73.0, z: -752.5, yaw: -31.0, pitch: 0.0}
+gilles: {monde: orbit_continent, x: -1946.5, y: 73.0, z: -750.5, yaw: 90.0, pitch: 0.0}
+ancre_sylvestre: {monde: orbit_continent, x: -1949.5, y: 73.0, z: -747.5, yaw: 0.0, pitch: 0.0}
+porte_sylvestre: {monde: orbit_continent, x: -1950.5, y: 73.0, z: -718.5, yaw: 180.0, pitch: 0.0}
+camp_araignees_ouest: {monde: orbit_continent, x: -2348.5, y: 78.0, z: -471.5, yaw: 0.0, pitch: 0.0}
+camp_glaneurs_lisiere: {monde: orbit_continent, x: -1964.5, y: 75.0, z: -535.5, yaw: 0.0, pitch: 0.0}
+tour_du_bois: {monde: orbit_continent, x: -1456.5, y: 77.0, z: -752.5, yaw: 0.0, pitch: 0.0}
+crypte_seuil: {monde: orbit_continent, x: -1349.5, y: 77.0, z: -853.5, yaw: 0.0, pitch: 0.0}
+crypte_porte: {monde: orbit_continent, x: -1349.5, y: 77.0, z: -843.5, yaw: 180.0, pitch: 0.0}
+colline_morvain: {monde: orbit_continent, x: -1704.5, y: 112.0, z: -1317.5, yaw: 0.0, pitch: 0.0}
+nid_reine: {monde: orbit_continent, x: -2332.5, y: 83.0, z: -1080.5, yaw: 0.0, pitch: 0.0}
+camp_brigands_bois: {monde: orbit_continent, x: -1867.5, y: 78.0, z: -1081.5, yaw: 0.0, pitch: 0.0}
+camp_araignees_est: {monde: orbit_continent, x: -980.5, y: 72.0, z: -202.5, yaw: 0.0, pitch: 0.0}
+chapelle_penitents: {monde: orbit_continent, x: -1099.5, y: 73.0, z: 89.5, yaw: 0.0, pitch: 0.0}
+cercle_neant: {monde: orbit_continent, x: -1481.5, y: 71.0, z: -24.5, yaw: 0.0, pitch: 0.0}
+camp_glaneurs_crete: {monde: orbit_continent, x: -786.5, y: 103.0, z: -1073.5, yaw: 0.0, pitch: 0.0}
+ancre_quatre_vents: {monde: orbit_continent, x: 60.5, y: 68, z: 222.5, yaw: 0, pitch: 0.0}
+aldren: {monde: orbit_continent, x: 55.5, y: 68, z: 227.5, yaw: -135, pitch: 0.0}
+vesper: {monde: orbit_continent, x: 67.5, y: 68, z: 218.5, yaw: 45, pitch: 0.0}
+calixte: {monde: orbit_continent, x: 57.5, y: 68, z: 219.5, yaw: -45, pitch: 0.0}
+nell: {monde: orbit_continent, x: 64.5, y: 68, z: 221.5, yaw: 90, pitch: 0.0}
+camp_lames_aube: {monde: orbit_continent, x: 269.5, y: 69, z: -184.5, yaw: 0, pitch: 0.0}
+camp_lames_ombre: {monde: orbit_continent, x: 251.5, y: 74, z: -964.5, yaw: 0, pitch: 0.0}
+ruine_eclat: {monde: orbit_continent, x: 522.5, y: 69, z: -582.5, yaw: 0, pitch: 0.0}
+marche_seuil: {monde: orbit_continent, x: 550.5, y: 66, z: -445.5, yaw: 180, pitch: 0.0}
+marche_portail: {monde: orbit_continent, x: 550.5, y: 66, z: -455.5, yaw: 0, pitch: 0.0}
+camp_g1: {monde: orbit_continent, x: 247.5, y: 69, z: -534.5, yaw: 0, pitch: 0.0}
+camp_g2: {monde: orbit_continent, x: 496.5, y: 70, z: 789.5, yaw: 0, pitch: 0.0}
+camp_g3: {monde: orbit_continent, x: -251.5, y: 72, z: 590.5, yaw: 0, pitch: 0.0}
+camp_g4: {monde: orbit_continent, x: -773.5, y: 68, z: -688.5, yaw: 0, pitch: 0.0}
+camp_g5: {monde: orbit_continent, x: 369.5, y: 68, z: 1306.5, yaw: 0, pitch: 0.0}
+camp_g6: {monde: orbit_continent, x: 841.5, y: 68, z: -501.5, yaw: 0, pitch: 0.0}
+camp_g8: {monde: orbit_continent, x: -941.5, y: 72, z: -500.5, yaw: 0, pitch: 0.0}
+camp_g9: {monde: orbit_continent, x: 557.5, y: 65, z: 330.5, yaw: 0, pitch: 0.0}
+ruine_g1: {monde: orbit_continent, x: 108.5, y: 107, z: -1238.5, yaw: 0, pitch: 0.0}
+ruine_g3: {monde: orbit_continent, x: -830.5, y: 67, z: 1404.5, yaw: 0, pitch: 0.0}
+ruine_g4: {monde: orbit_continent, x: 865.5, y: 70, z: 532.5, yaw: 0, pitch: 0.0}
+ruine_g5: {monde: orbit_continent, x: -500.5, y: 95, z: -1023.5, yaw: 0, pitch: 0.0}
+porte_guet: {monde: orbit_continent, x: -2511.7, y: 105, z: -1749.5, yaw: 165, pitch: 0.0}
+ancre_guet: {monde: orbit_continent, x: -2519.5, y: 105, z: -1777.5, yaw: 0, pitch: 0.0}
+isaure: {monde: orbit_continent, x: -2516.5, y: 105, z: -1774.5, yaw: 135, pitch: 0.0}
+teo_guet: {monde: orbit_continent, x: -2522.5, y: 105, z: -1774.5, yaw: -135, pitch: 0.0}
+aubin: {monde: orbit_continent, x: -2516.5, y: 105, z: -1783.5, yaw: 45, pitch: 0.0}
+rosalinde: {monde: orbit_continent, x: -2522.5, y: 105, z: -1783.5, yaw: -45, pitch: 0.0}
+camp_col: {monde: orbit_continent, x: -2049.5, y: 72, z: -1590.5, yaw: 0, pitch: 0.0}
+refuge_teo: {monde: orbit_continent, x: -2809.5, y: 89, z: -1077.5, yaw: 0, pitch: 0.0}
+ruine_fioles: {monde: orbit_continent, x: -2010.5, y: 77, z: -2087.5, yaw: 0, pitch: 0.0}
+mine_seuil: {monde: orbit_continent, x: -2103.5, y: 98, z: -2449.5, yaw: -90, pitch: 0.0}
+mine_portail: {monde: orbit_continent, x: -2093.5, y: 98, z: -2449.5, yaw: 90, pitch: 0.0}
+carnet_orsan: {monde: orbit_continent, x: -1839.5, y: 103, z: -2556.5, yaw: 0, pitch: 0.0}
+camp_castel: {monde: orbit_continent, x: -2788.5, y: 76, z: -2263.5, yaw: 0, pitch: 0.0}
+ruine_rallumage: {monde: orbit_continent, x: -2225.5, y: 103, z: -2561.5, yaw: 0, pitch: 0.0}
+camp_nord_ponant: {monde: orbit_continent, x: -2397.5, y: 109, z: -2134.5, yaw: 0, pitch: 0.0}
+camp_ouest_ponant: {monde: orbit_continent, x: -2092.5, y: 80, z: -2310.5, yaw: 0, pitch: 0.0}
+cimetiere_cretes: {monde: orbit_continent, x: -1559.5, y: 92, z: -2502.5, yaw: 0, pitch: 0.0}
+camp_kobolds_col: {monde: orbit_continent, x: -1728.5, y: 92, z: -1984.5, yaw: 0, pitch: 0.0}
+mine_kobolds: {monde: orbit_continent, x: -1445.5, y: 99, z: -2308.5, yaw: 0, pitch: 0.0}
+camp_sud_ponant: {monde: orbit_continent, x: -1348.5, y: 80, z: -2751.5, yaw: 0, pitch: 0.0}
+cratere_murmures: {monde: orbit_continent, x: 2535.5, y: 66, z: 615.5, yaw: 90, pitch: 0.0}
+bord_murmures: {monde: orbit_continent, x: 2525.5, y: 71, z: 619.5, yaw: 90, pitch: 0.0}
+eclat_murmures: {monde: orbit_continent, x: 2524.5, y: 70, z: 611.5, yaw: -50, pitch: 0.0}
+nyra: {monde: orbit_continent, x: 2521.5, y: 71, z: 629.5, yaw: -135, pitch: 0.0}
+ilian: {monde: orbit_continent, x: 2551.5, y: 70, z: 596.5, yaw: 40, pitch: 0.0}
+sorcha: {monde: orbit_continent, x: 2549.5, y: 70, z: 637.5, yaw: 150, pitch: 0.0}
+vide_point: {monde: orbit_continent, x: 2563.5, y: 70, z: 622.5, yaw: 0, pitch: 0.0}
+grisolde: {monde: orbit_continent, x: 2397.5, y: 70, z: 662.5, yaw: 31, pitch: 0.0}
+vharos: {monde: orbit_continent, x: 2391.5, y: 70, z: 671.5, yaw: -135, pitch: 0.0}
+maugre: {monde: orbit_continent, x: 2391.5, y: 70, z: 662.5, yaw: -31, pitch: 0.0}
+kesh: {monde: orbit_continent, x: 2397.5, y: 70, z: 671.5, yaw: 135, pitch: 0.0}
+ancre_nidnoir: {monde: orbit_continent, x: 2394.5, y: 70, z: 668.5, yaw: 0, pitch: 0.0}
+limiers_nidnoir: {monde: orbit_continent, x: 2320.5, y: 70, z: 660.5, yaw: 0, pitch: 0.0}
+morvain_gris: {monde: orbit_continent, x: 2353.5, y: 70, z: 776.5, yaw: 27, pitch: 0.0}
+orlane: {monde: orbit_continent, x: 2347.5, y: 70, z: 786.5, yaw: -150, pitch: 0.0}
+brac: {monde: orbit_continent, x: 2353.5, y: 70, z: 785.5, yaw: 150, pitch: 0.0}
+ancre_gris: {monde: orbit_continent, x: 2350.5, y: 70, z: 782.5, yaw: 0, pitch: 0.0}
+camp_purif_landes: {monde: orbit_continent, x: 2136.5, y: 72, z: 858.5, yaw: 0, pitch: 0.0}
+chapelle_landes: {monde: orbit_continent, x: 2670.5, y: 73, z: 1040.5, yaw: 0, pitch: 0.0}
+convoi_purifies: {monde: orbit_continent, x: 2949.5, y: 66, z: -31.5, yaw: 0, pitch: 0.0}
+avant_poste: {monde: orbit_continent, x: 2933.5, y: 64, z: -666.5, yaw: 0, pitch: 0.0}
+porte_sud_morneval: {monde: orbit_continent, x: 2517.5, y: 71, z: 338.5, yaw: -159, pitch: 0.0}
+pont_morneval: {monde: orbit_continent, x: 2550.5, y: 73, z: 250.5, yaw: 180, pitch: 0.0}
+sevrine: {monde: orbit_continent, x: 2554.5, y: 71, z: 197.5, yaw: 24, pitch: 0.0}
+stele_citadelle: {monde: orbit_continent, x: 2550.5, y: 71, z: 206.5, yaw: 180, pitch: 0.0}
+porte_nord_morneval: {monde: orbit_continent, x: 2515.5, y: 71, z: 163.5, yaw: -22, pitch: 0.0}
+velia: {monde: orbit_continent, x: 2543.5, y: 71, z: 304.5, yaw: -54, pitch: 0.0}
+dorn: {monde: orbit_continent, x: 2557.5, y: 71, z: 304.5, yaw: 54, pitch: 0.0}
+ilse: {monde: orbit_continent, x: 2550.5, y: 71, z: 307.5, yaw: 0, pitch: 0.0}
+forge_morneval: {monde: orbit_continent, x: 2539.5, y: 71, z: 309.5, yaw: 90, pitch: 0.0}
+alchimie_morneval: {monde: orbit_continent, x: 2561.5, y: 71, z: 308.5, yaw: -90, pitch: 0.0}
+hdv_morneval: {monde: orbit_continent, x: 2550.5, y: 71, z: 312.5, yaw: 0, pitch: 0.0}
+runes_morneval: {monde: orbit_continent, x: 2561.5, y: 71, z: 204.5, yaw: -90, pitch: 0.0}
+pilier_morneval: {monde: orbit_continent, x: 2550.5, y: 71, z: 186.5, yaw: 180, pitch: 0.0}
+camp_morts_landes: {monde: orbit_continent, x: 2098.5, y: 74, z: 228.5, yaw: 0, pitch: 0.0}
+nid_landes: {monde: orbit_continent, x: 1937.5, y: 68, z: 1145.5, yaw: 0, pitch: 0.0}
+tour_landes: {monde: orbit_continent, x: 2539.5, y: 66, z: 1239.5, yaw: 0, pitch: 0.0}
+enclos_entree: {monde: orbit_continent, x: 2749.5, y: 67, z: -449.5, yaw: 0, pitch: 0.0}
+cimetiere_nord_morneval: {monde: orbit_continent, x: 2142.5, y: 71, z: -38.5, yaw: 0, pitch: 0.0}
+cercle_landes: {monde: orbit_continent, x: 2297.5, y: 73, z: -798.5, yaw: 0, pitch: 0.0}
+nid_est_landes: {monde: orbit_continent, x: 2860.5, y: 66, z: 499.5, yaw: 0, pitch: 0.0}
+tour_ouest_landes: {monde: orbit_continent, x: 1664.5, y: 71, z: 207.5, yaw: 0, pitch: 0.0}
+porte_pilotis: {monde: orbit_continent, x: 1921.5, y: 64, z: 1627.7, yaw: 45, pitch: 0.0}
+ancre_pilotis: {monde: orbit_continent, x: 1900.5, y: 64, z: 1652.5, yaw: 0, pitch: 0.0}
+odran: {monde: orbit_continent, x: 1903.5, y: 64, z: 1649.5, yaw: 45, pitch: 0.0}
+kael: {monde: orbit_continent, x: 1903.5, y: 64, z: 1655.5, yaw: 135, pitch: 0.0}
+fenn: {monde: orbit_continent, x: 1897.5, y: 64, z: 1655.5, yaw: -135, pitch: 0.0}
+tourbe: {monde: orbit_continent, x: 1897.5, y: 64, z: 1646.5, yaw: -27, pitch: 0.0}
+tour_noyee: {monde: orbit_continent, x: 2200.5, y: 64, z: 1634.5, yaw: 0, pitch: 0.0}
+camp_noyes_nord: {monde: orbit_continent, x: 2128.5, y: 66, z: 1376.5, yaw: 0, pitch: 0.0}
+camp_roi_tourbes: {monde: orbit_continent, x: 2316.5, y: 63, z: 2019.5, yaw: 0, pitch: 0.0}
+temple_seuil: {monde: orbit_continent, x: 1654.5, y: 64, z: 2350.5, yaw: 90, pitch: 0.0}
+temple_portail: {monde: orbit_continent, x: 1644.5, y: 64, z: 2350.5, yaw: 90, pitch: 0.0}
+cercle_englouti: {monde: orbit_continent, x: 1791.5, y: 63, z: 2387.5, yaw: 0, pitch: 0.0}
+quatre_vents_place: {monde: orbit_continent, x: 60.5, y: 68, z: 222.5, yaw: 0, pitch: 0.0}
+nid_ouest_marais: {monde: orbit_continent, x: 1250.5, y: 63, z: 1868.5, yaw: 0, pitch: 0.0}
+cimetiere_marais: {monde: orbit_continent, x: 1337.5, y: 64, z: 2141.5, yaw: 0, pitch: 0.0}
+tour_d_eau: {monde: orbit_continent, x: 2454.5, y: 64, z: 2601.5, yaw: 0, pitch: 0.0}
+chapelle_noyee: {monde: orbit_continent, x: 2028.5, y: 63, z: 2680.5, yaw: 0, pitch: 0.0}
+morts_du_sud_marais: {monde: orbit_continent, x: 982.5, y: 63, z: 2438.5, yaw: 0, pitch: 0.0}
+nid_sud_marais: {monde: orbit_continent, x: 1039.5, y: 63, z: 2816.5, yaw: 0, pitch: 0.0}
+cimetiere_est_marais: {monde: orbit_continent, x: 2967.5, y: 63, z: 2426.5, yaw: 0, pitch: 0.0}
+porte_sombrebois: {monde: orbit_continent, x: 1771.5, y: 81, z: -826.7, yaw: 135, pitch: 0.0}
+ancre_sombrebois: {monde: orbit_continent, x: 1750.5, y: 81, z: -847.5, yaw: 0, pitch: 0.0}
+varka: {monde: orbit_continent, x: 1747.5, y: 81, z: -843.5, yaw: -143, pitch: 0.0}
+jaro: {monde: orbit_continent, x: 1753.5, y: 81, z: -843.5, yaw: 143, pitch: 0.0}
+sylas: {monde: orbit_continent, x: 1747.5, y: 81, z: -853.5, yaw: -27, pitch: 0.0}
+ombline: {monde: orbit_continent, x: 1751.5, y: 81, z: -853.5, yaw: 9, pitch: 0.0}
+camp_purif_sylve: {monde: orbit_continent, x: 1876.5, y: 77, z: -658.5, yaw: 0, pitch: 0.0}
+cercle_sylve: {monde: orbit_continent, x: 1942.5, y: 75, z: -1058.5, yaw: 0, pitch: 0.0}
+coeur_sylve_seuil: {monde: orbit_continent, x: 2096.5, y: 77, z: -1349.5, yaw: -90, pitch: 0.0}
+coeur_sylve_portail: {monde: orbit_continent, x: 2106.5, y: 77, z: -1349.5, yaw: -90, pitch: 0.0}
+chapelle_sylve: {monde: orbit_continent, x: 1580.5, y: 74, z: -1181.5, yaw: 0, pitch: 0.0}
+antre_ancien: {monde: orbit_continent, x: 1884.5, y: 76, z: -1588.5, yaw: 0, pitch: 0.0}
+toiles_sud_sylve: {monde: orbit_continent, x: 1587.5, y: 82, z: -538.5, yaw: 0, pitch: 0.0}
+cimetiere_est_sylve: {monde: orbit_continent, x: 2843.5, y: 71, z: -982.5, yaw: 0, pitch: 0.0}
+bivouac_ouest_sylve: {monde: orbit_continent, x: 842.5, y: 96, z: -1010.5, yaw: 0, pitch: 0.0}
+tour_nord_sylve: {monde: orbit_continent, x: 2799.5, y: 78, z: -1817.5, yaw: 0, pitch: 0.0}
+nid_ouest_sylve: {monde: orbit_continent, x: 1082.5, y: 79, z: -1066.5, yaw: 0, pitch: 0.0}

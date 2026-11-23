@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [ { "texture": "orbitmmo:pillard_archer" } ],
+    "humanoid_leggings": [ { "texture": "orbitmmo:pillard_archer" } ]
+  }
+}

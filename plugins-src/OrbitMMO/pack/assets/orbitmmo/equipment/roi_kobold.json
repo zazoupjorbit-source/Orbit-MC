@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [ { "texture": "orbitmmo:roi_kobold" } ],
+    "humanoid_leggings": [ { "texture": "orbitmmo:roi_kobold" } ]
+  }
+}

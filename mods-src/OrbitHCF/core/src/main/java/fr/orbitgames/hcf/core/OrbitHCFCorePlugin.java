@@ -105,10 +105,10 @@ public final class OrbitHCFCorePlugin extends JavaPlugin {
         OrbitHCF.register(TimerService.class, timerManager);
 
         // Listeners
-        Bukkit.getPluginManager().registerEvents(new ConnectionListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new DeathListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new ProtectionListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new WarmupListener(this), this);
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new ConnectionListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new DeathListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new ProtectionListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new WarmupListener(this));
 
         // Commandes
         FactionCommand factionCommand = new FactionCommand(this);

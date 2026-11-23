@@ -59,6 +59,9 @@ public final class ProfileMenu {
         id.add("<#8C96A3>Niveau : <white>" + d.level + (maxed ? " <#FFD66E>(max)"
                 : " <#5A6270>(" + Text.num(d.xp) + " / " + Text.num(Stats.xpToNext(d.level)) + " XP)"));
         id.add("<#8C96A3>Faction : " + d.faction.tag());
+        fr.orbit.mmo.guild.Guild guild = plugin.guilds().of(target.getUniqueId());
+        id.add("<#8C96A3>Guilde : " + (guild == null ? "<#5A6270>aucune"
+                : guild.tag() + " <#5A6270>· " + guild.rank(target.getUniqueId()).tag()));
         id.add("<#8C96A3>Race : <white>" + raceName(d.race));
         id.add("<#8C96A3>Classe : " + c.tag(d.faction) + (spec == null ? "" : " <#5A6270>· " + spec.tag()));
         if (spec != null) {
@@ -72,7 +75,7 @@ public final class ProfileMenu {
 
         m.set(10, classIcon(plugin, d, c, spec, r), self ? t -> Menus.specSelect(plugin, viewer) : null);
         m.set(11, raceIcon(d), null);
-        m.set(12, factionIcon(d.faction), null);
+        m.set(12, factionIcon(d.faction, guild), self ? t -> GuildMenus.open(plugin, viewer) : null);
         m.set(13, lifeIcon(d), null);
         m.set(14, resourceIcon(d, r), null);
         m.set(15, attackIcon(plugin, target, d), null);
@@ -101,6 +104,9 @@ public final class ProfileMenu {
         m.set(46, talentsIcon(plugin, d, spec, self), self ? t -> Menus.talents(plugin, viewer, null) : null);
         m.set(47, bonusIcon(d), null);
         m.set(48, statsIcon(d), null);
+        if (plugin.mounts() != null) {
+            m.set(50, plugin.mounts().menuIcon(d, self), self ? t -> plugin.mounts().openStable(viewer) : null);
+        }
         if (self) {
             m.set(49, Items.icon(Material.ENCHANTED_BOOK, "<#7FB2FF><b>Livre de sorts</b>", "<#8C96A3>Choisir le sort de chaque objet"),
                     t -> Menus.spellbook(plugin, viewer));
@@ -156,7 +162,7 @@ public final class ProfileMenu {
                 "<#5A6270>D'autres races arrivent bientôt.");
     }
 
-    private static ItemStack factionIcon(Faction f) {
+    private static ItemStack factionIcon(Faction f, fr.orbit.mmo.guild.Guild guild) {
         List<String> lore = new ArrayList<>();
         for (String line : f.lore) {
             lore.add("<#8C96A3>" + line);
@@ -164,6 +170,13 @@ public final class ProfileMenu {
         lore.add("");
         lore.add("<#8C96A3>Capitale : <white>" + f.capital);
         lore.add("<#5A6270>Combat contre l'autre faction hors des zones sûres.");
+        lore.add("");
+        if (guild == null) {
+            lore.add("<#8C96A3>Guilde : <#5A6270>aucune");
+        } else {
+            lore.add("<#8C96A3>Guilde : " + guild.tag() + " <#5A6270>· " + guild.size() + " membre(s)");
+            lore.add("<#8C96A3>Pilier des Astres : étage franchi <white>" + (guild.towerCleared() > 0 ? guild.towerCleared() : "aucun"));
+        }
         return Items.icon(f.icon, "<" + f.hex + "><b>Faction : " + f.label + "</b>", lore);
     }
 

@@ -17,13 +17,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/** /station generer [zones] | ecarts | etancheite | apercu [coupe] | effacer | regle &lt;clé&gt; &lt;valeur&gt; | tp [point] | points | recharger. */
+/** /station generer [zones] | ecarts | remettre &lt;rayon|tout&gt; | etancheite | apercu [coupe] | effacer oui | regle &lt;clé&gt; &lt;valeur&gt; | tp [point] | points | recharger. */
 public final class StationCommand implements CommandExecutor, TabCompleter {
 
     private static final TextColor ICE = TextColor.color(0x62CFF4);
     private static final TextColor GOLD = TextColor.color(0xE0B864);
     private static final TextColor RED = TextColor.color(0xE0484A);
-    private static final List<String> SUBS = List.of("generer", "ecarts", "etancheite", "apercu", "effacer", "regle", "tp", "points", "recharger");
+    private static final List<String> SUBS = List.of("generer", "ecarts", "remettre", "etancheite", "apercu", "effacer", "regle", "tp", "points", "recharger");
+    /** Plus grand rayon de /station remettre &lt;rayon&gt; ; au-delà, c'est /station remettre tout. */
+    private static final int MAX_RADIUS = 48;
 
     private final OrbitDevCore plugin;
 
@@ -54,7 +56,14 @@ public final class StationCommand implements CommandExecutor, TabCompleter {
             }
             case "etancheite", "etanche", "seal" -> station.seal(sender);
             case "ecarts", "diff" -> station.diff(sender);
-            case "effacer", "clear" -> station.clear(sender);
+            case "remettre", "restaurer", "restore" -> restore(sender, station, args);
+            case "effacer", "clear" -> {
+                if (args.length < 2 || !args[1].equalsIgnoreCase("oui")) {
+                    say(sender, "Ça vide toute la station, retouches faites à la main comprises. Pour confirmer : /station effacer oui", RED);
+                    return true;
+                }
+                station.clear(sender);
+            }
             case "regle", "set" -> {
                 if (args.length < 3) {
                     say(sender, "Usage : /station regle <clé> <valeur>, par exemple atrium.rayon 30", RED);
@@ -105,9 +114,49 @@ public final class StationCommand implements CommandExecutor, TabCompleter {
                 station.load();
                 say(sender, "station.yml rechargé.", GOLD);
             }
-            default -> say(sender, "/station <generer [zones]|ecarts|etancheite|apercu [hauteur de coupe]|effacer|regle <clé> <valeur>|tp [point]|points|recharger>", ICE);
+            default -> say(sender, "/station <generer [zones]|ecarts|remettre <rayon|tout>|etancheite|apercu [hauteur de coupe]|effacer oui|regle <clé> <valeur>|tp [point]|points|recharger>", ICE);
         }
         return true;
+    }
+
+    /**
+     * /station remettre tout : toute la station redevient comme sur le plan, retouches faites à la main comprises.
+     * /station remettre &lt;rayon&gt; : seulement autour de soi (depuis la console : &lt;rayon&gt; &lt;x&gt; &lt;y&gt; &lt;z&gt;).
+     */
+    private void restore(CommandSender sender, StationService station, String[] args) {
+        if (args.length < 2) {
+            say(sender, "Usage : /station remettre <rayon> (autour de toi, 1 à " + MAX_RADIUS + " blocs) ou /station remettre tout."
+                    + " Remet comme sur le plan, retouches faites à la main comprises.", RED);
+            return;
+        }
+        if (args[1].equalsIgnoreCase("tout") || args[1].equalsIgnoreCase("all")) {
+            station.restore(sender, null);
+            return;
+        }
+        try {
+            int radius = Integer.parseInt(args[1]);
+            if (radius < 1 || radius > MAX_RADIUS) {
+                say(sender, "Rayon entre 1 et " + MAX_RADIUS + " blocs. Pour toute la station : /station remettre tout.", RED);
+                return;
+            }
+            if (args.length >= 5) {
+                station.restore(sender, new StationService.Area(Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), radius));
+                return;
+            }
+            Player player = Senders.player(sender);
+            if (player == null) {
+                say(sender, "Depuis la console : /station remettre <rayon> <x> <y> <z>, ou /station remettre tout.", RED);
+                return;
+            }
+            if (!player.getWorld().getName().equals(station.worldName())) {
+                say(sender, "Va dans la station pour remettre un endroit comme sur le plan.", RED);
+                return;
+            }
+            Location at = player.getLocation();
+            station.restore(sender, new StationService.Area(at.getBlockX(), at.getBlockY(), at.getBlockZ(), radius));
+        } catch (NumberFormatException e) {
+            say(sender, "Nombre invalide. Exemples : /station remettre 5, /station remettre tout.", RED);
+        }
     }
 
     private void say(CommandSender sender, String message, TextColor color) {
@@ -126,6 +175,8 @@ public final class StationCommand implements CommandExecutor, TabCompleter {
         String last = args[args.length - 1];
         return switch (sub) {
             case "generer" -> Completions.filter(StationDesign.ZONES, last);
+            case "remettre" -> args.length == 2 ? Completions.filter(List.of("3", "5", "10", "tout"), last) : List.of();
+            case "effacer" -> args.length == 2 ? Completions.filter(List.of("oui"), last) : List.of();
             case "tp" -> args.length == 2 ? Completions.filter(new ArrayList<>(plugin.station().points().keySet()), last) : List.of();
             case "regle" -> {
                 if (args.length != 2) {

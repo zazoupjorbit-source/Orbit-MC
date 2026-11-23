@@ -52,6 +52,9 @@ public final class OrbitMMO extends JavaPlugin {
     private fr.orbit.mmo.market.Market market;
     private fr.orbit.mmo.quest.QuestService quests;
     private fr.orbit.mmo.continent.ContinentService continent;
+    private fr.orbit.mmo.guild.GuildService guilds;
+    private fr.orbit.mmo.hud.TabList tab;
+    private fr.orbit.mmo.mount.MountService mounts;
 
     @Override
     public void onEnable() {
@@ -67,6 +70,7 @@ public final class OrbitMMO extends JavaPlugin {
         players = new PlayerStore(this);
         progression = new Progression(this);
         parties = new PartyService(this);
+        guilds = new fr.orbit.mmo.guild.GuildService(this); // guildes.yml ; lu avant les étages, qui en dépendent
         mobs = new MobService(this);
         bosses = new BossService(this);
         floors = new FloorService(this);
@@ -95,6 +99,7 @@ public final class OrbitMMO extends JavaPlugin {
         pm.registerEvents(pack, this);
         pm.registerEvents(gear, this);
         pm.registerEvents(market, this);
+        pm.registerEvents(guilds, this);
 
         MmoCommand mmo = new MmoCommand(this);
         register("mmo", mmo);
@@ -102,11 +107,16 @@ public final class OrbitMMO extends JavaPlugin {
         register("lobby", mmo);
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         register("groupe", new PartyCommand(this));
+        fr.orbit.mmo.command.GuildCommand guildCommand = new fr.orbit.mmo.command.GuildCommand(this);
+        register("guilde", guildCommand);
+        register("gc", guildCommand);
         register("mmoadmin", new AdminCommand(this));
 
         mobs.start();
         bosses.start();
         hud.start();
+        tab = new fr.orbit.mmo.hud.TabList(this);
+        tab.start();
         combat.start();
         auras.start();
         spells.start();
@@ -117,6 +127,7 @@ public final class OrbitMMO extends JavaPlugin {
         quests = new fr.orbit.mmo.quest.QuestService(this);
         quests.enable();
         register("quetes", new fr.orbit.mmo.quest.QuestCommand(this, quests));
+        register("langue", new fr.orbit.mmo.quest.LangCommand(quests));
 
         // Le continent (paquet fr.orbit.mmo.continent) : monde ouvert, à côté des étages ; commande /continent.
         continent = new fr.orbit.mmo.continent.ContinentService(this);
@@ -124,17 +135,30 @@ public final class OrbitMMO extends JavaPlugin {
         pm.registerEvents(continent, this);
         register("continent", new fr.orbit.mmo.continent.ContinentCommand(continent));
 
+        // Montures (paquet fr.orbit.mmo.mount) : mounts.yml, écurie, butin du continent ; commande /monture.
+        mounts = new fr.orbit.mmo.mount.MountService(this);
+        mounts.enable();
+        pm.registerEvents(mounts, this);
+        register("monture", new fr.orbit.mmo.mount.MountCommand(this, mounts));
+
         for (Player p : getServer().getOnlinePlayers()) {
             playerListener.join(p);
             if (pack.enabled()) {
                 pack.send(p);
             }
         }
-        getLogger().info("OrbitMMO activé — " + floors.highestCleared() + " étage(s) franchi(s) sur " + floors.maxFloor() + ".");
+        getLogger().info("OrbitMMO activé — " + floors.highestCleared() + " étage(s) franchi(s) sur " + floors.maxFloor()
+                + " (ouverts à tous jusqu'au " + (floors.base() + 1) + "), " + guilds.all().size() + " guilde(s).");
     }
 
     @Override
     public void onDisable() {
+        if (spells != null) {
+            spells.stop();
+        }
+        if (mounts != null) {
+            mounts.shutdown();
+        }
         if (continent != null) {
             continent.shutdown();
         }
@@ -155,6 +179,9 @@ public final class OrbitMMO extends JavaPlugin {
         }
         if (market != null) {
             market.save();
+        }
+        if (guilds != null) {
+            guilds.save();
         }
         if (players != null) {
             players.shutdown();
@@ -213,6 +240,11 @@ public final class OrbitMMO extends JavaPlugin {
         return parties;
     }
 
+    /** Les guildes (une faction, trois grades, banque, progression dans le Pilier des Astres). */
+    public fr.orbit.mmo.guild.GuildService guilds() {
+        return guilds;
+    }
+
     public MobService mobs() {
         return mobs;
     }
@@ -239,6 +271,16 @@ public final class OrbitMMO extends JavaPlugin {
 
     public SpellBar bar() {
         return bar;
+    }
+
+    /** Liste des joueurs (touche Tab). */
+    public fr.orbit.mmo.hud.TabList tab() {
+        return tab;
+    }
+
+    /** Montures : écurie, appel, monte au sol et en vol. */
+    public fr.orbit.mmo.mount.MountService mounts() {
+        return mounts;
     }
 
     public Hud hud() {

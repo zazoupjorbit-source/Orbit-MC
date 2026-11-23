@@ -28,7 +28,7 @@ public class TablistManager {
         }
         List<String> header = plugin.getTablistConfig().getStringList("header");
         List<String> footer = plugin.getTablistConfig().getStringList("footer");
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : fr.orbitgames.hcf.api.HcfWorlds.players()) {
             String headerText = Text.color(Text.replace(String.join("\n", header), "joueur", player.getName()));
             String footerText = Text.color(Text.replace(String.join("\n", footer), "joueur", player.getName()));
             player.sendPlayerListHeaderAndFooter(

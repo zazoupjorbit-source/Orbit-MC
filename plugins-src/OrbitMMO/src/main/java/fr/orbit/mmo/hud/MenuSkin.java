@@ -55,6 +55,12 @@ public final class MenuSkin {
      * objet de {@code items}, liseré de la couleur de son nom. {@code sub} et {@code right} peuvent être null.
      */
     public static Component title(Screen screen, int rows, String title, String sub, String right, ItemStack[] items) {
+        return title(screen, rows, title, sub, right, items, null);
+    }
+
+    /** Comme {@link #title(Screen, int, String, String, String, ItemStack[])}, avec la carte du PNJ à droite du menu. */
+    public static Component title(Screen screen, int rows, String title, String sub, String right, ItemStack[] items,
+                                  NpcCard.Card card) {
         Console c = new Console();
         c.glyph(BG_X, screen != null ? screen.glyph : (char) (BG_GENERIC + rows - 3), BG_ADVANCE, NamedTextColor.WHITE);
         if (screen == null && items != null) {
@@ -86,6 +92,9 @@ public final class MenuSkin {
         }
         if (sub != null && !sub.isBlank() && room > 10) {
             c.text(0, fit(Console.norm(sub), room), T_BAND, SUB);
+        }
+        if (card != null) {
+            NpcCard.draw(c, card);
         }
         return c.build(null);
     }

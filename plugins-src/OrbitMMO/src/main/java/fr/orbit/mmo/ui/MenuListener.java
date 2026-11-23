@@ -53,6 +53,10 @@ public final class MenuListener implements Listener {
 
     @EventHandler
     public void onClose(InventoryCloseEvent e) {
+        // Le joueur quitte les menus du PNJ (et n'en ouvre pas un autre) : sa carte s'en va avec.
+        if (e.getReason() != InventoryCloseEvent.Reason.OPEN_NEW && e.getPlayer() instanceof Player closer) {
+            plugin.hud().npcCardEnd(closer);
+        }
         if (!(e.getInventory().getHolder() instanceof Menu menu) || !menu.forceOpen || !(e.getPlayer() instanceof Player p)) {
             return;
         }

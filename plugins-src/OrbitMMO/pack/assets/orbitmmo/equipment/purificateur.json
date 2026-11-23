@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [ { "texture": "orbitmmo:purificateur" } ],
+    "humanoid_leggings": [ { "texture": "orbitmmo:purificateur" } ]
+  }
+}

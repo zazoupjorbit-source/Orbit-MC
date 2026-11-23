@@ -30,7 +30,7 @@ public class LogoutCommand implements CommandExecutor {
             return true;
         }
         if (plugin.getClaimManager().getZoneType(player.getLocation()) == FactionType.SAFEZONE) {
-            player.kickPlayer(plugin.getMessages().format("logout.success"));
+            fr.orbitgames.hcf.api.HcfWorlds.eject(player, plugin.getMessages().format("logout.success"));
             return true;
         }
         if (plugin.getWarmupManager().has(player.getUniqueId(), TimerKeys.LOGOUT)) {
@@ -41,7 +41,7 @@ public class LogoutCommand implements CommandExecutor {
                 plugin.getFactionsConfig().getLong("timers.logout-delay-seconds", 30L));
         plugin.getMessages().send(player, "logout.start", "temps", DurationFormat.compact(delay));
         plugin.getWarmupManager().start(player, TimerKeys.LOGOUT, delay,
-                () -> player.kickPlayer(plugin.getMessages().format("logout.success")),
+                () -> fr.orbitgames.hcf.api.HcfWorlds.eject(player, plugin.getMessages().format("logout.success")),
                 "logout.cancelled");
         return true;
     }

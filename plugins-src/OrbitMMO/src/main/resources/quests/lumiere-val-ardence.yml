@@ -1,0 +1,1240 @@
+# ------------------------------------------------------------------
+#  Lumière, acte I (suite) — fin du Val d'Ardence (niv. 3 à 10)
+#  Suit lumiere-depart.yml (quêtes 1 à 4). Source narrative : lore/zones/LUMIERE-SUITE.md
+#  Quêtes principales 5 à 10, et quêtes annexes de Veillemont, du Bourg des Pâtres et d'Auréval.
+#  Format : voir l'en-tête de lumiere-depart.yml. Après modification : /quetes admin recharger
+#  Les points de ce fichier sont posés dans quest-points.yml (monde orbit_continent).
+# ------------------------------------------------------------------
+
+pnj:
+  seraphine:
+    nom: "Haute-Prélate Séraphine"
+    titre: "Bastion de l'Aube"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: makena
+    point: seraphine
+    repliques:
+      - "L'Aube ne dort pas, Marqué. Elle attend."
+      - "Chaque Éclat rendu à l'Astre est une prière exaucée."
+    nom-en: "High Prelate Séraphine"
+    titre-en: "Bastion of the Dawn"
+    repliques-en:
+      - "The Dawn does not sleep, Marked. It waits."
+      - "Every Shard returned to the Star is a prayer answered."
+  morvain:
+    nom: "Morvain"
+    titre: "Chevalier noir"
+    nom-en: "Morvain"
+    titre-en: "Black Knight"
+    couleur: "#B36BFF"
+    visage: zuri
+    # Jamais posé : il parle pendant des scènes.
+    point: morvain_sans_corps
+  tobias:
+    nom: "Tobias"
+    titre: "Éclaireur"
+    titre-en: "Scout"
+    couleur: "#A8E6A1"
+    type: MANNEQUIN
+    visage: efe
+    # Son corps est au Village Sylvestre (acte II) ; à l'acte I il parle pendant des scènes.
+    point: tobias
+    main: BOW
+    repliques:
+      - "Je te dois la vie. Je compte pas l'oublier."
+      - "Le bois sent le verre brûlé. C'est pas normal."
+    repliques-en:
+      - "I owe you my life. I don't intend to forget it."
+      - "The woods smell of burnt glass. That's not right."
+  hilde:
+    nom: "Hilde"
+    titre: "Aubergiste"
+    titre-en: "Innkeeper"
+    couleur: "#E8C9A0"
+    type: MANNEQUIN
+    visage: makena
+    point: hilde
+    repliques:
+      - "Une soupe chaude pour les Marqués, c'est la maison qui offre. Enfin… quand il reste de la viande."
+    repliques-en:
+      - "Hot soup for the Marked, on the house. Well… when there's meat left."
+  bertin:
+    nom: "Bertin"
+    titre: "Garde de Veillemont"
+    titre-en: "Veillemont Guard"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    visage: alex
+    point: bertin
+    main: IRON_SWORD
+    repliques:
+      - "Toute la nuit à écouter hurler les loups. Je dors debout."
+    repliques-en:
+      - "All night listening to the wolves howl. I'm sleeping on my feet."
+  fenouil:
+    nom: "Fenouil"
+    titre: "Colporteur"
+    titre-en: "Peddler"
+    couleur: "#D9B86C"
+    type: MANNEQUIN
+    visage: sunny
+    point: fenouil
+    repliques:
+      - "Des rubans, des aiguilles, du sel… enfin, j'en avais."
+    repliques-en:
+      - "Ribbons, needles, salt… well, I used to have some."
+  odile:
+    nom: "Dame Odile"
+    titre: "Bailli du Bourg des Pâtres"
+    nom-en: "Lady Odile"
+    titre-en: "Bailiff of Shepherds' Hamlet"
+    couleur: "#E8D7A0"
+    type: MANNEQUIN
+    visage: noor
+    point: odile
+    repliques:
+      - "Le Bourg a survécu à mille hivers. Il survivra aux Éclats."
+    repliques-en:
+      - "The Hamlet has survived a thousand winters. It will survive the Shards."
+  gaspard:
+    nom: "Gaspard"
+    titre: "Berger"
+    titre-en: "Shepherd"
+    couleur: "#C9D6A3"
+    type: MANNEQUIN
+    visage: steve
+    point: gaspard
+    repliques:
+      - "Quarante bêtes hier soir. Vingt-six ce matin."
+    repliques-en:
+      - "Forty head last night. Twenty-six this morning."
+  clotaire:
+    nom: "Clotaire"
+    titre: "Sonneur de cloches"
+    titre-en: "Bell-ringer"
+    couleur: "#B8B0A0"
+    type: MANNEQUIN
+    visage: ari
+    point: clotaire
+    repliques:
+      - "Une cloche qui sonne toute seule, ça appelle quelqu'un. Toujours."
+    repliques-en:
+      - "A bell that rings on its own is calling someone. Always."
+  bastien:
+    nom: "Héraut Bastien"
+    titre: "Héraut d'Auréval"
+    nom-en: "Herald Bastien"
+    titre-en: "Herald of Auréval"
+    couleur: "#FFE9A8"
+    type: MANNEQUIN
+    visage: alex
+    point: bastien
+    repliques:
+      - "Bienvenue à Auréval, la ville aux murs blancs !"
+    repliques-en:
+      - "Welcome to Auréval, the city of white walls!"
+  hardouin:
+    nom: "Sergent Hardouin"
+    titre: "Garnison d'Auréval"
+    nom-en: "Sergeant Hardouin"
+    titre-en: "Auréval Garrison"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    visage: steve
+    point: hardouin
+    main: IRON_SWORD
+    repliques:
+      - "Les murs sont blancs. Les routes, beaucoup moins."
+    repliques-en:
+      - "The walls are white. The roads, much less so."
+  lise:
+    nom: "Lise"
+    titre: "Apprentie astromancienne"
+    titre-en: "Apprentice Astromancer"
+    couleur: "#9AD8FF"
+    type: MANNEQUIN
+    visage: kai
+    point: lise
+    repliques:
+      - "Maître Orsan dit que les étoiles ne mentent jamais. Moi, je vérifie quand même."
+    repliques-en:
+      - "Master Orsan says the stars never lie. I check anyway."
+
+monstres:
+  rampant_vorace:
+    nom: "Rampant vorace"
+    type: SILVERFISH
+    taille: 2.6
+    pv: 0.8
+    degats: 0.7
+    vitesse: 1.0
+  meneur_rampant:
+    nom: "Meneur de la horde"
+    type: WOLF
+    taille: 1.7
+    pv: 4.0
+    degats: 1.2
+    vitesse: 1.0
+    xp: 4
+    or: 4
+  fidele_petrifie:
+    nom: "Fidèle pétrifié"
+    type: ZOMBIE
+    pv: 1.1
+    degats: 1.0
+    vitesse: 0.85
+    arme: STONE_SWORD
+  gardien_corrompu:
+    nom: "Gardien corrompu"
+    type: IRON_GOLEM
+    taille: 1.3
+    pv: 7.0
+    degats: 1.3
+    vitesse: 0.85
+    xp: 10
+    or: 8
+
+apparitions:
+  horde_veillemont:
+    point: rampants
+    monstre: rampant_vorace
+    niveau: [3, 4]
+    nombre: 6
+    rayon: 10
+  meneur_veillemont:
+    point: rampants
+    monstre: meneur_rampant
+    niveau: 5
+    nombre: 1
+    rayon: 4
+  fideles_chapelle:
+    point: chapelle_coeur
+    monstre: fidele_petrifie
+    niveau: [7, 8]
+    nombre: 4
+    rayon: 9
+  gardien_chapelle:
+    point: chapelle_coeur
+    monstre: gardien_corrompu
+    niveau: 10
+    nombre: 1
+    rayon: 3
+
+quetes:
+
+  # ================================================================ ACTE I — QUÊTES PRINCIPALES
+
+  # ---------------------------------------------------------------- 5
+  la_palissade:
+    nom: "La palissade"
+    nom-en: "The Palisade"
+    faction: lumiere
+    niveau: 3
+    requiert: [poussiere_d_etoile]
+    donneur: varenne
+    resume:
+      - "Une horde de Rampants marche sur Veillemont."
+    resume-en:
+      - "A horde of Crawlers is marching on Veillemont."
+    offre:
+      - "varenne: Tu entends ? Non ? Moi si. Ça gratte, ça siffle, à l'ouest."
+      - "varenne: Ils viennent en nombre, cette fois. Les Éclats de la nuit les ont rendus voraces."
+      - "varenne: Sors avec mes gars. On les arrête avant la palissade, pas dessus."
+    offre-en:
+      - "varenne: Hear that? No? I do. Scratching, hissing, to the west."
+      - "varenne: They're coming in numbers this time. Last night's Shards made them ravenous."
+      - "varenne: Head out with my men. We stop them before the palisade, not on it."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre la ligne de défense à l'ouest"
+        texte-en: "Join the defensive line to the west"
+        point: rampants
+        rayon: 12
+        apres:
+          - "Les herbes hautes ondulent. Des dizaines de carapaces de cristal luisent dans le crépuscule."
+        apres-en:
+          - "The tall grass ripples. Dozens of crystal shells gleam in the dusk."
+      - type: TUER
+        texte: "Repousser la horde"
+        texte-en: "Drive back the horde"
+        monstres: [rampant_vorace]
+        point: rampants
+        nombre: 10
+      - type: TUER
+        texte: "Abattre le meneur de la horde"
+        texte-en: "Slay the leader of the horde"
+        monstres: [meneur_rampant]
+        point: rampants
+        apres:
+          - "La bête s'effondre. Les Rampants qui restent se dispersent dans la nuit, sans chef."
+        apres-en:
+          - "The beast collapses. The remaining Crawlers scatter into the night, leaderless."
+      - type: PARLER
+        texte: "Retrouver le capitaine Varenne"
+        texte-en: "Find Captain Varenne"
+        pnj: varenne
+        dialogue:
+          - "varenne: … Pas mal. Pour un miracle."
+          - "varenne: Je retire ce que j'ai dit. Ou à peu près."
+          - "varenne: J'ai un problème, Marqué. Tobias, mon meilleur éclaireur, est parti vers la vieille tour de l'est il y a deux jours."
+          - "varenne: Il n'est pas revenu."
+        dialogue-en:
+          - "varenne: … Not bad. For a miracle."
+          - "varenne: I take back what I said. More or less."
+          - "varenne: I've got a problem, Marked. Tobias, my best scout, went toward the old eastern tower two days ago."
+          - "varenne: He hasn't come back."
+    recompenses:
+      xp: 320
+      or: 40
+
+  # ---------------------------------------------------------------- 6
+  l_eclaireur_disparu:
+    nom: "L'éclaireur disparu"
+    nom-en: "The Missing Scout"
+    faction: lumiere
+    niveau: 4
+    requiert: [la_palissade]
+    donneur: varenne
+    resume:
+      - "Tobias, l'éclaireur de Veillemont,"
+      - "n'est pas revenu de la vieille tour de l'est."
+    resume-en:
+      - "Tobias, Veillemont's scout,"
+      - "has not returned from the old eastern tower."
+    offre:
+      - "varenne: Il a pris la piste du nord-est, vers la vieille tour. Il voulait voir où tombaient les Éclats."
+      - "varenne: Suis ses traces. Si tu le trouves vivant, ramène-le. Sinon… ramène son arc."
+    offre-en:
+      - "varenne: He took the north-east trail, toward the old tower. He wanted to see where the Shards were falling."
+      - "varenne: Follow his tracks. If you find him alive, bring him back. If not… bring back his bow."
+    etapes:
+      - type: INTERAGIR
+        texte: "Examiner le carquois abandonné"
+        texte-en: "Examine the abandoned quiver"
+        point: carquois_tobias
+        rayon: 4
+        apres:
+          - "Un carquois aux armes de Veillemont, à moitié vide. Les flèches manquantes ont été tirées."
+        apres-en:
+          - "A quiver bearing Veillemont's crest, half empty. The missing arrows were fired."
+      - type: INTERAGIR
+        texte: "Suivre les traces de sang"
+        texte-en: "Follow the blood trail"
+        point: sang_tobias
+        rayon: 4
+        apres:
+          - "Du sang séché sur l'herbe, et des empreintes : des bottes, plusieurs paires. Il était poursuivi."
+        apres-en:
+          - "Dried blood on the grass, and footprints: boots, several pairs. He was being chased."
+      - type: INTERAGIR
+        texte: "Examiner la pierre gravée"
+        texte-en: "Examine the carved stone"
+        point: pierre_marquee
+        rayon: 4
+        apres:
+          - "Une borne du chemin. Quelqu'un y a gravé un signe : un cercle ouvert, une déchirure au centre."
+          - "La gravure luit d'un violet sourd. Ta Marque picote, comme au contact du froid."
+        apres-en:
+          - "A road marker. Someone has carved a sign on it: an open circle, a tear at its centre."
+          - "The carving glows a dull violet. Your Mark tingles, as if touched by cold."
+      - type: INTERAGIR
+        texte: "Fouiller la vieille tour de l'est"
+        texte-en: "Search the old eastern tower"
+        point: tour_brisee
+        rayon: 5
+        apres:
+          - "Derrière un pan de mur effondré, un jeune homme se redresse, l'arc bandé."
+          - "tobias: Toi… T'es un Marqué ? Varenne t'a envoyé ?"
+          - "tobias: Écoute. Ils sont dans le Val. Des gens de l'Ombre. Ils ramassent les Éclats tombés cette nuit, ils les chargent dans des caisses."
+          - "tobias: Ils m'ont vu. J'ai pas couru assez vite. Je rentre à Veillemont, va prévenir le capitaine."
+        apres-en:
+          - "Behind a collapsed stretch of wall, a young man straightens up, bow drawn."
+          - "tobias: You… You're a Marked? Did Varenne send you?"
+          - "tobias: Listen. They're in the Vale. People of the Shadow. They're gathering the Shards that fell last night, loading them into crates."
+          - "tobias: They saw me. I didn't run fast enough. I'm heading back to Veillemont, go warn the captain."
+      - type: PARLER
+        texte: "Faire votre rapport au capitaine Varenne"
+        texte-en: "Report to Captain Varenne"
+        pnj: varenne
+        dialogue:
+          - "varenne: Vivant. Le gamin est vivant. … Merci."
+          - "varenne: L'Ombre dans le Val. Ça, c'est plus mon affaire, c'est celle du Bastion."
+          - "varenne: Tu vas à Auréval. Tu racontes tout à la Haute-Prélate. Elle t'écoutera : t'es un Marqué."
+        dialogue-en:
+          - "varenne: Alive. The boy's alive. … Thank you."
+          - "varenne: The Shadow in the Vale. That's not my business anymore, it's the Bastion's."
+          - "varenne: You're going to Auréval. You tell the High Prelate everything. She'll listen: you're a Marked."
+    recompenses:
+      xp: 450
+      or: 55
+
+  # ---------------------------------------------------------------- 7
+  sous_les_murs_blancs:
+    nom: "Sous les murs blancs"
+    nom-en: "Beneath the White Walls"
+    faction: lumiere
+    niveau: 5
+    requiert: [l_eclaireur_disparu]
+    donneur: varenne
+    resume:
+      - "Porter la nouvelle à Auréval :"
+      - "l'Ombre ramasse les Éclats du Val."
+    resume-en:
+      - "Carry the news to Auréval:"
+      - "the Shadow is gathering the Vale's Shards."
+    offre:
+      - "varenne: La route du sud monte jusqu'à la capitale. Suis-la, tu verras les murs blancs bien avant d'y être."
+      - "varenne: Au Bastion, demande la Haute-Prélate Séraphine. Et tiens-toi droit."
+    offre-en:
+      - "varenne: The southern road climbs all the way to the capital. Follow it, you'll see the white walls long before you get there."
+      - "varenne: At the Bastion, ask for High Prelate Séraphine. And stand up straight."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la porte sud d'Auréval"
+        texte-en: "Reach the southern gate of Auréval"
+        point: porte_sud_aureval
+        rayon: 8
+        apres:
+          - "Auréval. Des remparts blancs, des tours coiffées de cuivre, un fleuve qui coupe la ville en deux."
+          - "Au nord, au-dessus des toits, la masse du Bastion de l'Aube."
+        apres-en:
+          - "Auréval. White ramparts, copper-capped towers, a river cutting the city in two."
+          - "To the north, above the rooftops, looms the Bastion of the Dawn."
+      - type: ATTEINDRE
+        texte: "Traverser le grand pont"
+        texte-en: "Cross the great bridge"
+        point: pont_aureval
+        rayon: 6
+        apres:
+          - "Sur le pont, la foule s'écarte. Une file de Marqués passe, les mains liées par des rubans blancs, escortés par des prêtres."
+          - "Leurs Marques vacillent. L'un d'eux te regarde, sans un mot."
+          - "Ils disparaissent derrière les portes d'une haute bâtisse aux volets clos : le Cloître Blanc. Les portes se referment."
+        apres-en:
+          - "On the bridge, the crowd parts. A line of Marked passes by, hands bound with white ribbons, escorted by priests."
+          - "Their Marks flicker. One of them looks at you, without a word."
+          - "They vanish behind the doors of a tall building with shuttered windows: the White Cloister. The doors close."
+      - type: PARLER
+        texte: "Se présenter à la Haute-Prélate Séraphine, au Bastion"
+        texte-en: "Present yourself to High Prelate Séraphine, at the Bastion"
+        pnj: seraphine
+        dialogue:
+          - "seraphine: Le Marqué de Veillemont. Le capitaine Varenne écrit peu ; quand il écrit, je lis."
+          - "joueur: L'Ombre ramasse les Éclats dans le Val. Ils en ont des caisses entières."
+          - "seraphine: Je sais. Vous êtes le troisième à me le dire cette semaine, et le premier à en revenir."
+          - "joueur: Ces Marqués, sur le pont… où les emmène-t-on ?"
+          - "seraphine: Au Cloître Blanc. Leur lumière est instable ; nous les aidons. Cela ne vous concerne pas."
+          - "seraphine: Avant toute chose : sous ce parvis dort un Éclat. Touchez la stèle. L'Aube vous gardera."
+        dialogue-en:
+          - "seraphine: The Marked of Veillemont. Captain Varenne writes rarely; when he writes, I read."
+          - "joueur: The Shadow is gathering Shards in the Vale. They have entire crates of them."
+          - "seraphine: I know. You are the third to tell me this week, and the first to come back."
+          - "joueur: Those Marked, on the bridge… where are they being taken?"
+          - "seraphine: To the White Cloister. Their light is unstable; we help them. That does not concern you."
+          - "seraphine: Before anything else: beneath this square sleeps a Shard. Touch the stele. The Dawn will keep you."
+      - type: ANCRAGE
+        texte: "Toucher la stèle du parvis"
+        texte-en: "Touch the stele of the square"
+        point: stele_bastion
+        rayon: 4
+        apres:
+          - "Sous la pierre, quelque chose répond. Le même fil tiède qu'à Veillemont, plus fort, plus ancien."
+        apres-en:
+          - "Beneath the stone, something answers. The same warm thread as in Veillemont, stronger, older."
+    recompenses:
+      xp: 520
+      or: 70
+
+  # ---------------------------------------------------------------- 8
+  les_glaneurs:
+    nom: "Les Glaneurs"
+    nom-en: "The Gleaners"
+    faction: lumiere
+    niveau: 6
+    requiert: [sous_les_murs_blancs]
+    donneur: seraphine
+    resume:
+      - "Les Glaneurs de l'Ombre campent au nord d'Auréval"
+      - "avec un Éclat volé dans le Val."
+    resume-en:
+      - "The Shadow's Gleaners are camped north of Auréval"
+      - "with a Shard stolen from the Vale."
+    offre:
+      - "seraphine: Ces récolteurs ont un nom : les Glaneurs. Ils campent au nord, à une demi-journée des murs."
+      - "seraphine: Le plus gros Éclat du Val est chez eux. Reprenez-le. Ce qui appartient à l'Astre revient à l'Astre."
+    offre-en:
+      - "seraphine: These harvesters have a name: the Gleaners. They are camped to the north, half a day from the walls."
+      - "seraphine: The largest Shard of the Vale is in their hands. Take it back. What belongs to the Star returns to the Star."
+    etapes:
+      - type: TUER
+        texte: "Tuer des Glaneurs"
+        texte-en: "Kill Gleaners"
+        monstres: [glaneur, glaneur_guetteur]
+        point: camp_glaneurs_nord
+        nombre: 8
+      - type: INTERAGIR
+        texte: "Ouvrir la caisse au centre du camp"
+        texte-en: "Open the crate at the centre of the camp"
+        point: camp_glaneurs_nord
+        rayon: 6
+        apres:
+          - "Sous la paille, un Éclat gros comme une tête d'homme. Il pulse au rythme de ta Marque."
+          - "Derrière toi, des pas. Lents. Qui ne se cachent pas."
+        apres-en:
+          - "Beneath the straw, a Shard as big as a man's head. It pulses in time with your Mark."
+          - "Behind you, footsteps. Slow. Not hiding."
+      - type: INTERAGIR
+        texte: "Faire face à l'inconnu en armure noire"
+        texte-en: "Face the stranger in black armour"
+        point: morvain_ombre
+        rayon: 6
+        apres:
+          - "Un chevalier en armure noire t'observe, appuyé sur son épée. Sa Marque, sur la gorge, est violette."
+          - "morvain: Un Marqué de l'Aube. Encore tout neuf, à ce que je vois."
+          - "morvain: Gardez cet Éclat, je n'en ai plus besoin. J'ai vu ce que je voulais voir."
+          - "morvain: Un conseil, entre Marqués : demandez-leur où vont ceux qu'on emmène au Cloître Blanc."
+          - "morvain: Et demandez-vous pourquoi aucun n'en revient."
+          - "Il recule dans l'ombre des tentes. Quand tu y arrives, il n'y a plus personne."
+        apres-en:
+          - "A knight in black armour watches you, leaning on his sword. His Mark, on his throat, is violet."
+          - "morvain: A Marked of the Dawn. Still brand new, by the look of it."
+          - "morvain: Keep that Shard, I have no more use for it. I have seen what I wanted to see."
+          - "morvain: A word of advice, between Marked: ask them where those taken to the White Cloister go."
+          - "morvain: And ask yourself why none of them ever come back."
+          - "He steps back into the shadow of the tents. By the time you get there, no one is left."
+      - type: PARLER
+        texte: "Rapporter l'Éclat à la Haute-Prélate"
+        texte-en: "Bring the Shard back to the High Prelate"
+        pnj: seraphine
+        dialogue:
+          - "seraphine: L'Éclat du Val. L'Astre vous en sera reconnaissant."
+          - "joueur: Leur chef m'attendait. Morvain. Il m'a parlé du Cloître Blanc."
+          - "seraphine: Les hommes du Néant mentent comme ils respirent. C'est la seule chose qu'ils font bien."
+          - "seraphine: L'Aube a une dernière épreuve pour vous. Ensuite, vous prêterez serment."
+        dialogue-en:
+          - "seraphine: The Shard of the Vale. The Star will be grateful to you."
+          - "joueur: Their leader was waiting for me. Morvain. He spoke to me of the White Cloister."
+          - "seraphine: The men of the Void lie as they breathe. It is the only thing they do well."
+          - "seraphine: The Dawn has one last trial for you. Then you will take the oath."
+    recompenses:
+      xp: 650
+      or: 90
+
+  # ---------------------------------------------------------------- 9
+  le_sanctuaire_effondre:
+    nom: "Le Sanctuaire effondré"
+    nom-en: "The Fallen Sanctuary"
+    faction: lumiere
+    niveau: 8
+    requiert: [les_glaneurs]
+    donneur: seraphine
+    resume:
+      - "Un Éclat a traversé la voûte d'une chapelle de l'Aube"
+      - "et rendu fou son gardien de pierre."
+    resume-en:
+      - "A Shard crashed through the vault of a chapel of the Dawn"
+      - "and drove its stone guardian mad."
+    offre:
+      - "seraphine: Loin à l'ouest se dresse une chapelle oubliée. Nos premiers fidèles y priaient."
+      - "seraphine: Cette nuit-là, un Éclat a crevé sa voûte. Son gardien de pierre s'est éveillé, et il ne reconnaît plus personne."
+      - "seraphine: Abattez-le. Rapportez-moi le cœur de l'Éclat. Ce sera votre épreuve."
+    offre-en:
+      - "seraphine: Far to the west stands a forgotten chapel. Our first faithful prayed there."
+      - "seraphine: That night, a Shard broke through its vault. Its stone guardian awoke, and it no longer recognises anyone."
+      - "seraphine: Bring it down. Bring me the heart of the Shard. That will be your trial."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la chapelle en ruine, loin à l'ouest"
+        texte-en: "Reach the ruined chapel, far to the west"
+        point: chapelle_entree
+        rayon: 10
+        apres:
+          - "Des statues de fidèles, figées dans la prière. Certaines ont bougé depuis qu'on les a sculptées."
+        apres-en:
+          - "Statues of the faithful, frozen in prayer. Some have moved since they were carved."
+      - type: TUER
+        texte: "Briser les fidèles pétrifiés"
+        texte-en: "Shatter the petrified faithful"
+        monstres: [fidele_petrifie]
+        point: chapelle_coeur
+        nombre: 6
+        apres:
+          - "Le sol tremble. Une voix de pierre roule entre les murs."
+          - "« … PROFANATEUR… L'AUBE… NE… DORT… PAS… »"
+        apres-en:
+          - "The ground shakes. A voice of stone rolls between the walls."
+          - "« … DEFILER… THE DAWN… DOES NOT… SLEEP… »"
+      - type: TUER
+        texte: "Vaincre le Gardien corrompu"
+        texte-en: "Defeat the Corrupted Guardian"
+        monstres: [gardien_corrompu]
+        point: chapelle_coeur
+      - type: INTERAGIR
+        texte: "Prendre le cœur de l'Éclat"
+        texte-en: "Take the heart of the Shard"
+        point: chapelle_coeur
+        rayon: 5
+        apres:
+          - "Au milieu des gravats, le cœur de l'Éclat brille, pur, presque doux."
+          - "Quand tu le prends, l'espace d'un instant, tu entends une cloche. Très loin. Une cloche que tu connais."
+        apres-en:
+          - "Amid the rubble, the heart of the Shard shines, pure, almost gentle."
+          - "As you take it, for an instant, you hear a bell. Very far away. A bell you know."
+    recompenses:
+      xp: 900
+      or: 120
+
+  # ---------------------------------------------------------------- 10
+  le_serment_de_l_aube:
+    nom: "Le Serment de l'Aube"
+    nom-en: "The Oath of the Dawn"
+    faction: lumiere
+    niveau: 9
+    requiert: [le_sanctuaire_effondre]
+    donneur: seraphine
+    resume:
+      - "Prêter serment devant l'Aube,"
+      - "et devenir un Marqué de l'Aube."
+    resume-en:
+      - "Take the oath before the Dawn,"
+      - "and become a Marked of the Dawn."
+    offre:
+      - "seraphine: Le cœur de l'Éclat. Et pas une égratignure sur votre Marque."
+      - "seraphine: Il est temps. Ceux qui vous ont relevé sont venus."
+    offre-en:
+      - "seraphine: The heart of the Shard. And not a scratch on your Mark."
+      - "seraphine: It is time. Those who raised you up have come."
+    etapes:
+      - type: INTERAGIR
+        texte: "Prêter serment sur la stèle du parvis"
+        texte-en: "Take the oath on the stele of the square"
+        point: stele_bastion
+        rayon: 4
+        apres:
+          - "Sur le parvis, Sœur Maëlis et le capitaine Varenne. Plus loin, Tobias, appuyé sur une béquille."
+          - "seraphine: Répétez après moi."
+          - "seraphine: « Je suis tombé avec les étoiles. Je porte la lumière de l'Astre. »"
+          - "seraphine: « Tant qu'elle brûlera en moi, je la porterai contre le Néant. Par l'Aube, je le jure. »"
+          - "joueur: Par l'Aube, je le jure."
+          - "maelis: Il vous a gardé. Je le savais."
+          - "Une cloche sonne. Puis une autre. Puis toutes les cloches d'Auréval : l'alarme."
+          - "seraphine: Un Éclat immense vient de tomber à l'est, au-delà du Bois de l'Aube. L'Ombre y marche déjà."
+          - "varenne: Bon. Va falloir que je trouve un autre miracle pour garder la palissade. Reviens vivant, Marqué."
+        apres-en:
+          - "On the square, Sister Maëlis and Captain Varenne. Further off, Tobias, leaning on a crutch."
+          - "seraphine: Repeat after me."
+          - "seraphine: « I fell with the stars. I carry the light of the Star. »"
+          - "seraphine: « As long as it burns in me, I will carry it against the Void. By the Dawn, I swear it. »"
+          - "joueur: By the Dawn, I swear it."
+          - "maelis: It kept you. I knew it."
+          - "A bell rings. Then another. Then every bell in Auréval: the alarm."
+          - "seraphine: An immense Shard has just fallen to the east, beyond the Wood of the Dawn. The Shadow is already marching on it."
+          - "varenne: Well. Guess I'll have to find another miracle to guard the palisade. Come back alive, Marked."
+      - type: ATTEINDRE
+        texte: "Partir par la porte nord d'Auréval"
+        texte-en: "Leave through the northern gate of Auréval"
+        point: porte_nord_aureval
+        rayon: 8
+        apres:
+          - "Le Chemin de l'Aube file vers le nord-est, vers les arbres. Quelque part derrière eux, le ciel est encore rouge."
+        apres-en:
+          - "The Path of the Dawn runs north-east, toward the trees. Somewhere beyond them, the sky is still red."
+    recompenses:
+      xp: 1300
+      or: 200
+      objets:
+        - materiau: GOLDEN_HORSE_ARMOR
+          nom: "Insigne du Serment"
+          nom-en: "Insignia of the Oath"
+          description:
+            - "Remis aux Marqués qui ont juré par l'Aube."
+          description-en:
+            - "Given to the Marked who have sworn by the Dawn."
+
+  # ================================================================ ANNEXES — VEILLEMONT
+
+  v_le_pain_et_le_sel:
+    nom: "Le pain et le sel"
+    nom-en: "Bread and Salt"
+    faction: lumiere
+    niveau: 2
+    requiert: [ce_qui_rampe]
+    donneur: hilde
+    resume:
+      - "L'auberge de Veillemont n'a plus de viande."
+    resume-en:
+      - "Veillemont's inn has run out of meat."
+    offre:
+      - "hilde: Des Marqués qui arrivent tous les jours, et pas un morceau de lard dans le saloir."
+      - "hilde: Les sangliers du Val sont devenus fous, mais ils restent bons à manger. Ramène-m'en."
+    offre-en:
+      - "hilde: Marked arriving every day, and not a scrap of bacon in the salting tub."
+      - "hilde: The Vale's boars have gone mad, but they're still good to eat. Bring me some."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer de la viande de sanglier"
+        texte-en: "Collect boar meat"
+        monstres: [sanglier]
+        nombre: 6
+        chance: 0.6
+        objet: "Viande de sanglier"
+        objet-en: "Boar meat"
+      - type: PARLER
+        texte: "Rapporter la viande à Hilde"
+        texte-en: "Bring the meat to Hilde"
+        pnj: hilde
+        dialogue:
+          - "hilde: Voilà qui fera une soupe ! Reviens ce soir, je t'en garde un bol."
+        dialogue-en:
+          - "hilde: That'll make a soup! Come back tonight, I'll save you a bowl."
+    recompenses:
+      xp: 160
+      or: 25
+
+  v_les_loups_de_la_colline:
+    nom: "Les loups de la colline"
+    nom-en: "The Wolves of the Hill"
+    faction: lumiere
+    niveau: 3
+    requiert: [ce_qui_rampe]
+    donneur: bertin
+    resume:
+      - "Les loups du Val rôdent autour du village la nuit."
+    resume-en:
+      - "The Vale's wolves prowl around the village at night."
+    offre:
+      - "bertin: Les Rampants, encore, on les voit venir : ça brille. Les loups, eux, on les entend seulement."
+      - "bertin: Fais-en taire quelques-uns, que je dorme une nuit entière."
+    offre-en:
+      - "bertin: The Crawlers, at least, you see them coming: they shine. The wolves, you only hear."
+      - "bertin: Silence a few of them, so I can sleep a whole night."
+    etapes:
+      - type: TUER
+        texte: "Tuer des loups des plaines"
+        texte-en: "Kill plains wolves"
+        monstres: [loup]
+        nombre: 8
+      - type: PARLER
+        texte: "Prévenir Bertin"
+        texte-en: "Tell Bertin"
+        pnj: bertin
+        dialogue:
+          - "bertin: Huit ? Alors ce soir je dors. Merci, Marqué."
+        dialogue-en:
+          - "bertin: Eight? Then tonight I sleep. Thanks, Marked."
+    recompenses:
+      xp: 220
+      or: 30
+
+  v_le_colporteur_depouille:
+    nom: "Le colporteur dépouillé"
+    nom-en: "The Robbed Peddler"
+    faction: lumiere
+    niveau: 4
+    requiert: [ce_qui_rampe]
+    donneur: fenouil
+    resume:
+      - "Des brigands ont pris les marchandises de Fenouil"
+      - "et campent à l'est des Champs Vitrifiés."
+    resume-en:
+      - "Brigands have taken Fenouil's goods"
+      - "and are camped east of the Vitrified Fields."
+    offre:
+      - "fenouil: Ils m'ont tout pris. Le ballot, la mule, et mes bottes. Mes bottes !"
+      - "fenouil: Ils campent à l'est, passé les cratères. Si tu me rends mon ballot, je te fais un prix. Un vrai."
+    offre-en:
+      - "fenouil: They took everything. The bundle, the mule, and my boots. My boots!"
+      - "fenouil: They're camped to the east, past the craters. Get my bundle back and I'll give you a price. A real one."
+    etapes:
+      - type: TUER
+        texte: "Chasser les brigands du camp de l'est"
+        texte-en: "Drive the brigands from the eastern camp"
+        monstres: [bandit, braconnier]
+        point: camp_brigands_est
+        nombre: 6
+      - type: INTERAGIR
+        texte: "Reprendre le ballot de Fenouil"
+        texte-en: "Recover Fenouil's bundle"
+        point: camp_brigands_est
+        rayon: 6
+        apres:
+          - "Le ballot est là, ficelé. Pas de bottes."
+        apres-en:
+          - "The bundle is there, tied up. No boots."
+      - type: PARLER
+        texte: "Rendre le ballot à Fenouil"
+        texte-en: "Return the bundle to Fenouil"
+        pnj: fenouil
+        dialogue:
+          - "fenouil: Mon ballot ! Tout y est… sauf les bottes. Tant pis, je marcherai pieds nus jusqu'à Auréval."
+        dialogue-en:
+          - "fenouil: My bundle! It's all there… except the boots. Never mind, I'll walk barefoot to Auréval."
+    recompenses:
+      xp: 330
+      or: 60
+
+  v_les_souvenirs_de_brune:
+    nom: "Les souvenirs de Brune"
+    nom-en: "Brune's Memories"
+    faction: lumiere
+    niveau: 3
+    requiert: [ce_qui_rampe]
+    donneur: brune
+    resume:
+      - "Brune pense que les cratères se souviennent"
+      - "de ce que les Marqués ont oublié."
+    resume-en:
+      - "Brune believes the craters remember"
+      - "what the Marked have forgotten."
+    offre:
+      - "brune: Toi aussi, tu as oublié ton nom. Moi, je l'entends parfois, dans le chant de la lumière."
+      - "brune: Retourne là où tu es tombé. Touche la terre fondue, la cendre de l'autre, l'Éclat. Écoute."
+    offre-en:
+      - "brune: You forgot your name too. Me, I hear mine sometimes, in the song of the light."
+      - "brune: Go back to where you fell. Touch the melted earth, the other one's ashes, the Shard. Listen."
+    etapes:
+      - type: INTERAGIR
+        texte: "Toucher le fond de votre cratère"
+        texte-en: "Touch the bottom of your crater"
+        point: cratere_eveil
+        rayon: 4
+        apres:
+          - "Le verre est encore tiède. Une odeur de pain chaud, venue de nulle part."
+        apres-en:
+          - "The glass is still warm. A smell of warm bread, from nowhere."
+      - type: INTERAGIR
+        texte: "Toucher la cendre du Marqué inconnu"
+        texte-en: "Touch the ashes of the Unknown Marked"
+        point: mourant
+        rayon: 4
+        apres:
+          - "Il ne reste presque rien. Un bouton de cuivre, qui tient dans la paume."
+        apres-en:
+          - "Almost nothing is left. A copper button, small enough to fit in your palm."
+      - type: INTERAGIR
+        texte: "Toucher l'Éclat qui vous a marqué"
+        texte-en: "Touch the Shard that marked you"
+        point: eclat_eveil
+        rayon: 4
+        apres:
+          - "Une cloche. Une voix qui appelle un nom, quelque part en bas d'une rue. Ton nom. Tu ne l'entends pas."
+          - "Puis plus rien."
+        apres-en:
+          - "A bell. A voice calling a name, somewhere at the bottom of a street. Your name. You cannot hear it."
+          - "Then nothing."
+      - type: PARLER
+        texte: "Raconter à Brune ce que vous avez entendu"
+        texte-en: "Tell Brune what you heard"
+        pnj: brune
+        dialogue:
+          - "brune: Une cloche ? Alors tu viens d'une ville. Une ville avec une cloche."
+          - "brune: C'est un début. On se souvient par petits bouts. Garde le bouton, il est à toi maintenant."
+        dialogue-en:
+          - "brune: A bell? Then you come from a town. A town with a bell."
+          - "brune: It's a start. We remember in little pieces. Keep the button, it's yours now."
+    recompenses:
+      xp: 240
+      or: 20
+      objets:
+        - materiau: COPPER_INGOT
+          nom: "Bouton de cuivre"
+          nom-en: "Copper Button"
+          description:
+            - "Tout ce qui reste d'un Marqué dont personne ne sait le nom."
+          description-en:
+            - "All that remains of a Marked whose name nobody knows."
+
+  v_une_lettre_pour_le_bourg:
+    nom: "Une lettre pour le Bourg"
+    nom-en: "A Letter for the Hamlet"
+    faction: lumiere
+    niveau: 4
+    requiert: [la_palissade]
+    donneur: bertin
+    resume:
+      - "Porter les nouvelles de Veillemont"
+      - "au Bourg des Pâtres, au sud."
+    resume-en:
+      - "Carry the news from Veillemont"
+      - "to Shepherds' Hamlet, to the south."
+    offre:
+      - "bertin: Le capitaine veut que le Bourg des Pâtres sache pour la horde. Moi je peux pas quitter la palissade."
+      - "bertin: C'est au sud, par la route. Donne ça à Dame Odile."
+    offre-en:
+      - "bertin: The captain wants Shepherds' Hamlet to know about the horde. I can't leave the palisade."
+      - "bertin: It's south, along the road. Give this to Lady Odile."
+    etapes:
+      - type: PARLER
+        texte: "Remettre la lettre à Dame Odile, au Bourg des Pâtres"
+        texte-en: "Deliver the letter to Lady Odile, at Shepherds' Hamlet"
+        pnj: odile
+        dialogue:
+          - "odile: Une horde, déjà… Varenne a bien fait de prévenir."
+          - "odile: Restez un peu, Marqué. Le Bourg a besoin de bras, et le nôtre a un Éclat, lui aussi. Touchez-le."
+        dialogue-en:
+          - "odile: A horde, already… Varenne was right to warn us."
+          - "odile: Stay a while, Marked. The Hamlet needs hands, and ours has a Shard too. Touch it."
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage du Bourg"
+        texte-en: "Touch the Hamlet's anchoring Shard"
+        point: ancre_bourg
+        rayon: 4
+    recompenses:
+      xp: 260
+      or: 30
+
+  # ================================================================ ANNEXES — BOURG DES PÂTRES
+
+  b_le_troupeau_disperse:
+    nom: "Le troupeau dispersé"
+    nom-en: "The Scattered Flock"
+    faction: lumiere
+    niveau: 4
+    requiert: [v_une_lettre_pour_le_bourg]
+    donneur: gaspard
+    resume:
+      - "Les loups déciment le troupeau de Gaspard."
+    resume-en:
+      - "Wolves are decimating Gaspard's flock."
+    offre:
+      - "gaspard: Ils viennent par l'est, à travers les pâturages. Toujours les mêmes, des bêtes maigres et sans peur."
+      - "gaspard: Fais-les fuir. Pour de bon."
+    offre-en:
+      - "gaspard: They come from the east, across the pastures. Always the same ones, lean beasts with no fear."
+      - "gaspard: Drive them off. For good."
+    etapes:
+      - type: TUER
+        texte: "Tuer les loups des pâturages"
+        texte-en: "Kill the pasture wolves"
+        monstres: [loup]
+        point: paturages
+        nombre: 8
+      - type: PARLER
+        texte: "Rassurer Gaspard"
+        texte-en: "Reassure Gaspard"
+        pnj: gaspard
+        dialogue:
+          - "gaspard: Plus un hurlement depuis ce matin. Les bêtes mangent enfin."
+        dialogue-en:
+          - "gaspard: Not a howl since this morning. The flock is finally eating."
+    recompenses:
+      xp: 320
+      or: 45
+
+  b_la_tour_des_morts:
+    nom: "La tour des morts"
+    nom-en: "The Tower of the Dead"
+    faction: lumiere
+    niveau: 5
+    requiert: [v_une_lettre_pour_le_bourg]
+    donneur: clotaire
+    resume:
+      - "Une cloche sonne seule dans une tour en ruine,"
+      - "à l'est du Bourg."
+    resume-en:
+      - "A bell rings by itself in a ruined tower,"
+      - "east of the Hamlet."
+    offre:
+      - "clotaire: Depuis la nuit des étoiles, la cloche de la vieille tour sonne toute seule. À minuit."
+      - "clotaire: Et les morts du vieux cimetière se lèvent pour l'écouter. Va la faire taire."
+    offre-en:
+      - "clotaire: Since the night of the stars, the bell in the old tower has been ringing by itself. At midnight."
+      - "clotaire: And the dead of the old graveyard rise to listen. Go and silence it."
+    etapes:
+      - type: TUER
+        texte: "Abattre les squelettes de la tour"
+        texte-en: "Destroy the skeletons of the tower"
+        monstres: [squelette]
+        point: tour_des_morts
+        nombre: 6
+      - type: INTERAGIR
+        texte: "Arrêter la cloche"
+        texte-en: "Stop the bell"
+        point: tour_des_morts
+        rayon: 6
+        apres:
+          - "Un éclat de cristal s'est logé dans le battant. Quand tu l'arraches, la cloche se tait, et ta Marque aussi."
+        apres-en:
+          - "A crystal splinter is lodged in the clapper. When you tear it out, the bell falls silent, and so does your Mark."
+      - type: PARLER
+        texte: "Revenir voir Clotaire"
+        texte-en: "Return to Clotaire"
+        pnj: clotaire
+        dialogue:
+          - "clotaire: Un Éclat dans le battant… Alors c'était pas les morts qui l'appelaient. C'était la lumière."
+          - "clotaire: C'est pire, si tu veux mon avis."
+        dialogue-en:
+          - "clotaire: A Shard in the clapper… So it wasn't the dead calling. It was the light."
+          - "clotaire: That's worse, if you ask me."
+    recompenses:
+      xp: 420
+      or: 55
+
+  b_les_kobolds_du_sud:
+    nom: "Les kobolds du sud"
+    nom-en: "The Southern Kobolds"
+    faction: lumiere
+    niveau: 6
+    requiert: [v_une_lettre_pour_le_bourg]
+    donneur: odile
+    resume:
+      - "Des kobolds pillent les greniers du Bourg."
+    resume-en:
+      - "Kobolds are raiding the Hamlet's granaries."
+    offre:
+      - "odile: Les kobolds descendent de leur camp, au sud, et vident nos greniers."
+      - "odile: Ils n'osaient jamais sortir de leurs terriers, avant. Les Éclats les ont rendus audacieux."
+    offre-en:
+      - "odile: The kobolds come down from their camp to the south and empty our granaries."
+      - "odile: They never dared leave their burrows before. The Shards have made them bold."
+    etapes:
+      - type: TUER
+        texte: "Nettoyer le camp de kobolds du sud"
+        texte-en: "Clear the southern kobold camp"
+        monstres: [kobold, kobold_garde]
+        point: camp_kobolds_sud
+        nombre: 10
+      - type: PARLER
+        texte: "Faire votre rapport à Dame Odile"
+        texte-en: "Report to Lady Odile"
+        pnj: odile
+        dialogue:
+          - "odile: Les greniers respireront cet hiver. Merci."
+          - "odile: Mais ils viennent d'ailleurs, ces kobolds. D'un endroit qu'il faudra voir."
+        dialogue-en:
+          - "odile: The granaries will breathe this winter. Thank you."
+          - "odile: But these kobolds come from somewhere else. A place someone will have to see."
+    recompenses:
+      xp: 520
+      or: 70
+
+  b_sous_la_colline:
+    nom: "Sous la colline"
+    nom-en: "Beneath the Hill"
+    faction: lumiere
+    niveau: 6
+    requiert: [b_les_kobolds_du_sud]
+    donneur: odile
+    resume:
+      - "Les kobolds sortent d'un terrier"
+      - "qui mène bien plus loin qu'on ne croit."
+    resume-en:
+      - "The kobolds come out of a burrow"
+      - "that leads much further than anyone thinks."
+    offre:
+      - "odile: À l'ouest, une porte de pierre sort de la colline. Les anciens l'appellent le Terrier."
+      - "odile: On dit que derrière, il n'y a pas une grotte, mais un escalier vers les étoiles. Allez voir."
+    offre-en:
+      - "odile: To the west, a stone gate juts out of the hill. The elders call it the Burrow."
+      - "odile: They say that behind it there is no cave, but a stairway to the stars. Go and see."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Trouver la porte du Terrier des Kobolds"
+        texte-en: "Find the gate of the Kobold Burrow"
+        point: terrier_entree
+        rayon: 6
+        apres:
+          - "Sous la voûte, l'air vibre. Le passage ne mène pas sous la terre : il mène au premier étage du Pilier des Astres."
+          - "Ceux qui y entrent en reviennent plus forts. Ou n'en reviennent pas."
+        apres-en:
+          - "Beneath the arch, the air hums. The passage does not lead underground: it leads to the first floor of the Pillar of Stars."
+          - "Those who enter come back stronger. Or do not come back."
+      - type: PARLER
+        texte: "Revenir voir Dame Odile"
+        texte-en: "Return to Lady Odile"
+        pnj: odile
+        dialogue:
+          - "odile: Le Pilier… Alors les anciens disaient vrai."
+          - "odile: N'y allez pas seul. Les guildes d'Auréval s'y relaient. Trouvez-en une."
+        dialogue-en:
+          - "odile: The Pillar… So the elders were right."
+          - "odile: Don't go alone. Auréval's guilds take turns in there. Find one."
+    recompenses:
+      xp: 400
+      or: 60
+
+  # ================================================================ ANNEXES — AURÉVAL
+
+  a_les_rues_de_la_capitale:
+    nom: "Les rues de la capitale"
+    nom-en: "The Streets of the Capital"
+    faction: lumiere
+    niveau: 5
+    requiert: [sous_les_murs_blancs]
+    donneur: bastien
+    resume:
+      - "Le héraut Bastien vous fait découvrir Auréval."
+    resume-en:
+      - "Herald Bastien shows you around Auréval."
+    offre:
+      - "bastien: Un Marqué tout neuf ! Laissez-moi deviner : vous ne savez pas où est la forge."
+      - "bastien: Faites le tour : la forge et l'alchimie sur la Grand-Place, l'hôtel des ventes, la runiste et le Pilier au parvis."
+    offre-en:
+      - "bastien: A brand-new Marked! Let me guess: you don't know where the forge is."
+      - "bastien: Take the tour: the forge and the alchemist on the Grand Square, the auction house, the runesmith and the Pillar on the Bastion square."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Visiter la forge de Torvald"
+        texte-en: "Visit Torvald's forge"
+        point: forge_aureval
+        rayon: 5
+      - type: ATTEINDRE
+        texte: "Visiter l'échoppe de Mirelle, l'alchimiste"
+        texte-en: "Visit Mirelle's shop, the alchemist"
+        point: alchimie_aureval
+        rayon: 5
+      - type: ATTEINDRE
+        texte: "Visiter l'hôtel des ventes"
+        texte-en: "Visit the auction house"
+        point: hdv_aureval
+        rayon: 5
+      - type: ATTEINDRE
+        texte: "Visiter l'établi d'Ysolde, la runiste"
+        texte-en: "Visit Ysolde's bench, the runesmith"
+        point: runes_aureval
+        rayon: 5
+      - type: ATTEINDRE
+        texte: "Voir le Gardien du Pilier des Astres"
+        texte-en: "See the Guardian of the Pillar of Stars"
+        point: pilier_aureval
+        rayon: 6
+      - type: PARLER
+        texte: "Revenir voir le héraut Bastien"
+        texte-en: "Return to Herald Bastien"
+        pnj: bastien
+        dialogue:
+          - "bastien: Et voilà ! Vous connaissez Auréval mieux que la moitié des gardes."
+        dialogue-en:
+          - "bastien: There you go! You know Auréval better than half the guards."
+    recompenses:
+      xp: 300
+      or: 80
+
+  a_les_kobolds_du_nord:
+    nom: "Les kobolds du nord"
+    nom-en: "The Northern Kobolds"
+    faction: lumiere
+    niveau: 7
+    requiert: [sous_les_murs_blancs]
+    donneur: hardouin
+    resume:
+      - "Un camp de kobolds coupe la route du nord-ouest."
+    resume-en:
+      - "A kobold camp is cutting off the north-western road."
+    offre:
+      - "hardouin: Un camp de kobolds s'est installé au nord-ouest, loin derrière celui des Glaneurs."
+      - "hardouin: Mes patrouilles n'en reviennent qu'à moitié. Toi, t'es Marqué : tu reviens toujours."
+    offre-en:
+      - "hardouin: A kobold camp has settled to the north-west, well beyond the Gleaners' one."
+      - "hardouin: Only half my patrols come back. You're Marked: you always come back."
+    etapes:
+      - type: TUER
+        texte: "Détruire le camp de kobolds du nord"
+        texte-en: "Destroy the northern kobold camp"
+        monstres: [kobold, kobold_garde]
+        point: camp_kobolds_nord
+        nombre: 12
+      - type: PARLER
+        texte: "Faire votre rapport au sergent Hardouin"
+        texte-en: "Report to Sergeant Hardouin"
+        pnj: hardouin
+        dialogue:
+          - "hardouin: Douze ! Je vais l'écrire au capitaine. Il croira jamais qu'un Marqué fait mieux qu'une patrouille."
+        dialogue-en:
+          - "hardouin: Twelve! I'll write it to the captain. He'll never believe a Marked did better than a patrol."
+    recompenses:
+      xp: 650
+      or: 90
+
+  a_le_cercle_de_pierres:
+    nom: "Le cercle de pierres"
+    nom-en: "The Stone Circle"
+    faction: lumiere
+    niveau: 7
+    requiert: [sous_les_murs_blancs]
+    donneur: lise
+    resume:
+      - "Lise veut savoir pourquoi un vieux cercle de pierres"
+      - "s'est mis à briller."
+    resume-en:
+      - "Lise wants to know why an old stone circle"
+      - "has started to shine."
+    offre:
+      - "lise: À l'ouest du Bourg des Pâtres, il y a un cercle de pierres plus vieux que la Chute. Il brille, depuis la nuit des étoiles."
+      - "lise: Maître Orsan ne répond plus à mes lettres. Alors j'ai besoin de vous. Et faites attention : des morts y rôdent."
+    offre-en:
+      - "lise: West of Shepherds' Hamlet there is a stone circle older than the Fall. It has been shining since the night of the stars."
+      - "lise: Master Orsan no longer answers my letters. So I need you. And be careful: the dead roam there."
+    etapes:
+      - type: TUER
+        texte: "Chasser les morts du cercle"
+        texte-en: "Drive the dead from the circle"
+        monstres: [squelette]
+        point: cercle_pierres
+        nombre: 6
+      - type: INTERAGIR
+        texte: "Lire les pierres du cercle"
+        texte-en: "Read the stones of the circle"
+        point: cercle_pierres
+        rayon: 6
+        apres:
+          - "Les pierres sont gravées d'étoiles. Ensemble, elles dessinent le ciel d'avant la Chute : un seul astre, immense, au centre."
+          - "Une pierre est neuve. Quelqu'un y a gravé, récemment, le sceau du Cloître Blanc."
+        apres-en:
+          - "The stones are carved with stars. Together, they draw the sky before the Fall: a single star, immense, at the centre."
+          - "One stone is new. Someone has recently carved the seal of the White Cloister on it."
+      - type: PARLER
+        texte: "Raconter à Lise ce que disent les pierres"
+        texte-en: "Tell Lise what the stones say"
+        pnj: lise
+        dialogue:
+          - "lise: Le ciel d'avant… et le sceau du Cloître ? Ici ? Ça n'a pas de sens."
+          - "lise: Sauf si le Cloître étudie les Éclats autant que Maître Orsan. Ou avec lui."
+        dialogue-en:
+          - "lise: The sky from before… and the Cloister's seal? Here? That makes no sense."
+          - "lise: Unless the Cloister studies the Shards as much as Master Orsan does. Or with him."
+    recompenses:
+      xp: 650
+      or: 85
+
+  a_une_lettre_pour_orsan:
+    nom: "Une lettre pour Orsan"
+    nom-en: "A Letter for Orsan"
+    faction: lumiere
+    niveau: 7
+    requiert: [a_le_cercle_de_pierres]
+    donneur: lise
+    resume:
+      - "Lise veut une réponse de son maître."
+    resume-en:
+      - "Lise wants an answer from her master."
+    offre:
+      - "lise: Portez-lui ça, à Veillemont. Et regardez son visage quand il la lira. Je veux savoir."
+    offre-en:
+      - "lise: Take this to him, in Veillemont. And watch his face when he reads it. I want to know."
+    etapes:
+      - type: PARLER
+        texte: "Remettre la lettre de Lise à Maître Orsan"
+        texte-en: "Give Lise's letter to Master Orsan"
+        pnj: orsan
+        dialogue:
+          - "orsan: Lise… Elle a toujours été trop curieuse. C'est pour ça que je l'ai choisie."
+          - "orsan: Oui, j'écris au Cloître. Ils m'envoient des mesures, je leur envoie des théories. C'est de la science, rien de plus."
+          - "orsan: … Dites-lui que je vais bien. Et qu'elle ne s'approche pas du Cloître. Dites-le-lui exactement comme ça."
+        dialogue-en:
+          - "orsan: Lise… She was always too curious. That's why I chose her."
+          - "orsan: Yes, I write to the Cloister. They send me measurements, I send them theories. It's science, nothing more."
+          - "orsan: … Tell her I am well. And that she must not go near the Cloister. Tell her exactly that."
+      - type: PARLER
+        texte: "Rapporter la réponse à Lise"
+        texte-en: "Bring the answer back to Lise"
+        pnj: lise
+        dialogue:
+          - "lise: « Qu'elle ne s'approche pas du Cloître. » Il a peur. Mon maître n'a jamais peur."
+          - "lise: Merci. Je n'oublierai pas."
+        dialogue-en:
+          - "lise: « She must not go near the Cloister. » He's afraid. My master is never afraid."
+          - "lise: Thank you. I won't forget."
+    recompenses:
+      xp: 500
+      or: 60

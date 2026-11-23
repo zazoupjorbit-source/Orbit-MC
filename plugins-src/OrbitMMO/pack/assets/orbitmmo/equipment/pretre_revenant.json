@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [ { "texture": "orbitmmo:pretre_revenant" } ],
+    "humanoid_leggings": [ { "texture": "orbitmmo:pretre_revenant" } ]
+  }
+}

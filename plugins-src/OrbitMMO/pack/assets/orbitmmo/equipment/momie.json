@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [ { "texture": "orbitmmo:momie" } ],
+    "humanoid_leggings": [ { "texture": "orbitmmo:momie" } ]
+  }
+}

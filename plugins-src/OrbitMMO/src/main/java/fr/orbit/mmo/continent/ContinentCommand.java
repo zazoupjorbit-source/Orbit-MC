@@ -42,6 +42,7 @@ public final class ContinentCommand implements TabExecutor {
             case "capitale", "capitales" -> capital(sender, args);
             case "site", "sites" -> site(sender, args);
             case "quetes", "quêtes" -> quests(sender, args);
+            case "ambiance" -> ambient(sender, args);
             default -> help(sender);
         }
         return true;
@@ -57,6 +58,51 @@ public final class ContinentCommand implements TabExecutor {
         Text.msg(s, "<#FFD66E>/continent capitale <#D7DCE2>les capitales : plan, écarts, génération");
         Text.msg(s, "<#FFD66E>/continent site <#D7DCE2>villages, donjons, camps, ruines et cratères");
         Text.msg(s, "<#FFD66E>/continent quetes <#D7DCE2>poser les points de quête dessinés par les sites");
+        Text.msg(s, "<#FFD66E>/continent ambiance <#D7DCE2>gardes, villageois, bétail et voyageurs (sans quête)");
+    }
+
+    /** « /continent ambiance » : état des PNJ d'ambiance, essai sans joueur, relecture de ambiance.yml. */
+    private void ambient(CommandSender s, String[] args) {
+        fr.orbit.mmo.ambient.AmbientService ambient = service.ambient();
+        if (ambient == null) {
+            Text.msg(s, "<#FF5C5C>L'ambiance n'est pas chargée.");
+            return;
+        }
+        String sub = args.length < 2 ? "etat" : args[1].toLowerCase(Locale.ROOT);
+        switch (sub) {
+            case "etat", "detail" -> multi(s, ambient.status(args.length > 2 ? args[2] : null));
+            case "essai" -> {
+                if (args.length < 3) {
+                    Text.msg(s, "<#FF5C5C>Usage : /continent ambiance essai <lieu> [point] [secondes]. Lieux : " + String.join(", ", ambient.townIds()));
+                    return;
+                }
+                String point = null;
+                int seconds = 120;
+                for (int i = 3; i < args.length; i++) {
+                    try {
+                        seconds = Integer.parseInt(args[i]);
+                    } catch (NumberFormatException e) {
+                        point = args[i];
+                    }
+                }
+                multi(s, ambient.test(args[2], point, seconds));
+            }
+            case "route" -> multi(s, ambient.testRoad());
+            case "purger", "recharger" -> multi(s, ambient.reload());
+            default -> {
+                Text.msg(s, "<#7FD4FF><b>/continent ambiance</b> <#D7DCE2>— réglages dans plugins/OrbitMMO/ambiance.yml");
+                Text.msg(s, "<#FFD66E>/continent ambiance etat [lieu] <#D7DCE2>qui est présent (avec un lieu : un par un, avec sa position)");
+                Text.msg(s, "<#FFD66E>/continent ambiance essai <lieu> [point] [secondes] <#D7DCE2>fait vivre un lieu sans joueur, pour vérifier");
+                Text.msg(s, "<#FFD66E>/continent ambiance route <#D7DCE2>pendant un essai : envoie un groupe sur la route la plus proche");
+                Text.msg(s, "<#FFD66E>/continent ambiance recharger <#D7DCE2>relit ambiance.yml et retire tout le monde (ils reviennent seuls)");
+            }
+        }
+    }
+
+    private static void multi(CommandSender s, String text) {
+        for (String line : text.split("\n")) {
+            Text.msg(s, line);
+        }
     }
 
     private void capitalHelp(CommandSender s) {
@@ -64,6 +110,7 @@ public final class ContinentCommand implements TabExecutor {
         Text.msg(s, "<#FFD66E>/continent capitale <nom> plan <#D7DCE2>image du plan, sans toucher au monde");
         Text.msg(s, "<#FFD66E>/continent capitale <nom> ecarts <#D7DCE2>compare le monde au plan, sans rien changer");
         Text.msg(s, "<#FFD66E>/continent capitale <nom> generer [confirmer] <#D7DCE2>construit ; « confirmer » écrase les retouches");
+        Text.msg(s, "<#FFD66E>/continent capitale <nom> pnj <#D7DCE2>repose les PNJ et les points du plan, sans toucher à un bloc");
         Text.msg(s, "<#FFD66E>/continent capitale <nom> tp [point] <#D7DCE2>· <#FFD66E>points <#D7DCE2>s'y rendre, lister les points");
         Text.msg(s, "<#FFD66E>/continent capitale recharger <#D7DCE2>· <#FFD66E>stop <#D7DCE2>relire capitales.yml, arrêter le travail en cours");
     }
@@ -121,6 +168,11 @@ public final class ContinentCommand implements TabExecutor {
                 boolean confirm = args.length > 3 && args[3].equalsIgnoreCase("confirmer");
                 error = capitals.generate(s, id, confirm);
                 Text.msg(s, error != null ? "<#FF5C5C>" + Text.esc(error) : "<#7FD4FF>Génération lancée. <#D7DCE2>« /continent capitale » pour suivre.");
+            }
+            case "pnj" -> {
+                error = capitals.npcs(s, id);
+                Text.msg(s, error != null ? "<#FF5C5C>" + Text.esc(error)
+                        : "<#7FD4FF>PNJ et points en cours de pose <#D7DCE2>(aucun bloc n'est touché).");
             }
             case "points" -> {
                 java.util.Map<String, Location> points = capitals.points(id);
@@ -558,7 +610,7 @@ public final class ContinentCommand implements TabExecutor {
         String last = args.length == 0 ? "" : args[args.length - 1].toLowerCase(Locale.ROOT);
         List<String> options = new ArrayList<>();
         if (args.length <= 1) {
-            options.addAll(List.of("info", "lieux", "tp", "pregen", "apercu", "capitale", "site", "quetes"));
+            options.addAll(List.of("info", "lieux", "tp", "pregen", "apercu", "capitale", "site", "quetes", "ambiance"));
         } else if (args[0].equalsIgnoreCase("pregen") && args.length == 2) {
             options.addAll(List.of("stop", "etat", "refaire"));
         } else if ((args[0].equalsIgnoreCase("tp") || args[0].equalsIgnoreCase("apercu")) && args.length == 2) {
@@ -594,12 +646,18 @@ public final class ContinentCommand implements TabExecutor {
                     options.addAll(b.points().keySet());
                 }
             }
+        } else if (args[0].equalsIgnoreCase("ambiance")) {
+            if (args.length == 2) {
+                options.addAll(List.of("etat", "essai", "route", "recharger"));
+            } else if (args.length == 3 && service.ambient() != null) {
+                options.addAll(service.ambient().townIds());
+            }
         } else if (args[0].toLowerCase(Locale.ROOT).startsWith("capitale")) {
             if (args.length == 2) {
                 options.addAll(service.capitals().ids());
                 options.addAll(List.of("recharger", "stop"));
             } else if (args.length == 3) {
-                options.addAll(List.of("plan", "ecarts", "generer", "tp", "points"));
+                options.addAll(List.of("plan", "ecarts", "generer", "pnj", "tp", "points"));
             } else if (args.length == 4 && args[2].equalsIgnoreCase("generer")) {
                 options.add("confirmer");
             } else if (args.length == 4 && args[2].equalsIgnoreCase("tp")) {

@@ -319,6 +319,7 @@ public final class SpellBar implements Listener {
         ItemMeta meta = it.getItemMeta();
         meta.getPersistentDataContainer().set(Keys.ITEM, PersistentDataType.STRING, cat.itemType());
         meta.setMaxStackSize(1);
+        meta.setEnchantmentGlintOverride(true); // reflet enchanté, comme la boussole du lobby
         it.setItemMeta(meta);
         // La recharge affichée sur l'objet est celle du sort choisi.
         it.setData(DataComponentTypes.USE_COOLDOWN, UseCooldown.useCooldown(Math.max(0.05f, (float) cur.cooldown))
@@ -442,7 +443,7 @@ public final class SpellBar implements Listener {
             lore.add("<#8C96A3>Recharge : <white>" + fmt(cd) + " s");
         }
         if (s.type == SpellDef.Type.CHARGE || s.type == SpellDef.Type.PROJECTILE || s.type == SpellDef.Type.SOIN
-                || s.type == SpellDef.Type.BOND || s.type == SpellDef.Type.ZONE) {
+                || s.type == SpellDef.Type.BOND || s.type == SpellDef.Type.ZONE || s.type == SpellDef.Type.VAGUE) {
             lore.add("<#8C96A3>Portée : <white>" + fmt(s.range) + " blocs");
         }
         if (!s.weapons.isEmpty()) {
@@ -465,7 +466,7 @@ public final class SpellBar implements Listener {
         int crit = (int) Math.round(plugin.combat().critChance(d, s.id) * 100);
         boolean hostile = s.effects.keySet().stream().anyMatch(SpellEngine.ENEMY_KEYS::contains);
         boolean damages = s.power > 0 && switch (s.type) {
-            case FRAPPE, TOURBILLON, CHARGE, BOND, PROJECTILE, ZONE -> true;
+            case FRAPPE, TOURBILLON, CHARGE, BOND, PROJECTILE, ZONE, VAGUE -> true;
             case CRI -> hostile;
             default -> false;
         };
@@ -480,7 +481,7 @@ public final class SpellBar implements Listener {
                 out.add("<#8C96A3>Pendant " + fmt(plugin.spells().duration(d, s)) + " s : <white>≈ "
                         + fmt(Math.round(dmg * Math.max(1, Math.round(plugin.spells().duration(d, s))))) + " au total");
             }
-            if (s.radius > 0 || s.type == SpellDef.Type.TOURBILLON || s.type == SpellDef.Type.CRI) {
+            if (s.radius > 0 || s.type == SpellDef.Type.TOURBILLON || s.type == SpellDef.Type.CRI || s.type == SpellDef.Type.VAGUE) {
                 out.add("<#8C96A3>Touche tous les ennemis de la zone");
             }
             out.add("<#8C96A3>Critique : <white>" + crit + " %");
@@ -525,8 +526,23 @@ public final class SpellBar implements Listener {
         if (s.has("peur")) {
             out.add("<#9AD8FF>Terrifie : <white>" + fmt(s.effect("peur")) + " s <#5A6270>(pas les boss)");
         }
+        if (s.has("desorienter")) {
+            out.add("<#FF9AE0>Désoriente : <white>" + fmt(s.effect("desorienter")) + " s <#5A6270>(rompu par les dégâts, pas les boss)");
+        }
+        if (s.has("enraciner")) {
+            out.add("<#7FD48A>Immobilise : <white>" + fmt(s.effect("enraciner")) + " s <#5A6270>(pas les boss)");
+        }
+        if (s.has("silence")) {
+            out.add("<#9AD8FF>Silence : <white>" + fmt(s.effect("silence")) + " s <#5A6270>(coupe l'incantation)");
+        }
+        if (s.has("attirer")) {
+            out.add("<#FFB347>Attire les ennemis vers vous <#5A6270>(pas les boss)");
+        }
         if (s.has("ralentir")) {
             out.add("<#9AD8FF>Ralentit : <white>" + fmt(s.effect("ralentir")) + " s");
+        }
+        if (s.has("etourdir") || s.has("peur") || s.has("desorienter") || s.has("enraciner") || s.has("silence")) {
+            out.add("<#5A6270>Contre les joueurs : durée ÷ 2 à chaque contrôle du même genre (18 s)");
         }
         if (s.has("affaiblir")) {
             out.add("<#B36BFF>Affaiblit : <white>−20 % de dégâts pendant " + fmt(s.effect("affaiblir")) + " s");
@@ -687,8 +703,7 @@ public final class SpellBar implements Listener {
                     deny(p, "Impossible en plein combat");
                     return;
                 }
-                plugin.hud().flash(p, "<#7FD4FF><b>Téléportation !</b> <#D7DCE2>" + Text.esc(plugin.floors().def(d.floor).town()), 40);
-                plugin.floors().teleport(p, plugin.floors().unlocked(d.floor) ? d.floor : 1, true);
+                plugin.hud().flash(p, "<#7FD4FF><b>Téléportation !</b> <#D7DCE2>" + Text.esc(plugin.floors().recall(p, d)), 40);
             }
             default -> {
                 return;

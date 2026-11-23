@@ -1,8 +1,9 @@
 # La Station : réglages du générateur du lobby (/station generer).
 # Change une valeur ici ou avec /station regle <clé> <valeur>, puis relance /station generer.
-# /station etancheite contrôle que rien n'est ouvert sur le vide (fait aussi à chaque génération complète).
-# /station ecarts liste, sans rien toucher, ce qui diffère entre le monde et le plan : à lancer AVANT
-# /station generer si quelqu'un a retouché la station à la main, car une génération remet tout comme sur le plan.
+# /station generer garde les blocs retouchés à la main depuis la dernière pose : il ne touche que ce que le plan change.
+# /station ecarts liste, sans rien toucher, les retouches faites à la main et ce que le plan a changé depuis.
+# /station remettre <rayon> remet comme sur le plan autour de soi, retouches comprises ; /station remettre tout, partout.
+# /station etancheite contrôle que rien n'est ouvert sur le vide, retouches comprises (fait aussi à chaque génération complète).
 
 # Monde vide dans lequel la station est construite (créé s'il n'existe pas).
 monde: station

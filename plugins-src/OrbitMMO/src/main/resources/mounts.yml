@@ -1,0 +1,463 @@
+# Montures d'OrbitMMO.
+# Ce fichier vient du jar. Pour le retoucher sans recompiler : copie-le dans plugins/OrbitMMO/mounts.yml
+# (il remplace alors celui du jar), puis /monture recharger.
+#
+# Une monture = des pièces (modèles 3D du pack, namespace orbitmmo:mount/<modele>) posées autour d'un point
+# au sol. x = vers la gauche de la bête, y = hauteur au-dessus du sol, z = vers l'avant, en blocs.
+# « selle » = hauteur où s'assoit le joueur. Animations : patte, aile_g, aile_d, corps (aucune = fixe).
+# Toutes les montures sont ouvertes aux deux factions (choix de Zazou) ; la clé « faction: » reste possible pour une monture réservée.
+# Types : sol, vol, eau (nage, plonge, lente à terre). Animation « queue » = balancement.
+# Sources (butin sur le continent) : monstre (id de sites.yml / monstres), region (A à L), boss (true),
+# chance = probabilité par monstre tué (0.01 = 1 %). Toutes les conditions d'une ligne doivent être vraies.
+
+reglages:
+  combat-secondes: 6          # pas d'appel en combat
+  descendre-si-touche: true   # un coup reçu ou porté fait descendre
+  vol-zones-sures: true       # false = vol interdit dans les zones sûres (capitales, villages)
+  hauteur-max: 300
+  recharge-secondes: 3
+
+montures:
+  loup_guerre:
+    nom: "Loup de guerre"
+    couleur: "#C9CED6"
+    rarete: rare
+    type: sol
+    icone: BONE
+    description:
+      - "Un loup des steppes dressé à la selle."
+      - "Rapide et endurant sur les routes."
+    vitesse: 0.42        # blocs par tick au galop (≈ 8,4 blocs/s)
+    saut: 0.6
+    echelle: 1.4
+    selle: 1.75
+    largeur: 0.45
+    sources:
+      - { monstre: loup, chance: 0.01 }
+    pieces:
+      - { modele: loup_corps, x: 0, y: 1.325, z: 0.26, anim: corps }
+      - { modele: loup_patte, x: 0.28, y: 1.225, z: 0.61, anim: patte, phase: 0 }
+      - { modele: loup_patte, x: -0.28, y: 1.225, z: 0.61, anim: patte, phase: 3.14 }
+      - { modele: loup_patte, x: 0.28, y: 1.225, z: -0.44, anim: patte, phase: 3.14 }
+      - { modele: loup_patte, x: -0.28, y: 1.225, z: -0.44, anim: patte, phase: 0 }
+
+  griffon_dore:
+    nom: "Griffon doré"
+    couleur: "#FFD66E"
+    rarete: epique
+    type: vol
+    icone: FEATHER
+    description:
+      - "Fierté des cavaliers d'Auréval."
+      - "Vole : [Espace] monter, [Ctrl] descendre."
+    vitesse: 0.32
+    vitesse-vol: 0.7
+    saut: 0.5
+    echelle: 1.6
+    selle: 2.05
+    largeur: 0.6
+    sources:
+      - { region: C, chance: 0.004 }
+      - { boss: true, chance: 0.05 }
+    pieces:
+      - { modele: griffon_corps, x: 0, y: 1.5, z: 0.4, anim: corps }
+      - { modele: griffon_aile_g, x: 0.45, y: 1.9, z: 0.55, anim: aile_g }
+      - { modele: griffon_aile_d, x: -0.45, y: 1.9, z: 0.55, anim: aile_d }
+
+  wyverne_noire:
+    nom: "Wyverne noire"
+    couleur: "#B36BFF"
+    rarete: epique
+    type: vol
+    icone: PHANTOM_MEMBRANE
+    description:
+      - "Née dans les brumes des Marais des Murmures."
+      - "Vole : [Espace] monter, [Ctrl] descendre."
+    vitesse: 0.3
+    vitesse-vol: 0.72
+    saut: 0.5
+    echelle: 1.7
+    selle: 2.2
+    largeur: 0.6
+    sources:
+      - { region: F, chance: 0.004 }
+      - { boss: true, chance: 0.05 }
+    pieces:
+      - { modele: wyverne_corps, x: 0, y: 1.7, z: 0.58, anim: corps }
+      - { modele: wyverne_aile_g, x: 0.4, y: 2.0, z: 0.78, anim: aile_g }
+      - { modele: wyverne_aile_d, x: -0.4, y: 2.0, z: 0.78, anim: aile_d }
+
+  # ================================================================ 17 montures de plus (23/11)
+  # ---------------------------------------------------------------- Terrestres
+  sanglier_guerre:
+    nom: "Sanglier de guerre"
+    couleur: "#C98B5A"
+    rarete: peu-commune
+    type: sol
+    icone: PORKCHOP
+    description:
+      - "Têtu, cuirassé, inarrêtable."
+    vitesse: 0.4
+    saut: 0.55
+    echelle: 1.5
+    selle: 1.6
+    largeur: 0.5
+    sources:
+      - { monstre: sanglier, chance: 0.01 }
+    pieces:
+      - { modele: sanglier_corps, x: 0, y: 0.94, z: 0, anim: corps }
+      - { modele: sanglier_patte, x: 0.33, y: 0.94, z: 0.56, anim: patte, phase: 0 }
+      - { modele: sanglier_patte, x: -0.33, y: 0.94, z: 0.56, anim: patte, phase: 3.14 }
+      - { modele: sanglier_patte, x: 0.33, y: 0.94, z: -0.75, anim: patte, phase: 3.14 }
+      - { modele: sanglier_patte, x: -0.33, y: 0.94, z: -0.75, anim: patte, phase: 0 }
+
+  cerf_aure:
+    nom: "Cerf d'Aure"
+    couleur: "#FFD66E"
+    rarete: rare
+    type: sol
+    icone: GOLDEN_CARROT
+    description:
+      - "Ses bois portent la couronne de l'Aube."
+    vitesse: 0.48
+    saut: 0.7
+    echelle: 1.5
+    selle: 1.97
+    largeur: 0.45
+    sources:
+      - { region: B, chance: 0.004 }
+    pieces:
+      - { modele: cerf_corps, x: 0, y: 1.41, z: 0, anim: corps }
+      - { modele: cerf_patte, x: 0.28, y: 1.41, z: 0.56, anim: patte, phase: 0 }
+      - { modele: cerf_patte, x: -0.28, y: 1.41, z: 0.56, anim: patte, phase: 3.14 }
+      - { modele: cerf_patte, x: 0.28, y: 1.41, z: -0.66, anim: patte, phase: 3.14 }
+      - { modele: cerf_patte, x: -0.28, y: 1.41, z: -0.66, anim: patte, phase: 0 }
+
+  raptor_marais:
+    nom: "Raptor des marais"
+    couleur: "#7FBF5A"
+    rarete: rare
+    type: sol
+    icone: SLIME_BALL
+    description:
+      - "Court sur deux pattes plus vite qu'un cheval."
+    vitesse: 0.5
+    saut: 0.75
+    echelle: 1.5
+    selle: 2.06
+    largeur: 0.4
+    sources:
+      - { region: F, chance: 0.004 }
+    pieces:
+      - { modele: raptor_corps, x: 0, y: 1.5, z: 0, anim: corps }
+      - { modele: raptor_queue, x: 0, y: 1.5, z: -0.94, anim: queue }
+      - { modele: raptor_patte, x: 0.28, y: 1.5, z: -0.19, anim: patte, phase: 0 }
+      - { modele: raptor_patte, x: -0.28, y: 1.5, z: -0.19, anim: patte, phase: 3.14 }
+
+  ours_cuirasse:
+    nom: "Ours cuirassé"
+    couleur: "#9AA3AD"
+    rarete: rare
+    type: sol
+    icone: HONEYCOMB
+    description:
+      - "Lent à démarrer, impossible à arrêter."
+    vitesse: 0.38
+    saut: 0.5
+    echelle: 1.6
+    selle: 2.0
+    largeur: 0.6
+    sources:
+      - { monstre: ours_brun, chance: 0.01 }
+      - { monstre: ours, chance: 0.005 }
+    pieces:
+      - { modele: ours_corps, x: 0, y: 1.1, z: 0, anim: corps }
+      - { modele: ours_patte, x: 0.35, y: 1.1, z: 0.6, anim: patte, phase: 0 }
+      - { modele: ours_patte, x: -0.35, y: 1.1, z: 0.6, anim: patte, phase: 3.14 }
+      - { modele: ours_patte, x: 0.35, y: 1.1, z: -0.8, anim: patte, phase: 3.14 }
+      - { modele: ours_patte, x: -0.35, y: 1.1, z: -0.8, anim: patte, phase: 0 }
+
+  tigre_givre:
+    nom: "Tigre de givre"
+    couleur: "#A8E0FF"
+    rarete: epique
+    type: sol
+    icone: SNOWBALL
+    description:
+      - "Il chasse sur les Cimes de Givre."
+    vitesse: 0.5
+    saut: 0.75
+    echelle: 1.5
+    selle: 1.6
+    largeur: 0.45
+    sources:
+      - { monstre: loup_givre, chance: 0.008 }
+      - { region: J, chance: 0.002 }
+    pieces:
+      - { modele: tigre_corps, x: 0, y: 1.13, z: 0, anim: corps }
+      - { modele: tigre_patte, x: 0.28, y: 1.13, z: 0.56, anim: patte, phase: 0 }
+      - { modele: tigre_patte, x: -0.28, y: 1.13, z: 0.56, anim: patte, phase: 3.14 }
+      - { modele: tigre_patte, x: 0.28, y: 1.13, z: -0.75, anim: patte, phase: 3.14 }
+      - { modele: tigre_patte, x: -0.28, y: 1.13, z: -0.75, anim: patte, phase: 0 }
+
+  salamandre_lave:
+    nom: "Salamandre de lave"
+    couleur: "#FF6A1F"
+    rarete: epique
+    type: sol
+    icone: MAGMA_CREAM
+    description:
+      - "Née dans les Terres de Cendre."
+    vitesse: 0.42
+    saut: 0.5
+    echelle: 1.6
+    selle: 1.2
+    largeur: 0.55
+    sources:
+      - { monstre: chien_cendre, chance: 0.006 }
+    pieces:
+      - { modele: salamandre_corps, x: 0, y: 0.8, z: 0, anim: corps }
+      - { modele: salamandre_queue, x: 0, y: 0.8, z: -1.2, anim: queue }
+      - { modele: salamandre_patte, x: 0.45, y: 0.8, z: 0.5, anim: patte, phase: 0 }
+      - { modele: salamandre_patte, x: -0.45, y: 0.8, z: 0.5, anim: patte, phase: 3.14 }
+      - { modele: salamandre_patte, x: 0.45, y: 0.8, z: -0.7, anim: patte, phase: 3.14 }
+      - { modele: salamandre_patte, x: -0.45, y: 0.8, z: -0.7, anim: patte, phase: 0 }
+
+  # ---------------------------------------------------------------- Volantes
+  hippogriffe:
+    nom: "Hippogriffe"
+    couleur: "#E8E2D8"
+    rarete: rare
+    type: vol
+    icone: WHITE_WOOL
+    description:
+      - "Moitié cheval, moitié aigle, tout en élégance."
+    vitesse: 0.4
+    vitesse-vol: 0.65
+    saut: 0.5
+    echelle: 1.6
+    selle: 2.2
+    largeur: 0.55
+    sources:
+      - { region: G, chance: 0.003 }
+    pieces:
+      - { modele: hippogriffe_corps, x: 0, y: 1.6, z: 0, anim: corps }
+      - { modele: hippogriffe_aile_g, x: 0.5, y: 2.0, z: 0.2, anim: aile_g }
+      - { modele: hippogriffe_aile_d, x: -0.5, y: 2.0, z: 0.2, anim: aile_d }
+
+  griffon_astral:
+    nom: "Griffon astral"
+    couleur: "#9FE3FF"
+    rarete: legendaire
+    type: vol
+    icone: NETHER_STAR
+    description:
+      - "Ses plumes gardent la lumière des étoiles mortes."
+    vitesse: 0.36
+    vitesse-vol: 0.85
+    saut: 0.5
+    echelle: 1.6
+    selle: 2.05
+    largeur: 0.6
+    sources:
+      - { boss: true, chance: 0.02 }
+    pieces:
+      - { modele: griffon_astral_corps, x: 0, y: 1.5, z: 0.4, anim: corps }
+      - { modele: griffon_astral_aile_g, x: 0.45, y: 1.9, z: 0.55, anim: aile_g }
+      - { modele: griffon_astral_aile_d, x: -0.45, y: 1.9, z: 0.55, anim: aile_d }
+
+  wyverne_givre:
+    nom: "Wyverne de givre"
+    couleur: "#7FD4FF"
+    rarete: epique
+    type: vol
+    icone: BLUE_ICE
+    description:
+      - "Son souffle gèle les torrents des Cimes."
+    vitesse: 0.3
+    vitesse-vol: 0.75
+    saut: 0.5
+    echelle: 1.7
+    selle: 2.2
+    largeur: 0.6
+    sources:
+      - { region: J, chance: 0.003 }
+    pieces:
+      - { modele: wyverne_givre_corps, x: 0, y: 1.7, z: 0.58, anim: corps }
+      - { modele: wyverne_givre_aile_g, x: 0.4, y: 2.0, z: 0.78, anim: aile_g }
+      - { modele: wyverne_givre_aile_d, x: -0.4, y: 2.0, z: 0.78, anim: aile_d }
+
+  drake_cendre:
+    nom: "Drake de cendre"
+    couleur: "#FF7A2E"
+    rarete: epique
+    type: vol
+    icone: BLAZE_POWDER
+    description:
+      - "Des braises couvent sous ses écailles."
+    vitesse: 0.34
+    vitesse-vol: 0.75
+    saut: 0.5
+    echelle: 1.7
+    selle: 2.13
+    largeur: 0.6
+    sources:
+      - { region: K, chance: 0.003 }
+    pieces:
+      - { modele: drake_corps, x: 0, y: 1.59, z: 0, anim: corps }
+      - { modele: drake_queue, x: 0, y: 1.59, z: -1.49, anim: queue }
+      - { modele: drake_aile_g, x: 0.48, y: 1.91, z: 0.21, anim: aile_g }
+      - { modele: drake_aile_d, x: -0.48, y: 1.91, z: 0.21, anim: aile_d }
+
+  phenix:
+    nom: "Phénix"
+    couleur: "#FF8A3B"
+    rarete: legendaire
+    type: vol
+    icone: FIRE_CHARGE
+    description:
+      - "Il renaît de ses cendres, et toi avec."
+    vitesse: 0.36
+    vitesse-vol: 0.85
+    saut: 0.5
+    echelle: 1.6
+    selle: 2.1
+    largeur: 0.5
+    sources:
+      - { monstre: brute_calcinee, chance: 0.005 }
+      - { boss: true, chance: 0.02 }
+    pieces:
+      - { modele: phenix_corps, x: 0, y: 1.5, z: 0, anim: corps }
+      - { modele: phenix_aile_g, x: 0.4, y: 1.9, z: 0.2, anim: aile_g }
+      - { modele: phenix_aile_d, x: -0.4, y: 1.9, z: 0.2, anim: aile_d }
+
+  raie_celeste:
+    nom: "Raie céleste"
+    couleur: "#7FD4FF"
+    rarete: epique
+    type: vol
+    icone: ECHO_SHARD
+    description:
+      - "Elle nage dans le ciel du Désert d'Ocre."
+    vitesse: 0.25
+    vitesse-vol: 0.8
+    saut: 0.5
+    echelle: 1.8
+    selle: 0.62
+    largeur: 0.6
+    sources:
+      - { region: H, chance: 0.003 }
+    pieces:
+      - { modele: raie_corps, x: 0, y: 0.28, z: 0, anim: corps }
+      - { modele: raie_aile_g, x: 0.56, y: 0.28, z: 0, anim: aile_g }
+      - { modele: raie_aile_d, x: -0.56, y: 0.28, z: 0, anim: aile_d }
+
+  dragon_orbitium:
+    nom: "Dragon d'orbitium"
+    couleur: "#6FF0FF"
+    rarete: legendaire
+    type: vol
+    icone: DRAGON_BREATH
+    description:
+      - "Le seigneur de La Fournaise. Peu l'ont vu, moins l'ont monté."
+    vitesse: 0.38
+    vitesse-vol: 0.95
+    saut: 0.5
+    echelle: 2.0
+    selle: 2.5
+    largeur: 0.7
+    sources:
+      - { region: L, chance: 0.001 }
+      - { boss: true, chance: 0.01 }
+    pieces:
+      - { modele: dragon_corps, x: 0, y: 1.88, z: 0, anim: corps }
+      - { modele: dragon_queue, x: 0, y: 1.88, z: -1.75, anim: queue }
+      - { modele: dragon_aile_g, x: 0.56, y: 2.25, z: 0.25, anim: aile_g }
+      - { modele: dragon_aile_d, x: -0.56, y: 2.25, z: 0.25, anim: aile_d }
+
+  # ---------------------------------------------------------------- Aquatiques (rapides dans l'eau, lentes à terre)
+  hippocampe:
+    nom: "Hippocampe"
+    couleur: "#E8A33A"
+    rarete: rare
+    type: eau
+    icone: TROPICAL_FISH
+    description:
+      - "Gracieux sous les vagues."
+    vitesse: 0.15
+    vitesse-nage: 0.6
+    saut: 0.4
+    echelle: 1.6
+    selle: 1.05
+    largeur: 0.45
+    sources:
+      - { monstre: noye, chance: 0.006 }
+    pieces:
+      - { modele: hippocampe_corps, x: 0, y: 0.45, z: 0, anim: corps }
+      - { modele: hippocampe_queue, x: 0, y: 0.25, z: -1.0, anim: queue }
+      - { modele: hippocampe_nageoire_g, x: 0.4, y: 0.3, z: -0.2, anim: aile_g }
+      - { modele: hippocampe_nageoire_d, x: -0.4, y: 0.3, z: -0.2, anim: aile_d }
+
+  tortue_abysses:
+    nom: "Tortue des abysses"
+    couleur: "#5EE89A"
+    rarete: rare
+    type: eau
+    icone: TURTLE_HELMET
+    description:
+      - "Lente sur terre, infatigable sous les flots."
+    vitesse: 0.12
+    vitesse-nage: 0.55
+    saut: 0.3
+    echelle: 1.8
+    selle: 1.24
+    largeur: 0.7
+    sources:
+      - { region: F, chance: 0.003 }
+    pieces:
+      - { modele: tortue_corps, x: 0, y: 0.34, z: 0, anim: corps }
+      - { modele: tortue_patte_g, x: 0.79, y: 0.34, z: 0.68, anim: aile_g }
+      - { modele: tortue_patte_d, x: -0.79, y: 0.34, z: 0.68, anim: aile_d }
+
+  serpent_marin:
+    nom: "Serpent marin"
+    couleur: "#4FC3D9"
+    rarete: epique
+    type: eau
+    icone: PRISMARINE_SHARD
+    description:
+      - "Il glisse sous l'eau comme une ombre."
+    vitesse: 0.14
+    vitesse-nage: 0.75
+    saut: 0.3
+    echelle: 1.6
+    selle: 0.95
+    largeur: 0.45
+    sources:
+      - { region: E, chance: 0.003 }
+    pieces:
+      - { modele: serpent_corps, x: 0, y: 0.55, z: 0, anim: corps }
+      - { modele: serpent_queue, x: 0, y: 0.45, z: -1.2, anim: queue }
+      - { modele: serpent_queue2, x: 0, y: 0.45, z: -3.6, anim: queue, phase: 1.2 }
+
+  orque_guerre:
+    nom: "Orque de guerre"
+    couleur: "#D7DCE2"
+    rarete: epique
+    type: eau
+    icone: INK_SAC
+    description:
+      - "La terreur des côtes, harnachée pour la guerre."
+    vitesse: 0.12
+    vitesse-nage: 0.8
+    saut: 0.3
+    echelle: 1.7
+    selle: 1.12
+    largeur: 0.6
+    sources:
+      - { region: D, chance: 0.003 }
+    pieces:
+      - { modele: orque_corps, x: 0, y: 0.58, z: 0, anim: corps }
+      - { modele: orque_queue, x: 0, y: 0.53, z: -1.49, anim: queue }
+      - { modele: orque_nageoire_g, x: 0.53, y: 0.43, z: 0.21, anim: aile_g }
+      - { modele: orque_nageoire_d, x: -0.53, y: 0.43, z: 0.21, anim: aile_d }

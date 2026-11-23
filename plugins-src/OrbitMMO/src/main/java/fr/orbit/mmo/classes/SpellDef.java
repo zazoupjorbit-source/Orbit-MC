@@ -29,7 +29,9 @@ public final class SpellDef {
         /** Soin sur l'allié visé (ou sur soi). */
         SOIN,
         /** Zone au sol au point visé, qui frappe à chaque seconde pendant la durée. */
-        ZONE
+        ZONE,
+        /** Onde au sol qui avance droit devant (portée = longueur, zone = demi-largeur). */
+        VAGUE
     }
 
     /** Les trois objets de sort du joueur : chaque sort est rangé dans l'un d'eux. */

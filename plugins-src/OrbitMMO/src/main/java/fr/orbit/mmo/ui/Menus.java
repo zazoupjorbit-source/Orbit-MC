@@ -55,7 +55,9 @@ public final class Menus {
                 "<#D7DCE2>(armes, armures, améliorer, réparer, rachat du butin), alchimiste",
                 "<#D7DCE2>(potions, cristaux) et prêtre (parchemins, essences).",
                 "<#D7DCE2>Les joueurs de la faction adverse peuvent vous attaquer",
-                "<#D7DCE2>hors des zones sûres.");
+                "<#D7DCE2>hors des zones sûres.",
+                "<#D7DCE2>Guilde (/guilde) : une faction, des étages du Pilier,",
+                "<#D7DCE2>un classement, des primes et une banque en commun.");
     }
 
     /** Vitres dans les cases vides, posées à l'ouverture et seulement si le menu n'est pas habillé. */
@@ -238,6 +240,21 @@ public final class Menus {
         Items.give(p, Items.tpCrystal());
         plugin.playerListener().prepareBody(p, d);
         Fx.teleport(p.getLocation());
+        // Départ : là où commence la quête d'introduction de sa faction s'il y en a une (elle mène ensuite à la capitale),
+        // sinon directement la capitale de sa faction.
+        org.bukkit.Location start = plugin.quests() == null || d.buildMode ? null : plugin.quests().introStart(p, d);
+        if (start == null && plugin.continent() != null) {
+            start = plugin.continent().home(f.id);
+        }
+        if (start != null) {
+            d.capitalHome = true;
+            org.bukkit.Location to = start;
+            p.teleportAsync(to).thenAccept(ok -> {
+                if (ok && p.isOnline()) {
+                    Fx.teleport(to);
+                }
+            });
+        }
         Text.title(p, "<" + c.hex + "><b>" + c.name(f) + "</b> <" + spec.hex + ">" + spec.name, f.tag() + " <#D7DCE2>· votre aventure commence…", 10, 60, 20);
         p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1.2f);
         Text.msg(p, "<#D7DCE2>Vous êtes <b>" + c.tag(f) + "</b> " + spec.tag() + " de la faction " + f.tag() + ". Contrôles :");
@@ -283,14 +300,17 @@ public final class Menus {
                 t -> spellbook(plugin, p));
         m.set(11, Items.icon(spec.icon, "<#FFD66E><b>Spécialisation</b>", "<#8C96A3>Actuelle : " + spec.tag(),
                 "<#5A6270>Changement en ville"), t -> specSelect(plugin, p));
+        fr.orbit.mmo.guild.Guild guild = plugin.guilds().of(p.getUniqueId());
         int free = plugin.progression().talentPointsFree(d);
         m.set(12, Items.icon(Material.EXPERIENCE_BOTTLE, "<#5EE89A><b>Talents</b>",
                 d.level < plugin.progression().specLevel() ? "<#5A6270>À partir du niveau " + plugin.progression().specLevel()
                         : free > 0 ? "<#FFD66E>" + free + " point(s) à dépenser !" : "<#8C96A3>Arbre de " + spec.name),
                 t -> talents(plugin, p, null));
-        m.set(13, Items.icon(Material.ENDER_EYE, "<#7FD4FF><b>Étages</b>",
-                "<#8C96A3>Étages ouverts : <white>" + Math.min(plugin.floors().maxFloor(), plugin.floors().highestCleared() + 1)
-                        + " / " + plugin.floors().maxFloor(), "<#5A6270>Téléportation depuis une ville"),
+        m.set(13, Items.icon(Material.ENDER_EYE, "<#7FD4FF><b>Le Pilier des Astres</b>",
+                "<#8C96A3>Donjon de " + plugin.floors().maxFloor() + " étages, à gravir en groupe.",
+                "<#8C96A3>Étages ouverts : <white>" + Math.min(plugin.floors().maxFloor(), plugin.floors().cleared(d) + 1)
+                        + " / " + plugin.floors().maxFloor() + (guild == null ? " <#5A6270>(sans guilde)" : " <#5A6270>(avec votre guilde)"),
+                "<#5A6270>Entrée : le gardien du Pilier, devant", "<#5A6270>le donjon de votre capitale"),
                 t -> floors(plugin, p, false));
         m.set(14, Items.icon(Material.WHITE_BANNER, "<#FFB347><b>Groupe</b>", "<#8C96A3>/groupe inviter <joueur>"),
                 t -> party(plugin, p));
@@ -302,6 +322,39 @@ public final class Menus {
             useTpCrystal(plugin, p, d);
         });
         m.set(22, Items.icon(Material.BOOK, "<#D7DCE2><b>Comment jouer</b>", guide()), null);
+        // Quêtes : journal, quête suivie et traînée de guidage.
+        if (plugin.quests() != null) {
+            fr.orbit.mmo.quest.QuestProgress qp = plugin.quests().progress(p);
+            m.set(21, Items.icon(Material.WRITABLE_BOOK, "<#FFD66E><b>Quêtes</b>",
+                    "<#8C96A3>En cours : <white>" + qp.active.size() + " <#5A6270>· terminées : " + qp.done.size(),
+                    "<#8C96A3>Journal, objectifs et quête suivie.",
+                    "<#8C96A3>Perdu ? La <#FFD66E>traînée de guidage</#FFD66E> trace",
+                    "<#8C96A3>au sol le chemin vers votre objectif.",
+                    "<#5A6270>Aussi : /quetes"), t -> plugin.quests().openJournal(p));
+            // Langue des dialogues et des quêtes (français / anglais).
+            m.set(24, plugin.quests().langIcon(p), t -> {
+                plugin.quests().cycleLang(p);
+                main(plugin, p);
+            });
+        }
+        // Guilde : sous le bouton du groupe.
+        String ghex = fr.orbit.mmo.guild.GuildService.HEX;
+        Faction gf = guild == null ? d.faction : guild.faction();
+        m.set(23, Items.icon(gf == Faction.OMBRE ? Material.PURPLE_BANNER : Material.YELLOW_BANNER, "<" + ghex + "><b>Guilde</b>",
+                guild == null ? List.of("<#8C96A3>Vous n'avez pas de guilde.",
+                        "<#8C96A3>En fonder une : <#FFD66E>" + Text.num(plugin.guilds().createCost()) + " or",
+                        "<#5A6270>Étages du Pilier, classement,", "<#5A6270>primes et banque en commun.")
+                        : List.of("<#8C96A3>" + Text.esc(guild.name()) + " <#5A6270>· " + guild.rank(p.getUniqueId()).label,
+                        "<#8C96A3>Membres : <white>" + guild.size() + "/" + plugin.guilds().maxMembers()
+                                + " <#5A6270>(" + plugin.guilds().online(guild) + " en ligne)",
+                        "<#8C96A3>Étage franchi : <white>" + (guild.towerCleared() > 0 ? guild.towerCleared() : "aucun")
+                                + " <#5A6270>· " + fr.orbit.mmo.guild.GuildService.ordinal(plugin.guilds().place(guild)) + " au classement",
+                        "<#8C96A3>Banque : <#FFD66E>" + Text.num(guild.bank()) + " or")),
+                t -> GuildMenus.open(plugin, p));
+        // Montures (session montures, 23/11) : l'écurie.
+        if (plugin.mounts() != null) {
+            m.set(25, plugin.mounts().menuIcon(d, true), t -> plugin.mounts().openStable(p));
+        }
         frame(m, 3);
         m.open(p);
         p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 0.7f, 1.8f);
@@ -316,8 +369,7 @@ public final class Menus {
                     return;
                 }
                 contents[i].setAmount(contents[i].getAmount() - 1);
-                plugin.hud().flash(p, "<#7FD4FF><b>Téléportation !</b> <#D7DCE2>" + Text.esc(plugin.floors().def(d.floor).town()), 40);
-                plugin.floors().teleport(p, plugin.floors().unlocked(d.floor) ? d.floor : 1, true);
+                plugin.hud().flash(p, "<#7FD4FF><b>Téléportation !</b> <#D7DCE2>" + Text.esc(plugin.floors().recall(p, d)), 40);
                 return;
             }
         }
@@ -626,38 +678,74 @@ public final class Menus {
 
     public static void floors(OrbitMMO plugin, Player p, boolean fromGate) {
         PlayerData d = plugin.players().get(p);
-        boolean canTravel = fromGate || plugin.floors().isSafe(p.getLocation());
-        int open = Math.min(plugin.floors().maxFloor(), plugin.floors().highestCleared() + 1);
+        if (!plugin.progression().valid(d)) {
+            factionSelect(plugin, p);
+            return;
+        }
+        // Le Pilier des Astres est un donjon : on y entre par son gardien (dans sa capitale) et on change d'étage depuis une de ses villes.
+        int here = plugin.floors().floorOf(p.getWorld());
+        boolean canTravel = fromGate || (here > 0 && plugin.floors().isSafe(p.getLocation()));
+        // Étages ouverts à ce joueur : les siens, ceux de sa guilde, ou le socle commun.
+        int cleared = plugin.floors().cleared(d);
+        fr.orbit.mmo.guild.Guild guild = plugin.guilds().of(p.getUniqueId());
+        int open = Math.min(plugin.floors().maxFloor(), cleared + 1);
         int shown = Math.min(45, Math.min(plugin.floors().maxFloor(), open + 1));
-        Menu m = new Menu(6, Text.mm("<#7FD4FF><b>Porte de téléportation</b></#7FD4FF> <#8C96A3>· " + open + "/" + plugin.floors().maxFloor()))
-                .skin("Téléportation", "Étages ouverts : " + open + "/" + plugin.floors().maxFloor(), null);
+        Menu m = new Menu(6, Text.mm("<#7FD4FF><b>Le Pilier des Astres</b></#7FD4FF> <#8C96A3>· " + open + "/" + plugin.floors().maxFloor()))
+                .skin("Le Pilier des Astres", "Étages ouverts : " + open + "/" + plugin.floors().maxFloor(), null);
         for (int n = 1; n <= shown; n++) {
             int floor = n;
             FloorDef def = plugin.floors().def(n);
-            if (plugin.floors().unlocked(n)) {
+            if (n <= open) {
                 List<String> lore = new ArrayList<>();
                 lore.add("<#8C96A3>" + Text.esc(def.town()));
                 lore.add("<#8C96A3>Monstres : <white>niveau " + def.minLevel() + " à " + def.maxLevel());
-                lore.add(n <= plugin.floors().highestCleared() ? "<#5EE89A>Boss vaincu" : "<#FF8A3B>Boss invaincu");
+                lore.add(n <= cleared ? "<#5EE89A>Boss vaincu" : "<#FF8A3B>Boss invaincu");
+                fr.orbit.mmo.guild.GuildService.First first = plugin.guilds().first(n);
+                if (first != null) {
+                    lore.add("<#5A6270>Premier passage : <" + fr.orbit.mmo.guild.GuildService.HEX + ">" + Text.esc(first.guildName()));
+                } else {
+                    lore.add("<#5A6270>Premier passage : <#FFD66E>à prendre <#5A6270>(prime de " + Text.num(plugin.guilds().prime(n)) + " or)");
+                }
                 lore.add("");
-                lore.add(n == d.floor ? "<#7FD4FF>Vous êtes ici" : canTravel ? "<#FFD66E>Clic pour vous téléporter" : "<#5A6270>Allez à une porte de téléportation");
+                lore.add(n == here ? "<#7FD4FF>Vous êtes ici" : canTravel ? "<#FFD66E>Clic pour vous téléporter"
+                        : here > 0 ? "<#5A6270>Allez à la porte d'une ville du Pilier" : "<#5A6270>Allez voir le gardien du Pilier");
                 ItemStack it = Items.icon(def.theme().icon, "<#7FD4FF><b>Étage " + n + "</b> <#D7DCE2>" + Text.esc(def.name()), lore);
-                m.set(n - 1, n == d.floor ? Items.glow(it) : it, t -> {
+                m.set(n - 1, n == here ? Items.glow(it) : it, t -> {
                     if (!canTravel) {
-                        Text.msg(p, "<#FF5C5C>Utilisez la porte de téléportation d'une ville.");
+                        Text.msg(p, here > 0 ? "<#FF5C5C>Utilisez la porte de téléportation d'une ville du Pilier."
+                                : "<#FF5C5C>On entre dans le Pilier des Astres par son gardien, devant le donjon de votre capitale.");
                         return;
                     }
                     p.closeInventory();
-                    if (floor != d.floor || !plugin.floors().isSafe(p.getLocation())) {
+                    if (floor != plugin.floors().floorOf(p.getWorld()) || !plugin.floors().isSafe(p.getLocation())) {
                         plugin.floors().teleport(p, floor, true);
                     }
                 });
             } else {
                 m.set(n - 1, Items.icon(Material.BARRIER, "<#5A6270><b>Étage " + n + "</b>",
-                        "<#5A6270>Verrouillé : battez le boss de l'étage " + (n - 1)), null);
+                        "<#5A6270>Verrouillé : battez le boss de l'étage " + (n - 1),
+                        guild == null ? "<#5A6270>(vous-même, ou la guilde que vous rejoindrez)" : "<#5A6270>(vous ou votre guilde)"), null);
             }
         }
         m.set(49, Items.icon(Material.ARROW, "<#8C96A3>Menu"), t -> main(plugin, p));
+        m.set(45, Items.icon(Material.GOLDEN_HELMET, "<#FFD66E><b>Guildes dans le Pilier</b>",
+                guild == null ? "<#8C96A3>Sans guilde : vous gravissez pour vous seul."
+                        : "<#8C96A3>" + Text.esc(guild.name()) + " : étage franchi <white>" + (guild.towerCleared() > 0 ? guild.towerCleared() : "aucun"),
+                "<#8C96A3>Une guilde ouvre ses étages à tous ses membres.",
+                "<#8C96A3>La première à franchir un étage touche une prime.",
+                "", "<#5EE89A>▶ Clic : classement des guildes"), t -> GuildMenus.ranking(plugin, p));
+        if (here > 0 && plugin.continent() != null && plugin.continent().capital(d.faction.id) != null) {
+            String capital = plugin.continent().capital(d.faction.id).name();
+            m.set(53, Items.icon(Material.OAK_DOOR, "<#FFD66E><b>Quitter le Pilier</b>", "<#8C96A3>Retour à " + Text.esc(capital) + ", votre capitale.",
+                    canTravel ? "<#FFD66E>Clic pour sortir" : "<#5A6270>Depuis la porte d'une ville du Pilier"), t -> {
+                if (!canTravel) {
+                    Text.msg(p, "<#FF5C5C>On sort du Pilier par la porte de téléportation d'une de ses villes.");
+                    return;
+                }
+                p.closeInventory();
+                plugin.continent().sendHome(p, d.faction.id, true);
+            });
+        }
         frame(m, 6);
         m.open(p);
         if (fromGate) {

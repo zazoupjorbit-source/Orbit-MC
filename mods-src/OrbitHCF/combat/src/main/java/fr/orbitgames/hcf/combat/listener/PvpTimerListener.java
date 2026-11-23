@@ -30,13 +30,30 @@ public class PvpTimerListener implements Listener {
         return plugin.getCombatConfig().getBoolean("pvp-timer.enabled", true);
     }
 
+    /**
+     * Premiere venue en HCF. Serveur 100 % HCF : premiere connexion. Serveur partage (Practice) :
+     * premiere entree dans le monde HCF, retenue dans les donnees du joueur.
+     */
+    private boolean firstHcfVisit(Player player) {
+        if (!fr.orbitgames.hcf.api.HcfWorlds.isScoped()) {
+            return !player.hasPlayedBefore();
+        }
+        org.bukkit.NamespacedKey key = new org.bukkit.NamespacedKey(plugin, "deja-venu");
+        org.bukkit.persistence.PersistentDataContainer data = player.getPersistentDataContainer();
+        if (data.has(key, org.bukkit.persistence.PersistentDataType.BYTE)) {
+            return false;
+        }
+        data.set(key, org.bukkit.persistence.PersistentDataType.BYTE, (byte) 1);
+        return true;
+    }
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         if (!enabled()) {
             return;
         }
         Player player = event.getPlayer();
-        if (!player.hasPlayedBefore()) {
+        if (firstHcfVisit(player)) {
             Duration duration = Duration.ofSeconds(
                     plugin.getCombatConfig().getLong("pvp-timer.duration-seconds", 1800L));
             OrbitHCF.timers().setTimer(player.getUniqueId(), TimerKeys.PVP_TIMER, duration, true);

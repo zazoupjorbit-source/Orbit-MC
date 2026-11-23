@@ -80,7 +80,7 @@ final class HpGlyphs {
     }
 
     private static Component glyphs(String s) {
-        return Component.text(s).font(FONT).color(NamedTextColor.WHITE).shadowColor(ShadowColor.none())
+        return Component.text(HdTiles.expand(s)).font(FONT).color(NamedTextColor.WHITE).shadowColor(ShadowColor.none())
                 .decoration(TextDecoration.BOLD, false);
     }
 

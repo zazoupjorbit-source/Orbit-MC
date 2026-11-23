@@ -1,6 +1,7 @@
 package fr.orbit.mmo.quest;
 
 import fr.orbit.mmo.OrbitMMO;
+import fr.orbit.mmo.hud.QuestPanel;
 import fr.orbit.mmo.item.Items;
 import fr.orbit.mmo.mob.MobKilledEvent;
 import fr.orbit.mmo.mob.MobState;
@@ -72,6 +73,10 @@ public final class QuestService implements Listener {
     private final Dialogue dialogue;
     private final QuestNpcs npcs;
     private final QuestTracker tracker = new QuestTracker();
+    /** Traînée de guidage vers l'objectif de la quête suivie. */
+    private final QuestGuide trail = new QuestGuide(this);
+    /** Essais de la traînée par l'administration : joueur → lieu visé (en mémoire seulement). */
+    private final Map<UUID, Location> trailTest = new HashMap<>();
     /** Monstres vivants de chaque zone d'apparition. */
     private final Map<String, List<MobState>> spawned = new HashMap<>();
     private final Map<String, Long> idleCooldown = new HashMap<>();
@@ -82,7 +87,7 @@ public final class QuestService implements Listener {
         this.registry = new QuestRegistry(plugin);
         this.points = new QuestPoints(plugin);
         this.store = new QuestStore(plugin);
-        this.dialogue = new Dialogue(plugin, registry);
+        this.dialogue = new Dialogue(plugin, registry, this::lang);
         this.npcs = new QuestNpcs(plugin, registry, points);
     }
 
@@ -94,6 +99,7 @@ public final class QuestService implements Listener {
             npcs.purge(w.getEntities());
         }
         plugin.getServer().getScheduler().runTaskTimer(plugin, this::tick, 20L, 10L);
+        plugin.getServer().getScheduler().runTaskTimer(plugin, trail::tick, 40L, 4L);
         plugin.getServer().getScheduler().runTaskTimer(plugin, store::saveDirty, 1200L, 1200L);
     }
 
@@ -171,7 +177,8 @@ public final class QuestService implements Listener {
             if (ticks % 2 == 0) {
                 guide(p, pr);
             }
-            tracker.show(p, trackerLines(p, pr));
+            boolean skinned = plugin.pack().isLoaded(p.getUniqueId());
+            tracker.show(p, trackerLines(p, pr, skinned), skinned, ui(p, "Quêtes", "Quests"));
             markers(p, d, pr);
         }
     }
@@ -256,7 +263,7 @@ public final class QuestService implements Listener {
 
     // ------------------------------------------------------------------ Règles
 
-    private static StepDef step(QuestDef q, Active a) {
+    static StepDef step(QuestDef q, Active a) {
         if (q == null || a == null || a.step < 0 || a.step >= q.steps().size()) {
             return null;
         }
@@ -280,6 +287,20 @@ public final class QuestService implements Listener {
             }
         }
         return true;
+    }
+
+    /**
+     * Départ de la quête d'introduction qui attend ce personnage : elle démarrera seule et l'y téléportera.
+     * Null s'il n'y en a pas (pas de quête automatique pour lui, points pas posés, ou quête sans lieu de départ).
+     */
+    public Location introStart(Player p, PlayerData d) {
+        QuestProgress pr = store.get(p.getUniqueId());
+        for (QuestDef q : registry.quests()) {
+            if (q.auto() && available(d, pr, q) && ready(q)) {
+                return q.startPoint() == null ? null : points.location(q.startPoint());
+            }
+        }
+        return null;
     }
 
     /** Tous les points dont la quête a besoin sont posés. */
@@ -322,13 +343,15 @@ public final class QuestService implements Listener {
         QuestProgress pr = store.get(p.getUniqueId());
         pr.done.remove(q.id());
         pr.active.put(q.id(), new Active(0, 0));
+        // La dernière quête prise est celle que la traînée de guidage suit (le journal permet d'en changer).
+        pr.tracked = q.id();
         pr.dirty = true;
         pr.lastGcdSeen = 0;
         Location dep = points.location(q.startPoint());
         if (dep != null) {
             p.teleport(dep);
         }
-        Text.title(p, "<#FFD66E><b>" + Text.esc(q.name()) + "</b>", "<#A9B1BC>Nouvelle quête", 10, 60, 20);
+        Text.title(p, "<#FFD66E><b>" + Text.esc(tr(p, q.name())) + "</b>", "<#A9B1BC>" + ui(p, "Nouvelle quête", "New quest"), 10, 60, 20);
         p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.6f, 1.4f);
         dialogue.play(p, q.intro(), () -> announce(p, q));
     }
@@ -339,7 +362,8 @@ public final class QuestService implements Listener {
         if (s == null) {
             return;
         }
-        Text.msg(p, "<#FFD66E>Objectif</#FFD66E> <#5A6270>·</#5A6270> <white>" + Text.esc(objective(s, pr.active.get(q.id()))));
+        Text.msg(p, "<#FFD66E>" + ui(p, "Objectif", "Objective") + "</#FFD66E> <#5A6270>·</#5A6270> <white>"
+                + Text.esc(objective(p, s, pr.active.get(q.id()))));
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 0.6f, 1.6f);
     }
 
@@ -361,7 +385,7 @@ public final class QuestService implements Listener {
         if (a.step >= q.steps().size()) {
             dialogue.play(p, s.after(), () -> finish(p, q));
         } else {
-            plugin.hud().flash(p, "<#5EE89A>✔ " + Text.esc(s.text()), 50);
+            plugin.hud().flash(p, "<#5EE89A>✔ " + Text.esc(tr(p, s.text())), 50);
             dialogue.play(p, s.after(), () -> announce(p, q));
         }
     }
@@ -393,22 +417,24 @@ public final class QuestService implements Listener {
             ItemStack stack = new ItemStack(it.material(), it.amount());
             if (it.name() != null) {
                 ItemMeta meta = stack.getItemMeta();
-                meta.displayName(Text.item("<#FFE9A8>" + Text.esc(it.name())));
+                meta.displayName(Text.item("<#FFE9A8>" + Text.esc(tr(p, it.name()))));
                 if (!it.lore().isEmpty()) {
                     List<String> lore = new ArrayList<>();
                     for (String l : it.lore()) {
-                        lore.add("<#A9B1BC><i>" + Text.esc(l));
+                        lore.add("<#A9B1BC><i>" + Text.esc(tr(p, l)));
                     }
                     meta.lore(Text.lore(lore));
                 }
                 stack.setItemMeta(meta);
             }
             Items.give(p, stack);
-            sb.append("<#D7DCE2>+").append(it.amount()).append(' ').append(Text.esc(it.name() == null ? it.material().name() : it.name())).append("</#D7DCE2>  ");
+            sb.append("<#D7DCE2>+").append(it.amount()).append(' ').append(Text.esc(it.name() == null ? it.material().name() : tr(p, it.name()))).append("</#D7DCE2>  ");
         }
-        Text.title(p, "<gradient:#FFD66E:#FFF3B0><b>Quête terminée</b></gradient>", "<white>" + Text.esc(q.name()), 10, 60, 20);
+        String doneLabel = ui(p, "Quête terminée", "Quest complete");
+        Text.title(p, "<gradient:#FFD66E:#FFF3B0><b>" + doneLabel + "</b></gradient>", "<white>" + Text.esc(tr(p, q.name())), 10, 60, 20);
         p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.0f);
-        Text.msg(p, "<#FFD66E>✦ Quête terminée :</#FFD66E> <white>" + Text.esc(q.name()) + (sb.isEmpty() ? "" : "  " + sb.toString().trim()));
+        Text.msg(p, "<#FFD66E>✦ " + doneLabel + ui(p, " :", ":") + "</#FFD66E> <white>" + Text.esc(tr(p, q.name()))
+                + (sb.isEmpty() ? "" : "  " + sb.toString().trim()));
     }
 
     // ------------------------------------------------------------------ Administration
@@ -444,6 +470,23 @@ public final class QuestService implements Listener {
         store.save(pr);
     }
 
+    /**
+     * Nouveau personnage (réinitialisation) : retour à zéro de l'histoire, quel que soit le camp choisi ensuite.
+     * Quêtes en cours et terminées, Éclat d'ancrage, quête suivie : tout est effacé.
+     * Seuls les réglages du joueur (langue, traînée allumée ou non) sont gardés.
+     */
+    public void wipe(Player p) {
+        UUID id = p.getUniqueId();
+        dialogue.cancel(id);
+        trailTest.remove(id);
+        tracker.hide(p);
+        QuestProgress pr = store.get(id);
+        pr.clear();
+        pr.faction = null;
+        pr.lastGcdSeen = 0;
+        store.save(pr);
+    }
+
     public void skipDialogue(Player p) {
         dialogue.skip(p);
     }
@@ -451,11 +494,12 @@ public final class QuestService implements Listener {
     // ------------------------------------------------------------------ Textes
 
     /** « Tuer des Rampants (3/8) ». */
-    String objective(StepDef s, Active a) {
+    String objective(Player p, StepDef s, Active a) {
+        String text = tr(p, s.text());
         if (s.counted()) {
-            return s.text() + " (" + Math.min(a == null ? 0 : a.count, s.count()) + "/" + s.count() + ")";
+            return text + " (" + Math.min(a == null ? 0 : a.count, s.count()) + "/" + s.count() + ")";
         }
-        return s.text();
+        return text;
     }
 
     /** Lieu à indiquer pour l'étape (PNJ, point, zone d'apparition). */
@@ -477,48 +521,286 @@ public final class QuestService implements Listener {
         return null;
     }
 
-    private List<String> trackerLines(Player p, QuestProgress pr) {
-        List<String> lines = new ArrayList<>();
-        int shown = 0;
+    // ------------------------------------------------------------------ Langue
+
+    /** Langue du joueur : son choix, sinon celle de son jeu (français, ou anglais pour toutes les autres). */
+    public String lang(Player p) {
+        QuestProgress pr = store.get(p.getUniqueId());
+        if (pr.lang != null) {
+            return pr.lang;
+        }
+        return "fr".equalsIgnoreCase(p.locale().getLanguage()) ? "fr" : "en";
+    }
+
+    /** Choix du joueur : « fr », « en », ou null pour suivre la langue de son jeu. */
+    public void setLang(Player p, String lang) {
+        QuestProgress pr = store.get(p.getUniqueId());
+        pr.lang = "fr".equals(lang) || "en".equals(lang) ? lang : null;
+        pr.dirty = true;
+    }
+
+    /** Bascule français ↔ anglais (boutons des menus) et le dit au joueur dans sa nouvelle langue. */
+    public void cycleLang(Player p) {
+        setLang(p, "en".equals(lang(p)) ? "fr" : "en");
+        langNotice(p);
+    }
+
+    public void langNotice(Player p) {
+        boolean chosen = langChosen(p);
+        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 0.6f, 1.6f);
+        Text.msg(p, "en".equals(lang(p))
+                ? "<#7FB2FF>Language:</#7FB2FF> <white>English</white> <#8C96A3>— dialogues and quests are now in English"
+                + (chosen ? "." : " (your game language).") + " <white>/langue fr</white> to switch back."
+                : "<#7FB2FF>Langue :</#7FB2FF> <white>français</white> <#8C96A3>— dialogues et quêtes en français"
+                + (chosen ? "." : " (la langue de votre jeu).") + " <white>/langue en</white> pour l'anglais.");
+    }
+
+    /** Bouton « Langue / Language » pour le menu principal. */
+    public org.bukkit.inventory.ItemStack langIcon(Player p) {
+        return QuestJournal.langIcon(this, p);
+    }
+
+    /** Le joueur a-t-il choisi lui-même sa langue ? (Sinon elle suit celle de son jeu.) */
+    public boolean langChosen(Player p) {
+        return store.get(p.getUniqueId()).lang != null;
+    }
+
+    /** Texte d'un fichier de quêtes (nom, objectif, réplique) dans la langue du joueur. */
+    public String tr(Player p, String fr) {
+        return registry.tr(fr, lang(p));
+    }
+
+    /** Libellé fixe du déroulé des quêtes, dans la langue du joueur. */
+    String ui(Player p, String fr, String en) {
+        return "en".equals(lang(p)) ? en : fr;
+    }
+
+    // ------------------------------------------------------------------ Quête suivie et traînée de guidage
+
+    /** Ouvre le journal de quêtes (bouton « Quêtes » du menu principal). */
+    public void openJournal(Player p) {
+        QuestJournal.open(this, p);
+    }
+
+    /** La traînée de guidage est-elle allumée pour ce joueur ? Son choix, sinon le réglage du serveur. */
+    boolean trailOn(QuestProgress pr) {
+        return pr.trail != null ? pr.trail : plugin.getConfig().getBoolean("quetes.trainee-par-defaut", true);
+    }
+
+    /** Quête suivie : celle que le joueur a choisie si elle est toujours en cours, sinon la première en cours. */
+    String trackedId(QuestProgress pr) {
+        if (pr.tracked != null && step(registry.quest(pr.tracked), pr.active.get(pr.tracked)) != null) {
+            return pr.tracked;
+        }
         for (Map.Entry<String, Active> e : pr.active.entrySet()) {
+            if (step(registry.quest(e.getKey()), e.getValue()) != null) {
+                return e.getKey();
+            }
+        }
+        return null;
+    }
+
+    /** Lieu vers lequel mène la traînée du joueur ; null s'il n'y a rien à montrer. */
+    Location trailTarget(Player p) {
+        Location test = trailTest.get(p.getUniqueId());
+        if (test != null) {
+            return test;
+        }
+        PlayerData d = plugin.players().loaded(p.getUniqueId());
+        if (d == null || d.buildMode || !plugin.progression().valid(d)) {
+            return null;
+        }
+        QuestProgress pr = store.get(p.getUniqueId());
+        if (!trailOn(pr)) {
+            return null;
+        }
+        String id = trackedId(pr);
+        if (id == null) {
+            // Aucune quête en cours : la traînée mène au personnage qui propose la prochaine.
+            NpcDef giver = nextGiver(p, d, pr);
+            return giver == null ? null : npcs.location(giver.id());
+        }
+        StepDef s = step(registry.quest(id), pr.active.get(id));
+        return s == null ? null : target(s);
+    }
+
+    /** Personnage le plus proche qui propose une quête à ce joueur (même monde) ; null s'il n'y en a pas. */
+    private NpcDef nextGiver(Player p, PlayerData d, QuestProgress pr) {
+        NpcDef best = null;
+        double bestDist = Double.MAX_VALUE;
+        for (NpcDef n : registry.npcs()) {
+            if (offerOf(d, pr, n.id()) == null) {
+                continue;
+            }
+            Location at = npcs.location(n.id());
+            if (at == null || !at.getWorld().equals(p.getWorld())) {
+                continue;
+            }
+            double dist = at.distanceSquared(p.getLocation());
+            if (dist < bestDist) {
+                bestDist = dist;
+                best = n;
+            }
+        }
+        return best;
+    }
+
+    /** Existe-t-il au moins une quête pour le camp de ce joueur ? (Sinon le journal le dit.) */
+    boolean anyQuestFor(Player p) {
+        PlayerData d = plugin.players().loaded(p.getUniqueId());
+        for (QuestDef q : registry.quests()) {
+            if (q.faction() == null || d == null || q.faction() == d.faction) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Essai (administration) : la traînée du joueur mène à ce lieu, quêtes ou pas. Null = fin de l'essai. */
+    public void trailTest(Player p, Location to) {
+        if (to == null) {
+            trailTest.remove(p.getUniqueId());
+        } else {
+            trailTest.put(p.getUniqueId(), to);
+        }
+    }
+
+    /** Diagnostic (administration) : ce que la traînée de ce joueur est en train de faire, et pourquoi. */
+    public String trailDiag(Player p) {
+        QuestProgress pr = store.get(p.getUniqueId());
+        PlayerData d = plugin.players().loaded(p.getUniqueId());
+        StringBuilder sb = new StringBuilder("<white>" + Text.esc(p.getName()) + "</white> <#8C96A3>· ");
+        sb.append(d == null || !plugin.progression().valid(d) ? "pas de personnage" : "camp " + d.faction.label);
+        sb.append(" · traînée ").append(trailOn(pr) ? "allumée" : "éteinte");
+        if (d != null && d.buildMode) {
+            sb.append(" · mode construction (pas de traînée)");
+        }
+        sb.append(" · ").append(pr.active.size()).append(" quête(s) en cours");
+        String id = trackedId(pr);
+        sb.append(id == null ? "" : " · suivie : " + id);
+        if (trailTest.containsKey(p.getUniqueId())) {
+            sb.append(" · ESSAI en cours");
+        }
+        Location t = trailTarget(p);
+        if (t == null) {
+            sb.append(" · <#FF8A7A>aucun objectif à montrer</#FF8A7A>");
+        } else if (!t.getWorld().equals(p.getWorld())) {
+            sb.append(" · <#FF8A7A>objectif dans un autre monde (").append(Text.esc(t.getWorld().getName())).append(")</#FF8A7A>");
+        } else {
+            sb.append(" · objectif ").append(t.getBlockX()).append(' ').append(t.getBlockY()).append(' ').append(t.getBlockZ())
+                    .append(" à ").append(Math.round(t.distance(p.getLocation()))).append(" m");
+            int n = trail.pathSize(p.getUniqueId());
+            sb.append(n < 0 ? " · <#FF8A7A>pas de traînée (arrivé ?)</#FF8A7A>" : n < 2 ? " · <#FFD66E>ligne droite (pas de chemin trouvé)</#FFD66E>"
+                    : " · <#5EE89A>chemin de " + n + " cases</#5EE89A>");
+        }
+        return sb.toString();
+    }
+
+    /** Le joueur choisit la quête que la traînée suit. */
+    public void track(Player p, QuestDef q) {
+        QuestProgress pr = store.get(p.getUniqueId());
+        if (q == null || !pr.active.containsKey(q.id())) {
+            Text.msg(p, "<#FF5C5C>Cette quête n'est pas en cours.");
+            return;
+        }
+        pr.tracked = q.id();
+        pr.dirty = true;
+        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 0.6f, 1.8f);
+        Text.msg(p, "<#FFD66E>Quête suivie</#FFD66E> <#5A6270>·</#5A6270> <white>" + Text.esc(tr(p, q.name())) + "</white>"
+                + (trailOn(pr) ? " <#8C96A3>— la traînée dorée au sol mène à l'objectif."
+                : " <#8C96A3>— traînée éteinte : <white>/quetes trainee</white> pour l'allumer."));
+    }
+
+    /** Allume ou éteint la traînée de guidage du joueur. Renvoie son nouvel état. */
+    public boolean toggleTrail(Player p) {
+        QuestProgress pr = store.get(p.getUniqueId());
+        boolean on = !trailOn(pr);
+        pr.trail = on;
+        pr.dirty = true;
+        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 0.6f, on ? 1.8f : 1.0f);
+        Text.msg(p, on ? "<#5EE89A>Traînée de guidage allumée</#5EE89A> <#8C96A3>— suivez les particules dorées au sol."
+                : "<#8C96A3>Traînée de guidage éteinte. <white>/quetes trainee</white> pour la rallumer.");
+        return on;
+    }
+
+    private List<QuestPanel.Row> trackerLines(Player p, QuestProgress pr, boolean skinned) {
+        List<QuestPanel.Row> lines = new ArrayList<>();
+        int shown = 0;
+        // La quête suivie passe en tête du suivi à l'écran.
+        String followed = trackedId(pr);
+        boolean mark = followed != null && pr.active.size() > 1 && trailOn(pr);
+        List<Map.Entry<String, Active>> order = new ArrayList<>(pr.active.entrySet());
+        order.sort(java.util.Comparator.comparing(e -> !e.getKey().equals(followed)));
+        for (Map.Entry<String, Active> e : order) {
             QuestDef q = registry.quest(e.getKey());
             StepDef s = step(q, e.getValue());
             if (s == null) {
                 continue;
             }
             if (shown == 2) {
-                lines.add("<#8C96A3>+" + (pr.active.size() - 2) + " autre(s) · /quetes");
+                lines.add(QuestPanel.Row.of(QuestPanel.Kind.MORE, "+" + (pr.active.size() - 2) + ui(p, " autre(s) · /quetes", " more · /quetes")));
                 break;
             }
             if (!lines.isEmpty()) {
-                lines.add(" ");
+                lines.add(QuestPanel.Row.of(QuestPanel.Kind.SEPARATOR, ""));
             }
-            lines.add("<#FFD66E><b>" + Text.esc(q.name()) + "</b>");
-            lines.add("<#D7DCE2>▸ " + Text.esc(objective(s, e.getValue())));
+            boolean main = skinned ? shown == 0 : mark && e.getKey().equals(followed);
+            lines.add(QuestPanel.Row.of(main ? QuestPanel.Kind.QUEST_MAIN : QuestPanel.Kind.QUEST, tr(p, q.name())));
+            addObjective(lines, objective(p, s, e.getValue()), skinned);
             Location at = target(s);
             if (at != null) {
                 if (at.getWorld().equals(p.getWorld())) {
-                    double dist = at.distance(p.getLocation());
-                    lines.add(dist < 4 ? "<#5EE89A>  ici" : "<#8C96A3>  " + arrow(p, at) + " " + Math.round(dist) + " m");
+                    lines.add(distanceRow(p, at));
                 } else {
-                    lines.add("<#8C96A3>  ailleurs (" + Text.esc(at.getWorld().getName()) + ")");
+                    lines.add(QuestPanel.Row.of(QuestPanel.Kind.ELSEWHERE, ui(p, "ailleurs (", "elsewhere (") + at.getWorld().getName() + ")"));
                 }
             }
             shown++;
         }
+        if (lines.isEmpty()) {
+            // Aucune quête en cours : on indique le personnage qui propose la prochaine.
+            PlayerData d = plugin.players().loaded(p.getUniqueId());
+            NpcDef giver = d == null ? null : nextGiver(p, d, pr);
+            Location at = giver == null ? null : npcs.location(giver.id());
+            if (at != null) {
+                lines.add(QuestPanel.Row.of(QuestPanel.Kind.QUEST_MAIN, ui(p, "Nouvelle quête", "New quest")));
+                addObjective(lines, ui(p, "Parler à ", "Talk to ") + tr(p, giver.name()), skinned);
+                lines.add(at.getWorld().equals(p.getWorld()) ? distanceRow(p, at)
+                        : QuestPanel.Row.of(QuestPanel.Kind.ELSEWHERE, ui(p, "ailleurs", "elsewhere")));
+            }
+        }
         return lines;
     }
 
-    private static final String[] ARROWS = {"↑", "↗", "→", "↘", "↓", "↙", "←", "↖"};
+    /** Objectif : coupé sur deux lignes dans le cadre du pack, une seule ligne sinon. */
+    private static void addObjective(List<QuestPanel.Row> lines, String text, boolean skinned) {
+        if (!skinned) {
+            lines.add(QuestPanel.Row.of(QuestPanel.Kind.OBJECTIVE, text));
+            return;
+        }
+        List<String> parts = QuestPanel.wrapObjective(text);
+        for (int i = 0; i < parts.size(); i++) {
+            lines.add(QuestPanel.Row.of(i == 0 ? QuestPanel.Kind.OBJECTIVE : QuestPanel.Kind.OBJECTIVE_MORE, parts.get(i)));
+        }
+    }
 
-    /** Flèche vers la cible, relative au regard du joueur. */
-    private static String arrow(Player p, Location to) {
+    private QuestPanel.Row distanceRow(Player p, Location at) {
+        double dist = at.distance(p.getLocation());
+        if (dist < 4) {
+            return QuestPanel.Row.of(QuestPanel.Kind.HERE, ui(p, "ici", "here"));
+        }
+        String txt = dist >= 1000 ? String.format(java.util.Locale.FRANCE, "%.1f km", dist / 1000.0) : Math.round(dist) + " m";
+        return new QuestPanel.Row(QuestPanel.Kind.DISTANCE, txt, arrow(p, at));
+    }
+
+    /** Direction de la cible relative au regard du joueur : 0 = devant, puis par huitièmes de tour dans le sens horaire. */
+    private static int arrow(Player p, Location to) {
         double dx = to.getX() - p.getLocation().getX();
         double dz = to.getZ() - p.getLocation().getZ();
         double targetYaw = Math.toDegrees(Math.atan2(-dx, dz));
         double rel = targetYaw - p.getLocation().getYaw();
         rel = ((rel % 360) + 360) % 360;
-        return ARROWS[(int) Math.round(rel / 45.0) % 8];
+        return (int) Math.round(rel / 45.0) % 8;
     }
 
     // ------------------------------------------------------------------ Monstres de quête
@@ -600,8 +882,18 @@ public final class QuestService implements Listener {
         UUID id = e.getPlayer().getUniqueId();
         dialogue.cancel(id);
         tracker.quit(id);
+        trail.quit(id);
+        trailTest.remove(id);
         npcs.quit(id);
         store.unload(id);
+    }
+
+    /** Clic gauche pendant un dialogue : fin de l'écriture, puis réplique suivante. */
+    @EventHandler
+    public void onSwing(org.bukkit.event.player.PlayerAnimationEvent e) {
+        if (e.getAnimationType() == org.bukkit.event.player.PlayerAnimationType.ARM_SWING && dialogue.busy(e.getPlayer())) {
+            dialogue.skip(e.getPlayer());
+        }
     }
 
     @EventHandler
@@ -673,8 +965,9 @@ public final class QuestService implements Listener {
     /** Boutons « Accepter » / « Plus tard » dans le chat. */
     private void propose(Player p, QuestDef q) {
         ClickCallback.Options once = ClickCallback.Options.builder().uses(1).lifetime(Duration.ofMinutes(10)).build();
-        Component accept = Text.mm("<#5EE89A><b>[ Accepter ]</b>")
-                .hoverEvent(HoverEvent.showText(Text.mm("<#D7DCE2>Commencer « " + Text.esc(q.name()) + " »")))
+        String title = Text.esc(tr(p, q.name()));
+        Component accept = Text.mm("<#5EE89A><b>[ " + ui(p, "Accepter", "Accept") + " ]</b>")
+                .hoverEvent(HoverEvent.showText(Text.mm("<#D7DCE2>" + ui(p, "Commencer « " + title + " »", "Start \"" + title + "\""))))
                 .clickEvent(ClickEvent.callback(a -> {
                     PlayerData d = plugin.players().get(p);
                     QuestProgress pr = store.get(p.getUniqueId());
@@ -682,9 +975,10 @@ public final class QuestService implements Listener {
                         start(p, q);
                     }
                 }, once));
-        Component later = Text.mm("<#8C96A3>[ Plus tard ]")
-                .clickEvent(ClickEvent.callback(a -> Text.msg(p, "<#8C96A3>Revenez quand vous serez prêt."), once));
-        p.sendMessage(Text.mm("<#FFD66E>✦ Quête :</#FFD66E> <white>" + Text.esc(q.name()) + "</white>  ")
+        Component later = Text.mm("<#8C96A3>[ " + ui(p, "Plus tard", "Later") + " ]")
+                .clickEvent(ClickEvent.callback(a -> Text.msg(p, "<#8C96A3>"
+                        + ui(p, "Revenez quand vous serez prêt.", "Come back when you are ready.")), once));
+        p.sendMessage(Text.mm("<#FFD66E>✦ " + ui(p, "Quête :", "Quest:") + "</#FFD66E> <white>" + title + "</white>  ")
                 .append(accept).append(Component.text("  ")).append(later));
     }
 
@@ -761,7 +1055,7 @@ public final class QuestService implements Listener {
                 if (a.count >= s.count()) {
                     completeStep(p, q);
                 } else {
-                    String what = s.type() == StepType.RAMASSER && s.item() != null ? "+1 " + s.item() : s.text();
+                    String what = s.type() == StepType.RAMASSER && s.item() != null ? "+1 " + tr(p, s.item()) : tr(p, s.text());
                     plugin.hud().flash(p, "<#FFD66E>" + Text.esc(what) + " <white>" + a.count + "/" + s.count(), 40);
                 }
             }

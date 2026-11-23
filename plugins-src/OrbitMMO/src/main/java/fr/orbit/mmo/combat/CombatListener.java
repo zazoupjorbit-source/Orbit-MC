@@ -70,7 +70,7 @@ public final class CombatListener implements Listener {
         }
         if (source instanceof Player p && e instanceof EntityDamageByEntityEvent be) {
             PlayerData d = plugin.players().get(p);
-            if (!plugin.progression().valid(d) || d.cast != null) {
+            if (!plugin.progression().valid(d) || d.cast != null || plugin.spells().control().incapacitated(p)) {
                 e.setCancelled(true);
                 return;
             }
@@ -116,7 +116,7 @@ public final class CombatListener implements Listener {
                 return;
             }
             PlayerData da = plugin.players().get(a);
-            if (da.cast != null) {
+            if (da.cast != null || plugin.spells().control().incapacitated(a)) {
                 e.setCancelled(true);
                 return;
             }
@@ -132,7 +132,7 @@ public final class CombatListener implements Listener {
 
         MobState attacker = plugin.mobs().state(source);
         if (attacker != null) {
-            if (plugin.floors().isSafe(v.getLocation())) {
+            if (plugin.floors().isSafe(v.getLocation()) || plugin.spells().control().incapacitated(source)) {
                 e.setCancelled(true);
                 return;
             }

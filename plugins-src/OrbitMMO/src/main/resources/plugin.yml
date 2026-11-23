@@ -18,9 +18,20 @@ commands:
   groupe:
     description: Groupe de joueurs (inviter, accepter, quitter, expulser).
     aliases: [party]
+  guilde:
+    description: Guilde (créer, inviter, accepter, quitter, exclure, promouvoir, dissoudre, banque, classement) ; seule, ouvre le menu.
+    aliases: [guild, g]
+  gc:
+    description: Message dans le canal de sa guilde ; sans message, bascule le canal.
   quetes:
     description: Journal de quêtes ; /quetes passer pour la réplique suivante ; /quetes admin pour l'administration.
     aliases: [quete, journal]
+  monture:
+    description: Appeler ou renvoyer sa monture, ouvrir l'écurie.
+    aliases: [mount, ecurie]
+  langue:
+    description: Langue des dialogues et des quêtes (fr, en, auto) · Language of dialogues and quests.
+    aliases: [language, lang]
   mmoadmin:
     description: Outils d'administration et de test d'Orbit MMO.
     permission: orbitmmo.admin

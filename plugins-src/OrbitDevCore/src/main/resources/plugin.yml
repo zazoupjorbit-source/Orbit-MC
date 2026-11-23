@@ -49,7 +49,7 @@ commands:
     aliases: [mount]
   station:
     description: Génère et règle le lobby « La Station ».
-    usage: /station <generer|ecarts|etancheite|apercu|effacer|regle|tp|points|recharger>
+    usage: /station <generer|ecarts|remettre|etancheite|apercu|effacer|regle|tp|points|recharger>
   boutique:
     description: Ouvre le menu de la boutique.
     usage: /boutique

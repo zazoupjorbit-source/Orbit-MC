@@ -10,7 +10,9 @@ import fr.orbit.extraction.gun.GunService;
 import fr.orbit.extraction.gun.ItemSpecs;
 import fr.orbit.extraction.gun.MagStore;
 import fr.orbit.extraction.infected.InfectedService;
+import fr.orbit.extraction.loot.Containers;
 import fr.orbit.extraction.loot.Crates;
+import fr.orbit.extraction.loot.Search;
 import fr.orbit.extraction.loot.Meds;
 import fr.orbit.extraction.map.MiniMap;
 import fr.orbit.extraction.rank.Kits;
@@ -50,6 +52,8 @@ public final class OrbitExtraction extends JavaPlugin {
     private Parcels parcels;
     private Meds meds;
     private Crates crates;
+    private Search search;
+    private Containers containers;
     private Ranks ranks;
     private Kits kits;
     private MiniMap miniMap;
@@ -81,6 +85,8 @@ public final class OrbitExtraction extends JavaPlugin {
         parcels = new Parcels(this);
         meds = new Meds(this);
         specs.meds(meds);
+        search = new Search(this);
+        containers = new Containers(this);
         crates = new Crates(this);
         ranks = new Ranks(this);
         kits = new Kits(this);
@@ -109,6 +115,8 @@ public final class OrbitExtraction extends JavaPlugin {
         pm.registerEvents(parcels, this);
         pm.registerEvents(meds, this);
         pm.registerEvents(crates, this);
+        pm.registerEvents(search, this);
+        pm.registerEvents(containers, this);
         pm.registerEvents(market, this);
         pm.registerEvents(ranks, this);
         pm.registerEvents(miniMap, this);
@@ -132,6 +140,8 @@ public final class OrbitExtraction extends JavaPlugin {
         parcels.start();
         meds.start();
         crates.start();
+        search.start();
+        containers.start();
         events.start();
         market.start();
         ranks.start();
@@ -164,6 +174,9 @@ public final class OrbitExtraction extends JavaPlugin {
         if (crates != null) {
             crates.shutdown();
         }
+        if (containers != null) {
+            containers.shutdown();
+        }
         if (vehicles != null) {
             vehicles.shutdown();
         }
@@ -193,7 +206,9 @@ public final class OrbitExtraction extends JavaPlugin {
         parcels.load(getConfig().getConfigurationSection("colis"));
         ranks.load(getConfig().getConfigurationSection("rangs"));
         kits.load(getConfig().getConfigurationSection("kits"));
+        search.load(getConfig().getConfigurationSection("fouille"));    // avant les caisses qui s'en servent
         crates.load(getConfig().getConfigurationSection("caisses"));
+        containers.load(getConfig().getConfigurationSection("fouille"));
         events.load(getConfig().getConfigurationSection("evenements"));     // après les caisses (niveaux epave, largage)
         market.load(getConfig().getConfigurationSection("hdv"));
     }
@@ -271,6 +286,14 @@ public final class OrbitExtraction extends JavaPlugin {
 
     public Meds meds() {
         return meds;
+    }
+
+    public Search search() {
+        return search;
+    }
+
+    public Containers containers() {
+        return containers;
     }
 
     public Crates crates() {

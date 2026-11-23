@@ -143,6 +143,18 @@ public final class SiteService {
         return built.values();
     }
 
+    /** Les villages et hameaux construits, pour les PNJ d'ambiance : centre, rayon de la palissade, points. */
+    List<ContinentService.Town> towns() {
+        List<ContinentService.Town> out = new ArrayList<>();
+        for (Built b : built.values()) {
+            SiteDesign.Site s = b.site();
+            if (s.kind().equals("village")) {
+                out.add(new ContinentService.Town(s.id(), s.name(), false, s.faction(), s.style(), s.x(), s.z(), s.radius(), b.points()));
+            }
+        }
+        return out;
+    }
+
     public Built built(String id) {
         return built.get(id);
     }

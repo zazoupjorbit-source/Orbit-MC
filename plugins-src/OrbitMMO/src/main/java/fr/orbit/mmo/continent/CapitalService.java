@@ -44,7 +44,7 @@ import java.util.logging.Level;
  */
 public final class CapitalService {
 
-    private enum Mode { PLAN, DIFF, GENERATE }
+    private enum Mode { PLAN, DIFF, GENERATE, NPCS }
 
     private static final String TAG = "orbit_capitale";
     private static final int MAX_LINES = 4000;
@@ -98,6 +98,19 @@ public final class CapitalService {
 
     public List<String> ids() {
         return new ArrayList<>(capitals.keySet());
+    }
+
+    /** Les capitales générées, pour les PNJ d'ambiance : centre, rayon du rempart, points (portes, places, pont). */
+    List<ContinentService.Town> towns() {
+        List<ContinentService.Town> out = new ArrayList<>();
+        for (CapitalDesign.Settings s : capitals.values()) {
+            ContinentData.Place p = continent.data().place(s.place());
+            if (p == null || !generated(s.id())) {
+                continue;
+            }
+            out.add(new ContinentService.Town(s.id(), p.name(), true, p.faction(), s.style(), p.x(), p.z(), s.wall(), points(s.id())));
+        }
+        return out;
     }
 
     /** Nom affiché de la capitale (celui du lieu), ou null. */
@@ -243,6 +256,17 @@ public final class CapitalService {
         return start(who, id, Mode.GENERATE, confirm);
     }
 
+    /**
+     * Repose les PNJ et réenregistre les points d'une capitale déjà générée, sans toucher à un seul bloc :
+     * sert quand le plan gagne un PNJ ou un point (le gardien du Pilier des Astres) alors que la ville a pu être retouchée à la main.
+     */
+    public String npcs(CommandSender who, String id) {
+        if (capitals.containsKey(id) && !generated(id)) {
+            return "Cette capitale n'est pas encore générée : « generer » pose aussi ses PNJ.";
+        }
+        return start(who, id, Mode.NPCS, false);
+    }
+
     /** @return message d'erreur, ou null si le travail est lancé */
     private String start(CommandSender who, String id, Mode mode, boolean confirm) {
         if (work != null) {
@@ -363,7 +387,7 @@ public final class CapitalService {
                     return;
                 }
                 // Capitale déjà générée : on regarde d'abord si le monde a été retouché.
-                w.phase = w.mode == Mode.DIFF || (generated(w.id) && !w.confirm) ? 2 : 3;
+                w.phase = w.mode == Mode.NPCS ? 4 : (w.mode == Mode.DIFF || (generated(w.id) && !w.confirm) ? 2 : 3);
             }
             case 2 -> {
                 if (scan(w, false)) {
@@ -504,9 +528,11 @@ public final class CapitalService {
             posed += made.isEmpty() ? 0 : 1;
         }
         YamlConfiguration st = state();
-        st.set(w.id + ".genere", true);
-        st.set(w.id + ".date", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
-        st.set(w.id + ".pave", plan.ground);
+        if (w.mode != Mode.NPCS) {
+            st.set(w.id + ".genere", true);
+            st.set(w.id + ".date", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
+            st.set(w.id + ".pave", plan.ground);
+        }
         st.set(w.id + ".points", null);
         for (Map.Entry<String, double[]> e : plan.points.entrySet()) {
             String path = w.id + ".points." + e.getKey();
@@ -521,6 +547,11 @@ public final class CapitalService {
             plugin.getLogger().log(Level.WARNING, "Capitale " + plan.name + " : écriture de " + stateFile.getName() + " impossible", e);
         }
         world.save();
+        if (w.mode == Mode.NPCS) {
+            finish(w, "<#7FD4FF>" + Text.esc(plan.name) + " : <#D7DCE2>" + posed + " PNJ reposés et " + plan.points.size()
+                    + " points réenregistrés. Aucun bloc n'a été touché.");
+            return;
+        }
         long seconds = Math.max(1, (System.currentTimeMillis() - w.startedAt) / 1000);
         finish(w, "<#7FD4FF>" + Text.esc(plan.name) + " générée : <#D7DCE2>" + count(w.changed) + (w.changed > 1 ? " blocs posés, " : " bloc posé, ") + posed + " PNJ, en "
                 + seconds + " s. « /continent capitale " + w.id + " tp » pour y aller.");

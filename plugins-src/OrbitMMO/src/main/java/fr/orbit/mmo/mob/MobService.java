@@ -124,6 +124,13 @@ public final class MobService implements Listener {
         if (e instanceof Wolf w) {
             w.setAngry(true);
         }
+        // Apparence du pack, choisie par l'identifiant du monstre : tenue complète, variante de loup, ours brun.
+        try {
+            fr.orbit.mmo.ambient.Looks.applyMob(e, def.id());
+        } catch (RuntimeException | LinkageError ex) {
+            // Une apparence refusée par le serveur ne doit jamais empêcher le monstre d'apparaître.
+            plugin.getLogger().log(java.util.logging.Level.WARNING, "Apparence du monstre « " + def.id() + " » refusée", ex);
+        }
         attr(e, Attribute.SCALE, def.scale(), false);
         attr(e, Attribute.MOVEMENT_SPEED, def.speed(), true);
         attr(e, Attribute.FOLLOW_RANGE, 28, false);

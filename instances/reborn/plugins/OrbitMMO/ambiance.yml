@@ -1,0 +1,45 @@
+# PNJ d'ambiance du continent : gardes, villageois, fermiers, enfants, chiens, chats, bétail, voyageurs.
+# Ils n'ont ni quête ni menu. Rien n'est enregistré dans le monde : ils apparaissent quand un joueur approche
+# et disparaissent quand il s'éloigne. Après une modification : /continent ambiance recharger
+
+actif: true
+# Voyageurs et patrouilles sur les routes.
+routes: true
+# La nuit, seuls les gardes, les chats et une partie des villageois restent dehors.
+nuit: true
+# Nombre maximal de PNJ d'ambiance présents en même temps sur tout le serveur.
+plafond: 260
+# Un PNJ apparaît quand un joueur est à moins de tant de blocs de sa place, et disparaît au-delà.
+distance-apparition: 64
+distance-retrait: 96
+# Groupes de voyageurs en vue d'un même joueur sur la route.
+groupes-par-joueur: 1
+
+# Habitants d'une capitale.
+capitale:
+  gardes-par-porte: 2
+  gardes-parvis: 2
+  rondes: 6
+  villageois: 40
+  enfants: 10
+  chats: 6
+  chiens: 5
+  poules: 8
+  # Le pré, hors des murs.
+  fermiers: 3
+  vaches: 4
+  cochons: 3
+
+# Habitants d'un village (les plus grands en ont moitié plus).
+village:
+  gardes-par-porte: 2
+  gardes-parvis: 0
+  rondes: 1
+  villageois: 7
+  enfants: 3
+  chats: 1
+  chiens: 1
+  poules: 3
+  fermiers: 2
+  vaches: 2
+  cochons: 1

@@ -231,7 +231,8 @@ public final class Items {
         ItemStack it = new ItemStack(Material.PRISMARINE_CRYSTALS);
         ItemMeta meta = it.getItemMeta();
         meta.displayName(Text.item("<#7FD4FF>Cristal de téléportation"));
-        meta.lore(Text.lore(List.of("<#8C96A3>Ramène à la ville de l'étage.", "<#5A6270>[Clic droit] « Téléportation ! »")));
+        meta.lore(Text.lore(List.of("<#8C96A3>Ramène à votre capitale.", "<#8C96A3>Dans le Pilier : à la ville de l'étage.",
+                "<#5A6270>[Clic droit] « Téléportation ! »")));
         meta.setEnchantmentGlintOverride(true);
         meta.getPersistentDataContainer().set(Keys.ITEM, PersistentDataType.STRING, "tp_crystal");
         it.setItemMeta(meta);

@@ -16,13 +16,14 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * /quetes : journal. /quetes passer : réplique suivante.
+ * /quetes : journal. /quetes suivre [quête] : quête suivie par la traînée de guidage. /quetes trainee : allumer ou
+ * éteindre la traînée. /quetes passer : réplique suivante.
  * /quetes admin … : poser les points, tester les quêtes (permission orbitmmo.admin).
  */
 public final class QuestCommand implements TabExecutor {
 
     private static final List<String> ADMIN = List.of("point", "points", "supprimer", "tp", "manquants", "liste",
-            "demarrer", "etape", "terminer", "reset", "recharger");
+            "demarrer", "etape", "terminer", "reset", "trainee", "recharger");
 
     private final OrbitMMO plugin;
     private final QuestService svc;
@@ -46,8 +47,43 @@ public final class QuestCommand implements TabExecutor {
             }
             return true;
         }
+        if (args[0].equalsIgnoreCase("trainee") || args[0].equalsIgnoreCase("traînée") || args[0].equalsIgnoreCase("guide")) {
+            if (sender instanceof Player p) {
+                svc.toggleTrail(p);
+            }
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("suivre")) {
+            if (!(sender instanceof Player p)) {
+                return true;
+            }
+            QuestProgress pr = svc.progress(p);
+            if (args.length < 2) {
+                // Sans nom : on passe à la quête en cours suivante.
+                List<String> ids = new ArrayList<>(pr.active.keySet());
+                if (ids.isEmpty()) {
+                    Text.msg(p, "<#8C96A3>Aucune quête en cours.");
+                    return true;
+                }
+                String next = ids.get((ids.indexOf(svc.trackedId(pr)) + 1) % ids.size());
+                svc.track(p, svc.registry().quest(next));
+                return true;
+            }
+            String wanted = String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length)).toLowerCase(Locale.ROOT);
+            QuestDef found = null;
+            for (String id : pr.active.keySet()) {
+                QuestDef q = svc.registry().quest(id);
+                if (q != null && (id.equalsIgnoreCase(wanted) || q.name().toLowerCase(Locale.ROOT).contains(wanted))) {
+                    found = q;
+                    break;
+                }
+            }
+            svc.track(p, found);
+            return true;
+        }
         if (!args[0].equalsIgnoreCase("admin")) {
-            Text.msg(sender, "<#8C96A3>/quetes <white>— journal ·</white> /quetes passer <white>— réplique suivante");
+            Text.msg(sender, "<#8C96A3>/quetes <white>— journal ·</white> /quetes suivre [quête] <white>— choisir la quête suivie ·</white>"
+                    + " /quetes trainee <white>— allumer ou éteindre la traînée ·</white> /quetes passer <white>— réplique suivante");
             return true;
         }
         if (!sender.hasPermission("orbitmmo.admin")) {
@@ -118,6 +154,7 @@ public final class QuestCommand implements TabExecutor {
                 }
             }
             case "demarrer", "terminer", "reset", "etape" -> playerAction(sender, sub, args);
+            case "trainee" -> trailAdmin(sender, args);
             case "recharger" -> {
                 svc.reload();
                 Text.msg(sender, "<#5EE89A>Quêtes et points rechargés.");
@@ -164,6 +201,42 @@ public final class QuestCommand implements TabExecutor {
         Text.msg(sender, "<#5EE89A>Fait.");
     }
 
+    /**
+     * /quetes admin trainee &lt;joueur&gt; : ce que fait sa traînée. Avec un point de quête ou « x y z » : essai, la traînée
+     * mène à ce lieu même sans quête. Avec « fin » : fin de l'essai.
+     */
+    private void trailAdmin(CommandSender sender, String[] args) {
+        if (args.length < 3) {
+            Text.msg(sender, "<#8C96A3>/quetes admin trainee <joueur> [point | x y z | fin]");
+            return;
+        }
+        Player target = Bukkit.getPlayerExact(args[2]);
+        if (target == null) {
+            Text.msg(sender, "<#FF5C5C>Joueur introuvable.");
+            return;
+        }
+        if (args.length == 4 && args[3].equalsIgnoreCase("fin")) {
+            svc.trailTest(target, null);
+            Text.msg(sender, "<#5EE89A>Essai terminé.");
+        } else if (args.length == 4) {
+            Location l = svc.points().location(args[3]);
+            if (l == null) {
+                Text.msg(sender, "<#FF5C5C>Point inconnu ou monde non chargé.");
+                return;
+            }
+            svc.trailTest(target, l);
+        } else if (args.length >= 6) {
+            try {
+                svc.trailTest(target, new Location(target.getWorld(), Double.parseDouble(args[3]) + 0.5,
+                        Double.parseDouble(args[4]), Double.parseDouble(args[5]) + 0.5));
+            } catch (NumberFormatException e) {
+                Text.msg(sender, "<#FF5C5C>Coordonnées invalides.");
+                return;
+            }
+        }
+        Text.msg(sender, svc.trailDiag(target));
+    }
+
     private void help(CommandSender s) {
         Text.msg(s, "<#FFD66E>Quêtes — administration");
         String[][] lines = {
@@ -177,6 +250,7 @@ public final class QuestCommand implements TabExecutor {
                 {"etape <joueur> <quête> <n°>", "place à une étape"},
                 {"terminer <joueur> <quête>", "termine (avec récompenses)"},
                 {"reset <joueur> [quête]", "efface l'avancement"},
+                {"trainee <joueur> [point | x y z | fin]", "état de sa traînée ; essai vers un lieu"},
                 {"recharger", "relit les fichiers de quêtes"}};
         for (String[] l : lines) {
             s.sendMessage(Text.mm("  <white>/quetes admin " + l[0] + "</white> <#8C96A3>— " + l[1]));
@@ -187,10 +261,12 @@ public final class QuestCommand implements TabExecutor {
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         List<String> out = new ArrayList<>();
         if (args.length == 1) {
-            out.addAll(List.of("journal", "passer"));
+            out.addAll(List.of("journal", "suivre", "trainee", "passer"));
             if (sender.hasPermission("orbitmmo.admin")) {
                 out.add("admin");
             }
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("suivre") && sender instanceof Player p) {
+            out.addAll(svc.progress(p).active.keySet());
         } else if (args.length == 2 && args[0].equalsIgnoreCase("admin") && sender.hasPermission("orbitmmo.admin")) {
             out.addAll(ADMIN);
         } else if (args.length == 3 && args[0].equalsIgnoreCase("admin")) {
@@ -202,7 +278,7 @@ public final class QuestCommand implements TabExecutor {
                         out.addAll(svc.missingPoints(q));
                     }
                 }
-            } else if (List.of("demarrer", "terminer", "reset", "etape").contains(sub)) {
+            } else if (List.of("demarrer", "terminer", "reset", "etape", "trainee").contains(sub)) {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     out.add(p.getName());
                 }

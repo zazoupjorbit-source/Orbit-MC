@@ -26,6 +26,8 @@ public final class Keys {
     public static NamespacedKey PARCEL;
     /** Id d'un objet de soin (bandage, trousse). */
     public static NamespacedKey MED;
+    /** Case encore cachée d'un conteneur en cours de fouille. */
+    public static NamespacedKey SEARCH;
     /** Id d'une caisse de butin (sur son entité d'interaction). */
     public static NamespacedKey CRATE;
     /** Marque la carte tactique (mini-carte en main gauche, jamais perdue). */
@@ -52,6 +54,7 @@ public final class Keys {
         PARCEL = new NamespacedKey(p, "parcel");
         MED = new NamespacedKey(p, "med");
         CRATE = new NamespacedKey(p, "crate");
+        SEARCH = new NamespacedKey(p, "search");
         MINIMAP = new NamespacedKey(p, "minimap");
         VEHICLE = new NamespacedKey(p, "vehicle");
         VEHICLE_TOOL = new NamespacedKey(p, "vehicle_tool");

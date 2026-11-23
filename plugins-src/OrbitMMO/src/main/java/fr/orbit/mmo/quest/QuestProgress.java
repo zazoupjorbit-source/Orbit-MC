@@ -30,6 +30,12 @@ public final class QuestProgress {
     public final Set<String> done = new LinkedHashSet<>();
     /** Éclat d'ancrage choisi (nom de point) : lieu de réapparition. */
     public String anchor;
+    /** Quête suivie (celle que la traînée de guidage montre) ; null = la première en cours. */
+    public String tracked;
+    /** Traînée de guidage : choix du joueur ; null = réglage du serveur (quetes.trainee-par-defaut). */
+    public Boolean trail;
+    /** Langue des dialogues et des quêtes : « fr », « en », ou null = celle du jeu du joueur. Gardée d'un personnage à l'autre. */
+    public String lang;
 
     // --- En mémoire seulement ---
     /** Dernière recharge globale vue (pour détecter qu'un sort a été lancé). */
@@ -44,12 +50,17 @@ public final class QuestProgress {
         active.clear();
         done.clear();
         anchor = null;
+        tracked = null;
         dirty = true;
     }
 
     void load(ConfigurationSection y) {
         faction = Faction.byId(y.getString("faction"));
         anchor = y.getString("ancrage");
+        tracked = y.getString("suivie");
+        trail = y.isBoolean("trainee") ? Boolean.valueOf(y.getBoolean("trainee")) : null;
+        String l = y.getString("langue");
+        lang = "fr".equals(l) || "en".equals(l) ? l : null;
         done.addAll(y.getStringList("terminees"));
         ConfigurationSection a = y.getConfigurationSection("en-cours");
         if (a != null) {
@@ -62,6 +73,9 @@ public final class QuestProgress {
     void save(ConfigurationSection y) {
         y.set("faction", faction == null ? null : faction.id);
         y.set("ancrage", anchor);
+        y.set("suivie", tracked);
+        y.set("trainee", trail);
+        y.set("langue", lang);
         y.set("terminees", java.util.List.copyOf(done));
         for (Map.Entry<String, Active> e : active.entrySet()) {
             y.set("en-cours." + e.getKey() + ".etape", e.getValue().step);

@@ -8,9 +8,9 @@ language: fr
 
 spawn:
   # Téléporte le joueur au spawn à chaque connexion.
-  teleport-on-join: true
+  teleport-on-join: false
   # Fait réapparaître le joueur au spawn après une mort.
-  teleport-on-respawn: true
+  teleport-on-respawn: false
 
 compass:
   # false : pas de boussole ici (reservee au lobby) ; /lobby pour y retourner.

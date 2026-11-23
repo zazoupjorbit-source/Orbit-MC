@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [ { "texture": "orbitmmo:glaneur_guetteur" } ],
+    "humanoid_leggings": [ { "texture": "orbitmmo:glaneur_guetteur" } ]
+  }
+}

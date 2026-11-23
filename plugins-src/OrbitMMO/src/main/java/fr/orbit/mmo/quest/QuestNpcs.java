@@ -150,8 +150,21 @@ final class QuestNpcs {
         if (e instanceof Mannequin mq) {
             mq.setImmovable(true);
             mq.setDescription(def.title() == null ? Component.empty() : Text.mm("<#A9B1BC>" + Text.esc(def.title())));
+            String face = registry.face(def.id());
             if (def.skin() != null && !def.skin().isBlank()) {
                 mq.setProfile(ResolvableProfile.resolvableProfile().name(def.skin()).build());
+            } else if (face != null) {
+                // « visage » : une des apparences fournies avec le jeu (le portrait du dialogue est le même visage).
+                try {
+                    // Un skin du pack (dessiné pour ce PNJ) ou, à défaut, une des apparences du jeu.
+                    mq.setProfile(fr.orbit.mmo.ambient.Looks.hasSkin(face) ? fr.orbit.mmo.ambient.Looks.skin(face)
+                            : ResolvableProfile.resolvableProfile().skinPatch(patch -> patch
+                            .body(net.kyori.adventure.key.Key.key("minecraft", "entity/player/wide/" + face))
+                            .model(org.bukkit.profile.PlayerTextures.SkinModel.CLASSIC)).build());
+                    mq.setSkinParts(com.destroystokyo.paper.SkinParts.allParts());
+                } catch (RuntimeException ex) {
+                    plugin.getLogger().warning("PNJ " + def.id() + " : visage « " + face + " » refusé (" + ex.getMessage() + ").");
+                }
             }
         }
         if (e instanceof Villager v && def.profession() != null) {

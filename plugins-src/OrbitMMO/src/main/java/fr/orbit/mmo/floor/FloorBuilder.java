@@ -148,6 +148,10 @@ final class FloorBuilder {
                 "<gradient:#7FD4FF:#B36BFF><b>Porte de téléportation</b></gradient>\n<#D7DCE2>" + Text.esc(def.town()));
         label(w, new Location(w, ax - arenaR - 3.5, y + 7.5, 0.5),
                 "<#FF3B3B><b>Salle du boss</b></#FF3B3B>\n<#D7DCE2>Étage " + def.number());
+        if (fr.orbit.mmo.ambient.TownFolk.human("merchant")) {
+            fr.orbit.mmo.ambient.TownFolk.spawn(new Location(w, 7.5, y + 1, 7.5, 135, 0), "merchant", Text.mm(MARKET_NAME));
+            return;
+        }
         w.spawn(new Location(w, 7.5, y + 1, 7.5, 135, 0), Villager.class, v -> {
             v.setAI(false);
             v.setInvulnerable(true);
@@ -261,7 +265,21 @@ final class FloorBuilder {
         Villager.Profession job = null;
         String name;
         String sign;
+        // Hauteur de l'écriteau au-dessus des pieds : celle d'un villageois, sauf pour les PNJ plus grands.
+        double board = 2.05;
         switch (tag) {
+            case "tower" -> {
+                name = "<#7FD4FF><b>Gardien du Pilier</b> <#8C96A3>· Les cent étages";
+                sign = TOWER_LABEL;
+                type = org.bukkit.entity.IronGolem.class;
+                board = 2.85;
+            }
+            case "tower_ombre" -> {
+                name = "<#9B59FF><b>Veilleur du Pilier</b> <#8C96A3>· Les cent étages";
+                sign = TOWER_LABEL;
+                type = org.bukkit.entity.WitherSkeleton.class;
+                board = 2.55;
+            }
             case "blacksmith" -> {
                 name = "<#FF8A3B><b>Torvald</b> <#8C96A3>· Forgeron";
                 sign = FORGE_LABEL;
@@ -292,7 +310,10 @@ final class FloorBuilder {
             }
         }
         Villager.Profession profession = job;
-        org.bukkit.entity.Entity npc = w.spawn(new Location(w, x, y, z, yaw, 0), type, e -> {
+        // Avec le pack : un mannequin qui porte le skin du PNJ. Sinon (skin absent du jar), le villageois d'avant.
+        org.bukkit.entity.Entity npc = fr.orbit.mmo.ambient.TownFolk.human(tag)
+                ? fr.orbit.mmo.ambient.TownFolk.spawn(new Location(w, x, y, z, yaw, 0), tag, Text.mm(name))
+                : w.spawn(new Location(w, x, y, z, yaw, 0), type, e -> {
             e.setAI(false);
             e.setInvulnerable(true);
             e.setSilent(true);
@@ -305,8 +326,11 @@ final class FloorBuilder {
             if (profession != null && e instanceof Villager v) {
                 v.setProfession(profession);
             }
+            if (tag.equals("tower_ombre") && fr.orbit.mmo.ambient.Looks.hasOutfit("veilleur")) {
+                fr.orbit.mmo.ambient.Looks.dress(e, "veilleur");
+            }
         });
-        org.bukkit.entity.Entity board = w.spawn(new Location(w, x, y + 2.05, z), TextDisplay.class, t -> {
+        org.bukkit.entity.Entity label = w.spawn(new Location(w, x, y + board, z), TextDisplay.class, t -> {
             t.text(Text.mm(sign));
             t.setBillboard(Display.Billboard.CENTER);
             t.setPersistent(true);
@@ -315,12 +339,19 @@ final class FloorBuilder {
             t.setBackgroundColor(Color.fromARGB(96, 0, 0, 0));
             t.getPersistentDataContainer().set(Keys.NPC, PersistentDataType.STRING, "label");
         });
-        return java.util.List.of(npc, board);
+        return java.util.List.of(npc, label);
     }
+
+    /** Écriteau des gardiens du Pilier des Astres (le donjon des cent étages), devant le donjon de chaque capitale. */
+    static final String TOWER_LABEL = "<#D7DCE2>Le Pilier des Astres · Choisir l'étage";
 
     /** PNJ immobile, invulnérable, qui ne disparaît jamais. */
     private static <T extends org.bukkit.entity.LivingEntity> void npc(World w, Class<T> type, double x, double y, double z, float yaw,
                                                                       String tag, String name, java.util.function.Consumer<T> extra) {
+        if (fr.orbit.mmo.ambient.TownFolk.human(tag)) {
+            fr.orbit.mmo.ambient.TownFolk.spawn(new Location(w, x, y, z, yaw, 0), tag, Text.mm(name));
+            return;
+        }
         w.spawn(new Location(w, x, y, z, yaw, 0), type, e -> {
             e.setAI(false);
             e.setInvulnerable(true);

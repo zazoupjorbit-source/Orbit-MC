@@ -128,9 +128,11 @@ public final class AdminCommand implements TabExecutor {
             case "caisses" -> {
                 if (a.length > 1 && a[1].equalsIgnoreCase("reset")) {
                     plugin.crates().clear();
-                    Text.msg(s, "Caisses retirées : elles sont redistribuées sur l'île dans les secondes qui viennent.");
+                    plugin.containers().clear();
+                    Text.msg(s, "Caisses retirées : elles sont redistribuées sur l'île dans les secondes qui viennent. Coffres et tonneaux regarnis.");
                 } else {
                     Text.msg(s, plugin.crates().count() + " caisse(s) sur l'île : " + plugin.crates().summary());
+                    Text.msg(s, "Fouille : " + plugin.containers().summary() + ".");
                 }
             }
             case "carte" -> {
@@ -142,6 +144,20 @@ public final class AdminCommand implements TabExecutor {
                 }
             }
             case "evenement", "event" -> {
+                if (a.length > 1 && a[1].equalsIgnoreCase("tp")) {
+                    Player me = player(s);
+                    org.bukkit.Location at = plugin.events().lastCrash();
+                    if (me == null) {
+                        Text.msg(s, "<#C0392B>Commande réservée aux joueurs.");
+                    } else if (at == null) {
+                        Text.msg(s, "<#C0392B>Aucun crash d'hélicoptère en cours.");
+                    } else {
+                        int x = at.getBlockX() + 3, z = at.getBlockZ();
+                        me.teleport(new org.bukkit.Location(at.getWorld(), x + 0.5, at.getWorld().getHighestBlockYAt(x, z) + 1, z + 0.5));
+                        Text.msg(s, "Téléporté au crash d'hélicoptère.");
+                    }
+                    return true;
+                }
                 Player t = a.length > 2 ? Bukkit.getPlayerExact(a[2]) : player(s);
                 if (a.length < 2 || !plugin.events().types().contains(a[1].toLowerCase(Locale.ROOT))) {
                     Text.msg(s, "Événements : <#D7DCE2>" + String.join("</#D7DCE2>, <#D7DCE2>", plugin.events().types())
@@ -403,7 +419,10 @@ public final class AdminCommand implements TabExecutor {
                 case "infecte" -> plugin.infected().types().forEach(t -> out.add(t.id()));
                 case "kit", "rang", "fin", "stats", "pack", "credits" -> Bukkit.getOnlinePlayers().forEach(p -> out.add(p.getName()));
                 case "caisses" -> out.add("reset");
-                case "evenement", "event" -> out.addAll(plugin.events().types());
+                case "evenement", "event" -> {
+                    out.addAll(plugin.events().types());
+                    out.add("tp");
+                }
                 case "carte" -> out.add("generer");
                 case "vehicule", "vehicules" -> {
                     plugin.vehicles().defs().forEach(vd -> out.add(vd.id()));

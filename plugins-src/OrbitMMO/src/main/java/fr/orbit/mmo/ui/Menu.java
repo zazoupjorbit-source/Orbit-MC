@@ -36,6 +36,8 @@ public final class Menu implements InventoryHolder {
 
     private MenuSkin.Screen skinScreen;
     private String skinTitle, skinSub, skinRight;
+    /** Carte du PNJ dessinée dans le titre du coffre affiché (null : aucune). */
+    private fr.orbit.mmo.hud.NpcCard.Card shownCard;
 
     public interface BottomClick {
         void click(int slot, ClickType type);
@@ -82,13 +84,19 @@ public final class Menu implements InventoryHolder {
     }
 
     public void open(Player p) {
-        if (skinTitle != null && MenuSkin.supports(rows)
-                && OrbitMMO.getPlugin(OrbitMMO.class).pack().isLoaded(p.getUniqueId())) {
-            if (inventory == base) {
+        OrbitMMO plugin = OrbitMMO.getPlugin(OrbitMMO.class);
+        if (skinTitle != null && MenuSkin.supports(rows) && plugin.pack().isLoaded(p.getUniqueId())) {
+            // Menu ouvert par un PNJ de ville : sa carte (portrait, nom, phrase) est dessinée à droite du menu.
+            fr.orbit.mmo.hud.NpcCard.Card card = plugin.hud().npcCard(p);
+            if (inventory == base || card != shownCard) {
                 ItemStack[] items = base.getContents();
                 inventory = Bukkit.createInventory(this, rows * 9,
-                        MenuSkin.title(skinScreen, rows, skinTitle, skinSub, skinRight, items));
+                        MenuSkin.title(skinScreen, rows, skinTitle, skinSub, skinRight, items, card));
                 inventory.setContents(items);
+                shownCard = card;
+            }
+            if (card != null) {
+                card.markShown();
             }
         } else {
             if (framed) {

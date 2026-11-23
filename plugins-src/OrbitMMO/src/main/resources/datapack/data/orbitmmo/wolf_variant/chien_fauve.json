@@ -1,0 +1,5 @@
+{
+  "assets": { "angry": "orbitmmo:entity/wolf/chien_fauve_angry", "tame": "orbitmmo:entity/wolf/chien_fauve_tame", "wild": "orbitmmo:entity/wolf/chien_fauve" },
+  "baby_assets": { "angry": "orbitmmo:entity/wolf/chien_fauve_angry_baby", "tame": "orbitmmo:entity/wolf/chien_fauve_tame_baby", "wild": "orbitmmo:entity/wolf/chien_fauve_baby" },
+  "spawn_conditions": []
+}

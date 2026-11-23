@@ -1,0 +1,14 @@
+guildes:
+  sao:
+    nom: SAO
+    faction: lumiere
+    creee: 1795414070843
+    banque: 0
+    etage: 0
+    etage-le: 0
+    premiers: 0
+    membres:
+      75744c5d-dec0-435f-b8d1-90ab90e76dcf:
+        nom: Waneuh
+        grade: chef
+        depuis: 1795414070843

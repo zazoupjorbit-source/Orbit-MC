@@ -1,0 +1,860 @@
+# ------------------------------------------------------------------
+#  Ombre, acte III — le Marais des Murmures (niv. 15 à 25)
+#  Hub : Les Pilotis. Quêtes principales 19 à 26 et annexes.
+#  FICHIER GÉNÉRÉ par tools\quetes\gen-quetes.js depuis tools\quetes\zones\ombre-marais.js : modifier la source, pas ce fichier.
+# ------------------------------------------------------------------
+
+pnj:
+  odran:
+    nom: "Odran le Passeur"
+    nom-en: "Odran the Ferryman"
+    titre: "Chef des Pilotis"
+    titre-en: "Chief of Les Pilotis"
+    couleur: "#9FC4B0"
+    type: MANNEQUIN
+    visage: steve
+    point: odran
+    repliques:
+      - "Dans le marais, l'eau garde tout. Les corps, les secrets, les fioles."
+    repliques-en:
+      - "In the marsh, the water keeps everything. Bodies, secrets, vials."
+  kael:
+    nom: "Kael"
+    titre: "Creux qui parle"
+    titre-en: "Hollow who speaks"
+    couleur: "#8C96A3"
+    type: MANNEQUIN
+    visage: efe
+    point: kael
+    repliques:
+      - "Je… cherche… mes mots. Ils reviennent. Un par un."
+    repliques-en:
+      - "I… search… for my words. They come back. One by one."
+  fenn:
+    nom: "Fenn"
+    titre: "Pêcheur"
+    titre-en: "Fisherman"
+    couleur: "#C9D6A3"
+    type: MANNEQUIN
+    visage: sunny
+    point: fenn
+    repliques:
+      - "Les anguilles sont noires, cette année. Noires dedans aussi."
+    repliques-en:
+      - "The eels are black this year. Black inside too."
+  tourbe:
+    nom: "Mère Tourbe"
+    nom-en: "Mother Peat"
+    titre: "Rebouteuse"
+    titre-en: "Bonesetter"
+    couleur: "#B8B0A0"
+    type: MANNEQUIN
+    visage: noor
+    point: tourbe
+    repliques:
+      - "Les morts du marais ne pourrissent pas. Ils attendent."
+    repliques-en:
+      - "The marsh dead don't rot. They wait."
+
+monstres:
+  noye_ancien:
+    nom: "Noyé ancien"
+    type: DROWNED
+    taille: 1.3
+    pv: 1.4
+    degats: 1.15
+    vitesse: 0.9
+  roi_des_tourbes:
+    nom: "Roi des Tourbes"
+    type: DROWNED
+    taille: 2.2
+    pv: 9
+    degats: 1.4
+    vitesse: 0.9
+    xp: 12
+    or: 10
+
+apparitions:
+  noyes_temple:
+    point: temple_seuil
+    monstre: noye_ancien
+    niveau: [22, 23]
+    nombre: 5
+    rayon: 9
+  roi_tourbes:
+    point: camp_roi_tourbes
+    monstre: roi_des_tourbes
+    niveau: 25
+    nombre: 1
+    rayon: 4
+  affames_englouti:
+    point: cercle_englouti
+    monstre: affame_neant
+    niveau: [23, 24]
+    nombre: 5
+    rayon: 9
+
+quetes:
+
+  # ================================================================ ACTE III — QUÊTES PRINCIPALES
+
+  o_les_pilotis:
+    nom: "Les Pilotis"
+    faction: ombre
+    niveau: 15
+    requiert: [o_l_ancien_de_la_sylve]
+    resume:
+      - "Les Pilotis, au cœur du Marais des Murmures,"
+      - "ne répondent plus."
+    resume-en:
+      - "Les Pilotis, in the heart of the Marsh of Whispers,"
+      - "no longer answer."
+    intro:
+      - "Le marais commence là où la Sylve s'arrête. L'eau est noire, tiède, et elle murmure plus fort que toi."
+    intro-en:
+      - "The marsh begins where the Sylva ends. The water is black, warm, and it whispers louder than you do."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre Les Pilotis"
+        texte-en: "Reach Les Pilotis"
+        point: porte_pilotis
+        rayon: 8
+      - type: PARLER
+        texte: "Parler à Odran le Passeur"
+        texte-en: "Talk to Odran the Ferryman"
+        pnj: odran
+        dialogue:
+          - "odran: Un Marqué du Puits. Varka t'envoie ? Tant mieux. On ne répond plus parce qu'on n'a plus personne pour porter les messages."
+          - "odran: Les noyés sortent de l'eau. Vharos est passé il y a trois jours, avec des caisses, vers le vieux temple englouti."
+          - "odran: Et j'ai un Creux qui parle. Tu me croiras quand tu l'entendras."
+        dialogue-en:
+          - "odran: A Marked of the Well. Varka sent you? Good. We don't answer because we have no one left to carry messages."
+          - "odran: The drowned are coming out of the water. Vharos came through three days ago, with crates, toward the old sunken temple."
+          - "odran: And I have a Hollow who speaks. You'll believe me when you hear him."
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage des Pilotis"
+        texte-en: "Touch Les Pilotis's anchoring Shard"
+        point: ancre_pilotis
+        rayon: 4
+    recompenses:
+      xp: 2600
+      or: 260
+
+  o_les_lanternes_noyees:
+    nom: "Les lanternes noyées"
+    nom-en: "The Drowned Lanterns"
+    faction: ombre
+    niveau: 16
+    requiert: [o_les_pilotis]
+    donneur: odran
+    resume:
+      - "Une tour noyée, à l'est des Pilotis,"
+      - "brille la nuit d'une lumière dorée."
+    resume-en:
+      - "A drowned tower, east of Les Pilotis,"
+      - "shines at night with a golden light."
+    offre:
+      - "odran: À l'est, une vieille tour à moitié dans l'eau. La nuit, elle brille. Doré. Dans un marais de l'Ombre."
+      - "odran: Les noyés y vont comme des papillons. Va voir."
+    offre-en:
+      - "odran: To the east, an old tower half in the water. At night, it shines. Golden. In a marsh of the Shadow."
+      - "odran: The drowned flock to it like moths. Go and see."
+    etapes:
+      - type: TUER
+        texte: "Abattre les noyés de la tour"
+        texte-en: "Destroy the drowned of the tower"
+        monstres: [noye, revenant]
+        nombre: 10
+        point: tour_noyee
+      - type: INTERAGIR
+        texte: "Décrocher une lanterne"
+        texte-en: "Take down a lantern"
+        point: tour_noyee
+        rayon: 6
+        apres:
+          - "Les lanternes ne contiennent pas de flamme. Elles contiennent une fiole de lumière dorée. Le sceau du Cloître est gravé dans le verre."
+          - "Les noyés autour ont tous la même marque au bras. Un soleil brûlé."
+        apres-en:
+          - "The lanterns hold no flame. They hold a vial of golden light. The Cloister's seal is engraved in the glass."
+          - "The drowned around it all have the same mark on their arm. A burned sun."
+      - type: PARLER
+        texte: "Revenir voir Odran"
+        texte-en: "Return to Odran"
+        pnj: odran
+        dialogue:
+          - "odran: Des Purifiés de l'Aube, noyés chez nous, autour de lanternes de l'Aube. Quelqu'un les a amenés ici."
+          - "odran: Va voir Kael. Il en sait plus qu'il ne peut dire. Pour l'instant."
+        dialogue-en:
+          - "odran: Purified of the Dawn, drowned in our marsh, around Dawn lanterns. Someone brought them here."
+          - "odran: Go see Kael. He knows more than he can say. For now."
+    recompenses:
+      xp: 3000
+      or: 300
+
+  o_le_creux_qui_parle:
+    nom: "Le Creux qui parle"
+    nom-en: "The Hollow Who Speaks"
+    faction: ombre
+    niveau: 17
+    requiert: [o_les_lanternes_noyees]
+    donneur: odran
+    resume:
+      - "Kael, un Creux, retrouve ses mots"
+      - "quand il boit de la lumière."
+    resume-en:
+      - "Kael, a Hollow, is finding his words again"
+      - "when he drinks light."
+    offre:
+      - "odran: Kael est arrivé il y a un mois, un Creux comme les autres. Puis il a bu une fiole trouvée dans l'eau. Le lendemain, il a dit bonjour."
+    offre-en:
+      - "odran: Kael arrived a month ago, a Hollow like the others. Then he drank a vial found in the water. The next day, he said good morning."
+    etapes:
+      - type: PARLER
+        texte: "Parler à Kael"
+        texte-en: "Talk to Kael"
+        pnj: kael
+        dialogue:
+          - "kael: Je… te connais pas. Mais je connais… ta Marque. Elle a… froid. Comme la mienne… avant."
+          - "kael: Les noyés portent… des fioles. Apporte… Je veux… me souvenir."
+        dialogue-en:
+          - "kael: I… don't know you. But I know… your Mark. It is… cold. Like mine… before."
+          - "kael: The drowned carry… vials. Bring… I want… to remember."
+      - type: RAMASSER
+        texte: "Récupérer des fioles de lumière sur les noyés"
+        texte-en: "Collect vials of light from the drowned"
+        monstres: [noye, noye_ancien]
+        nombre: 6
+        chance: 0.45
+        objet: "Fiole de lumière"
+        objet-en: "Vial of light"
+      - type: PARLER
+        texte: "Donner les fioles à Kael"
+        texte-en: "Give the vials to Kael"
+        pnj: kael
+        dialogue:
+          - "Kael boit les six fioles, l'une après l'autre. Sa Marque, éteinte, se rallume d'un violet très pâle."
+          - "kael: Je m'appelle Kael. J'étais forgeron, à Gris-Hameau. Les Purificateurs m'ont pris la nuit des étoiles."
+          - "kael: Au Cloître, on m'a allongé dans une salle blanche. Ils ont chanté. Ma lumière est sortie de moi, dans une fiole. Après, plus rien."
+          - "kael: Puis on m'a revendu à la Citadelle. Avec ma propre lumière, dans une caisse, à côté de moi."
+        dialogue-en:
+          - "Kael drinks the six vials, one after the other. His Mark, extinguished, rekindles a very pale violet."
+          - "kael: My name is Kael. I was a smith, in Gris-Hameau. The Purifiers took me on the night of the stars."
+          - "kael: At the Cloister, they laid me down in a white room. They sang. My light came out of me, into a vial. After that, nothing."
+          - "kael: Then I was sold to the Citadel. With my own light, in a crate, next to me."
+    recompenses:
+      xp: 3300
+      or: 330
+
+  o_le_marchand_de_fioles:
+    nom: "Le marchand de fioles"
+    nom-en: "The Vial Merchant"
+    faction: ombre
+    niveau: 19
+    requiert: [o_le_creux_qui_parle]
+    donneur: kael
+    resume:
+      - "Un camp de noyés, au nord des Pilotis,"
+      - "garde le registre du commerce des fioles."
+    resume-en:
+      - "A camp of drowned, north of Les Pilotis,"
+      - "guards the ledger of the vial trade."
+    offre:
+      - "kael: Les caisses passaient par un camp, au nord. Un homme y tenait les comptes. Les noyés l'ont eu, mais pas ses papiers."
+    offre-en:
+      - "kael: The crates went through a camp, to the north. A man kept the accounts there. The drowned got him, but not his papers."
+    etapes:
+      - type: TUER
+        texte: "Nettoyer le camp du nord"
+        texte-en: "Clear the northern camp"
+        monstres: [noye, archer_tourbe]
+        nombre: 12
+        point: camp_noyes_nord
+      - type: INTERAGIR
+        texte: "Trouver le registre"
+        texte-en: "Find the ledger"
+        point: camp_noyes_nord
+        rayon: 6
+        apres:
+          - "Un registre trempé, encore lisible. « Livré à V. : quarante fioles. Payé en Éclats noirs. Sceau du Cloître. »"
+          - "Plus bas, une autre écriture, élégante : « Les Éclats noirs sont bien arrivés au Bastion. Que l'Astre nous pardonne. — O. »"
+        apres-en:
+          - "A soaked ledger, still legible. « Delivered to V.: forty vials. Paid in black Shards. Cloister seal. »"
+          - "Further down, another hand, elegant: « The black Shards arrived safely at the Bastion. May the Star forgive us. — O. »"
+      - type: PARLER
+        texte: "Montrer le registre à Odran"
+        texte-en: "Show the ledger to Odran"
+        pnj: odran
+        dialogue:
+          - "odran: V., c'est Vharos. Et O.… un homme de l'Aube, au Bastion. Ils commercent ensemble."
+          - "odran: L'Aube vide les Marqués, vend leur lumière à la Citadelle, et la Citadelle paie en Éclats noirs. Les deux camps sont dans le même sac."
+        dialogue-en:
+          - "odran: V. is Vharos. And O.… a man of the Dawn, at the Bastion. They trade together."
+          - "odran: The Dawn empties the Marked, sells their light to the Citadel, and the Citadel pays in black Shards. Both sides are in the same bag."
+    recompenses:
+      xp: 3700
+      or: 370
+
+  o_le_roi_des_tourbes:
+    nom: "Le Roi des Tourbes"
+    nom-en: "The King of the Peat"
+    faction: ombre
+    niveau: 21
+    requiert: [o_le_marchand_de_fioles]
+    donneur: odran
+    resume:
+      - "Au sud-est, le Roi des Tourbes"
+      - "commande aux noyés du marais."
+    resume-en:
+      - "To the south-east, the King of the Peat"
+      - "commands the drowned of the marsh."
+    offre:
+      - "odran: Les noyés obéissent à quelque chose. Au sud-est, un géant sort de la tourbe chaque nuit. Mes pères l'appelaient le Roi des Tourbes."
+      - "odran: Tue-le, et le marais redeviendra un marais."
+    offre-en:
+      - "odran: The drowned obey something. To the south-east, a giant rises from the peat every night. My fathers called him the King of the Peat."
+      - "odran: Kill it, and the marsh will be a marsh again."
+    etapes:
+      - type: TUER
+        texte: "Abattre la garde du Roi"
+        texte-en: "Destroy the King's guard"
+        monstres: [noye, archer_tourbe]
+        nombre: 6
+        point: camp_roi_tourbes
+      - type: TUER
+        texte: "Vaincre le Roi des Tourbes"
+        texte-en: "Defeat the King of the Peat"
+        monstres: [roi_des_tourbes]
+        point: camp_roi_tourbes
+      - type: INTERAGIR
+        texte: "Fouiller la tourbe où il dormait"
+        texte-en: "Search the peat where he slept"
+        point: camp_roi_tourbes
+        rayon: 6
+        apres:
+          - "Une couronne de racines, et dessous, des centaines de fioles vides. Il les buvait. Il voulait se souvenir, lui aussi."
+        apres-en:
+          - "A crown of roots, and beneath it, hundreds of empty vials. He drank them. He wanted to remember, too."
+      - type: PARLER
+        texte: "Revenir voir Odran"
+        texte-en: "Return to Odran"
+        pnj: odran
+        dialogue:
+          - "odran: Même les monstres veulent se souvenir. Ça devrait nous faire honte."
+        dialogue-en:
+          - "odran: Even monsters want to remember. That ought to shame us."
+    recompenses:
+      xp: 4200
+      or: 420
+
+  o_le_temple_englouti:
+    nom: "Le Temple englouti"
+    nom-en: "The Sunken Temple"
+    faction: ombre
+    niveau: 23
+    requiert: [o_le_roi_des_tourbes]
+    donneur: odran
+    resume:
+      - "Vharos est descendu au Temple englouti"
+      - "avec des caisses de fioles."
+    resume-en:
+      - "Vharos went down into the Sunken Temple"
+      - "with crates of vials."
+    offre:
+      - "odran: Le Temple englouti, au sud-ouest. Vharos y est descendu avec ses caisses. Il n'est pas remonté."
+      - "odran: Les noyés anciens gardent la porte. Ce sont les plus vieux du marais."
+    offre-en:
+      - "odran: The Sunken Temple, to the south-west. Vharos went down there with his crates. He hasn't come back up."
+      - "odran: The ancient drowned guard the door. They're the oldest in the marsh."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre le Temple englouti"
+        texte-en: "Reach the Sunken Temple"
+        point: temple_seuil
+        rayon: 10
+      - type: TUER
+        texte: "Abattre les noyés anciens"
+        texte-en: "Destroy the ancient drowned"
+        monstres: [noye_ancien]
+        nombre: 8
+        point: temple_seuil
+      - type: INTERAGIR
+        texte: "Poser la main sur la porte scellée"
+        texte-en: "Lay your hand on the sealed door"
+        point: temple_portail
+        rayon: 5
+        apres:
+          - "Ta Marque traverse la pierre. Tu vois en dessous : une salle immense, des cuves de lumière dorée, et des Creux endormis dedans."
+          - "Vharos marche entre les cuves. Face à lui, un homme en robe blanche, un bâton d'astromancien à la main."
+          - "vharos: Chaque fiole garde un Creux debout. Chaque Creux debout éloigne le Néant d'un jour."
+          - "L'homme en blanc hoche la tête. « Et chaque Éclat noir rapproche l'Astre d'un jour. Le Pacte des Deux Ciels tient, Vharos. Qu'il tienne encore. »"
+        apres-en:
+          - "Your Mark passes through the stone. You see below: an immense hall, vats of golden light, and Hollow asleep inside them."
+          - "Vharos walks between the vats. Facing him, a man in a white robe, an astromancer's staff in hand."
+          - "vharos: Each vial keeps a Hollow standing. Each standing Hollow holds back the Void one more day."
+          - "The man in white nods. « And each black Shard brings the Star one day closer. The Pact of the Two Skies holds, Vharos. May it hold a while longer. »"
+      - type: PARLER
+        texte: "Raconter la vision à Kael"
+        texte-en: "Tell Kael about the vision"
+        pnj: kael
+        dialogue:
+          - "kael: Le Pacte des Deux Ciels… Les deux camps se battent le jour, et se partagent les Marqués la nuit."
+          - "kael: Et nous, on est la monnaie."
+        dialogue-en:
+          - "kael: The Pact of the Two Skies… The two sides fight by day, and share the Marked by night."
+          - "kael: And we are the coin."
+    recompenses:
+      xp: 4800
+      or: 480
+
+  o_rendez_moi:
+    nom: "Rendez-moi"
+    nom-en: "Give Me Back"
+    faction: ombre
+    niveau: 24
+    requiert: [o_le_temple_englouti]
+    donneur: kael
+    resume:
+      - "Un cercle de pierres s'est ouvert sur le Néant"
+      - "près du Temple englouti."
+    resume-en:
+      - "A stone circle has opened onto the Void"
+      - "near the Sunken Temple."
+    offre:
+      - "kael: Près du temple, un cercle de pierres. Des Affamés en sortent. Je les entends… comme tu entends le murmure."
+      - "kael: Va. Écoute ce qu'il dit. Moi, j'ai trop peur."
+    offre-en:
+      - "kael: Near the temple, a stone circle. Hungry ones come out of it. I hear them… the way you hear the whisper."
+      - "kael: Go. Listen to what it says. I'm too afraid."
+    etapes:
+      - type: TUER
+        texte: "Repousser les Affamés"
+        texte-en: "Drive back the Hungry"
+        monstres: [affame_neant]
+        nombre: 10
+        point: cercle_englouti
+      - type: INTERAGIR
+        texte: "Écouter le Néant au centre du cercle"
+        texte-en: "Listen to the Void at the centre of the circle"
+        point: cercle_englouti
+        rayon: 6
+        apres:
+          - "Tu poses la main sur la faille. Le froid te traverse, immense, plus vieux que le monde."
+          - "Pour la deuxième fois de ta vie, le murmure prononce un mot clair. « Rendez-moi. »"
+        apres-en:
+          - "You lay your hand on the rift. The cold runs through you, immense, older than the world."
+          - "For the second time in your life, the whisper speaks a clear word. « Give me back. »"
+      - type: PARLER
+        texte: "Revenir voir Kael"
+        texte-en: "Return to Kael"
+        pnj: kael
+        dialogue:
+          - "kael: « Rendez-moi »… Rendre quoi ? Sa lumière ? Celle qu'on met en fioles ?"
+          - "kael: Si le Néant, c'est ce qui reste de l'Astre… alors chaque fiole, c'est un morceau de lui qu'on se vend."
+        dialogue-en:
+          - "kael: « Give me back »… Give back what? Its light? The light we put in vials?"
+          - "kael: If the Void is what remains of the Star… then every vial is a piece of it that we sell to each other."
+    recompenses:
+      xp: 5000
+      or: 500
+
+  o_vers_les_quatre_vents:
+    nom: "Vers les Quatre-Vents"
+    nom-en: "Toward the Four Winds"
+    faction: ombre
+    niveau: 25
+    requiert: [o_rendez_moi]
+    donneur: odran
+    resume:
+      - "Morvain vous attend aux Quatre-Vents,"
+      - "la ville neutre, aux portes de la Marche."
+    resume-en:
+      - "Morvain awaits you at the Four Winds,"
+      - "the neutral city, at the gates of the March."
+    offre:
+      - "odran: Un corbeau de Morvain. Il est aux Quatre-Vents, la ville neutre, loin à l'ouest. L'Éclat immense est tombé tout près."
+      - "odran: Prends le registre. Montre-le à qui doit le voir. Et reviens nous dire si le monde a encore un sens."
+    offre-en:
+      - "odran: A raven from Morvain. He's at the Four Winds, the neutral city, far to the west. The immense Shard fell close by."
+      - "odran: Take the ledger. Show it to whoever needs to see it. And come back to tell us if the world still makes sense."
+    etapes:
+      - type: PARLER
+        texte: "Dire au revoir à Kael"
+        texte-en: "Say goodbye to Kael"
+        pnj: kael
+        dialogue:
+          - "kael: Va. Moi, je reste. J'apprends à forger de nouveau. Mes mains se souviennent mieux que ma tête."
+          - "kael: Si tu croises un Marqué de l'Aube… dis-lui que les Creux ont un nom."
+        dialogue-en:
+          - "kael: Go. I'm staying. I'm learning to forge again. My hands remember better than my head."
+          - "kael: If you meet a Marked of the Dawn… tell him the Hollow have names."
+      - type: ATTEINDRE
+        texte: "Rejoindre la place des Quatre-Vents"
+        texte-en: "Reach the square of the Four Winds"
+        point: quatre_vents_place
+        rayon: 12
+        apres:
+          - "Les Quatre-Vents. Une ville sans bannière, où l'Aube et l'Ombre boivent dans les mêmes tavernes en se regardant de travers."
+          - "À l'est, au-dessus de la Marche, le ciel est encore rouge."
+        apres-en:
+          - "The Four Winds. A city with no banner, where Dawn and Shadow drink in the same taverns, glaring at each other."
+          - "To the east, above the March, the sky is still red."
+    recompenses:
+      xp: 5200
+      or: 520
+
+  # ================================================================ ANNEXES — LES PILOTIS
+
+  o_p_les_archers_des_tourbes:
+    nom: "Les archers des tourbes"
+    nom-en: "The Peat Archers"
+    faction: ombre
+    niveau: 16
+    requiert: [o_les_pilotis]
+    donneur: fenn
+    resume:
+      - "Des archers morts tirent sur les barques des Pilotis."
+    resume-en:
+      - "Dead archers are shooting at the boats of Les Pilotis."
+    offre:
+      - "fenn: Des archers sortent des tourbes et tirent sur nos barques. Des morts. Qui visent bien."
+    offre-en:
+      - "fenn: Archers rise from the peat and shoot at our boats. Dead ones. Who aim well."
+    etapes:
+      - type: TUER
+        texte: "Abattre des archers des tourbes"
+        texte-en: "Destroy peat archers"
+        monstres: [archer_tourbe]
+        nombre: 12
+      - type: PARLER
+        texte: "Prévenir Fenn"
+        texte-en: "Tell Fenn"
+        pnj: fenn
+        dialogue:
+          - "fenn: Je vais pouvoir pêcher sans casque. Merci."
+        dialogue-en:
+          - "fenn: I'll be able to fish without a helmet. Thanks."
+    recompenses:
+      xp: 2700
+      or: 270
+
+  o_p_les_anguilles_noires:
+    nom: "Les anguilles noires"
+    nom-en: "The Black Eels"
+    faction: ombre
+    niveau: 17
+    requiert: [o_les_pilotis]
+    donneur: fenn
+    resume:
+      - "Fenn veut comprendre pourquoi les anguilles"
+      - "du marais sont devenues noires."
+    resume-en:
+      - "Fenn wants to understand why the eels"
+      - "of the marsh have turned black."
+    offre:
+      - "fenn: Les noyés avalent les anguilles. Ouvre-en quelques-uns et rapporte-les-moi. Je veux voir si elles sont noires dedans aussi."
+    offre-en:
+      - "fenn: The drowned swallow the eels. Open a few of them and bring them back. I want to see if they're black inside too."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer des anguilles noires"
+        texte-en: "Collect black eels"
+        monstres: [noye]
+        nombre: 8
+        chance: 0.5
+        objet: "Anguille noire"
+        objet-en: "Black eel"
+      - type: PARLER
+        texte: "Rapporter les anguilles à Fenn"
+        texte-en: "Bring the eels to Fenn"
+        pnj: fenn
+        dialogue:
+          - "fenn: Noires jusqu'à l'arête. Le Néant est dans l'eau. Je mangerai des racines cet hiver."
+        dialogue-en:
+          - "fenn: Black to the bone. The Void is in the water. I'll eat roots this winter."
+    recompenses:
+      xp: 2900
+      or: 290
+
+  o_p_les_araignees_du_marais:
+    nom: "Les araignées du marais"
+    nom-en: "The Marsh Spiders"
+    faction: ombre
+    niveau: 18
+    requiert: [o_les_pilotis]
+    donneur: tourbe
+    resume:
+      - "Un nid d'araignées grandit à l'ouest des Pilotis."
+    resume-en:
+      - "A spider nest is growing west of Les Pilotis."
+    offre:
+      - "tourbe: À l'ouest, les araignées tissent entre les roseaux. Mes cueilleuses n'osent plus y aller."
+    offre-en:
+      - "tourbe: To the west, spiders weave between the reeds. My gatherers don't dare go there anymore."
+    etapes:
+      - type: TUER
+        texte: "Détruire le nid de l'ouest"
+        texte-en: "Destroy the western nest"
+        monstres: [araignee, araignee_geante]
+        nombre: 12
+        point: nid_ouest_marais
+      - type: PARLER
+        texte: "Revenir voir Mère Tourbe"
+        texte-en: "Return to Mother Peat"
+        pnj: tourbe
+        dialogue:
+          - "tourbe: Mes cueilleuses te béniront. À leur façon : en t'oubliant vite."
+        dialogue-en:
+          - "tourbe: My gatherers will bless you. In their way: by forgetting you quickly."
+    recompenses:
+      xp: 3200
+      or: 320
+
+  o_p_le_cimetiere_englouti:
+    nom: "Le cimetière englouti"
+    nom-en: "The Sunken Graveyard"
+    faction: ombre
+    niveau: 20
+    requiert: [o_les_pilotis]
+    donneur: tourbe
+    resume:
+      - "Un cimetière à demi noyé, au sud-ouest,"
+      - "se vide de ses morts."
+    resume-en:
+      - "A half-drowned graveyard, to the south-west,"
+      - "is emptying of its dead."
+    offre:
+      - "tourbe: Au sud-ouest, l'eau a mangé un cimetière. Les morts flottent jusqu'ici. Je n'ai plus de place pour les recoucher."
+    offre-en:
+      - "tourbe: To the south-west, the water swallowed a graveyard. The dead float all the way here. I have no room left to lay them down again."
+    etapes:
+      - type: TUER
+        texte: "Rendre les morts à la tourbe"
+        texte-en: "Return the dead to the peat"
+        monstres: [squelette, revenant]
+        nombre: 12
+        point: cimetiere_marais
+      - type: INTERAGIR
+        texte: "Planter le pieu de garde"
+        texte-en: "Plant the warding stake"
+        point: cimetiere_marais
+        rayon: 6
+        apres:
+          - "Le pieu s'enfonce dans la tourbe. L'eau autour se calme, comme une bête qu'on caresse."
+        apres-en:
+          - "The stake sinks into the peat. The water around it calms, like a stroked beast."
+      - type: PARLER
+        texte: "Revenir voir Mère Tourbe"
+        texte-en: "Return to Mother Peat"
+        pnj: tourbe
+        dialogue:
+          - "tourbe: Ils dormiront. Un peu."
+        dialogue-en:
+          - "tourbe: They'll sleep. For a while."
+    recompenses:
+      xp: 3600
+      or: 360
+
+  o_p_la_tour_d_eau:
+    nom: "La tour d'eau"
+    nom-en: "The Water Tower"
+    faction: ombre
+    niveau: 22
+    requiert: [o_les_pilotis]
+    donneur: fenn
+    resume:
+      - "Une tour noyée, loin au sud-est,"
+      - "sonne une cloche sous l'eau."
+    resume-en:
+      - "A drowned tower, far to the south-east,"
+      - "rings a bell under the water."
+    offre:
+      - "fenn: Loin au sud-est, une cloche sonne sous l'eau, dans une vieille tour. Les poissons fuient. Les noyés, eux, y vont."
+    offre-en:
+      - "fenn: Far to the south-east, a bell rings under the water, in an old tower. The fish flee. The drowned go toward it."
+    etapes:
+      - type: TUER
+        texte: "Abattre les noyés de la tour"
+        texte-en: "Destroy the drowned of the tower"
+        monstres: [revenant, noye]
+        nombre: 8
+        point: tour_d_eau
+      - type: INTERAGIR
+        texte: "Arrêter la cloche"
+        texte-en: "Stop the bell"
+        point: tour_d_eau
+        rayon: 6
+        apres:
+          - "Un Éclat est coincé dans le battant, comme au Bourg des Pâtres, de l'autre côté du monde. Mais celui-ci est noir."
+        apres-en:
+          - "A Shard is stuck in the clapper, like at the Shepherds' Hamlet, on the other side of the world. But this one is black."
+      - type: PARLER
+        texte: "Revenir voir Fenn"
+        texte-en: "Return to Fenn"
+        pnj: fenn
+        dialogue:
+          - "fenn: Une cloche qui appelle les noyés… Le Néant sait sonner, maintenant."
+        dialogue-en:
+          - "fenn: A bell that calls the drowned… The Void knows how to ring now."
+    recompenses:
+      xp: 4000
+      or: 400
+
+  o_p_la_chapelle_noyee:
+    nom: "La chapelle noyée"
+    nom-en: "The Drowned Chapel"
+    faction: ombre
+    niveau: 23
+    requiert: [o_le_creux_qui_parle]
+    donneur: kael
+    resume:
+      - "Kael se souvient d'une chapelle"
+      - "où il a fait halte, enchaîné."
+    resume-en:
+      - "Kael remembers a chapel"
+      - "where he stopped, in chains."
+    offre:
+      - "kael: Le convoi qui m'emmenait… s'est arrêté dans une chapelle, au sud. J'y ai laissé… quelque chose. Je crois."
+    offre-en:
+      - "kael: The convoy that took me… stopped at a chapel, to the south. I left… something there. I think."
+    etapes:
+      - type: TUER
+        texte: "Abattre les noyés de la chapelle"
+        texte-en: "Destroy the drowned of the chapel"
+        monstres: [revenant, noye]
+        nombre: 8
+        point: chapelle_noyee
+      - type: INTERAGIR
+        texte: "Fouiller l'autel"
+        texte-en: "Search the altar"
+        point: chapelle_noyee
+        rayon: 6
+        apres:
+          - "Sous l'autel, gravé au clou dans le bois : « Kael, forgeron, Gris-Hameau. Je m'appelle Kael. Je m'appelle Kael. »"
+        apres-en:
+          - "Under the altar, scratched into the wood with a nail: « Kael, smith, Gris-Hameau. My name is Kael. My name is Kael. »"
+      - type: PARLER
+        texte: "Raconter à Kael ce que vous avez trouvé"
+        texte-en: "Tell Kael what you found"
+        pnj: kael
+        dialogue:
+          - "kael: Je me l'étais écrit. Pour ne pas oublier. J'ai oublié quand même."
+          - "kael: Merci de me l'avoir rapporté."
+        dialogue-en:
+          - "kael: I wrote it to myself. So I wouldn't forget. I forgot anyway."
+          - "kael: Thank you for bringing it back to me."
+    recompenses:
+      xp: 4300
+      or: 430
+
+  o_p_les_morts_du_sud:
+    nom: "Les morts du sud"
+    nom-en: "The Southern Dead"
+    faction: ombre
+    niveau: 24
+    requiert: [o_p_le_cimetiere_englouti]
+    donneur: tourbe
+    resume:
+      - "Un autre cimetière se réveille,"
+      - "loin au sud-ouest du marais."
+    resume-en:
+      - "Another graveyard is waking,"
+      - "far south-west of the marsh."
+    offre:
+      - "tourbe: Il y en a un autre, plus loin encore, au sud-ouest. Plus vieux. Plus profond. Il me faut encore un pieu."
+    offre-en:
+      - "tourbe: There's another one, further still, to the south-west. Older. Deeper. I need another stake."
+    etapes:
+      - type: TUER
+        texte: "Rendre les morts à la tourbe"
+        texte-en: "Return the dead to the peat"
+        monstres: [squelette, revenant]
+        nombre: 12
+        point: morts_du_sud_marais
+      - type: INTERAGIR
+        texte: "Planter le pieu de garde"
+        texte-en: "Plant the warding stake"
+        point: morts_du_sud_marais
+        rayon: 6
+      - type: PARLER
+        texte: "Revenir voir Mère Tourbe"
+        texte-en: "Return to Mother Peat"
+        pnj: tourbe
+        dialogue:
+          - "tourbe: Deux pieux. Le marais te doit une fière chandelle. Noire, la chandelle."
+        dialogue-en:
+          - "tourbe: Two stakes. The marsh owes you a debt. A black one."
+    recompenses:
+      xp: 4500
+      or: 450
+
+  o_p_le_nid_du_sud:
+    nom: "Le nid du sud"
+    nom-en: "The Southern Nest"
+    faction: ombre
+    niveau: 25
+    requiert: [o_p_les_araignees_du_marais]
+    donneur: fenn
+    resume:
+      - "Le plus grand nid d'araignées du marais"
+      - "se cache tout au sud."
+    resume-en:
+      - "The largest spider nest in the marsh"
+      - "is hidden far to the south."
+    offre:
+      - "fenn: Tout au sud, près de la mer, un nid si grand qu'on le voit depuis les barques. Je te paie ce que tu veux pour qu'il disparaisse."
+    offre-en:
+      - "fenn: Far to the south, near the sea, a nest so big you can see it from the boats. I'll pay whatever you want for it to disappear."
+    etapes:
+      - type: TUER
+        texte: "Détruire le grand nid du sud"
+        texte-en: "Destroy the great southern nest"
+        monstres: [araignee, araignee_geante]
+        nombre: 14
+        point: nid_sud_marais
+      - type: PARLER
+        texte: "Revenir voir Fenn"
+        texte-en: "Return to Fenn"
+        pnj: fenn
+        dialogue:
+          - "fenn: Je le vois plus, depuis la barque. Tiens, c'est tout ce que j'ai."
+        dialogue-en:
+          - "fenn: I can't see it from the boat anymore. Here, it's all I've got."
+    recompenses:
+      xp: 4700
+      or: 470
+
+  o_p_le_cimetiere_de_l_est:
+    nom: "Le cimetière de l'est"
+    nom-en: "The Eastern Graveyard"
+    faction: ombre
+    niveau: 23
+    requiert: [o_les_pilotis]
+    donneur: tourbe
+    resume:
+      - "Un cimetière de la côte est"
+      - "envoie ses morts vers les Pilotis."
+    resume-en:
+      - "A graveyard on the east coast"
+      - "is sending its dead toward Les Pilotis."
+    offre:
+      - "tourbe: À l'est, sur la côte, un cimetière de marins. Ils reviennent tous vers le marais. Vers nous."
+    offre-en:
+      - "tourbe: To the east, on the coast, a sailors' graveyard. They all come back toward the marsh. Toward us."
+    etapes:
+      - type: TUER
+        texte: "Rendre les marins à la terre"
+        texte-en: "Return the sailors to the earth"
+        monstres: [squelette, revenant]
+        nombre: 12
+        point: cimetiere_est_marais
+      - type: PARLER
+        texte: "Revenir voir Mère Tourbe"
+        texte-en: "Return to Mother Peat"
+        pnj: tourbe
+        dialogue:
+          - "tourbe: Les marins aussi ont le droit de dormir."
+        dialogue-en:
+          - "tourbe: Sailors have the right to sleep too."
+    recompenses:
+      xp: 4300
+      or: 430

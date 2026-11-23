@@ -129,6 +129,7 @@ public final class CasterAttack implements Listener {
     private void fire(Player p, WeaponType type) {
         PlayerData d = plugin.players().loaded(p.getUniqueId());
         if (d == null || d.buildMode || !plugin.progression().valid(d) || d.hp <= 0 || d.cast != null
+                || plugin.spells().control().incapacitated(p)
                 || (p.getGameMode() != GameMode.SURVIVAL && p.getGameMode() != GameMode.ADVENTURE)) {
             return;
         }

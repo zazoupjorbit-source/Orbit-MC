@@ -68,11 +68,10 @@ public final class PlayerStore {
         }
     }
 
-    /** Efface l'avatar (nouvelle partie). */
+    /** Efface l'avatar (nouvelle partie) : retour à zéro, introduction comprise. */
     public PlayerData reset(Player p) {
         PlayerData fresh = new PlayerData(p.getUniqueId());
         fresh.name = p.getName();
-        fresh.introDone = true;
         cache.put(p.getUniqueId(), fresh);
         save(fresh);
         return fresh;

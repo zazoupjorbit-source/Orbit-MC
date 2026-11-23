@@ -67,8 +67,19 @@ firework-game:
   leave-lock-seconds: 5
   # Contour lumineux (visible à travers les murs) sur les joueurs en mode feu d'artifice.
   glow: true
-  # true : le joueur éliminé est renvoyé au spawn ; false : il reste sur place, hors du mode.
+  # true : le joueur éliminé (ou mort) réapparaît ailleurs ; false : il reste sur place.
   respawn-at-spawn: true
+  # true : après une élimination ou une mort, on reste en mode feu d'artifice (série et bonus perdus).
+  stay-in-mode: true
+  # true : réapparition au hasard dans la station (à l'intérieur, sur un sol libre) ; false : spawn du lobby.
+  random-respawn: true
+  # Zone tirée au hasard autour du centre de la station (blocs), hauteur max au-dessus du sol,
+  # et distance minimale aux autres joueurs en mode (si possible).
+  random-respawn-radius: 85
+  random-respawn-height: 8
+  random-respawn-min-distance: 12
+  # Protection après la réapparition, en ticks (20 = 1 s) : les tirs traversent le joueur.
+  respawn-protection-ticks: 40
   # Bonus de série : nombre d'éliminations d'affilée pour le débloquer (0 = bonus désactivé).
   # Tous les bonus sont perdus à l'élimination ou en quittant le mode.
   streak-rewards:

@@ -1,0 +1,1024 @@
+# ------------------------------------------------------------------
+#  Lumière, acte III — les Collines du Ponant (niv. 16 à 25)
+#  Hub : le Guet du Ponant. Quêtes principales 18 à 26 et annexes.
+#  FICHIER GÉNÉRÉ par tools\quetes\gen-quetes.js depuis tools\quetes\zones\lumiere-ponant.js : modifier la source, pas ce fichier.
+# ------------------------------------------------------------------
+
+pnj:
+  isaure:
+    nom: "Commandante Isaure"
+    nom-en: "Commander Isaure"
+    titre: "Guet du Ponant"
+    titre-en: "Ponant Watch"
+    couleur: "#E8C872"
+    type: MANNEQUIN
+    visage: zuri
+    point: isaure
+    main: IRON_SWORD
+    repliques:
+      - "Le Guet tient. Il tiendra tant qu'il restera une épée et un mur."
+    repliques-en:
+      - "The Watch holds. It will hold as long as there's a sword and a wall left."
+  teo_guet:
+    nom: "Téo"
+    titre: "Marqué en fuite"
+    titre-en: "Marked on the run"
+    couleur: "#F2E6C9"
+    type: MANNEQUIN
+    visage: kai
+    point: teo_guet
+    repliques:
+      - "Ma Marque revient. Un peu chaque jour. Ça fait mal, mais c'est à moi."
+    repliques-en:
+      - "My Mark is coming back. A little each day. It hurts, but it's mine."
+  aubin:
+    nom: "Aubin"
+    titre: "Éclaireur"
+    titre-en: "Scout"
+    couleur: "#A8E6A1"
+    type: MANNEQUIN
+    visage: alex
+    point: aubin
+    main: BOW
+    repliques:
+      - "Les collines voient tout. Moi aussi, d'ici."
+    repliques-en:
+      - "The hills see everything. So do I, from here."
+  rosalinde:
+    nom: "Sœur Rosalinde"
+    nom-en: "Sister Rosalinde"
+    titre: "Soigneuse"
+    titre-en: "Healer"
+    couleur: "#F7E7A1"
+    type: MANNEQUIN
+    visage: sunny
+    point: rosalinde
+    repliques:
+      - "Je soigne tout le monde. Même ceux que l'Ordre m'interdit de soigner."
+    repliques-en:
+      - "I heal everyone. Even those the Order forbids me to heal."
+
+monstres:
+  purificateur_traqueur:
+    nom: "Purificateur traqueur"
+    type: SKELETON
+    pv: 1.25
+    degats: 1.15
+    vitesse: 1.05
+    arme: GOLDEN_AXE
+  geolier_cloitre:
+    nom: "Geôlier du Cloître"
+    type: VINDICATOR
+    pv: 1.35
+    degats: 1.15
+    vitesse: 0.95
+    arme: GOLDEN_AXE
+  castel_inquisiteur:
+    nom: "Frère Castel, Inquisiteur"
+    type: VINDICATOR
+    taille: 1.3
+    pv: 9
+    degats: 1.4
+    vitesse: 1
+    xp: 12
+    or: 10
+    arme: GOLDEN_AXE
+
+apparitions:
+  traqueurs_teo:
+    point: refuge_teo
+    monstre: purificateur_traqueur
+    niveau: [18, 19]
+    nombre: 5
+    rayon: 9
+  geoliers_mine:
+    point: mine_seuil
+    monstre: geolier_cloitre
+    niveau: [20, 21]
+    nombre: 5
+    rayon: 9
+  affames_carnet:
+    point: carnet_orsan
+    monstre: affame_neant
+    niveau: [21, 22]
+    nombre: 5
+    rayon: 9
+  traqueurs_castel:
+    point: camp_castel
+    monstre: purificateur_traqueur
+    niveau: [22, 23]
+    nombre: 4
+    rayon: 9
+  castel_camp:
+    point: camp_castel
+    monstre: castel_inquisiteur
+    niveau: 25
+    nombre: 1
+    rayon: 4
+
+quetes:
+
+  # ================================================================ ACTE III — QUÊTES PRINCIPALES
+
+  l_les_collines_du_ponant:
+    nom: "Les Collines du Ponant"
+    nom-en: "The Ponant Hills"
+    faction: lumiere
+    niveau: 16
+    requiert: [la_reine_tisseuse]
+    resume:
+      - "Le Guet du Ponant ne répond plus."
+      - "Un Marqué en fuite a été vu dans les collines."
+    resume-en:
+      - "The Ponant Watch no longer answers."
+      - "A Marked on the run has been seen in the hills."
+    intro:
+      - "Au nord du Bois de l'Aube, les collines montent vers le ciel comme des vagues figées. Tout en haut, une tour de guet fume encore."
+    intro-en:
+      - "North of the Wood of the Dawn, the hills rise toward the sky like frozen waves. At the very top, a watchtower is still smoking."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre le Guet du Ponant"
+        texte-en: "Reach the Ponant Watch"
+        point: porte_guet
+        rayon: 8
+      - type: PARLER
+        texte: "Parler à la Commandante Isaure"
+        texte-en: "Talk to Commander Isaure"
+        pnj: isaure
+        dialogue:
+          - "isaure: Un Marqué de l'Aube ? Elwen a reçu mon message, alors. Il était temps."
+          - "isaure: Des brigands tiennent le col, au sud-est. Plus rien ne monte, ni vivres, ni renforts. Et des Purificateurs fouillent les collines."
+          - "isaure: Ils cherchent un gamin. Ils ne disent pas pourquoi. Ça ne me plaît pas."
+        dialogue-en:
+          - "isaure: A Marked of the Dawn? Elwen got my message, then. About time."
+          - "isaure: Brigands hold the pass, to the south-east. Nothing comes up anymore, no food, no reinforcements. And Purifiers are searching the hills."
+          - "isaure: They're looking for a kid. They won't say why. I don't like it."
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage du Guet"
+        texte-en: "Touch the Watch's anchoring Shard"
+        point: ancre_guet
+        rayon: 4
+    recompenses:
+      xp: 2600
+      or: 260
+
+  l_le_col_bloque:
+    nom: "Le col bloqué"
+    nom-en: "The Blocked Pass"
+    faction: lumiere
+    niveau: 17
+    requiert: [l_les_collines_du_ponant]
+    donneur: isaure
+    resume:
+      - "Des brigands bloquent le col"
+      - "qui ravitaille le Guet."
+    resume-en:
+      - "Brigands are blocking the pass"
+      - "that supplies the Watch."
+    offre:
+      - "isaure: Le camp du col, au sud-est. Brise-le, et le Guet pourra manger de nouveau."
+    offre-en:
+      - "isaure: The camp at the pass, to the south-east. Break it, and the Watch can eat again."
+    etapes:
+      - type: TUER
+        texte: "Briser le camp du col"
+        texte-en: "Break the camp at the pass"
+        monstres: [bandit, braconnier]
+        nombre: 10
+        point: camp_col
+      - type: INTERAGIR
+        texte: "Fouiller la tente du chef"
+        texte-en: "Search the chief's tent"
+        point: camp_col
+        rayon: 6
+        apres:
+          - "Une bourse pleine d'or, bien trop pleine pour des brigands. Sur le cuir, un soleil levant, brûlé au fer : le sceau du Cloître Blanc."
+          - "Un mot, dedans : « Que personne ne monte au Guet tant que l'enfant n'est pas repris. »"
+        apres-en:
+          - "A purse full of gold, far too full for brigands. On the leather, a rising sun, branded with iron: the seal of the White Cloister."
+          - "A note, inside: « Let no one reach the Watch until the child is taken back. »"
+      - type: PARLER
+        texte: "Montrer la bourse à Isaure"
+        texte-en: "Show the purse to Isaure"
+        pnj: isaure
+        dialogue:
+          - "isaure: Le Cloître paie des brigands pour nous affamer. Pour un enfant."
+          - "isaure: Je sers l'Aube depuis vingt ans. Je ne reconnais pas l'Aube, là-dedans."
+        dialogue-en:
+          - "isaure: The Cloister pays brigands to starve us. For a child."
+          - "isaure: I've served the Dawn for twenty years. I don't recognise the Dawn in this."
+    recompenses:
+      xp: 2800
+      or: 280
+
+  l_le_fugitif:
+    nom: "Le fugitif"
+    nom-en: "The Fugitive"
+    faction: lumiere
+    niveau: 18
+    requiert: [l_le_col_bloque]
+    donneur: isaure
+    resume:
+      - "Aubin a vu des Purificateurs encercler"
+      - "une ruine, loin au sud du Guet."
+    resume-en:
+      - "Aubin saw Purifiers surround"
+      - "a ruin, far south of the Watch."
+    offre:
+      - "isaure: Aubin a vu des Purificateurs encercler une vieille ruine, loin au sud. Ils ont trouvé le gamin."
+      - "isaure: Trouve-le avant eux. Ensuite, on décidera."
+    offre-en:
+      - "isaure: Aubin saw Purifiers surround an old ruin, far to the south. They've found the kid."
+      - "isaure: Find him before they do. Then we'll decide."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la ruine du sud"
+        texte-en: "Reach the southern ruin"
+        point: refuge_teo
+        rayon: 12
+      - type: TUER
+        texte: "Repousser les Purificateurs traqueurs"
+        texte-en: "Drive back the tracking Purifiers"
+        monstres: [purificateur_traqueur]
+        nombre: 6
+        point: refuge_teo
+        apres:
+          - "Le dernier Purificateur tombe en criant : « L'enfant appartient au Cloître ! »"
+        apres-en:
+          - "The last Purifier falls, shouting: « The child belongs to the Cloister! »"
+      - type: INTERAGIR
+        texte: "Chercher le fugitif dans la ruine"
+        texte-en: "Look for the fugitive in the ruin"
+        point: refuge_teo
+        rayon: 6
+        apres:
+          - "teo_guet: C'est toi ? Le Marqué des Champs Vitrifiés ? Tu m'as relevé, ce matin-là."
+          - "teo_guet: Ils m'ont emmené au Cloître. Une salle blanche. Ils chantaient. J'ai senti ma lumière partir, comme du sang."
+          - "teo_guet: Ils se sont arrêtés à la moitié. Quelqu'un a crié : « Pas lui, il est pour le Reliquaire. » J'ai profité du bruit pour m'enfuir."
+        apres-en:
+          - "teo_guet: Is that you? The Marked from the Vitrified Fields? You picked me up, that morning."
+          - "teo_guet: They took me to the Cloister. A white room. They were singing. I felt my light leave, like blood."
+          - "teo_guet: They stopped halfway. Someone shouted: « Not him, he's for the Reliquary. » I used the noise to escape."
+      - type: PARLER
+        texte: "Ramener Téo au Guet"
+        texte-en: "Bring Téo back to the Watch"
+        pnj: isaure
+        dialogue:
+          - "isaure: Un enfant. Ils traquent un enfant avec des chiens et de l'or."
+          - "isaure: Il reste ici. Sous ma garde. Et si quelqu'un vient le réclamer, il me le demandera en face."
+        dialogue-en:
+          - "isaure: A child. They hunt a child with dogs and gold."
+          - "isaure: He stays here. Under my guard. And if anyone comes to claim him, they'll ask me to my face."
+    recompenses:
+      xp: 3000
+      or: 300
+
+  l_pour_v:
+    nom: "« Pour V. »"
+    nom-en: "« For V. »"
+    faction: lumiere
+    niveau: 19
+    requiert: [l_le_fugitif]
+    donneur: teo_guet
+    resume:
+      - "Téo a vu les caisses du Cloître partir"
+      - "vers une ruine à l'est du Guet."
+    resume-en:
+      - "Téo saw the Cloister's crates leave"
+      - "toward a ruin east of the Watch."
+    offre:
+      - "teo_guet: En m'enfuyant, j'ai suivi un convoi. Des caisses, vers une vieille ruine à l'est. Les morts gardent l'endroit, mais ils laissent passer les convois. C'est pas normal."
+    offre-en:
+      - "teo_guet: While escaping, I followed a convoy. Crates, toward an old ruin to the east. The dead guard the place, but they let the convoys through. That's not normal."
+    etapes:
+      - type: TUER
+        texte: "Abattre les morts de la ruine"
+        texte-en: "Destroy the dead of the ruin"
+        monstres: [squelette, revenant]
+        nombre: 8
+        point: ruine_fioles
+      - type: INTERAGIR
+        texte: "Ouvrir les caisses"
+        texte-en: "Open the crates"
+        point: ruine_fioles
+        rayon: 6
+        apres:
+          - "Des fioles, rangées dans la paille. Une lumière dorée y bat comme un cœur. Tu sens ta propre Marque s'agiter, comme si elle reconnaissait une sœur."
+          - "Sur les caisses, le sceau du Cloître. Et l'adresse : « Citadelle d'Obsidienne, Morneval. Pour V. »"
+        apres-en:
+          - "Vials, packed in straw. A golden light beats inside them like a heart. You feel your own Mark stir, as if it recognised a sister."
+          - "On the crates, the Cloister's seal. And the address: « Obsidian Citadel, Morneval. For V. »"
+      - type: PARLER
+        texte: "Montrer une fiole à Téo"
+        texte-en: "Show a vial to Téo"
+        pnj: teo_guet
+        dialogue:
+          - "teo_guet: C'est… c'est ça qui est sorti de moi. J'en suis sûr. Ça a la même chaleur."
+          - "teo_guet: Morneval ? Ils envoient notre lumière à l'Ombre ? Pourquoi ils feraient ça ?"
+        dialogue-en:
+          - "teo_guet: That's… that's what came out of me. I'm sure of it. It has the same warmth."
+          - "teo_guet: Morneval? They send our light to the Shadow? Why would they do that?"
+    recompenses:
+      xp: 3300
+      or: 330
+
+  l_la_mine_du_ponant:
+    nom: "La Mine du Ponant"
+    nom-en: "The Ponant Mine"
+    faction: lumiere
+    niveau: 20
+    requiert: [l_pour_v]
+    donneur: isaure
+    resume:
+      - "La Mine du Ponant, scellée depuis la Chute,"
+      - "a été rouverte par le Cloître."
+    resume-en:
+      - "The Ponant Mine, sealed since the Fall,"
+      - "has been reopened by the Cloister."
+    offre:
+      - "isaure: La Mine du Ponant était scellée depuis la Chute. Aubin dit que la porte est ouverte, et gardée par des hommes du Cloître."
+      - "isaure: Va voir ce qu'ils y cachent. Sans moi : si j'y vais, c'est une guerre."
+    offre-en:
+      - "isaure: The Ponant Mine had been sealed since the Fall. Aubin says the door is open, and guarded by Cloister men."
+      - "isaure: Go and see what they're hiding there. Without me: if I go, it's a war."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la Mine du Ponant"
+        texte-en: "Reach the Ponant Mine"
+        point: mine_seuil
+        rayon: 10
+      - type: TUER
+        texte: "Abattre les Geôliers du Cloître"
+        texte-en: "Defeat the Jailers of the Cloister"
+        monstres: [geolier_cloitre]
+        nombre: 8
+        point: mine_seuil
+      - type: INTERAGIR
+        texte: "Poser la main sur la porte de la mine"
+        texte-en: "Lay your hand on the mine door"
+        point: mine_portail
+        rayon: 5
+        apres:
+          - "Ta Marque traverse la roche. En bas, des dizaines de silhouettes creusent sans un bruit. Des Marqués. Des Purifiés. Leurs yeux ne voient plus rien."
+          - "Ils arrachent des Éclats à la paroi et les portent vers une grande châsse d'or : le Reliquaire. Il brille un peu plus à chaque Éclat."
+          - "Un murmure monte du Reliquaire. Pas froid : brûlant. « Laissez-moi partir. »"
+        apres-en:
+          - "Your Mark passes through the rock. Below, dozens of figures dig without a sound. Marked. Purified. Their eyes see nothing anymore."
+          - "They tear Shards from the wall and carry them to a great golden shrine: the Reliquary. It shines a little more with each Shard."
+          - "A whisper rises from the Reliquary. Not cold: burning. « Let me go. »"
+      - type: PARLER
+        texte: "Revenir voir Isaure"
+        texte-en: "Return to Isaure"
+        pnj: isaure
+        dialogue:
+          - "isaure: Des Marqués réduits en esclaves, pour remplir une châsse. Et la châsse… parle ?"
+          - "isaure: Le Reliquaire. Téo l'a entendu au Cloître. Ils ne veulent pas purifier les Marqués. Ils veulent leur lumière."
+        dialogue-en:
+          - "isaure: Marked reduced to slaves, to fill a shrine. And the shrine… speaks?"
+          - "isaure: The Reliquary. Téo heard the name at the Cloister. They don't want to purify the Marked. They want their light."
+    recompenses:
+      xp: 3700
+      or: 370
+
+  l_le_carnet_d_orsan:
+    nom: "Le carnet d'Orsan"
+    nom-en: "Orsan's Notebook"
+    faction: lumiere
+    niveau: 21
+    requiert: [l_la_mine_du_ponant]
+    donneur: aubin
+    resume:
+      - "Un astromancien a campé dans une ruine"
+      - "au sud-est, avant d'être chassé par les Affamés."
+    resume-en:
+      - "An astromancer camped in a ruin"
+      - "to the south-east, before being driven out by the Hungry."
+    offre:
+      - "aubin: Au sud-est, dans une ruine sur les hauteurs, un astromancien de l'Aube a campé une semaine. Puis les Affamés sont venus et il a fui sans ses affaires."
+      - "aubin: Ses affaires y sont encore. Les Affamés aussi."
+    offre-en:
+      - "aubin: To the south-east, in a ruin on the heights, a Dawn astromancer camped for a week. Then the Hungry came and he fled without his things."
+      - "aubin: His things are still there. So are the Hungry."
+    etapes:
+      - type: TUER
+        texte: "Repousser les Affamés"
+        texte-en: "Drive back the Hungry"
+        monstres: [affame_neant]
+        nombre: 8
+        point: carnet_orsan
+      - type: INTERAGIR
+        texte: "Fouiller le campement de l'astromancien"
+        texte-en: "Search the astromancer's camp"
+        point: carnet_orsan
+        rayon: 6
+        apres:
+          - "Un carnet de cuir, signé « O. ». L'écriture d'Orsan, élégante et tremblante."
+          - "« Le Reliquaire rassemble la lumière de l'Astre. Quand il sera plein, l'Astre renaîtra, et nous le garderons cette fois. »"
+          - "« Mais ce que l'on arrache aux Marqués fuit, et nourrit le Néant. Le Néant grandit à chaque fiole. Séraphine le sait. »"
+          - "« Alors nous vendons le surplus à V. Ses Creux retiennent le Néant, ses Éclats noirs remplissent le Reliquaire. Le Pacte des Deux Ciels. Que l'Astre nous pardonne. »"
+        apres-en:
+          - "A leather notebook, signed « O. ». Orsan's handwriting, elegant and shaky."
+          - "« The Reliquary gathers the Star's light. When it is full, the Star will be reborn, and this time we will keep it. »"
+          - "« But what is torn from the Marked leaks, and feeds the Void. The Void grows with every vial. Seraphine knows it. »"
+          - "« So we sell the surplus to V. His Hollow hold back the Void, his black Shards fill the Reliquary. The Pact of the Two Skies. May the Star forgive us. »"
+      - type: PARLER
+        texte: "Montrer le carnet à Isaure"
+        texte-en: "Show the notebook to Isaure"
+        pnj: isaure
+        dialogue:
+          - "isaure: Un pacte avec Morneval. Signé par la Haute-Prélate."
+          - "isaure: On se fait tuer sur toutes les frontières, et nos chefs commercent avec les leurs."
+          - "teo_guet: Et nous, les Marqués, on est la marchandise."
+        dialogue-en:
+          - "isaure: A pact with Morneval. Signed by the High Prelate."
+          - "isaure: We get killed on every border, and our leaders trade with theirs."
+          - "teo_guet: And we Marked are the goods."
+    recompenses:
+      xp: 4000
+      or: 400
+
+  l_l_inquisiteur:
+    nom: "L'Inquisiteur"
+    nom-en: "The Inquisitor"
+    faction: lumiere
+    niveau: 23
+    requiert: [l_le_carnet_d_orsan]
+    donneur: isaure
+    resume:
+      - "Frère Castel, Inquisiteur du Cloître,"
+      - "vient réclamer Téo."
+    resume-en:
+      - "Brother Castel, Inquisitor of the Cloister,"
+      - "has come to claim Téo."
+    offre:
+      - "isaure: Un Inquisiteur du Cloître s'est installé dans le vieux cimetière, au sud-ouest. Frère Castel. Il exige Téo avant la nuit."
+      - "isaure: On dit qu'il revient de chez l'Ombre, où il a perdu tout un convoi de prisonniers. Il n'a plus rien à perdre. Moi non plus."
+    offre-en:
+      - "isaure: An Inquisitor of the Cloister has settled in the old graveyard, to the south-west. Brother Castel. He demands Téo before nightfall."
+      - "isaure: They say he's back from the Shadow's lands, where he lost a whole convoy of prisoners. He has nothing left to lose. Neither do I."
+    etapes:
+      - type: TUER
+        texte: "Abattre l'escorte de l'Inquisiteur"
+        texte-en: "Destroy the Inquisitor's escort"
+        monstres: [purificateur_traqueur, squelette, revenant]
+        nombre: 8
+        point: camp_castel
+      - type: TUER
+        texte: "Vaincre Frère Castel"
+        texte-en: "Defeat Brother Castel"
+        monstres: [castel_inquisiteur]
+        point: camp_castel
+        apres:
+          - "castel: Vous ne comprenez rien ! Sans le Reliquaire, l'Astre ne reviendra jamais !"
+        apres-en:
+          - "castel: You understand nothing! Without the Reliquary, the Star will never return!"
+      - type: INTERAGIR
+        texte: "Fouiller les affaires de l'Inquisiteur"
+        texte-en: "Search the Inquisitor's belongings"
+        point: camp_castel
+        rayon: 6
+        apres:
+          - "Un ordre scellé : « Ramenez l'enfant de Varenne. Sa Marque est née la première, la nuit des étoiles. Il est la clé du Reliquaire. — S. »"
+        apres-en:
+          - "A sealed order: « Bring back Varenne's child. His Mark was born first, on the night of the stars. He is the key to the Reliquary. — S. »"
+      - type: PARLER
+        texte: "Montrer l'ordre à Isaure"
+        texte-en: "Show the order to Isaure"
+        pnj: isaure
+        dialogue:
+          - "isaure: L'enfant de Varenne ? Le capitaine de Veillemont ? Il a perdu son fils la nuit des étoiles…"
+          - "teo_guet: Varenne… Ce nom… J'ai froid, d'un coup."
+        dialogue-en:
+          - "isaure: Varenne's child? The captain of Veillemont? He lost his son on the night of the stars…"
+          - "teo_guet: Varenne… That name… I'm cold, all of a sudden."
+    recompenses:
+      xp: 4600
+      or: 460
+      objets:
+        - materiau: GOLDEN_AXE
+          nom: "Hache de l'Inquisiteur"
+          nom-en: "Inquisitor's Axe"
+          description:
+            - "L'arme de Frère Castel. Le soleil gravé sur le fer est à moitié effacé."
+          description-en:
+            - "Brother Castel's weapon. The sun engraved on the iron is half worn away."
+
+  l_la_lumiere_rendue:
+    nom: "La lumière rendue"
+    nom-en: "The Light Returned"
+    faction: lumiere
+    niveau: 24
+    requiert: [l_l_inquisiteur]
+    donneur: teo_guet
+    resume:
+      - "Les fioles du Cloître pourraient rendre"
+      - "à Téo ce qu'on lui a pris."
+    resume-en:
+      - "The Cloister's vials could give back"
+      - "to Téo what was taken from him."
+    offre:
+      - "teo_guet: Les fioles de la ruine… Si c'est ma lumière qu'ils ont mise dedans, peut-être qu'on peut la remettre."
+      - "teo_guet: Il y a un cercle de pierres au sud, sur les hauteurs. Rosalinde dit que les Marques y brillent plus fort. Viens avec moi. Les morts y rôdent."
+    offre-en:
+      - "teo_guet: The vials from the ruin… If it's my light they put inside, maybe we can put it back."
+      - "teo_guet: There's a stone circle to the south, on the heights. Rosalinde says Marks shine brighter there. Come with me. The dead prowl there."
+    etapes:
+      - type: TUER
+        texte: "Dégager le cercle des hauteurs"
+        texte-en: "Clear the circle on the heights"
+        monstres: [squelette, revenant]
+        nombre: 8
+        point: ruine_rallumage
+      - type: INTERAGIR
+        texte: "Verser la lumière sur la Marque de Téo"
+        texte-en: "Pour the light onto Téo's Mark"
+        point: ruine_rallumage
+        rayon: 6
+        apres:
+          - "La fiole se vide sur le bras de Téo. La lumière hésite, puis rentre en lui comme de l'eau dans la terre sèche."
+          - "Dans ta tête, une voix brûlante, la même que celle du Reliquaire : « Merci. »"
+          - "teo_guet: Je me souviens. Une maison avec une épée au mur. Un homme qui m'appelle. « Téo ! » C'est mon père."
+          - "teo_guet: Il s'appelle Varenne. Il commande la garnison de Veillemont. Il est à côté de moi depuis le début et je ne l'ai pas reconnu."
+        apres-en:
+          - "The vial empties onto Téo's arm. The light hesitates, then sinks into him like water into dry earth."
+          - "In your head, a burning voice, the same as the Reliquary's: « Thank you. »"
+          - "teo_guet: I remember. A house with a sword on the wall. A man calling me. « Téo! » It's my father."
+          - "teo_guet: His name is Varenne. He commands the Veillemont garrison. He was right next to me from the start and I didn't recognise him."
+      - type: PARLER
+        texte: "Ramener Téo au Guet"
+        texte-en: "Bring Téo back to the Watch"
+        pnj: teo_guet
+        dialogue:
+          - "teo_guet: Ma Marque brille de nouveau. Pas autant qu'avant, mais elle est à moi."
+          - "teo_guet: La voix a dit « merci ». Celle du Reliquaire. Elle n'aime pas être en fiole, je crois."
+        dialogue-en:
+          - "teo_guet: My Mark shines again. Not as much as before, but it's mine."
+          - "teo_guet: The voice said « thank you ». The Reliquary's voice. It doesn't like being in a vial, I think."
+    recompenses:
+      xp: 5000
+      or: 500
+
+  l_vers_les_quatre_vents:
+    nom: "Vers les Quatre-Vents"
+    nom-en: "Toward the Four Winds"
+    faction: lumiere
+    niveau: 25
+    requiert: [l_la_lumiere_rendue]
+    donneur: isaure
+    resume:
+      - "Maître Orsan est arrivé au Guet."
+      - "La route des Quatre-Vents vous attend."
+    resume-en:
+      - "Master Orsan has arrived at the Watch."
+      - "The road to the Four Winds awaits you."
+    offre:
+      - "isaure: Maître Orsan est arrivé ce matin, avec Lise. Il te cherche. Il a l'air d'un homme qui n'a pas dormi depuis un mois."
+    offre-en:
+      - "isaure: Master Orsan arrived this morning, with Lise. He's looking for you. He looks like a man who hasn't slept in a month."
+    etapes:
+      - type: INTERAGIR
+        texte: "Retrouver Orsan près de l'Éclat du Guet"
+        texte-en: "Meet Orsan by the Watch's Shard"
+        point: ancre_guet
+        rayon: 6
+        apres:
+          - "orsan: Vous avez lu mon carnet. Je le vois à votre regard. Lise aussi l'a lu."
+          - "lise: Vous m'aviez dit que le Cloître soignait les Marqués, maître. Vous me l'aviez juré."
+          - "orsan: Je voulais le croire, Lise. Je voulais que l'Astre revienne. Je l'ai tant regardé disparaître…"
+          - "orsan: L'Éclat immense est tombé dans la Marche, près des Quatre-Vents. Séraphine veut qu'on le rapporte au Reliquaire. Le Reliquaire serait alors plein."
+          - "orsan: Allez-y avant ses hommes. Et quand vous serez devant l'Éclat, écoutez-le. Moi, je n'ai jamais su."
+        apres-en:
+          - "orsan: You have read my notebook. I can see it in your eyes. Lise read it too."
+          - "lise: You told me the Cloister healed the Marked, master. You swore it to me."
+          - "orsan: I wanted to believe it, Lise. I wanted the Star to come back. I watched it disappear so many times…"
+          - "orsan: The immense Shard fell in the March, near the Four Winds. Seraphine wants it brought to the Reliquary. The Reliquary would then be full."
+          - "orsan: Go before her men do. And when you stand before the Shard, listen to it. I never knew how."
+      - type: ATTEINDRE
+        texte: "Rejoindre la place des Quatre-Vents"
+        texte-en: "Reach the square of the Four Winds"
+        point: quatre_vents_place
+        rayon: 12
+        apres:
+          - "Les Quatre-Vents. Une ville sans bannière, où l'Aube et l'Ombre boivent dans les mêmes tavernes en se regardant de travers."
+          - "Au-dessus de la Marche, le ciel est encore rouge."
+        apres-en:
+          - "The Four Winds. A city with no banner, where Dawn and Shadow drink in the same taverns, glaring at each other."
+          - "Above the March, the sky is still red."
+    recompenses:
+      xp: 5200
+      or: 520
+
+  # ================================================================ ANNEXES — LE GUET DU PONANT
+
+  l_g_les_ours_des_cretes:
+    nom: "Les ours des crêtes"
+    nom-en: "The Ridge Bears"
+    faction: lumiere
+    niveau: 16
+    requiert: [l_les_collines_du_ponant]
+    donneur: aubin
+    resume:
+      - "Les ours des collines attaquent les sentinelles."
+    resume-en:
+      - "The hill bears are attacking the sentries."
+    offre:
+      - "aubin: Les ours sont descendus des crêtes. Ils ont faim, et mes sentinelles sentent le pain."
+    offre-en:
+      - "aubin: The bears have come down from the ridges. They're hungry, and my sentries smell of bread."
+    etapes:
+      - type: TUER
+        texte: "Chasser les ours des collines"
+        texte-en: "Hunt the hill bears"
+        monstres: [ours_brun]
+        nombre: 8
+      - type: PARLER
+        texte: "Prévenir Aubin"
+        texte-en: "Tell Aubin"
+        pnj: aubin
+        dialogue:
+          - "aubin: Mes sentinelles dormiront mieux. Moi aussi."
+        dialogue-en:
+          - "aubin: My sentries will sleep better. Me too."
+    recompenses:
+      xp: 2500
+      or: 250
+
+  l_g_les_cornes:
+    nom: "Les cornes"
+    nom-en: "The Horns"
+    faction: lumiere
+    niveau: 17
+    requiert: [l_les_collines_du_ponant]
+    donneur: rosalinde
+    resume:
+      - "Sœur Rosalinde a besoin de cornes de taureau"
+      - "pour ses remèdes."
+    resume-en:
+      - "Sister Rosalinde needs bull horns"
+      - "for her remedies."
+    offre:
+      - "rosalinde: La corne de taureau, râpée, arrête le sang. Les blessés du Guet en ont besoin, et les taureaux des collines n'en manquent pas."
+    offre-en:
+      - "rosalinde: Bull horn, grated, stops bleeding. The Watch's wounded need it, and the hill bulls have plenty."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer des cornes de taureau"
+        texte-en: "Collect bull horns"
+        monstres: [taureau]
+        nombre: 6
+        chance: 0.5
+        objet: "Corne de taureau"
+        objet-en: "Bull horn"
+      - type: PARLER
+        texte: "Rapporter les cornes à Sœur Rosalinde"
+        texte-en: "Bring the horns to Sister Rosalinde"
+        pnj: rosalinde
+        dialogue:
+          - "rosalinde: Merci. Ce soir, personne ne saignera pour rien."
+        dialogue-en:
+          - "rosalinde: Thank you. Tonight, no one will bleed for nothing."
+    recompenses:
+      xp: 2700
+      or: 270
+
+  l_g_les_loups_des_collines:
+    nom: "Les loups des collines"
+    nom-en: "The Hill Wolves"
+    faction: lumiere
+    niveau: 17
+    requiert: [l_les_collines_du_ponant]
+    donneur: aubin
+    resume:
+      - "Les loups suivent les convois du Guet."
+    resume-en:
+      - "Wolves are following the Watch's convoys."
+    offre:
+      - "aubin: Chaque convoi qui monte traîne une meute derrière lui. Éclaircis-la un peu."
+    offre-en:
+      - "aubin: Every convoy coming up drags a pack behind it. Thin it out a bit."
+    etapes:
+      - type: TUER
+        texte: "Tuer des loups"
+        texte-en: "Kill wolves"
+        monstres: [loup]
+        nombre: 12
+      - type: PARLER
+        texte: "Prévenir Aubin"
+        texte-en: "Tell Aubin"
+        pnj: aubin
+        dialogue:
+          - "aubin: Bien. Les mules arrêteront de trembler."
+        dialogue-en:
+          - "aubin: Good. The mules will stop shaking."
+    recompenses:
+      xp: 2700
+      or: 270
+
+  l_g_le_camp_du_nord:
+    nom: "Le camp du nord"
+    nom-en: "The Northern Camp"
+    faction: lumiere
+    niveau: 18
+    requiert: [l_le_col_bloque]
+    donneur: isaure
+    resume:
+      - "D'autres brigands payés par le Cloître"
+      - "campent au nord du Guet."
+    resume-en:
+      - "More brigands paid by the Cloister"
+      - "are camped north of the Watch."
+    offre:
+      - "isaure: Il y a un deuxième camp, au nord, sur les hauteurs. Même or, même sceau, j'en suis sûre."
+    offre-en:
+      - "isaure: There's a second camp, to the north, on the heights. Same gold, same seal, I'm sure of it."
+    etapes:
+      - type: TUER
+        texte: "Briser le camp du nord"
+        texte-en: "Break the northern camp"
+        monstres: [bandit, braconnier]
+        nombre: 10
+        point: camp_nord_ponant
+      - type: INTERAGIR
+        texte: "Fouiller le camp"
+        texte-en: "Search the camp"
+        point: camp_nord_ponant
+        rayon: 6
+        apres:
+          - "Encore une bourse au soleil brûlé. Et une liste de noms : les sentinelles du Guet, une à une."
+        apres-en:
+          - "Another purse with the burned sun. And a list of names: the Watch's sentries, one by one."
+      - type: PARLER
+        texte: "Revenir voir Isaure"
+        texte-en: "Return to Isaure"
+        pnj: isaure
+        dialogue:
+          - "isaure: Ils avaient nos noms. Ils comptaient nous tuer un par un. Merci."
+        dialogue-en:
+          - "isaure: They had our names. They meant to kill us one by one. Thank you."
+    recompenses:
+      xp: 2900
+      or: 290
+
+  l_g_les_kobolds_du_col:
+    nom: "Les kobolds du col"
+    nom-en: "The Pass Kobolds"
+    faction: lumiere
+    niveau: 19
+    requiert: [l_les_collines_du_ponant]
+    donneur: aubin
+    resume:
+      - "Des kobolds ont creusé un camp"
+      - "à l'est du Guet."
+    resume-en:
+      - "Kobolds have dug a camp"
+      - "east of the Watch."
+    offre:
+      - "aubin: À l'est, des kobolds creusent partout. Ils cherchent des Éclats, comme tout le monde."
+    offre-en:
+      - "aubin: To the east, kobolds are digging everywhere. They're looking for Shards, like everyone else."
+    etapes:
+      - type: TUER
+        texte: "Chasser les kobolds du col"
+        texte-en: "Drive out the pass kobolds"
+        monstres: [kobold, kobold_garde]
+        nombre: 12
+        point: camp_kobolds_col
+      - type: PARLER
+        texte: "Prévenir Aubin"
+        texte-en: "Tell Aubin"
+        pnj: aubin
+        dialogue:
+          - "aubin: Moins de trous, moins de chevilles cassées."
+        dialogue-en:
+          - "aubin: Fewer holes, fewer broken ankles."
+    recompenses:
+      xp: 3100
+      or: 310
+
+  l_g_le_camp_de_l_ouest:
+    nom: "Le camp de l'ouest"
+    nom-en: "The Western Camp"
+    faction: lumiere
+    niveau: 20
+    requiert: [l_les_collines_du_ponant]
+    donneur: aubin
+    resume:
+      - "Un autre camp de kobolds,"
+      - "près de la Mine du Ponant."
+    resume-en:
+      - "Another kobold camp,"
+      - "near the Ponant Mine."
+    offre:
+      - "aubin: Près de la Mine du Ponant, d'autres kobolds. Ceux-là creusent juste à côté des hommes du Cloître. Bizarre, non ?"
+    offre-en:
+      - "aubin: Near the Ponant Mine, more kobolds. These dig right next to the Cloister's men. Strange, no?"
+    etapes:
+      - type: TUER
+        texte: "Chasser les kobolds de l'ouest"
+        texte-en: "Drive out the western kobolds"
+        monstres: [kobold, kobold_garde]
+        nombre: 12
+        point: camp_ouest_ponant
+      - type: INTERAGIR
+        texte: "Fouiller le camp"
+        texte-en: "Search the camp"
+        point: camp_ouest_ponant
+        rayon: 6
+        apres:
+          - "Des Éclats, en tas, prêts à être livrés. Les kobolds vendaient au Cloître, eux aussi."
+        apres-en:
+          - "Shards, in heaps, ready to be delivered. The kobolds were selling to the Cloister too."
+      - type: PARLER
+        texte: "Revenir voir Aubin"
+        texte-en: "Return to Aubin"
+        pnj: aubin
+        dialogue:
+          - "aubin: Même les kobolds commercent avec le Cloître. Il ne manquait plus que ça."
+        dialogue-en:
+          - "aubin: Even the kobolds trade with the Cloister. That's all we needed."
+    recompenses:
+      xp: 3300
+      or: 330
+
+  l_g_la_mine_des_kobolds:
+    nom: "La mine des kobolds"
+    nom-en: "The Kobold Mine"
+    faction: lumiere
+    niveau: 22
+    requiert: [l_g_les_kobolds_du_col]
+    donneur: aubin
+    resume:
+      - "Le grand terrier des kobolds,"
+      - "loin à l'est des collines."
+    resume-en:
+      - "The kobolds' great burrow,"
+      - "far east in the hills."
+    offre:
+      - "aubin: Les kobolds du col venaient d'un grand terrier, loin à l'est. Le chef y garde son trésor. Rapporte-le, on le partagera… un peu."
+    offre-en:
+      - "aubin: The pass kobolds came from a great burrow, far to the east. The chief keeps his treasure there. Bring it back, we'll share it… a little."
+    etapes:
+      - type: TUER
+        texte: "Vider le grand terrier"
+        texte-en: "Clear the great burrow"
+        monstres: [kobold, kobold_garde]
+        nombre: 14
+        point: mine_kobolds
+      - type: INTERAGIR
+        texte: "Prendre le trésor du chef"
+        texte-en: "Take the chief's treasure"
+        point: mine_kobolds
+        rayon: 6
+        apres:
+          - "Un coffre de bric et de broc. Et, tout au fond, une cloche d'enfant, en cuivre. Ta Marque tressaille : tu as déjà entendu ce son."
+        apres-en:
+          - "A chest of odds and ends. And, at the very bottom, a child's copper bell. Your Mark shivers: you have heard this sound before."
+      - type: PARLER
+        texte: "Revenir voir Aubin"
+        texte-en: "Return to Aubin"
+        pnj: aubin
+        dialogue:
+          - "aubin: Une cloche ? Garde-la, si elle te parle."
+        dialogue-en:
+          - "aubin: A bell? Keep it, if it speaks to you."
+    recompenses:
+      xp: 3700
+      or: 370
+      objets:
+        - materiau: BELL
+          nom: "Cloche de cuivre"
+          nom-en: "Copper Bell"
+          description:
+            - "Une cloche d'enfant. Tu as déjà entendu ce son, dans un rêve."
+          description-en:
+            - "A child's bell. You've heard this sound before, in a dream."
+
+  l_g_le_cimetiere_des_cretes:
+    nom: "Le cimetière des crêtes"
+    nom-en: "The Ridge Graveyard"
+    faction: lumiere
+    niveau: 23
+    requiert: [l_les_collines_du_ponant]
+    donneur: rosalinde
+    resume:
+      - "Un cimetière s'est réveillé"
+      - "loin à l'est, sur les crêtes."
+    resume-en:
+      - "A graveyard has woken"
+      - "far east, on the ridges."
+    offre:
+      - "rosalinde: Sur les crêtes de l'est, un vieux cimetière s'est réveillé. J'y ai enterré des Marqués morts au Cloître. On me l'avait interdit."
+      - "rosalinde: Rends-leur le repos. Ils l'ont mérité deux fois."
+    offre-en:
+      - "rosalinde: On the eastern ridges, an old graveyard has woken. I buried Marked who died at the Cloister there. I had been forbidden to."
+      - "rosalinde: Give them back their rest. They've earned it twice."
+    etapes:
+      - type: TUER
+        texte: "Rendre les morts au repos"
+        texte-en: "Return the dead to rest"
+        monstres: [squelette, revenant]
+        nombre: 12
+        point: cimetiere_cretes
+      - type: INTERAGIR
+        texte: "Redresser les stèles"
+        texte-en: "Straighten the headstones"
+        point: cimetiere_cretes
+        rayon: 6
+        apres:
+          - "Sur chaque stèle, un nom, gravé à la main par Rosalinde. Ils sont des dizaines."
+        apres-en:
+          - "On each headstone, a name, carved by hand by Rosalinde. There are dozens of them."
+      - type: PARLER
+        texte: "Revenir voir Sœur Rosalinde"
+        texte-en: "Return to Sister Rosalinde"
+        pnj: rosalinde
+        dialogue:
+          - "rosalinde: Merci. Quelqu'un doit se souvenir d'eux. L'Ordre a choisi d'oublier."
+        dialogue-en:
+          - "rosalinde: Thank you. Someone must remember them. The Order chose to forget."
+    recompenses:
+      xp: 4000
+      or: 400
+
+  l_g_les_brigands_du_sud:
+    nom: "Les brigands du sud"
+    nom-en: "The Southern Brigands"
+    faction: lumiere
+    niveau: 24
+    requiert: [l_g_le_camp_du_nord]
+    donneur: isaure
+    resume:
+      - "Le dernier camp de brigands payés"
+      - "se cache tout au sud-est."
+    resume-en:
+      - "The last camp of paid brigands"
+      - "is hiding far to the south-east."
+    offre:
+      - "isaure: Le dernier camp, tout au sud-est. Après lui, le Cloître n'aura plus de lames à louer dans mes collines."
+    offre-en:
+      - "isaure: The last camp, far to the south-east. After it, the Cloister will have no more blades for hire in my hills."
+    etapes:
+      - type: TUER
+        texte: "Briser le camp du sud"
+        texte-en: "Break the southern camp"
+        monstres: [bandit, braconnier]
+        nombre: 12
+        point: camp_sud_ponant
+      - type: PARLER
+        texte: "Revenir voir Isaure"
+        texte-en: "Return to Isaure"
+        pnj: isaure
+        dialogue:
+          - "isaure: Mes collines sont propres. Pour l'instant."
+        dialogue-en:
+          - "isaure: My hills are clean. For now."
+    recompenses:
+      xp: 4300
+      or: 430
+
+  l_g_une_lettre_pour_veillemont:
+    nom: "Une lettre pour Veillemont"
+    nom-en: "A Letter for Veillemont"
+    faction: lumiere
+    niveau: 24
+    requiert: [l_la_lumiere_rendue]
+    donneur: teo_guet
+    resume:
+      - "Téo veut que son père sache"
+      - "qu'il est vivant."
+    resume-en:
+      - "Téo wants his father to know"
+      - "that he is alive."
+    offre:
+      - "teo_guet: Je ne peux pas descendre à Veillemont, le Cloître me reprendrait sur la route. Mais toi, tu peux."
+      - "teo_guet: Donne cette lettre au capitaine Varenne. Dis-lui… dis-lui que je me souviens de l'épée au mur."
+    offre-en:
+      - "teo_guet: I can't go down to Veillemont, the Cloister would take me back on the road. But you can."
+      - "teo_guet: Give this letter to Captain Varenne. Tell him… tell him I remember the sword on the wall."
+    etapes:
+      - type: PARLER
+        texte: "Porter la lettre au capitaine Varenne"
+        texte-en: "Bring the letter to Captain Varenne"
+        pnj: varenne
+        dialogue:
+          - "Varenne lit la lettre. Deux fois. Puis il s'assoit, ce que tu ne l'as jamais vu faire."
+          - "varenne: Le gamin des Champs Vitrifiés. Je l'ai regardé dans les yeux et je ne l'ai pas reconnu. La Marque change les visages, ils disaient."
+          - "varenne: Et je l'ai laissé partir au Cloître. J'ai signé le registre moi-même."
+          - "varenne: Dis-lui que l'épée est toujours au mur. Et que son père a des comptes à rendre. À lui, et à d'autres."
+        dialogue-en:
+          - "Varenne reads the letter. Twice. Then he sits down, which you have never seen him do."
+          - "varenne: The kid from the Vitrified Fields. I looked him in the eyes and didn't recognise him. The Mark changes faces, they said."
+          - "varenne: And I let him go to the Cloister. I signed the register myself."
+          - "varenne: Tell him the sword is still on the wall. And that his father has accounts to settle. With him, and with others."
+    recompenses:
+      xp: 3500
+      or: 350
+      objets:
+        - materiau: IRON_SWORD
+          nom: "Épée de Varenne"
+          nom-en: "Varenne's Sword"
+          description:
+            - "L'épée du mur. « Pour le jour où il reviendra. »"
+          description-en:
+            - "The sword from the wall. « For the day he comes back. »"

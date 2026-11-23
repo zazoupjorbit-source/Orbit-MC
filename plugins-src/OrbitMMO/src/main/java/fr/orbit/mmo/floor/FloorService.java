@@ -42,7 +42,10 @@ public final class FloorService implements Listener {
 
     private final OrbitMMO plugin;
     private final File stateFile;
+    /** Record du serveur : le plus haut étage dont le boss est tombé, toutes guildes confondues. */
     private int highestCleared;
+    /** Socle : dernier étage tenu pour franchi par tout le monde (posé par /mmoadmin ouvrir). */
+    private int base;
     private final Set<Integer> built = new HashSet<>();
     /** Étages dont la ville a reçu le forgeron, l'alchimiste et le prêtre. */
     private final Set<Integer> townNpcs = new HashSet<>();
@@ -71,6 +74,8 @@ public final class FloorService implements Listener {
 
     public void start() {
         plugin.getServer().getScheduler().runTaskTimer(plugin, this::gateFx, 40L, 10L);
+        // Les PNJ de ville deviennent des mannequins à skin (les anciens sont remplacés sur place).
+        fr.orbit.mmo.ambient.TownFolk.start(plugin);
         // Fin des effets achetés en ville (potions, parchemins, essences, bénédiction).
         plugin.getServer().getScheduler().runTaskTimer(plugin, () -> plugin.progression().tickBoosts(), 20L, 20L);
     }
@@ -108,8 +113,36 @@ public final class FloorService implements Listener {
         saveState();
     }
 
-    public boolean unlocked(int n) {
-        return n >= 1 && n <= Math.min(maxFloor(), highestCleared + 1);
+    /** Dernier étage tenu pour franchi par tout le monde : chacun peut entrer jusqu'à l'étage suivant. */
+    public int base() {
+        return base;
+    }
+
+    public void setBase(int n) {
+        base = Math.max(0, Math.min(maxFloor(), n));
+        highestCleared = Math.max(highestCleared, base);
+        saveState();
+    }
+
+    /**
+     * Dernier étage franchi qui compte pour ce joueur : le socle du serveur, les boss qu'il a vaincus lui-même, ou
+     * ceux de sa guilde (une guilde ouvre ses étages à tous ses membres).
+     */
+    public int cleared(PlayerData d) {
+        int n = base;
+        if (d != null) {
+            n = Math.max(n, d.towerCleared);
+            fr.orbit.mmo.guild.Guild g = plugin.guilds() == null ? null : plugin.guilds().of(d.id);
+            if (g != null) {
+                n = Math.max(n, g.towerCleared());
+            }
+        }
+        return Math.min(maxFloor(), n);
+    }
+
+    /** Étage ouvert à ce joueur : le dernier qu'il a franchi (lui, sa guilde ou le socle), plus un. */
+    public boolean unlocked(PlayerData d, int n) {
+        return n >= 1 && n <= Math.min(maxFloor(), cleared(d) + 1);
     }
 
     public long bossReadyAt(int floor) {
@@ -255,6 +288,25 @@ public final class FloorService implements Listener {
         });
     }
 
+    /**
+     * Cristal de retour : dans le Pilier des Astres (les cent étages), il ramène à la ville de l'étage ; partout ailleurs, à la capitale de sa faction.
+     *
+     * @return le nom du lieu d'arrivée
+     */
+    public String recall(Player p, PlayerData d) {
+        int here = floorOf(p.getWorld());
+        if (here <= 0 && plugin.continent() != null && d.faction != null) {
+            String home = plugin.continent().sendHome(p, d.faction.id, true);
+            if (home != null) {
+                return home;
+            }
+        }
+        int n = here > 0 ? here : d.floor;
+        n = unlocked(d, n) ? n : 1;
+        teleport(p, n, true);
+        return def(n).town();
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void onMove(PlayerMoveEvent e) {
         Location to = e.getTo();
@@ -306,12 +358,16 @@ public final class FloorService implements Listener {
             return;
         }
         Player p = e.getPlayer();
+        // La phrase du PNJ est préparée avant d'ouvrir son menu : avec le pack, le menu l'affiche dans sa carte.
+        Greeting greeting = prepareGreeting(p, tag);
         switch (tag) {
             case "merchant" -> fr.orbit.mmo.ui.MarketMenus.open(plugin, p);
             case "blacksmith" -> fr.orbit.mmo.ui.TownMenus.forge(plugin, p);
             case "alchemist" -> fr.orbit.mmo.ui.TownMenus.alchemist(plugin, p);
             case "priest" -> fr.orbit.mmo.ui.TownMenus.priest(plugin, p);
             case "runesmith" -> fr.orbit.mmo.ui.RuneMenus.open(plugin, p);
+            // Gardien du Pilier des Astres (capitales) : il ouvre le choix de l'étage, comme la porte d'une ville du Pilier.
+            case "tower", "tower_ombre" -> Menus.floors(plugin, p, true);
             case "ambient" -> {
                 p.playSound(e.getRightClicked().getLocation(), org.bukkit.Sound.ENTITY_CAT_PURREOW, 0.6f, 1.1f);
                 e.getRightClicked().getWorld().spawnParticle(Particle.HEART, e.getRightClicked().getLocation().add(0, 0.8, 0), 2, 0.2, 0.1, 0.2, 0);
@@ -321,10 +377,10 @@ public final class FloorService implements Listener {
                 return;
             }
         }
-        greet(p, e.getRightClicked(), tag);
+        greet(p, e.getRightClicked(), tag, greeting);
     }
 
-    /** Répliques des PNJ (une de temps en temps, pas à chaque clic). */
+    /** Répliques des PNJ : dans la carte à droite du menu (pack), sinon dans le chat, une de temps en temps. */
     private static final Map<String, String[]> LINES = Map.of(
             "merchant", new String[]{
                     "Tout se vend, tout s'achète. Fixe ton prix, je m'occupe du reste.",
@@ -346,19 +402,95 @@ public final class FloorService implements Listener {
             "runesmith", new String[]{
                     "Une rune bien sertie vaut mieux qu'une lame neuve.",
                     "Trois runes pareilles ? Donne, j'en fais une seule, bien plus forte.",
-                    "Le feu, le givre, la foudre… et le néant. Choisis bien ce que ta lame doit porter."});
+                    "Le feu, le givre, la foudre… et le néant. Choisis bien ce que ta lame doit porter."},
+            "tower", new String[]{
+                    "Cent étages, un gardien à chacun. Personne n'a encore vu le sommet.",
+                    "Seul, tu n'iras pas loin là-haut. Reviens avec les tiens.",
+                    "Ce qu'on arrache au Pilier ne se trouve nulle part ailleurs sur le continent."},
+            "tower_ombre", new String[]{
+                    "Cent étages, un gardien à chacun. Personne n'en a encore vu le sommet.",
+                    "Le Pilier avale les solitaires. Monte avec les tiens.",
+                    "Ce que le Pilier garde, il ne le rend qu'à ceux qui le gravissent."});
 
     private static final Map<String, String> SPEAKERS = Map.of(
+            "tower", "<#7FD4FF>Gardien du Pilier",
+            "tower_ombre", "<#9B59FF>Veilleur du Pilier",
             "merchant", "<#FFD66E>Corvin",
             "blacksmith", "<#FF8A3B>Torvald",
             "alchemist", "<#B36BFF>Mirelle",
             "priest", "<#FFF3B0>Frère Anselme",
             "runesmith", "<#9B59FF>Ysolde");
 
-    private void greet(Player p, org.bukkit.entity.Entity npc, String tag) {
+    /** Les mêmes répliques en anglais, dans le même ordre (joueurs dont la langue est l'anglais, voir /langue). */
+    private static final Map<String, String[]> LINES_EN = Map.of(
+            "merchant", new String[]{
+                    "Everything sells, everything can be bought. Name your price, I handle the rest.",
+                    "The finest pieces go fast. Come back often!",
+                    "In a hurry? Torvald, at the forge, buys your loot right away… but for less."},
+            "blacksmith", new String[]{
+                    "A well-kept blade is worth two new ones.",
+                    "Show me what you're wearing, I'll see what I can make of it.",
+                    "The fire of my forge never goes out. My patience does.",
+                    "Your loot from out there? Put it on the bench, I'll buy it."},
+            "alchemist", new String[]{
+                    "A potion for the road? You never know what prowls outside.",
+                    "Careful, that one is still fizzing… that means it's ready.",
+                    "The herbs around here work wonders, believe me."},
+            "priest", new String[]{
+                    "May the stars watch over you, traveller.",
+                    "A blessed scroll is better than a cracked shield.",
+                    "Come by for my blessing before you leave."},
+            "runesmith", new String[]{
+                    "A well-set rune is better than a new blade.",
+                    "Three runes alike? Hand them over, I'll make one, far stronger.",
+                    "Fire, frost, lightning… and the void. Choose well what your blade should carry."},
+            "tower", new String[]{
+                    "A hundred floors, a guardian on each. No one has seen the top yet.",
+                    "Alone, you won't get far up there. Come back with your own.",
+                    "What is torn from the Pillar is found nowhere else on the continent."},
+            "tower_ombre", new String[]{
+                    "A hundred floors, a guardian on each. No one has seen the top yet.",
+                    "The Pillar swallows the lonely. Climb with your own.",
+                    "What the Pillar keeps, it only gives back to those who climb it."});
+
+    private static final Map<String, String> SPEAKERS_EN = Map.of(
+            "tower", "Pillar Guardian",
+            "tower_ombre", "Pillar Watcher",
+            "priest", "Brother Anselme");
+
+    /** Ce qu'un PNJ de ville dit à ce clic : la phrase, et la carte posée pour son menu (null sans le pack). */
+    private record Greeting(String line, fr.orbit.mmo.hud.NpcCard.Card card) {
+    }
+
+    private Greeting prepareGreeting(Player p, String tag) {
         String[] lines = LINES.get(tag);
-        if (lines == null) {
+        String speaker = SPEAKERS.get(tag);
+        if (lines == null || speaker == null) {
+            return null;
+        }
+        boolean en = plugin.quests() != null && "en".equals(plugin.quests().lang(p));
+        String[] set = en && LINES_EN.containsKey(tag) && LINES_EN.get(tag).length == lines.length ? LINES_EN.get(tag) : lines;
+        String line = set[java.util.concurrent.ThreadLocalRandom.current().nextInt(set.length)];
+        if (!plugin.pack().isLoaded(p.getUniqueId())) {
+            return new Greeting(line, null);
+        }
+        // SPEAKERS : « <#RRGGBB>Nom ».
+        int cut = speaker.indexOf('>');
+        String name = en && SPEAKERS_EN.containsKey(tag) ? SPEAKERS_EN.get(tag) : speaker.substring(cut + 1);
+        fr.orbit.mmo.hud.NpcCard.Card card = fr.orbit.mmo.hud.NpcCard.of(tag, name,
+                net.kyori.adventure.text.format.TextColor.fromHexString(speaker.substring(1, cut)), line);
+        plugin.hud().npcCard(p, card);
+        return new Greeting(line, card);
+    }
+
+    private void greet(Player p, org.bukkit.entity.Entity npc, String tag, Greeting g) {
+        if (g == null) {
             return;
+        }
+        boolean inCard = g.card() != null && g.card().shown();
+        if (g.card() != null && !inCard && plugin.hud().npcCard(p) == g.card()) {
+            // Aucun menu n'a pris la carte : elle ne doit pas ressortir sur un autre menu.
+            plugin.hud().npcCardEnd(p);
         }
         long now = System.currentTimeMillis();
         String key = p.getUniqueId() + ":" + tag;
@@ -367,11 +499,13 @@ public final class FloorService implements Listener {
             return;
         }
         greetCooldown.put(key, now + 30_000);
-        String line = lines[java.util.concurrent.ThreadLocalRandom.current().nextInt(lines.length)];
-        p.sendMessage(Text.mm(SPEAKERS.get(tag) + " <#5A6270>» <#D7DCE2><i>" + Text.esc(line)));
+        if (!inCard) {
+            p.sendMessage(Text.mm(SPEAKERS.get(tag) + " <#5A6270>» <#D7DCE2><i>" + Text.esc(g.line())));
+        }
         org.bukkit.Sound s = switch (tag) {
             case "alchemist" -> org.bukkit.Sound.ENTITY_WITCH_CELEBRATE;
             case "blacksmith" -> org.bukkit.Sound.BLOCK_ANVIL_USE;
+            case "tower", "tower_ombre" -> org.bukkit.Sound.BLOCK_BEACON_AMBIENT;
             default -> org.bukkit.Sound.ENTITY_VILLAGER_TRADE;
         };
         p.playSound(npc.getLocation(), s, tag.equals("blacksmith") ? 0.3f : 0.7f, 1.1f);
@@ -478,6 +612,8 @@ public final class FloorService implements Listener {
         }
         YamlConfiguration y = YamlConfiguration.loadConfiguration(stateFile);
         highestCleared = y.getInt("highest-cleared");
+        // Avant les guildes, « highest-cleared » ouvrait les étages à tout le serveur : il devient le socle de départ.
+        base = Math.max(0, Math.min(highestCleared, y.getInt("socle", highestCleared)));
         built.addAll(y.getIntegerList("built"));
         townNpcs.addAll(y.getIntegerList("town-npcs"));
         marketStall.addAll(y.getIntegerList("market-stall"));
@@ -497,6 +633,7 @@ public final class FloorService implements Listener {
     public void saveState() {
         YamlConfiguration y = new YamlConfiguration();
         y.set("highest-cleared", highestCleared);
+        y.set("socle", base);
         y.set("built", List.copyOf(built));
         y.set("town-npcs", List.copyOf(townNpcs));
         y.set("market-stall", List.copyOf(marketStall));

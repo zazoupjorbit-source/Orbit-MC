@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [ { "texture": "orbitmmo:elfe_sombre" } ],
+    "humanoid_leggings": [ { "texture": "orbitmmo:elfe_sombre" } ]
+  }
+}

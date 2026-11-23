@@ -4,6 +4,18 @@
 #  Classes, sorts et talents : fichiers classes/<classe>.yml (/mmoadmin classes exporter)
 # ------------------------------------------------------------------
 
+quetes:
+  # Traînée de guidage (chemin de particules au sol vers l'objectif de la quête suivie) : allumée ou éteinte pour
+  # un joueur qui n'a encore rien choisi. Chacun la règle ensuite dans le journal (/quetes) ou par /quetes trainee.
+  trainee-par-defaut: true
+guildes:
+  # Guildes (/guilde, fichier plugins/OrbitMMO/guildes.yml) : une seule faction par guilde, chef · officiers · membres.
+  cout-creation: 1000 # or payé par le fondateur
+  max-membres: 20
+  # Prime versée dans la banque de la première guilde du serveur à franchir un étage du Pilier des Astres :
+  # prime-base + prime-par-etage × numéro de l'étage (étage 1 : 750 or, étage 10 : 3 000 or).
+  prime-base: 500
+  prime-par-etage: 250
 continent:
   enabled: true
   world: orbit_continent
@@ -50,7 +62,7 @@ resource-pack:
   port: 8790
   # Pour héberger le pack ailleurs (CDN, site), mets son URL ici : le serveur intégré n'est alors pas lancé.
   # Tunnel Cloudflare gratuit (tools\cloudflared.exe) vers le port 8790 : l'adresse change à chaque relance.
-  public-url: https://facts-start-while-arm.trycloudflare.com/orbitmmo.zip
+  public-url: https://homes-original-diamonds-deals.trycloudflare.com/orbitmmo.zip
   # true : le serveur intégré reste lancé même avec public-url (nécessaire pour un tunnel).
   serve-local: true
   # true : refuser le pack déconnecte le joueur.
@@ -200,7 +212,7 @@ mobs:
       chance: 0.5
   elfe_sombre:
     name: Elfe sombre
-    type: VINDICATOR
+    type: SKELETON
     weapon: IRON_AXE
     hp: 1.1
     damage: 1.15
@@ -238,7 +250,7 @@ mobs:
       chance: 0.4
   scorpion:
     name: Scorpion des sables
-    type: SILVERFISH
+    type: ENDERMITE
     scale: 3.0
     hp: 0.9
     damage: 1.1
@@ -325,7 +337,7 @@ bosses:
       value: 6
   treant:
     name: Tréant corrompu
-    type: VINDICATOR
+    type: ZOMBIE
     scale: 2.4
     hp: 18
     damage: 2.0

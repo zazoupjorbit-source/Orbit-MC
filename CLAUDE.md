@@ -11,7 +11,8 @@ Réseau Minecraft de l'univers **ORBIT** (cofondé par Zazou et Wane). Objectif 
 ## Serveurs (réseau de dev, en local)
 - `lobby` = **La Station** : station spatiale générée par code (commande `/station` du plugin OrbitDevCore). Hall central + 4 portes/PNJ vers les modes.
   - Règle : `/station ecarts` **avant** tout `/station generer` (sinon les retouches faites à la main sont écrasées).
-- `survie`, `extraction`, `practice` : instances créées, encore vides.
+- `survie` : instance créée, encore vide. `extraction` : plugin OrbitExtraction.
+- `practice` : plugin **OrbitPractice** (`plugins-src/OrbitPractice`) : duels classés 1v1/2v2 NoDebuff et Classes HCF, Elo en MariaDB (`practice_elo`, `practice_matchs`), 8 arènes générées dans le monde vide `arenes` (`/practice arene generer`, jamais `forcer` sans accord : ça écrase les retouches). Le hub est la map posée à la main dans le monde principal (`/practice hub definir`).
 - `reborn` : instance du MMO.
 
 ## Les 4 modes de lancement

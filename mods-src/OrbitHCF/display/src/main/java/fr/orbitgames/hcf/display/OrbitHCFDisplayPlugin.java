@@ -58,7 +58,7 @@ public final class OrbitHCFDisplayPlugin extends JavaPlugin implements Listener 
         actionBarManager = new ActionBarManager(this);
         tablistManager = new TablistManager(this);
 
-        Bukkit.getPluginManager().registerEvents(this, this);
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, this);
 
         long sidebarInterval = Math.max(5L, scoreboardConfig.getLong("update-interval-ticks", 10L));
         long nametagInterval = Math.max(20L, nametagsConfig.getLong("update-interval-ticks", 40L));
@@ -74,7 +74,7 @@ public final class OrbitHCFDisplayPlugin extends JavaPlugin implements Listener 
         tasks.add(Bukkit.getScheduler().runTaskTimer(this, tablistManager::tick, tablistInterval, tablistInterval));
 
         // Joueurs deja connectes (rechargement a chaud)
-        Bukkit.getOnlinePlayers().forEach(boardManager::setup);
+        fr.orbitgames.hcf.api.HcfWorlds.players().forEach(boardManager::setup);
 
         logModule("OrbitHCF-Classes");
         logModule("OrbitHCF-Combat");
@@ -107,7 +107,14 @@ public final class OrbitHCFDisplayPlugin extends JavaPlugin implements Listener 
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
-        boardManager.remove(event.getPlayer());
+        org.bukkit.entity.Player player = event.getPlayer();
+        boardManager.remove(player);
+        bossBarManager.removePlayer(player);
+        if (player.isOnline()) {
+            // Sortie du monde HCF sans deconnexion : effacer l'en-tete/pied de la tablist HCF.
+            player.sendPlayerListHeaderAndFooter(net.kyori.adventure.text.Component.empty(),
+                    net.kyori.adventure.text.Component.empty());
+        }
     }
 
     private FileConfiguration loadYaml(String name) {

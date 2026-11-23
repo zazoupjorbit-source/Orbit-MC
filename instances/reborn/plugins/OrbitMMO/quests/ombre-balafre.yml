@@ -1,0 +1,1514 @@
+# ------------------------------------------------------------------
+#  Ombre, acte I — la Balafre et les Landes de Morneval (niv. 1 à 10)
+#  Cratère des Murmures, Nidnoir, Gris-Hameau, Morneval. Quêtes principales 1 à 11 et annexes.
+#  FICHIER GÉNÉRÉ par tools\quetes\gen-quetes.js depuis tools\quetes\zones\ombre-balafre.js : modifier la source, pas ce fichier.
+# ------------------------------------------------------------------
+
+pnj:
+  nyra:
+    nom: "Nyra"
+    titre: "Murmureuse"
+    titre-en: "Whisperer"
+    couleur: "#B36BFF"
+    type: MANNEQUIN
+    visage: zuri
+    point: nyra
+    repliques:
+      - "Écoute. Le Néant ne crie jamais. Il murmure."
+    repliques-en:
+      - "Listen. The Void never screams. It whispers."
+  ilian:
+    nom: "Ilian"
+    titre: "Marqué"
+    titre-en: "Marked"
+    couleur: "#C9B6E8"
+    type: MANNEQUIN
+    visage: ari
+    point: ilian
+    repliques:
+      - "Il y a une voix dans ma tête. Elle connaît mon nom. Pas moi."
+    repliques-en:
+      - "There's a voice in my head. It knows my name. I don't."
+  sorcha:
+    nom: "Sorcha"
+    titre: "Marquée"
+    titre-en: "Marked"
+    couleur: "#C9B6E8"
+    type: MANNEQUIN
+    visage: noor
+    point: sorcha
+    repliques:
+      - "Le noir est doux, tu trouves pas ?"
+    repliques-en:
+      - "The dark is soft, don't you think?"
+  vide:
+    nom: "Marqué hagard"
+    nom-en: "Dazed Marked"
+    couleur: "#8C96A3"
+    visage: efe
+    point: vide_sans_corps
+  grisolde:
+    nom: "Grisolde"
+    titre: "Cheffe de Nidnoir"
+    titre-en: "Chief of Nidnoir"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    visage: makena
+    point: grisolde
+    main: IRON_SWORD
+    repliques:
+      - "Les dogmes, je m'en fiche. Mes gens, eux, je les compte."
+    repliques-en:
+      - "I don't care about dogma. My people, I count."
+  vharos:
+    nom: "Vharos"
+    titre: "Nécromancien"
+    titre-en: "Necromancer"
+    couleur: "#9B7BFF"
+    type: MANNEQUIN
+    visage: steve
+    point: vharos
+    repliques:
+      - "Votre Marque n'éclaire pas. Elle aspire. Fascinant."
+    repliques-en:
+      - "Your Mark does not shine. It draws in. Fascinating."
+  maugre:
+    nom: "Maugre"
+    titre: "Aubergiste"
+    titre-en: "Innkeeper"
+    couleur: "#E8C9A0"
+    type: MANNEQUIN
+    visage: sunny
+    point: maugre
+    repliques:
+      - "Ici, la soupe est noire et la bière aussi. Mais elles sont chaudes."
+    repliques-en:
+      - "Here the soup is black and so is the beer. But they're hot."
+  kesh:
+    nom: "Kesh"
+    titre: "Sentinelle de Nidnoir"
+    titre-en: "Nidnoir Sentry"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    visage: efe
+    point: kesh
+    main: BOW
+    repliques:
+      - "D'en haut, je vois tout. Même ce que je préférerais pas."
+    repliques-en:
+      - "From up here I see everything. Even what I'd rather not."
+  morvain_mentor:
+    nom: "Morvain"
+    titre: "Chevalier noir"
+    titre-en: "Black Knight"
+    couleur: "#B36BFF"
+    type: MANNEQUIN
+    visage: zuri
+    point: morvain_gris
+    main: NETHERITE_SWORD
+    repliques:
+      - "Les échecs m'ont appris une chose : on gagne avec les pièces qu'on vous laisse."
+    repliques-en:
+      - "Chess taught me one thing: you win with the pieces they leave you."
+  orlane:
+    nom: "Orlane"
+    titre: "Passeuse de Gris-Hameau"
+    titre-en: "Ferrywoman of Gris-Hameau"
+    couleur: "#E8D7A0"
+    type: MANNEQUIN
+    visage: kai
+    point: orlane
+    repliques:
+      - "Tout passe par Gris-Hameau. Les marchandises, les nouvelles, les morts."
+    repliques-en:
+      - "Everything goes through Gris-Hameau. Goods, news, the dead."
+  brac:
+    nom: "Vieux Brac"
+    titre: "Fossoyeur"
+    titre-en: "Gravedigger"
+    couleur: "#B8B0A0"
+    type: MANNEQUIN
+    visage: alex
+    point: brac
+    repliques:
+      - "Je creuse les tombes. Ces temps-ci, je les rebouche surtout."
+    repliques-en:
+      - "I dig graves. These days I mostly fill them back in."
+  jaro:
+    nom: "Jaro"
+    titre: "Glaneur"
+    titre-en: "Gleaner"
+    couleur: "#A8E6A1"
+    type: MANNEQUIN
+    visage: ari
+    point: jaro
+    main: IRON_PICKAXE
+    repliques:
+      - "Le murmure est revenu. Doucement. Comme quelqu'un qui frappe à la porte."
+    repliques-en:
+      - "The whisper came back. Softly. Like someone knocking at the door."
+  castel:
+    nom: "Frère Castel"
+    nom-en: "Brother Castel"
+    titre: "Frère-Purificateur"
+    titre-en: "Brother-Purifier"
+    couleur: "#FFD66E"
+    visage: steve
+    point: castel_sans_corps
+  sevrine:
+    nom: "Archonte Sévrine"
+    nom-en: "Archon Sévrine"
+    titre: "Citadelle d'Obsidienne"
+    titre-en: "Obsidian Citadel"
+    couleur: "#B36BFF"
+    type: MANNEQUIN
+    visage: noor
+    point: sevrine
+    repliques:
+      - "Le Néant n'est pas vide. Il est patient."
+    repliques-en:
+      - "The Void is not empty. It is patient."
+  velia:
+    nom: "Crieuse Velia"
+    nom-en: "Crier Velia"
+    titre: "Crieuse de Morneval"
+    titre-en: "Crier of Morneval"
+    couleur: "#E8C9A0"
+    type: MANNEQUIN
+    visage: makena
+    point: velia
+    repliques:
+      - "Morneval ne dort jamais, elle attend la nuit !"
+    repliques-en:
+      - "Morneval never sleeps, it waits for the night!"
+  dorn:
+    nom: "Sergent Dorn"
+    nom-en: "Sergeant Dorn"
+    titre: "Garde de Morneval"
+    titre-en: "Morneval Guard"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    visage: alex
+    point: dorn
+    main: IRON_SWORD
+    repliques:
+      - "Les murs sont noirs. Les routes, elles, sont rouges."
+    repliques-en:
+      - "The walls are black. The roads are red."
+  ilse:
+    nom: "Ilse"
+    titre: "Disciple de Vharos"
+    titre-en: "Disciple of Vharos"
+    couleur: "#9B7BFF"
+    type: MANNEQUIN
+    visage: kai
+    point: ilse
+    repliques:
+      - "Mon maître dit que les morts mentent moins que les vivants."
+    repliques-en:
+      - "My master says the dead lie less than the living."
+
+monstres:
+  limier_traqueur:
+    nom: "Limier traqueur"
+    type: WOLF
+    taille: 1.15
+    pv: 0.6
+    degats: 0.55
+    vitesse: 1.05
+  creux:
+    nom: "Creux"
+    type: ZOMBIE
+    pv: 1.2
+    degats: 0.6
+    vitesse: 0.8
+    xp: 2
+  purificateur_rappel:
+    nom: "Purificateur en rappel"
+    type: VINDICATOR
+    pv: 0.8
+    degats: 0.7
+    vitesse: 1
+    arme: GOLDEN_AXE
+  capitaine_purificateur:
+    nom: "Capitaine purificateur"
+    type: VINDICATOR
+    taille: 1.35
+    pv: 4
+    degats: 1.2
+    xp: 4
+    or: 4
+    arme: GOLDEN_AXE
+  sentinelle_aube:
+    nom: "Sentinelle de l'Aube"
+    type: SKELETON
+    taille: 1.8
+    pv: 7
+    degats: 1.3
+    vitesse: 0.85
+    xp: 10
+    or: 8
+    arme: GOLDEN_SWORD
+
+apparitions:
+  creux_murmures:
+    point: vide_point
+    monstre: creux
+    niveau: 1
+    nombre: 1
+    rayon: 3
+  limiers_nidnoir:
+    point: limiers_nidnoir
+    monstre: limier_traqueur
+    niveau: [2, 3]
+    nombre: 5
+    rayon: 10
+  purif_nidnoir:
+    point: limiers_nidnoir
+    monstre: purificateur_rappel
+    niveau: [3, 4]
+    nombre: 6
+    rayon: 10
+  capitaine_nidnoir:
+    point: limiers_nidnoir
+    monstre: capitaine_purificateur
+    niveau: 5
+    nombre: 1
+    rayon: 4
+  sentinelle_poste:
+    point: avant_poste
+    monstre: sentinelle_aube
+    niveau: 10
+    nombre: 1
+    rayon: 3
+
+quetes:
+
+  # ================================================================ ACTE I — QUÊTES PRINCIPALES
+
+  o_le_murmure:
+    nom: "Le Murmure"
+    nom-en: "The Whisper"
+    faction: ombre
+    niveau: 1
+    depart: cratere_murmures
+    resume:
+      - "Vous vous êtes réveillé au fond d'un cratère de verre noir."
+      - "Quelque chose murmure votre nom."
+    resume-en:
+      - "You woke up at the bottom of a crater of black glass."
+      - "Something whispers your name."
+    intro:
+      - "Le silence. Puis, dans le silence, quelque chose. Pas une voix : un souffle, juste derrière tes pensées. Lève-toi."
+      - "Sous ta peau, une lueur violette bat comme un second cœur. Autour de toi, le verre noir craque en refroidissant."
+      - "Tu ne te souviens pas de ton nom. Mais quelque chose, là, dans le noir, le connaît."
+    intro-en:
+      - "Silence. Then, in the silence, something. Not a voice: a breath, just behind your thoughts. Rise."
+      - "Beneath your skin, a violet glow beats like a second heart. Around you, black glass cracks as it cools."
+      - "You do not remember your name. But something, there, in the dark, knows it."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Sortir du cratère"
+        texte-en: "Climb out of the crater"
+        point: bord_murmures
+        rayon: 3
+      - type: INTERAGIR
+        texte: "Toucher l'Éclat noir"
+        texte-en: "Touch the black Shard"
+        point: eclat_murmures
+        rayon: 3
+        apres:
+          - "Le cristal est froid comme une nuit d'hiver. La Marque s'ouvre sur ton bras, violette, et le murmure se tait d'un coup."
+          - "Une silhouette sort de la brume."
+        apres-en:
+          - "The crystal is cold as a winter night. The Mark opens on your arm, violet, and the whisper suddenly falls silent."
+          - "A figure steps out of the mist."
+      - type: PARLER
+        texte: "Parler à Nyra"
+        texte-en: "Talk to Nyra"
+        pnj: nyra
+        dialogue:
+          - "nyra: Toi aussi, tu l'entends. Ne mens pas, je le vois dans tes yeux."
+          - "nyra: C'est le Néant. Il murmure à ceux qu'il a touchés. La plupart des gens en ont peur."
+          - "joueur: Je ne me souviens de rien."
+          - "nyra: Nous, on écoute. Viens. D'autres se réveillent, et tous ne vont pas bien."
+        dialogue-en:
+          - "nyra: You hear it too. Don't lie, I can see it in your eyes."
+          - "nyra: It's the Void. It whispers to those it has touched. Most people are afraid of it."
+          - "joueur: I don't remember anything."
+          - "nyra: We listen. Come. Others are waking, and not all of them are well."
+    recompenses:
+      xp: 60
+      or: 10
+
+  o_ce_que_le_neant_garde:
+    nom: "Ce que le Néant garde"
+    nom-en: "What the Void Keeps"
+    faction: ombre
+    niveau: 1
+    requiert: [o_le_murmure]
+    resume:
+      - "Nyra cherche les autres Marqués"
+      - "perdus dans le Cratère des Murmures."
+    resume-en:
+      - "Nyra is looking for the other Marked"
+      - "lost in the Crater of Whispers."
+    intro:
+      - "nyra: Ils sont trois, au moins. Je les entends. L'un d'eux murmure trop fort."
+    intro-en:
+      - "nyra: There are three of them, at least. I can hear them. One of them whispers too loudly."
+    etapes:
+      - type: PARLER
+        texte: "Retrouver Ilian"
+        texte-en: "Find Ilian"
+        pnj: ilian
+        dialogue:
+          - "ilian: T'es comme moi ? T'entends la voix ?"
+          - "ilian: Elle dit qu'elle a froid. Pourquoi une voix aurait froid ?"
+          - "joueur: Une Murmureuse nous attend. Va la voir."
+        dialogue-en:
+          - "ilian: You're like me? You hear the voice?"
+          - "ilian: It says it's cold. Why would a voice be cold?"
+          - "joueur: A Whisperer is waiting for us. Go to her."
+      - type: PARLER
+        texte: "Retrouver Sorcha"
+        texte-en: "Find Sorcha"
+        pnj: sorcha
+        dialogue:
+          - "sorcha: Chut. Le noir est doux. Laisse-moi encore un peu."
+          - "sorcha: L'autre, là-bas, il n'écoute pas. Il se débat. Ça finit mal, quand on se débat."
+        dialogue-en:
+          - "sorcha: Hush. The dark is soft. Let me stay a little longer."
+          - "sorcha: The other one, over there, he doesn't listen. He fights it. It ends badly, when you fight it."
+      - type: INTERAGIR
+        texte: "Approcher du troisième Marqué"
+        texte-en: "Approach the third Marked"
+        point: vide_point
+        rayon: 4
+        apres:
+          - "Un homme est agenouillé, les mains sur les oreilles. Sa Marque pulse, de plus en plus vite."
+          - "vide: Elle parle trop fort… elle parle trop fort… je ne m'entends plus…"
+          - "Puis le silence. Ses yeux se vident. Il se relève, et il n'y a plus personne derrière son regard."
+        apres-en:
+          - "A man kneels, hands over his ears. His Mark pulses, faster and faster."
+          - "vide: It speaks too loud… it speaks too loud… I can't hear myself…"
+          - "Then silence. His eyes go empty. He stands up, and there is no one left behind his gaze."
+      - type: TUER
+        texte: "Abattre le Creux"
+        texte-en: "Put down the Hollow"
+        monstres: [creux]
+        point: vide_point
+      - type: PARLER
+        texte: "Revenir voir Nyra"
+        texte-en: "Return to Nyra"
+        pnj: nyra
+        dialogue:
+          - "nyra: On les appelle les Creux. Le Néant est entré, et il n'est rien resté de lui."
+          - "nyra: Ne fais pas cette tête. Le Néant donne. Parfois, il prend. C'est le prix."
+          - "nyra: Toi, il t'a laissé ta voix. Garde-la. Va à Nidnoir, à l'ouest. Grisolde t'attend."
+        dialogue-en:
+          - "nyra: We call them the Hollow. The Void went in, and nothing of him was left."
+          - "nyra: Don't make that face. The Void gives. Sometimes it takes. That's the price."
+          - "nyra: You, it left your voice. Keep it. Go to Nidnoir, to the west. Grisolde is waiting."
+    recompenses:
+      xp: 90
+      or: 15
+
+  o_les_limiers_de_l_aube:
+    nom: "Les Limiers de l'Aube"
+    nom-en: "The Hounds of the Dawn"
+    faction: ombre
+    niveau: 1
+    requiert: [o_ce_que_le_neant_garde]
+    donneur: grisolde
+    resume:
+      - "Les chiens des Purificateurs flairent les Marques"
+      - "autour de Nidnoir."
+    resume-en:
+      - "The Purifiers' hounds sniff out Marks"
+      - "around Nidnoir."
+    offre:
+      - "grisolde: Nyra t'a ramené ? Bien. Un de plus que les Purificateurs n'auront pas."
+      - "grisolde: Tu sais ce que fait la Lumière aux Marqués comme toi ? Moi non plus. Personne n'est revenu pour le raconter."
+      - "grisolde: Leurs chiens sentent ta Marque à une lieue. Ils rôdent à l'ouest. Va les faire taire."
+    offre-en:
+      - "grisolde: Nyra brought you back? Good. One more the Purifiers won't get."
+      - "grisolde: Do you know what the Light does to Marked like you? Neither do I. Nobody ever came back to tell."
+      - "grisolde: Their hounds smell your Mark a league away. They're prowling to the west. Go shut them up."
+    etapes:
+      - type: SORT
+        texte: "Lancer un sort de votre classe"
+        texte-en: "Cast one of your class spells"
+        monstres: [limier_traqueur]
+        apres:
+          - "Le Néant répond. Pas comme un outil : comme un chien qui reconnaît son maître."
+        apres-en:
+          - "The Void answers. Not like a tool: like a dog that knows its master."
+      - type: TUER
+        texte: "Tuer des Limiers traqueurs"
+        texte-en: "Kill tracking Hounds"
+        monstres: [limier_traqueur]
+        nombre: 8
+        point: limiers_nidnoir
+      - type: PARLER
+        texte: "Faire votre rapport à Grisolde"
+        texte-en: "Report to Grisolde"
+        pnj: grisolde
+        dialogue:
+          - "grisolde: Huit chiens de moins. Ils en ont d'autres, mais ça fait plaisir."
+          - "grisolde: Va voir Vharos. Il ouvre les morts pour comprendre les vivants. Il voudra t'ouvrir aussi. Dis non."
+        dialogue-en:
+          - "grisolde: Eight fewer dogs. They have more, but it's nice all the same."
+          - "grisolde: Go see Vharos. He opens the dead to understand the living. He'll want to open you too. Say no."
+    recompenses:
+      xp: 150
+      or: 25
+
+  o_l_ancre_noire:
+    nom: "L'ancre noire"
+    nom-en: "The Black Anchor"
+    faction: ombre
+    niveau: 2
+    requiert: [o_les_limiers_de_l_aube]
+    donneur: vharos
+    resume:
+      - "Vharos étudie la poussière d'Éclat"
+      - "et votre Marque, de beaucoup trop près."
+    resume-en:
+      - "Vharos studies Shard dust"
+      - "and your Mark, far too closely."
+    offre:
+      - "vharos: Le Marqué du cratère. Tendez le bras. Ne bougez pas."
+      - "vharos: Les Limiers de l'Aube mangent la poussière des Éclats qu'ils déterrent. Rapportez-m'en. Elle me dira ce que vous êtes."
+    offre-en:
+      - "vharos: The Marked from the crater. Hold out your arm. Don't move."
+      - "vharos: The Dawn's Hounds eat the dust of the Shards they dig up. Bring me some. It will tell me what you are."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer de la poussière d'Éclat"
+        texte-en: "Collect Shard dust"
+        monstres: [limier_traqueur]
+        nombre: 6
+        chance: 0.6
+        point: limiers_nidnoir
+        objet: "Poussière d'Éclat"
+        objet-en: "Shard dust"
+      - type: PARLER
+        texte: "Apporter la poussière à Vharos"
+        texte-en: "Bring the dust to Vharos"
+        pnj: vharos
+        dialogue:
+          - "vharos: Intéressant. Votre Marque ne brille pas, elle aspire. Comme un puits."
+          - "vharos: Posez la main sur l'ancre. Si vous mourez, le Néant vous recrachera ici. Il n'aime pas lâcher ce qu'il a marqué."
+        dialogue-en:
+          - "vharos: Interesting. Your Mark does not shine, it draws in. Like a well."
+          - "vharos: Put your hand on the anchor. If you die, the Void will spit you back out here. It does not like letting go of what it has marked."
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage de Nidnoir"
+        texte-en: "Touch Nidnoir's anchoring Shard"
+        point: ancre_nidnoir
+        rayon: 4
+        apres:
+          - "Un froid te traverse, comme une main qui se referme doucement sur ton cœur. Puis elle te lâche."
+          - "vharos: Revenez me voir de temps en temps. J'aimerais suivre… votre évolution."
+        apres-en:
+          - "A cold runs through you, like a hand gently closing around your heart. Then it lets go."
+          - "vharos: Come back and see me from time to time. I would like to follow… your progress."
+    recompenses:
+      xp: 180
+      or: 30
+      objets:
+        - materiau: ECHO_SHARD
+          nom: "Éclat d'écho"
+          nom-en: "Echo Shard"
+          description:
+            - "Un fragment froid du cristal qui vous a marqué."
+          description-en:
+            - "A cold fragment of the crystal that marked you."
+
+  o_la_nuit_des_purificateurs:
+    nom: "La nuit des Purificateurs"
+    nom-en: "The Night of the Purifiers"
+    faction: ombre
+    niveau: 3
+    requiert: [o_l_ancre_noire]
+    donneur: grisolde
+    resume:
+      - "Les Purificateurs de l'Aube attaquent Nidnoir."
+    resume-en:
+      - "The Dawn's Purifiers are attacking Nidnoir."
+    offre:
+      - "grisolde: Kesh a vu des torches sur la lande. Des dizaines. Ils ont fini par trouver le camp."
+      - "grisolde: On les arrête à l'ouest, avant les maisons. Avec moi."
+    offre-en:
+      - "grisolde: Kesh saw torches on the moor. Dozens. They finally found the camp."
+      - "grisolde: We stop them to the west, before the houses. With me."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre la ligne à l'ouest de Nidnoir"
+        texte-en: "Join the line west of Nidnoir"
+        point: limiers_nidnoir
+        rayon: 12
+        apres:
+          - "castel: Enfants du Néant ! Il n'est pas trop tard ! L'Aube peut encore vous laver de cette souillure !"
+          - "castel: Rendez-vous, et le Cloître Blanc vous rendra la paix !"
+        apres-en:
+          - "castel: Children of the Void! It is not too late! The Dawn can still wash this filth from you!"
+          - "castel: Surrender, and the White Cloister will give you peace!"
+      - type: TUER
+        texte: "Repousser les Purificateurs"
+        texte-en: "Drive back the Purifiers"
+        monstres: [purificateur_rappel]
+        nombre: 10
+        point: limiers_nidnoir
+      - type: TUER
+        texte: "Abattre leur capitaine"
+        texte-en: "Slay their captain"
+        monstres: [capitaine_purificateur]
+        point: limiers_nidnoir
+        apres:
+          - "Le capitaine tombe. Plus loin, une voix hurle la retraite. Des chariots s'éloignent dans la nuit, avec des cris dedans."
+        apres-en:
+          - "The captain falls. Further off, a voice calls the retreat. Carts roll away into the night, with screams inside."
+      - type: PARLER
+        texte: "Retrouver Grisolde"
+        texte-en: "Find Grisolde"
+        pnj: grisolde
+        dialogue:
+          - "grisolde: Tu te bats bien. Pour un gamin qui a oublié son nom."
+          - "grisolde: Ils ont pris trois des nôtres. Dont Jaro. Ça, je ne le pardonnerai pas."
+          - "grisolde: Morvain est à Gris-Hameau, au sud. Il a demandé un Marqué. Je t'envoie. Lui saura quoi faire."
+        dialogue-en:
+          - "grisolde: You fight well. For a kid who forgot their own name."
+          - "grisolde: They took three of ours. Including Jaro. That, I won't forgive."
+          - "grisolde: Morvain is in Gris-Hameau, to the south. He asked for a Marked. I'm sending you. He'll know what to do."
+    recompenses:
+      xp: 320
+      or: 40
+
+  o_les_glaneurs:
+    nom: "Les Glaneurs"
+    nom-en: "The Gleaners"
+    faction: ombre
+    niveau: 4
+    requiert: [o_la_nuit_des_purificateurs]
+    donneur: morvain_mentor
+    resume:
+      - "Morvain, chef des Glaneurs, vous envoie"
+      - "récolter des Éclats dans une chapelle de la lande."
+    resume-en:
+      - "Morvain, leader of the Gleaners, sends you"
+      - "to gather Shards in a chapel on the moor."
+    offre:
+      - "morvain_mentor: Ah. Le Marqué de Nidnoir. Grisolde m'a parlé de vous en des termes peu flatteurs. C'est bon signe."
+      - "morvain_mentor: Chaque Éclat que nous ramassons est un Éclat que l'Aube n'utilisera pas pour rallumer son étoile morte."
+      - "morvain_mentor: Une chapelle en ruine, au sud-est. Un Éclat est tombé dans son chœur. Les morts le gardent. Plus pour longtemps."
+    offre-en:
+      - "morvain_mentor: Ah. The Marked of Nidnoir. Grisolde spoke of you in unflattering terms. That's a good sign."
+      - "morvain_mentor: Every Shard we gather is a Shard the Dawn will not use to rekindle its dead star."
+      - "morvain_mentor: A ruined chapel, to the south-east. A Shard fell into its choir. The dead guard it. Not for long."
+    etapes:
+      - type: TUER
+        texte: "Chasser les morts de la chapelle"
+        texte-en: "Drive the dead from the chapel"
+        monstres: [squelette]
+        nombre: 6
+        point: chapelle_landes
+      - type: INTERAGIR
+        texte: "Arracher l'Éclat du chœur"
+        texte-en: "Tear the Shard from the choir"
+        point: chapelle_landes
+        rayon: 6
+        apres:
+          - "L'Éclat murmure quand tu le touches. Puis, derrière toi, une branche craque."
+          - "Un jeune archer aux couleurs de l'Aube t'observe depuis les ruines. Il tire, te manque, et s'enfuit. Ta lame l'a touché au bras."
+        apres-en:
+          - "The Shard whispers when you touch it. Then, behind you, a branch snaps."
+          - "A young archer in the Dawn's colours watches you from the ruins. He shoots, misses, and flees. Your blade caught his arm."
+      - type: PARLER
+        texte: "Rapporter l'Éclat à Morvain"
+        texte-en: "Bring the Shard to Morvain"
+        pnj: morvain_mentor
+        dialogue:
+          - "morvain_mentor: Un éclaireur de l'Aube, si loin de chez lui ? Il dira ce qu'il a vu. Tant mieux."
+          - "morvain_mentor: Qu'ils sachent que nous ramassons les Éclats. Ils viendront. Et je veux voir qui ils envoient."
+        dialogue-en:
+          - "morvain_mentor: A Dawn scout, so far from home? He will tell what he saw. All the better."
+          - "morvain_mentor: Let them know we are gathering the Shards. They will come. And I want to see who they send."
+    recompenses:
+      xp: 450
+      or: 55
+
+  o_le_leurre:
+    nom: "Le leurre"
+    nom-en: "The Decoy"
+    faction: ombre
+    niveau: 5
+    requiert: [o_les_glaneurs]
+    donneur: morvain_mentor
+    resume:
+      - "Morvain prépare un leurre pour le Marqué"
+      - "que l'Aube enverra."
+    resume-en:
+      - "Morvain is setting a decoy for the Marked"
+      - "the Dawn will send."
+    offre:
+      - "morvain_mentor: L'Aube enverra un Marqué tout neuf reprendre « son » Éclat. Je lui en laisserai un. Un seul, bien visible."
+      - "morvain_mentor: Mais le bivouac des Purificateurs, à l'ouest, gêne le passage de nos caisses. Videz-le, et posez le leurre à sa place."
+    offre-en:
+      - "morvain_mentor: The Dawn will send a brand-new Marked to take back « its » Shard. I will leave one for him. Just one, in plain sight."
+      - "morvain_mentor: But the Purifiers' bivouac, to the west, blocks the way for our crates. Clear it, and set the decoy in its place."
+    etapes:
+      - type: TUER
+        texte: "Vider le bivouac des Purificateurs"
+        texte-en: "Clear the Purifiers' bivouac"
+        monstres: [purificateur, limier_aube]
+        nombre: 8
+        point: camp_purif_landes
+      - type: INTERAGIR
+        texte: "Poser la caisse-leurre au milieu du bivouac"
+        texte-en: "Place the decoy crate in the middle of the bivouac"
+        point: camp_purif_landes
+        rayon: 6
+        apres:
+          - "Un seul Éclat, gros comme une tête d'homme, sur la paille. Assez pour qu'on le prenne pour un trésor."
+        apres-en:
+          - "A single Shard, as big as a man's head, on the straw. Enough to be mistaken for a treasure."
+      - type: PARLER
+        texte: "Revenir voir Morvain"
+        texte-en: "Return to Morvain"
+        pnj: morvain_mentor
+        dialogue:
+          - "morvain_mentor: Parfait. Quand il viendra, je lui laisserai la babiole et un conseil."
+          - "morvain_mentor: Un jour, il comprendra. Ou il mourra. Les deux sont possibles."
+          - "morvain_mentor: Maintenant, parlons de Jaro. Un convoi de Purificateurs part vers l'Aube. Avec des prisonniers."
+        dialogue-en:
+          - "morvain_mentor: Perfect. When he comes, I will leave him the trinket and a piece of advice."
+          - "morvain_mentor: One day he will understand. Or he will die. Both are possible."
+          - "morvain_mentor: Now, let's talk about Jaro. A convoy of Purifiers is leaving for the Dawn. With prisoners."
+    recompenses:
+      xp: 520
+      or: 70
+
+  o_le_convoi_des_purifies:
+    nom: "Le convoi des Purifiés"
+    nom-en: "The Convoy of the Purified"
+    faction: ombre
+    niveau: 6
+    requiert: [o_le_leurre]
+    donneur: morvain_mentor
+    resume:
+      - "Un convoi de Purificateurs emmène Jaro"
+      - "et d'autres Marqués vers le Cloître Blanc."
+    resume-en:
+      - "A Purifier convoy is taking Jaro"
+      - "and other Marked to the White Cloister."
+    offre:
+      - "morvain_mentor: Le convoi fait halte au nord-est de Morneval, au bord de la lande. Attaquez à la nuit tombée."
+      - "morvain_mentor: Ramenez Jaro. Ramenez-les tous, si vous pouvez."
+    offre-en:
+      - "morvain_mentor: The convoy is halting north-east of Morneval, at the edge of the moor. Strike at nightfall."
+      - "morvain_mentor: Bring Jaro back. Bring them all back, if you can."
+    etapes:
+      - type: TUER
+        texte: "Attaquer l'escorte du convoi"
+        texte-en: "Attack the convoy's escort"
+        monstres: [purificateur, limier_aube]
+        nombre: 10
+        point: convoi_purifies
+      - type: INTERAGIR
+        texte: "Ouvrir les cages des prisonniers"
+        texte-en: "Open the prisoners' cages"
+        point: convoi_purifies
+        rayon: 6
+        apres:
+          - "Trois Marqués dans les cages. Sur leur bras, par-dessus la Marque, un sceau brûlé au fer : un soleil levant."
+          - "jaro: Ils m'ont brûlé ça sur le bras. Ça fait comme un couvercle. Je l'entends presque plus, le murmure."
+          - "jaro: Le prêtre disait que le Cloître allait me purifier. J'ai vu ceux qui en revenaient. Ils étaient en paix, ouais. Ils parlaient plus du tout."
+          - "castel: Vous ne les sauvez pas, enfant du Néant ! Vous les condamnez !"
+          - "Frère Castel s'enfuit à cheval vers l'ouest. Jaro s'appuie sur ton épaule."
+        apres-en:
+          - "Three Marked in the cages. On their arms, over the Mark, a seal burned in with iron: a rising sun."
+          - "jaro: They burned this on my arm. It's like a lid. I can hardly hear the whisper anymore."
+          - "jaro: The priest said the Cloister would purify me. I saw the ones who came back. They were at peace, sure. They didn't speak at all anymore."
+          - "castel: You are not saving them, child of the Void! You are damning them!"
+          - "Brother Castel flees on horseback toward the west. Jaro leans on your shoulder."
+      - type: ATTEINDRE
+        texte: "Conduire Jaro à la porte de Morneval"
+        texte-en: "Bring Jaro to the gate of Morneval"
+        point: porte_sud_morneval
+        rayon: 8
+        apres:
+          - "jaro: Morneval… J'y suis jamais entré. Ils laissent entrer les Glaneurs, tu crois ?"
+        apres-en:
+          - "jaro: Morneval… I've never been inside. Do they let Gleaners in, you think?"
+    recompenses:
+      xp: 650
+      or: 90
+
+  o_le_coeur_d_obsidienne:
+    nom: "Le cœur d'obsidienne"
+    nom-en: "The Obsidian Heart"
+    faction: ombre
+    niveau: 7
+    requiert: [o_le_convoi_des_purifies]
+    resume:
+      - "Morneval, la capitale de l'Ombre,"
+      - "et la Citadelle d'Obsidienne."
+    resume-en:
+      - "Morneval, the capital of the Shadow,"
+      - "and the Obsidian Citadel."
+    intro:
+      - "Morneval. Des remparts noirs, des tours qui avalent la lumière, un fleuve lent qui coupe la ville en deux."
+      - "Au nord, la masse de la Citadelle d'Obsidienne, taillée d'un seul bloc."
+    intro-en:
+      - "Morneval. Black ramparts, towers that swallow light, a slow river cutting the city in two."
+      - "To the north, the mass of the Obsidian Citadel, carved from a single block."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Traverser le grand pont"
+        texte-en: "Cross the great bridge"
+        point: pont_morneval
+        rayon: 6
+        apres:
+          - "Sur les quais, des silhouettes travaillent sans un mot. Elles portent des chaînes légères. Leurs yeux sont vides."
+          - "Des Creux. Enchaînés. Ils déchargent des bateaux, montent la garde, balaient. Personne ne les regarde."
+        apres-en:
+          - "On the quays, figures work without a word. They wear light chains. Their eyes are empty."
+          - "Hollow. Chained. They unload boats, stand guard, sweep. Nobody looks at them."
+      - type: PARLER
+        texte: "Se présenter à l'Archonte Sévrine, à la Citadelle"
+        texte-en: "Present yourself to Archon Sévrine, at the Citadel"
+        pnj: sevrine
+        dialogue:
+          - "sevrine: Le Marqué de Nidnoir. Celui qui a repris des nôtres au Cloître."
+          - "sevrine: Morvain vous recommande. Morvain ne recommande jamais personne."
+          - "joueur: Les Creux, sur les quais. Vous les enchaînez ?"
+          - "sevrine: Le Néant les a vidés. Nous leur donnons encore un but. C'est plus de miséricorde que l'Aube n'en a jamais montré."
+          - "sevrine: Sous ce parvis s'ouvre le Puits. Touchez la stèle : le Néant vous reconnaîtra ici aussi."
+        dialogue-en:
+          - "sevrine: The Marked of Nidnoir. The one who took ours back from the Cloister."
+          - "sevrine: Morvain recommends you. Morvain never recommends anyone."
+          - "joueur: The Hollow, on the quays. You chain them?"
+          - "sevrine: The Void emptied them. We still give them a purpose. That is more mercy than the Dawn has ever shown."
+          - "sevrine: Beneath this square opens the Well. Touch the stele: the Void will know you here too."
+      - type: ANCRAGE
+        texte: "Toucher la stèle du parvis"
+        texte-en: "Touch the stele of the square"
+        point: stele_citadelle
+        rayon: 4
+    recompenses:
+      xp: 520
+      or: 70
+
+  o_l_avant_poste_de_l_aube:
+    nom: "L'Avant-poste de l'Aube"
+    nom-en: "The Dawn Outpost"
+    faction: ombre
+    niveau: 8
+    requiert: [o_le_coeur_d_obsidienne]
+    donneur: sevrine
+    resume:
+      - "L'Aube a planté un fortin autour d'un Éclat"
+      - "loin au nord-est de Morneval."
+    resume-en:
+      - "The Dawn has planted a fort around a Shard"
+      - "far north-east of Morneval."
+    offre:
+      - "sevrine: Au nord-est, les Purificateurs gardent un Éclat tombé la nuit des étoiles. Ils le « purifient » avant de l'emporter."
+      - "sevrine: Une Sentinelle dorée le garde. Abattez-la. Rapportez l'Éclat. Ce sera votre épreuve."
+    offre-en:
+      - "sevrine: To the north-east, the Purifiers guard a Shard that fell on the night of the stars. They « purify » it before taking it away."
+      - "sevrine: A golden Sentinel guards it. Bring it down. Bring back the Shard. That will be your trial."
+    etapes:
+      - type: TUER
+        texte: "Percer la garde de l'avant-poste"
+        texte-en: "Break through the outpost's guard"
+        monstres: [purificateur, limier_aube]
+        nombre: 6
+        point: avant_poste
+        apres:
+          - "Une armure dorée se lève au milieu du camp. Une voix sans souffle tonne : « SOUILLURE DÉTECTÉE. AU NOM DE L'ASTRE, TU SERAS PURIFIÉ. »"
+        apres-en:
+          - "A golden armour rises in the middle of the camp. A breathless voice thunders: « FILTH DETECTED. IN THE NAME OF THE STAR, YOU WILL BE PURIFIED. »"
+      - type: TUER
+        texte: "Vaincre la Sentinelle de l'Aube"
+        texte-en: "Defeat the Sentinel of the Dawn"
+        monstres: [sentinelle_aube]
+        point: avant_poste
+      - type: INTERAGIR
+        texte: "Prendre l'Éclat purifié"
+        texte-en: "Take the purified Shard"
+        point: avant_poste
+        rayon: 5
+        apres:
+          - "L'Éclat est blanc, lisse, silencieux. Pour la première fois, aucun murmure n'en sort. Ça te fait froid dans le dos."
+        apres-en:
+          - "The Shard is white, smooth, silent. For the first time, no whisper comes from it. It sends a chill down your spine."
+    recompenses:
+      xp: 900
+      or: 120
+
+  o_le_serment_du_neant:
+    nom: "Le Serment du Néant"
+    nom-en: "The Oath of the Void"
+    faction: ombre
+    niveau: 9
+    requiert: [o_l_avant_poste_de_l_aube]
+    donneur: sevrine
+    resume:
+      - "Descendre au Puits du Néant"
+      - "et devenir un Marqué du Néant."
+    resume-en:
+      - "Descend to the Well of the Void"
+      - "and become a Marked of the Void."
+    offre:
+      - "sevrine: Un Éclat purifié. Muet. Voilà ce que l'Aube fait de tout ce qu'elle touche."
+      - "sevrine: Jetez-le au Puits. Et ensuite, la main."
+    offre-en:
+      - "sevrine: A purified Shard. Mute. That is what the Dawn does to everything it touches."
+      - "sevrine: Throw it into the Well. And then, your hand."
+    etapes:
+      - type: INTERAGIR
+        texte: "Jeter l'Éclat dans le Puits et prêter serment"
+        texte-en: "Throw the Shard into the Well and take the oath"
+        point: stele_citadelle
+        rayon: 4
+        apres:
+          - "Morvain, Grisolde et Jaro sont là. L'Éclat tombe dans le noir sans un bruit."
+          - "sevrine: « Je suis tombé avec les étoiles. J'ai vu ce qu'il reste quand elles s'éteignent. »"
+          - "sevrine: « Je n'ai pas peur du Néant : il est en moi. Par l'Ombre, je l'accepte. »"
+          - "joueur: Par l'Ombre, je l'accepte."
+          - "Tu plonges la main dans le Puits. Pour la première fois, le murmure prononce un mot clair. Un seul. « Froid. »"
+          - "Un cor sonne au-dessus de la ville : un Éclat immense est tombé loin à l'ouest, au-delà des terres disputées."
+          - "morvain_mentor: Et l'Aube y court déjà. Votre Marqué de l'Aube y sera sans doute. Allons voir ce qu'il est devenu."
+        apres-en:
+          - "Morvain, Grisolde and Jaro are there. The Shard falls into the dark without a sound."
+          - "sevrine: « I fell with the stars. I have seen what remains when they go out. »"
+          - "sevrine: « I do not fear the Void: it is within me. By the Shadow, I accept it. »"
+          - "joueur: By the Shadow, I accept it."
+          - "You plunge your hand into the Well. For the first time, the whisper speaks a clear word. Just one. « Cold. »"
+          - "A horn sounds above the city: an immense Shard has fallen far to the west, beyond the disputed lands."
+          - "morvain_mentor: And the Dawn is already racing toward it. Your Marked of the Dawn will surely be there. Let's go and see what he has become."
+      - type: ATTEINDRE
+        texte: "Partir par la porte nord de Morneval"
+        texte-en: "Leave through the northern gate of Morneval"
+        point: porte_nord_morneval
+        rayon: 8
+        apres:
+          - "Le Chemin de la Sylve s'enfonce vers le nord-ouest, sous des arbres si sombres qu'on croirait la nuit tombée."
+        apres-en:
+          - "The Sylvan Path plunges north-west, beneath trees so dark you would think night had fallen."
+    recompenses:
+      xp: 1300
+      or: 200
+      objets:
+        - materiau: NETHERITE_SCRAP
+          nom: "Sceau du Puits"
+          nom-en: "Seal of the Well"
+          description:
+            - "Remis aux Marqués qui ont accepté le Néant."
+          description-en:
+            - "Given to the Marked who have accepted the Void."
+
+  # ================================================================ ANNEXES — NIDNOIR
+
+  o_n_la_soupe_noire:
+    nom: "La soupe noire"
+    nom-en: "Black Soup"
+    faction: ombre
+    niveau: 2
+    requiert: [o_les_limiers_de_l_aube]
+    donneur: maugre
+    resume:
+      - "L'auberge de Nidnoir n'a plus rien à mettre dans la marmite."
+    resume-en:
+      - "Nidnoir's inn has nothing left for the pot."
+    offre:
+      - "maugre: Des Marqués qui arrivent tous les jours, et pas un os dans la marmite. Les loups de la lande, eux, sont gras."
+    offre-en:
+      - "maugre: Marked arriving every day, and not a bone in the pot. The moor wolves, though, are fat."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer de la viande de loup"
+        texte-en: "Collect wolf meat"
+        monstres: [loup_ombre]
+        nombre: 6
+        chance: 0.6
+        objet: "Viande de loup"
+        objet-en: "Wolf meat"
+      - type: PARLER
+        texte: "Rapporter la viande à Maugre"
+        texte-en: "Bring the meat to Maugre"
+        pnj: maugre
+        dialogue:
+          - "maugre: Ça fera une soupe noire comme la nuit. La meilleure."
+        dialogue-en:
+          - "maugre: That'll make a soup as black as night. The best kind."
+    recompenses:
+      xp: 160
+      or: 25
+
+  o_n_les_araignees_des_gorges:
+    nom: "Les araignées des gorges"
+    nom-en: "The Gorge Spiders"
+    faction: ombre
+    niveau: 3
+    requiert: [o_les_limiers_de_l_aube]
+    donneur: kesh
+    resume:
+      - "Des araignées s'approchent de Nidnoir la nuit."
+    resume-en:
+      - "Spiders creep toward Nidnoir at night."
+    offre:
+      - "kesh: La nuit, j'entends des pattes sur les toits. Des araignées de la lande. Elles grossissent depuis les étoiles."
+    offre-en:
+      - "kesh: At night I hear legs on the roofs. Moor spiders. They've been growing since the stars."
+    etapes:
+      - type: TUER
+        texte: "Tuer des araignées de la lande"
+        texte-en: "Kill moor spiders"
+        monstres: [araignee]
+        nombre: 8
+      - type: PARLER
+        texte: "Prévenir Kesh"
+        texte-en: "Tell Kesh"
+        pnj: kesh
+        dialogue:
+          - "kesh: Huit ? Ce soir, je regarderai les étoiles au lieu des toits."
+        dialogue-en:
+          - "kesh: Eight? Tonight I'll watch the stars instead of the roofs."
+    recompenses:
+      xp: 220
+      or: 30
+
+  o_n_les_souvenirs_de_sorcha:
+    nom: "Les souvenirs de Sorcha"
+    nom-en: "Sorcha's Memories"
+    faction: ombre
+    niveau: 3
+    requiert: [o_les_limiers_de_l_aube]
+    donneur: sorcha
+    resume:
+      - "Sorcha pense que le noir garde"
+      - "ce que les Marqués ont oublié."
+    resume-en:
+      - "Sorcha believes the dark keeps"
+      - "what the Marked have forgotten."
+    offre:
+      - "sorcha: Le noir garde tout. Nos noms, nos maisons. Retourne là où tu es tombé. Touche le verre. Écoute."
+    offre-en:
+      - "sorcha: The dark keeps everything. Our names, our homes. Go back to where you fell. Touch the glass. Listen."
+    etapes:
+      - type: INTERAGIR
+        texte: "Toucher le fond de votre cratère"
+        texte-en: "Touch the bottom of your crater"
+        point: cratere_murmures
+        rayon: 4
+        apres:
+          - "Le verre est froid. Une odeur de fer chaud, venue de nulle part."
+        apres-en:
+          - "The glass is cold. A smell of hot iron, from nowhere."
+      - type: INTERAGIR
+        texte: "Toucher la place où le Creux est tombé"
+        texte-en: "Touch the place where the Hollow fell"
+        point: vide_point
+        rayon: 4
+        apres:
+          - "Il ne reste qu'une bague de fer, tordue, trop petite pour un doigt d'homme."
+        apres-en:
+          - "Only an iron ring is left, twisted, too small for a man's finger."
+      - type: INTERAGIR
+        texte: "Toucher l'Éclat noir"
+        texte-en: "Touch the black Shard"
+        point: eclat_murmures
+        rayon: 4
+        apres:
+          - "Une forge. Le bruit d'un marteau. Une petite main dans la tienne. Quelqu'un rit."
+          - "Puis le murmure recouvre tout."
+        apres-en:
+          - "A forge. The sound of a hammer. A small hand in yours. Someone laughs."
+          - "Then the whisper covers everything."
+      - type: PARLER
+        texte: "Raconter à Sorcha ce que vous avez entendu"
+        texte-en: "Tell Sorcha what you heard"
+        pnj: sorcha
+        dialogue:
+          - "sorcha: Une forge, une petite main… Tu avais quelqu'un. Quelqu'un t'attend peut-être encore."
+          - "sorcha: Garde la bague. Le noir te la rend."
+        dialogue-en:
+          - "sorcha: A forge, a small hand… You had someone. Someone may still be waiting for you."
+          - "sorcha: Keep the ring. The dark gives it back to you."
+    recompenses:
+      xp: 240
+      or: 20
+      objets:
+        - materiau: IRON_NUGGET
+          nom: "Bague de fer"
+          nom-en: "Iron Ring"
+          description:
+            - "Trop petite pour un doigt d'homme."
+          description-en:
+            - "Too small for a man's finger."
+
+  o_n_un_message_pour_gris_hameau:
+    nom: "Un message pour Gris-Hameau"
+    nom-en: "A Message for Gris-Hameau"
+    faction: ombre
+    niveau: 4
+    requiert: [o_la_nuit_des_purificateurs]
+    donneur: kesh
+    resume:
+      - "Porter les nouvelles de Nidnoir"
+      - "à Orlane, à Gris-Hameau."
+    resume-en:
+      - "Carry the news from Nidnoir"
+      - "to Orlane, at Gris-Hameau."
+    offre:
+      - "kesh: Grisolde veut que Gris-Hameau sache pour l'attaque. C'est juste au sud, sur la chaussée. Donne ça à Orlane."
+    offre-en:
+      - "kesh: Grisolde wants Gris-Hameau to know about the attack. It's just south, along the causeway. Give this to Orlane."
+    etapes:
+      - type: PARLER
+        texte: "Remettre le message à Orlane, à Gris-Hameau"
+        texte-en: "Deliver the message to Orlane, at Gris-Hameau"
+        pnj: orlane
+        dialogue:
+          - "orlane: Des Purificateurs jusqu'à Nidnoir… La lande n'est plus à nous."
+          - "orlane: Reste un peu. Notre Éclat t'attend. Ici aussi, on meurt vite."
+        dialogue-en:
+          - "orlane: Purifiers all the way to Nidnoir… The moor isn't ours anymore."
+          - "orlane: Stay a while. Our Shard is waiting for you. Here too, people die fast."
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage de Gris-Hameau"
+        texte-en: "Touch Gris-Hameau's anchoring Shard"
+        point: ancre_gris
+        rayon: 4
+    recompenses:
+      xp: 260
+      or: 30
+
+  o_n_les_morts_du_chemin:
+    nom: "Les morts du chemin"
+    nom-en: "The Dead of the Road"
+    faction: ombre
+    niveau: 5
+    requiert: [o_la_nuit_des_purificateurs]
+    donneur: kesh
+    resume:
+      - "Un cimetière oublié s'est réveillé"
+      - "au nord-ouest de Nidnoir."
+    resume-en:
+      - "A forgotten graveyard has awoken"
+      - "north-west of Nidnoir."
+    offre:
+      - "kesh: Au nord-ouest, un vieux cimetière. Depuis les étoiles, les morts en sortent et marchent vers les vivants."
+    offre-en:
+      - "kesh: To the north-west, an old graveyard. Since the stars, the dead crawl out and walk toward the living."
+    etapes:
+      - type: TUER
+        texte: "Rendre les morts à la terre"
+        texte-en: "Return the dead to the earth"
+        monstres: [squelette, revenant]
+        nombre: 8
+        point: camp_morts_landes
+      - type: PARLER
+        texte: "Revenir voir Kesh"
+        texte-en: "Return to Kesh"
+        pnj: kesh
+        dialogue:
+          - "kesh: Vharos dira que c'est du gâchis. Moi, je dis que c'est du calme."
+        dialogue-en:
+          - "kesh: Vharos will say it's a waste. I say it's peace and quiet."
+    recompenses:
+      xp: 420
+      or: 55
+
+  # ================================================================ ANNEXES — GRIS-HAMEAU
+
+  o_g_les_tisseuses:
+    nom: "Les tisseuses"
+    nom-en: "The Weavers"
+    faction: ombre
+    niveau: 6
+    requiert: [o_n_un_message_pour_gris_hameau]
+    donneur: orlane
+    resume:
+      - "Un nid d'araignées géantes coupe la route"
+      - "à l'ouest de Gris-Hameau."
+    resume-en:
+      - "A nest of giant spiders cuts the road"
+      - "west of Gris-Hameau."
+    offre:
+      - "orlane: Mes passeurs ne reviennent plus de l'ouest. Un nid d'araignées a poussé au bord de la chaussée."
+    offre-en:
+      - "orlane: My ferrymen no longer come back from the west. A spider nest has grown by the causeway."
+    etapes:
+      - type: TUER
+        texte: "Détruire le nid de l'ouest"
+        texte-en: "Destroy the western nest"
+        monstres: [araignee, araignee_geante]
+        nombre: 10
+        point: nid_landes
+      - type: PARLER
+        texte: "Prévenir Orlane"
+        texte-en: "Tell Orlane"
+        pnj: orlane
+        dialogue:
+          - "orlane: La chaussée respire. Mes passeurs aussi."
+        dialogue-en:
+          - "orlane: The causeway can breathe. So can my ferrymen."
+    recompenses:
+      xp: 520
+      or: 70
+
+  o_g_la_tour_du_sud:
+    nom: "La tour du sud"
+    nom-en: "The Southern Tower"
+    faction: ombre
+    niveau: 6
+    requiert: [o_n_un_message_pour_gris_hameau]
+    donneur: brac
+    resume:
+      - "Des morts se rassemblent dans une tour en ruine"
+      - "au sud de Gris-Hameau."
+    resume-en:
+      - "The dead are gathering in a ruined tower"
+      - "south of Gris-Hameau."
+    offre:
+      - "brac: Les morts que j'enterre ne restent pas couchés. Ils vont tous au même endroit : la vieille tour, au sud."
+      - "brac: Va voir ce qui les appelle."
+    offre-en:
+      - "brac: The dead I bury don't stay down. They all go to the same place: the old tower, to the south."
+      - "brac: Go and see what is calling them."
+    etapes:
+      - type: TUER
+        texte: "Abattre les morts de la tour"
+        texte-en: "Destroy the dead of the tower"
+        monstres: [squelette]
+        nombre: 6
+        point: tour_landes
+      - type: INTERAGIR
+        texte: "Fouiller le sommet de la tour"
+        texte-en: "Search the top of the tower"
+        point: tour_landes
+        rayon: 6
+        apres:
+          - "Un Éclat noir planté dans la pierre. Autour, des pas dans la poussière, des centaines, qui tournent en rond."
+        apres-en:
+          - "A black Shard planted in the stone. Around it, footprints in the dust, hundreds, walking in circles."
+      - type: PARLER
+        texte: "Revenir voir le vieux Brac"
+        texte-en: "Return to old Brac"
+        pnj: brac
+        dialogue:
+          - "brac: Ils tournaient autour d'un Éclat ? Comme des papillons autour d'une lampe."
+          - "brac: Le Néant les appelle, les morts aussi. Ça devrait faire peur à plus de monde."
+        dialogue-en:
+          - "brac: They circled a Shard? Like moths around a lamp."
+          - "brac: The Void calls the dead too. That ought to scare more people."
+    recompenses:
+      xp: 520
+      or: 70
+
+  o_g_sous_l_enclos:
+    nom: "Sous l'Enclos"
+    nom-en: "Beneath the Enclosure"
+    faction: ombre
+    niveau: 6
+    requiert: [o_g_les_tisseuses]
+    donneur: orlane
+    resume:
+      - "L'Enclos du Taureau, au nord de Morneval,"
+      - "mène plus loin qu'on ne croit."
+    resume-en:
+      - "The Bull's Enclosure, north of Morneval,"
+      - "leads further than anyone thinks."
+    offre:
+      - "orlane: Au nord de Morneval, une porte de pierre : l'Enclos du Taureau. Les anciens disent qu'elle mène au Pilier des Astres."
+    offre-en:
+      - "orlane: North of Morneval, a stone gate: the Bull's Enclosure. The elders say it leads to the Pillar of Stars."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Trouver la porte de l'Enclos du Taureau"
+        texte-en: "Find the gate of the Bull's Enclosure"
+        point: enclos_entree
+        rayon: 6
+        apres:
+          - "Sous la voûte, l'air vibre. Le passage ouvre sur un étage du Pilier des Astres. On entend un mugissement, très loin."
+        apres-en:
+          - "Beneath the arch, the air hums. The passage opens onto a floor of the Pillar of Stars. A bellow can be heard, very far away."
+      - type: PARLER
+        texte: "Revenir voir Orlane"
+        texte-en: "Return to Orlane"
+        pnj: orlane
+        dialogue:
+          - "orlane: Le Pilier… N'y va pas seul. Les guildes de Morneval s'y relaient."
+        dialogue-en:
+          - "orlane: The Pillar… Don't go alone. Morneval's guilds take turns in there."
+    recompenses:
+      xp: 400
+      or: 60
+
+  o_g_les_araignees_de_l_est:
+    nom: "Les araignées de l'est"
+    nom-en: "The Eastern Spiders"
+    faction: ombre
+    niveau: 5
+    requiert: [o_n_un_message_pour_gris_hameau]
+    donneur: brac
+    resume:
+      - "Un nid d'araignées près de la côte est"
+      - "menace les pêcheurs."
+    resume-en:
+      - "A spider nest near the eastern coast"
+      - "threatens the fishermen."
+    offre:
+      - "brac: Les pêcheurs de la côte est m'apportent leurs morts. Piqués. Il y a un nid, là-bas."
+    offre-en:
+      - "brac: The fishermen from the east coast bring me their dead. Stung. There's a nest out there."
+    etapes:
+      - type: TUER
+        texte: "Détruire le nid de l'est"
+        texte-en: "Destroy the eastern nest"
+        monstres: [araignee, araignee_geante]
+        nombre: 10
+        point: nid_est_landes
+      - type: PARLER
+        texte: "Revenir voir le vieux Brac"
+        texte-en: "Return to old Brac"
+        pnj: brac
+        dialogue:
+          - "brac: Moins de tombes à creuser. Je ne vais pas m'en plaindre."
+        dialogue-en:
+          - "brac: Fewer graves to dig. I won't complain."
+    recompenses:
+      xp: 450
+      or: 60
+
+  # ================================================================ ANNEXES — MORNEVAL
+
+  o_m_les_rues_de_morneval:
+    nom: "Les rues de Morneval"
+    nom-en: "The Streets of Morneval"
+    faction: ombre
+    niveau: 7
+    requiert: [o_le_coeur_d_obsidienne]
+    donneur: velia
+    resume:
+      - "La crieuse Velia vous fait découvrir Morneval."
+    resume-en:
+      - "Crier Velia shows you around Morneval."
+    offre:
+      - "velia: Un Marqué tout neuf ! Tu cherches la forge ? Tout le monde cherche la forge."
+      - "velia: Fais le tour : forge, alchimie, hôtel des ventes sur la Grand-Place, la runiste et le Veilleur du Pilier au parvis."
+    offre-en:
+      - "velia: A brand-new Marked! Looking for the forge? Everyone's looking for the forge."
+      - "velia: Take the tour: forge, alchemist, auction house on the Grand Square, the runesmith and the Watcher of the Pillar on the Citadel square."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Visiter la forge"
+        texte-en: "Visit the forge"
+        point: forge_morneval
+        rayon: 5
+      - type: ATTEINDRE
+        texte: "Visiter l'alchimiste"
+        texte-en: "Visit the alchemist"
+        point: alchimie_morneval
+        rayon: 5
+      - type: ATTEINDRE
+        texte: "Visiter l'hôtel des ventes"
+        texte-en: "Visit the auction house"
+        point: hdv_morneval
+        rayon: 5
+      - type: ATTEINDRE
+        texte: "Visiter la runiste"
+        texte-en: "Visit the runesmith"
+        point: runes_morneval
+        rayon: 5
+      - type: ATTEINDRE
+        texte: "Voir le Veilleur du Pilier"
+        texte-en: "See the Watcher of the Pillar"
+        point: pilier_morneval
+        rayon: 6
+      - type: PARLER
+        texte: "Revenir voir Velia"
+        texte-en: "Return to Velia"
+        pnj: velia
+        dialogue:
+          - "velia: Voilà ! Tu connais Morneval mieux que les gardes. C'est pas difficile, remarque."
+        dialogue-en:
+          - "velia: There! You know Morneval better than the guards. Not that it's hard."
+    recompenses:
+      xp: 400
+      or: 80
+
+  o_m_les_cimetieres_du_nord:
+    nom: "Les cimetières du nord"
+    nom-en: "The Northern Graveyards"
+    faction: ombre
+    niveau: 8
+    requiert: [o_le_coeur_d_obsidienne]
+    donneur: dorn
+    resume:
+      - "Un cimetière oublié se vide"
+      - "à l'ouest de Morneval."
+    resume-en:
+      - "A forgotten graveyard is emptying"
+      - "west of Morneval."
+    offre:
+      - "dorn: À l'ouest, un cimetière se vide. Et ses morts ne sont pas des Creux de chez nous : personne ne les tient."
+    offre-en:
+      - "dorn: To the west, a graveyard is emptying. And its dead aren't our Hollow: no one controls them."
+    etapes:
+      - type: TUER
+        texte: "Nettoyer le cimetière"
+        texte-en: "Clear the graveyard"
+        monstres: [squelette, revenant]
+        nombre: 12
+        point: cimetiere_nord_morneval
+      - type: PARLER
+        texte: "Faire votre rapport au sergent Dorn"
+        texte-en: "Report to Sergeant Dorn"
+        pnj: dorn
+        dialogue:
+          - "dorn: Douze ! Je l'écris à la Citadelle. Ils feront semblant de lire."
+        dialogue-en:
+          - "dorn: Twelve! I'll write it to the Citadel. They'll pretend to read it."
+    recompenses:
+      xp: 750
+      or: 95
+
+  o_m_le_cercle_brise:
+    nom: "Le cercle brisé"
+    nom-en: "The Broken Circle"
+    faction: ombre
+    niveau: 8
+    requiert: [o_le_coeur_d_obsidienne]
+    donneur: ilse
+    resume:
+      - "Ilse veut savoir ce que son maître"
+      - "a fait dans un vieux cercle de pierres."
+    resume-en:
+      - "Ilse wants to know what her master"
+      - "did in an old stone circle."
+    offre:
+      - "ilse: Au nord, un cercle de pierres. Mon maître y allait seul, la nuit. Il n'y va plus. Je veux savoir pourquoi."
+    offre-en:
+      - "ilse: To the north, a stone circle. My master went there alone, at night. He doesn't anymore. I want to know why."
+    etapes:
+      - type: TUER
+        texte: "Chasser les morts du cercle"
+        texte-en: "Drive the dead from the circle"
+        monstres: [squelette]
+        nombre: 6
+        point: cercle_landes
+      - type: INTERAGIR
+        texte: "Examiner le cercle"
+        texte-en: "Examine the circle"
+        point: cercle_landes
+        rayon: 6
+        apres:
+          - "Au centre, des fioles vides, brisées. Sur l'une d'elles, un sceau : un soleil levant. Le sceau du Cloître Blanc."
+          - "Au fond d'une fiole, une goutte de lumière dorée bouge encore."
+        apres-en:
+          - "At the centre, empty vials, broken. On one of them, a seal: a rising sun. The seal of the White Cloister."
+          - "At the bottom of one vial, a drop of golden light still moves."
+      - type: PARLER
+        texte: "Raconter à Ilse ce que vous avez trouvé"
+        texte-en: "Tell Ilse what you found"
+        pnj: ilse
+        dialogue:
+          - "ilse: Le sceau du Cloître ? Dans le cercle de mon maître ? Ça n'a aucun sens."
+          - "ilse: Sauf s'il achète ce que le Cloître prend aux Marqués."
+        dialogue-en:
+          - "ilse: The Cloister's seal? In my master's circle? That makes no sense."
+          - "ilse: Unless he buys what the Cloister takes from the Marked."
+    recompenses:
+      xp: 750
+      or: 90
+
+  o_m_une_lettre_pour_vharos:
+    nom: "Une lettre pour Vharos"
+    nom-en: "A Letter for Vharos"
+    faction: ombre
+    niveau: 8
+    requiert: [o_m_le_cercle_brise]
+    donneur: ilse
+    resume:
+      - "Ilse veut une réponse de son maître."
+    resume-en:
+      - "Ilse wants an answer from her master."
+    offre:
+      - "ilse: Portez-lui ça, à Nidnoir. Et regardez ses mains quand il la lira. Elles ne mentent pas, elles."
+    offre-en:
+      - "ilse: Take this to him, in Nidnoir. And watch his hands when he reads it. Hands don't lie."
+    etapes:
+      - type: PARLER
+        texte: "Remettre la lettre à Vharos"
+        texte-en: "Give the letter to Vharos"
+        pnj: vharos
+        dialogue:
+          - "vharos: Ilse… Trop curieuse. C'est pour ça que je l'ai prise."
+          - "vharos: Oui, j'achète de la lumière. Une goutte de lumière garde un Creux debout un mois de plus. C'est de la médecine."
+          - "vharos: Dites-lui de ne jamais toucher à ces fioles. Exactement comme ça."
+        dialogue-en:
+          - "vharos: Ilse… Too curious. That's why I took her on."
+          - "vharos: Yes, I buy light. One drop of light keeps a Hollow standing one more month. It is medicine."
+          - "vharos: Tell her never to touch those vials. Exactly like that."
+      - type: PARLER
+        texte: "Rapporter la réponse à Ilse"
+        texte-en: "Bring the answer back to Ilse"
+        pnj: ilse
+        dialogue:
+          - "ilse: « Ne jamais toucher à ces fioles. » Il a peur de quelque chose. Je le saurai."
+        dialogue-en:
+          - "ilse: « Never touch those vials. » He's afraid of something. I'll find out."
+    recompenses:
+      xp: 600
+      or: 70
+
+  o_m_la_tour_de_l_ouest:
+    nom: "La tour de l'ouest"
+    nom-en: "The Western Tower"
+    faction: ombre
+    niveau: 8
+    requiert: [o_le_coeur_d_obsidienne]
+    donneur: dorn
+    resume:
+      - "Une tour en ruine sert de repaire"
+      - "loin à l'ouest de Morneval."
+    resume-en:
+      - "A ruined tower serves as a lair"
+      - "far west of Morneval."
+    offre:
+      - "dorn: Loin à l'ouest, une tour en ruine. Les morts s'y rassemblent. Va voir avant qu'ils viennent nous voir."
+    offre-en:
+      - "dorn: Far to the west, a ruined tower. The dead are gathering there. Go and look before they come to look at us."
+    etapes:
+      - type: TUER
+        texte: "Abattre les morts de la tour"
+        texte-en: "Destroy the dead of the tower"
+        monstres: [squelette]
+        nombre: 8
+        point: tour_ouest_landes
+      - type: INTERAGIR
+        texte: "Fouiller la tour"
+        texte-en: "Search the tower"
+        point: tour_ouest_landes
+        rayon: 6
+        apres:
+          - "Une carte gravée dans le mur : la lande, Morneval… et une croix sur une forêt noire, au nord. La Sylve."
+        apres-en:
+          - "A map carved in the wall: the moor, Morneval… and a cross on a black forest, to the north. The Sylva."
+      - type: PARLER
+        texte: "Revenir voir le sergent Dorn"
+        texte-en: "Return to Sergeant Dorn"
+        pnj: dorn
+        dialogue:
+          - "dorn: La Sylve ? Tu iras bien assez tôt, crois-moi."
+        dialogue-en:
+          - "dorn: The Sylva? You'll get there soon enough, believe me."
+    recompenses:
+      xp: 750
+      or: 90

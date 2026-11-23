@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [ { "texture": "orbitmmo:fidele_petrifie" } ],
+    "humanoid_leggings": [ { "texture": "orbitmmo:fidele_petrifie" } ]
+  }
+}

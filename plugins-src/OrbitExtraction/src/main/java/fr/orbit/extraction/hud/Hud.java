@@ -172,9 +172,12 @@ public final class Hud implements Listener {
         char zone = cast != null ? Console.ZONE_EXTRACT : raid ? Console.ZONE_RAID : Console.ZONE_SAFE;
         c.glyph(192, zone, 12, WHITE);
 
-        // Barre de progression : extraction, sinon soin en cours ; son nom sur la ligne de texte.
+        // Barre de progression : extraction, sinon soin, sinon fouille en cours ; son nom sur la ligne de texte.
         if (cast == null) {
             cast = plugin.meds().progress(p);
+        }
+        if (cast == null) {
+            cast = plugin.search().progress(p);
         }
         Component status = flash;
         if (cast != null) {

@@ -1,0 +1,97 @@
+# ------------------------------------------------------------------
+#  OrbitPractice — Practice HCF du réseau Orbit MC
+#  Rechargement : /practice reload
+# ------------------------------------------------------------------
+
+base:
+  # Accès MariaDB du réseau (Elo partagé avec la Station). Chemin relatif au dossier du serveur.
+  # Base injoignable : le mode tourne quand même, l'Elo reste en mémoire jusqu'à l'arrêt.
+  fichier: ../../setup/db.properties
+
+elo:
+  depart: 1000
+  k: 32
+
+combat:
+  # Nombre de manches à gagner pour remporter le combat (2 = Best-of-3, 1 = une seule manche).
+  manches-gagnantes: 2
+  # true : pas de temps de recharge entre deux coups d'épée (PvP façon 1.8).
+  sans-delai-attaque: true
+  # Recharge de la perle de l'Ender, en secondes.
+  perle-recharge-secondes: 16
+
+arenes:
+  # Monde vide créé par le plugin : il contient le hub et les arènes.
+  monde: arenes
+  # Nombre d'arènes construites par thème (4 thèmes).
+  copies-par-theme: 2
+  # Plateformes de Sumo (deuxième rangée d'arènes, au-dessus d'un bassin).
+  plateformes-sumo: 4
+
+kits:
+  # Boxing : nombre de coups pour gagner la manche.
+  boxing-coups: 100
+
+classes:
+  barde:
+    energie-max: 100
+    energie-par-seconde: 1
+    portee: 20
+    recharge-secondes: 10
+  archer:
+    marque-secondes: 10
+    multiplicateur: 1.25
+  voleur:
+    angle: 110
+    degats-bonus: 6.0
+    recharge-secondes: 8
+
+# Point d'arrivee des joueurs hors combat. Vide : le spawn du monde principal (la map posee a la main).
+# Se regle en jeu : /practice hub definir (la ou tu te tiens) ou /practice hub generer (hub construit par code).
+hub: {}
+
+# Anti-grief : personne n'abime le decor (joueurs, creatures, explosions, feu), sauf un admin en creatif.
+protection:
+  active: true
+  # Aucune creature hostile n'apparait (celles deja presentes sont retirees au demarrage).
+  sans-creatures-hostiles: true
+  # Mondes non proteges (ex. le futur monde du mode HCF, ou l'on casse et l'on pose des blocs).
+  mondes-libres: []
+
+# Mode PvP HCF (factions, claims, DTR, KOTH) : plugins OrbitHCF, limites au monde ci-dessous.
+# Il faut aussi « mondes-hcf: [hcf] » dans plugins/OrbitHCF-API/config.yml.
+# /hcf pour y entrer depuis le hub, /hub pour revenir (refuse en combat). Inventaires separes :
+# l'etat HCF de chaque joueur est garde dans plugins/OrbitPractice/hcf-joueurs/.
+hcf:
+  actif: true
+  monde: hcf
+
+# Combat facon 1.7/1.8 sur tout le serveur (hub, Practice et mode HCF), en restant en 26.3.
+# Chaque point se coupe separement ; actif: false remet le combat de 26.3 partout.
+vieux-combat:
+  actif: true
+  # Plus de balayage : un coup d epee ne touche qu une cible.
+  sans-balayage: true
+  # Haches faibles (diamant 6 au lieu de 9) et Tranchant a +1,25 par niveau.
+  degats-anciens: true
+  # Recul entre joueurs calcule comme en 1.8 (aussi en l air), bonus de sprint et de Recul.
+  recul-ancien: true
+  recul:
+    horizontal: 0.4
+    vertical: 0.4
+    plafond-vertical: 0.4
+    bonus-sprint: 0.5
+    bonus-vertical: 0.1
+  # Canne a peche : accrocher un joueur le repousse.
+  recul-canne: true
+  # Clic droit avec une epee = blocage (part des degats bloquee, de 0 a 1).
+  blocage-epee: true
+  blocage-part-bloquee: 0.5
+  # Pas de main secondaire (touche F bloquee, objet renvoye dans l inventaire) ni de bouclier fabricable.
+  sans-main-secondaire: true
+  sans-bouclier: true
+  # Regeneration naturelle : 1 PV toutes les N secondes avec 9 cuisses ou plus.
+  regen-ancienne: true
+  regen-secondes: 4
+  # Pomme de Notch : Regeneration V 30 s, Absorption I 2 min, Resistance I et Resistance au feu 5 min.
+  pomme-notch-ancienne: true

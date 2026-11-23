@@ -118,7 +118,7 @@ public class BardManager {
     // ------------------------------------------------------------------
 
     private void tickEnergy() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : fr.orbitgames.hcf.api.HcfWorlds.players()) {
             if (isBard(player)) {
                 energy.merge(player.getUniqueId(), regenPerSecond,
                         (current, regen) -> Math.min(maxEnergy, current + regen));
@@ -127,7 +127,7 @@ public class BardManager {
     }
 
     private void tickAuras() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : fr.orbitgames.hcf.api.HcfWorlds.players()) {
             if (!isBard(player)) {
                 continue;
             }

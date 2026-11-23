@@ -42,9 +42,117 @@ public final class QuestRegistry {
     private final Map<String, NpcDef> npcs = new LinkedHashMap<>();
     private final Map<String, MobDef> mobs = new LinkedHashMap<>();
     private final Map<String, SpawnDef> spawns = new LinkedHashMap<>();
+    /**
+     * Traductions anglaises : texte français → texte anglais. Dans les fichiers de quêtes, chaque clé de texte peut
+     * avoir sa jumelle « -en » (nom-en, titre-en, repliques-en, resume-en, intro-en, offre-en, fin-en, texte-en,
+     * dialogue-en, apres-en, objet-en, description-en). Une liste « -en » doit avoir autant de lignes que la française.
+     */
+    private final Map<String, String> english = new java.util.HashMap<>();
+    /** Portrait de chaque PNJ (clé de hud/Portraits), montré à droite de la boîte de dialogue quand il parle. */
+    private final Map<String, String> portraits = new java.util.HashMap<>();
+    /** Apparence choisie pour un mannequin (clé « visage » : un des neuf visages du jeu). */
+    private final Map<String, String> faces = new java.util.HashMap<>();
 
     public QuestRegistry(OrbitMMO plugin) {
         this.plugin = plugin;
+    }
+
+    /** Portrait du PNJ (clé de hud/Portraits), ou null (narrateur, joueur, PNJ sans portrait). */
+    public String portrait(String npcId) {
+        return npcId == null ? null : portraits.get(npcId);
+    }
+
+    /** Visage du jeu donné à ce mannequin (clé « visage »), ou null. */
+    public String face(String npcId) {
+        return npcId == null ? null : faces.get(npcId);
+    }
+
+    /**
+     * Apparence d'un PNJ. Un skin du pack qui porte l'identifiant du PNJ (tools\gen-skins.ps1) est pris d'office.
+     * Sinon « visage » (mannequins) : un skin du pack, ou alex, ari, efe, kai, makena, noor, steve, sunny ou zuri ; le corps
+     * et le portrait suivent. « portrait » force le portrait (clé de hud/Portraits, ou « aucun »). Sans rien : le
+     * portrait vient du type de l'entité (mannequin, villageois et son métier, sorcière, golem, squelette noir).
+     */
+    private void look(String id, ConfigurationSection s, EntityType type) {
+        String face = s.getString("visage");
+        if (face != null) {
+            face = face.toLowerCase(java.util.Locale.ROOT);
+        }
+        // Skin du pack : celui que « visage » nomme, sinon celui qui porte l'identifiant du PNJ (il passe alors
+        // devant un visage du jeu). Dessinés par tools\gen-skins.ps1.
+        if (fr.orbit.mmo.ambient.Looks.hasSkin(face)) {
+            faces.put(id, face);
+        } else if (fr.orbit.mmo.ambient.Looks.hasSkin(id)) {
+            face = id;
+            faces.put(id, face);
+        } else if (face != null) {
+            if (!fr.orbit.mmo.hud.Portraits.FACES.contains(face)) {
+                plugin.getLogger().warning("PNJ " + id + " : visage « " + face + " » inconnu ("
+                        + String.join(", ", fr.orbit.mmo.hud.Portraits.FACES) + ").");
+                face = null;
+            } else {
+                faces.put(id, face);
+            }
+        }
+        String portrait = s.getString("portrait");
+        if (portrait == null) {
+            if (fr.orbit.mmo.ambient.Looks.hasSkin(face)) {
+                // Le portrait d'un skin du pack porte le même nom (PNJ nommés seulement, voir hud/Portraits).
+                portrait = face;
+            } else if (type == EntityType.MANNEQUIN) {
+                String skin = s.getString("skin");
+                portrait = face != null ? face : skin == null || skin.isBlank() ? fr.orbit.mmo.hud.Portraits.DEFAULT_FACE : null;
+            } else if (type == EntityType.VILLAGER) {
+                portrait = fr.orbit.mmo.hud.Portraits.villager(s.getString("metier"));
+            } else if (type == EntityType.WITCH) {
+                portrait = "alchemist";
+            } else if (type == EntityType.IRON_GOLEM) {
+                portrait = "tower";
+            } else if (type == EntityType.WITHER_SKELETON) {
+                portrait = "tower_ombre";
+            }
+        }
+        if (fr.orbit.mmo.hud.Portraits.has(portrait)) {
+            portraits.put(id, portrait);
+        }
+    }
+
+    /** Texte dans la langue demandée (« en » : la traduction si elle existe ; sinon le français). */
+    public String tr(String fr, String lang) {
+        if (fr == null || !"en".equals(lang)) {
+            return fr;
+        }
+        return english.getOrDefault(fr, fr);
+    }
+
+    /** Nombre de textes traduits en anglais. */
+    public int translated() {
+        return english.size();
+    }
+
+    private void pair(String fr, String en) {
+        if (fr != null && en != null && !en.isBlank()) {
+            english.put(fr, en);
+        }
+    }
+
+    /** Listes jumelles ; {@code spoken} : répliques « pnj: texte », on apparie le texte sans le préfixe. */
+    private void pairs(List<String> fr, List<String> en, boolean spoken, String where) {
+        if (en.isEmpty()) {
+            return;
+        }
+        if (en.size() != fr.size()) {
+            plugin.getLogger().warning("Traduction ignorée (" + where + ") : " + en.size() + " ligne(s) en anglais pour "
+                    + fr.size() + " en français.");
+            return;
+        }
+        for (int i = 0; i < fr.size(); i++) {
+            if (spoken) {
+                pair(line(fr.get(i)).text(), line(en.get(i)).text());
+            } else {
+                pair(fr.get(i), en.get(i));
+            }
+        }
     }
 
     public File folder() {
@@ -53,6 +161,9 @@ public final class QuestRegistry {
 
     public void load() {
         quests.clear();
+        english.clear();
+        portraits.clear();
+        faces.clear();
         npcs.clear();
         mobs.clear();
         spawns.clear();
@@ -77,7 +188,8 @@ public final class QuestRegistry {
             }
         }
         plugin.getLogger().info(quests.size() + " quêtes, " + npcs.size() + " PNJ de quête, " + mobs.size()
-                + " monstres de quête, " + spawns.size() + " zones d'apparition chargés.");
+                + " monstres de quête, " + spawns.size() + " zones d'apparition chargés ; " + english.size()
+                + " texte(s) traduit(s) en anglais.");
     }
 
     // ------------------------------------------------------------------ Lecture
@@ -94,6 +206,10 @@ public final class QuestRegistry {
                 npcs.put(id, new NpcDef(id, s.getString("nom", id), s.getString("couleur", "#FFE9A8"),
                         s.getString("titre"), type, s.getString("skin"), s.getString("metier"),
                         s.getString("point", id), material(s.getString("main"), null), s.getStringList("repliques")));
+                look(id, s, type);
+                pair(s.getString("nom"), s.getString("nom-en"));
+                pair(s.getString("titre"), s.getString("titre-en"));
+                pairs(s.getStringList("repliques"), s.getStringList("repliques-en"), false, "PNJ " + id + ", repliques");
             }
         }
         ConfigurationSection ms = y.getConfigurationSection("monstres");
@@ -153,6 +269,11 @@ public final class QuestRegistry {
                         st.getString("point"), st.getDouble("rayon", type == StepType.ATTEINDRE ? 4 : 3), stepMobs,
                         Math.max(1, st.getInt("nombre", 1)), st.getDouble("chance", 1), st.getString("objet"),
                         lines(st.getStringList("dialogue")), lines(st.getStringList("apres"))));
+                String where = "quête " + id + ", étape " + (i + 1);
+                pair(st.getString("texte"), st.getString("texte-en"));
+                pair(st.getString("objet"), st.getString("objet-en"));
+                pairs(st.getStringList("dialogue"), st.getStringList("dialogue-en"), true, where + ", dialogue");
+                pairs(st.getStringList("apres"), st.getStringList("apres-en"), true, where + ", apres");
             }
             if (steps.isEmpty()) {
                 plugin.getLogger().warning("Quête " + id + " ignorée : aucune étape.");
@@ -167,8 +288,15 @@ public final class QuestRegistry {
                 Material mat = material(it.getString("materiau"), null);
                 if (mat != null) {
                     items.add(new ItemReward(mat, it.getString("nom"), Math.max(1, it.getInt("nombre", 1)), it.getStringList("description")));
+                    pair(it.getString("nom"), it.getString("nom-en"));
+                    pairs(it.getStringList("description"), it.getStringList("description-en"), false, "quête " + id + ", objet");
                 }
             }
+            pair(s.getString("nom"), s.getString("nom-en"));
+            pairs(s.getStringList("resume"), s.getStringList("resume-en"), false, "quête " + id + ", resume");
+            pairs(s.getStringList("offre"), s.getStringList("offre-en"), true, "quête " + id + ", offre");
+            pairs(s.getStringList("intro"), s.getStringList("intro-en"), true, "quête " + id + ", intro");
+            pairs(s.getStringList("fin"), s.getStringList("fin-en"), true, "quête " + id + ", fin");
             RewardDef reward = new RewardDef(s.getLong("recompenses.xp"), s.getLong("recompenses.or"), items);
             String giver = s.getString("donneur");
             quests.put(id, new QuestDef(id, file, s.getString("nom", id), Faction.byId(s.getString("faction")),
@@ -183,15 +311,18 @@ public final class QuestRegistry {
     private static List<Line> lines(List<String> raw) {
         List<Line> out = new ArrayList<>(raw.size());
         for (String s : raw) {
-            int i = s.indexOf(": ");
-            String head = i > 0 ? s.substring(0, i).trim() : "";
-            if (!head.isEmpty() && head.matches("[a-z0-9_]+")) {
-                out.add(new Line(head, s.substring(i + 2).trim()));
-            } else {
-                out.add(new Line("narrateur", s));
-            }
+            out.add(line(s));
         }
         return List.copyOf(out);
+    }
+
+    private static Line line(String s) {
+        int i = s.indexOf(": ");
+        String head = i > 0 ? s.substring(0, i).trim() : "";
+        if (!head.isEmpty() && head.matches("[a-z0-9_]+")) {
+            return new Line(head, s.substring(i + 2).trim());
+        }
+        return new Line("narrateur", s);
     }
 
     private static EntityType entity(String s, EntityType def) {

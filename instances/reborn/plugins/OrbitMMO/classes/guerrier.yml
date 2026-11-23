@@ -3,7 +3,8 @@
 #  La rage monte en frappant (attaque de base) et en encaissant, retombe hors combat.
 #
 #  Sorts — clés utiles :
-#    type : FRAPPE, TOURBILLON, CHARGE, BOND, CRI, BUFF, PROJECTILE, SOIN, ZONE
+#    type : FRAPPE, TOURBILLON, CHARGE, BOND, CRI, BUFF, PROJECTILE, SOIN, ZONE,
+#           VAGUE (onde au sol droit devant : portee = longueur, zone = demi-largeur)
 #    categorie : attaque | deplacement | buff (objet qui porte le sort ; absent = d'apres le type :
 #               CHARGE/BOND = deplacement, CRI/BUFF/SOIN = buff, le reste = attaque)
 #    spe : spécialisations qui ont le sort (absent = toute la classe) · niveau · talent: true (donné par un talent)
@@ -11,7 +12,9 @@
 #    portee · portee-min · arc (degrés ; <= 60 = une seule cible) · zone (rayon) · coups · intervalle (ticks)
 #    puissance (x puissance de l'arme) · arme: [ONE_HANDED, TWO_HANDED…] · bouclier: true · condition: cible-pv<20
 #    effets ennemis : etourdir, peur, ralentir (s), saignement (s) + dot (coef/s), affaiblir (s), provocation,
-#                     repousser, soulever
+#                     repousser, soulever, attirer (vers le lanceur), enraciner (s, immobilise),
+#                     desorienter (s, rompu par les dégâts), silence (s, coupe l'incantation)
+#                     Contre les joueurs : rendements décroissants (plein, 1/2, 1/4, immunisé, 18 s).
 #    effets sur soi (et le groupe pour un CRI) : reduction, bonus-degats, bonus-crit (%), bouclier (% PV max),
 #                     soin (% PV max), soin-par-sec (% PV max/s), vitesse (niveau), soin-soi (% PV max), vol-de-vie (%)
 #
@@ -619,6 +622,55 @@ sorts:
     duree: 10
     effets: { soin: 15, bouclier: 10 }
     description: "Rend 15 % des PV au groupe et pose un bouclier de 10 % des PV."
+  brise_genou:
+    nom: Brise-genou
+    type: FRAPPE
+    icone: CHAIN
+    couleur: "#7FD48A"
+    niveau: 16
+    cout: 10
+    recharge: 12
+    portee: 3.5
+    arc: 50
+    puissance: 0.7
+    effets: { enraciner: 3 }
+    description: "Frappe les jambes de la cible : elle ne peut plus bouger pendant 3 s."
+  chaine_d_acier:
+    nom: Chaîne d'acier
+    type: PROJECTILE
+    icone: TRIPWIRE_HOOK
+    couleur: "#C8D0DA"
+    niveau: 18
+    cout: 15
+    recharge: 20
+    portee: 20
+    puissance: 0.5
+    effets: { attirer: 1, ralentir: 3 }
+    description: "Lance une chaîne qui ramène l'ennemi touché à vos pieds et le ralentit."
+  cri_d_effroi:
+    nom: Cri d'effroi
+    type: CRI
+    icone: ECHO_SHARD
+    couleur: "#B36BFF"
+    niveau: 24
+    recharge: 45
+    zone: 8
+    puissance: 0
+    effets: { peur: 4 }
+    description: "Un hurlement terrifiant : les ennemis proches fuient pendant 4 s."
+  fissure:
+    nom: Fissure
+    type: VAGUE
+    icone: POINTED_DRIPSTONE
+    couleur: "#D9A066"
+    niveau: 26
+    cout: 25
+    recharge: 18
+    portee: 12
+    zone: 1.8
+    puissance: 1.4
+    effets: { soulever: 0.7, ralentir: 3 }
+    description: "Fend le sol droit devant vous sur 12 blocs : les ennemis touchés sont projetés en l'air et ralentis."
 
   # ---------------- Rempart ----------------
   heurt_de_bouclier:
@@ -724,6 +776,35 @@ sorts:
     duree: 10
     effets: { bouclier: 20, reduction: 20 }
     description: "Vous et votre groupe : bouclier de 20 % des PV et dégâts subis réduits de 20 % pendant 10 s."
+  heurt_assourdissant:
+    nom: Heurt assourdissant
+    type: FRAPPE
+    icone: BELL
+    couleur: "#9AD8FF"
+    spe: [rempart]
+    niveau: 18
+    gain: 5
+    recharge: 15
+    gcd: false
+    portee: 3.5
+    arc: 50
+    puissance: 0.6
+    bouclier: true
+    effets: { silence: 3 }
+    description: "Coup de bouclier qui coupe l'incantation de la cible et l'empêche de lancer des sorts 3 s."
+  appel_du_rempart:
+    nom: Appel du rempart
+    type: CRI
+    icone: LODESTONE
+    couleur: "#7FB2FF"
+    spe: [rempart]
+    niveau: 35
+    cout: 15
+    recharge: 40
+    zone: 10
+    puissance: 0.3
+    effets: { attirer: 1, provocation: 1, ralentir: 2 }
+    description: "Attire tous les ennemis proches contre vous, les provoque et les ralentit."
 
   # ---------------- Carnage ----------------
   frappe_mortelle:
@@ -822,3 +903,33 @@ sorts:
     arme: [TWO_HANDED]
     effets: { saignement: 8, dot: 0.3, ralentir: 3 }
     description: "Frappe le sol : gros dégâts autour de vous, les ennemis saignent 8 s et sont ralentis."
+  fracasse_crane:
+    nom: Fracasse-crâne
+    type: FRAPPE
+    icone: BONE
+    couleur: "#FF9AE0"
+    spe: [carnage]
+    niveau: 18
+    cout: 20
+    recharge: 30
+    portee: 3.5
+    arc: 50
+    puissance: 0.3
+    effets: { desorienter: 5 }
+    description: "Un coup au crâne qui désoriente la cible 5 s. Le moindre dégât la réveille."
+  maelstrom_d_acier:
+    nom: Maelström d'acier
+    type: TOURBILLON
+    icone: TRIDENT
+    couleur: "#FF6A3B"
+    spe: [carnage]
+    niveau: 35
+    cout: 30
+    recharge: 35
+    portee: 8
+    coups: 3
+    intervalle: 8
+    puissance: 0.9
+    arme: [TWO_HANDED]
+    effets: { attirer: 1, ralentir: 2 }
+    description: "Trois tours d'arme qui aspirent les ennemis jusqu'à 8 blocs vers vous et les frappent."

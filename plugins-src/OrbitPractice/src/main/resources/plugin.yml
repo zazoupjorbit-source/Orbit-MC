@@ -1,0 +1,42 @@
+name: OrbitPractice
+version: '0.1.0'
+main: fr.orbit.practice.OrbitPractice
+api-version: '1.21'
+description: Orbit Practice HCF — 10 kits en 1v1 / 2v2, classé (Elo) ou casual, arènes générées, mode HCF.
+authors: [ORBIT]
+# Le mode HCF utilise OrbitHCF-API ; le monde « hcf » doit exister avant que le Core charge les factions.
+softdepend: [OrbitHCF-API]
+loadbefore: [OrbitHCF-Core, OrbitHCF-Combat, OrbitHCF-Classes, OrbitHCF-Events, OrbitHCF-Display]
+
+commands:
+  practice:
+    description: Classement, et administration du Practice (arènes, hub).
+    usage: /practice <top|arene|hub|reload>
+    aliases: [pr]
+  duel:
+    description: Défie un joueur en 1v1 (sans Elo).
+    usage: /duel <pseudo> [kit] — /duel accepter <pseudo>
+  party:
+    description: Forme une équipe de 2 pour le 2v2.
+    usage: /party <inviter <pseudo>|accepter|quitter>
+    aliases: [equipe]
+  spec:
+    description: Observe le combat d'un joueur.
+    usage: /spec [pseudo]
+  quitter:
+    description: Quitte la file d'attente.
+    usage: /quitter
+    aliases: [leave]
+
+  hcf:
+    description: Entre dans le mode PvP HCF (factions, claims, KOTH).
+    usage: /hcf
+  hub:
+    description: Revient au hub du Practice (depuis le HCF, refusé en combat).
+    usage: /hub
+    aliases: [vestiaire]
+
+permissions:
+  practice.admin:
+    description: Générer les arènes et le hub, recharger la config.
+    default: op

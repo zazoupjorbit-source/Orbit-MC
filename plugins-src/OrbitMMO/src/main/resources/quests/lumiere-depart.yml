@@ -11,6 +11,16 @@
 #  Dialogues : « id_du_pnj: texte », « joueur: texte », ou texte seul (narration).
 #  {joueur} est remplacé par le pseudo.
 #
+#  Anglais : chaque texte peut avoir sa clé jumelle « -en » (nom-en, titre-en, repliques-en,
+#  resume-en, intro-en, offre-en, fin-en, texte-en, dialogue-en, apres-en, objet-en,
+#  description-en). Une liste « -en » doit avoir autant de lignes que la liste française,
+#  dans le même ordre ; sinon elle est ignorée (avertissement dans le journal du serveur).
+#  Un texte sans jumelle reste en français pour tout le monde.
+#
+#  Apparence d'un PNJ mannequin : « visage » = alex, ari, efe, kai, makena, noor, steve, sunny ou zuri (les neuf
+#  apparences du jeu). Le corps du PNJ et son portrait dans la boîte de dialogue suivent. Sans « visage » : alex.
+#  « portrait: aucun » retire le portrait.
+#
 #  Types d'étapes : PARLER (pnj), ATTEINDRE (point, rayon), INTERAGIR (point),
 #  TUER (monstres, nombre), RAMASSER (monstres, nombre, chance, objet),
 #  SORT (lancer un sort), ANCRAGE (point : devient le lieu de réapparition).
@@ -22,50 +32,78 @@ pnj:
     titre: "Prêtresse de l'Aube"
     couleur: "#FFE9A8"
     type: MANNEQUIN
+    visage: kai
     point: maelis
     repliques:
       - "Que la lumière de l'Astre veille sur vous."
       - "Ils sont si nombreux à s'être réveillés cette nuit…"
+    nom-en: "Sister Maëlis"
+    titre-en: "Priestess of the Dawn"
+    repliques-en:
+      - "May the light of the Star watch over you."
+      - "So many of them woke up tonight…"
   teo:
     nom: "Téo"
     titre: "Marqué"
     couleur: "#D7DCE2"
     type: MANNEQUIN
+    visage: ari
     point: teo
     repliques:
       - "J'arrive pas à me rappeler le nom de ma mère. C'est normal, ça ?"
+    titre-en: "Marked"
+    repliques-en:
+      - "I can't remember my mother's name. Is that normal?"
   brune:
     nom: "Brune"
     titre: "Marquée"
     couleur: "#D7DCE2"
     type: MANNEQUIN
+    visage: noor
     point: brune
     repliques:
       - "La lumière chante encore, tu l'entends ?"
+    titre-en: "Marked"
+    repliques-en:
+      - "The light is still singing, can you hear it?"
   # Le Marqué mourant n'a pas de corps posé : il parle pendant l'étape « INTERAGIR ».
   mourant:
     nom: "Marqué inconnu"
+    nom-en: "Unknown Marked"
     couleur: "#8C96A3"
+    visage: zuri
     point: mourant_sans_corps
   varenne:
     nom: "Capitaine Varenne"
     titre: "Garnison de Veillemont"
     couleur: "#C8A27A"
     type: MANNEQUIN
+    visage: steve
     point: varenne
     main: IRON_SWORD
     repliques:
       - "Garde les yeux ouverts, Marqué."
       - "Si t'as le temps de bavarder, t'as le temps de tuer des Rampants."
+    nom-en: "Captain Varenne"
+    titre-en: "Veillemont Garrison"
+    repliques-en:
+      - "Keep your eyes open, Marked."
+      - "If you've got time to chat, you've got time to kill Crawlers."
   orsan:
     nom: "Maître Orsan"
     titre: "Astromancien de l'Aube"
     couleur: "#9AD8FF"
     type: MANNEQUIN
+    visage: sunny
     point: orsan
     repliques:
       - "Votre Marque a-t-elle changé de couleur ? Non ? Dommage."
       - "Les étoiles ne mentent jamais. Les hommes, si."
+    nom-en: "Master Orsan"
+    titre-en: "Astromancer of the Dawn"
+    repliques-en:
+      - "Has your Mark changed colour? No? Pity."
+      - "The stars never lie. Men do."
 
 monstres:
   rampant:
@@ -113,19 +151,34 @@ quetes:
       - "Puis la lumière — pas celle du jour, mais une lueur dorée qui pulse sous ta peau, au rythme de ton cœur."
       - "Autour de toi, la terre est vitrifiée, encore fumante. Au fond du cratère, un éclat de cristal chante doucement."
       - "Tu ne te souviens pas de ton nom. Mais tu sais une chose : cette lumière t'a choisi."
+    nom-en: "The Awakening"
+    resume-en:
+      - "You woke up at the bottom of a crater,"
+      - "a golden light beneath your skin."
+    intro-en:
+      - "The cold. That comes first."
+      - "Then the light — not daylight, but a golden glow pulsing beneath your skin, in time with your heart."
+      - "Around you, the earth has turned to glass, still smoking. At the bottom of the crater, a crystal shard sings softly."
+      - "You do not remember your name. But you know one thing: this light chose you."
     etapes:
       - type: ATTEINDRE
         texte: "Sortir du cratère"
+        texte-en: "Climb out of the crater"
         point: bord_cratere
         rayon: 3
       - type: INTERAGIR
         texte: "Toucher l'Éclat"
+        texte-en: "Touch the Shard"
         point: eclat_eveil
         apres:
           - "Tes doigts effleurent le cristal. La Marque s'embrase sur ton bras, brûlante, puis s'apaise."
           - "Quelqu'un approche à travers la fumée."
+        apres-en:
+          - "Your fingers brush the crystal. The Mark flares on your arm, burning, then settles."
+          - "Someone is coming through the smoke."
       - type: PARLER
         texte: "Parler à Sœur Maëlis"
+        texte-en: "Talk to Sister Maëlis"
         pnj: maelis
         dialogue:
           - "maelis: Ne bougez pas trop vite… Là. Regardez-moi. Vous m'entendez ?"
@@ -133,6 +186,12 @@ quetes:
           - "maelis: Vous êtes tombé avec les étoiles, cette nuit, et vous êtes encore en vie."
           - "joueur: Je… je ne me souviens de rien."
           - "maelis: C'est normal. Ils sont tous comme vous. Venez, il y en a d'autres."
+        dialogue-en:
+          - "maelis: Don't move too fast… There. Look at me. Can you hear me?"
+          - "maelis: Your arm… By the Dawn. You bear the Mark."
+          - "maelis: You fell with the stars tonight, and you are still alive."
+          - "joueur: I… I don't remember anything."
+          - "maelis: That is normal. They are all like you. Come, there are others."
     recompenses:
       xp: 60
       or: 10
@@ -149,38 +208,68 @@ quetes:
     intro:
       - "maelis: Ils errent dans les Champs Vitrifiés, perdus comme vous l'étiez."
       - "maelis: Aidez-moi à les retrouver. Parlez-leur, rassurez-les."
+    nom-en: "Those Who Fell"
+    resume-en:
+      - "Sister Maëlis is looking for the other Marked"
+      - "lost in the Vitrified Fields."
+    intro-en:
+      - "maelis: They wander the Vitrified Fields, lost as you were."
+      - "maelis: Help me find them. Talk to them, reassure them."
     etapes:
       - type: PARLER
         texte: "Retrouver Téo"
+        texte-en: "Find Téo"
         pnj: teo
         dialogue:
           - "teo: T'es… t'es comme moi ? T'as la lumière, toi aussi ?"
           - "teo: J'arrive pas à me rappeler mon nom. Ni rien d'autre."
           - "joueur: Une prêtresse nous attend. Tu n'es pas seul."
           - "teo: … D'accord. D'accord, j'y vais."
+        dialogue-en:
+          - "teo: You… you're like me? You've got the light too?"
+          - "teo: I can't remember my name. Or anything else."
+          - "joueur: A priestess is waiting for us. You are not alone."
+          - "teo: … All right. All right, I'm going."
       - type: PARLER
         texte: "Retrouver Brune"
+        texte-en: "Find Brune"
         pnj: brune
         dialogue:
           - "brune: Chut. Écoute. Tu l'entends chanter ?"
           - "brune: La lumière. Elle chante sous ma peau depuis cette nuit."
           - "brune: Va voir l'autre, là-bas. Lui, il ne chante pas. Il crie."
+        dialogue-en:
+          - "brune: Hush. Listen. Can you hear it singing?"
+          - "brune: The light. It has been singing under my skin since last night."
+          - "brune: Go and see the other one, over there. He isn't singing. He's screaming."
       - type: INTERAGIR
         texte: "Approcher du troisième Marqué"
+        texte-en: "Approach the third Marked"
         point: mourant
         apres:
           - "Un homme est recroquevillé au bord d'un cratère. Sa Marque vacille comme une bougie dans le vent."
           - "mourant: Elle brûle… elle brûle trop fort…"
           - "mourant: Je ne la sens plus…"
           - "La lueur s'éteint. Son corps se fige, grisaille, puis s'effondre en cendres que le vent emporte."
+        apres-en:
+          - "A man is curled up at the edge of a crater. His Mark flickers like a candle in the wind."
+          - "mourant: It burns… it burns too bright…"
+          - "mourant: I can't feel it anymore…"
+          - "The glow goes out. His body stiffens, turns grey, then crumbles into ash carried off by the wind."
       - type: PARLER
         texte: "Revenir voir Sœur Maëlis"
+        texte-en: "Return to Sister Maëlis"
         pnj: maelis
         dialogue:
           - "maelis: Je sais. Je l'ai vu aussi."
           - "maelis: L'Éclat choisit, mais il ne garde pas tout le monde."
           - "maelis: Vous, il vous a gardé. Ça veut dire quelque chose."
           - "maelis: Allez à Veillemont, avant la nuit. Le capitaine Varenne aura besoin de vous."
+        dialogue-en:
+          - "maelis: I know. I saw it too."
+          - "maelis: The Shard chooses, but it does not keep everyone."
+          - "maelis: You, it kept. That means something."
+          - "maelis: Go to Veillemont before nightfall. Captain Varenne will need you."
     recompenses:
       xp: 90
       or: 15
@@ -200,22 +289,39 @@ quetes:
       - "varenne: Écoute-moi bien. Ici, j'ai pas besoin de miracle, j'ai besoin d'épées."
       - "varenne: Ces choses dehors, on les appelle les Rampants. Avant, c'étaient des renards, des loups. Les Éclats les ont tordus."
       - "varenne: Tue-les. Après, on parlera."
+    nom-en: "What Crawls"
+    resume-en:
+      - "Creatures twisted by the Shards"
+      - "prowl around Veillemont."
+    offre-en:
+      - "varenne: Another Marked. The Sister brings one back every day."
+      - "varenne: Listen carefully. I don't need miracles here, I need swords."
+      - "varenne: Those things out there, we call them Crawlers. They used to be foxes, wolves. The Shards twisted them."
+      - "varenne: Kill them. Then we'll talk."
     etapes:
       - type: SORT
         texte: "Lancer un sort de votre classe"
+        texte-en: "Cast one of your class spells"
         monstres: [rampant, loup_rampant]
         apres:
           - "La magie répond à la Marque, presque d'elle-même."
+        apres-en:
+          - "The magic answers the Mark, almost of its own accord."
       - type: TUER
         texte: "Tuer des Rampants"
+        texte-en: "Kill Crawlers"
         monstres: [rampant, loup_rampant]
         nombre: 8
       - type: PARLER
         texte: "Faire votre rapport au capitaine Varenne"
+        texte-en: "Report to Captain Varenne"
         pnj: varenne
         dialogue:
           - "varenne: Huit. Pas mal, pour quelqu'un qui a oublié son propre nom."
           - "varenne: Va voir Orsan, l'astromancien. Il passe ses nuits à fixer le ciel, mais il sait des choses sur votre Marque."
+        dialogue-en:
+          - "varenne: Eight. Not bad, for someone who forgot their own name."
+          - "varenne: Go and see Orsan, the astromancer. He spends his nights staring at the sky, but he knows things about your Mark."
     recompenses:
       xp: 150
       or: 25
@@ -234,32 +340,55 @@ quetes:
       - "orsan: Ah. Le Marqué dont parle Varenne. Approchez, que je vous voie."
       - "orsan: Les Rampants portent en eux de la poussière d'Éclat. Elle les a changés."
       - "orsan: Rapportez-m'en. Pour la science… et pour vous, je le crains."
+    nom-en: "Stardust"
+    resume-en:
+      - "Master Orsan studies Shard dust"
+      - "and takes a keen interest in your Mark."
+    offre-en:
+      - "orsan: Ah. The Marked that Varenne mentioned. Come closer, let me look at you."
+      - "orsan: The Crawlers carry Shard dust inside them. It changed them."
+      - "orsan: Bring me some. For science… and for you, I fear."
     etapes:
       - type: RAMASSER
         texte: "Récupérer de la poussière d'Éclat"
+        texte-en: "Collect Shard dust"
         monstres: [rampant, loup_rampant]
         nombre: 6
         chance: 0.6
         objet: "Poussière d'Éclat"
+        objet-en: "Shard dust"
       - type: PARLER
         texte: "Apporter la poussière à Maître Orsan"
+        texte-en: "Bring the dust to Master Orsan"
         pnj: orsan
         dialogue:
           - "orsan: Fascinant… Votre Marque réagit à la poussière. Elle la boit, littéralement."
           - "orsan: Venez. Il y a ici un Éclat plus ancien que le village. Je veux voir ce qu'il fait de vous."
+        dialogue-en:
+          - "orsan: Fascinating… Your Mark reacts to the dust. It drinks it, quite literally."
+          - "orsan: Come. There is a Shard here older than the village. I want to see what it does with you."
       - type: ANCRAGE
         texte: "Toucher l'Éclat d'ancrage de Veillemont"
+        texte-en: "Touch the anchoring Shard of Veillemont"
         point: ancre_veillemont
         apres:
           - "Une chaleur te traverse, comme un fil tendu entre ta poitrine et le cristal."
           - "orsan: Voilà. Désormais, si vous tombez au combat, la lumière vous ramènera ici."
           - "orsan: Ne me demandez pas comment, je ne le sais pas encore. Mais je compte bien le découvrir."
           - "orsan: Revenez me voir de temps en temps. J'aimerais suivre… votre évolution."
+        apres-en:
+          - "A warmth runs through you, like a thread pulled taut between your chest and the crystal."
+          - "orsan: There. From now on, if you fall in battle, the light will bring you back here."
+          - "orsan: Do not ask me how, I do not know yet. But I fully intend to find out."
+          - "orsan: Come back and see me from time to time. I would like to follow… your progress."
     recompenses:
       xp: 180
       or: 30
       objets:
         - materiau: AMETHYST_SHARD
           nom: "Éclat de souvenir"
+          nom-en: "Memory Shard"
           description:
             - "Un fragment tiède du cristal qui t'a marqué."
+          description-en:
+            - "A warm fragment of the crystal that marked you."

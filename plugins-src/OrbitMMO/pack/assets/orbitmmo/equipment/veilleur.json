@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [ { "texture": "orbitmmo:veilleur" } ],
+    "humanoid_leggings": [ { "texture": "orbitmmo:veilleur" } ]
+  }
+}

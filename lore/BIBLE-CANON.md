@@ -6,7 +6,7 @@
 > **Règle :** rien n'entre ici directement. Une idée passe d'abord par
 > [BIBLE-BROUILLON.md](BIBLE-BROUILLON.md), puis elle est déplacée ici une fois validée.
 
-*Dernière mise à jour : 22/11/2026*
+*Dernière mise à jour : 23/11/2026*
 
 ---
 
@@ -33,6 +33,16 @@ Des fragments de cristal tombés de l'Astre. Ils contiennent encore sa puissance
 
 ### Le Néant
 Le vide laissé par l'Astre. Il n'est pas vide : il offre une puissance immense à ceux qui l'acceptent.
+
+### Les secrets du monde (validés le 23/11/2026, révélés peu à peu par les quêtes)
+Ni la Lumière ni l'Ombre ne connaissent toute la vérité. Le joueur la reconstitue des deux côtés.
+- **Pourquoi l'Astre s'est brisé.** Aurélien le Premier, fondateur de l'Ordre de l'Aube, a voulu l'enchaîner avec des chaînes de lumière pour qu'il ne puisse plus jamais s'éteindre ni partir. L'Astre ne s'est pas brisé sous les chaînes : **il s'est brisé pour leur échapper**. Il a choisi.
+- **Le Néant est ce qui reste de l'Astre.** Ce n'est pas un vide : c'est son dernier souffle, resté dans le ciel, qui a froid. C'est lui que les Marqués de l'Ombre entendent murmurer (« Il a froid », « Rendez-moi »). Le Néant se nourrit de la lumière que perdent les Marques qui s'éteignent ou qu'on vide.
+- **La lumière des Marqués est celle de l'Astre.** Au Cloître Blanc, on ne « purifie » pas les Marqués : on chante leur lumière hors d'eux, dans des **fioles**. Elle parle aussi (« Laissez-moi partir »). Rendue à un Marqué, elle rallume sa Marque.
+- **Creux et Purifiés sont la même chose** : des Marqués à qui on a pris leur lumière, au Puits du Néant ou au Cloître Blanc.
+- **Le Reliquaire.** Châsse d'or cachée au fond de la Mine du Ponant, remplie d'Éclats par des Purifiés réduits en esclaves. Quand il sera plein, l'Aube compte faire renaître l'Astre et le garder en cage. Ce qui fuit pendant l'extraction nourrit le Néant.
+- **Le Pacte des Deux Ciels.** Accord secret entre **Vharos** (Citadelle d'Obsidienne) et la Haute-Prélate **Séraphine**, par l'intermédiaire de **Maître Orsan** (« O. »). L'Aube vend à la Citadelle le surplus de lumière en fioles (adressées « Pour V. »), qui garde ses Creux debout et retient le Néant ; la Citadelle paie en **Éclats noirs**, qui remplissent le Reliquaire. Les deux camps se battent le jour et se partagent les Marqués la nuit.
+- **L'Éclat-Cœur** : l'Éclat immense tombé la Nuit des Étoiles Filantes dans les Ruines de la Marche, doré d'un côté, violet de l'autre. Il parle avec les deux voix à la fois : l'Astre coupé en deux. Il ne veut ni être vengé ni être rallumé en cage : il veut être **rassemblé, et libre**. Celui qui le tient tient l'Astre en laisse.
 
 ---
 
@@ -70,7 +80,9 @@ Pendant la Nuit des Étoiles Filantes, certains ont été touchés par un Éclat
 Il y a **deux factions**. Le joueur rejoint l'une des deux et commence dans sa zone de départ.
 
 ### Lumière
-- **Capitale :** le Bastion de l'Aube
+- **Capitale :** Auréval, la ville aux murs blancs. Au nord de la ville, sur le parvis, se dresse **le Bastion de l'Aube**, la citadelle de l'Ordre (là où se trouve le Pilier des Astres).
+- **Haute-Prélate :** **Séraphine**. Elle siège au Bastion et reçoit le Serment des Marqués.
+- **Le Cloître Blanc :** une haute bâtisse d'Auréval aux volets clos, où l'on conduit les Marqués dont la lumière est « instable ».
 - **Couleur :** `#FFD66E` (or)
 - **Ce qu'ils sont :** les gardiens de l'ordre et de la lumière des étoiles.
 - **Magie :** feu, foudre et magie sacrée.
@@ -135,3 +147,12 @@ La trame en 7 étapes :
 | **La Nuit des Étoiles Filantes** | La nuit où les Éclats se sont remis à tomber. Début du jeu. |
 | **Marqué** | Une personne touchée par un Éclat et qui y a survécu. Le joueur en est un. |
 | **La Marque** | Le signe lumineux que porte un Marqué sous la peau. |
+| **Auréval** | La capitale de la Lumière. |
+| **Le Bastion de l'Aube** | La citadelle de l'Ordre, au nord d'Auréval. |
+| **Le Cloître Blanc** | Le lieu d'Auréval où l'on conduit les Marqués « instables ». Aucun n'en revient. |
+| **Fiole de lumière** | La lumière d'un Marqué, retirée au Cloître Blanc et mise en fiole. |
+| **Creux / Purifié** | Un Marqué vidé de sa lumière (Creux chez l'Ombre, Purifié chez l'Aube). |
+| **Le Reliquaire** | La châsse d'or de l'Aube, dans la Mine du Ponant, où l'on rassemble la lumière de l'Astre. |
+| **Le Pacte des Deux Ciels** | L'accord secret entre Vharos et Séraphine pour se partager les Marqués et leur lumière. |
+| **L'Éclat-Cœur** | L'Éclat immense des Ruines de la Marche : l'Astre coupé en deux. |
+| **Les Quatre-Vents** | La ville neutre aux portes de la Marche. On n'y tire pas l'épée. |

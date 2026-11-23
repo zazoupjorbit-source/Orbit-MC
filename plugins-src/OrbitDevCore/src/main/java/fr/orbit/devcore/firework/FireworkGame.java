@@ -169,6 +169,8 @@ public final class FireworkGame implements Listener {
         int streak;
         /** Jusqu'à ce tick, la barre d'action affiche autre chose que le HUD (élimination, refus). */
         long hudHold;
+        /** Jusqu'à ce tick, protégé après une réapparition (les tirs le traversent). */
+        long protectedUntil;
 
         Fighter(Color color) {
             this.color = color;
@@ -606,7 +608,8 @@ public final class FireworkGame implements Listener {
             return false;
         }
         if (entity instanceof Player player) {
-            return fighters.containsKey(player.getUniqueId());
+            Fighter fighter = fighters.get(player.getUniqueId());
+            return fighter != null && fighter.protectedUntil <= ticks;
         }
         return !shot.fromDummy && dummyOf(entity) != null;
     }
@@ -706,17 +709,23 @@ public final class FireworkGame implements Listener {
     }
 
     private void eliminate(Shot shot, Player victim) {
-        fighters.remove(victim.getUniqueId());
         burst(victim.getLocation().add(0, 1.0, 0), shot.color);
-        disarm(victim);
+        boolean stay = plugin.getConfig().getBoolean("firework-game.stay-in-mode", true);
+        Fighter victimFighter = fighters.get(victim.getUniqueId());
+        if (stay && victimFighter != null) {
+            resetAfterDeath(victim, victimFighter);
+        } else {
+            fighters.remove(victim.getUniqueId());
+            disarm(victim);
+        }
         Messages messages = plugin.messages();
         victim.showTitle(Title.title(messages.get("firework.eliminated-title"),
                 messages.get("firework.eliminated-subtitle", comp("killer", shot.shooterName)), TITLE_TIMES));
         victim.playSound(DEATH_SOUND);
         if (plugin.getConfig().getBoolean("firework-game.respawn-at-spawn", true)) {
-            Location spawn = plugin.locations().spawn();
-            if (spawn != null) {
-                Teleports.teleport(plugin, victim, spawn, null);
+            Location spot = respawnSpot(victim);
+            if (spot != null) {
+                Teleports.teleport(plugin, victim, spot, null);
             }
         }
         Component victimName = Component.text(victim.getName());
@@ -764,6 +773,118 @@ public final class FireworkGame implements Listener {
 
     private static boolean isMilestone(int streak) {
         return streak == 3 || streak == 5 || (streak >= 10 && streak % 5 == 0);
+    }
+
+    // ------------------------------------------------------------------ réapparition dans la station
+
+    /** Élimination ou mort en restant dans le mode : série et bonus perdus, courte protection. */
+    private void resetAfterDeath(Player player, Fighter fighter) {
+        fighter.streak = 0;
+        fighter.bonuses.clear();
+        fighter.protectedUntil = ticks + Math.max(0, plugin.getConfig().getInt("firework-game.respawn-protection-ticks", 40));
+        clearSpeed(player);
+        removeGrapples(player);
+        refresh(player);
+    }
+
+    /**
+     * Point de réapparition : au hasard dans la station (firework-game.random-respawn), loin des autres
+     * joueurs en mode si possible ; sinon le spawn du lobby.
+     */
+    private Location respawnSpot(Player player) {
+        if (plugin.getConfig().getBoolean("firework-game.random-respawn", true)) {
+            Location spot = randomStationSpot(player);
+            if (spot != null) {
+                return spot;
+            }
+        }
+        return plugin.locations().spawn();
+    }
+
+    private Location randomStationSpot(Player player) {
+        World world = plugin.getServer().getWorld(plugin.station().worldName());
+        if (world == null) {
+            return null;
+        }
+        FileConfiguration config = plugin.getConfig();
+        org.bukkit.configuration.file.YamlConfiguration station = plugin.station().config();
+        int cx = station.getInt("origine.x", 0);
+        int cy = station.getInt("origine.y", 100);
+        int cz = station.getInt("origine.z", 0);
+        int radius = Math.max(4, config.getInt("firework-game.random-respawn-radius", 85));
+        int maxRise = Math.max(1, config.getInt("firework-game.random-respawn-height", 8));
+        double minDist = Math.max(0, config.getDouble("firework-game.random-respawn-min-distance", 12));
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        Location fallback = null;
+        for (int attempt = 0; attempt < 80; attempt++) {
+            int x = cx + random.nextInt(-radius, radius + 1);
+            int z = cz + random.nextInt(-radius, radius + 1);
+            for (int y = cy + 1; y <= cy + maxRise; y++) {
+                if (!isSafeSpot(world, x, y, z)) {
+                    continue;
+                }
+                Location spot = new Location(world, x + 0.5, y, z + 0.5, random.nextFloat() * 360f, 0f);
+                if (farFromFighters(player, spot, minDist)) {
+                    return spot;
+                }
+                if (fallback == null) {
+                    fallback = spot;
+                }
+                break;
+            }
+        }
+        return fallback;
+    }
+
+    /** Sol plein, deux blocs libres, dégagé autour et un plafond au-dessus (donc à l'intérieur de la station). */
+    private static boolean isSafeSpot(World world, int x, int y, int z) {
+        org.bukkit.block.Block below = world.getBlockAt(x, y - 1, z);
+        Material ground = below.getType();
+        if (!ground.isSolid() || ground == Material.MAGMA_BLOCK || ground == Material.CAMPFIRE
+                || ground == Material.SOUL_CAMPFIRE || ground == Material.CACTUS || ground.name().endsWith("_FENCE")
+                || ground.name().endsWith("_WALL") || ground == Material.BARRIER) {
+            return false;
+        }
+        if (!free(world.getBlockAt(x, y, z)) || !free(world.getBlockAt(x, y + 1, z))) {
+            return false;
+        }
+        int open = 0;
+        int[][] around = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        for (int[] d : around) {
+            if (free(world.getBlockAt(x + d[0], y, z + d[1])) && free(world.getBlockAt(x + d[0], y + 1, z + d[1]))) {
+                open++;
+            }
+        }
+        if (open < 3) {
+            return false;
+        }
+        for (int up = y + 2; up <= y + 48; up++) {
+            if (!world.getBlockAt(x, up, z).getType().isAir()) {
+                return true;
+            }
+        }
+        return false; // rien au-dessus : dehors, sur la coque
+    }
+
+    private static boolean free(org.bukkit.block.Block block) {
+        Material type = block.getType();
+        return block.isPassable() && !block.isLiquid() && type != Material.FIRE && type != Material.SOUL_FIRE
+                && !type.name().endsWith("_PRESSURE_PLATE") && type != Material.NETHER_PORTAL
+                && type != Material.END_PORTAL && type != Material.END_GATEWAY;
+    }
+
+    private boolean farFromFighters(Player self, Location spot, double minDist) {
+        double sq = minDist * minDist;
+        for (UUID id : fighters.keySet()) {
+            if (id.equals(self.getUniqueId())) {
+                continue;
+            }
+            Player other = plugin.getServer().getPlayer(id);
+            if (other != null && other.getWorld() == spot.getWorld() && other.getLocation().distanceSquared(spot) < sq) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // ------------------------------------------------------------------ bonus de série
@@ -1105,7 +1226,27 @@ public final class FireworkGame implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         event.getDrops().removeIf(item -> isLauncher(item) || isGrapple(item));
-        leave(event.getPlayer(), false);
+        Player player = event.getPlayer();
+        Fighter fighter = fighters.get(player.getUniqueId());
+        if (fighter != null && plugin.getConfig().getBoolean("firework-game.stay-in-mode", true)) {
+            resetAfterDeath(player, fighter); // reste en mode, réapparaît au hasard (onRespawnSpot)
+        } else {
+            leave(player, false);
+        }
+    }
+
+    /** Vraie mort en mode : réapparition au hasard dans la station (après le renvoi au spawn général). */
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onRespawnSpot(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+        if (!fighters.containsKey(player.getUniqueId())
+                || !plugin.getConfig().getBoolean("firework-game.respawn-at-spawn", true)) {
+            return;
+        }
+        Location spot = respawnSpot(player);
+        if (spot != null) {
+            event.setRespawnLocation(spot);
+        }
     }
 
     @EventHandler
@@ -1144,8 +1285,14 @@ public final class FireworkGame implements Listener {
             }
             if (!enabled()) {
                 removeAll(player);
-            } else if (plugin.getConfig().getBoolean("firework-game.give-on-join", true)) {
+            } else if (plugin.getConfig().getBoolean("firework-game.give-on-join", true)
+                    || fighters.containsKey(player.getUniqueId())) {
                 give(player);
+            }
+            // Toujours en mode après une vraie mort : le contour est perdu avec l'ancien corps.
+            if (fighters.containsKey(player.getUniqueId()) && plugin.getConfig().getBoolean("firework-game.glow", true)) {
+                player.setGlowing(true);
+                player.getPersistentDataContainer().set(glowKey, PersistentDataType.BYTE, (byte) 1);
             }
         });
     }

@@ -83,7 +83,7 @@ final class Console {
         if (run.length() == 0) {
             return;
         }
-        parts.add(Component.text(run.toString()).font(FONT).color(runColor).shadowColor(ShadowColor.none())
+        parts.add(Component.text(HdTiles.expand(run.toString())).font(FONT).color(runColor).shadowColor(ShadowColor.none())
                 .decoration(TextDecoration.BOLD, false).decoration(TextDecoration.ITALIC, false));
         run.setLength(0);
     }
@@ -168,6 +168,14 @@ final class Console {
             space(-1);
         }
         return cur;
+    }
+
+    /** Composant déjà mis en forme (police du jeu ou police de ligne du pack) posé en x ; {@code w} = sa largeur affichée. */
+    void plain(int x, Component c, int w) {
+        move(x);
+        flush();
+        parts.add(c);
+        cur += w;
     }
 
     // ------------------------------------------------------------------ Ligne finale

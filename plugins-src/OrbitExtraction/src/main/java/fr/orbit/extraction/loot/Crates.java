@@ -241,6 +241,7 @@ public final class Crates implements Listener {
         for (Crate c : crates.values()) {
             hide(c);
             closeViewers(c);
+            plugin.search().forget(c.inv);
         }
         crates.clear();
         nextSpawn = 0;
@@ -272,6 +273,7 @@ public final class Crates implements Listener {
                 if (c.box != null && c.box.isValid()) {
                     w.spawnParticle(Particle.CLOUD, c.at.clone().add(0, 0.5, 0), 14, 0.3, 0.3, 0.3, 0.02);
                 }
+                plugin.search().forget(c.inv);
                 hide(c);
                 it.remove();
                 if (!c.event) {
@@ -382,34 +384,12 @@ public final class Crates implements Listener {
         return arrows[(((int) Math.round(rel / 45.0) % 8) + 8) % 8];
     }
 
+    /** Remplit la caisse puis cache son contenu : il se révèle pendant la fouille (voir Search). */
     private void fill(Crate c) {
         Tier t = c.tier;
-        int total = 0;
-        for (Entry e : t.loot()) {
-            total += e.weight();
-        }
         int rolls = t.minRolls() + random.nextInt(t.maxRolls() - t.minRolls() + 1);
-        List<Integer> free = new ArrayList<>();
-        for (int i = 0; i < 27; i++) {
-            free.add(i);
-        }
-        for (int i = 0; i < rolls; i++) {
-            int r = random.nextInt(total);
-            Entry pick = t.loot().get(0);
-            for (Entry e : t.loot()) {
-                r -= e.weight();
-                if (r < 0) {
-                    pick = e;
-                    break;
-                }
-            }
-            for (ItemStack it : plugin.specs().create(pick.spec(), true)) {
-                if (free.isEmpty()) {
-                    return;
-                }
-                c.inv.setItem(free.remove(random.nextInt(free.size())), it);
-            }
-        }
+        Search search = plugin.search();
+        search.hide(c.inv, search.fill(c.inv, t.loot(), rolls, random), 0);
     }
 
     // ------------------------------------------------------------------ entités

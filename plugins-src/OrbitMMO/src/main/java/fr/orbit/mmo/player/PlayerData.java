@@ -26,14 +26,21 @@ public final class PlayerData {
     /** Rangs de talents, par spécialisation (chaque arbre garde ses points quand on change de spé). */
     public final Map<String, Map<String, Integer>> talents = new HashMap<>();
     public int floor = 1;
+    /** Plus haut étage du Pilier des Astres dont le joueur a lui-même vaincu le boss (sa guilde lui en ouvre peut-être plus). */
+    public int towerCleared;
     public int kills;
     public int deaths;
     public int playerKills;
     public boolean introDone;
+    /** Le personnage a déjà été conduit à la capitale de sa faction (les capitales sont le point de départ depuis le 23/11/2026). */
+    public boolean capitalHome;
     /** Sort choisi dans chaque objet de sort (catégorie → sort), changé avec Accroupi + molette. */
     public final Map<String, String> picks = new HashMap<>();
     /** Effets achetés en ville (Boost) → fin de l'effet (ms). */
     public final Map<String, Long> boosts = new HashMap<>();
+    /** Montures apprises (ids de mounts.yml) et dernière montée. */
+    public final java.util.Set<String> mounts = new java.util.LinkedHashSet<>();
+    public String mountPick;
 
     // --- En mémoire seulement ---
     public double resource;
@@ -111,10 +118,14 @@ public final class PlayerData {
             }
         }
         floor = Math.max(1, y.getInt("floor", 1));
+        towerCleared = Math.max(0, y.getInt("tower-cleared"));
         kills = y.getInt("kills");
         deaths = y.getInt("deaths");
         playerKills = y.getInt("player-kills");
         introDone = y.getBoolean("intro-done");
+        capitalHome = y.getBoolean("capital-home");
+        mounts.addAll(y.getStringList("mounts"));
+        mountPick = y.getString("mount-pick");
         ConfigurationSection pk = y.getConfigurationSection("picks");
         if (pk != null) {
             for (String k : pk.getKeys(false)) {
@@ -147,10 +158,14 @@ public final class PlayerData {
             }
         }
         y.set("floor", floor);
+        y.set("tower-cleared", towerCleared);
         y.set("kills", kills);
         y.set("deaths", deaths);
         y.set("player-kills", playerKills);
         y.set("intro-done", introDone);
+        y.set("capital-home", capitalHome);
+        y.set("mounts", mounts.isEmpty() ? null : new java.util.ArrayList<>(mounts));
+        y.set("mount-pick", mountPick);
         for (Map.Entry<String, String> e : picks.entrySet()) {
             y.set("picks." + e.getKey(), e.getValue());
         }

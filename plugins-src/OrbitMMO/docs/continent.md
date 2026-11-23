@@ -187,7 +187,35 @@ Depuis le 23/11/2026, le continent suit les mêmes règles de jeu que les étage
 - pas de faim (la barre suit l'endurance), pas d'usure des objets, aucun monstre autre que ceux du plugin ;
 - coffres, tonneaux, pots de fleurs et établis du décor ne s'ouvrent pas ; seul un administrateur en créatif peut retoucher le monde ;
 - **mort** : on réapparaît au lieu sûr le plus proche qui n'est pas à la faction adverse (capitale, ville, village, hameau construit). Un ancrage de quête garde la priorité ;
-- **connexion** : un joueur qui s'est déconnecté sur le continent y reste. Les autres reviennent à la ville de leur étage, comme avant.
+- **connexion** : un joueur qui s'est déconnecté sur le continent y reste ; voir « Le foyer et le Pilier des Astres » pour les autres cas.
+
+### Le foyer et le Pilier des Astres
+
+Depuis le 23/11/2026 (demande de Zazou), le point de départ n'est plus l'étage 1 : c'est la **capitale de sa faction**, et les cent étages sont un **donjon**, le Pilier des Astres (nom choisi par Zazou le 23/11/2026 ; « le Pilier » en abrégé), fait pour être gravi en groupe.
+
+| Moment | Où va le joueur |
+|---|---|
+| Première connexion, pas encore de personnage | Les Quatre-Vents (ville neutre), où s'ouvre le choix du camp |
+| Création du personnage, Lumière | Les Champs Vitrifiés : la quête L'Éveil y commence et mène à Veillemont. Auréval est son foyer |
+| Création du personnage, Ombre | Morneval, directement (pas encore de quête d'introduction) |
+| Connexion, déconnecté sur le continent | Il reste où il était |
+| Connexion, déconnecté dans le Pilier | La ville de l'étage où il était |
+| Connexion, ailleurs | La capitale de sa faction |
+| Première connexion d'un personnage créé avant le 23/11 | La capitale de sa faction, une fois, avec un message (`capital-home` dans sa fiche) |
+| Cristal de retour | Sur le continent : la capitale de sa faction. Dans le Pilier : la ville de l'étage |
+| Mort | Continent : lieu sûr le plus proche non adverse. Pilier : ville de l'étage. Ailleurs : sa capitale |
+
+Entrer dans le Pilier et en sortir :
+
+- **Entrée** : le gardien du Pilier, debout à côté de la porte du donjon de chaque capitale. Auréval : un golem, « Gardien du Pilier », en −2553 / 67 / 454. Morneval : un squelette noir, « Veilleur du Pilier », en 2547 / 71 / 182. Un clic droit ouvre le choix de l'étage (étages ouverts seulement). Point `tour` de chaque capitale : `/continent capitale <nom> tp tour`.
+- **Changer d'étage** : la porte de téléportation de la ville d'un étage, comme avant.
+- **Sortie** : bouton « Quitter le Pilier » du même menu (retour à sa capitale), ou un cristal de retour utilisé hors du Pilier.
+- Le menu principal (« Le Pilier des Astres ») montre les étages mais ne téléporte plus depuis le continent : il faut passer par le gardien.
+- Les cinq portails des donjons de la carte (étages 1 à 5) marchent toujours ; l'arche ramène alors au donjon par lequel on est entré. À décider : les garder comme entrées secondaires, ou leur donner leurs propres donjons.
+
+Les gardiens sont des PNJ du plan des capitales (`tower`, `tower_ombre`), sans aucun bloc : `/continent capitale <nom> pnj` les pose sans toucher à la ville. Code : `ContinentService.capital / home / sendHome / creation`, `FloorService.recall`, `Menus.create` et `Menus.floors`, `PlayerListener.join` et `onRespawn`, `QuestService.introStart`, `CapitalDesign.gatekeeper`.
+
+**Guildes** (23/11/2026, voir `docs\guildes.md`) : les étages ne s'ouvrent plus pour tout le serveur d'un coup. Un étage est ouvert à un joueur s'il a lui-même vaincu le boss de l'étage d'avant, si sa guilde l'a fait, ou si l'étage est sous le socle commun (`socle` dans `state.yml`, étages 1 à 3 sur `reborn`, changé par `/mmoadmin ouvrir <n>`). Chaque guilde gravit le Pilier dans l'ordre, les guildes sont classées par étage franchi et la première à franchir un étage touche une prime en or dans sa banque. « Étages ouverts seulement », plus haut, se lit donc joueur par joueur.
 
 ### Commande `/continent` (permission `orbitmmo.admin`)
 
@@ -250,18 +278,19 @@ Commande `/continent capitale` (le nom peut être abrégé : `aur`, `morn`) :
 | `/continent capitale <nom> ecarts` | Compare le monde au plan, sans rien changer ; détail dans `plugins\OrbitMMO\capitales\<nom>-ecarts.txt` |
 | `/continent capitale <nom> generer` | Construit. Sur une capitale déjà générée qui diffère du plan, s'arrête et demande `generer confirmer` |
 | `/continent capitale <nom> generer confirmer` | Reconstruit selon le plan : les retouches à la main sont perdues |
-| `/continent capitale <nom> tp [point]` · `points` | S'y rendre (`spawn`, `grand-place`, `parvis`, `pont`, `forge`, `alchimie`, `autel`, `runes`, `hotel-des-ventes`, `porte-…`), lister les points |
+| `/continent capitale <nom> pnj` | Repose les PNJ et réenregistre les points du plan, sans toucher à un seul bloc (capitale déjà générée) |
+| `/continent capitale <nom> tp [point]` · `points` | S'y rendre (`spawn`, `grand-place`, `parvis`, `tour`, `pont`, `forge`, `alchimie`, `autel`, `runes`, `hotel-des-ventes`, `porte-…`), lister les points |
 | `/continent capitale recharger` · `stop` | Relire `capitales.yml`, arrêter le travail en cours |
 
 Réglages dans `plugins\OrbitMMO\capitales.yml` : lieu, style (`lumiere` ou `ombre`), rayon du rempart (70 à 160), rayon du raccord, niveau du pavé (`auto` ou un Y), graine (change le tirage des maisons, des arbres et des lanternes), et le temps de pose par tick. Une autre ville peut se déclarer en ajoutant une entrée sur un lieu de la carte ; ce n'est pas essayé, et le dessin a été réglé sur deux sites traversés par un fleuve.
 
 **Règle : `ecarts` avant tout `generer`.** Le plan est recalculé à chaque commande à partir de `continent.dat` et des réglages ; il est identique tant que ni l'un ni l'autre ne change. Dès que Zazou retouche une capitale à la main, ces retouches apparaissent comme des écarts, et `generer confirmer` les effacerait. Changer la graine ou un rayon redessine toute la ville.
 
-L'état est gardé dans `plugins\OrbitMMO\capitales-etat.yml` (générée, date, niveau du pavé, points). Tant qu'une capitale est générée, `/continent tp <capitale>` et l'arrivée sur le continent mènent à son point `spawn`. Les PNJ portent les étiquettes `orbit_capitale` et `orbit_capitale_<nom>` : `generer` les retire et les repose, sans doublon.
+L'état est gardé dans `plugins\OrbitMMO\capitales-etat.yml` (générée, date, niveau du pavé, points). Tant qu'une capitale est générée, `/continent tp <capitale>` et l'arrivée sur le continent mènent à son point `spawn`. Les PNJ portent les étiquettes `orbit_capitale` et `orbit_capitale_<nom>` : `generer` et `pnj` les retirent et les reposent, sans doublon. Chaque capitale a six PNJ : les cinq de ville et le gardien du Pilier, posé le 23/11/2026 par `pnj` (`ecarts` répond toujours « aucun écart » sur les deux villes).
 
 Contrôles faits : aucun état de bloc inconnu en 26.3 ; `ecarts` répond « aucun écart » sur les deux capitales juste après la construction et après un redémarrage ; un bloc posé exprès a bien été signalé par `ecarts`, a fait refuser `generer`, puis a été retiré par `generer confirmer` ; aperçus du monde dans `docs\continent\monde\capitale-*.png`.
 
-Pas encore vu en jeu : l'allure à hauteur d'homme, l'intérieur des maisons, et l'ouverture des menus des cinq PNJ dans les capitales.
+Pas encore vu en jeu : l'allure à hauteur d'homme, l'intérieur des maisons, l'ouverture des menus des cinq PNJ dans les capitales, et tout le parcours du foyer et du Pilier (arrivée à la capitale après le choix du camp, gardien, sortie, cristal de retour).
 
 ### Villages, donjons, camps et ruines
 
@@ -291,7 +320,7 @@ Les styles (`lumiere`, `ombre`, `neutre`, `desert`, `givre`, `cendre`, `marais`,
 - un monstre qui entre dans une zone sûre disparaît, et tous disparaissent quand plus aucun joueur n'est à 72 blocs ;
 - 15 monstres propres au continent sont décrits sous `monstres` dans `sites.yml` (bandits, Glaneurs, Purificateurs et Limiers de l'Aube, revenants, noyés, pillards, Calcinés…) ; ceux de `config.yml` servent aussi.
 
-**Quêtes.** Veillemont et les Champs Vitrifiés portent les 11 points de la chaîne `lumiere-depart` : `cratere_eveil`, `bord_cratere`, `eclat_eveil`, `maelis`, `teo`, `brune`, `mourant` aux cratères ; `varenne`, `orsan`, `ancre_veillemont` au hameau ; `rampants` hors de la zone sûre. `/continent quetes` les montre, avec leur état dans `quest-points.yml`. **Ils ne sont pas posés automatiquement** : dès qu'ils existent, la quête `l_eveil` démarre seule à la création d'un personnage de la Lumière et le téléporte au cratère. `/continent quetes poser` les inscrit (`poser confirmer` déplace ceux déjà posés ailleurs), `retirer` les enlève.
+**Quêtes.** Veillemont et les Champs Vitrifiés portent les 11 points de la chaîne `lumiere-depart` : `cratere_eveil`, `bord_cratere`, `eclat_eveil`, `maelis`, `teo`, `brune`, `mourant` aux cratères ; `varenne`, `orsan`, `ancre_veillemont` au hameau ; `rampants` hors de la zone sûre. `/continent quetes` les montre, avec leur état dans `quest-points.yml`. La construction ne les inscrit pas d'elle-même : dès qu'ils existent, la quête `l_eveil` démarre seule à la création d'un personnage de la Lumière et le téléporte au cratère. `/continent quetes poser` les inscrit (`poser confirmer` déplace ceux déjà posés ailleurs), `retirer` les enlève. **Posés le 23/11/2026 à 03:20 sur `reborn`**, à la demande de Zazou : les 11 points sont dans `quest-points.yml`, monde `orbit_continent`. Le douzième point cité par la chaîne, `mourant_sans_corps`, n'est volontairement pas posé (le Marqué mourant n'a pas de corps).
 
 Commande `/continent site` (l'identifiant peut être abrégé s'il reste unique) :
 
@@ -318,7 +347,7 @@ Contrôles faits le 23/11/2026, hors serveur : les 147 plans se calculent sans e
 
 Nidnoir est à 122 blocs de Gris-Hameau, sur la même chaussée : son `raccord` est réduit à 22 blocs (30 par défaut) pour que les deux emprises ne se recouvrent pas. Si deux sites se recouvrent, le plugin l'écrit au démarrage et dans `/continent site` : ils se réécriraient l'un l'autre et `ecarts` ne serait jamais vide.
 
-**Pas encore vu ni essayé en jeu** (aucun joueur n'était sur le continent) : l'allure à hauteur d'homme des villages, des donjons et des camps ; l'apparition, le niveau et le comportement des monstres ; les portails de donjon et le retour par l'arche ; le PvP, la mort et la réapparition sur le continent ; l'ouverture des menus des PNJ dans les villages.
+**Pas encore vu ni essayé en jeu** (aucun joueur n'était sur le continent) : l'allure à hauteur d'homme des villages, des donjons et des camps ; l'apparition, le niveau et le comportement des monstres ; les portails de donjon et le retour par l'arche ; le PvP, la mort et la réapparition sur le continent ; l'ouverture des menus des PNJ dans les villages ; la chaîne de quêtes `lumiere-depart` jouée sur le continent.
 
 ### Refaire le monde après une retouche du dessin
 
@@ -335,7 +364,7 @@ Si le dessin change sans que le monde soit refait, le plugin l'écrit en avertis
 1. ~~Générateur de terrain et pré-génération~~ — fait le 22/11/2026.
 2. ~~Les deux capitales~~ — faites le 22/11/2026 (voir « Les capitales »). Reste à les voir en jeu, puis à décider de ce qui manque : intérieurs, quartiers, port, la ville neutre des Quatre-Vents.
 3. ~~Villages, ruines, entrées de donjon et camps de monstres~~ — construits et branchés le 23/11/2026 (voir « Villages, donjons, camps et ruines »). Reste à les voir en jeu.
-4. **Ouvrir le continent aux joueurs** : poser les points de quête (`/continent quetes poser`), décider par où un nouveau personnage arrive (Veillemont pour la Lumière ; la chaîne de l'Ombre à Nidnoir reste à écrire), et garder ou non l'arrivée par les étages.
+4. ~~Ouvrir le continent aux joueurs~~ — fait le 23/11/2026 : la capitale de sa faction est le point de départ et les cent étages sont un donjon, le Pilier (voir « Le foyer et le Pilier des Astres »). À jouer de bout en bout. La chaîne de l'Ombre à Nidnoir reste à écrire (un personnage de l'Ombre arrive à Morneval sans quête). Les guildes existent depuis le 23/11/2026 (`docs\guildes.md`), pas encore essayées en jeu.
 5. Accorder les deux jeux de noms : le lore des quêtes parle du Bastion de l'Aube, de Veillemont et du Val d'Ardence ; la carte dit Auréval, Bourg des Pâtres et Prés d'Auréval.
 6. Les donjons scellés (6 sur 11) attendent leurs étages ; les niveaux des étages 4 et 5 sont à recaler sur leur région.
 7. Régler la faune en jeu : densité, niveaux, butin des 15 nouveaux monstres, monstres d'élite ou chefs de camp (Morvain au Bois des Pénitents).

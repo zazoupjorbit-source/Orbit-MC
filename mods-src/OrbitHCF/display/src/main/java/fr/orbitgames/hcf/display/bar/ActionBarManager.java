@@ -35,7 +35,7 @@ public class ActionBarManager {
         if (timers == null) {
             return;
         }
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : fr.orbitgames.hcf.api.HcfWorlds.players()) {
             Duration combat = timers.getRemaining(player.getUniqueId(), TimerKeys.COMBAT_TAG);
             if (!combat.isZero()) {
                 send(player, plugin.getScoreboardConfig().getString("actionbar.combat", ""), combat);

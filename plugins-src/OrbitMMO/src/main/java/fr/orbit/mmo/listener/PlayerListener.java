@@ -55,8 +55,14 @@ public final class PlayerListener implements Listener {
                 return;
             }
             if (!plugin.progression().valid(d)) {
-                // Pas encore de personnage (ou ancien avatar d'avant la refonte) : création.
-                plugin.floors().teleport(p, 1, false);
+                // Pas encore de personnage (ou ancien avatar d'avant la refonte) : création, aux Quatre-Vents.
+                // Le choix du camp enverra ensuite à la capitale de la faction (voir Menus.create).
+                org.bukkit.Location lobby = plugin.continent() == null ? null : plugin.continent().creation();
+                if (lobby != null) {
+                    p.teleportAsync(lobby);
+                } else {
+                    plugin.floors().teleport(p, 1, false);
+                }
                 p.setGameMode(GameMode.ADVENTURE);
                 p.getInventory().clear();
                 if (!d.introDone) {
@@ -73,9 +79,23 @@ public final class PlayerListener implements Listener {
                 }
                 return;
             }
-            // Déconnecté sur le continent : on y reste, sinon retour à la ville de son étage.
-            if (plugin.continent() == null || !plugin.continent().isContinent(p.getWorld())) {
-                plugin.floors().teleport(p, plugin.floors().unlocked(d.floor) ? d.floor : 1, false);
+            // Déconnecté sur le continent : on y reste. Dans le Pilier des Astres (les étages) : retour à la ville de l'étage. Ailleurs, et la première
+            // fois depuis que les capitales sont le point de départ : la capitale de sa faction.
+            boolean first = !d.capitalHome;
+            int tower = plugin.floors().floorOf(p.getWorld());
+            boolean onContinent = plugin.continent() != null && plugin.continent().isContinent(p.getWorld());
+            if (!onContinent) {
+                String home = tower > 0 && !first || plugin.continent() == null ? null : plugin.continent().sendHome(p, d.faction.id, false);
+                if (home == null) {
+                    int n = tower > 0 ? tower : d.floor;
+                    plugin.floors().teleport(p, plugin.floors().unlocked(d, n) ? n : 1, false);
+                } else if (first) {
+                    Text.msg(p, "<#7FD4FF>Votre foyer est désormais <b>" + Text.esc(home) + "</b>, la capitale de votre faction. "
+                            + "<#D7DCE2>Les cent étages sont devenus un donjon, le Pilier des Astres : son gardien se tient devant le donjon de la ville.");
+                }
+            }
+            if (first && plugin.continent() != null && plugin.continent().ready()) {
+                d.capitalHome = true;
             }
             prepareBody(p, d);
             if (plugin.progression().spec(d) == null && !d.buildMode) {
@@ -116,7 +136,9 @@ public final class PlayerListener implements Listener {
         }
         plugin.auras().clear(p.getUniqueId());
         plugin.parties().quit(p);
+        plugin.guilds().quit(p);
         plugin.hud().quit(p);
+        plugin.tab().forget(p.getUniqueId());
         plugin.players().unload(p.getUniqueId());
     }
 
@@ -171,11 +193,18 @@ public final class PlayerListener implements Listener {
         if (!plugin.progression().valid(d)) {
             return;
         }
-        int floor = plugin.floors().unlocked(d.floor) ? d.floor : 1;
         // Tombé sur le continent : retour au lieu sûr le plus proche qui n'est pas à la faction adverse.
+        // Tombé dans le Pilier : la ville de l'étage. Ailleurs : la capitale de sa faction.
         String[] place = new String[1];
         org.bukkit.Location fallen = p.getLastDeathLocation() != null ? p.getLastDeathLocation() : p.getLocation();
+        int tower = plugin.floors().floorOf(fallen.getWorld());
+        int floor = plugin.floors().unlocked(d, tower > 0 ? tower : d.floor) ? (tower > 0 ? tower : d.floor) : 1;
         org.bukkit.Location back = plugin.continent() == null ? null : plugin.continent().respawn(fallen, d.faction.id, place);
+        if (back == null && tower <= 0 && plugin.continent() != null) {
+            back = plugin.continent().home(d.faction.id);
+            fr.orbit.mmo.continent.ContinentData.Place capital = back == null ? null : plugin.continent().capital(d.faction.id);
+            place[0] = capital == null ? null : capital.name();
+        }
         if (back != null) {
             e.setRespawnLocation(back);
         } else {

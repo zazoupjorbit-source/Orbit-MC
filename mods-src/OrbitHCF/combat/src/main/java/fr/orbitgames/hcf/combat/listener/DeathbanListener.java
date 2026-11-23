@@ -35,7 +35,7 @@ public class DeathbanListener implements Listener {
         plugin.getCombatManager().deathban(victim.getUniqueId(), duration);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (victim.isOnline()) {
-                victim.kickPlayer(plugin.getMessages().format("deathban.banned-kick",
+                fr.orbitgames.hcf.api.HcfWorlds.eject(victim, plugin.getMessages().format("deathban.banned-kick",
                         "temps", DurationFormat.compact(duration)));
             }
         }, 20L);

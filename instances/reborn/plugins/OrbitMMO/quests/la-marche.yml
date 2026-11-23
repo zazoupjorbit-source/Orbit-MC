@@ -1,0 +1,1183 @@
+# ------------------------------------------------------------------
+#  La Marche (niv. 26 à 34) — zone disputée, hub neutre : les Quatre-Vents
+#  Fin de l'acte III des deux factions (l_* et o_*) et annexes neutres (n_*), ouvertes à tous.
+#  FICHIER GÉNÉRÉ par tools\quetes\gen-quetes.js depuis tools\quetes\zones\la-marche.js : modifier la source, pas ce fichier.
+# ------------------------------------------------------------------
+
+pnj:
+  aldren:
+    nom: "Chevalier Aldren"
+    nom-en: "Sir Aldren"
+    titre: "Envoyé de l'Aube"
+    titre-en: "Envoy of the Dawn"
+    couleur: "#F7E7A1"
+    type: MANNEQUIN
+    visage: steve
+    point: aldren
+    main: GOLDEN_SWORD
+    repliques:
+      - "Ici, je n'ai pas le droit de tirer l'épée. C'est reposant, presque."
+    repliques-en:
+      - "Here, I'm not allowed to draw my sword. It's restful, almost."
+  vesper:
+    nom: "Dame Vesper"
+    nom-en: "Lady Vesper"
+    titre: "Envoyée de la Citadelle"
+    titre-en: "Envoy of the Citadel"
+    couleur: "#B48CFF"
+    type: MANNEQUIN
+    visage: noor
+    point: vesper
+    main: NETHERITE_SWORD
+    repliques:
+      - "Les Quatre-Vents sont neutres. Moi, je ne le suis pas. Je suis polie."
+    repliques-en:
+      - "The Four Winds are neutral. I'm not. I'm polite."
+  calixte:
+    nom: "Calixte"
+    titre: "Aubergiste des Quatre-Vents"
+    titre-en: "Innkeeper of the Four Winds"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    visage: makena
+    point: calixte
+    repliques:
+      - "Une seule règle sous mon toit : on boit, on ne se tue pas."
+    repliques-en:
+      - "One rule under my roof: you drink, you don't kill each other."
+  nell:
+    nom: "Nell"
+    titre: "Cartographe"
+    titre-en: "Cartographer"
+    couleur: "#A8E6A1"
+    type: MANNEQUIN
+    visage: ari
+    point: nell
+    main: MAP
+    repliques:
+      - "La Marche change chaque nuit. Mes cartes aussi."
+    repliques-en:
+      - "The March changes every night. So do my maps."
+
+monstres:
+  sentinelle_eclat:
+    nom: "Sentinelle d'Éclat"
+    type: WITHER_SKELETON
+    taille: 1.15
+    pv: 1.4
+    degats: 1.2
+    vitesse: 0.95
+    arme: AMETHYST_SHARD
+  gardien_eclat_coeur:
+    nom: "Gardien de l'Éclat-Cœur"
+    type: WITHER_SKELETON
+    taille: 2.2
+    pv: 12
+    degats: 1.45
+    vitesse: 0.9
+    xp: 15
+    or: 12
+    arme: DIAMOND_SWORD
+
+apparitions:
+  sentinelles_marche:
+    point: marche_seuil
+    monstre: sentinelle_eclat
+    niveau: [29, 31]
+    nombre: 5
+    rayon: 10
+  gardien_coeur:
+    point: marche_seuil
+    monstre: gardien_eclat_coeur
+    niveau: 32
+    nombre: 1
+    rayon: 5
+
+quetes:
+
+  # ================================================================ LUMIÈRE — LA MARCHE
+
+  l_les_quatre_vents:
+    nom: "Les Quatre-Vents"
+    nom-en: "The Four Winds"
+    faction: lumiere
+    niveau: 26
+    requiert: [l_vers_les_quatre_vents]
+    resume:
+      - "L'envoyé de l'Aube aux Quatre-Vents"
+      - "vous attend."
+    resume-en:
+      - "The Dawn's envoy at the Four Winds"
+      - "is waiting for you."
+    etapes:
+      - type: PARLER
+        texte: "Parler au Chevalier Aldren"
+        texte-en: "Talk to Sir Aldren"
+        pnj: aldren
+        dialogue:
+          - "aldren: Le Marqué du Guet. La Haute-Prélate m'a parlé de vous. En bien, figurez-vous."
+          - "aldren: L'Éclat immense est tombé dans les Ruines de la Marche, au nord-est. Mes ordres : le rapporter au Bastion. Les vôtres aussi, j'imagine."
+          - "aldren: L'Ombre a les mêmes ordres. Leur envoyée boit en face. Dame Vesper. Ne la provoquez pas ici : la ville vous chasserait tous les deux."
+        dialogue-en:
+          - "aldren: The Marked from the Watch. The High Prelate spoke to me about you. Well, believe it or not."
+          - "aldren: The immense Shard fell in the Ruins of the March, to the north-east. My orders: bring it back to the Bastion. Yours too, I imagine."
+          - "aldren: The Shadow has the same orders. Their envoy drinks across the street. Lady Vesper. Don't provoke her here: the city would throw you both out."
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage des Quatre-Vents"
+        texte-en: "Touch the Four Winds' anchoring Shard"
+        point: ancre_quatre_vents
+        rayon: 4
+    recompenses:
+      xp: 5500
+      or: 550
+
+  l_les_lames_a_louer:
+    nom: "Les lames à louer"
+    nom-en: "Blades for Hire"
+    faction: lumiere
+    niveau: 27
+    requiert: [l_les_quatre_vents]
+    donneur: aldren
+    resume:
+      - "Des mercenaires bloquent la route"
+      - "des Ruines de la Marche."
+    resume-en:
+      - "Mercenaries are blocking the road"
+      - "to the Ruins of the March."
+    offre:
+      - "aldren: Des mercenaires campent au nord, sur la route des Ruines. Ils laissent passer qui paie. Je n'ai pas l'intention de payer."
+    offre-en:
+      - "aldren: Mercenaries are camped to the north, on the road to the Ruins. They let through whoever pays. I have no intention of paying."
+    etapes:
+      - type: TUER
+        texte: "Briser le camp des mercenaires"
+        texte-en: "Break the mercenaries' camp"
+        monstres: [bandit, braconnier]
+        nombre: 12
+        point: camp_lames_aube
+      - type: INTERAGIR
+        texte: "Fouiller le coffre du capitaine"
+        texte-en: "Search the captain's chest"
+        point: camp_lames_aube
+        rayon: 6
+        apres:
+          - "Deux contrats. L'un au sceau du Bastion, l'autre au sceau de la Citadelle. Le même ordre, mot pour mot : « Tenir la route. Laisser passer nos hommes, et personne d'autre. »"
+        apres-en:
+          - "Two contracts. One with the Bastion's seal, the other with the Citadel's. The same order, word for word: « Hold the road. Let our men through, and no one else. »"
+      - type: PARLER
+        texte: "Montrer les contrats à Aldren"
+        texte-en: "Show the contracts to Aldren"
+        pnj: aldren
+        dialogue:
+          - "aldren: Les deux camps ont payé les mêmes lames. Pour garder la même route."
+          - "aldren: Je commence à croire que nos chefs se parlent plus qu'ils ne nous le disent."
+        dialogue-en:
+          - "aldren: Both sides paid the same blades. To hold the same road."
+          - "aldren: I'm beginning to think our leaders talk to each other more than they tell us."
+    recompenses:
+      xp: 5900
+      or: 590
+
+  l_la_ruine_de_l_eclat:
+    nom: "La ruine de l'Éclat"
+    nom-en: "The Ruin of the Shard"
+    faction: lumiere
+    niveau: 28
+    requiert: [l_les_lames_a_louer]
+    donneur: aldren
+    resume:
+      - "Une ruine domine les Ruines de la Marche."
+      - "De là-haut, on voit l'Éclat immense."
+    resume-en:
+      - "A ruin overlooks the Ruins of the March."
+      - "From up there, you can see the immense Shard."
+    offre:
+      - "aldren: Avant d'y aller, il faut voir. Une vieille ruine domine les Ruines de la Marche, au nord-est. Les morts y montent la garde."
+    offre-en:
+      - "aldren: Before going there, we need to see. An old ruin overlooks the Ruins of the March, to the north-east. The dead stand guard there."
+    etapes:
+      - type: TUER
+        texte: "Abattre les morts de la ruine"
+        texte-en: "Destroy the dead of the ruin"
+        monstres: [squelette, revenant]
+        nombre: 10
+        point: ruine_eclat
+      - type: INTERAGIR
+        texte: "Regarder vers les Ruines de la Marche"
+        texte-en: "Look toward the Ruins of the March"
+        point: ruine_eclat
+        rayon: 6
+        apres:
+          - "En contrebas, au milieu des Ruines, l'Éclat-Cœur. Haut comme une tour. Sa lumière bat, dorée d'un côté, violette de l'autre."
+          - "morvain: Vous voyez ? Il n'est ni à vous, ni à nous."
+          - "Morvain est là, assis sur une pierre, comme s'il t'attendait depuis la nuit des étoiles."
+          - "morvain: Un Marqué de l'Ombre est passé hier. Il a vu la même chose que vous. Il a eu la même tête."
+        apres-en:
+          - "Below, in the middle of the Ruins, the Heart-Shard. As tall as a tower. Its light pulses, golden on one side, violet on the other."
+          - "morvain: You see? It belongs neither to you nor to us."
+          - "Morvain is there, sitting on a stone, as if he had been waiting for you since the night of the stars."
+          - "morvain: A Marked of the Shadow came by yesterday. He saw the same thing as you. He made the same face."
+      - type: PARLER
+        texte: "Revenir voir Aldren"
+        texte-en: "Return to Aldren"
+        pnj: aldren
+        dialogue:
+          - "aldren: Morvain ? Le Chevalier noir ? Il ne vous a pas tué ?"
+          - "aldren: … Il y a beaucoup de choses qu'on ne m'a pas dites, je crois."
+        dialogue-en:
+          - "aldren: Morvain? The Black Knight? He didn't kill you?"
+          - "aldren: … There are many things I haven't been told, I think."
+    recompenses:
+      xp: 6300
+      or: 630
+
+  l_le_gardien_de_l_eclat_coeur:
+    nom: "Le Gardien de l'Éclat-Cœur"
+    nom-en: "The Guardian of the Heart-Shard"
+    faction: lumiere
+    niveau: 30
+    requiert: [l_la_ruine_de_l_eclat]
+    donneur: aldren
+    resume:
+      - "Le Gardien de l'Éclat-Cœur s'est levé"
+      - "devant les Ruines de la Marche."
+    resume-en:
+      - "The Guardian of the Heart-Shard has risen"
+      - "before the Ruins of the March."
+    offre:
+      - "aldren: Un gardien de cristal s'est levé devant les Ruines. Ni l'Aube ni l'Ombre n'ont pu passer."
+      - "aldren: Abattez-le. Et cette fois, ne laissez personne d'autre toucher l'Éclat avant vous."
+    offre-en:
+      - "aldren: A crystal guardian has risen before the Ruins. Neither the Dawn nor the Shadow have got past."
+      - "aldren: Bring it down. And this time, let no one else touch the Shard before you."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre les Ruines de la Marche"
+        texte-en: "Reach the Ruins of the March"
+        point: marche_seuil
+        rayon: 10
+      - type: TUER
+        texte: "Abattre les Sentinelles d'Éclat"
+        texte-en: "Destroy the Shard Sentinels"
+        monstres: [sentinelle_eclat]
+        nombre: 8
+        point: marche_seuil
+      - type: TUER
+        texte: "Vaincre le Gardien de l'Éclat-Cœur"
+        texte-en: "Defeat the Guardian of the Heart-Shard"
+        monstres: [gardien_eclat_coeur]
+        point: marche_seuil
+      - type: INTERAGIR
+        texte: "Poser la main sur l'Éclat-Cœur"
+        texte-en: "Lay your hand on the Heart-Shard"
+        point: marche_portail
+        rayon: 5
+        apres:
+          - "Deux voix, en même temps. L'une brûlante : « Laissez-moi partir. » L'autre glacée : « Rendez-moi. »"
+          - "Ce ne sont pas deux voix. C'est la même, coupée en deux. La lumière de l'Astre dans les fioles. Son ombre dans le Néant."
+          - "L'Astre ne veut pas être rallumé. Il ne veut pas être gardé. Il veut être rassemblé, et libre."
+        apres-en:
+          - "Two voices, at the same time. One burning: « Let me go. » The other freezing: « Give me back. »"
+          - "They are not two voices. It is the same one, cut in two. The Star's light in the vials. Its shadow in the Void."
+          - "The Star does not want to be rekindled. It does not want to be kept. It wants to be made whole, and free."
+      - type: PARLER
+        texte: "Revenir voir Aldren"
+        texte-en: "Return to Aldren"
+        pnj: aldren
+        dialogue:
+          - "aldren: Libre ? Si l'Astre est libre, il peut repartir. Nous laisser."
+          - "aldren: C'est peut-être ce que la Haute-Prélate craint le plus."
+        dialogue-en:
+          - "aldren: Free? If the Star is free, it can leave again. Leave us."
+          - "aldren: Maybe that's what the High Prelate fears most."
+    recompenses:
+      xp: 7200
+      or: 720
+      objets:
+        - materiau: AMETHYST_SHARD
+          nom: "Fragment de l'Éclat-Cœur"
+          nom-en: "Fragment of the Heart-Shard"
+          description:
+            - "Doré d'un côté, violet de l'autre. Il murmure deux choses à la fois."
+          description-en:
+            - "Golden on one side, violet on the other. It whispers two things at once."
+
+  l_le_pacte_des_deux_ciels:
+    nom: "Le Pacte des Deux Ciels"
+    nom-en: "The Pact of the Two Skies"
+    faction: lumiere
+    niveau: 31
+    requiert: [l_le_gardien_de_l_eclat_coeur]
+    donneur: aldren
+    resume:
+      - "Aldren a reçu un message du Bastion."
+    resume-en:
+      - "Aldren has received a message from the Bastion."
+    offre:
+      - "aldren: Un message du Bastion. Scellé par la Haute-Prélate en personne. Venez l'entendre."
+    offre-en:
+      - "aldren: A message from the Bastion. Sealed by the High Prelate herself. Come and hear it."
+    etapes:
+      - type: INTERAGIR
+        texte: "Écouter le message avec Aldren et Vesper"
+        texte-en: "Hear the message with Aldren and Vesper"
+        point: ancre_quatre_vents
+        rayon: 6
+        apres:
+          - "aldren: « Ramenez l'Éclat-Cœur et le Marqué qui l'a touché. Le Marqué ira au Cloître. Le Pacte l'exige. — S. »"
+          - "vesper: Le mien dit la même chose. Signé V. Sauf que chez nous, ça s'appelle la Citadelle."
+          - "aldren: Alors c'est vrai. Le Pacte des Deux Ciels. Nos chefs se partagent les Marqués."
+          - "vesper: Et ils veulent l'Éclat-Cœur pour la même raison : celui qui l'a tient l'Astre en laisse."
+          - "Aldren range son message. Vesper aussi. Ils ne te regardent pas comme des soldats. Ils te regardent comme des gens qui attendent une réponse."
+          - "morvain: Le Puits et la Crypte ont dit la même chose, chacun sa moitié. À vous de décider ce que vous rapportez. À suivre."
+        apres-en:
+          - "aldren: « Bring back the Heart-Shard and the Marked who touched it. The Marked will go to the Cloister. The Pact demands it. — S. »"
+          - "vesper: Mine says the same thing. Signed V. Except where I come from, it's called the Citadel."
+          - "aldren: So it's true. The Pact of the Two Skies. Our leaders share the Marked between them."
+          - "vesper: And they want the Heart-Shard for the same reason: whoever holds it holds the Star on a leash."
+          - "Aldren puts his message away. So does Vesper. They don't look at you like soldiers. They look at you like people waiting for an answer."
+          - "morvain: The Well and the Crypt said the same thing, each its own half. It's up to you to decide what you bring back. To be continued."
+    recompenses:
+      xp: 7600
+      or: 760
+
+  # ================================================================ OMBRE — LA MARCHE
+
+  o_les_quatre_vents:
+    nom: "Les Quatre-Vents"
+    nom-en: "The Four Winds"
+    faction: ombre
+    niveau: 26
+    requiert: [o_vers_les_quatre_vents]
+    resume:
+      - "L'envoyée de la Citadelle aux Quatre-Vents"
+      - "vous attend."
+    resume-en:
+      - "The Citadel's envoy at the Four Winds"
+      - "is waiting for you."
+    etapes:
+      - type: PARLER
+        texte: "Parler à Dame Vesper"
+        texte-en: "Talk to Lady Vesper"
+        pnj: vesper
+        dialogue:
+          - "vesper: Le Marqué du Puits. Morvain parle de vous comme d'un fils. Ça m'inquiète un peu."
+          - "vesper: L'Éclat immense est dans les Ruines de la Marche, au nord-est. L'Archonte Sévrine le veut à la Citadelle. Vharos aussi, et ce n'est pas tout à fait pareil."
+          - "vesper: L'Aube a envoyé un chevalier, Aldren. Il boit en face. Ici, on ne tire pas l'épée. Dehors, c'est autre chose."
+        dialogue-en:
+          - "vesper: The Marked of the Well. Morvain speaks of you like a son. That worries me a little."
+          - "vesper: The immense Shard is in the Ruins of the March, to the north-east. Archon Sévrine wants it at the Citadel. So does Vharos, and that's not quite the same thing."
+          - "vesper: The Dawn sent a knight, Aldren. He drinks across the street. Here, we don't draw swords. Outside is another matter."
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage des Quatre-Vents"
+        texte-en: "Touch the Four Winds' anchoring Shard"
+        point: ancre_quatre_vents
+        rayon: 4
+    recompenses:
+      xp: 5500
+      or: 550
+
+  o_les_lames_a_louer:
+    nom: "Les lames à louer"
+    nom-en: "Blades for Hire"
+    faction: ombre
+    niveau: 27
+    requiert: [o_les_quatre_vents]
+    donneur: vesper
+    resume:
+      - "Des mercenaires tiennent la route du nord."
+    resume-en:
+      - "Mercenaries hold the northern road."
+    offre:
+      - "vesper: Au nord, loin, des mercenaires tiennent la vieille route. Ils ont refusé mon or. Ça veut dire que quelqu'un a payé plus."
+    offre-en:
+      - "vesper: To the north, far away, mercenaries hold the old road. They refused my gold. That means someone paid more."
+    etapes:
+      - type: TUER
+        texte: "Briser le camp des mercenaires"
+        texte-en: "Break the mercenaries' camp"
+        monstres: [bandit, braconnier]
+        nombre: 12
+        point: camp_lames_ombre
+      - type: INTERAGIR
+        texte: "Fouiller le coffre du capitaine"
+        texte-en: "Search the captain's chest"
+        point: camp_lames_ombre
+        rayon: 6
+        apres:
+          - "Deux contrats. L'un au sceau de la Citadelle, l'autre au soleil du Bastion. Le même ordre : « Tenir la route. Laisser passer nos hommes, et personne d'autre. »"
+        apres-en:
+          - "Two contracts. One with the Citadel's seal, the other with the Bastion's sun. The same order: « Hold the road. Let our men through, and no one else. »"
+      - type: PARLER
+        texte: "Montrer les contrats à Vesper"
+        texte-en: "Show the contracts to Vesper"
+        pnj: vesper
+        dialogue:
+          - "vesper: Signé V. pour nous. Et S. pour eux. Ils ont loué les mêmes épées."
+          - "vesper: Kael avait raison, dans son marais. Nous sommes la monnaie."
+        dialogue-en:
+          - "vesper: Signed V. for us. And S. for them. They hired the same swords."
+          - "vesper: Kael was right, in his marsh. We are the coin."
+    recompenses:
+      xp: 5900
+      or: 590
+
+  o_la_ruine_de_l_eclat:
+    nom: "La ruine de l'Éclat"
+    nom-en: "The Ruin of the Shard"
+    faction: ombre
+    niveau: 28
+    requiert: [o_les_lames_a_louer]
+    donneur: vesper
+    resume:
+      - "Une ruine domine les Ruines de la Marche."
+      - "De là-haut, on voit l'Éclat immense."
+    resume-en:
+      - "A ruin overlooks the Ruins of the March."
+      - "From up there, you can see the immense Shard."
+    offre:
+      - "vesper: Une vieille ruine domine les Ruines de la Marche. Morvain t'y attend. Il dit que tu dois voir l'Éclat avant de le toucher."
+    offre-en:
+      - "vesper: An old ruin overlooks the Ruins of the March. Morvain is waiting for you there. He says you must see the Shard before you touch it."
+    etapes:
+      - type: TUER
+        texte: "Abattre les morts de la ruine"
+        texte-en: "Destroy the dead of the ruin"
+        monstres: [squelette, revenant]
+        nombre: 10
+        point: ruine_eclat
+      - type: INTERAGIR
+        texte: "Regarder vers les Ruines de la Marche"
+        texte-en: "Look toward the Ruins of the March"
+        point: ruine_eclat
+        rayon: 6
+        apres:
+          - "En contrebas, l'Éclat-Cœur. Haut comme une tour. Sa lumière bat, violette d'un côté, dorée de l'autre."
+          - "morvain_mentor: Le murmure du Puits, la lumière de leurs fioles. Les deux viennent de là."
+          - "morvain_mentor: Le Marqué de l'Aube est passé hier. Il a vu la même chose. Il a fait la même tête que vous."
+        apres-en:
+          - "Below, the Heart-Shard. As tall as a tower. Its light pulses, violet on one side, golden on the other."
+          - "morvain_mentor: The whisper of the Well, the light of their vials. Both come from there."
+          - "morvain_mentor: The Marked of the Dawn came by yesterday. He saw the same thing. He made the same face as you."
+      - type: PARLER
+        texte: "Revenir voir Vesper"
+        texte-en: "Return to Vesper"
+        pnj: vesper
+        dialogue:
+          - "vesper: Morvain parle encore du Marqué de l'Aube comme d'un ami. Un jour, il faudra qu'on ait une conversation, lui et moi."
+        dialogue-en:
+          - "vesper: Morvain still talks about the Marked of the Dawn like a friend. One day, he and I will have to have a conversation."
+    recompenses:
+      xp: 6300
+      or: 630
+
+  o_le_gardien_de_l_eclat_coeur:
+    nom: "Le Gardien de l'Éclat-Cœur"
+    nom-en: "The Guardian of the Heart-Shard"
+    faction: ombre
+    niveau: 30
+    requiert: [o_la_ruine_de_l_eclat]
+    donneur: vesper
+    resume:
+      - "Le Gardien de l'Éclat-Cœur s'est levé"
+      - "devant les Ruines de la Marche."
+    resume-en:
+      - "The Guardian of the Heart-Shard has risen"
+      - "before the Ruins of the March."
+    offre:
+      - "vesper: Un gardien de cristal garde les Ruines. Il a déjà tué six des nôtres. Et quatre des leurs, ce qui me console un peu."
+    offre-en:
+      - "vesper: A crystal guardian guards the Ruins. It has already killed six of ours. And four of theirs, which consoles me a little."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre les Ruines de la Marche"
+        texte-en: "Reach the Ruins of the March"
+        point: marche_seuil
+        rayon: 10
+      - type: TUER
+        texte: "Abattre les Sentinelles d'Éclat"
+        texte-en: "Destroy the Shard Sentinels"
+        monstres: [sentinelle_eclat]
+        nombre: 8
+        point: marche_seuil
+      - type: TUER
+        texte: "Vaincre le Gardien de l'Éclat-Cœur"
+        texte-en: "Defeat the Guardian of the Heart-Shard"
+        monstres: [gardien_eclat_coeur]
+        point: marche_seuil
+      - type: INTERAGIR
+        texte: "Poser la main sur l'Éclat-Cœur"
+        texte-en: "Lay your hand on the Heart-Shard"
+        point: marche_portail
+        rayon: 5
+        apres:
+          - "Deux voix, en même temps. L'une glacée, que tu connais par cœur : « Rendez-moi. » L'autre brûlante : « Laissez-moi partir. »"
+          - "Ce n'est pas le Néant contre l'Astre. C'est l'Astre, coupé en deux. Sa lumière enfermée dans des fioles, son ombre qui a froid."
+          - "Il ne veut pas être vengé. Il ne veut pas être rallumé. Il veut être rassemblé, et libre."
+        apres-en:
+          - "Two voices, at the same time. One freezing, that you know by heart: « Give me back. » The other burning: « Let me go. »"
+          - "It is not the Void against the Star. It is the Star, cut in two. Its light locked in vials, its shadow that is cold."
+          - "It does not want to be avenged. It does not want to be rekindled. It wants to be made whole, and free."
+      - type: PARLER
+        texte: "Revenir voir Vesper"
+        texte-en: "Return to Vesper"
+        pnj: vesper
+        dialogue:
+          - "vesper: Libre. L'Archonte veut un Astre éteint, l'Aube veut un Astre en cage. Personne ne veut un Astre libre."
+        dialogue-en:
+          - "vesper: Free. The Archon wants a dead Star, the Dawn wants a caged Star. No one wants a free Star."
+    recompenses:
+      xp: 7200
+      or: 720
+      objets:
+        - materiau: AMETHYST_SHARD
+          nom: "Fragment de l'Éclat-Cœur"
+          nom-en: "Fragment of the Heart-Shard"
+          description:
+            - "Violet d'un côté, doré de l'autre. Il murmure deux choses à la fois."
+          description-en:
+            - "Violet on one side, golden on the other. It whispers two things at once."
+
+  o_le_pacte_des_deux_ciels:
+    nom: "Le Pacte des Deux Ciels"
+    nom-en: "The Pact of the Two Skies"
+    faction: ombre
+    niveau: 31
+    requiert: [o_le_gardien_de_l_eclat_coeur]
+    donneur: vesper
+    resume:
+      - "Vesper a reçu un message de la Citadelle."
+    resume-en:
+      - "Vesper has received a message from the Citadel."
+    offre:
+      - "vesper: Un corbeau de la Citadelle. Scellé par Vharos. Viens l'entendre. Aldren aussi en a reçu un."
+    offre-en:
+      - "vesper: A raven from the Citadel. Sealed by Vharos. Come and hear it. Aldren got one too."
+    etapes:
+      - type: INTERAGIR
+        texte: "Écouter le message avec Vesper et Aldren"
+        texte-en: "Hear the message with Vesper and Aldren"
+        point: ancre_quatre_vents
+        rayon: 6
+        apres:
+          - "vesper: « Ramenez l'Éclat-Cœur et le Marqué qui l'a touché. Le Marqué ira au Puits, puis à l'Aube. Le Pacte l'exige. — V. »"
+          - "aldren: Le mien dit la même chose. Signé S. Le Cloître pour vous, la Citadelle pour nous, ou l'inverse : ça finit pareil."
+          - "vesper: Le Pacte des Deux Ciels. Nos chefs se partagent les Marqués, et ils se partageront l'Astre."
+          - "Vesper range son message. Aldren aussi. Ni l'un ni l'autre ne te regarde comme un soldat. Ils attendent une réponse."
+          - "morvain_mentor: Le Puits et la Crypte ont dit la même chose, chacun sa moitié. À vous de décider ce que vous rapportez. À suivre."
+        apres-en:
+          - "vesper: « Bring back the Heart-Shard and the Marked who touched it. The Marked will go to the Well, then to the Dawn. The Pact demands it. — V. »"
+          - "aldren: Mine says the same thing. Signed S. The Cloister for you, the Citadel for us, or the other way round: it ends the same."
+          - "vesper: The Pact of the Two Skies. Our leaders share the Marked, and they'll share the Star."
+          - "Vesper puts her message away. So does Aldren. Neither looks at you like a soldier. They are waiting for an answer."
+          - "morvain_mentor: The Well and the Crypt said the same thing, each its own half. It's up to you to decide what you bring back. To be continued."
+    recompenses:
+      xp: 7600
+      or: 760
+
+  # ================================================================ ANNEXES NEUTRES — LES QUATRE-VENTS (toutes factions)
+
+  n_les_loups_de_la_marche:
+    nom: "Les loups de la Marche"
+    nom-en: "The Wolves of the March"
+    niveau: 26
+    donneur: nell
+    resume:
+      - "Les loups de la Marche attaquent les voyageurs."
+    resume-en:
+      - "The wolves of the March attack travellers."
+    offre:
+      - "nell: Les loups de la Marche ne font pas la différence entre l'Aube et l'Ombre. Moi non plus, quand ils me courent après."
+    offre-en:
+      - "nell: The wolves of the March don't tell Dawn from Shadow. Neither do I, when they're chasing me."
+    etapes:
+      - type: TUER
+        texte: "Tuer des loups de la Marche"
+        texte-en: "Kill wolves of the March"
+        monstres: [loup]
+        nombre: 12
+      - type: PARLER
+        texte: "Prévenir Nell"
+        texte-en: "Tell Nell"
+        pnj: nell
+        dialogue:
+          - "nell: Je vais pouvoir finir ma carte du sud. Sans morsures."
+        dialogue-en:
+          - "nell: I'll be able to finish my map of the south. Without bites."
+    recompenses:
+      xp: 4800
+      or: 480
+
+  n_le_jambon_de_calixte:
+    nom: "Le jambon de Calixte"
+    nom-en: "Calixte's Ham"
+    niveau: 26
+    donneur: calixte
+    resume:
+      - "Calixte manque de viande pour l'auberge."
+    resume-en:
+      - "Calixte is short of meat for the inn."
+    offre:
+      - "calixte: Mes clients de l'Aube et de l'Ombre ont une chose en commun : ils mangent. Il me faut du sanglier."
+    offre-en:
+      - "calixte: My Dawn and Shadow customers have one thing in common: they eat. I need boar."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer de la viande de sanglier"
+        texte-en: "Collect boar meat"
+        monstres: [sanglier]
+        nombre: 8
+        chance: 0.6
+        objet: "Cuissot de sanglier"
+        objet-en: "Boar haunch"
+      - type: PARLER
+        texte: "Rapporter la viande à Calixte"
+        texte-en: "Bring the meat to Calixte"
+        pnj: calixte
+        dialogue:
+          - "calixte: Parfait. Ce soir, personne ne se battra : ils auront la bouche pleine."
+        dialogue-en:
+          - "calixte: Perfect. Tonight, no one will fight: their mouths will be full."
+    recompenses:
+      xp: 4800
+      or: 480
+
+  n_les_taureaux_sauvages:
+    nom: "Les taureaux sauvages"
+    nom-en: "The Wild Bulls"
+    niveau: 27
+    donneur: nell
+    resume:
+      - "Les taureaux sauvages piétinent les routes de la Marche."
+    resume-en:
+      - "Wild bulls are trampling the roads of the March."
+    offre:
+      - "nell: Les taureaux chargent tout ce qui a une bannière. Comme tout le monde a une bannière, ils chargent tout le monde."
+    offre-en:
+      - "nell: The bulls charge anything with a banner. Since everyone has a banner, they charge everyone."
+    etapes:
+      - type: TUER
+        texte: "Abattre des taureaux sauvages"
+        texte-en: "Bring down wild bulls"
+        monstres: [taureau]
+        nombre: 10
+      - type: PARLER
+        texte: "Prévenir Nell"
+        texte-en: "Tell Nell"
+        pnj: nell
+        dialogue:
+          - "nell: Les routes sont praticables. Pour une fois."
+        dialogue-en:
+          - "nell: The roads are passable. For once."
+    recompenses:
+      xp: 5000
+      or: 500
+
+  n_les_brigands_du_nord:
+    nom: "Les brigands du nord"
+    nom-en: "The Northern Brigands"
+    niveau: 27
+    donneur: calixte
+    resume:
+      - "Des brigands détroussent les clients de Calixte"
+      - "au nord de la ville."
+    resume-en:
+      - "Brigands are robbing Calixte's customers"
+      - "north of the city."
+    offre:
+      - "calixte: Au nord, des brigands détroussent mes clients en sortant d'ici. Mauvais pour les affaires."
+    offre-en:
+      - "calixte: To the north, brigands rob my customers as they leave. Bad for business."
+    etapes:
+      - type: TUER
+        texte: "Briser le camp du nord"
+        texte-en: "Break the northern camp"
+        monstres: [bandit, braconnier]
+        nombre: 12
+        point: camp_g1
+      - type: PARLER
+        texte: "Revenir voir Calixte"
+        texte-en: "Return to Calixte"
+        pnj: calixte
+        dialogue:
+          - "calixte: Ta prochaine chope est pour moi. La suivante aussi."
+        dialogue-en:
+          - "calixte: Your next tankard is on me. The one after, too."
+    recompenses:
+      xp: 5000
+      or: 500
+
+  n_le_cimetiere_du_lac:
+    nom: "Le cimetière du lac"
+    nom-en: "The Lakeside Graveyard"
+    niveau: 27
+    donneur: nell
+    resume:
+      - "Un cimetière s'est réveillé à l'est de la ville."
+    resume-en:
+      - "A graveyard has woken east of the city."
+    offre:
+      - "nell: À l'est, près du lac, un cimetière s'est réveillé la nuit des étoiles. Les morts y portent des armures des deux camps."
+    offre-en:
+      - "nell: To the east, by the lake, a graveyard woke on the night of the stars. The dead there wear armour from both sides."
+    etapes:
+      - type: TUER
+        texte: "Rendre les morts au repos"
+        texte-en: "Return the dead to rest"
+        monstres: [squelette, revenant]
+        nombre: 12
+        point: camp_g9
+      - type: INTERAGIR
+        texte: "Lire les tombes"
+        texte-en: "Read the graves"
+        point: camp_g9
+        rayon: 6
+        apres:
+          - "Sur une même dalle : un nom de l'Aube et un nom de l'Ombre. « Ils se sont tués ici. On les a enterrés ensemble, faute de place. »"
+        apres-en:
+          - "On the same slab: a Dawn name and a Shadow name. « They killed each other here. They were buried together, for lack of room. »"
+      - type: PARLER
+        texte: "Revenir voir Nell"
+        texte-en: "Return to Nell"
+        pnj: nell
+        dialogue:
+          - "nell: Ensemble, faute de place. La Marche résume bien la guerre."
+        dialogue-en:
+          - "nell: Together, for lack of room. The March sums up the war rather well."
+    recompenses:
+      xp: 5100
+      or: 510
+
+  n_le_cimetiere_de_l_ouest:
+    nom: "Le cimetière de l'ouest"
+    nom-en: "The Western Graveyard"
+    niveau: 28
+    donneur: calixte
+    resume:
+      - "Un cimetière se vide à l'ouest des Quatre-Vents."
+    resume-en:
+      - "A graveyard is emptying west of the Four Winds."
+    offre:
+      - "calixte: À l'ouest, le cimetière où j'ai enterré mon père se vide. Je voudrais qu'il reste où il est."
+    offre-en:
+      - "calixte: To the west, the graveyard where I buried my father is emptying. I'd like him to stay where he is."
+    etapes:
+      - type: TUER
+        texte: "Rendre les morts au repos"
+        texte-en: "Return the dead to rest"
+        monstres: [squelette, revenant]
+        nombre: 12
+        point: camp_g3
+      - type: INTERAGIR
+        texte: "Refermer la tombe du père de Calixte"
+        texte-en: "Close the grave of Calixte's father"
+        point: camp_g3
+        rayon: 6
+      - type: PARLER
+        texte: "Revenir voir Calixte"
+        texte-en: "Return to Calixte"
+        pnj: calixte
+        dialogue:
+          - "calixte: Merci. Il était aubergiste, lui aussi. Il disait : on sert tout le monde, et on ne choisit personne."
+        dialogue-en:
+          - "calixte: Thank you. He was an innkeeper too. He used to say: you serve everyone, and you choose no one."
+    recompenses:
+      xp: 5300
+      or: 530
+
+  n_les_pillards_de_l_est:
+    nom: "Les pillards de l'est"
+    nom-en: "The Eastern Raiders"
+    niveau: 28
+    donneur: nell
+    resume:
+      - "Des pillards ont pris un relais au sud-est."
+    resume-en:
+      - "Raiders have taken a waystation to the south-east."
+    offre:
+      - "nell: Des pillards venus du désert ont pris le vieux relais du sud-est. Ils ont mes instruments."
+    offre-en:
+      - "nell: Raiders from the desert have taken the old waystation to the south-east. They have my instruments."
+    etapes:
+      - type: TUER
+        texte: "Chasser les pillards"
+        texte-en: "Drive out the raiders"
+        monstres: [pillard, pillard_archer]
+        nombre: 12
+        point: camp_g2
+      - type: INTERAGIR
+        texte: "Récupérer les instruments de Nell"
+        texte-en: "Recover Nell's instruments"
+        point: camp_g2
+        rayon: 6
+      - type: PARLER
+        texte: "Rapporter les instruments à Nell"
+        texte-en: "Bring the instruments back to Nell"
+        pnj: nell
+        dialogue:
+          - "nell: Mon astrolabe ! Ils l'auraient vendu pour trois sous. Il vaut une vie."
+        dialogue-en:
+          - "nell: My astrolabe! They'd have sold it for three coins. It's worth a life."
+    recompenses:
+      xp: 5400
+      or: 540
+
+  n_les_brigands_du_col:
+    nom: "Les brigands du col"
+    nom-en: "The Pass Brigands"
+    niveau: 29
+    donneur: calixte
+    resume:
+      - "Des brigands tiennent un col"
+      - "au nord-ouest de la Marche."
+    resume-en:
+      - "Brigands hold a pass"
+      - "north-west of the March."
+    offre:
+      - "calixte: Mes livraisons de vin passent par le col du nord-ouest. Passaient, plutôt."
+    offre-en:
+      - "calixte: My wine deliveries go through the north-western pass. Went through, rather."
+    etapes:
+      - type: TUER
+        texte: "Briser le camp du col"
+        texte-en: "Break the camp at the pass"
+        monstres: [bandit, braconnier]
+        nombre: 12
+        point: camp_g4
+      - type: PARLER
+        texte: "Revenir voir Calixte"
+        texte-en: "Return to Calixte"
+        pnj: calixte
+        dialogue:
+          - "calixte: Le vin va recommencer à couler. Les langues aussi."
+        dialogue-en:
+          - "calixte: The wine will flow again. So will tongues."
+    recompenses:
+      xp: 5600
+      or: 560
+
+  n_la_ruine_du_nord:
+    nom: "La ruine du nord"
+    nom-en: "The Northern Ruin"
+    niveau: 29
+    donneur: nell
+    resume:
+      - "Une ruine perchée au nord de la Marche"
+      - "n'est sur aucune carte."
+    resume-en:
+      - "A ruin perched north of the March"
+      - "is on no map."
+    offre:
+      - "nell: Tout au nord, sur un piton, une ruine qui n'est sur aucune carte. Même pas sur les anciennes. Va voir, je dessinerai."
+    offre-en:
+      - "nell: Far to the north, on a crag, a ruin that's on no map. Not even the old ones. Go and look, I'll draw."
+    etapes:
+      - type: TUER
+        texte: "Abattre les morts de la ruine"
+        texte-en: "Destroy the dead of the ruin"
+        monstres: [squelette, revenant]
+        nombre: 8
+        point: ruine_g1
+      - type: INTERAGIR
+        texte: "Explorer la ruine"
+        texte-en: "Explore the ruin"
+        point: ruine_g1
+        rayon: 6
+        apres:
+          - "Un observatoire. Mille ans au moins. Sur le mur, le ciel d'avant la Chute : un seul astre, et autour, gravé, le mot « libre »."
+        apres-en:
+          - "An observatory. A thousand years old at least. On the wall, the sky before the Fall: a single star, and around it, carved, the word « free »."
+      - type: PARLER
+        texte: "Raconter à Nell"
+        texte-en: "Tell Nell"
+        pnj: nell
+        dialogue:
+          - "nell: Un observatoire d'avant la Chute. Ni de l'Aube ni de l'Ombre. Avant eux, quelqu'un regardait le ciel sans vouloir le posséder."
+        dialogue-en:
+          - "nell: An observatory from before the Fall. Neither Dawn nor Shadow. Before them, someone watched the sky without wanting to own it."
+    recompenses:
+      xp: 5600
+      or: 560
+
+  n_le_cimetiere_de_l_est:
+    nom: "Le cimetière de l'est"
+    nom-en: "The Eastern Graveyard"
+    niveau: 30
+    donneur: calixte
+    resume:
+      - "Un cimetière de soldats s'est réveillé"
+      - "à l'est, près des Ruines."
+    resume-en:
+      - "A soldiers' graveyard has woken"
+      - "to the east, near the Ruins."
+    offre:
+      - "calixte: Près des Ruines, à l'est, un cimetière de soldats s'est levé. Les deux camps m'ont demandé d'envoyer quelqu'un. Les deux. Le même jour."
+    offre-en:
+      - "calixte: Near the Ruins, to the east, a soldiers' graveyard has risen. Both sides asked me to send someone. Both. On the same day."
+    etapes:
+      - type: TUER
+        texte: "Rendre les soldats au repos"
+        texte-en: "Return the soldiers to rest"
+        monstres: [squelette, revenant]
+        nombre: 14
+        point: camp_g6
+      - type: PARLER
+        texte: "Revenir voir Calixte"
+        texte-en: "Return to Calixte"
+        pnj: calixte
+        dialogue:
+          - "calixte: Les deux camps te remercient. Séparément, bien sûr."
+        dialogue-en:
+          - "calixte: Both sides thank you. Separately, of course."
+    recompenses:
+      xp: 5800
+      or: 580
+
+  n_les_pillards_de_l_ouest:
+    nom: "Les pillards de l'ouest"
+    nom-en: "The Western Raiders"
+    niveau: 30
+    donneur: nell
+    resume:
+      - "Des pillards campent loin à l'ouest."
+    resume-en:
+      - "Raiders are camped far to the west."
+    offre:
+      - "nell: Loin à l'ouest, d'autres pillards. Ils remontent du désert, toujours plus nombreux. Quelque chose les chasse de chez eux."
+    offre-en:
+      - "nell: Far to the west, more raiders. They come up from the desert, more and more of them. Something is driving them from home."
+    etapes:
+      - type: TUER
+        texte: "Chasser les pillards de l'ouest"
+        texte-en: "Drive out the western raiders"
+        monstres: [pillard, pillard_archer]
+        nombre: 12
+        point: camp_g8
+      - type: INTERAGIR
+        texte: "Fouiller le camp"
+        texte-en: "Search the camp"
+        point: camp_g8
+        rayon: 6
+        apres:
+          - "Un carnet de route, en mauvais état : « Le sable devient noir. Les morts marchent la nuit. On monte vers le nord. »"
+        apres-en:
+          - "A battered travel log: « The sand is turning black. The dead walk at night. We're heading north. »"
+      - type: PARLER
+        texte: "Revenir voir Nell"
+        texte-en: "Return to Nell"
+        pnj: nell
+        dialogue:
+          - "nell: Le sable noir. Le Néant est aussi dans le désert. Il est partout où il a froid."
+        dialogue-en:
+          - "nell: Black sand. The Void is in the desert too. It's everywhere it is cold."
+    recompenses:
+      xp: 5800
+      or: 580
+
+  n_la_ruine_de_l_est:
+    nom: "La ruine de l'est"
+    nom-en: "The Eastern Ruin"
+    niveau: 31
+    donneur: nell
+    resume:
+      - "Une ruine à l'est de la Marche"
+      - "hurle la nuit."
+    resume-en:
+      - "A ruin east of the March"
+      - "howls at night."
+    offre:
+      - "nell: À l'est, une ruine hurle la nuit. Pas les loups : la pierre."
+    offre-en:
+      - "nell: To the east, a ruin howls at night. Not the wolves: the stone."
+    etapes:
+      - type: TUER
+        texte: "Abattre les morts de la ruine"
+        texte-en: "Destroy the dead of the ruin"
+        monstres: [squelette, revenant]
+        nombre: 10
+        point: ruine_g4
+      - type: INTERAGIR
+        texte: "Chercher ce qui hurle"
+        texte-en: "Look for what howls"
+        point: ruine_g4
+        rayon: 6
+        apres:
+          - "Un Éclat fendu, coincé dans la pierre. Le vent passe dans la fente et chante. Une seule note, très longue, très triste."
+        apres-en:
+          - "A split Shard, stuck in the stone. The wind passes through the crack and sings. A single note, very long, very sad."
+      - type: PARLER
+        texte: "Revenir voir Nell"
+        texte-en: "Return to Nell"
+        pnj: nell
+        dialogue:
+          - "nell: Un Éclat qui pleure. Je ne mettrai pas ça sur la carte. Personne ne me croirait."
+        dialogue-en:
+          - "nell: A Shard that weeps. I won't put that on the map. No one would believe me."
+    recompenses:
+      xp: 6000
+      or: 600
+
+  n_les_pillards_du_sud:
+    nom: "Les pillards du sud"
+    nom-en: "The Southern Raiders"
+    niveau: 32
+    donneur: calixte
+    resume:
+      - "Le plus grand camp de pillards"
+      - "se cache tout au sud de la Marche."
+    resume-en:
+      - "The largest raider camp"
+      - "is hidden far south of the March."
+    offre:
+      - "calixte: Tout au sud, le plus gros camp de pillards. C'est de là que partent ceux qui volent mes clients. Ferme-le, et je ferme ma porte aux voleurs."
+    offre-en:
+      - "calixte: Far to the south, the biggest raider camp. That's where the ones who rob my customers come from. Shut it down, and I'll shut my door to thieves."
+    etapes:
+      - type: TUER
+        texte: "Détruire le grand camp du sud"
+        texte-en: "Destroy the great southern camp"
+        monstres: [pillard, pillard_archer]
+        nombre: 14
+        point: camp_g5
+      - type: PARLER
+        texte: "Revenir voir Calixte"
+        texte-en: "Return to Calixte"
+        pnj: calixte
+        dialogue:
+          - "calixte: Il y aura une chambre pour toi aux Quatre-Vents. Toujours. Quelle que soit ta bannière."
+        dialogue-en:
+          - "calixte: There'll be a room for you at the Four Winds. Always. Whatever your banner."
+    recompenses:
+      xp: 6300
+      or: 630
+
+  n_la_ruine_du_sud:
+    nom: "La ruine du sud"
+    nom-en: "The Southern Ruin"
+    niveau: 32
+    donneur: nell
+    resume:
+      - "Une ruine au sud-ouest de la Marche"
+      - "garde une carte d'avant la Chute."
+    resume-en:
+      - "A ruin south-west of the March"
+      - "guards a map from before the Fall."
+    offre:
+      - "nell: On parle d'une carte d'avant la Chute, dans une ruine au sud-ouest. Si c'est vrai, je la veux. Si c'est faux, je veux le savoir."
+    offre-en:
+      - "nell: There's talk of a map from before the Fall, in a ruin to the south-west. If it's true, I want it. If it's false, I want to know."
+    etapes:
+      - type: TUER
+        texte: "Abattre les morts de la ruine"
+        texte-en: "Destroy the dead of the ruin"
+        monstres: [squelette, revenant]
+        nombre: 10
+        point: ruine_g3
+      - type: INTERAGIR
+        texte: "Chercher la carte"
+        texte-en: "Look for the map"
+        point: ruine_g3
+        rayon: 6
+        apres:
+          - "Une carte gravée sur une dalle. Un seul continent, sans frontière. Au centre, là où sont les Quatre-Vents, un mot : « Ici, il s'est posé. »"
+        apres-en:
+          - "A map carved on a slab. A single continent, with no border. In the centre, where the Four Winds are, a word: « Here, it came down. »"
+      - type: PARLER
+        texte: "Raconter à Nell"
+        texte-en: "Tell Nell"
+        pnj: nell
+        dialogue:
+          - "nell: « Ici, il s'est posé. » L'Astre ? Il serait déjà venu sur terre, avant la Chute ?"
+        dialogue-en:
+          - "nell: « Here, it came down. » The Star? It came down to earth before, before the Fall?"
+    recompenses:
+      xp: 6300
+      or: 630
+
+  n_la_ruine_des_hauteurs:
+    nom: "La ruine des hauteurs"
+    nom-en: "The Ruin on the Heights"
+    niveau: 33
+    requiert: [n_la_ruine_du_nord]
+    donneur: nell
+    resume:
+      - "Une dernière ruine, sur les hauteurs du nord-ouest,"
+      - "complète l'observatoire."
+    resume-en:
+      - "A last ruin, on the north-western heights,"
+      - "completes the observatory."
+    offre:
+      - "nell: L'observatoire du nord avait un jumeau, sur les hauteurs du nord-ouest. Je l'ai trouvé sur ta description. Va voir ce que lui regardait."
+    offre-en:
+      - "nell: The northern observatory had a twin, on the north-western heights. I found it from your description. Go and see what it was looking at."
+    etapes:
+      - type: TUER
+        texte: "Abattre les morts de la ruine"
+        texte-en: "Destroy the dead of the ruin"
+        monstres: [squelette, revenant]
+        nombre: 10
+        point: ruine_g5
+      - type: INTERAGIR
+        texte: "Explorer l'observatoire jumeau"
+        texte-en: "Explore the twin observatory"
+        point: ruine_g5
+        rayon: 6
+        apres:
+          - "Le même ciel gravé, mais l'astre y est entouré de silhouettes, les bras levés. Pas des chaînes : des mains tendues. Dessous : « Nous l'avons accueilli. Ils l'ont voulu pour eux. »"
+        apres-en:
+          - "The same carved sky, but here the star is surrounded by figures, arms raised. Not chains: outstretched hands. Below: « We welcomed it. They wanted it for themselves. »"
+      - type: PARLER
+        texte: "Raconter à Nell"
+        texte-en: "Tell Nell"
+        pnj: nell
+        dialogue:
+          - "nell: Ceux d'avant accueillaient l'Astre. Ceux d'après ont voulu le garder. Et nous, on se bat pour savoir qui le gardera."
+          - "nell: Je crois que je vais redessiner toutes mes cartes."
+        dialogue-en:
+          - "nell: Those before welcomed the Star. Those after wanted to keep it. And we fight over who will keep it."
+          - "nell: I think I'll redraw all my maps."
+    recompenses:
+      xp: 6600
+      or: 660
+
+  n_le_tribut_de_la_marche:
+    nom: "Le tribut de la Marche"
+    nom-en: "The Tribute of the March"
+    niveau: 34
+    requiert: [n_les_pillards_du_sud, n_le_cimetiere_de_l_est]
+    donneur: calixte
+    resume:
+      - "Les Quatre-Vents veulent remercier"
+      - "celui qui a nettoyé la Marche."
+    resume-en:
+      - "The Four Winds want to thank"
+      - "the one who cleared the March."
+    offre:
+      - "calixte: Les marchands des Quatre-Vents ont fait une collecte. Pour toi. Mais il faut d'abord prouver que la Marche est sûre : encore une meute de loups, et ce sera fini."
+    offre-en:
+      - "calixte: The merchants of the Four Winds took up a collection. For you. But first you must prove the March is safe: one more wolf pack, and it'll be done."
+    etapes:
+      - type: TUER
+        texte: "Nettoyer les routes de la Marche"
+        texte-en: "Clear the roads of the March"
+        monstres: [loup, taureau, sanglier]
+        nombre: 15
+      - type: PARLER
+        texte: "Revenir voir Calixte"
+        texte-en: "Return to Calixte"
+        pnj: calixte
+        dialogue:
+          - "calixte: Voilà le tribut. De l'or de l'Aube et de l'or de l'Ombre, fondus ensemble. Personne ne pourra dire d'où il vient."
+        dialogue-en:
+          - "calixte: Here's the tribute. Dawn gold and Shadow gold, melted together. No one can say where it came from."
+    recompenses:
+      xp: 7000
+      or: 1000
+      objets:
+        - materiau: GOLD_INGOT
+          nom: "Or des Quatre-Vents"
+          nom-en: "Four Winds Gold"
+          description:
+            - "De l'or des deux camps, fondu ensemble."
+          description-en:
+            - "Gold from both sides, melted together."

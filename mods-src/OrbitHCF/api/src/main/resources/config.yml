@@ -1,0 +1,3 @@
+# Mondes ou le HCF s applique. Liste vide : tous les mondes (serveur 100 % HCF).
+# Sur un serveur partage avec un autre mode (Practice), ne lister que les mondes du HCF.
+mondes-hcf: []

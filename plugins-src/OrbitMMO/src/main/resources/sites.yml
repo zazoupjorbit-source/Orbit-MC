@@ -124,14 +124,14 @@ faune:
 monstres:
   bandit:
     name: "Bandit de grand chemin"
-    type: PILLAGER
-    weapon: CROSSBOW
+    type: SKELETON
+    weapon: BOW
     hp: 0.9
     damage: 0.9
     drop: { name: "Bourse volée", item: LEATHER, sell: 9, chance: 0.35 }
   braconnier:
     name: "Braconnier"
-    type: VINDICATOR
+    type: SKELETON
     weapon: STONE_AXE
     drop: { name: "Peau tannée", item: RABBIT_HIDE, sell: 8, chance: 0.35 }
   glaneur:
@@ -148,7 +148,7 @@ monstres:
     damage: 0.9
   purificateur:
     name: "Purificateur"
-    type: VINDICATOR
+    type: SKELETON
     weapon: GOLDEN_AXE
     hp: 1.1
     damage: 1.1
@@ -169,7 +169,8 @@ monstres:
     drop: { name: "Linceul", item: STRING, sell: 8, chance: 0.4 }
   ours_brun:
     name: "Ours des collines"
-    type: POLAR_BEAR
+    type: PANDA
+    speed: 1.6
     hp: 1.4
     damage: 1.15
     drop: { name: "Fourrure d'ours", item: RABBIT_HIDE, sell: 12, chance: 0.4 }
@@ -194,8 +195,8 @@ monstres:
     drop: { name: "Pièce d'ocre", item: GOLD_NUGGET, sell: 14, chance: 0.35 }
   pillard_archer:
     name: "Tireur des dunes"
-    type: PILLAGER
-    weapon: CROSSBOW
+    type: SKELETON
+    weapon: BOW
     hp: 0.9
     damage: 1.0
   cendreux:

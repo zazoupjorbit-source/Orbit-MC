@@ -1,4 +1,5 @@
 # Écarts entre le monde « station » et le plan de la station : 2 blocs.
-# Une ligne par bloc : x y z | monde : ce qui est posé | plan : ce que /station generer mettrait.
-18 106 -12 | monde : minecraft:air | plan : minecraft:bone_block[axis=y]
-18 107 -12 | monde : minecraft:air | plan : minecraft:bone_block[axis=y]
+# Une ligne par bloc : x y z | monde : ce qui est posé | plan : ce que prévoit le plan | ce qu'en fait /station generer.
+# « retouche » = bloc changé à la main, gardé tel quel ; « à poser » = le plan a changé depuis la dernière pose.
+18 106 -12 | monde : minecraft:air | plan : minecraft:bone_block[axis=y] | retouche
+18 107 -12 | monde : minecraft:air | plan : minecraft:bone_block[axis=y] | retouche

@@ -69,8 +69,15 @@ public class BoardManager {
         updateNametags(player);
     }
 
+    /** Deconnexion ou sortie du monde HCF : rend le scoreboard du serveur et retire le nom des autres tableaux. */
     public void remove(Player player) {
-        boards.remove(player.getUniqueId());
+        Scoreboard board = boards.remove(player.getUniqueId());
+        if (board != null && player.isOnline() && player.getScoreboard() == board) {
+            player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+        }
+        for (Scoreboard other : boards.values()) {
+            removeFromRelationTeams(other, player.getName());
+        }
     }
 
     public void shutdown() {
@@ -88,7 +95,7 @@ public class BoardManager {
     // ------------------------------------------------------------------
 
     public void updateAllSidebars() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : fr.orbitgames.hcf.api.HcfWorlds.players()) {
             updateSidebar(player);
         }
     }
@@ -127,7 +134,7 @@ public class BoardManager {
         if (!plugin.getNametagsConfig().getBoolean("enabled", true)) {
             return;
         }
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : fr.orbitgames.hcf.api.HcfWorlds.players()) {
             updateNametags(player);
         }
     }
@@ -138,7 +145,7 @@ public class BoardManager {
             return;
         }
         FactionService factions = OrbitHCF.factions();
-        for (Player target : Bukkit.getOnlinePlayers()) {
+        for (Player target : fr.orbitgames.hcf.api.HcfWorlds.players()) {
             String group = resolveGroup(viewer, target, factions);
             Team team = getRelationTeam(board, group);
             if (!team.hasEntry(target.getName())) {

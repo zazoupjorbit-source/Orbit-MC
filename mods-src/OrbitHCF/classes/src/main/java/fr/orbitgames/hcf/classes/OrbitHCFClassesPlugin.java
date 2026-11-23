@@ -51,11 +51,11 @@ public final class OrbitHCFClassesPlugin extends JavaPlugin {
 
         OrbitHCF.register(ClassesService.class, classManager);
 
-        Bukkit.getPluginManager().registerEvents(new ArmorListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new BardListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new ArcherListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new RogueListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new ClassRestrictionListener(this), this);
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new ArmorListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new BardListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new ArcherListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new RogueListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new ClassRestrictionListener(this));
 
         PluginCommand classCommand = getCommand("class");
         if (classCommand != null) {
@@ -75,7 +75,7 @@ public final class OrbitHCFClassesPlugin extends JavaPlugin {
         }
 
         // Reevalue les joueurs deja connectes (rechargement a chaud)
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : fr.orbitgames.hcf.api.HcfWorlds.players()) {
             classManager.recheck(player);
         }
 

@@ -241,9 +241,63 @@ class CapitalDesign {
         plan.points.put("spawn", new double[]{ox + 0.5, g + 1, oz + cs - 9 + 0.5, 0});
         plan.points.put("grand-place", new double[]{ox + 0.5, g + 1, oz + cs + 8 + 0.5, 180});
         plan.points.put("parvis", new double[]{ox + 0.5, g + 1, oz + cn + 9 + 0.5, 180});
+        gatekeeper();
         plan.notes.add(houses + " maisons, " + trees + " arbres, " + lamps.size() + " lanternes, " + towers.size() + " tours, "
                 + gates.size() + " portes");
         return plan;
+    }
+
+    /**
+     * Gardien du Pilier des Astres : le PNJ qui ouvre le donjon des cent étages, debout à côté de la porte du donjon de la capitale.
+     * Un PNJ et un point (« tour »), aucun bloc : le plan des blocs ne change pas.
+     */
+    void gatekeeper() {
+        Lot keep = null;
+        for (Lot lot : lots) {
+            if (lot.kind.equals("donjon")) {
+                keep = lot;
+            }
+        }
+        if (keep == null) {
+            plan.notes.add("pas de donjon : pas de gardien du Pilier");
+            return;
+        }
+        Frame f = new Frame(keep.x0, keep.z0, keep.x1, keep.z1, keep.front);
+        int pc = f.w / 2;
+        for (int[] c : new int[][]{{pc + 3, -2}, {pc - 4, -2}, {pc + 3, -3}, {pc - 4, -3}, {pc + 4, -3}, {pc - 5, -3}, {pc + 3, -4}, {pc - 4, -4}}) {
+            if (!standable(f, c[0], c[1], 1)) {
+                continue;
+            }
+            int x = f.x(c[0], c[1]), z = f.z(c[0], c[1]);
+            plan.npcs.add(new CapitalPlan.Npc(s.style().equals("ombre") ? "tower_ombre" : "tower", ox + x + 0.5, g + 1, oz + z + 0.5,
+                    yaw(-f.bx, -f.bz)));
+            int b = -6;
+            while (b < -3 && !standable(f, pc, b, 0)) {
+                b++;
+            }
+            plan.points.put("tour", new double[]{ox + f.x(pc, b) + 0.5, g + 1, oz + f.z(pc, b) + 0.5, yaw(f.bx, f.bz)});
+            plan.notes.add("gardien du Pilier en " + (ox + x) + " " + (g + 1) + " " + (oz + z));
+            return;
+        }
+        plan.notes.add("pas de place libre devant le donjon pour le gardien du Pilier");
+    }
+
+    /** Sol plein et trois blocs d'air au-dessus, sur un carré de côté 2 × marge + 1 autour de (a, b). */
+    private boolean standable(Frame f, int a, int b, int margin) {
+        for (int da = -margin; da <= margin; da++) {
+            for (int db = -margin; db <= margin; db++) {
+                int x = f.x(a + da, b + db), z = f.z(a + da, b + db);
+                if (!plan.in(x, g, z) || plan.get(x, g, z) <= CapitalPlan.AIR) {
+                    return false;
+                }
+                for (int y = g + 1; y <= g + 3; y++) {
+                    if (!free(x, y, z)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     // ------------------------------------------------------------------ Outils

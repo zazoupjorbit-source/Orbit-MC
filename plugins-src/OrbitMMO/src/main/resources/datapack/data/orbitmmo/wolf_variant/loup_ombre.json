@@ -1,0 +1,5 @@
+{
+  "assets": { "angry": "orbitmmo:entity/wolf/loup_ombre_angry", "tame": "orbitmmo:entity/wolf/loup_ombre_tame", "wild": "orbitmmo:entity/wolf/loup_ombre" },
+  "baby_assets": { "angry": "orbitmmo:entity/wolf/loup_ombre_angry_baby", "tame": "orbitmmo:entity/wolf/loup_ombre_tame_baby", "wild": "orbitmmo:entity/wolf/loup_ombre_baby" },
+  "spawn_conditions": []
+}

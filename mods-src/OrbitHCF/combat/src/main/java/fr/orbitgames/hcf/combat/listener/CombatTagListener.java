@@ -72,6 +72,11 @@ public class CombatTagListener implements Listener {
             return;
         }
         plugin.getCombatManager().untag(uuid);
+        if (!fr.orbitgames.hcf.api.HcfWorlds.isHcf(player)) {
+            // Sortie autorisee du monde HCF (/logout termine, deathban) : pas de sanction, et le joueur
+            // est deja dans un autre monde ou ses objets ne doivent pas tomber.
+            return;
+        }
 
         // Sanction de combat log
         if (plugin.getCombatConfig().getBoolean("combat-tag.logout-sanction.kill", true)) {

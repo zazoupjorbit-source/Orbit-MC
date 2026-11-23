@@ -1,0 +1,5 @@
+{
+  "assets": { "angry": "orbitmmo:entity/wolf/limier_aube_angry", "tame": "orbitmmo:entity/wolf/limier_aube_tame", "wild": "orbitmmo:entity/wolf/limier_aube" },
+  "baby_assets": { "angry": "orbitmmo:entity/wolf/limier_aube_angry_baby", "tame": "orbitmmo:entity/wolf/limier_aube_tame_baby", "wild": "orbitmmo:entity/wolf/limier_aube_baby" },
+  "spawn_conditions": []
+}

@@ -300,6 +300,9 @@ public final class Combat {
             return;
         }
         ms.hp -= dmg;
+        if (dmg > 0) {
+            plugin.spells().control().damaged(ms.entity);
+        }
         if (attacker != null) {
             ms.damagers.merge(attacker.getUniqueId(), dmg, Double::sum);
             ms.lastHitter = attacker.getUniqueId();
@@ -381,6 +384,9 @@ public final class Combat {
         }
         d.hp -= dmg;
         d.lastCombat = now;
+        if (dmg > 0) {
+            plugin.spells().control().damaged(v);
+        }
         if (attacker != null) {
             d.lastAttacker = attacker.getUniqueId();
             d.lastAttackerAt = now;

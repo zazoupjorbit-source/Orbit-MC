@@ -39,7 +39,7 @@
 | **Maître Orsan** | Astromancien de l'Aube, il étudie les Éclats et les Marques. | Curieux, brillant, un peu trop intéressé par le joueur… | Vouvoie, parle comme un savant. |
 | **Tobias** | Éclaireur de Veillemont, disparu dans le Bois des Pénitents. | Jeune et courageux. Il doit la vie au joueur. | Tutoie, chaleureux. |
 | **Morvain** | Chevalier noir de l'Ombre, chef des Glaneurs. **Futur rival récurrent.** | Calme, ironique, sûr de lui. | Vouvoie avec mépris. |
-| **Haute-Prélate Ysolde** | Haute dignitaire du Bastion de l'Aube, elle préside le Serment. | Solennelle et impressionnante. On ne sait pas ce qu'elle pense vraiment. | Vouvoie, ton cérémonial. |
+| **Haute-Prélate Séraphine** (ex-Ysolde, renommée le 23/11) | Haute dignitaire du Bastion de l'Aube, elle préside le Serment. | Solennelle et impressionnante. On ne sait pas ce qu'elle pense vraiment. | Vouvoie, ton cérémonial. |
 
 > `[QUESTION]` Ysolde est-elle **la** dirigeante de la Lumière, ou une dignitaire parmi d'autres ? (lié à la question des dirigeants dans le brouillon)
 

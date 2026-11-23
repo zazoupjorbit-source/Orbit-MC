@@ -48,6 +48,10 @@ public final class Hud {
     private final Map<UUID, Map<UUID, BossBar>> partyBars = new HashMap<>();
     private final Map<UUID, Long> holdUntil = new HashMap<>();
     private final Map<UUID, Component> flashText = new HashMap<>();
+    /** Boîtes de dialogue des PNJ en cours d'affichage. */
+    private final Map<UUID, BossBar> dialogues = new HashMap<>();
+    /** Carte du PNJ de ville en cours pour chaque joueur (tant qu'il reste dans ses menus). */
+    private final Map<UUID, NpcCard.Card> cards = new HashMap<>();
 
     public Hud(OrbitMMO plugin) {
         this.plugin = plugin;
@@ -343,7 +347,51 @@ public final class Hud {
         p.sendActionBar(plugin.pack().isLoaded(id) ? console(p, d, null) : Text.mm(line(p, d)));
     }
 
+    // ------------------------------------------------------------------ Boîte de dialogue des PNJ
+
+    /** La boîte de dialogue dessinée est-elle disponible pour ce joueur ? (Il faut le pack ; sinon : chat.) */
+    public boolean dialogueBox(Player p) {
+        return plugin.pack().isLoaded(p.getUniqueId());
+    }
+
+    /** Affiche ou met à jour la boîte de dialogue ({@link DialogueBox#build}). */
+    public void dialogue(Player p, Component title) {
+        BossBar bar = dialogues.get(p.getUniqueId());
+        if (bar == null) {
+            // Barre blanche pleine : le pack la rend invisible, il ne reste que le titre (cadre et texte).
+            bar = BossBar.bossBar(title, 1f, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS);
+            dialogues.put(p.getUniqueId(), bar);
+            p.showBossBar(bar);
+        } else {
+            bar.name(title);
+        }
+    }
+
+    public void dialogueEnd(Player p) {
+        BossBar bar = dialogues.remove(p.getUniqueId());
+        if (bar != null) {
+            p.hideBossBar(bar);
+        }
+    }
+
+    // ------------------------------------------------------------------ Carte du PNJ de ville (à droite de son menu)
+
+    /** Carte que les menus ouverts par ce joueur doivent afficher (posée au clic sur un PNJ de ville). */
+    public void npcCard(Player p, NpcCard.Card card) {
+        cards.put(p.getUniqueId(), card);
+    }
+
+    public NpcCard.Card npcCard(Player p) {
+        return cards.get(p.getUniqueId());
+    }
+
+    public void npcCardEnd(Player p) {
+        cards.remove(p.getUniqueId());
+    }
+
     public void quit(Player p) {
+        dialogueEnd(p);
+        npcCardEnd(p);
         hideAll(p);
         holdUntil.remove(p.getUniqueId());
         flashText.remove(p.getUniqueId());
@@ -364,6 +412,7 @@ public final class Hud {
 
     public void shutdown() {
         for (Player p : Bukkit.getOnlinePlayers()) {
+            dialogueEnd(p);
             hideAll(p);
         }
     }

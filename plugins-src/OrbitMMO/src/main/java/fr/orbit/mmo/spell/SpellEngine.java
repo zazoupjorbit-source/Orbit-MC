@@ -41,7 +41,7 @@ public final class SpellEngine {
 
     /** Effets appliqués aux ennemis touchés. Les autres clés s'appliquent au lanceur (et au groupe pour un cri). */
     static final Set<String> ENEMY_KEYS = Set.of("etourdir", "ralentir", "saignement", "dot", "repousser",
-            "soulever", "provocation", "affaiblir", "peur");
+            "soulever", "provocation", "affaiblir", "peur", "attirer", "enraciner", "silence", "desorienter");
 
     /** Incantation en cours. */
     public static final class Cast {
@@ -66,13 +66,26 @@ public final class SpellEngine {
 
     private final OrbitMMO plugin;
     private final Random random = new Random();
+    private final Control control;
 
     public SpellEngine(OrbitMMO plugin) {
         this.plugin = plugin;
+        this.control = new Control(plugin);
     }
 
     public void start() {
         plugin.getServer().getScheduler().runTaskTimer(plugin, this::regenTick, 5L, 5L);
+        control.start();
+        plugin.getServer().getPluginManager().registerEvents(control, plugin);
+    }
+
+    public void stop() {
+        control.stop();
+    }
+
+    /** Contrôle de foule (étourdi, peur, désorienté, immobilisé, silence). */
+    public Control control() {
+        return control;
     }
 
     // ------------------------------------------------------------------ Valeurs (avec talents)
@@ -134,6 +147,11 @@ public final class SpellEngine {
         }
         if (!plugin.progression().knows(d, s)) {
             plugin.bar().deny(p, s.name + " n'est pas (ou plus) connu");
+            return false;
+        }
+        String cc = control.castBlock(p);
+        if (cc != null) {
+            plugin.bar().deny(p, cc);
             return false;
         }
         long now = System.currentTimeMillis();
@@ -265,7 +283,53 @@ public final class SpellEngine {
             case PROJECTILE -> projectile(p, d, s);
             case SOIN -> heal(p, d, s);
             case ZONE -> zone(p, d, s);
+            case VAGUE -> wave(p, d, s);
         }
+    }
+
+    /**
+     * Onde qui avance au sol droit devant (portée = longueur, zone = demi-largeur) et touche une fois chaque ennemi
+     * sur son passage.
+     */
+    private void wave(Player p, PlayerData d, SpellDef s) {
+        Location start = p.getLocation();
+        Vector dir = Fx.forward(start);
+        double half = s.radius > 0 ? s.radius : 1.5;
+        Set<UUID> done = new HashSet<>();
+        p.getWorld().playSound(start, Sound.ITEM_MACE_SMASH_GROUND, 1f, 0.7f);
+        new BukkitRunnable() {
+            double dist = 0.5;
+
+            @Override
+            public void run() {
+                if (!p.isOnline() || dist > s.range) {
+                    cancel();
+                    return;
+                }
+                for (int sub = 0; sub < 2 && dist <= s.range; sub++, dist += 1.0) {
+                    Location c = start.clone().add(dir.clone().multiply(dist));
+                    // Suit le relief : on cherche le sol à ±2 blocs.
+                    for (int dy = 2; dy >= -2; dy--) {
+                        Location probe = c.clone().add(0, dy, 0);
+                        if (!probe.getBlock().isPassable() && probe.clone().add(0, 1, 0).getBlock().isPassable()) {
+                            c = probe.add(0, 1, 0);
+                            break;
+                        }
+                    }
+                    c.getWorld().spawnParticle(Particle.BLOCK, c, 14, half * 0.6, 0.15, half * 0.6, 0.1,
+                            c.clone().add(0, -1, 0).getBlock().getBlockData());
+                    Fx.dust(c.clone().add(0, 0.3, 0), s.color(), 1.6f, 6, half * 0.5);
+                    for (LivingEntity t : radius(p, c, half)) {
+                        if (done.add(t.getUniqueId())) {
+                            hit(p, d, s, t, s.power);
+                        }
+                    }
+                }
+                if (((int) dist) % 3 == 0) {
+                    p.getWorld().playSound(start.clone().add(dir.clone().multiply(dist)), Sound.BLOCK_DRIPSTONE_BLOCK_BREAK, 0.8f, 0.6f);
+                }
+            }
+        }.runTaskTimer(plugin, 0L, 1L);
     }
 
     // ------------------------------------------------------------------ Types de sorts
@@ -539,10 +603,30 @@ public final class SpellEngine {
         MobState ms = plugin.mobs().state(t);
         boolean boss = ms != null && ms.boss != null;
         if (s.has("etourdir") && !boss) {
-            stun(t, s.effect("etourdir"), false, p);
+            control.apply(p, t, Control.Kind.STUN, s.effect("etourdir") + d.mods.get("duree", s.id));
         }
         if (s.has("peur") && !boss) {
-            stun(t, s.effect("peur"), true, p);
+            control.apply(p, t, Control.Kind.FEAR, s.effect("peur") + d.mods.get("duree", s.id));
+        }
+        if (s.has("desorienter") && !boss) {
+            control.apply(p, t, Control.Kind.DISORIENT, s.effect("desorienter") + d.mods.get("duree", s.id));
+        }
+        if (s.has("enraciner") && !boss) {
+            control.apply(p, t, Control.Kind.ROOT, s.effect("enraciner") + d.mods.get("duree", s.id));
+        }
+        if (s.has("silence")) {
+            control.apply(p, t, Control.Kind.SILENCE, s.effect("silence") + d.mods.get("duree", s.id));
+        }
+        if (s.has("attirer") && !boss) {
+            Vector v = p.getLocation().toVector().subtract(t.getLocation().toVector()).setY(0);
+            double len = v.length();
+            if (len > 1.6) {
+                Vector dir = v.clone().normalize();
+                double speed = Math.min(2.4, (len - 1.2) * 0.2 * Math.max(0.5, s.effect("attirer")));
+                Fx.line(t.getLocation().add(0, 1, 0), dir, Math.min(len, 12), s.color());
+                t.setVelocity(dir.clone().multiply(speed).setY(0.3));
+                t.getWorld().spawnParticle(Particle.CRIT, t.getLocation().add(0, 1, 0), 8, 0.2, 0.3, 0.2, 0.1);
+            }
         }
         if (s.has("ralentir")) {
             t.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, (int) (s.effect("ralentir") * 20), 2, false, true, true));
@@ -569,29 +653,6 @@ public final class SpellEngine {
         if (s.has("soulever") && !boss) {
             t.setVelocity(t.getVelocity().setY(s.effect("soulever")));
         }
-    }
-
-    /** Étourdissement (ou peur : la cible s'enfuit) ; les joueurs sont fortement ralentis. */
-    private void stun(LivingEntity t, double seconds, boolean fear, Player source) {
-        int ticks = (int) (seconds * 20);
-        if (t instanceof Mob m) {
-            m.setAware(false);
-            if (fear) {
-                Vector away = t.getLocation().toVector().subtract(source.getLocation().toVector()).setY(0);
-                if (away.lengthSquared() > 1.0E-4) {
-                    t.setVelocity(away.normalize().multiply(0.9).setY(0.25));
-                }
-            }
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                if (m.isValid()) {
-                    m.setAware(true);
-                }
-            }, ticks);
-        } else {
-            t.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, ticks, 5, false, false, true));
-        }
-        t.getWorld().spawnParticle(fear ? Particle.SOUL : Particle.ELECTRIC_SPARK, t.getLocation().add(0, t.getHeight() + 0.2, 0),
-                10, 0.3, 0.1, 0.3, 0.05);
     }
 
     /** Effets du sort sur le lanceur (et sur le groupe proche pour un cri). */

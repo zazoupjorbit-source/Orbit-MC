@@ -115,11 +115,13 @@ public final class BossService {
 
         long xp = Math.round(Stats.mobXp(ms.level) * def.xp());
         long gold = Math.round(Stats.mobGold(ms.level) * def.col());
+        List<Player> victors = new ArrayList<>();
         for (UUID id : ms.damagers.keySet()) {
             Player p = Bukkit.getPlayer(id);
             if (p == null) {
                 continue;
             }
+            victors.add(p);
             PlayerData d = plugin.players().get(p);
             d.gold += gold;
             d.kills++;
@@ -159,12 +161,12 @@ public final class BossService {
         }
         fireworks(l);
 
+        // Record du serveur, puis l'étage est franchi pour chaque vainqueur et pour sa guilde (classement, prime de
+        // premier passage) : les étages ne s'ouvrent plus pour tout le serveur d'un coup.
         if (f > plugin.floors().highestCleared()) {
             plugin.floors().setHighestCleared(f);
-            if (f < plugin.floors().maxFloor()) {
-                Bukkit.broadcast(Text.mm(Text.PREFIX + "<#FFD66E><b>L'étage " + (f + 1) + " est ouvert !</b> <#D7DCE2>Passez la porte de téléportation de l'étage " + f + "."));
-            }
         }
+        plugin.guilds().floorCleared(f, victors);
         long minutes = plugin.getConfig().getLong("bosses-respawn-minutes", 10);
         plugin.floors().setBossReadyAt(f, System.currentTimeMillis() + minutes * 60_000L);
     }

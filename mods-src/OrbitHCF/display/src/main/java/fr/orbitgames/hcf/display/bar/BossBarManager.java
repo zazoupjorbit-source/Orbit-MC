@@ -61,7 +61,7 @@ public class BossBarManager {
                 "temps", DurationFormat.compact(info.getRemainingCapture()))));
         double total = Math.max(1L, info.getTotalCapture().getSeconds());
         kothBar.setProgress(Math.max(0.0D, Math.min(1.0D, info.getRemainingCapture().getSeconds() / total)));
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : fr.orbitgames.hcf.api.HcfWorlds.players()) {
             kothBar.addPlayer(player);
         }
     }
@@ -86,7 +86,7 @@ public class BossBarManager {
                 plugin.getScoreboardConfig().getString("bossbar.sotw.title", "&aSOTW {temps}"),
                 "temps", DurationFormat.compact(remaining))));
         sotwBar.setProgress(1.0D);
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : fr.orbitgames.hcf.api.HcfWorlds.players()) {
             sotwBar.addPlayer(player);
         }
     }
@@ -96,6 +96,16 @@ public class BossBarManager {
             return BarColor.valueOf(name.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
             return BarColor.WHITE;
+        }
+    }
+
+    /** Retire les bossbars a un joueur qui quitte le monde HCF. */
+    public void removePlayer(Player player) {
+        if (kothBar != null) {
+            kothBar.removePlayer(player);
+        }
+        if (sotwBar != null) {
+            sotwBar.removePlayer(player);
         }
     }
 
