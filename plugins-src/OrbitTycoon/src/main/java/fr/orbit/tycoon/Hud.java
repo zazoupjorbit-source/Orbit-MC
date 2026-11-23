@@ -25,7 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * HUD permanent à droite de l'écran (barre latérale du tableau des scores, chiffres masqués) :
- * pseudo, grade, les trois monnaies, prestige, classement global (aux Crédits orbitaux) et nom de l'île.
+ * pseudo, grade, les trois monnaies, l'outil utilisé (niveau, ressources récoltées, prestige),
+ * prestige total, classement global (aux Crédits orbitaux), nom de l'île et générateurs (posés / max).
  * Rafraîchi chaque seconde ; une ligne n'est renvoyée au joueur que si son texte a changé.
  */
 final class Hud implements Listener {
@@ -113,27 +114,46 @@ final class Hud implements Listener {
     private List<String> lignes(Player p) {
         UUID id = p.getUniqueId();
         List<String> l = new ArrayList<>();
+        // 15 lignes max dans la barre latérale : chaque ligne compte.
         l.add(TRAIT);
-        l.add("<#62CFF4>◈ <white><bold>" + echapper(p.getName()) + "</bold>");
-        l.add("<gray>Grade <dark_gray>» " + grade(p));
-        l.add("");
+        l.add("<#62CFF4>◈ <white><bold>" + echapper(p.getName()) + "</bold> <dark_gray>· " + grade(p));
         l.add("<#E0B864><bold>MONNAIES");
         for (Monnaies.Monnaie m : Monnaies.Monnaie.values()) {
             long v = monnaies.solde(id, m);
             l.add("<" + m.couleur + ">" + m.symbole + " <white>" + nombre(v) + " <gray>" + court(m));
         }
+        Outil.Mode outil = outilUtilise(p);
+        if (outil == null) {
+            l.add("<#E0B864><bold>OUTIL <dark_gray>» <dark_gray><i>aucun</i>");
+            l.add("<dark_gray>Ton Outil orbital revient");
+            l.add("<dark_gray>à ta prochaine connexion.");
+            l.add("  ");
+        } else {
+            Progression prog = plugin.progression();
+            int niveau = Math.min(monnaies.niveau(id, outil), prog.niveauMax());
+            l.add("<#E0B864><bold>OUTIL <dark_gray>» <" + outil.couleur + "><bold>" + outil.nom);
+            l.add("<gray>Niveau <dark_gray>» <#3DDCB0>" + niveau + " <dark_gray>/ " + prog.niveauMax());
+            l.add("<gray>Ressources <dark_gray>» <white>" + nombre(monnaies.recoltes(id, outil)));
+            l.add("<gray>Prestige <dark_gray>» <#E0B864>✪ " + monnaies.prestige(id, outil) + " <dark_gray>/ " + prog.prestigeMax());
+        }
         l.add(" ");
-        l.add("<#E0B864><bold>PROGRESSION");
-        l.add("<gray>Prestige <dark_gray>» <#E0B864>✪ " + monnaies.prestige(id));
         Integer rang = rangs.get(id);
-        l.add("<gray>Classement <dark_gray>» " + (rang == null ? "<dark_gray>…"
-                : "<white>#" + rang + " <dark_gray>/ " + classes));
+        // Rang = classement global aux Crédits orbitaux.
+        l.add("<gray>Total <#E0B864>✪ " + monnaies.prestige(id) + " <dark_gray>• <gray>Rang "
+                + (rang == null ? "<dark_gray>…" : "<white>#" + rang + "<dark_gray>/" + classes));
         String ile = monnaies.ile(id);
         l.add("<gray>Île <dark_gray>» " + (ile == null ? "<dark_gray><i>aucune</i>" : "<white>" + echapper(ile)));
-        l.add(TRAIT + " ");
-        // 15 lignes max dans la barre latérale : le pied « Orbit MC » laisse la place aux commandes.
+        int poses = monnaies.generateursPoses(id), max = monnaies.generateursMax(id);
+        l.add("<gray>Générateurs <dark_gray>» " + (poses >= max ? "<#FF6B6B>" : "<#3DDCB0>") + poses + " <dark_gray>/ <white>" + max);
         l.add("<#E0B864>/boutique <dark_gray>• <#62CFF4>/vote");
         return l;
+    }
+
+    /** Outil orbital tenu en main ; sinon le mode de celui rangé dans l'inventaire ; null s'il n'en a pas. */
+    private Outil.Mode outilUtilise(Player p) {
+        Outil o = plugin.outil();
+        var main = p.getInventory().getItemInMainHand();
+        return o.est(main) ? o.mode(main) : o.modeActuel(p);
     }
 
     private static String court(Monnaies.Monnaie m) {

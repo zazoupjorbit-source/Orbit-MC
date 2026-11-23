@@ -109,7 +109,11 @@ mobzone:
 # Hauteur sous laquelle un joueur qui tombe dans le vide est ramené à l'arrivée de sa zone.
 vide-y: 0
 
-# HUD permanent à droite de l'écran (pseudo, grade, monnaies, prestige, classement, île).
+# Générateurs de l'île : nombre qu'un joueur peut poser en arrivant sur le Tycoon (affiché « posés / max » dans le HUD).
+generateurs:
+  depart: 10
+
+# HUD permanent à droite de l'écran (pseudo, grade, monnaies, outil, prestige, classement, île, générateurs).
 hud:
   # Le classement global (aux Crédits orbitaux) est recalculé toutes les X secondes.
   classement-secondes: 60
@@ -224,3 +228,58 @@ hdv:
   duree-heures: 48      # après, l'objet revient dans « Mes ventes »
   prix-min: 1
   prix-max: 1000000000000
+
+# Générateurs de ressources (/gen) : un bloc posé sur son île /is qui fait apparaître sa ressource dessus.
+# Production : 1 objet par générateur toutes les « intervalle-secondes », seulement si le chunk est chargé et
+# qu'un membre de l'île est connecté. Jusqu'à « pile-max » générateurs du même type empilés sur un bloc (clic droit).
+# Débloqués dans l'ordre de la liste : poser un générateur débloque le suivant pour toute l'île.
+# Objets produits vendus avec /vendre (main) ou /vendre tout : « vente » Crédits orbitaux par objet.
+# Barème : vente × 1,12 par niveau ; prix = rentabilisé en 2 h (blé) à 4 h (netherite). /tycoon reload après un changement.
+generateurs:
+  intervalle-secondes: 30
+  pile-max: 64
+  emplacements: [8, 10, 12, 15, 18, 22, 25]   # blocs générateurs par île, selon le palier de /is upgrade
+  max-au-sol: 512          # au-delà, le générateur attend qu'on ramasse (anti-lag)
+  liste:
+    - {id: ble, nom: "Blé", bloc: HAY_BLOCK, objet: WHEAT, prix: 240, vente: 1}
+    - {id: carotte, nom: "Carotte", bloc: ORANGE_TERRACOTTA, objet: CARROT, prix: 280, vente: 1.12}
+    - {id: pomme_de_terre, nom: "Pomme de terre", bloc: BROWN_TERRACOTTA, objet: POTATO, prix: 320, vente: 1.25}
+    - {id: betterave, nom: "Betterave", bloc: RED_TERRACOTTA, objet: BEETROOT, prix: 360, vente: 1.4}
+    - {id: canne_a_sucre, nom: "Canne à sucre", bloc: GREEN_TERRACOTTA, objet: SUGAR_CANE, prix: 410, vente: 1.57}
+    - {id: bambou, nom: "Bambou", bloc: BAMBOO_BLOCK, objet: BAMBOO, prix: 480, vente: 1.76}
+    - {id: citrouille, nom: "Citrouille", bloc: PUMPKIN, objet: PUMPKIN, prix: 540, vente: 1.97}
+    - {id: pasteque, nom: "Pastèque", bloc: MELON, objet: MELON_SLICE, prix: 620, vente: 2.21}
+    - {id: cactus, nom: "Cactus", bloc: GREEN_GLAZED_TERRACOTTA, objet: CACTUS, prix: 710, vente: 2.48}
+    - {id: cacao, nom: "Cacao", bloc: BROWN_GLAZED_TERRACOTTA, objet: COCOA_BEANS, prix: 810, vente: 2.77}
+    - {id: champignon_rouge, nom: "Champignon rouge", bloc: RED_MUSHROOM_BLOCK, objet: RED_MUSHROOM, prix: 930, vente: 3.11}
+    - {id: champignon_brun, nom: "Champignon brun", bloc: BROWN_MUSHROOM_BLOCK, objet: BROWN_MUSHROOM, prix: 1100, vente: 3.48}
+    - {id: verrue, nom: "Verrue du Nether", bloc: NETHER_WART_BLOCK, objet: NETHER_WART, prix: 1200, vente: 3.9}
+    - {id: chene, nom: "Chêne", bloc: OAK_WOOD, objet: OAK_LOG, prix: 1400, vente: 4.36}
+    - {id: bouleau, nom: "Bouleau", bloc: BIRCH_WOOD, objet: BIRCH_LOG, prix: 1600, vente: 4.89}
+    - {id: epicea, nom: "Épicéa", bloc: SPRUCE_WOOD, objet: SPRUCE_LOG, prix: 1800, vente: 5.47}
+    - {id: acajou, nom: "Acajou", bloc: JUNGLE_WOOD, objet: JUNGLE_LOG, prix: 2100, vente: 6.13}
+    - {id: acacia, nom: "Acacia", bloc: ACACIA_WOOD, objet: ACACIA_LOG, prix: 2300, vente: 6.87}
+    - {id: chene_noir, nom: "Chêne noir", bloc: DARK_OAK_WOOD, objet: DARK_OAK_LOG, prix: 2700, vente: 7.69}
+    - {id: mangrove, nom: "Palétuvier", bloc: MANGROVE_WOOD, objet: MANGROVE_LOG, prix: 3000, vente: 8.61}
+    - {id: cerisier, nom: "Cerisier", bloc: CHERRY_WOOD, objet: CHERRY_LOG, prix: 3500, vente: 9.65}
+    - {id: os, nom: "Os", bloc: BONE_BLOCK, objet: BONE, prix: 4000, vente: 10.8}
+    - {id: ficelle, nom: "Ficelle", bloc: WHITE_WOOL, objet: STRING, prix: 4500, vente: 12.1}
+    - {id: poudre, nom: "Poudre à canon", bloc: GRAY_GLAZED_TERRACOTTA, objet: GUNPOWDER, prix: 5100, vente: 13.55}
+    - {id: miel, nom: "Rayon de miel", bloc: HONEYCOMB_BLOCK, objet: HONEYCOMB, prix: 5800, vente: 15.18}
+    - {id: slime, nom: "Boule de slime", bloc: SLIME_BLOCK, objet: SLIME_BALL, prix: 6600, vente: 17}
+    - {id: perle, nom: "Perle de l'Ender", bloc: PURPUR_BLOCK, objet: ENDER_PEARL, prix: 7500, vente: 19.04}
+    - {id: blaze, nom: "Bâton de blaze", bloc: ORANGE_GLAZED_TERRACOTTA, objet: BLAZE_ROD, prix: 8600, vente: 21.32}
+    - {id: charbon, nom: "Charbon", bloc: COAL_BLOCK, objet: COAL, prix: 9700, vente: 23.88}
+    - {id: cuivre, nom: "Cuivre", bloc: WAXED_COPPER_BLOCK, objet: COPPER_INGOT, prix: 11000, vente: 26.75}
+    - {id: fer, nom: "Fer", bloc: IRON_BLOCK, objet: IRON_INGOT, prix: 13000, vente: 29.96}
+    - {id: lapis, nom: "Lapis-lazuli", bloc: LAPIS_BLOCK, objet: LAPIS_LAZULI, prix: 14000, vente: 33.56}
+    - {id: redstone, nom: "Redstone", bloc: REDSTONE_BLOCK, objet: REDSTONE, prix: 16000, vente: 37.58}
+    - {id: quartz, nom: "Quartz", bloc: QUARTZ_BLOCK, objet: QUARTZ, prix: 18000, vente: 42.09}
+    - {id: or, nom: "Or", bloc: GOLD_BLOCK, objet: GOLD_INGOT, prix: 21000, vente: 47.14}
+    - {id: amethyste, nom: "Améthyste", bloc: AMETHYST_BLOCK, objet: AMETHYST_SHARD, prix: 24000, vente: 52.8}
+    - {id: glowstone, nom: "Glowstone", bloc: GLOWSTONE, objet: GLOWSTONE_DUST, prix: 27000, vente: 59.14}
+    - {id: prismarine, nom: "Prismarine", bloc: PRISMARINE, objet: PRISMARINE_SHARD, prix: 31000, vente: 66.23}
+    - {id: obsidienne, nom: "Obsidienne", bloc: OBSIDIAN, objet: OBSIDIAN, prix: 35000, vente: 74.18}
+    - {id: diamant, nom: "Diamant", bloc: DIAMOND_BLOCK, objet: DIAMOND, prix: 39000, vente: 83.08}
+    - {id: emeraude, nom: "Émeraude", bloc: EMERALD_BLOCK, objet: EMERALD, prix: 45000, vente: 93.05}
+    - {id: netherite, nom: "Netherite", bloc: NETHERITE_BLOCK, objet: NETHERITE_SCRAP, prix: 51000, vente: 104.22}

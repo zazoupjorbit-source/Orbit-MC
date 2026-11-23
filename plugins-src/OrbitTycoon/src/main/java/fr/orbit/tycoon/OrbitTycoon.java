@@ -51,6 +51,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     private Hdv hdv;
     private Staff staff;
     private Guide guide;
+    private Generateurs generateurs;
     private boolean chantierEnCours;
 
     @Override
@@ -81,6 +82,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         hdv = new Hdv(this);
         staff = new Staff(this);
         guide = new Guide(this);
+        generateurs = new Generateurs(this);
         navigateur.iles(ilesJoueurs);
         navigateur.pack(pack);
         outil.pack(pack);
@@ -122,6 +124,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         pm.registerEvents(hdv, this);
         pm.registerEvents(staff, this);
         pm.registerEvents(guide, this);
+        pm.registerEvents(generateurs, this);
         pm.registerEvents(new Piles(this), this);
         pm.registerEvents(this, this);
         mobzone.demarrer();
@@ -138,6 +141,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         hdv.demarrer();
         staff.demarrer();
         guide.charger();
+        generateurs.demarrer();
 
         if (donnees().getInt("version", donnees().getBoolean("genere") ? 1 : 0) < VERSION_DESSIN)
             getLogger().warning("Le dessin du Tycoon n'est pas à jour : lance « tycoon generer tout confirmer » dans la console.");
@@ -158,6 +162,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         if (tuto != null) tuto.arreter();
         if (hdv != null) hdv.arreter();
         if (staff != null) staff.arreter();
+        if (generateurs != null) generateurs.arreter();
         if (ilesJoueurs != null) ilesJoueurs.arreter();
         if (monnaies != null) monnaies.arreter();
     }
@@ -242,6 +247,8 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         if (cmd.getName().equalsIgnoreCase("hdv")) return hdv.commande(s, args);
         if (cmd.getName().equalsIgnoreCase("staff")) return staff.commande(s, args);
         if (cmd.getName().equalsIgnoreCase("guide")) return guide.commande(s, args);
+        if (cmd.getName().equalsIgnoreCase("gen")) return generateurs.commande(s, args);
+        if (cmd.getName().equalsIgnoreCase("vendre")) return generateurs.vendre(s, args);
         if (cmd.getName().equalsIgnoreCase("zones")) {
             if (s instanceof Player p) navigateur.ouvrir(p);
             else msg(s, "Commande réservée aux joueurs.");
@@ -299,12 +306,14 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
                 coffres.rafraichir();
                 boutique.recharger();
                 guide.charger();
+                generateurs.charger();
                 msg(s, "Configuration rechargée.");
             }
             case "monnaie" -> monnaie(s, args);
             case "prestige" -> prestige(s, args);
             case "ile" -> ile(s, args);
             case "dome" -> dome(s, args);
+            case "gen", "generateurs" -> generateurs.admin(s, args);
             case "tuto" -> {
                 if (args.length < 3 || !args[1].equalsIgnoreCase("reset")) { msg(s, "Usage : /tycoon tuto reset <joueur>"); return true; }
                 tuto.reset(s, args[2]);
@@ -534,13 +543,20 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         if (cmd.getName().equalsIgnoreCase("hdv")) return args.length == 1 ? List.of("vendre", "ventes", "aide") : List.of();
         if (cmd.getName().equalsIgnoreCase("staff")) return staff.completer(args);
         if (cmd.getName().equalsIgnoreCase("guide")) return args.length == 1 ? List.of("lire", "jeter") : List.of();
+        if (cmd.getName().equalsIgnoreCase("vendre")) return args.length == 1 ? List.of("tout") : List.of();
+        if (cmd.getName().equalsIgnoreCase("gen")) return List.of();
         List<String> res = new ArrayList<>();
         if (cmd.getName().equalsIgnoreCase("classements") || cmd.getName().equalsIgnoreCase("classement")) {
             if (args.length == 1) for (Outil.Mode m : Outil.Mode.values()) if (m.id.startsWith(args[0].toLowerCase())) res.add(m.id);
             return res;
         }
         if (!cmd.getName().equalsIgnoreCase("tycoon")) return List.of();
-        if (args.length == 1) res.addAll(List.of("generer", "tp", "equiper", "reload", "monnaie", "prestige", "ile", "classement", "coffres", "cle", "boutique", "dome", "iles", "tuto", "deco"));
+        if (args.length == 1) res.addAll(List.of("generer", "tp", "equiper", "reload", "monnaie", "prestige", "ile", "classement", "coffres", "cle", "boutique", "dome", "iles", "tuto", "deco", "gen"));
+        else if (args[0].equalsIgnoreCase("gen")) {
+            if (args.length == 2) res.addAll(List.of("donner", "liste"));
+            else if (args.length == 3) return null;
+            else if (args.length == 4) res.addAll(generateurs.ids());
+        }
         else if (args[0].equalsIgnoreCase("monnaie")) {
             if (args.length == 2) res.addAll(List.of("donner", "retirer", "definir"));
             else if (args.length == 4) res.addAll(List.of("credit", "flux", "plasma"));

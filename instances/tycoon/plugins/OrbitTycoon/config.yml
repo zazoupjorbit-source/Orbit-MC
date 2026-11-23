@@ -1,6 +1,8 @@
 # Orbit Tycoon — réglages.
 # Après une modification : /tycoon reload (jamais /reload du serveur).
 
+generateurs:
+  depart: 10
 progression:
   niveau-max: 100
   prestige-max: 100

@@ -57,6 +57,10 @@ final class Monnaies implements Listener {
     private final Map<UUID, EnumMap<Outil.Mode, Integer>> prestigesOutils = new ConcurrentHashMap<>();
     /** Niveau et XP de chaque outil : {niveau, xp dans le niveau}. */
     private final Map<UUID, EnumMap<Outil.Mode, long[]>> niveaux = new ConcurrentHashMap<>();
+    /** Ressources récoltées avec chaque outil (blocs, poissons, monstres) : affichées par le HUD. */
+    private final Map<UUID, EnumMap<Outil.Mode, Long>> recoltes = new ConcurrentHashMap<>();
+    /** Générateurs de l'île : {déjà posés, maximum posable}. */
+    private final Map<UUID, int[]> generateurs = new ConcurrentHashMap<>();
     /** Quêtes de prestige récupérées, par outil (paliers 10, 20…). */
     private final Map<UUID, EnumMap<Outil.Mode, java.util.Set<Integer>>> quetes = new ConcurrentHashMap<>();
     private BukkitTask sauvegardeAuto;
@@ -159,6 +163,47 @@ final class Monnaies implements Listener {
         modifies.put(id, true);
     }
 
+    /** Nombre de ressources récoltées avec cet outil depuis le début. */
+    long recoltes(UUID id, Outil.Mode outil) {
+        soldes.computeIfAbsent(id, this::lire);
+        EnumMap<Outil.Mode, Long> m = recoltes.get(id);
+        return m == null ? 0 : m.getOrDefault(outil, 0L);
+    }
+
+    void ajouterRecoltes(UUID id, Outil.Mode outil, long quantite) {
+        if (quantite <= 0) return;
+        soldes.computeIfAbsent(id, this::lire);
+        recoltes.computeIfAbsent(id, k -> new EnumMap<>(Outil.Mode.class)).merge(outil, quantite, Long::sum);
+        modifies.put(id, true);
+    }
+
+    // ------------------------------------------------------------------ générateurs
+
+    private int generateursDepart() {
+        return Math.max(0, plugin.getConfig().getInt("generateurs.depart", 10));
+    }
+
+    private int[] gen(UUID id) {
+        soldes.computeIfAbsent(id, this::lire);
+        return generateurs.computeIfAbsent(id, k -> new int[]{0, generateursDepart()});
+    }
+
+    /** Générateurs déjà posés sur l'île du joueur. */
+    int generateursPoses(UUID id) { return gen(id)[0]; }
+
+    /** Nombre maximum de générateurs que le joueur peut poser (10 au départ, config generateurs.depart). */
+    int generateursMax(UUID id) { return gen(id)[1]; }
+
+    void definirGenerateursPoses(UUID id, int poses) {
+        gen(id)[0] = Math.max(0, poses);
+        modifies.put(id, true);
+    }
+
+    void definirGenerateursMax(UUID id, int max) {
+        gen(id)[1] = Math.max(0, max);
+        modifies.put(id, true);
+    }
+
     /** Paliers de quêtes de prestige déjà récupérés pour cet outil. */
     java.util.Set<Integer> quetes(UUID id, Outil.Mode outil) {
         soldes.computeIfAbsent(id, this::lire);
@@ -234,12 +279,17 @@ final class Monnaies implements Listener {
             prestigesOutils.put(id, po);
             EnumMap<Outil.Mode, long[]> nv = new EnumMap<>(Outil.Mode.class);
             EnumMap<Outil.Mode, java.util.Set<Integer>> qu = new EnumMap<>(Outil.Mode.class);
+            EnumMap<Outil.Mode, Long> rc = new EnumMap<>(Outil.Mode.class);
             for (Outil.Mode o : Outil.Mode.values()) {
                 nv.put(o, new long[]{Math.max(1, y.getInt("outils." + o.id + ".niveau", 1)), Math.max(0, y.getLong("outils." + o.id + ".xp", 0))});
+                rc.put(o, Math.max(0, y.getLong("outils." + o.id + ".recoltes", 0)));
                 qu.put(o, new java.util.TreeSet<>(y.getIntegerList("quetes." + o.id)));
             }
             niveaux.put(id, nv);
             quetes.put(id, qu);
+            recoltes.put(id, rc);
+            generateurs.put(id, new int[]{Math.max(0, y.getInt("generateurs.poses", 0)),
+                    Math.max(0, y.getInt("generateurs.max", generateursDepart()))});
             String ile = y.getString("ile.nom");
             if (ile != null && !ile.isBlank()) iles.put(id, ile);
         }
@@ -262,14 +312,19 @@ final class Monnaies implements Listener {
         for (Outil.Mode o : Outil.Mode.values()) y.set("prestige-outils." + o.id, po == null ? 0 : po.getOrDefault(o, 0));
         EnumMap<Outil.Mode, long[]> nv = niveaux.get(id);
         EnumMap<Outil.Mode, java.util.Set<Integer>> qu = quetes.get(id);
+        EnumMap<Outil.Mode, Long> rc = recoltes.get(id);
         for (Outil.Mode o : Outil.Mode.values()) {
             long[] v = nv == null ? null : nv.get(o);
             y.set("outils." + o.id + ".niveau", v == null ? 1 : v[0]);
             y.set("outils." + o.id + ".xp", v == null ? 0 : v[1]);
+            y.set("outils." + o.id + ".recoltes", rc == null ? 0L : rc.getOrDefault(o, 0L));
             java.util.Set<Integer> s = qu == null ? null : qu.get(o);
             y.set("quetes." + o.id, s == null ? java.util.List.of() : new java.util.ArrayList<>(s));
         }
         y.set("ile.nom", iles.get(id));
+        int[] g = generateurs.get(id);
+        y.set("generateurs.poses", g == null ? 0 : g[0]);
+        y.set("generateurs.max", g == null ? generateursDepart() : g[1]);
         try {
             y.save(f);
             modifies.remove(id);
@@ -293,7 +348,7 @@ final class Monnaies implements Listener {
         UUID id = e.getPlayer().getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             sauver(id);
-            if (Bukkit.getPlayer(id) == null) { soldes.remove(id); prestiges.remove(id); prestigesOutils.remove(id); iles.remove(id); niveaux.remove(id); quetes.remove(id); }
+            if (Bukkit.getPlayer(id) == null) { soldes.remove(id); prestiges.remove(id); prestigesOutils.remove(id); iles.remove(id); niveaux.remove(id); quetes.remove(id); recoltes.remove(id); generateurs.remove(id); }
         });
     }
 
@@ -322,6 +377,7 @@ final class Monnaies implements Listener {
                     .append(gain > 1 ? m.pluriel : m.nom).append("</").append(m.couleur).append(">");
         }
         if (outil != null) {
+            ajouterRecoltes(p.getUniqueId(), outil, quantite);
             String xp = plugin.progression().gagner(p, outil, cle, quantite);
             if (xp != null) {
                 if (!texte.isEmpty()) texte.append("   ");
