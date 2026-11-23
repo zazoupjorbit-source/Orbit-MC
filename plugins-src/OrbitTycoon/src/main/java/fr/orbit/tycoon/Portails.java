@@ -46,6 +46,7 @@ final class Portails implements Listener {
         Location to = e.getTo();
         if (to.getBlockX() == e.getFrom().getBlockX() && to.getBlockY() == e.getFrom().getBlockY() && to.getBlockZ() == e.getFrom().getBlockZ()) return;
         Player p = e.getPlayer();
+        if (!to.getWorld().equals(plugin.monde())) return;
         Long t = attente.get(p.getUniqueId());
         if (t != null && System.currentTimeMillis() < t) return;
         double cx = to.getX(), cy = to.getY() + 0.9, cz = to.getZ();

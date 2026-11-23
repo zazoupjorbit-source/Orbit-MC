@@ -1,6 +1,37 @@
 # Orbit Tycoon — réglages.
 # Après une modification : /tycoon reload (jamais /reload du serveur).
 
+coffres:
+  noms:
+  - Coffre 1
+  - Coffre 2
+  - Coffre 3
+  - Coffre 4
+  - Coffre 5
+  angle: 36 # direction depuis le centre du spawn (degrés), entre deux avenues
+  rayon: 36
+classement:
+  periode-secondes: 60
+  podium:
+    angle: 108 # direction depuis le centre du spawn (degrés), entre deux avenues
+    rayon: 36 # distance au centre
+iles:
+  tailles:
+  - 50
+  - 75
+  - 100
+  - 125
+  - 150
+  - 200
+  - 250
+  couts:
+  - 0
+  - 25000
+  - 100000
+  - 300000
+  - 750000
+  - 2000000
+  - 5000000
 hud:
   # Le classement global (aux Crédits orbitaux) est recalculé toutes les X secondes.
   classement-secondes: 60

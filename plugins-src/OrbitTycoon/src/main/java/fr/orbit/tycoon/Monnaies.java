@@ -131,6 +131,20 @@ final class Monnaies implements Listener {
         return tout;
     }
 
+    /** Prestige de tous les joueurs (fichiers + mémoire) : sert au classement prestige. Hors thread principal. */
+    Map<UUID, Integer> tousLesPrestiges() {
+        Map<UUID, Integer> tout = new java.util.HashMap<>();
+        File[] fichiers = new File(plugin.getDataFolder(), "joueurs").listFiles((d, n) -> n.endsWith(".yml"));
+        if (fichiers != null) for (File f : fichiers) {
+            try {
+                UUID id = UUID.fromString(f.getName().substring(0, f.getName().length() - 4));
+                tout.put(id, YamlConfiguration.loadConfiguration(f).getInt("prestige", 0));
+            } catch (IllegalArgumentException ignore) { }
+        }
+        tout.putAll(prestiges);
+        return tout;
+    }
+
     // ------------------------------------------------------------------ fichiers
 
     private File fichier(UUID id) {

@@ -58,6 +58,7 @@ final class Zones implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void casser(BlockBreakEvent e) {
+        if (IlesJoueurs.estMonde(e.getBlock().getWorld())) return;
         Player p = e.getPlayer();
         if (constructeur(p)) return;
         Block b = e.getBlock();
@@ -121,6 +122,7 @@ final class Zones implements Listener {
     /** Mobs : plus aucun objet ni XP ; le joueur qui tue reçoit directement ses monnaies. */
     @EventHandler(priority = EventPriority.HIGH)
     public void mobTue(org.bukkit.event.entity.EntityDeathEvent e) {
+        if (IlesJoueurs.estMonde(e.getEntity().getWorld())) return;
         if (e.getEntity() instanceof Player) return;
         e.getDrops().clear();
         e.setDroppedExp(0);
@@ -150,16 +152,19 @@ final class Zones implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void poser(BlockPlaceEvent e) {
+        if (IlesJoueurs.estMonde(e.getBlock().getWorld())) return;
         if (!constructeur(e.getPlayer())) e.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void seauVider(PlayerBucketEmptyEvent e) {
+        if (IlesJoueurs.estMonde(e.getBlock().getWorld())) return;
         if (!constructeur(e.getPlayer())) e.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void seauRemplir(PlayerBucketFillEvent e) {
+        if (IlesJoueurs.estMonde(e.getBlock().getWorld())) return;
         if (!constructeur(e.getPlayer())) e.setCancelled(true);
     }
 
@@ -171,20 +176,22 @@ final class Zones implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void mobPietine(EntityChangeBlockEvent e) {
+        if (IlesJoueurs.estMonde(e.getBlock().getWorld())) return;
         if (e.getBlock().getType() == Material.FARMLAND || !(e.getEntity() instanceof Player)) e.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void secher(MoistureChangeEvent e) { e.setCancelled(true); }
+    public void secher(MoistureChangeEvent e) { if (!IlesJoueurs.estMonde(e.getBlock().getWorld())) e.setCancelled(true); }
 
     @EventHandler(ignoreCancelled = true)
-    public void fondre(BlockFadeEvent e) { e.setCancelled(true); }
+    public void fondre(BlockFadeEvent e) { if (!IlesJoueurs.estMonde(e.getBlock().getWorld())) e.setCancelled(true); }
 
     @EventHandler(ignoreCancelled = true)
-    public void feuilles(LeavesDecayEvent e) { e.setCancelled(true); }
+    public void feuilles(LeavesDecayEvent e) { if (!IlesJoueurs.estMonde(e.getBlock().getWorld())) e.setCancelled(true); }
 
     @EventHandler(ignoreCancelled = true)
     public void ecoulement(BlockFromToEvent e) {
+        if (IlesJoueurs.estMonde(e.getBlock().getWorld())) return;
         // L'eau des lagons et canaux ne déborde jamais (sauf vers une case déjà eau).
         if (e.getBlock().getType() == Material.WATER) e.setCancelled(true);
     }
@@ -195,6 +202,7 @@ final class Zones implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void peche(org.bukkit.event.player.PlayerFishEvent e) {
+        if (IlesJoueurs.estMonde(e.getPlayer().getWorld())) return;
         if (e.getState() != org.bukkit.event.player.PlayerFishEvent.State.CAUGHT_FISH) return;
         if (!(e.getCaught() instanceof org.bukkit.entity.Item item)) return;
         int n = java.util.concurrent.ThreadLocalRandom.current().nextInt(100);
@@ -222,8 +230,9 @@ final class Zones implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void vide(PlayerMoveEvent e) {
         if (e.getTo().getY() >= plugin.getConfig().getInt("vide-y", 0)) return;
-        Zone z = Zone.at(e.getTo());
         Player p = e.getPlayer();
+        if (IlesJoueurs.estMonde(p.getWorld())) { plugin.ilesJoueurs().vide(p); return; }
+        Zone z = Zone.at(e.getTo());
         p.setFallDistance(0);
         p.teleportAsync((z == null ? Zone.BASE : z).arrivee(p.getWorld()));
     }

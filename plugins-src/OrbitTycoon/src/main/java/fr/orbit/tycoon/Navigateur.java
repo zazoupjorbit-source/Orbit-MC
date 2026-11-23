@@ -39,11 +39,40 @@ final class Navigateur implements Listener {
     private static final MiniMessage MM = MiniMessage.miniMessage();
     private static final int[] SLOTS_ZONES = {11, 12, 13, 14, 15};
     private static final int SLOT_BASE = 22;
+    private static final int SLOT_ILE = 24;
 
     private final OrbitTycoon plugin;
     private final Liens liens;
     private final NamespacedKey cle;
     private Pack pack;
+    private IlesJoueurs iles;
+
+    void iles(IlesJoueurs iles) { this.iles = iles; }
+
+    private ItemStack iconeIle(Player p) {
+        IlesJoueurs.Ile ile = iles.ileDe(p.getUniqueId());
+        boolean ici = ile != null && IlesJoueurs.estMonde(p.getWorld()) && iles.ileA(p.getX(), p.getZ()) == ile;
+        ItemStack it = new ItemStack(Material.GRASS_BLOCK);
+        ItemMeta meta = it.getItemMeta();
+        meta.displayName(texte("<#7CFC9A><bold>Mon île</bold>"));
+        List<Component> lore = new ArrayList<>();
+        if (ile == null) {
+            lore.add(texte("<gray>Tu n'as pas encore d'île."));
+            lore.add(Component.empty());
+            lore.add(texte("<#62CFF4>➜ Clic pour créer ton île"));
+        } else {
+            int t = iles.taille(ile);
+            lore.add(texte("<white>" + MM.escapeTags(ile.nom)));
+            lore.add(texte("<gray>Niveau <#E0B864>" + (ile.palier + 1) + "<gray> — zone <#E0B864>" + t + " × " + t));
+            lore.add(texte("<gray>Membres : <white>" + ile.membres.size()));
+            lore.add(Component.empty());
+            lore.add(texte(ici ? "<#E0B864>● Tu es ici" : "<#62CFF4>➜ Clic pour t'y téléporter"));
+        }
+        meta.lore(lore);
+        if (ici) meta.setEnchantmentGlintOverride(true);
+        it.setItemMeta(meta);
+        return it;
+    }
 
     Navigateur(OrbitTycoon plugin, Liens liens) {
         this.plugin = plugin;
@@ -119,10 +148,11 @@ final class Navigateur implements Listener {
             ItemStack fondA = vitre(Material.BLUE_STAINED_GLASS_PANE), fondB = vitre(Material.BLACK_STAINED_GLASS_PANE);
             for (int i = 0; i < 27; i++) inv.setItem(i, (i % 2 == 0) ? fondA : fondB);
         }
-        Zone ici = Zone.at(p.getLocation());
+        Zone ici = IlesJoueurs.estMonde(p.getWorld()) ? null : Zone.at(p.getLocation());
         List<Zone> zones = Zone.farms();
         for (int i = 0; i < zones.size(); i++) inv.setItem(SLOTS_ZONES[i], icone(zones.get(i), zones.get(i) == ici));
         inv.setItem(SLOT_BASE, icone(Zone.BASE, ici == Zone.BASE));
+        if (iles != null) inv.setItem(SLOT_ILE, iconeIle(p));
         p.openInventory(inv);
         p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 0.5f, 1.6f);
     }
@@ -150,7 +180,7 @@ final class Navigateur implements Listener {
         return it;
     }
 
-    void teleporter(Player p, Zone z) { teleporter(p, z, z.arrivee(p.getWorld())); }
+    void teleporter(Player p, Zone z) { teleporter(p, z, z.arrivee(plugin.monde())); }
 
     void teleporter(Player p, Zone z, Location dest) {
         p.teleportAsync(dest).thenAccept(ok -> {
@@ -181,6 +211,12 @@ final class Navigateur implements Listener {
         if (e.getView().getTopInventory().getHolder() instanceof Menu) {
             e.setCancelled(true);
             int slot = e.getRawSlot();
+            if (slot == SLOT_ILE && iles != null) {
+                p.closeInventory();
+                if (iles.ileDe(p.getUniqueId()) == null) p.performCommand("is create");
+                else iles.home(p);
+                return;
+            }
             Zone z = slot == SLOT_BASE ? Zone.BASE : null;
             for (int i = 0; i < SLOTS_ZONES.length; i++) if (slot == SLOTS_ZONES[i]) z = Zone.farms().get(i);
             if (z == null) return;

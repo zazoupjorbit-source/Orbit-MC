@@ -134,3 +134,25 @@ pack:
   port: 8794
   # Si les joueurs passent par un tunnel : URL publique du pack (vide = serveur local ci-dessus).
   url-publique: ""
+
+# Îles des joueurs (/is) : monde vide « iles_joueurs », une île par équipe.
+# tailles = côté de la zone (en blocs) à chaque niveau ; couts = prix en Crédits orbitaux pour atteindre ce niveau
+# (le premier coût, 0, est celui de l'île de départ). Mur invisible au bord de la zone.
+iles:
+  tailles: [50, 75, 100, 125, 150, 200, 250]
+  couts: [0, 25000, 100000, 300000, 750000, 2000000, 5000000]
+
+# Classement prestige au spawn : un panneau Top 10 à côté de chaque anneau-portail + podium des 3 meilleurs (skins).
+# Les socles et le podium se posent une fois avec « /tycoon classement poser ».
+classement:
+  periode-secondes: 60
+  podium:
+    angle: 108   # direction depuis le centre du spawn (degrés), entre deux avenues
+    rayon: 36    # distance au centre
+
+# Baie des coffres au spawn : 5 coffres au décor différent (dans l'ordre : Cryo, Solaire, Nébuleuse, Astéroïde, Réacteur).
+# Changer un nom : le modifier ici, puis /tycoon reload. Les blocs se posent une fois avec « /tycoon coffres poser ».
+coffres:
+  noms: ["Coffre 1", "Coffre 2", "Coffre 3", "Coffre 4", "Coffre 5"]
+  angle: 36    # direction depuis le centre du spawn (degrés), entre deux avenues
+  rayon: 36

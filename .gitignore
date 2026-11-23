@@ -145,3 +145,5 @@ runtime.json
 .claude-kit/
 # Etat de generation du monde tycoon (lie au monde, pas partage)
 /instances/*/plugins/OrbitTycoon/donnees.yml
+# Îles des joueurs (données de jeu, pas partagées)
+/instances/*/plugins/OrbitTycoon/iles.yml

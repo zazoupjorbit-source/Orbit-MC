@@ -3,6 +3,7 @@ package fr.orbit.tycoon;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRules;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -37,6 +38,9 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     private Pack pack;
     private Monnaies monnaies;
     private Hud hud;
+    private IlesJoueurs ilesJoueurs;
+    private Classement classement;
+    private Coffres coffres;
     private boolean chantierEnCours;
 
     @Override
@@ -54,6 +58,10 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         pack = new Pack(this);
         monnaies = new Monnaies(this);
         hud = new Hud(this, monnaies);
+        ilesJoueurs = new IlesJoueurs(this);
+        classement = new Classement(this);
+        coffres = new Coffres(this);
+        navigateur.iles(ilesJoueurs);
         navigateur.pack(pack);
 
         World w = monde();
@@ -81,6 +89,9 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         pm.registerEvents(pack, this);
         pm.registerEvents(monnaies, this);
         pm.registerEvents(hud, this);
+        pm.registerEvents(ilesJoueurs, this);
+        pm.registerEvents(classement, this);
+        pm.registerEvents(coffres, this);
         pm.registerEvents(new Piles(this), this);
         pm.registerEvents(this, this);
         mobzone.demarrer();
@@ -88,6 +99,9 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         pack.demarrer();
         monnaies.demarrer();
         hud.demarrer();
+        ilesJoueurs.demarrer();
+        classement.demarrer();
+        coffres.demarrer();
 
         if (donnees().getInt("version", donnees().getBoolean("genere") ? 1 : 0) < VERSION_DESSIN)
             getLogger().warning("Le dessin du Tycoon n'est pas à jour : lance « tycoon generer tout confirmer » dans la console.");
@@ -101,12 +115,20 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         if (portails != null) portails.arreter();
         if (pack != null) pack.arreter();
         if (hud != null) hud.arreter();
+        if (classement != null) classement.arreter();
+        if (coffres != null) coffres.arreter();
+        if (ilesJoueurs != null) ilesJoueurs.arreter();
         if (monnaies != null) monnaies.arreter();
     }
 
     World monde() { return Bukkit.getWorlds().get(0); }
 
     Monnaies monnaies() { return monnaies; }
+
+    IlesJoueurs ilesJoueurs() { return ilesJoueurs; }
+
+    /** Renvoie le joueur au spawn (Base Orbit). */
+    void versBase(Player p) { navigateur.teleporter(p, Zone.BASE, Zone.BASE.arrivee(monde())); }
 
     // ------------------------------------------------------------------ données
 
@@ -138,7 +160,8 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     @EventHandler
     public void reapparition(PlayerRespawnEvent e) {
         Zone z = Zone.at(e.getPlayer().getLocation());
-        e.setRespawnLocation((z == null ? Zone.BASE : z).arrivee(monde()));
+        Location surIle = IlesJoueurs.estMonde(e.getPlayer().getWorld()) ? ilesJoueurs.reapparition(e.getPlayer()) : null;
+        e.setRespawnLocation(surIle != null ? surIle : (z == null ? Zone.BASE : z).arrivee(monde()));
         Bukkit.getScheduler().runTask(this, () -> equiper(e.getPlayer()));
     }
 
@@ -155,6 +178,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
 
     @Override
     public boolean onCommand(CommandSender s, Command cmd, String label, String[] args) {
+        if (cmd.getName().equalsIgnoreCase("is")) return ilesJoueurs.commande(s, args);
         if (cmd.getName().equalsIgnoreCase("zones")) {
             if (s instanceof Player p) navigateur.ouvrir(p);
             else msg(s, "Commande réservée aux joueurs.");
@@ -186,19 +210,55 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
             case "reload" -> {
                 reloadConfig();
                 mobzone.demarrer();
+                coffres.rafraichir();
                 msg(s, "Configuration rechargée.");
             }
             case "monnaie" -> monnaie(s, args);
             case "prestige" -> prestige(s, args);
             case "ile" -> ile(s, args);
+            case "dome" -> dome(s, args);
+            case "coffres" -> {
+                if (args.length > 1 && args[1].equalsIgnoreCase("poser")) msg(s, "Coffres : " + coffres.poser() + " blocs posés.");
+                coffres.rafraichir();
+                msg(s, "Noms des coffres mis à jour (config.yml, coffres.noms ; /tycoon reload puis /tycoon coffres).");
+            }
+            case "classement" -> {
+                if (args.length > 1 && args[1].equalsIgnoreCase("poser")) msg(s, "Classement : " + classement.poser() + " blocs posés (socles des panneaux + podium).");
+                classement.forcer();
+                msg(s, "Classement prestige mis à jour.");
+            }
             default -> {
                 msg(s, "<#E0B864>/tycoon generer [tout|base|peche|bucheron|agriculture|mobzone|mine] [confirmer]");
                 msg(s, "<#E0B864>/tycoon tp <zone><gray>, <#E0B864>/tycoon equiper [joueur]<gray>, <#E0B864>/tycoon reload");
                 msg(s, "<#E0B864>/tycoon monnaie <donner|retirer|definir> <joueur> <credit|flux|plasma> <montant>");
                 msg(s, "<#E0B864>/tycoon prestige <joueur> <niveau><gray>, <#E0B864>/tycoon ile <joueur> <nom|aucune>");
+                msg(s, "<#E0B864>/tycoon classement [poser]<gray> (met à jour ; poser = socles + podium au spawn)");
+                msg(s, "<#E0B864>/tycoon coffres [poser]<gray> (met à jour les noms ; poser = les 5 coffres au spawn)");
             }
         }
         return true;
+    }
+
+    /** /tycoon dome generer [confirmer] : dôme d'observation + tunnel + vaisseau amiral. */
+    private void dome(CommandSender s, String[] args) {
+        if (args.length < 2 || !args[1].equalsIgnoreCase("generer")) { msg(s, "Usage : /tycoon dome generer [confirmer]"); return; }
+        if (chantierEnCours) { msg(s, "Une génération est déjà en cours."); return; }
+        YamlConfiguration d = donnees();
+        boolean deja = d.getBoolean("dome", false);
+        boolean confirmer = args.length > 2 && args[2].equalsIgnoreCase("confirmer");
+        if (deja && !confirmer) { msg(s, "<#FF4D4D>Dôme déjà construit.</#FF4D4D> Ajoute <#E0B864>confirmer</#E0B864> pour l'effacer et le reconstruire (retouches perdues)."); return; }
+        chantierEnCours = true;
+        Chantier c = new Chantier(this, monde());
+        new Dome(plans).dessiner(c, deja);
+        long debut = System.currentTimeMillis();
+        msg(s, "Dôme + vaisseau : " + c.nbEtapes() + " étapes, ça prend un moment.");
+        c.lancer(pct -> getLogger().info("dome : " + pct + " %"), () -> {
+            chantierEnCours = false;
+            YamlConfiguration d2 = donnees();
+            d2.set("dome", true);
+            sauver(d2);
+            msg(s, "<#7CFC9A>Dôme et vaisseau terminés :</#7CFC9A> " + c.poses() + " blocs en " + (System.currentTimeMillis() - debut) / 1000 + " s.");
+        });
     }
 
     /** /tycoon prestige <joueur> <niveau> (en attendant le vrai système de prestige). */
@@ -209,6 +269,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         var cible = Bukkit.getOfflinePlayer(args[1]);
         monnaies.definirPrestige(cible.getUniqueId(), niveau);
         msg(s, "Prestige de " + cible.getName() + " : <#E0B864>✪ " + niveau);
+        classement.forcer();
     }
 
     /** /tycoon ile <joueur> <nom|aucune> (en attendant les îles des joueurs). */
@@ -302,9 +363,10 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
 
     @Override
     public List<String> onTabComplete(CommandSender s, Command cmd, String alias, String[] args) {
+        if (cmd.getName().equalsIgnoreCase("is")) return ilesJoueurs.completer(args);
         if (!cmd.getName().equalsIgnoreCase("tycoon")) return List.of();
         List<String> res = new ArrayList<>();
-        if (args.length == 1) res.addAll(List.of("generer", "tp", "equiper", "reload", "monnaie"));
+        if (args.length == 1) res.addAll(List.of("generer", "tp", "equiper", "reload", "monnaie", "prestige", "ile", "classement", "coffres", "dome"));
         else if (args[0].equalsIgnoreCase("monnaie")) {
             if (args.length == 2) res.addAll(List.of("donner", "retirer", "definir"));
             else if (args.length == 4) res.addAll(List.of("credit", "flux", "plasma"));

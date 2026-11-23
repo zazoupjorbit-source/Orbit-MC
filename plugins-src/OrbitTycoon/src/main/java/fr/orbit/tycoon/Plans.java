@@ -325,7 +325,7 @@ final class Plans {
                         : (((int) (Math.toDegrees(ang) + 180) / 10) % 2 == 0 ? Material.DEEPSLATE_TILES : Material.POLISHED_DEEPSLATE));
 
             // Garde-corps vitré, piliers dorés.
-            if (d >= R - 0.9) {
+            if (d >= R - 0.9 && !Dome.couloir(dx, dz)) {
                 double arc = (ang + Math.PI) * R;
                 if (arc % 12 < 1.2) {
                     for (int y = Y + 1; y <= Y + 5; y++) c.set(dx, y, dz, Material.GOLD_BLOCK);

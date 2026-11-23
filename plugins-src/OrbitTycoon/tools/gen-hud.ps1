@@ -251,11 +251,11 @@ for ($ty = 3; $ty -le 15; $ty++) { for ($tx = 12; $tx -le 163; $tx++) {
     Px $b $x $y $c
 } }
 Diamond $b (8 + $MX) (9 + $MY) $OR $OR_L; Diamond $b (167 + $MX) (9 + $MY) $OR $OR_L
-# Cases des zones (rangee 1, colonnes 2 a 6) et de la base (rangee 2, colonne 4), coins a la couleur de la zone.
-$zones = @{ 11 = '3FA9F5'; 12 = 'C8894B'; 13 = 'F5D442'; 14 = 'FF4D4D'; 15 = 'B0BEC5'; 22 = $OR }
+# Cases des zones (rangee 1, colonnes 2 a 6), de la base (rangee 2, colonne 4) et de « Mon ile » (rangee 2, colonne 6), coins a la couleur de la zone.
+$zones = @{ 11 = '3FA9F5'; 12 = 'C8894B'; 13 = 'F5D442'; 14 = 'FF4D4D'; 15 = 'B0BEC5'; 22 = $OR; 24 = '7CFC9A' }
 foreach ($slot in $zones.Keys) { Socket $b (7 + 18 * ($slot % 9)) (17 + 18 * [Math]::Floor($slot / 9)) $zones[$slot] }
 # Filets menthe de part et d'autre, rangees 0 et 2.
-foreach ($o in @(@(0, 12, 164), @(2, 12, 74), @(2, 101, 164))) {
+foreach ($o in @(@(0, 12, 164), @(2, 12, 74), @(2, 101, 110), @(2, 138, 164))) {
     $y = 18 + 18 * $o[0] + 7
     for ($x = $o[1]; $x -le $o[2]; $x++) {
         Px $b ($x + $MX) ($y + $MY) (Mix $MT $MT_D ([Math]::Abs($x - ($o[1] + $o[2]) / 2.0) / [Math]::Max(1, ($o[2] - $o[1]) / 2.0)))

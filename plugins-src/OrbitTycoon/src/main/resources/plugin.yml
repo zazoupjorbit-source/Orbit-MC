@@ -14,6 +14,10 @@ commands:
     description: Affiche tes Crédits orbitaux, ton Flux stellaire et ton Plasma.
     usage: /solde
     aliases: [monnaie, argent, money, balance]
+  is:
+    description: Ton ile (creer, rejoindre, inviter, agrandir).
+    usage: /is <create/home/invite/join/leave/level/upgrade/promote/demote/kick/ban/unban/visit/nom>
+    aliases: [ile, island]
   tycoon:
     description: Administration du Tycoon.
     usage: /tycoon <generer|tp|equiper|reload|monnaie>
