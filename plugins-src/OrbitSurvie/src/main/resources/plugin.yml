@@ -1,0 +1,55 @@
+name: OrbitSurvie
+version: '0.1.0'
+main: fr.orbit.survie.OrbitSurvie
+api-version: '1.21'
+description: Orbit Survie — l'île du spawn (marché, enchantements, hôtel des ventes, arène, port), économie et portail aléatoire.
+authors: [ORBIT]
+# OrbitDevCore a aussi une commande /spawn : celle de l'île passe avant (interceptée).
+softdepend: [OrbitDevCore]
+
+commands:
+  ile:
+    description: Administration de l'île du spawn (génération, écarts, points).
+    usage: /ile <generer|ecarts|tp|points|pnj>
+    permission: survie.admin
+  argent:
+    description: Affiche ton solde (ou celui d'un joueur).
+    usage: /argent [pseudo]
+    aliases: [money, solde, balance, bal]
+  payer:
+    description: Envoie des crédits à un joueur connecté.
+    usage: /payer <pseudo> <montant>
+    aliases: [pay]
+  richesses:
+    description: Les 10 joueurs les plus riches.
+    usage: /richesses
+    aliases: [baltop, topargent]
+  kit:
+    description: Menu des kits (Joueur, VIP, VIP+, ORBIT).
+    usage: /kit [nom]
+    aliases: [kits]
+  base:
+    description: Armoires de base (protection de ta base, payée en crédits).
+    usage: /base [acheter|ajouter <pseudo>|retirer <pseudo>|zone]
+    aliases: [bases, armoire, tc]
+  shop:
+    description: Le marché — tous les objets du jeu, prix selon l'offre et la demande.
+    usage: /shop [catégorie|recherche]
+    aliases: [marche, market]
+  vendre:
+    description: Vend l'objet en main au marché (/vendre tout = tout l'inventaire).
+    usage: /vendre [tout]
+    aliases: [sell]
+  prix:
+    description: Prix au marché de l'objet en main.
+    usage: /prix
+    aliases: [worth, price]
+  hdv:
+    description: Hôtel des ventes — /hdv pour acheter, /hdv vendre <prix> pour vendre l'objet en main.
+    usage: /hdv [vendre <prix>|ventes]
+    aliases: [ah]
+
+permissions:
+  survie.admin:
+    description: Générer l'île, construire sur l'île (en créatif), gérer l'économie.
+    default: op

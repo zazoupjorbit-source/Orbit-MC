@@ -1,0 +1,167 @@
+# ------------------------------------------------------------------
+#  OrbitSurvie — l'île du spawn de la Survie Orbit MC
+#  L'île est dans son propre monde ; le monde de survie reste 100 % vanilla.
+# ------------------------------------------------------------------
+
+base:
+  # Accès MariaDB du réseau (comptes et hôtel des ventes). Chemin relatif au dossier du serveur.
+  fichier: ../../setup/db.properties
+
+ile:
+  # Monde de l'île (créé par le plugin : océan tropical sans fin, limité par une bordure).
+  monde: ile
+  # Côté de la bordure du monde de l'île, en blocs (centrée sur la fontaine).
+  bordure: 260
+
+survie:
+  # Monde de survie (celui de server.properties). Jamais modifié par le plugin.
+  monde: world
+  # Téléportation aléatoire du portail : distance au centre du monde, en blocs.
+  rtp-min: 300
+  rtp-max: 3000
+  # Délai entre deux passages du portail, en secondes.
+  rtp-delai: 10
+  # /spawn depuis la survie : attente sans bouger, en secondes.
+  spawn-attente: 5
+
+monnaie:
+  nom: crédits
+  depart: 100
+
+# Armoires de base (principe de la TC de Rust), décidé le 23/11/2026 : la protection se paie en crédits par jour,
+# d'avance ; impayée, elle saute (n'importe qui peut casser la base), avertissement 2 jours avant.
+bases:
+  mondes: [world, world_nether]
+  prix-armoire: 500
+  jours-offerts: 3
+  jours-max: 30
+  avertir-heures: 48
+  membres-max: 8
+  # Nombre d'armoires par grade (groupe LuckPerms, héritage compris).
+  limites: {joueur: 1, vip: 2, vipplus: 3, orbit: 4}
+  # rayon : la zone va de -rayon à +rayon autour de l'armoire (15 → 31 × 31 blocs), sur toute la hauteur.
+  niveaux:
+    - {rayon: 15, par-jour: 20, prix: 0}
+    - {rayon: 25, par-jour: 50, prix: 2000}
+    - {rayon: 40, par-jour: 120, prix: 6000}
+
+hdv:
+  # Taxe prise au vendeur sur chaque vente, en %.
+  taxe: 5
+  # Durée d'une mise en vente, en heures (ensuite : à récupérer dans « Mes ventes »).
+  duree-heures: 48
+  max-ventes: 10
+  prix-max: 10000000
+
+# Kits. grade = groupe LuckPerms requis (vide = tout le monde ; l'héritage compte : ORBIT a aussi VIP+ et VIP).
+# delai-heures : -1 = une seule fois. objets : {objet, quantite, nom (MiniMessage), enchant: {sharpness: 1}}.
+# Décidé le 23/11/2026 : les grades VIP, VIP+ et ORBIT s'obtiennent UNIQUEMENT avec la monnaie du jeu
+# (jamais contre de l'argent réel). C'est ce qui permet des kits qui aident à jouer (règle Mojang).
+kits:
+  depart:
+    nom: "Départ"
+    icone: STONE_PICKAXE
+    delai-heures: -1
+    objets:
+      - {objet: STONE_SWORD}
+      - {objet: STONE_PICKAXE}
+      - {objet: STONE_AXE}
+      - {objet: STONE_SHOVEL}
+      - {objet: LEATHER_HELMET}
+      - {objet: LEATHER_CHESTPLATE}
+      - {objet: LEATHER_LEGGINGS}
+      - {objet: LEATHER_BOOTS}
+      - {objet: BREAD, quantite: 16}
+      - {objet: TORCH, quantite: 32}
+      - {objet: CRAFTING_TABLE}
+      - {objet: ARMOIRE_DE_BASE}
+      - {objet: WHITE_BED}
+  joueur:
+    nom: "Joueur"
+    icone: BREAD
+    delai-heures: 24
+    objets:
+      - {objet: BREAD, quantite: 8}
+      - {objet: COOKED_BEEF, quantite: 4}
+      - {objet: TORCH, quantite: 16}
+      - {objet: OAK_LOG, quantite: 8}
+  vip:
+    nom: "<#F5C542>VIP"
+    grade: vip
+    icone: IRON_CHESTPLATE
+    delai-heures: 24
+    objets:
+      - {objet: IRON_SWORD, nom: "<#F5C542>Épée VIP"}
+      - {objet: IRON_PICKAXE, enchant: {efficiency: 1}}
+      - {objet: IRON_AXE}
+      - {objet: IRON_SHOVEL}
+      - {objet: IRON_HELMET}
+      - {objet: IRON_CHESTPLATE}
+      - {objet: IRON_LEGGINGS}
+      - {objet: IRON_BOOTS}
+      - {objet: SHIELD}
+      - {objet: COOKED_BEEF, quantite: 16}
+      - {objet: GOLDEN_CARROT, quantite: 8}
+      - {objet: TORCH, quantite: 32}
+  vipplus:
+    nom: "<#5CE0A0>VIP+"
+    grade: vipplus
+    icone: DIAMOND_SWORD
+    delai-heures: 48
+    objets:
+      - {objet: DIAMOND_SWORD, nom: "<#5CE0A0>Épée VIP+", enchant: {sharpness: 2, unbreaking: 1}}
+      - {objet: DIAMOND_PICKAXE, enchant: {efficiency: 2, unbreaking: 2}}
+      - {objet: DIAMOND_AXE, enchant: {efficiency: 2}}
+      - {objet: DIAMOND_SHOVEL, enchant: {efficiency: 2}}
+      - {objet: IRON_HELMET, enchant: {protection: 2}}
+      - {objet: IRON_CHESTPLATE, enchant: {protection: 2}}
+      - {objet: IRON_LEGGINGS, enchant: {protection: 2}}
+      - {objet: IRON_BOOTS, enchant: {protection: 2, feather_falling: 2}}
+      - {objet: BOW, enchant: {power: 2}}
+      - {objet: ARROW, quantite: 32}
+      - {objet: GOLDEN_CARROT, quantite: 16}
+      - {objet: GOLDEN_APPLE, quantite: 2}
+      - {objet: ENDER_PEARL, quantite: 4}
+      - {objet: EXPERIENCE_BOTTLE, quantite: 8}
+  orbit:
+    nom: "<#B57BFF>ORBIT"
+    grade: orbit
+    icone: NETHER_STAR
+    delai-heures: 72
+    objets:
+      - {objet: DIAMOND_SWORD, nom: "<#B57BFF>Lame d'ORBIT", enchant: {sharpness: 3, unbreaking: 2, looting: 1}}
+      - {objet: DIAMOND_PICKAXE, nom: "<#B57BFF>Pioche d'ORBIT", enchant: {efficiency: 4, unbreaking: 3, fortune: 2}}
+      - {objet: DIAMOND_AXE, enchant: {efficiency: 3, unbreaking: 2}}
+      - {objet: DIAMOND_SHOVEL, enchant: {efficiency: 3, unbreaking: 2}}
+      - {objet: DIAMOND_HELMET, enchant: {protection: 3, unbreaking: 2}}
+      - {objet: DIAMOND_CHESTPLATE, enchant: {protection: 3, unbreaking: 2}}
+      - {objet: DIAMOND_LEGGINGS, enchant: {protection: 3, unbreaking: 2}}
+      - {objet: DIAMOND_BOOTS, enchant: {protection: 3, unbreaking: 2, feather_falling: 3}}
+      - {objet: BOW, enchant: {power: 3, infinity: 1}}
+      - {objet: ARROW}
+      - {objet: GOLDEN_CARROT, quantite: 32}
+      - {objet: GOLDEN_APPLE, quantite: 4}
+      - {objet: ENDER_PEARL, quantite: 8}
+      - {objet: EXPERIENCE_BOTTLE, quantite: 16}
+
+# Marchands de l'île. achat = prix payé par le joueur pour 1 objet (0 = pas en vente),
+# vente = prix reçu par le joueur pour 1 objet (0 = le marchand ne le reprend pas).
+# Clic gauche : acheter 1 (Maj : 16). Clic droit : vendre 1 (Maj : tout l'inventaire).
+# Les anciens marchands à prix fixes sont remplacés par le marché (/shop) : voir marche.yml.
+# HUD à droite de l'écran (même style que le Tycoon).
+hud:
+  # Soldes et classement des fortunes relus en base toutes les X secondes.
+  soldes-secondes: 5
+  # Grades LuckPerms, du plus haut au plus bas (clé = nom du groupe). Le premier que le joueur a est affiché.
+  grades:
+    fondateur: <b><gradient:#FF3B3B:#FF8A3B>ꜰᴏɴᴅᴀᴛᴇᴜʀ</gradient></b>
+    cofondateur: <b><gradient:#FF8A3B:#FFC83B>ᴄᴏ-ꜰᴏɴᴅᴀᴛᴇᴜʀ</gradient></b>
+    admin: <b><gradient:#E0245E:#FF5C8A>ᴀᴅᴍɪɴ</gradient></b>
+    dev: <b><gradient:#3A7FFF:#7FB2FF>ᴅᴇᴠ</gradient></b>
+    modo: <b><gradient:#1FBF6A:#5EE89A>ᴍᴏᴅᴏ</gradient></b>
+    helpeur: <b><gradient:#22C1D6:#7FE7F2>ʜᴇʟᴘᴇᴜʀ</gradient></b>
+    builder: <b><gradient:#F5B400:#FFE066>ʙᴜɪʟᴅᴇʀ</gradient></b>
+    orbit: <b><gradient:#62CFF4:#E0B864>ᴏʀʙɪᴛ</gradient></b>
+    vipplus: <b><#E0B864>ᴠɪᴘ+</b>
+    vip: <b><#62CFF4>ᴠɪᴘ</b>
+  grade-defaut: <b><gradient:#8C96A3:#B8C0CA>ᴊᴏᴜᴇᴜʀ</gradient></b>
