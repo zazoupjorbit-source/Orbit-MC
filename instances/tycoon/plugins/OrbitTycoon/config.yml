@@ -1,6 +1,10 @@
 # Orbit Tycoon — réglages.
 # Après une modification : /tycoon reload (jamais /reload du serveur).
 
+equipements:
+  bonus-piece: 2.5 # par pièce portée
+  bonus-set: 15.0 # set complet (4/4), remplace 4 × bonus-piece
+  coffre-farm: true # le coffre Farm (coffres.cle-farm.coffre) donne une pièce au hasard
 tab:
   actif: true
 pets:
