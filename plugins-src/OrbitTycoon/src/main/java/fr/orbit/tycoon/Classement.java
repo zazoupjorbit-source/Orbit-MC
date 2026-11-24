@@ -194,7 +194,7 @@ final class Classement implements Listener {
         Component texte = textePanneau();
         for (Place p : panneaux) {
             if (!p.loc.isChunkLoaded()) continue;
-            if (!p.vivante()) p.entite = texteFixe(p.loc, texte, 1.15f);
+            if (!p.vivante()) p.entite = texteFixe(p.loc, texte, (float) plugin.getConfig().getDouble("classement.panneau-echelle", 1.8));
             else ((TextDisplay) p.entite).text(texte);
         }
         for (int i = 0; i < 3; i++) majPodium(i);

@@ -47,7 +47,7 @@ final class Pnjs implements Listener {
     private static final int Y = Zone.Y;
     static final String TAG = "orbit_pnj";
     private static final String TAG_VENDEUR = "orbit_pnj_vendeur", TAG_AVENTURIER = "orbit_pnj_aventurier",
-            TAG_FORGERON = "orbit_pnj_forgeron";
+            TAG_FORGERON = "orbit_pnj_forgeron", TAG_BATISSEUR = "orbit_pnj_batisseur";
     /** Rayon des pavillons autour du centre du spawn (voir Plans.base). */
     private static final double R_PAVILLON = 97;
     /** Index des pavillons (même ordre que Plans.PAVILLONS). */
@@ -133,6 +133,14 @@ final class Pnjs implements Listener {
             preparer(m, l, "vendeur", "<#E0B864><bold>Marchand orbital</bold>");
             m.addScoreboardTag(TAG);
             m.addScoreboardTag(TAG_VENDEUR);
+        }), false));
+        // Bâtisseur (magasin de blocs), à côté du Marchand.
+        places.add(new Place(dansPavillon(MARCHE, 3, 3, Y + 1), l -> l.getWorld().spawn(l, Mannequin.class, m -> {
+            preparer(m, l, "astronaute", "<#62CFF4><bold>Bâtisseur</bold>");
+            m.setDescription(MM.deserialize("<gray>Blocs de déco · Clic droit"));
+            m.getEquipment().setItemInMainHand(new org.bukkit.inventory.ItemStack(org.bukkit.Material.BRICKS));
+            m.addScoreboardTag(TAG);
+            m.addScoreboardTag(TAG_BATISSEUR);
         }), false));
         places.add(new Place(dansPavillon(QUETES, 3, 0, Y + 1), l -> l.getWorld().spawn(l, Mannequin.class, m -> {
             preparer(m, l, "aventurier", "<#62CFF4><bold>Aventurier</bold>");
@@ -278,6 +286,9 @@ final class Pnjs implements Listener {
         if (c.getScoreboardTags().contains(TAG_VENDEUR)) {
             p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_TRADE, 0.8f, 1.1f);
             plugin.hdv().ouvrir(p, 0);
+        } else if (c.getScoreboardTags().contains(TAG_BATISSEUR)) {
+            p.playSound(p.getLocation(), Sound.BLOCK_STONE_PLACE, 0.8f, 1.1f);
+            plugin.magasinBlocs().ouvrir(p);
         } else if (c.getScoreboardTags().contains(TAG_AVENTURIER)) {
             int pretes = plugin.quetes().pretes(p.getUniqueId());
             if (pretes > 0) OrbitTycoon.msg(p, "<#62CFF4>Aventurier</#62CFF4> <dark_gray>»</dark_gray> <gray>Bravo, pilote ! "

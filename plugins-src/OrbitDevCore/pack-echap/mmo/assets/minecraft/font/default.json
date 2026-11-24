@@ -1,0 +1,9 @@
+{
+  "providers": [
+    {"type": "space", "advances": {"": -1}},
+    {"type": "bitmap", "file": "orbitdev:font/echap_mmo_0.png", "height": 60, "ascent": 41, "chars": [""]},
+    {"type": "bitmap", "file": "orbitdev:font/echap_mmo_1.png", "height": 60, "ascent": 41, "chars": [""]},
+    {"type": "bitmap", "file": "orbitdev:font/echap_mmo_2.png", "height": 60, "ascent": 41, "chars": [""]},
+    {"type": "bitmap", "file": "orbitdev:font/echap_mmo_3.png", "height": 60, "ascent": 41, "chars": [""]}
+  ]
+}

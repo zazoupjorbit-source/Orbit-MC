@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {"layer0": "orbittycoon:item/quete_peche_9_verrou"}
+}

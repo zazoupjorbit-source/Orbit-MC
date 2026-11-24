@@ -25,8 +25,13 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HexFormat;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,9 +47,12 @@ import java.util.logging.Level;
  * Embarqué dans le jar ({@code pack.zip}, construit par build.ps1 depuis le dossier pack/) et servi par un
  * petit serveur HTTP intégré, sauf si une URL publique est configurée. Proposé pendant l'écran de connexion.
  *
- * <p>Le pack ne contient que des ressources propres à ORBIT (police orbitdev:gui, modèle orbitdev:invisible) :
- * il peut rester chargé chez le joueur quand il change de serveur sans rien modifier ailleurs.
+ * <p>Le pack contient surtout des ressources propres à ORBIT (police orbitdev:gui, modèle orbitdev:invisible),
+ * plus l'habillage du menu Échap du réseau (boutons, fond, logo du lobby : scripts\gen-echap.ps1).
  * Les menus utilisent les textures seulement si {@link #isLoaded} ; sinon ils retombent sur des vitres colorées.
+ *
+ * <p>Menu Échap par mode : {@code menu-echap: survie} (ou extraction, practice, mmo) ajoute par-dessus le petit
+ * pack {@code echap-<mode>.zip} (logo du mode). Tous ces packs sont servis par le serveur qui sert le pack du lobby.
  */
 public final class LobbyPack implements Listener {
 
@@ -62,6 +70,14 @@ public final class LobbyPack implements Listener {
     private boolean required;
     private HttpServer http;
     private ExecutorService httpPool;
+
+    /** Packs « menu Échap » de chaque mode (tous chargés : le serveur qui sert les packs doit pouvoir tous les fournir). */
+    private static final String[] ECHAP_MODES = {"survie", "extraction", "practice", "mmo"};
+    private final Map<String, byte[]> echapZips = new HashMap<>();
+    private final Map<String, String> echapHashes = new HashMap<>();
+    /** Mode de ce serveur (config menu-echap), null si aucun. */
+    private String echapMode;
+    private UUID echapId;
 
     public LobbyPack(OrbitDevCore plugin) {
         this.plugin = plugin;
@@ -92,6 +108,7 @@ public final class LobbyPack implements Listener {
             throw new IllegalStateException(e);
         }
         packId = UUID.nameUUIDFromBytes(("orbitdev:" + hash).getBytes(StandardCharsets.UTF_8));
+        loadEchap(c.getString("menu-echap", "").trim().toLowerCase(java.util.Locale.ROOT));
         // serve-local: false (autres serveurs du réseau) : le pack, identique, est déjà servi par le lobby sur ce port.
         boolean serve = c.getBoolean("resource-pack.serve-local", true);
         if (publicUrl.isEmpty() && serve && !startHttp()) {
@@ -100,6 +117,33 @@ public final class LobbyPack implements Listener {
         enabled = true;
         plugin.getLogger().info("Pack du lobby prêt (" + (zip.length / 1024) + " Ko, sha1 " + hash.substring(0, 12) + ") — "
                 + (publicUrl.isEmpty() ? (serve ? "servi sur le port " : "servi par le lobby sur le port ") + port : "URL publique " + publicUrl) + ".");
+    }
+
+    private void loadEchap(String mode) {
+        for (String m : ECHAP_MODES) {
+            try (InputStream in = plugin.getResource("echap-" + m + ".zip")) {
+                if (in == null) {
+                    continue;
+                }
+                byte[] data = in.readAllBytes();
+                echapZips.put(m, data);
+                echapHashes.put(m, HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(data)));
+            } catch (IOException | NoSuchAlgorithmException e) {
+                plugin.getLogger().log(Level.WARNING, "Lecture de echap-" + m + ".zip impossible", e);
+            }
+        }
+        if (mode.isEmpty()) {
+            return;
+        }
+        if (!echapZips.containsKey(mode)) {
+            plugin.getLogger().warning("menu-echap: " + mode + " inconnu (modes : " + String.join(", ", ECHAP_MODES) + ").");
+        } else if (!publicUrl.isEmpty()) {
+            plugin.getLogger().warning("menu-echap ignoré : avec resource-pack.public-url, le pack du menu Échap n'est pas hébergé.");
+        } else {
+            echapMode = mode;
+            echapId = UUID.nameUUIDFromBytes(("orbitdev-echap:" + echapHashes.get(mode)).getBytes(StandardCharsets.UTF_8));
+            plugin.getLogger().info("Menu Échap du mode " + mode + " ajouté par-dessus le pack du lobby.");
+        }
     }
 
     private boolean startHttp() {
@@ -128,16 +172,29 @@ public final class LobbyPack implements Listener {
                 ex.sendResponseHeaders(405, -1);
                 return;
             }
+            // /orbit-echap-<mode>-<version>.zip : pack du menu Échap d'un mode ; sinon le pack du lobby.
+            byte[] data = zip;
+            String path = ex.getRequestURI().getPath();
+            int i = path.indexOf("/orbit-echap-");
+            if (i >= 0) {
+                String rest = path.substring(i + "/orbit-echap-".length());
+                int dash = rest.lastIndexOf('-');
+                data = dash > 0 ? echapZips.get(rest.substring(0, dash)) : null;
+                if (data == null) {
+                    ex.sendResponseHeaders(404, -1);
+                    return;
+                }
+            }
             ex.getResponseHeaders().set("Content-Type", "application/zip");
             ex.getResponseHeaders().set("Cache-Control", "no-cache");
             if ("HEAD".equalsIgnoreCase(method)) {
-                ex.getResponseHeaders().set("Content-Length", String.valueOf(zip.length));
+                ex.getResponseHeaders().set("Content-Length", String.valueOf(data.length));
                 ex.sendResponseHeaders(200, -1);
                 return;
             }
-            ex.sendResponseHeaders(200, zip.length);
+            ex.sendResponseHeaders(200, data.length);
             try (OutputStream body = ex.getResponseBody()) {
-                body.write(zip);
+                body.write(data);
             }
         } finally {
             ex.close();
@@ -199,9 +256,17 @@ public final class LobbyPack implements Listener {
     }
 
     private ResourcePackRequest request(UUID player, String host, CompletableFuture<Void> done, boolean replace) {
-        ResourcePackInfo info = ResourcePackInfo.resourcePackInfo(packId, URI.create(url(host)), hash);
+        List<ResourcePackInfo> infos = new ArrayList<>();
+        infos.add(ResourcePackInfo.resourcePackInfo(packId, URI.create(url(host)), hash));
+        if (echapMode != null) {
+            // Ajouté après le pack du lobby : il passe par-dessus (logo du mode dans le menu Échap).
+            String v = echapHashes.get(echapMode).substring(0, 12);
+            infos.add(ResourcePackInfo.resourcePackInfo(echapId,
+                    URI.create("http://" + host + ":" + port + "/orbit-echap-" + echapMode + "-" + v + ".zip"), echapHashes.get(echapMode)));
+        }
+        AtomicInteger pending = new AtomicInteger(infos.size());
         return ResourcePackRequest.resourcePackRequest()
-                .packs(info)
+                .packs(infos)
                 .replace(replace)
                 .required(required)
                 .prompt(Messages.mini("<#8DB8FF><b>ORBIT</b></#8DB8FF>\n<#D7DCE2>Menus du lobby et anneaux-portails du réseau."))
@@ -209,12 +274,14 @@ public final class LobbyPack implements Listener {
                     if (status.intermediate()) {
                         return;
                     }
-                    if (status == ResourcePackStatus.SUCCESSFULLY_LOADED) {
-                        loaded.add(player);
-                    } else {
-                        loaded.remove(player);
+                    if (packId.equals(id)) {
+                        if (status == ResourcePackStatus.SUCCESSFULLY_LOADED) {
+                            loaded.add(player);
+                        } else {
+                            loaded.remove(player);
+                        }
                     }
-                    if (done != null) {
+                    if (pending.decrementAndGet() <= 0 && done != null) {
                         done.complete(null);
                     }
                 })

@@ -39,6 +39,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     private Pack pack;
     private Monnaies monnaies;
     private Hud hud;
+    private Tab tab;
     private IlesJoueurs ilesJoueurs;
     private Pnjs pnjs;
     private Classement classement;
@@ -52,13 +53,18 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     private Quetes quetes;
     private Ressources ressources;
     private Hdv hdv;
+    private MagasinBlocs magasinBlocs;
     private Staff staff;
     private Guide guide;
     private final Don don = new Don(this);
     private Generateurs generateurs;
     private Collecteurs collecteurs;
+    private Noyau noyau;
+    private Pets pets;
+    private Equipements equipements;
     private final Nettoyage nettoyage = new Nettoyage(this);
     private final VoteParty voteParty = new VoteParty(this);
+    private final Votes votes = new Votes(this);
     private boolean chantierEnCours;
 
     @Override
@@ -76,6 +82,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         pack = new Pack(this);
         monnaies = new Monnaies(this);
         hud = new Hud(this, monnaies);
+        tab = new Tab(this, monnaies, hud);
         ilesJoueurs = new IlesJoueurs(this);
         classement = new Classement(this);
         coffres = new Coffres(this);
@@ -89,10 +96,14 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         quetes = new Quetes(this);
         ressources = new Ressources(this);
         hdv = new Hdv(this);
+        magasinBlocs = new MagasinBlocs(this);
         staff = new Staff(this);
         guide = new Guide(this);
         generateurs = new Generateurs(this);
         collecteurs = new Collecteurs(this);
+        noyau = new Noyau(this);
+        pets = new Pets(this);
+        equipements = new Equipements(this);
         navigateur.iles(ilesJoueurs);
         navigateur.pack(pack);
         outil.pack(pack);
@@ -122,6 +133,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         pm.registerEvents(pack, this);
         pm.registerEvents(monnaies, this);
         pm.registerEvents(hud, this);
+        pm.registerEvents(tab, this);
         pm.registerEvents(ilesJoueurs, this);
         pm.registerEvents(classement, this);
         pm.registerEvents(coffres, this);
@@ -133,19 +145,26 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         pm.registerEvents(quetes, this);
         pm.registerEvents(ressources, this);
         pm.registerEvents(hdv, this);
+        pm.registerEvents(magasinBlocs, this);
         pm.registerEvents(staff, this);
         pm.registerEvents(guide, this);
         pm.registerEvents(generateurs, this);
         pm.registerEvents(collecteurs, this);
+        pm.registerEvents(noyau, this);
+        pm.registerEvents(pets, this);
         pm.registerEvents(new Piles(this), this);
         pm.registerEvents(voteParty, this);
+        pm.registerEvents(votes, this);
         pm.registerEvents(this, this);
         mobzone.demarrer();
         portails.demarrer();
         pack.demarrer();
         monnaies.demarrer();
         hud.demarrer();
+        tab.demarrer();
         ilesJoueurs.demarrer();
+        noyau.demarrer();
+        pets.demarrer();
         classement.demarrer();
         coffres.demarrer();
         boutique.demarrer();
@@ -158,6 +177,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         collecteurs.demarrer();
         nettoyage.demarrer();
         voteParty.demarrer();
+        votes.demarrer();
 
         if (donnees().getInt("version", donnees().getBoolean("genere") ? 1 : 0) < VERSION_DESSIN)
             getLogger().warning("Le dessin du Tycoon n'est pas à jour : lance « tycoon generer tout confirmer » dans la console.");
@@ -171,6 +191,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         if (portails != null) portails.arreter();
         if (pack != null) pack.arreter();
         if (hud != null) hud.arreter();
+        if (tab != null) tab.arreter();
         if (classement != null) classement.arreter();
         if (coffres != null) coffres.arreter();
         if (boutique != null) boutique.arreter();
@@ -180,8 +201,11 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         if (staff != null) staff.arreter();
         nettoyage.arreter();
         voteParty.arreter();
+        votes.arreter();
         if (collecteurs != null) collecteurs.arreter();
         if (generateurs != null) generateurs.arreter();
+        if (noyau != null) noyau.arreter();
+        if (pets != null) pets.arreter();
         if (ilesJoueurs != null) ilesJoueurs.arreter();
         if (monnaies != null) monnaies.arreter();
     }
@@ -191,6 +215,10 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     Monnaies monnaies() { return monnaies; }
 
     IlesJoueurs ilesJoueurs() { return ilesJoueurs; }
+    Noyau noyau() { return noyau; }
+    Pets pets() { return pets; }
+    Equipements equipements() { return equipements; }
+    Staff staff() { return staff; }
 
     Tuto tuto() { return tuto; }
 
@@ -214,6 +242,8 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
 
     Hdv hdv() { return hdv; }
 
+    MagasinBlocs magasinBlocs() { return magasinBlocs; }
+
     Generateurs generateurs() { return generateurs; }
 
     Collecteurs collecteurs() { return collecteurs; }
@@ -221,6 +251,14 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     Navigateur navigateur() { return navigateur; }
 
     Guide guide() { return guide; }
+
+    Pnjs pnjs() { return pnjs; }
+
+    Classement classement() { return classement; }
+
+    Boutique boutique() { return boutique; }
+
+    VoteParty voteParty() { return voteParty; }
 
     /** Renvoie le joueur au spawn (Base Orbit). */
     void versBase(Player p) { navigateur.teleporter(p, Zone.BASE, Zone.BASE.arrivee(monde())); }
@@ -276,6 +314,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         if (cmd.getName().equalsIgnoreCase("is")) return ilesJoueurs.commande(s, args);
         if (cmd.getName().equalsIgnoreCase("tuto")) return tuto.commande(s, args);
         if (cmd.getName().equalsIgnoreCase("hdv")) return hdv.commande(s, args);
+        if (cmd.getName().equalsIgnoreCase("blocs")) return magasinBlocs.commande(s, args);
         if (cmd.getName().equalsIgnoreCase("staff")) return staff.commande(s, args);
         if (cmd.getName().equalsIgnoreCase("guide")) return guide.commande(s, args);
         if (cmd.getName().equalsIgnoreCase("gen")) return generateurs.commande(s, args);
@@ -346,6 +385,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
                 boutique.recharger();
                 guide.charger();
                 generateurs.charger();
+                magasinBlocs.recharger();
                 nettoyage.demarrer();
                 ressources.recharger();
                 voteParty.demarrer();
@@ -398,15 +438,34 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
                 else msg(s, "Usage : /tycoon iles deco <gray>(pose le décor spatial sur les îles existantes, seulement dans l'air)");
             }
             case "coffres" -> {
-                if (args.length > 1 && args[1].equalsIgnoreCase("poser")) msg(s, "Coffres : " + coffres.poser() + " blocs posés.");
+                if (args.length > 1 && args[1].equalsIgnoreCase("poser")) msg(s, "Coffres : " + coffres.poser());
                 coffres.rafraichir();
                 msg(s, "Noms des coffres mis à jour (config.yml, coffres.noms ; /tycoon reload puis /tycoon coffres).");
             }
+            case "pet" -> {
+                Player cible = args.length > 3 ? Bukkit.getPlayerExact(args[3]) : (s instanceof Player p ? p : null);
+                if (args.length >= 3 && args[1].equalsIgnoreCase("niveau") && args[2].matches("\\d{1,3}") && cible != null) {
+                    msg(s, pets.definirNiveau(cible, Integer.parseInt(args[2])) + " pet(s) équipé(s) de " + cible.getName() + " mis au niveau " + args[2] + ".");
+                    return true;
+                }
+                if (args.length < 3 || !args[1].equalsIgnoreCase("donner") || cible == null) { msg(s, "Usage : /tycoon pet donner <espece_rarete> [joueur] <gray>(ex. tatou_legendaire)<white> ou /tycoon pet niveau <0-100> [joueur] <gray>(pets équipés)"); return true; }
+                msg(s, pets.donner(cible, args[2]) ? "Pet donné à " + cible.getName() + "." : "Pet inconnu : " + args[2]);
+            }
+            case "equipement" -> {
+                Player cible = args.length > 3 ? Bukkit.getPlayerExact(args[3]) : (s instanceof Player p ? p : null);
+                if (args.length < 3 || !args[1].equalsIgnoreCase("donner") || cible == null) { msg(s, "Usage : /tycoon equipement donner <pioche|hache|houe|canne|epee|tout> [joueur]"); return true; }
+                msg(s, equipements.donner(cible, args[2]) ? "Équipement donné à " + cible.getName() + "." : "Outil inconnu : " + args[2]);
+            }
+            case "vote" -> {
+                if (args.length < 2 || !args[1].matches("[A-Za-z0-9_.]{1,16}")) { msg(s, "Usage : /tycoon vote <joueur> [site] <gray>(simule un vote reçu)"); return true; }
+                votes.voter(args[1], args.length > 2 ? args[2] : "Test");
+                msg(s, "Vote simulé pour " + args[1] + " (clés en attente : " + votes.enAttente(args[1]) + ").");
+            }
             case "cle" -> {
-                int n = args.length > 1 && args[1].matches("[1-5]") ? Integer.parseInt(args[1]) - 1 : -1;
+                int n = args.length > 1 && args[1].matches("[1-6]") ? Integer.parseInt(args[1]) - 1 : -1;
                 Player cible = args.length > 2 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player p ? p : null);
                 int nombre = args.length > 3 && args[3].matches("\\d{1,2}") ? Math.max(1, Integer.parseInt(args[3])) : 1;
-                if (n < 0 || cible == null) { msg(s, "Usage : /tycoon cle <1-5> [joueur] [nombre]"); return true; }
+                if (n < 0 || cible == null) { msg(s, "Usage : /tycoon cle <1-6> [joueur] [nombre]"); return true; }
                 cible.getInventory().addItem(coffres.cle(n, nombre));
                 msg(s, nombre + " clé(s) « " + coffres.nom(n) + " » données à " + cible.getName() + ".");
             }
@@ -433,7 +492,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
                 msg(s, "<#E0B864>/tycoon classement [poser]<gray> (met à jour ; poser = socles + podium au spawn)");
                 msg(s, "<#E0B864>/tycoon coffres [poser]<gray> (met à jour les noms ; poser = espace + 5 coffres au spawn)");
                 msg(s, "<#E0B864>/tycoon boutique poser<gray> (arche + estrade du PNJ Boutique), <#E0B864>/tycoon dome generer [confirmer]");
-                msg(s, "<#E0B864>/tycoon cle <1-5> [joueur] [nombre]<gray> (clé provisoire de test)");
+                msg(s, "<#E0B864>/tycoon cle <1-6> [joueur] [nombre]<gray> (clé provisoire de test)");
                 msg(s, "<#E0B864>/tycoon tuto reset <joueur><gray> (relance le tuto du joueur)");
                 msg(s, "<#E0B864>/tycoon deco <poser|retirer><gray> (décor du spawn : pavillons, anneaux, espaces vides)");
             }
@@ -690,9 +749,14 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
             return res;
         }
         if (!cmd.getName().equalsIgnoreCase("tycoon")) return List.of();
-        if (args.length == 1) res.addAll(List.of("generer", "tp", "equiper", "reload", "monnaie", "prestige", "test", "mobzone", "ile", "classement", "coffres", "cle", "boutique", "dome", "iles", "tuto", "deco", "gen", "nettoyage", "voteparty"));
+        if (args.length == 1) res.addAll(List.of("generer", "tp", "equiper", "reload", "monnaie", "prestige", "test", "mobzone", "ile", "classement", "coffres", "cle", "pet", "equipement", "boutique", "dome", "iles", "tuto", "deco", "gen", "nettoyage", "voteparty", "vote"));
         else if (args[0].equalsIgnoreCase("nettoyage") && args.length == 2) res.add("maintenant");
+        else if (args[0].equalsIgnoreCase("pet") && args.length == 2) res.addAll(List.of("donner", "niveau"));
+        else if (args[0].equalsIgnoreCase("equipement") && args.length == 2) res.add("donner");
+        else if (args[0].equalsIgnoreCase("equipement") && args.length == 3) res.addAll(List.of("pioche", "hache", "houe", "canne", "epee", "tout"));
+        else if (args[0].equalsIgnoreCase("pet") && args.length == 3) res.addAll(args[1].equalsIgnoreCase("niveau") ? List.of("0", "50", "100") : Pets.ids());
         else if (args[0].equalsIgnoreCase("voteparty") && args.length == 2) res.addAll(List.of("ajouter", "definir"));
+        else if (args[0].equalsIgnoreCase("vote") && args.length == 2) return null;
         else if (args[0].equalsIgnoreCase("gen")) {
             if (args.length == 2) res.addAll(List.of("donner", "collecteur", "coffre", "liste"));
             else if (args.length == 3) return null;

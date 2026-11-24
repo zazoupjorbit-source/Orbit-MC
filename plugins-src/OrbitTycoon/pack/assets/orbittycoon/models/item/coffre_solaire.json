@@ -1,0 +1,25 @@
+{
+  "textures": {
+    "particle": "orbittycoon:item/coffre_solaire_cote",
+    "cote": "orbittycoon:item/coffre_solaire_cote",
+    "dessus": "orbittycoon:item/coffre_solaire_dessus",
+    "gemme": "orbittycoon:item/coffre_solaire_gemme",
+    "metal": "orbittycoon:item/coffre_metal"
+  },
+  "elements": [
+    {"from": [0, 0, 0], "to": [16, 2, 16], "faces": {"north": {"texture": "#metal"}, "south": {"texture": "#metal"}, "east": {"texture": "#metal"}, "west": {"texture": "#metal"}, "up": {"texture": "#metal"}, "down": {"texture": "#metal"}}},
+    {"from": [0.75, 2, 0.75], "to": [15.25, 10, 15.25], "faces": {"north": {"texture": "#cote"}, "south": {"texture": "#cote"}, "east": {"texture": "#cote"}, "west": {"texture": "#cote"}, "up": {"texture": "#dessus"}, "down": {"texture": "#cote"}}},
+    {"from": [0.4, 9.6, 0.4], "to": [15.6, 10.4, 15.6], "faces": {"north": {"texture": "#metal"}, "south": {"texture": "#metal"}, "east": {"texture": "#metal"}, "west": {"texture": "#metal"}, "up": {"texture": "#metal"}, "down": {"texture": "#metal"}}},
+    {"from": [0.5, 10.4, 0.5], "to": [15.5, 14, 15.5], "faces": {"north": {"texture": "#cote"}, "south": {"texture": "#cote"}, "east": {"texture": "#cote"}, "west": {"texture": "#cote"}, "up": {"texture": "#dessus"}, "down": {"texture": "#cote"}}},
+    {"from": [0, 2, 0], "to": [2, 14.5, 2], "faces": {"north": {"texture": "#metal"}, "south": {"texture": "#metal"}, "east": {"texture": "#metal"}, "west": {"texture": "#metal"}, "up": {"texture": "#metal"}, "down": {"texture": "#metal"}}},
+    {"from": [14, 2, 0], "to": [16, 14.5, 2], "faces": {"north": {"texture": "#metal"}, "south": {"texture": "#metal"}, "east": {"texture": "#metal"}, "west": {"texture": "#metal"}, "up": {"texture": "#metal"}, "down": {"texture": "#metal"}}},
+    {"from": [0, 2, 14], "to": [2, 14.5, 16], "faces": {"north": {"texture": "#metal"}, "south": {"texture": "#metal"}, "east": {"texture": "#metal"}, "west": {"texture": "#metal"}, "up": {"texture": "#metal"}, "down": {"texture": "#metal"}}},
+    {"from": [14, 2, 14], "to": [16, 14.5, 16], "faces": {"north": {"texture": "#metal"}, "south": {"texture": "#metal"}, "east": {"texture": "#metal"}, "west": {"texture": "#metal"}, "up": {"texture": "#metal"}, "down": {"texture": "#metal"}}},
+    {"from": [6, 5, 0.25], "to": [10, 11, 0.75], "faces": {"north": {"texture": "#metal"}, "south": {"texture": "#metal"}, "east": {"texture": "#metal"}, "west": {"texture": "#metal"}, "up": {"texture": "#metal"}, "down": {"texture": "#metal"}}},
+    {"from": [7, 7, 0], "to": [9, 9.5, 0.25], "faces": {"north": {"texture": "#gemme"}, "south": {"texture": "#gemme"}, "east": {"texture": "#gemme"}, "west": {"texture": "#gemme"}, "up": {"texture": "#gemme"}, "down": {"texture": "#gemme"}}},
+    {"from": [6, 5, 15.25], "to": [10, 11, 15.75], "faces": {"north": {"texture": "#metal"}, "south": {"texture": "#metal"}, "east": {"texture": "#metal"}, "west": {"texture": "#metal"}, "up": {"texture": "#metal"}, "down": {"texture": "#metal"}}},
+    {"from": [7, 7, 15.75], "to": [9, 9.5, 16], "faces": {"north": {"texture": "#gemme"}, "south": {"texture": "#gemme"}, "east": {"texture": "#gemme"}, "west": {"texture": "#gemme"}, "up": {"texture": "#gemme"}, "down": {"texture": "#gemme"}}},
+    {"from": [5.5, 14, 5.5], "to": [10.5, 14.75, 10.5], "faces": {"north": {"texture": "#metal"}, "south": {"texture": "#metal"}, "east": {"texture": "#metal"}, "west": {"texture": "#metal"}, "up": {"texture": "#metal"}, "down": {"texture": "#metal"}}},
+    {"from": [6.5, 14.75, 6.5], "to": [9.5, 16, 9.5], "faces": {"north": {"texture": "#gemme"}, "south": {"texture": "#gemme"}, "east": {"texture": "#gemme"}, "west": {"texture": "#gemme"}, "up": {"texture": "#gemme"}, "down": {"texture": "#gemme"}}}
+  ]
+}

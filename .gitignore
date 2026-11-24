@@ -156,8 +156,26 @@ runtime.json
 # Hotel des ventes et avancement du tuto : donnees des joueurs
 /instances/*/plugins/OrbitTycoon/hdv.yml
 /instances/*/plugins/OrbitTycoon/tuto.yml
+# Votes : cles RSA + jeton (secrets) et cles en attente (donnees de jeu)
+/instances/*/plugins/OrbitTycoon/votes/
+/instances/*/plugins/OrbitTycoon/votes-attente.yml
 
 # Survie : marque de génération de l'île (liée au monde), aperçu et sauvegardes de config
 /instances/*/plugins/OrbitSurvie/ile-generee
 /instances/*/plugins/OrbitSurvie/ile-apercu.png
 /instances/*/plugins/OrbitSurvie/*.ancien
+
+# --- Visuels à partager (logo Discord) ---
+!/marketing/
+/marketing/*
+!/marketing/discord/
+/marketing/discord/*
+!/marketing/discord/logo-orbitmc-discord.png
+!/marketing/discord/logo-orbitmc.html
+
+# Données de jeu (écrites par les plugins en jeu) : jamais dans git
+/instances/*/plugins/OrbitExtraction/chargeurs.yml
+/instances/*/plugins/OrbitTycoon/pets.yml
+/instances/*/plugins/OrbitTycoon/pets.yml.*
+/instances/*/plugins/OrbitTycoon/generateurs.yml
+/instances/*/plugins/OrbitTycoon/coffres-ailes.ok

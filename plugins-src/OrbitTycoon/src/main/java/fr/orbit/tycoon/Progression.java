@@ -29,7 +29,7 @@ import static fr.orbit.tycoon.Navigateur.texte;
  * Niveaux, XP et prestige de chaque outil, plus la fiche d'outil (Shift + clic droit → clic droit sur un outil).
  * - Chaque ressource récoltée donne de l'XP à l'outil de sa zone (barème progression.xp dans config.yml).
  * - Niveaux 1 → niveau-max ; au niveau max, l'XP ne monte plus : il faut passer prestige.
- * - Passer prestige coûte des Crédits orbitaux (cout-base × (prestige + 1)), remet l'outil au niveau 1
+ * - Passer prestige coûte des Crédits orbitaux (gains de la meilleure ressource pour monter 1 → max + 15 min de farm), remet l'outil au niveau 1
  *   et ajoute 1 au prestige de l'outil et au prestige total.
  */
 final class Progression implements Listener {
@@ -66,9 +66,33 @@ final class Progression implements Listener {
         return Math.max(1, Math.round((base + parNiveau * (niveau - 1)) * (1 + bonus * prestige)));
     }
 
-    /** Coût en Crédits orbitaux pour passer du prestige {@code prestige} au suivant. */
-    long coutPrestige(int prestige) {
-        return Math.max(0, cfg().getLong("progression.prestige-cout-base", 10_000)) * (prestige + 1L);
+    /**
+     * Coût en Crédits orbitaux pour passer du prestige {@code prestige} au suivant, calé sur la meilleure ressource
+     * débloquée de l'outil : ce que rapportent les récoltes pour monter du niveau 1 au max, plus
+     * « prestige-minutes-manquantes » de farm (à « recoltes-par-seconde »). Arrivé au niveau max en farmant cet outil,
+     * il manque donc ces minutes-là. Arrondi à la centaine supérieure.
+     */
+    long coutPrestige(UUID id, Outil.Mode m, int prestige) {
+        long credit = cfg().getLong("credit-orbital.defaut", 1), xp = cfg().getLong("progression.xp.defaut", 1);
+        List<Ressources.Palier> liste = plugin.ressources().liste(m);
+        for (int i = liste.size() - 1; i >= 0; i--) {
+            if (!plugin.ressources().debloque(id, m, i)) continue;
+            Ressources.Palier r = liste.get(i);
+            if (!r.origine()) { credit = r.credit(); xp = r.xp(); }
+            else if (r.icone() != null) {
+                // Zone d'origine : barème de sa ressource principale (OAK_LOG, WHEAT, COD…).
+                credit = cfg().getLong("credit-orbital.ressources." + r.icone().name(), credit);
+                xp = cfg().getLong("progression.xp.ressources." + r.icone().name(), xp);
+            }
+            break;
+        }
+        long xpTotal = 0;
+        for (int n = 1; n < niveauMax(); n++) xpTotal += xpRequis(n, prestige);
+        double manquantes = cfg().getDouble("progression.prestige-minutes-manquantes", 15) * 60
+                * cfg().getDouble("progression.recoltes-par-seconde", 1);
+        double recoltes = Math.ceil((double) xpTotal / Math.max(1, xp)) + Math.max(0, manquantes);
+        long cout = Math.round(Math.max(0, credit) * recoltes);
+        return (cout + 99) / 100 * 100;
     }
 
     // ------------------------------------------------------------------ XP
@@ -157,7 +181,7 @@ final class Progression implements Listener {
     private ItemStack boutonPrestige(UUID id, Outil.Mode m, int niveau, int prestige) {
         if (prestige >= prestigeMax())
             return objet(Material.BEACON, "<#E0B864><bold>Prestige maximum", true, "<gray>Ton " + m.nom + " est au sommet : ✪ " + prestige + " !");
-        long cout = coutPrestige(prestige);
+        long cout = coutPrestige(id, m, prestige);
         boolean niveauOk = niveau >= niveauMax();
         boolean argentOk = plugin.monnaies().solde(id, Monnaies.Monnaie.CREDIT) >= cout;
         List<String> lore = new ArrayList<>();
@@ -221,7 +245,7 @@ final class Progression implements Listener {
             p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 0.6f, 0.8f);
             return;
         }
-        long cout = coutPrestige(prestige);
+        long cout = coutPrestige(id, m, prestige);
         plugin.confirmer().ouvrir(p, "Passer prestige ?",
                 objet(Material.NETHER_STAR, "<" + m.couleur + "><bold>" + m.nom + " <#E0B864>✪ " + prestige + " → ✪ " + (prestige + 1), true),
                 List.of("<gray>Coût : <#E0B864>" + Hud.nombre(cout) + " ⛃ Crédits orbitaux", "<gray>L'outil repart au niveau 1."),
@@ -234,8 +258,8 @@ final class Progression implements Listener {
         int prestige = mon.prestige(id, m);
         if (prestige >= prestigeMax()) return "Ton " + m.nom + " est déjà au prestige maximum.";
         if (mon.niveau(id, m) < niveauMax()) return "Ton " + m.nom + " doit d'abord atteindre le <#3DDCB0>niveau " + niveauMax() + "</#3DDCB0>.";
-        if (mon.solde(id, Monnaies.Monnaie.CREDIT) < coutPrestige(prestige))
-            return "Il te faut <#E0B864>" + Hud.nombre(coutPrestige(prestige)) + " ⛃ Crédits orbitaux</#E0B864> pour passer prestige.";
+        if (mon.solde(id, Monnaies.Monnaie.CREDIT) < coutPrestige(id, m, prestige))
+            return "Il te faut <#E0B864>" + Hud.nombre(coutPrestige(id, m, prestige)) + " ⛃ Crédits orbitaux</#E0B864> pour passer prestige.";
         return null;
     }
 
@@ -245,7 +269,7 @@ final class Progression implements Listener {
         // On revérifie tout : le solde a pu changer pendant la confirmation.
         String refus = refus(id, m);
         int prestige = mon.prestige(id, m);
-        if (refus != null || !mon.retirer(id, Monnaies.Monnaie.CREDIT, coutPrestige(prestige))) {
+        if (refus != null || !mon.retirer(id, Monnaies.Monnaie.CREDIT, coutPrestige(id, m, prestige))) {
             OrbitTycoon.msg(p, refus != null ? refus : "Pas assez de Crédits orbitaux.");
             return;
         }

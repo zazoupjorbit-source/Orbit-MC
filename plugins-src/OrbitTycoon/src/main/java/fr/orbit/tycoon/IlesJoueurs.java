@@ -71,7 +71,9 @@ final class IlesJoueurs implements Listener {
     static final class Ile {
         final int index;
         String nom;
-        int palier;   // 0 = taille de départ
+        int palier;   // 0 = taille de départ (= niveau du Noyau Orbital - 1)
+        /** Objets déposés dans le Noyau Orbital pour le prochain niveau (id de générateur -> nombre). */
+        final Map<String, Long> depots = new HashMap<>();
         final Map<UUID, Rang> membres = new LinkedHashMap<>();
         final Set<UUID> bannis = new HashSet<>();
         Ile(int index) { this.index = index; }
@@ -137,6 +139,8 @@ final class IlesJoueurs implements Listener {
             Ile ile = new Ile(Integer.parseInt(cle));
             ile.nom = c.getString("nom", "Île");
             ile.palier = c.getInt("palier", 0);
+            ConfigurationSection d = c.getConfigurationSection("depots");
+            if (d != null) for (String id : d.getKeys(false)) ile.depots.put(id, d.getLong(id));
             ConfigurationSection m = c.getConfigurationSection("membres");
             if (m != null) for (String id : m.getKeys(false)) {
                 try { ile.membres.put(UUID.fromString(id), Rang.valueOf(m.getString(id, "MEMBRE"))); }
@@ -153,7 +157,7 @@ final class IlesJoueurs implements Listener {
     }
 
     /** Construit le YAML sur le thread principal, l'écrit sur le disque en asynchrone. */
-    private void sauver() {
+    void sauver() {
         YamlConfiguration y = new YamlConfiguration();
         sauverDans(y);
         String texte = y.saveToString();
@@ -175,6 +179,7 @@ final class IlesJoueurs implements Listener {
             String b = "iles." + ile.index + ".";
             y.set(b + "nom", ile.nom);
             y.set(b + "palier", ile.palier);
+            for (var e : ile.depots.entrySet()) if (e.getValue() > 0) y.set(b + "depots." + e.getKey(), e.getValue());
             for (var e : ile.membres.entrySet()) y.set(b + "membres." + e.getKey(), e.getValue().name());
             y.set(b + "bannis", ile.bannis.stream().map(UUID::toString).toList());
         }
@@ -193,7 +198,7 @@ final class IlesJoueurs implements Listener {
 
     // ------------------------------------------------------------------ tailles (paliers)
 
-    private List<Integer> tailles() {
+    List<Integer> tailles() {
         List<Integer> l = plugin.getConfig().getIntegerList("iles.tailles");
         return l.isEmpty() ? List.of(100) : l;
     }
@@ -247,6 +252,7 @@ final class IlesJoueurs implements Listener {
         if (!monde.generateTree(sol.getLocation().add(0, 1, 0), TreeType.TREE))
             sol.getRelative(0, 1, 0).setType(Material.OAK_SAPLING, false);
         decorer(ile);
+        plugin.noyau().poser(ile);
     }
 
     // ------------------------------------------------------------------ décor spatial autour de l'île
@@ -468,7 +474,7 @@ final class IlesJoueurs implements Listener {
         msg(p, "<#E0B864><bold>Îles</bold> <gray>— commandes :");
         msg(p, "<#E0B864>/is create [nom]<gray> crée ton île, <#E0B864>/is home<gray> t'y téléporte");
         msg(p, "<#E0B864>/is invite <joueur><gray>, <#E0B864>/is join <joueur><gray>, <#E0B864>/is leave");
-        msg(p, "<#E0B864>/is level<gray>, <#E0B864>/is upgrade<gray> (agrandir), <#E0B864>/is nom <nom>");
+        msg(p, "<#E0B864>/is level<gray>, <#E0B864>/is upgrade<gray> (Noyau Orbital), <#E0B864>/is nom <nom>");
         msg(p, "<#E0B864>/is promote|demote|kick|ban|unban <joueur><gray>, <#E0B864>/is visit <joueur>");
     }
 
@@ -479,6 +485,7 @@ final class IlesJoueurs implements Listener {
     }
 
     private void teleporter(Player p, Ile ile) {
+        plugin.noyau().assurer(ile);
         p.teleportAsync(arrivee(ile), PlayerTeleportEvent.TeleportCause.PLUGIN).thenAccept(ok -> {
             if (!ok) return;
             Bukkit.getScheduler().runTask(plugin, () -> {
@@ -505,8 +512,9 @@ final class IlesJoueurs implements Listener {
         sauver();
         plugin.monnaies().definirIle(p.getUniqueId(), ile.nom);
         msg(p, "<#7CFC9A>Île créée !</#7CFC9A> Elle fait <#E0B864>" + taille(ile) + " × " + taille(ile)
-                + "</#E0B864><gray> : améliore-la avec <#E0B864>/is upgrade</#E0B864><gray> pour l'agrandir.");
+                + "</#E0B864><gray> : clic droit sur le <#62CFF4>Noyau Orbital</#62CFF4><gray> (au nord du pad) pour l'agrandir.");
         teleporter(p, ile);
+        plugin.generateurs().cadeauIle(p);
     }
 
     private void renommer(Player p, String nouveau) {
@@ -531,7 +539,7 @@ final class IlesJoueurs implements Listener {
         return o;
     }
 
-    private Ile ileAvecRang(Player p, Rang minimum) {
+    Ile ileAvecRang(Player p, Rang minimum) {
         Ile ile = ileDe(p.getUniqueId());
         if (ile == null) { msg(p, "Tu n'as pas d'île."); return null; }
         if (ile.membres.get(p.getUniqueId()).ordinal() < minimum.ordinal()) {
@@ -617,7 +625,7 @@ final class IlesJoueurs implements Listener {
         if (ile.palier + 1 < tailles().size()) {
             int suivante = tailles().get(ile.palier + 1);
             msg(p, "Prochain niveau : <#E0B864>" + suivante + " × " + suivante + "</#E0B864><gray> pour "
-                    + Monnaies.Monnaie.CREDIT.format(cout(ile.palier + 1)) + "<gray> (<#E0B864>/is upgrade</#E0B864><gray>).");
+                    + Monnaies.Monnaie.CREDIT.format(cout(ile.palier + 1)) + "<gray> + des ressources (<#62CFF4>Noyau Orbital</#62CFF4><gray>).");
         } else msg(p, "<#7CFC9A>Taille maximale atteinte.");
         StringBuilder sb = new StringBuilder();
         for (var e : ile.membres.entrySet()) {
@@ -627,29 +635,17 @@ final class IlesJoueurs implements Listener {
         msg(p, "Membres : " + sb);
     }
 
-    private long cout(int palier) {
+    long cout(int palier) {
         List<Long> c = couts();
         return palier < c.size() ? c.get(palier) : Long.MAX_VALUE;
     }
 
+    /** L'île s'agrandit maintenant par le Noyau Orbital (bloc interactif posé à la création de l'île). */
     private void ameliorer(Player p) {
-        Ile ile = ileAvecRang(p, Rang.OFFICIER);
-        if (ile == null) return;
-        if (ile.palier + 1 >= tailles().size()) { msg(p, "<#7CFC9A>Ton île est déjà à la taille maximale."); return; }
-        long prix = cout(ile.palier + 1);
-        if (prix == Long.MAX_VALUE) { msg(p, "<#FF4D4D>Prix de ce niveau absent de la config (iles.couts)."); return; }
-        if (!plugin.monnaies().retirer(p.getUniqueId(), Monnaies.Monnaie.CREDIT, prix)) {
-            msg(p, "<#FF4D4D>Il te faut " + Monnaies.Monnaie.CREDIT.format(prix) + "<#FF4D4D>.");
-            return;
-        }
-        ile.palier++;
-        sauver();
-        int t = taille(ile);
-        annoncer(ile, "<#7CFC9A>L'île passe au niveau " + (ile.palier + 1) + " !</#7CFC9A><gray> Nouvelle zone : <#E0B864>" + t + " × " + t);
-        for (UUID id : ile.membres.keySet()) {
-            Player m = Bukkit.getPlayer(id);
-            if (m != null) m.playSound(m.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.6f, 1.2f);
-        }
+        Ile ile = ileDe(p.getUniqueId());
+        if (ile == null) { msg(p, "Tu n'as pas d'île. <#E0B864>/is create"); return; }
+        msg(p, "L'île s'agrandit avec le <#62CFF4>Noyau Orbital</#62CFF4><gray> : fais <#E0B864>clic droit</#E0B864><gray> dessus,"
+                + " au nord du pad d'arrivée (<#E0B864>/is home</#E0B864><gray>).");
     }
 
     private void promouvoir(Player p, String n, boolean confirmer) {
@@ -758,7 +754,7 @@ final class IlesJoueurs implements Listener {
         teleporter(p, ile);
     }
 
-    private void annoncer(Ile ile, String mm) {
+    void annoncer(Ile ile, String mm) {
         for (UUID id : ile.membres.keySet()) {
             Player m = Bukkit.getPlayer(id);
             if (m != null) msg(m, mm);

@@ -258,3 +258,7 @@ modes:
     description:
       - "<gray>Le portail ancien."
       - "<gray>Classes, donjons et lore ORBIT."
+
+# Logo du mode dans le menu Echap (pack ajoute par-dessus celui du lobby) : survie, extraction, practice, mmo.
+# Vide : logo du lobby (ORBIT MC - La Station).
+menu-echap: ""

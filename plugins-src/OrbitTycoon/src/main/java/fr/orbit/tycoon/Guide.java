@@ -61,7 +61,7 @@ final class Guide implements Listener {
     /** Noms des coffres (<coffre1> … <coffre5>) tirés de config.yml. */
     private TagResolver variables() {
         List<TagResolver> l = new ArrayList<>();
-        for (int n = 0; n < 5; n++) l.add(Placeholder.unparsed("coffre" + (n + 1), plugin.coffres().nom(n)));
+        for (int n = 0; n < Coffres.NB; n++) l.add(Placeholder.unparsed("coffre" + (n + 1), plugin.coffres().nom(n)));
         return TagResolver.resolver(l);
     }
 

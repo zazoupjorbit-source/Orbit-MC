@@ -81,7 +81,7 @@ final class Tuto implements Listener {
     private boolean actif() { return plugin.getConfig().getBoolean("tuto.actif", true); }
     private int recoltesDemandees() { return Math.max(1, plugin.getConfig().getInt("tuto.recoltes", 10)); }
     private int zonesDemandees() { return Math.min(Zone.farms().size(), Math.max(1, plugin.getConfig().getInt("tuto.zones", 5))); }
-    private int numeroCle() { return Math.max(1, Math.min(5, plugin.getConfig().getInt("tuto.cle-coffre", 1))) - 1; }
+    private int numeroCle() { return Math.max(1, Math.min(Coffres.NB, plugin.getConfig().getInt("tuto.cle-coffre", 1))) - 1; }
     private long recompenseCredits() { return Math.max(0, plugin.getConfig().getLong("tuto.recompense-credits", 500)); }
 
     // ------------------------------------------------------------------ cycle de vie
@@ -206,7 +206,7 @@ final class Tuto implements Listener {
                     "Suis la barre en haut de l'écran : 8 petites étapes. <dark_gray>(/tuto pour revoir la consigne, /tuto passer pour sauter)");
             case SOLDE -> List.of("Tes monnaies : tape <click:suggest_command:'/solde'><#E0B864><u>/solde</u></#E0B864></click><gray>.");
             case NAVIGATEUR -> List.of(
-                    "Le <#E0B864>Navigateur orbital</#E0B864> (dans ton inventaire) te téléporte vers les îles, ton île et le spawn.",
+                    "Le <#E0B864>Navigateur orbital</#E0B864> (dans ton inventaire) ouvre le panneau de tout le Tycoon : zones, île, quêtes, shop, HDV...",
                     "Fais un clic droit avec, ou tape <#E0B864>/zones</#E0B864>.");
             case OUTIL -> List.of(
                     "Ton <#E0B864>Outil orbital</#E0B864> est à la fois pioche, hache, houe, canne à pêche et épée.",
