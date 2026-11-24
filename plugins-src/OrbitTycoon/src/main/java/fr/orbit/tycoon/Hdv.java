@@ -189,7 +189,7 @@ final class Hdv implements Listener {
         p.sendMessage(texte("  <#E0B864>/hdv <gray>: ouvrir l'hôtel des ventes"));
         p.sendMessage(texte("  <#E0B864>/hdv vendre <prix> <gray>: vendre l'objet en main (ex. 2500, 10k, 1.5m)"));
         p.sendMessage(texte("  <#E0B864>/hdv ventes <gray>: tes offres et objets à récupérer"));
-        p.sendMessage(texte("  <dark_gray>Taxe " + cfg().getInt("hdv.taxe", 5) + " % · " + cfg().getInt("hdv.max-offres", 10)
+        p.sendMessage(texte("  <dark_gray>Taxe " + cfg().getInt("hdv.taxe", 5) + " % · " + plugin.grades().maxOffres(p)
                 + " offres max · expiration " + cfg().getLong("hdv.duree-heures", 48) + " h"));
     }
 
@@ -216,7 +216,7 @@ final class Hdv implements Listener {
         long min = Math.max(1, cfg().getLong("hdv.prix-min", 1)), max = cfg().getLong("hdv.prix-max", 1_000_000_000_000L);
         if (prix < 0) { OrbitTycoon.msg(p, "Prix illisible. Exemples : <#E0B864>2500</#E0B864>, <#E0B864>10k</#E0B864>, <#E0B864>1.5m</#E0B864>."); return; }
         if (prix < min || prix > max) { OrbitTycoon.msg(p, "Le prix doit être entre <#E0B864>" + Hud.nombre(min) + "</#E0B864> et <#E0B864>" + Hud.nombre(max) + "</#E0B864> Crédits."); return; }
-        int maxOffres = Math.max(1, cfg().getInt("hdv.max-offres", 10));
+        int maxOffres = Math.max(1, plugin.grades().maxOffres(p));
         long miennes = offres.values().stream().filter(o -> o.vendeur.equals(p.getUniqueId())).count();
         if (miennes >= maxOffres) {
             OrbitTycoon.msg(p, "Tu as déjà <#E0B864>" + maxOffres + " offres</#E0B864> (expirées comprises). Retire-en dans <#E0B864>/hdv ventes</#E0B864>.");
@@ -259,7 +259,7 @@ final class Hdv implements Listener {
         long miennes = offres.values().stream().filter(o -> o.vendeur.equals(p.getUniqueId())).count();
         long aRecuperer = offres.values().stream().filter(o -> o.vendeur.equals(p.getUniqueId()) && expiree(o)).count();
         inv.setItem(SLOT_MES_VENTES, objet(Material.CHEST, "<#E0B864><bold>Mes ventes", aRecuperer > 0,
-                "<gray>Offres : <white>" + miennes + " <dark_gray>/ " + cfg().getInt("hdv.max-offres", 10),
+                "<gray>Offres : <white>" + miennes + " <dark_gray>/ " + plugin.grades().maxOffres(p),
                 aRecuperer > 0 ? "<#FF4D4D>" + aRecuperer + " objet(s) expiré(s) à récupérer" : "<dark_gray>Rien à récupérer.",
                 "", "<#E0B864>➜ Clic pour gérer tes offres"));
         inv.setItem(SLOT_INFO, objet(Material.EMERALD, "<#E0B864><bold>Hôtel des ventes", false,

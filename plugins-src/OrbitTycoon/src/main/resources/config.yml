@@ -127,6 +127,10 @@ hud:
     helpeur: "<b><gradient:#22C1D6:#7FE7F2>ʜᴇʟᴘᴇᴜʀ</gradient></b>"
     builder: "<b><gradient:#F5B400:#FFE066>ʙᴜɪʟᴅᴇʀ</gradient></b>"
     orbit: "<b><gradient:#62CFF4:#E0B864>ᴏʀʙɪᴛ</gradient></b>"
+    astral: "<b><gradient:#C77DFF:#62CFF4>ᴀꜱᴛʀᴀʟ</gradient></b>"
+    amiral: "<b><gradient:#E0B864:#FFF1A0>ᴀᴍɪʀᴀʟ</gradient></b>"
+    commandant: "<b><gradient:#3FA9F5:#62CFF4>ᴄᴏᴍᴍᴀɴᴅᴀɴᴛ</gradient></b>"
+    pilote: "<b><gradient:#9FB8D0:#D8F6FF>ᴘɪʟᴏᴛᴇ</gradient></b>"
     vipplus: "<b><#E0B864>ᴠɪᴘ+</b>"
     vip: "<b><#62CFF4>ᴠɪᴘ</b>"
   grade-defaut: "<b><gradient:#8C96A3:#B8C0CA>ᴊᴏᴜᴇᴜʀ</gradient></b>"
@@ -294,6 +298,36 @@ titres:
     moissonneur: "<#7CFC9A>Moissonneur cosmique"
     comete: "<#C77DFF>Chasseur de comètes"
     legende: "<gradient:#62CFF4:#E0B864>Légende orbitale</gradient>"
+    grade_pilote: "<gradient:#9FB8D0:#D8F6FF>Pilote</gradient>"
+    grade_commandant: "<gradient:#3FA9F5:#62CFF4>Commandant</gradient>"
+    grade_amiral: "<gradient:#E0B864:#FFF1A0>Amiral</gradient>"
+    grade_astral: "<gradient:#C77DFF:#62CFF4>✦ Astral ✦</gradient>"
+    pionnier: "<#62CFF4>Pionnier stellaire"
+    voyageur: "<#9FB8D0>Voyageur du vide"
+    capitaine: "<#3FA9F5>Capitaine cosmique"
+    dompteur: "<#C77DFF>Dompteur de nébuleuses"
+    seigneur: "<gradient:#E0B864:#FFF1A0>Seigneur des étoiles</gradient>"
+    devoreur: "<gradient:#C77DFF:#FF9F43>Dévoreur de mondes</gradient>"
+  # Titres vendus au rayon Titres de la boutique (id: prix en Plasma). Les autres : coffres ou grades.
+  boutique:
+    pionnier: 300
+    voyageur: 500
+    capitaine: 800
+    dompteur: 1200
+    seigneur: 2000
+    devoreur: 3500
+  # Image spatiale de chaque titre dans la boutique (titre_fusee, titre_satellite, titre_comete, titre_galaxie, titre_etoile, titre_trou_noir).
+  icones:
+    electeur: titre_satellite
+    moissonneur: titre_etoile
+    comete: titre_comete
+    legende: titre_galaxie
+    pionnier: titre_fusee
+    voyageur: titre_satellite
+    capitaine: titre_fusee
+    dompteur: titre_galaxie
+    seigneur: titre_etoile
+    devoreur: titre_trou_noir
 
 # Équipements de farm (Equipements.java) : 1 set de 4 pièces par outil (Cratère = pioche, Sylvanova = hache,
 # Moisson Solaire = houe, Marée Lunaire = canne, Supernova = épée). Pièce PORTÉE + outil du set en main :
@@ -302,6 +336,10 @@ equipements:
   bonus-piece: 2.5     # par pièce portée
   bonus-set: 15.0      # set complet (4/4), remplace 4 × bonus-piece
   coffre-farm: true    # le coffre Farm (coffres.cle-farm.coffre) donne une pièce au hasard
+  # Armures premium (boutique, Plasma) : bonus en % de Crédits, Flux et XP avec TOUS les outils (0 = désactivé).
+  premium:
+    nebuleuse: {bonus-piece: 5.0, bonus-set: 25.0, prix-piece: 1200, prix-set: 4200}
+    zenith: {bonus-piece: 10.0, bonus-set: 50.0, prix-piece: 3000, prix-set: 10500}
 
 # Pets (Pets.java) : 20 espèces (4 par outil : Fortune, XP, Money, Proc) × 4 raretés = 80 pets.
 # Obtenus dans le coffre Ménagerie (6e coffre) ; collection et équipement (3 max) : Navigateur → Pets.
@@ -320,6 +358,16 @@ pets:
 # Après un changement : /tycoon reload, puis /tycoon boutique poser (nouvelles arches) ou retirer (arches en trop).
 boutique:
   avenues: [mobzone]   # une seule arche : face aux coffres
+  # Prix des clés en Plasma, dans l'ordre de coffres.noms (Vote, Farm, Event, Saturne, Neptune, Pets).
+  prix-cles: [50, 80, 150, 500, 1000, 300]
+  # Seconde ligne du rayon Clés : lot de 16 clés, réduction en % sur le prix ×16.
+  reduction-pack-cles: 20
+  # Rayon Items : baguettes de vente (prix en Plasma, utilisations) et boosters (Plasma, ×mult pendant minutes).
+  baguettes:
+    orbitale: {prix: 400, utilisations: 100}
+    nebulaire: {prix: 900, utilisations: 100}
+    stellaire: {prix: 1500, utilisations: 50}
+  boosters: {credits: 250, flux: 250, xp: 250, mult: 2.0, minutes: 30}
 
 # Tuto guidé (1re connexion) : /solde, Navigateur, Outil orbital, récolte, découverte des îles, coffres, /vote.
 # Avancement des joueurs dans tuto.yml. /tuto (consigne), /tuto passer, /tuto recommencer ; admin : /tycoon tuto reset <joueur>.
@@ -565,3 +613,12 @@ magasin-blocs:
   multiplicateur: 1.0   # tous les prix du barème × ce nombre
   prix: {}              # prix fixés bloc par bloc, ex. {BEACON: 50000, GLASS: 2}
   exclus: []            # blocs retirés en plus, ex. [ENDER_CHEST]
+
+# Grades du Tycoon (Grades.java), achetés en Plasma à la boutique. bonus = % de Crédits, Flux, XP d'outil et production des générateurs.
+# Groupe LuckPerms du même nom, donné avec le contexte server=tycoon. Monter de grade = payer la différence.
+# offres-hdv = offres en plus à l'hôtel des ventes (s'ajoute à hdv.max-offres).
+grades:
+  pilote: {prix: 1500, bonus: 5.0, offres-hdv: 5}
+  commandant: {prix: 3500, bonus: 10.0, offres-hdv: 10}
+  amiral: {prix: 7500, bonus: 15.0, offres-hdv: 20}
+  astral: {prix: 15000, bonus: 25.0, offres-hdv: 30}

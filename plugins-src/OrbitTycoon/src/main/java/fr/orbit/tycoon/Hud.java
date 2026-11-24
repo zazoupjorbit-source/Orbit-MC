@@ -8,6 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
@@ -25,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * HUD permanent à droite de l'écran (barre latérale du tableau des scores, chiffres masqués) :
- * pseudo, grade, les trois monnaies, l'outil utilisé (niveau, ressources récoltées, prestige),
+ * pseudo, grade, les trois monnaies, l'outil utilisé (niveau, sa ressource propre récoltée, prestige),
  * prestige total, classement global (aux Crédits orbitaux), nom de l'île et générateurs (posés / max).
  * Rafraîchi chaque seconde ; une ligne n'est renvoyée au joueur que si son texte a changé.
  */
@@ -81,6 +82,17 @@ final class Hud implements Listener {
         ecrans.remove(e.getPlayer().getUniqueId());
     }
 
+    /** Changement d'emplacement de la barre rapide : l'outil en main a pu changer → HUD tout de suite. */
+    @EventHandler
+    public void changeMain(PlayerItemHeldEvent e) {
+        bientot(e.getPlayer());
+    }
+
+    /** Rafraîchit le HUD du joueur au tick suivant (après le changement d'objet), sans attendre la seconde. */
+    void bientot(Player p) {
+        Bukkit.getScheduler().runTask(plugin, () -> { if (p.isOnline()) maj(p); });
+    }
+
     private void creer(Player p) {
         Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
         Objective o = sb.registerNewObjective("orbit_hud", Criteria.DUMMY, MM.deserialize(TITRE));
@@ -133,7 +145,9 @@ final class Hud implements Listener {
             int niveau = Math.min(monnaies.niveau(id, outil), prog.niveauMax());
             l.add("<#E0B864><bold>OUTIL <dark_gray>» <" + outil.couleur + "><bold>" + outil.nom);
             l.add("<gray>Niveau <dark_gray>» <#3DDCB0>" + niveau + " <dark_gray>/ " + prog.niveauMax());
-            l.add("<gray>Ressources <dark_gray>» <white>" + nombre(monnaies.recoltes(id, outil)));
+            // Chaque outil a sa propre ressource : la ligne suit l'outil en main.
+            l.add("<" + outil.couleur + ">" + outil.symbole + " <white>" + nombre(monnaies.recoltes(id, outil))
+                    + " <gray>" + outil.ressource);
             l.add("<gray>Prestige <dark_gray>» <#E0B864>✪ " + monnaies.prestige(id, outil) + " <dark_gray>/ " + prog.prestigeMax());
         }
         l.add(" ");

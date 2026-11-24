@@ -69,7 +69,7 @@ final class Navigateur implements Listener {
             Map.entry("cat_coffres", "Coffres"), Map.entry("cat_shop", "Shop"), Map.entry("cat_hdv", "HDV"),
             Map.entry("cat_zones", "Zones"), Map.entry("info", "Infos"), Map.entry("retour", "Retour"),
             Map.entry("outil_interface", "Outil"), Map.entry("outil_ressources", "Récolte"), Map.entry("outil_atelier", "Atelier"),
-            Map.entry("outil_classement", "Podium"), Map.entry("boutique_ouvrir", "Boutique"), Map.entry("boutique_pnj", "PNJ"),
+            Map.entry("outil_classement", "Podium"), Map.entry("boutique_ouvrir", "Boutique"), Map.entry("boutique_pnj", "PNJ"), Map.entry("boutique_grades", "Grades"), Map.entry("boutique_items", "Items"), Map.entry("boutique_cles", "Clés"),
             Map.entry("quetes_mes", "Quêtes"), Map.entry("quetes_pavillon", "Pavillon"), Map.entry("tuto_consigne", "Étape"),
             Map.entry("tuto_recommencer", "Refaire"), Map.entry("tuto_passer", "Passer"), Map.entry("tuto_lire", "Guide"),
             Map.entry("tuto_livre", "Livre"), Map.entry("ile_creer", "Créer"), Map.entry("ile_mon", "Mon île"),
@@ -168,7 +168,7 @@ final class Navigateur implements Listener {
     /** Les 11 catégories, dans l'ordre du panneau. */
     private enum Categorie {
         OUTILS("outils", Material.DIAMOND_PICKAXE, "<#62CFF4><bold>Outils</bold>", "Ton Outil orbital, ses ressources,", "l'Atelier et le classement prestige."),
-        BOUTIQUE("boutique", Material.BEACON, "<#E0B864><bold>Boutique</bold>", "Cosmétiques Orbit (aucun pay-to-win)", "et le PNJ Boutique du spawn."),
+        BOUTIQUE("boutique", Material.BEACON, "<#E0B864><bold>Boutique</bold>", "Grades, items, clés (Plasma)", "et le PNJ Boutique du spawn."),
         QUETES("quetes", Material.WRITABLE_BOOK, "<#7CFC9A><bold>Quêtes</bold>", "Tes quêtes de prestige et le", "pavillon de l'Aventurier."),
         TUTO("tuto", Material.BOOK, "<#C77DFF><bold>Tuto</bold>", "Revoir, recommencer ou passer le tuto,", "et le livre-guide."),
         ILE("ile", Material.GRASS_BLOCK, "<#7CFC9A><bold>Île</bold> <gray>(/is)", "Créer, rejoindre, agrandir", "et gérer ton île."),
@@ -390,11 +390,21 @@ final class Navigateur implements Listener {
                     new Entree("boutique_pnj", Material.ARMOR_STAND, "<#62CFF4><bold>PNJ Boutique</bold>",
                             List.of("<gray>Un PNJ astronaute t'attend sur", "<gray>chaque avenue du spawn.", "", CLIC_TP),
                             j -> tp(j, plugin.boutique().pointTp())),
+                    new Entree("boutique_grades", Material.NETHER_STAR, "<#E0B864><bold>Grades</bold>",
+                            List.of("<gray>Pilote, Commandant, Amiral, Astral :", "<gray>jusqu'à <#7CFC9A>+25 %<gray> de gains, vol sur",
+                                    "<gray>ton île, accès prioritaire, cadre…", "<dark_gray>(/grades)", "", CLIC_OUVRIR),
+                            j -> { j.closeInventory(); plugin.boutique().ouvrirGrades(j); }),
+                    new Entree("boutique_items", Material.CHEST, "<#C77DFF><bold>Items</bold>",
+                            List.of("<gray>Objets utiles pour ton île :", "<gray>Collecteur orbital…", "", CLIC_OUVRIR),
+                            j -> { j.closeInventory(); plugin.boutique().ouvrirItems(j); }),
+                    new Entree("boutique_cles", Material.TRIPWIRE_HOOK, "<#62CFF4><bold>Clés de coffres</bold>",
+                            List.of("<gray>Les clés des 6 coffres orbitaux,", "<gray>à l'unité ou par 5.", "", CLIC_OUVRIR),
+                            j -> { j.closeInventory(); plugin.boutique().ouvrirCles(j); }),
                     info("La boutique, c'est quoi ?",
-                            "<gray>Uniquement des <#E0B864>cosmétiques</#E0B864>",
-                            "<gray>(payés en <#C77DFF>Plasma</#C77DFF>).",
-                            "<gray>Aucun avantage en jeu :",
-                            "<#7CFC9A>zéro pay-to-win."));
+                            "<gray>Grades, items et clés,",
+                            "<gray>payés en <#C77DFF>Plasma</#C77DFF>.",
+                            "<gray>Grades : bonus de gains + confort.",
+                            "<gray>Ton solde : <#E0B864>/solde"));
             case QUETES -> List.of(
                     new Entree("quetes_mes", Material.WRITABLE_BOOK, "<#7CFC9A><bold>Mes quêtes</bold>",
                             List.of("<gray>Tes quêtes de prestige en cours", "<gray>et leurs récompenses.", "", CLIC_OUVRIR),

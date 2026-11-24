@@ -356,9 +356,14 @@ final class Generateurs implements Listener {
         // Une île ne produit que si un de ses membres est physiquement dessus (pas juste connecté ailleurs) :
         // évite d'accumuler des tonnes de ressources pendant que personne n'y est.
         Set<Integer> actives = new HashSet<>();
+        // Bonus de production de l'île : le meilleur grade (Grades.java) parmi les membres présents dessus.
+        java.util.Map<Integer, Double> bonusGrade = new java.util.HashMap<>();
         for (Player p : w.getPlayers()) {
             IlesJoueurs.Ile ici = iles().ileA(p.getLocation().getX(), p.getLocation().getZ());
-            if (ici != null && ici == iles().ileDe(p.getUniqueId())) actives.add(ici.index);
+            if (ici != null && ici == iles().ileDe(p.getUniqueId())) {
+                actives.add(ici.index);
+                if (plugin.grades() != null) bonusGrade.merge(ici.index, plugin.grades().bonus(p), Math::max);
+            }
         }
         if (actives.isEmpty()) return;
         int maxSol = Math.max(64, plugin.getConfig().getInt("generateurs.max-au-sol", 512));
@@ -371,7 +376,8 @@ final class Generateurs implements Listener {
             if (!w.isChunkLoaded(c[0] >> 4, c[2] >> 4)) continue;
             // Un collecteur dans le chunk : la production est vendue (Collecteur orbital) ou rangée (Coffre collecteur),
             // sans objet au sol ; seul ce qui ne rentre pas dans un coffre plein tombe au sol.
-            int pile = plugin.collecteurs().absorber(c[0] >> 4, c[2] >> 4, g.ile, t, g.pile * parCycle());
+            int quantite = Equipements.appliquer(g.pile * parCycle(), bonusGrade.getOrDefault(g.ile, 0.0));
+            int pile = plugin.collecteurs().absorber(c[0] >> 4, c[2] >> 4, g.ile, t, quantite);
             if (pile <= 0) continue;
             Location l = new Location(w, c[0] + 0.5, c[1] + 1.15, c[2] + 0.5);
             ItemStack modele = produit(t, 1);
@@ -720,6 +726,25 @@ final class Generateurs implements Listener {
         }
         if (n == 0) { OrbitTycoon.msg(p, "Aucune ressource de générateur dans ton inventaire."); return; }
         payer(p, total, n);
+    }
+
+    /**
+     * Baguette de vente : vend les ressources de générateur d'un coffre (prix de vente × mult).
+     * Renvoie le nombre d'objets vendus (0 = rien à vendre, le coffre n'est pas touché).
+     */
+    int vendreConteneur(Player p, org.bukkit.inventory.Inventory inv, double mult) {
+        double total = 0;
+        int n = 0;
+        ItemStack[] contenu = inv.getContents();
+        for (int i = 0; i < contenu.length; i++) {
+            Type t = typeProduit(contenu[i]);
+            if (t == null) continue;
+            total += contenu[i].getAmount() * t.vente();
+            n += contenu[i].getAmount();
+            inv.setItem(i, null);
+        }
+        if (n > 0) payer(p, total * mult, n);
+        return n;
     }
 
     private void payer(Player p, double montant, int objets) {

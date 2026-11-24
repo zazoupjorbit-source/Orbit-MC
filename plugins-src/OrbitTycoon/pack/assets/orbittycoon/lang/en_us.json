@@ -7,8 +7,12 @@
   "orbittycoon.tab.grade.helpeur": "\uE905",
   "orbittycoon.tab.grade.builder": "\uE906",
   "orbittycoon.tab.grade.orbit": "\uE907",
-  "orbittycoon.tab.grade.vipplus": "\uE908",
-  "orbittycoon.tab.grade.vip": "\uE909",
-  "orbittycoon.tab.grade.joueur": "\uE90A",
-  "orbittycoon.tab.prestige": "\uE90B"
+  "orbittycoon.tab.grade.astral": "\uE908",
+  "orbittycoon.tab.grade.amiral": "\uE909",
+  "orbittycoon.tab.grade.commandant": "\uE90A",
+  "orbittycoon.tab.grade.pilote": "\uE90B",
+  "orbittycoon.tab.grade.vipplus": "\uE90C",
+  "orbittycoon.tab.grade.vip": "\uE90D",
+  "orbittycoon.tab.grade.joueur": "\uE90E",
+  "orbittycoon.tab.prestige": "\uE90F"
 }

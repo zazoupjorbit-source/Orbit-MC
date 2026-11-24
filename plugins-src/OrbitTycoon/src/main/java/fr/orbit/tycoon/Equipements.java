@@ -222,13 +222,106 @@ final class Equipements implements Listener {
         return quantite + plus;
     }
 
+    // ------------------------------------------------------------------ armures premium (boutique, Plasma)
+
+    /**
+     * Armures premium vendues en Plasma à la boutique : bonus de Crédits, Flux et XP avec TOUS les outils
+     * (réglages equipements.premium.&lt;id&gt; : bonus-piece, bonus-set, prix-piece, prix-set). Ne tombent pas des coffres.
+     */
+    enum Premium {
+        NEBULEUSE("nebuleuse", "Nébuleuse", "Combinaison", "#C77DFF", "Tissée dans le cœur d'une nébuleuse", 5, 25, 1200, 4200),
+        ZENITH("zenith", "Zénith", "Armure", "#E0B864", "Forgée au sommet du ciel, là où brille l'or", 10, 50, 3000, 10500);
+
+        final String id, nom, type, couleur, devise;
+        final double bonusPiece, bonusSet;
+        final long prixPiece, prixSet;
+
+        Premium(String id, String nom, String type, String couleur, String devise, double bp, double bs, long pp, long ps) {
+            this.id = id; this.nom = nom; this.type = type; this.couleur = couleur; this.devise = devise;
+            this.bonusPiece = bp; this.bonusSet = bs; this.prixPiece = pp; this.prixSet = ps;
+        }
+    }
+
+    double bonusPiece(Premium a) { return plugin.getConfig().getDouble("equipements.premium." + a.id + ".bonus-piece", a.bonusPiece); }
+    double bonusSet(Premium a) { return plugin.getConfig().getDouble("equipements.premium." + a.id + ".bonus-set", a.bonusSet); }
+    long prixPiece(Premium a) { return plugin.getConfig().getLong("equipements.premium." + a.id + ".prix-piece", a.prixPiece); }
+    long prixSet(Premium a) { return plugin.getConfig().getLong("equipements.premium." + a.id + ".prix-set", a.prixSet); }
+
+    /** La pièce p de l'armure premium a (incassable, valeur d'armure du cuir, texture du pack). */
+    ItemStack premium(Premium a, Piece p) {
+        ItemStack it = new ItemStack(p.type);
+        it.editMeta(LeatherArmorMeta.class, m -> {
+            m.itemName(MM.deserialize("<" + a.couleur + "><bold>" + p.nom + " " + a.nom));
+            m.setColor(Color.fromRGB(Integer.parseInt(a.couleur.substring(1), 16)));
+            m.setUnbreakable(true);
+            m.setEnchantmentGlintOverride(true);
+            m.addItemFlags(ItemFlag.HIDE_DYE, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_UNBREAKABLE);
+            m.lore(lorePremium(a, false).stream().map(l -> MM.deserialize("<!italic>" + l)).toList());
+            m.getPersistentDataContainer().set(cle, PersistentDataType.STRING, "PREMIUM:" + a.name() + ":" + p.name());
+            m.setItemModel(new NamespacedKey("orbittycoon", "armure_" + a.id + "_" + idPiece(p)));
+        });
+        it.setData(DataComponentTypes.EQUIPPABLE, Equippable.equippable(p.slot).assetId(Key.key("orbittycoon", a.id)).build());
+        return it;
+    }
+
+    /** Description d'une armure premium (objet porté, ou fiche de la boutique avec les prix). */
+    List<String> lorePremium(Premium a, boolean boutique) {
+        String b = pct(bonusPiece(a)), set = pct(bonusSet(a));
+        List<String> l = new ArrayList<>();
+        l.add("<#C77DFF>✦ Armure premium <dark_gray>· <gray>tous les outils");
+        l.add("<dark_gray><italic>" + a.devise);
+        l.add("");
+        l.add("<#62CFF4><bold>Chaque pièce portée :</bold>");
+        l.add("<dark_gray> • <#62CFF4>+" + b + " % <white>de Crédits et de Flux");
+        l.add("<dark_gray> • <#62CFF4>+" + b + " % <white>d'XP d'outil");
+        l.add("<#E0B864><bold>Set complet (4/4) : +" + set + " %</bold>");
+        l.add("<dark_gray>Se cumule avec les sets de farm.");
+        if (boutique) {
+            l.add("");
+            l.add("<gray>Pièce : <#C77DFF>" + Monnaies.Monnaie.PLASMA.format(prixPiece(a)));
+            l.add("<gray>Set complet : <#C77DFF>" + Monnaies.Monnaie.PLASMA.format(prixSet(a)));
+        } else {
+            l.add("");
+            l.add("<dark_gray>Vendue à la boutique (Plasma).");
+        }
+        return l;
+    }
+
+    /** Armure premium de cette pièce, ou null. */
+    Premium premiumDe(ItemStack it) {
+        if (it == null || !it.hasItemMeta()) return null;
+        String v = it.getItemMeta().getPersistentDataContainer().get(cle, PersistentDataType.STRING);
+        if (v == null || !v.startsWith("PREMIUM:")) return null;
+        String[] t = v.split(":");
+        try { return Premium.valueOf(t[1]); } catch (RuntimeException e) { return null; }
+    }
+
+    /** Bonus total en % des armures premium portées (Crédits, Flux, XP), quel que soit l'outil. */
+    double bonusPremium(Player p) {
+        int[] n = new int[Premium.values().length];
+        for (ItemStack it : p.getInventory().getArmorContents()) {
+            Premium a = premiumDe(it);
+            if (a != null) n[a.ordinal()]++;
+        }
+        double total = 0;
+        for (Premium a : Premium.values()) {
+            int k = n[a.ordinal()];
+            if (k > 0) total += k >= 4 ? bonusSet(a) : k * bonusPiece(a);
+        }
+        return total;
+    }
+
     // ------------------------------------------------------------------ staff
 
     /** /tycoon equipement donner <outil|tout> [joueur] : true si l'outil est connu. */
     boolean donner(Player cible, String quoi) {
         List<ItemStack> l = new ArrayList<>();
+        Premium premium = null;
+        for (Premium a : Premium.values()) if (a.id.equalsIgnoreCase(quoi)) premium = a;
         if (quoi.equalsIgnoreCase("tout")) l.addAll(toutes());
-        else {
+        else if (premium != null) {
+            for (Piece p : Piece.values()) l.add(premium(premium, p));
+        } else {
             Set s = Set.de(Outil.Mode.parse(quoi));
             if (s == null) return false;
             for (Piece p : Piece.values()) l.add(objet(s, p));

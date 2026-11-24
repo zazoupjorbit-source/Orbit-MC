@@ -45,6 +45,8 @@ $sets = [ordered]@{
     moisson   = @{ p = C '#F5D442'; l = C '#FFF1A0'; d = C '#B8901E'; f = C '#3A2C0C'; a = C '#FF9A3B'; b = C '#FFF6D6'; n = 3 }
     maree     = @{ p = C '#3FA9F5'; l = C '#A8DBFF'; d = C '#1F5F9E'; f = C '#0E2340'; a = C '#9FE7FF'; b = C '#F2FBFF'; n = 4 }
     supernova = @{ p = C '#FF4D4D'; l = C '#FFA0A0'; d = C '#9E1F2A'; f = C '#24080A'; a = C '#FF9A3B'; b = C '#FFE27A'; n = 5 }
+    nebuleuse = @{ p = C '#9B5DE5'; l = C '#D7B8FF'; d = C '#5A2A8C'; f = C '#1A0E2E'; a = C '#FF8FE0'; b = C '#F4E6FF'; n = 6 }   # premium
+    zenith    = @{ p = C '#E0B864'; l = C '#FFF1A0'; d = C '#A8792A'; f = C '#0B1A2E'; a = C '#62CFF4'; b = C '#D8F6FF'; n = 7 }   # premium
 }
 
 # Emblème 4x4 de la poitrine (a = accent, A = accent clair, x = fond sombre, d = sombre du set).
@@ -54,6 +56,8 @@ $emblemes = @{
     moisson   = @('xaax', 'aAAa', 'aAAa', 'xaax')   # soleil
     maree     = @('xAAx', 'Aaxx', 'Aaxx', 'xAAx')   # croissant de lune
     supernova = @('axxa', 'xAAx', 'xAAx', 'axxa')   # étoile qui explose
+    nebuleuse = @('Aaxx', 'xaAa', 'aAax', 'xxaA')   # galaxie en spirale
+    zenith    = @('xAAx', 'AAAA', 'xaax', 'axxa')   # astre au zenith
 }
 
 # Couleur d'une lettre du dessin. Les plaques (p, l, d) reçoivent le motif du métier.
@@ -91,6 +95,14 @@ function Couleur([string]$k, $s, [string]$nom, [int]$x, [int]$y) {
         'supernova' {    # fissures de lave qui rougeoient
             if ((Bruit $x $y 14) -lt 0.06) { return Mix $s.a $s.b 0.3 }
             if ((Bruit ($x + 1) $y 14) -lt 0.06) { $c = Mix $c $s.a 0.35 }
+        }
+        'nebuleuse' {    # premium : volutes de nébuleuse rose + étoiles blanches
+            if ((Bruit $x $y 15) -lt 0.05) { return $s.b }
+            if ((($x * 2 + $y * 3 + [int]([Math]::Sin($x * 0.7) * 2)) % 7 + 7) % 7 -eq 0) { $c = Mix $c $s.a 0.4 }
+        }
+        'zenith' {       # premium : rayons dorés en diagonale + éclats bleu glacé
+            if ((Bruit $x $y 16) -lt 0.035) { return $s.a }
+            if (((($x - $y) % 5) + 5) % 5 -eq 0) { $c = Mix $c $s.l 0.5 }
         }
     }
     return $c
@@ -370,7 +382,7 @@ function Figure($b1, $b2, [bool]$dos) {
 
 # ------------------------------------------------------------------ écriture
 $utf8 = New-Object System.Text.UTF8Encoding $false
-$apercu = New-Object System.Drawing.Bitmap (5 * 200), 270
+$apercu = New-Object System.Drawing.Bitmap ($sets.Count * 200), 270
 $ga = [System.Drawing.Graphics]::FromImage($apercu)
 $ga.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::NearestNeighbor
 $ga.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::Half
@@ -408,4 +420,4 @@ $maquettes = Join-Path $PSScriptRoot '..\..\..\maquettes'
 New-Item -ItemType Directory -Force $maquettes | Out-Null
 $apercu.Save((Join-Path $maquettes 'armures_tycoon_apercu.png'), [System.Drawing.Imaging.ImageFormat]::Png)
 $apercu.Dispose()
-Write-Host "Armures generees : 5 sets (10 calques 64x32, 20 icones 16x16)."
+Write-Host "Armures generees : $($sets.Count) sets ($($sets.Count * 2) calques 64x32, $($sets.Count * 4) icones 16x16)."

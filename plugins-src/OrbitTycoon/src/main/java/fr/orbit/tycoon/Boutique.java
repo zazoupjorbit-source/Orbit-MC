@@ -37,7 +37,7 @@ import java.util.List;
 /**
  * Boutique du spawn : un PNJ astronaute (mannequin au skin du pack) sous une arche dorée, sur chacune des
  * 5 avenues qui mènent aux anneaux-portails. Clic droit sur un PNJ ou /boutique : ouvre le menu.
- * Pour l'instant les rayons affichent « Bientôt » (boutique future 100 % cosmétique, payée en Plasma : aucun pay-to-win).
+ * Rayons payés en Plasma : Grades (Grades.java), Items (Collecteur orbital), Clés de coffres, Titres, HDV.
  * Blocs posés une fois par « /tycoon boutique poser » ; PNJ et titres recréés au chargement de leur chunk.
  */
 final class Boutique implements Listener {
@@ -125,7 +125,7 @@ final class Boutique implements Listener {
         });
         Location t = posTitre(i);
         if (t.isChunkLoaded() && (titres[i] == null || !titres[i].isValid())) titres[i] = t.getWorld().spawn(t, TextDisplay.class, d -> {
-            d.text(MM.deserialize("<gradient:#62CFF4:#E0B864><bold>BOUTIQUE ORBIT</bold></gradient>\n<gray>Cosmétiques de la station"));
+            d.text(MM.deserialize("<gradient:#62CFF4:#E0B864><bold>BOUTIQUE ORBIT</bold></gradient>\n<gray>Grades · Items · Clés"));
             d.setPersistent(false);
             d.setBillboard(Display.Billboard.VERTICAL);
             d.setShadowed(true);
@@ -168,24 +168,318 @@ final class Boutique implements Listener {
 
     private static final class Menu implements InventoryHolder {
         private Inventory inv;
+        private final java.util.Map<Integer, java.util.function.Consumer<Player>> actions = new java.util.HashMap<>();
+        /** Action du clic droit (rayon Clés : ×5). */
+        private final java.util.Map<Integer, java.util.function.Consumer<Player>> droit = new java.util.HashMap<>();
         @Override public Inventory getInventory() { return inv; }
     }
 
-    void ouvrir(Player p) {
+    private static final String PLASMA = "<#C77DFF>";
+    /** Prix des clés en Plasma (dans l'ordre de coffres.noms : Vote, Farm, Event, Saturne, Neptune, Pets). */
+    private static final long[] PRIX_CLES = {50, 80, 150, 500, 1000, 300};
+
+    private Menu menu(Player p, int lignes, String titre) {
         Menu h = new Menu();
-        Inventory inv = Bukkit.createInventory(h, 27, Habillage.titre(plugin, p, 3, "Boutique Orbit"));
-        h.inv = inv;
-        long plasma = plugin.monnaies().solde(p.getUniqueId(), Monnaies.Monnaie.PLASMA);
-        inv.setItem(11, objet(Material.AMETHYST_SHARD, "<#C77DFF><bold>Cosmétiques",
-                "<gray>Titres, particules, compagnons…", "<gray>Payés en <#C77DFF>Plasma</#C77DFF>.", "", "<#E0B864>Bientôt disponible"));
-        inv.setItem(13, objet(Material.NETHER_STAR, "<#C77DFF><bold>Ton Plasma",
-                "<white>" + Monnaies.Monnaie.PLASMA.format(plasma), "", "<dark_gray>100 % cosmétique : aucun pay-to-win."));
-        inv.setItem(15, objet(Material.EMERALD, "<#E0B864><bold>Hôtel des ventes",
-                "<gray>Achète et vends entre joueurs", "<gray>en <#E0B864>Crédits orbitaux</#E0B864>.", "", "<#E0B864>➜ Clic pour ouvrir <dark_gray>(/hdv)"));
-        Habillage.fond(plugin, p, inv);
-        p.openInventory(inv);
+        h.inv = Bukkit.createInventory(h, lignes * 9, Habillage.titre(plugin, p, lignes, titre));
+        return h;
+    }
+
+    private void montrer(Player p, Menu h) {
+        Habillage.fond(plugin, p, h.inv);
+        p.openInventory(h.inv);
+    }
+
+    private void poser(Menu h, int slot, ItemStack it, java.util.function.Consumer<Player> action) {
+        h.inv.setItem(slot, it);
+        if (action != null) h.actions.put(slot, action);
+    }
+
+    private long plasma(Player p) { return plugin.monnaies().solde(p.getUniqueId(), Monnaies.Monnaie.PLASMA); }
+
+    private ItemStack soldePlasma(Player p) {
+        return objet(Material.NETHER_STAR, PLASMA + "<bold>Ton Plasma", "<white>" + Monnaies.Monnaie.PLASMA.format(plasma(p)),
+                "", "<gray>La monnaie premium de la station.");
+    }
+
+    private ItemStack retour() { return objet(Material.ARROW, "<#E0B864><bold>← Retour", "<gray>Rayons de la boutique"); }
+
+    /** Accueil : les rayons de la boutique. */
+    void ouvrir(Player p) {
+        Menu h = menu(p, 3, "Boutique Orbit");
+        poser(h, 10, objet(Material.NETHER_STAR, "<#E0B864><bold>Grades",
+                "<gray>Pilote, Commandant, Amiral, Astral.", "<gray>Jusqu'à <#7CFC9A>+25 %<gray> de gains.", "", "<#E0B864>➜ Clic pour voir"), this::ouvrirGrades);
+        h.inv.getItem(10).editMeta(m -> m.setItemModel(new org.bukkit.NamespacedKey("orbittycoon", "nav_grade_astral")));
+        ItemStack items = objet(Material.CHEST, "<#C77DFF><bold>Items",
+                "<gray>Objets utiles pour ton île :", "<gray>Collecteur orbital…", "", "<#E0B864>➜ Clic pour voir");
+        items.editMeta(m -> m.setItemModel(new org.bukkit.NamespacedKey("orbittycoon", "nav_boutique_items")));
+        poser(h, 11, items, this::ouvrirItems);
+        ItemStack cles = plugin.coffres().cle(3, 1);
+        cles.editMeta(m -> {
+            m.itemName(MM.deserialize("<#62CFF4><bold>Clés de coffres"));
+            m.lore(List.of(ligne("<gray>Les clés des 6 coffres orbitaux"), ligne("<gray>du spawn."), Component.empty(), ligne("<#E0B864>➜ Clic pour voir")));
+        });
+        poser(h, 12, cles, this::ouvrirCles);
+        ItemStack titres = objet(Material.NAME_TAG, "<#62CFF4><bold>Titres",
+                "<gray>Les titres affichés devant", "<gray>ton pseudo : achète-les", "<gray>ou choisis lequel porter.", "", "<#E0B864>➜ Clic pour voir");
+        titres.editMeta(m -> m.setItemModel(new org.bukkit.NamespacedKey("orbittycoon", "nav_titre_galaxie")));
+        poser(h, 14, titres, this::ouvrirTitres);
+        poser(h, 15, soldePlasma(p), null);
+        poser(h, 16, objet(Material.EMERALD, "<#E0B864><bold>Hôtel des ventes",
+                "<gray>Achète et vends entre joueurs", "<gray>en <#E0B864>Crédits orbitaux</#E0B864>.", "", "<#E0B864>➜ Clic pour ouvrir <dark_gray>(/hdv)"),
+                j -> plugin.hdv().ouvrir(j, 0));
+        montrer(p, h);
         p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 0.8f, 1.2f);
     }
+
+    /** Rayon Grades : les 4 grades, prix à payer (différence avec le grade actuel). */
+    void ouvrirGrades(Player p) {
+        Grades gr = plugin.grades();
+        Menu h = menu(p, 4, "Grades");
+        Material[] icones = {Material.IRON_INGOT, Material.DIAMOND, Material.GOLD_BLOCK, Material.NETHER_STAR};
+        int[] slots = {10, 12, 14, 16};
+        Grades.Grade actuel = gr.grade(p);
+        for (Grades.Grade g : Grades.Grade.values()) {
+            List<String> lore = new ArrayList<>();
+            lore.add("<dark_gray>Grade du Tycoon");
+            lore.add("");
+            lore.addAll(gr.avantages(g));
+            lore.add("");
+            long prix = gr.prixPour(p, g);
+            if (prix < 0) lore.add(actuel == g ? "<#7CFC9A>✔ Ton grade actuel" : "<#7CFC9A>✔ Inclus dans ton grade");
+            else {
+                lore.add("<gray>Prix : " + PLASMA + Monnaies.Monnaie.PLASMA.format(gr.prix(g))
+                        + (actuel != null ? " <dark_gray>→ " + PLASMA + Monnaies.Monnaie.PLASMA.format(prix) + " <gray>pour toi" : ""));
+                lore.add("<#E0B864>➜ Clic pour acheter");
+            }
+            ItemStack it = objet(icones[g.ordinal()], g.joli, lore.toArray(new String[0]));
+            it.editMeta(m -> m.setItemModel(new org.bukkit.NamespacedKey("orbittycoon", "nav_grade_" + g.id)));
+            if (actuel == g) it.editMeta(m -> m.setEnchantmentGlintOverride(true));
+            poser(h, slots[g.ordinal()], it, prix < 0 ? null : j -> confirmerGrade(j, g));
+        }
+        poser(h, 27, retour(), this::ouvrir);
+        poser(h, 31, soldePlasma(p), null);
+        montrer(p, h);
+    }
+
+    private void confirmerGrade(Player p, Grades.Grade g) {
+        long prix = plugin.grades().prixPour(p, g);
+        ItemStack insigne = objet(Material.NETHER_STAR, g.joli);
+        insigne.editMeta(m -> m.setItemModel(new org.bukkit.NamespacedKey("orbittycoon", "nav_grade_" + g.id)));
+        plugin.confirmer().ouvrir(p, "Grade " + g.nom, insigne,
+                List.of("<gray>Payer " + PLASMA + Monnaies.Monnaie.PLASMA.format(prix), "<gray>pour devenir " + g.joli),
+                () -> { plugin.grades().acheter(p, g); ouvrirGrades(p); }, () -> ouvrirGrades(p));
+    }
+
+    private static final int[] CASES_TITRES = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
+
+    /**
+     * Rayon Titres : tous les titres (titres.liste), chacun avec une image spatiale (titres.icones.&lt;id&gt;).
+     * À vendre si titres.boutique.&lt;id&gt; a un prix ; les titres grade_* viennent avec le grade ; les autres des coffres.
+     */
+    void ouvrirTitres(Player p) {
+        Butin butin = plugin.butin();
+        Menu h = menu(p, 6, "Titres");
+        var cfg = plugin.getConfig();
+        String porte = butin.affiche(p.getUniqueId());
+        int i = 0;
+        for (var en : butin.titres().entrySet()) {
+            if (i >= CASES_TITRES.length) break;
+            String id = en.getKey();
+            boolean a = butin.possede(p.getUniqueId(), id), affiche = id.equals(porte);
+            long prix = cfg.getLong("titres.boutique." + id, 0);
+            String icone = id.startsWith("grade_") ? "nav_" + id : "nav_" + cfg.getString("titres.icones." + id, "titre_etoile");
+            List<String> lore = new ArrayList<>();
+            lore.add("<gray>Devant ton pseudo dans le chat :");
+            lore.add("<dark_gray>[</dark_gray>" + en.getValue() + "<dark_gray>]</dark_gray> <white>" + p.getName());
+            lore.add("");
+            java.util.function.Consumer<Player> action = null;
+            if (affiche) lore.add("<#7CFC9A>✔ Affiché");
+            else if (a) { lore.add("<#7CFC9A>✔ Possédé"); lore.add("<#62CFF4>➜ Clic pour l'afficher"); action = j -> { butin.afficher(j, id); ouvrirTitres(j); }; }
+            else if (prix > 0) {
+                lore.add("<gray>Prix : " + PLASMA + Monnaies.Monnaie.PLASMA.format(prix));
+                lore.add("<#E0B864>➜ Clic pour acheter");
+                action = j -> confirmerTitre(j, id, prix);
+            } else if (id.startsWith("grade_")) lore.add("<#E0B864>Inclus avec le grade " + MM.stripTags(en.getValue()).replace("✦", "").trim());
+            else lore.add("<gray>À trouver dans les coffres orbitaux.");
+            ItemStack it = objet(Material.NAME_TAG, en.getValue(), lore.toArray(new String[0]));
+            it.editMeta(m -> {
+                m.setItemModel(new org.bukkit.NamespacedKey("orbittycoon", icone));
+                if (affiche) m.setEnchantmentGlintOverride(true);
+            });
+            poser(h, CASES_TITRES[i++], it, action);
+        }
+        poser(h, 45, retour(), this::ouvrir);
+        poser(h, 48, objet(Material.BARRIER, "<#FF4D4D>Ne plus afficher de titre", "<dark_gray>(/titre)"),
+                j -> { j.closeInventory(); j.performCommand("titre"); });
+        poser(h, 50, soldePlasma(p), null);
+        montrer(p, h);
+    }
+
+    private void confirmerTitre(Player p, String id, long prix) {
+        String texte = plugin.butin().texteTitre(id);
+        ItemStack it = objet(Material.NAME_TAG, texte);
+        it.editMeta(m -> m.setItemModel(new org.bukkit.NamespacedKey("orbittycoon",
+                "nav_" + plugin.getConfig().getString("titres.icones." + id, "titre_etoile"))));
+        plugin.confirmer().ouvrir(p, "Titre", it, List.of("<gray>Payer " + PLASMA + Monnaies.Monnaie.PLASMA.format(prix), "<gray>pour le titre " + texte),
+                () -> {
+                    if (plugin.butin().possede(p.getUniqueId(), id)) { ouvrirTitres(p); return; }
+                    if (!plugin.monnaies().retirer(p.getUniqueId(), Monnaies.Monnaie.PLASMA, prix)) {
+                        OrbitTycoon.msg(p, "<#FF4D4D>Il te faut " + Monnaies.Monnaie.PLASMA.format(prix) + "<#FF4D4D>.");
+                        p.playSound(p.getLocation(), Sound.BLOCK_CHEST_LOCKED, 0.6f, 1.3f);
+                    } else {
+                        plugin.butin().debloquer(p, id);
+                        plugin.getLogger().info(p.getName() + " achète le titre " + id + " pour " + prix + " Plasma.");
+                    }
+                    ouvrirTitres(p);
+                }, () -> ouvrirTitres(p));
+    }
+
+    /** Rayon Items : objets utiles payés en Plasma (Collecteur orbital ; d'autres viendront). */
+    void ouvrirItems(Player p) {
+        Menu h = menu(p, 5, "Items");
+        // Rangée 1 : collecteurs.
+        poser(h, 11, plugin.collecteurs().vitrine(), j -> plugin.collecteurs().acheter(j));
+        poser(h, 15, plugin.collecteurs().vitrineCoffre(), j -> plugin.collecteurs().acheterCoffre(j));
+        // Rangée 2 : baguettes de vente.
+        Baguettes bg = plugin.baguettes();
+        int[] casesB = {20, 22, 24};
+        for (Baguettes.Modele md : Baguettes.Modele.values()) {
+            long prix = bg.prix(md);
+            ItemStack it = bg.objet(md, bg.utilisations(md));
+            it.editMeta(m -> {
+                List<Component> l = new ArrayList<>(m.lore() == null ? List.of() : m.lore());
+                l.add(Component.empty());
+                l.add(ligne("<gray>Prix : " + PLASMA + Monnaies.Monnaie.PLASMA.format(prix)));
+                l.add(ligne("<#E0B864>➜ Clic pour acheter"));
+                m.lore(l);
+            });
+            poser(h, casesB[md.ordinal()], it, j -> confirmerObjet(j, md.nom + " " + Baguettes.fois(md.mult), prix,
+                    () -> bg.objet(md, bg.utilisations(md))));
+        }
+        // Rangée 3 : boosters ×2 (30 min).
+        Boosters bo = plugin.boosters();
+        int[] casesBo = {29, 31, 33};
+        int k = 0;
+        for (Boosters.Sorte s : Boosters.Sorte.values()) {
+            if (k >= casesBo.length) break;
+            long prix = plugin.getConfig().getLong("boutique.boosters." + s.id, 250);
+            int minutes = plugin.getConfig().getInt("boutique.boosters.minutes", 30);
+            double mult = plugin.getConfig().getDouble("boutique.boosters.mult", 2.0);
+            ItemStack it = bo.objet(s, mult, minutes, 1);
+            it.editMeta(m -> {
+                List<Component> l = new ArrayList<>(m.lore() == null ? List.of() : m.lore());
+                l.add(Component.empty());
+                l.add(ligne("<gray>Prix : " + PLASMA + Monnaies.Monnaie.PLASMA.format(prix)));
+                l.add(ligne("<#E0B864>➜ Clic pour acheter"));
+                m.lore(l);
+            });
+            poser(h, casesBo[k++], it, j -> confirmerObjet(j, "Booster " + s.nom + " " + Baguettes.fois(mult), prix,
+                    () -> bo.objet(s, mult, minutes, 1)));
+        }
+        poser(h, 36, retour(), this::ouvrir);
+        poser(h, 40, soldePlasma(p), null);
+        montrer(p, h);
+    }
+
+    /** Achat confirmé d'un objet du rayon Items payé en Plasma. */
+    private void confirmerObjet(Player p, String nom, long prix, java.util.function.Supplier<ItemStack> objet) {
+        plugin.confirmer().ouvrir(p, nom, objet.get(),
+                List.of("<gray>Payer " + PLASMA + Monnaies.Monnaie.PLASMA.format(prix), "<gray>pour : <white>" + nom),
+                () -> {
+                    if (!plugin.monnaies().retirer(p.getUniqueId(), Monnaies.Monnaie.PLASMA, prix)) {
+                        OrbitTycoon.msg(p, "<#FF4D4D>Il te faut " + Monnaies.Monnaie.PLASMA.format(prix) + "<#FF4D4D>.");
+                        p.playSound(p.getLocation(), Sound.BLOCK_CHEST_LOCKED, 0.6f, 1.3f);
+                    } else {
+                        donner(p, List.of(objet.get()));
+                        plugin.getLogger().info(p.getName() + " achète " + nom + " pour " + prix + " Plasma.");
+                        OrbitTycoon.msg(p, "<gray>Achat réussi : <white>" + nom + "<gray> !");
+                        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.7f, 1.2f);
+                    }
+                    ouvrirItems(p);
+                }, () -> ouvrirItems(p));
+    }
+
+    /** Rayon Clés : une clé par coffre (clic gauche ×1, clic droit ×5). */
+    void ouvrirCles(Player p) {
+        Menu h = menu(p, 4, "Clés de coffres");
+        int[] slots = {10, 11, 12, 14, 15, 16};
+        for (int n = 0; n < Coffres.NB; n++) {
+            final int c = n;
+            long prix = prixCle(n);
+            ItemStack it = plugin.coffres().cle(n, 1);
+            it.editMeta(m -> {
+                List<Component> l = new ArrayList<>(m.lore() == null ? List.of() : m.lore());
+                l.add(Component.empty());
+                l.add(ligne("<gray>Prix : " + PLASMA + Monnaies.Monnaie.PLASMA.format(prix) + " <gray>la clé"));
+                l.add(ligne("<#E0B864>➜ Clic gauche : ×1"));
+                l.add(ligne("<#E0B864>➜ Clic droit : ×5"));
+                m.lore(l);
+            });
+            poser(h, slots[n], it, j -> acheterCles(j, c, 1));
+            h.droit.put(slots[n], j -> acheterCles(j, c, 5));
+
+            // Seconde ligne : lot de 16 clés à prix réduit.
+            int reduc = reductionPack();
+            long sansReduc = prix * PACK;
+            long avecReduc = prixPack(n);
+            ItemStack pack = plugin.coffres().cle(n, PACK);
+            pack.editMeta(m -> {
+                List<Component> l = new ArrayList<>(m.lore() == null ? List.of() : m.lore());
+                l.add(Component.empty());
+                l.add(ligne("<#E0B864><bold>LOT DE ×" + PACK + "</bold> <#62CFF4>· RÉDUCTION -" + reduc + "%"));
+                l.add(ligne("<gray>Prix normal : <dark_gray><st>" + Monnaies.Monnaie.PLASMA.format(sansReduc) + "</st>"));
+                l.add(ligne("<gray>Prix réduit : " + PLASMA + Monnaies.Monnaie.PLASMA.format(avecReduc)));
+                l.add(ligne("<green>Tu économises " + Monnaies.Monnaie.PLASMA.format(sansReduc - avecReduc) + "<green> !"));
+                l.add(Component.empty());
+                l.add(ligne("<#E0B864>➜ Clic : acheter ×" + PACK));
+                m.lore(l);
+                m.setEnchantmentGlintOverride(true);
+            });
+            poser(h, slots[n] + 9, pack, j -> acheterCles(j, c, PACK));
+        }
+        poser(h, 27, retour(), this::ouvrir);
+        poser(h, 31, soldePlasma(p), null);
+        montrer(p, h);
+    }
+
+    private long prixCle(int n) {
+        List<Long> l = plugin.getConfig().getLongList("boutique.prix-cles");
+        return n < l.size() ? l.get(n) : PRIX_CLES[Math.min(n, PRIX_CLES.length - 1)];
+    }
+
+    /** Taille du lot de clés à prix réduit (seconde ligne du rayon). */
+    private static final int PACK = 16;
+
+    /** Réduction du lot ×16 en % (config boutique.reduction-pack-cles, 20 par défaut). */
+    private int reductionPack() {
+        return Math.max(0, Math.min(90, plugin.getConfig().getInt("boutique.reduction-pack-cles", 20)));
+    }
+
+    private long prixPack(int n) {
+        return Math.round(prixCle(n) * PACK * (100 - reductionPack()) / 100.0);
+    }
+
+    private void acheterCles(Player p, int n, int nombre) {
+        long prix = nombre == PACK ? prixPack(n) : prixCle(n) * nombre;
+        if (!plugin.monnaies().retirer(p.getUniqueId(), Monnaies.Monnaie.PLASMA, prix)) {
+            OrbitTycoon.msg(p, "<#FF4D4D>Il te faut " + Monnaies.Monnaie.PLASMA.format(prix) + "<#FF4D4D>.");
+            p.playSound(p.getLocation(), Sound.BLOCK_CHEST_LOCKED, 0.6f, 1.3f);
+            return;
+        }
+        donner(p, List.of(plugin.coffres().cle(n, nombre)));
+        plugin.getLogger().info(p.getName() + " achète " + nombre + " clé(s) " + plugin.coffres().nom(n) + " pour " + prix + " Plasma.");
+        OrbitTycoon.msg(p, "<gray>Tu as acheté <white>" + nombre + " Clé" + (nombre > 1 ? "s " : " ")
+                + MM.escapeTags(plugin.coffres().nom(n)) + "<gray> pour " + Monnaies.Monnaie.PLASMA.format(prix) + "<gray>.");
+        p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.7f, 1.2f);
+        ouvrirCles(p);
+    }
+
+    private static void donner(Player p, List<ItemStack> l) {
+        for (ItemStack reste : p.getInventory().addItem(l.toArray(new ItemStack[0])).values())
+            p.getWorld().dropItemNaturally(p.getLocation(), reste);
+    }
+
+    private static Component ligne(String mm) { return MM.deserialize(mm).decoration(TextDecoration.ITALIC, false); }
 
     private static ItemStack objet(Material m, String nom, String... lignes) {
         ItemStack it = new ItemStack(m);
@@ -200,15 +494,13 @@ final class Boutique implements Listener {
 
     @EventHandler
     public void clicMenu(InventoryClickEvent e) {
-        if (!(e.getView().getTopInventory().getHolder() instanceof Menu)) return;
+        if (!(e.getView().getTopInventory().getHolder() instanceof Menu h)) return;
         e.setCancelled(true);
         if (e.getClickedInventory() != e.getView().getTopInventory() || !(e.getWhoClicked() instanceof Player p)) return;
-        if (e.getSlot() == 15) {
-            plugin.hdv().ouvrir(p, 0);
-        } else if (e.getSlot() == 11) {
-            OrbitTycoon.msg(p, "<gray>Ce rayon de la boutique ouvrira bientôt !");
-            p.playSound(p.getLocation(), Sound.BLOCK_CHEST_LOCKED, 0.6f, 1.3f);
-        }
+        var action = e.isRightClick() && h.droit.containsKey(e.getSlot()) ? h.droit.get(e.getSlot()) : h.actions.get(e.getSlot());
+        if (action == null) return;
+        p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 0.4f, 1.4f);
+        action.accept(p);
     }
 
     @EventHandler

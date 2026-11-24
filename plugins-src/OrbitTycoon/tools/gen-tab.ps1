@@ -17,7 +17,11 @@ $grades = @(
     @('helpeur',     'HELPEUR',      '22C1D6', '7FE7F2'),
     @('builder',     'BUILDER',      'F5B400', 'FFE066'),
     @('orbit',       'ORBIT',        '62CFF4', 'E0B864'),
-    @('vipplus',     'VIP+',         'E0B864', 'F6DC9C'),
+    @('astral',      'ASTRAL',       'C77DFF', '62CFF4'),
+    @('amiral',      'AMIRAL',       'E0B864', 'FFF1A0'),
+    @('commandant',  'COMMANDANT',   '3FA9F5', '62CFF4'),
+    @('pilote',      'PILOTE',       '9FB8D0', 'D8F6FF'),
+    @('vipplus',     'VIP+',       'E0B864', 'F6DC9C'),
     @('vip',         'VIP',          '62CFF4', 'A8E6FA'),
     @('joueur',      'JOUEUR',       '8C96A3', 'C4CBD4')
 )

@@ -62,6 +62,9 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     private Noyau noyau;
     private Pets pets;
     private Equipements equipements;
+    private Grades grades;
+    private Baguettes baguettes;
+    private CommandesGrade commandesGrade;
     private Boosters boosters;
     private Butin butin;
     private final Nettoyage nettoyage = new Nettoyage(this);
@@ -106,6 +109,9 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         noyau = new Noyau(this);
         pets = new Pets(this);
         equipements = new Equipements(this);
+        grades = new Grades(this);
+        baguettes = new Baguettes(this);
+        commandesGrade = new CommandesGrade(this);
         boosters = new Boosters(this);
         butin = new Butin(this);
         navigateur.iles(ilesJoueurs);
@@ -148,6 +154,9 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         pm.registerEvents(confirmer, this);
         pm.registerEvents(quetes, this);
         pm.registerEvents(equipements, this);
+        pm.registerEvents(grades, this);
+        pm.registerEvents(baguettes, this);
+        pm.registerEvents(commandesGrade, this);
         pm.registerEvents(ressources, this);
         pm.registerEvents(hdv, this);
         pm.registerEvents(magasinBlocs, this);
@@ -175,6 +184,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         classement.demarrer();
         coffres.demarrer();
         boutique.demarrer();
+        grades.demarrer();
         pnjs.demarrer();
         tuto.demarrer();
         hdv.demarrer();
@@ -202,6 +212,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         if (classement != null) classement.arreter();
         if (coffres != null) coffres.arreter();
         if (boutique != null) boutique.arreter();
+        if (grades != null) grades.arreter();
         if (pnjs != null) pnjs.arreter();
         if (tuto != null) tuto.arreter();
         if (hdv != null) hdv.arreter();
@@ -228,6 +239,8 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     Boosters boosters() { return boosters; }
     Butin butin() { return butin; }
     Equipements equipements() { return equipements; }
+    Grades grades() { return grades; }
+    Baguettes baguettes() { return baguettes; }
     Staff staff() { return staff; }
 
     Tuto tuto() { return tuto; }
@@ -239,6 +252,8 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     Liens liens() { return liens; }
 
     Outil outil() { return outil; }
+
+    Hud hud() { return hud; }
 
     Progression progression() { return progression; }
 
@@ -351,6 +366,14 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
             else msg(s, "Usage : /solde <joueur>");
             return true;
         }
+        // /grades [particules|fly] : rayon Grades de la boutique ; /fly : vol sur son île (grade Commandant et plus).
+        if (cmd.getName().equalsIgnoreCase("grades") || cmd.getName().equalsIgnoreCase("fly")) {
+            if (!(s instanceof Player p)) { msg(s, "Commande réservée aux joueurs."); return true; }
+            if (cmd.getName().equalsIgnoreCase("fly")) grades.basculerVol(p); else grades.commande(p, args);
+            return true;
+        }
+        // Commandes de grade (/ec, /craft, /hat, /enclume, /near, /pv…) : CommandesGrade.java.
+        if (s instanceof Player pg && commandesGrade.commande(pg, cmd.getName(), args)) return true;
         // /classements <outil> et /classement <outil> : classement de l'outil ; /classement seul : TP au podium.
         if (cmd.getName().equalsIgnoreCase("classements") || (cmd.getName().equalsIgnoreCase("classement") && args.length > 0)) {
             classements(s, args);

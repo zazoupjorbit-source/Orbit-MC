@@ -69,6 +69,41 @@ commands:
     description: Le livre-guide d'Orbit Tycoon (le reprendre, le lire ou le jeter).
     usage: /guide [lire|jeter]
     aliases: [livre]
+  grades:
+    description: Les 4 grades du Tycoon (boutique, Plasma) ; particules = couper/remettre tes particules de grade.
+    usage: /grades [particules|fly]
+    aliases: [grade, rangs]
+  fly:
+    description: Active ou coupe le vol sur ton île (grade Commandant et plus).
+    usage: /fly
+  ec:
+    description: Coffre de l'End partout (grade Pilote et plus).
+    aliases: [enderchest]
+  craft:
+    description: Établi portable (grade Pilote et plus).
+    aliases: [workbench, wb]
+  hat:
+    description: Porte le bloc en main sur la tête (grade Commandant et plus).
+  enclume:
+    description: Enclume portable (grade Commandant et plus).
+    aliases: [anvil]
+  near:
+    description: Joueurs proches (grade Amiral et plus).
+  meule:
+    description: Meule portable (grade Amiral et plus).
+    aliases: [grindstone]
+  tailleur:
+    description: Tailleur de pierre portable (grade Amiral et plus).
+    aliases: [stonecutter]
+  ptime:
+    description: Ton heure, jour ou nuit (grade Amiral et plus).
+    usage: /ptime jour|nuit|reset
+  pv:
+    description: Coffre spatial personnel (Amiral 27 cases, Astral 54).
+    aliases: [coffrespatial]
+  forge:
+    description: Table de forge portable (grade Astral).
+    aliases: [smithing]
   titre:
     description: Choisis le titre cosmétique affiché devant ton pseudo (titres gagnés dans les coffres).
     usage: /titre

@@ -622,6 +622,154 @@ public class NavIcones {
 
     static void outils(Ic g) { pioche(g, ACIER); epee(g); }
 
+    // ------------------------------------------------------------------ insignes des grades
+
+    /** Écusson arrondi en haut, pointe en bas (centré, largeur 2·l, du haut h0 à la pointe h1). */
+    static Shape ecusson(double l, double h0, double h1) {
+        return plus(rr(16 - l, h0, 2 * l, (h1 - h0) * 0.55, 5), poly(16 - l, h0 + (h1 - h0) * 0.4, 16 + l, h0 + (h1 - h0) * 0.4, 16, h1));
+    }
+
+    static void aile(Ic g, boolean gauche, int c) {
+        double s = gauche ? -1 : 1;
+        for (int k = 0; k < 3; k++) {
+            double y = 12 + k * 3.2, l = 12 - k * 2.6;
+            g.relief(poly(16 + s * 4, y, 16 + s * (4 + l), y - 2.2 + k * 0.4, 16 + s * (4 + l - 1.5), y + 1.6, 16 + s * 4, y + 2.4), c);
+        }
+    }
+
+    /** Pilote : ailes d'argent autour d'un petit écusson bleu glacé. */
+    static void gradePilote(Ic g) {
+        aile(g, true, ACIER);
+        aile(g, false, ACIER);
+        g.relief(ecusson(5.5, 8, 25), NUIT);
+        g.plat(trace(ecusson(4.6, 8.9, 23.8), 0.9), BLEU);
+        g.relief(etoile(16, 14.5, 4, 1.7, 5), BLANC);
+        g.etincelle(26, 4, BLEU);
+    }
+
+    /** Commandant : écusson bleu, liseré or, deux chevrons dorés et une étoile. */
+    static void gradeCommandant(Ic g) {
+        g.relief(ecusson(11, 3, 30), mix(BLEU, NUIT, 0.45));
+        g.plat(trace(ecusson(9.6, 4.4, 28.2), 1.1), OR);
+        g.relief(etoile(16, 10.5, 4.2, 1.8, 5), BLANC);
+        for (int k = 0; k < 2; k++) {
+            double y = 16 + k * 5;
+            g.relief(trace(ligne(9.5, y, 16, y + 4, 22.5, y), 2.4), OR);
+        }
+        g.etincelle(28, 4, BLEU);
+    }
+
+    /** Amiral : écusson or massif, bordure bleu nuit, trois étoiles en arc et une ancre stellaire. */
+    static void gradeAmiral(Ic g) {
+        g.relief(ecusson(12, 2.5, 30.5), OR);
+        g.relief(ecusson(9.4, 5, 27.6), NUIT);
+        for (int k = -1; k <= 1; k++) g.relief(etoile(16 + k * 5.2, 9.6 + Math.abs(k) * 1.3, 2.7, 1.15, 5), OR);
+        g.relief(trait(16, 13.5, 16, 24, 1.8), BLEU);
+        g.relief(trait(12.5, 16, 19.5, 16, 1.6), BLEU);
+        g.relief(trace(moins(circ(16, 20.5, 4.6), rect(10, 14, 12, 6.5)), 1.6), BLEU);
+        g.etincelle(4, 4, OR);
+        g.etincelle(28, 26, BLEU);
+    }
+
+    // ------------------------------------------------------------------ titres (images spatiales)
+
+    static void titreFusee(Ic g) {
+        g.relief(poly(9, 22, 5, 28, 12, 26), ROUGE);
+        g.relief(poly(23, 22, 27, 28, 20, 26), ROUGE);
+        g.relief(plus(rr(11, 9, 10, 18, 4), poly(11, 11, 16, 2, 21, 11)), BLANC);
+        g.relief(circ(16, 14, 3), NUIT);
+        g.plat(circ(15.2, 13.2, 1.1), BLEU);
+        g.plat(rect(11, 20, 10, 1.4), OR);
+        g.relief(poly(12.5, 27, 19.5, 27, 16, 31.5), ORANGE);
+        g.plat(poly(14.3, 27, 17.7, 27, 16, 30), BLE);
+        g.etincelle(5, 6, BLEU);
+        g.etincelle(27, 9, OR);
+    }
+
+    static void titreSatellite(Ic g) {
+        g.relief(rot(rect(2, 12, 9, 8), 0, 16, 16), BLEU);
+        g.relief(rect(21, 12, 9, 8), BLEU);
+        g.plat(rect(6.2, 12, 0.9, 8), NUIT);
+        g.plat(rect(25.2, 12, 0.9, 8), NUIT);
+        g.relief(trait(11, 16, 21, 16, 1.6), ACIER);
+        g.relief(rr(12, 11, 8, 10, 2), OR);
+        g.relief(trace(moins(circ(16, 8, 5), rect(10, 8, 12, 8)), 1.4), ACIER);
+        g.relief(trait(16, 8, 16, 11, 1.2), ACIER);
+        g.point(16, 4, BLEU);
+        g.etincelle(5, 26, BLEU);
+        g.etincelle(27, 5, OR);
+    }
+
+    static void titreComete(Ic g) {
+        g.relief(poly(4, 28, 13, 15, 19, 21), mix(BLEU, NUIT, 0.35));
+        g.relief(poly(6, 29, 14, 18, 17, 21), BLEU);
+        g.relief(circ(19, 13, 7), mix(BLEU, BLANC, 0.5));
+        g.plat(circ(17, 11, 2.4), BLANC);
+        g.etincelle(27, 4, BLANC);
+        g.etincelle(5, 7, VIOLET);
+        g.point(26, 26, BLEU);
+    }
+
+    static void titreGalaxie(Ic g) {
+        g.relief(ell(16, 16, 14, 7), mix(VIOLET, NUIT, 0.55));
+        g.plat(trace(ell(16, 16, 10.5, 4.8), 1.3), mix(VIOLET, ROSE, 0.4));
+        g.plat(trace(ell(16, 16, 6.5, 2.8), 1.2), VIOLET);
+        g.relief(circ(16, 16, 3), mix(BLANC, VIOLET, 0.2));
+        g.point(8, 13, BLANC); g.point(24, 19, BLANC); g.point(11, 20, BLEU); g.point(22, 12, ROSE);
+        g.etincelle(5, 4, BLANC);
+        g.etincelle(27, 27, BLEU);
+    }
+
+    static void titreEtoile(Ic g) {
+        g.plat(circ(16, 16, 13), mix(OR, NUIT, 0.75));
+        g.relief(etoile(16, 16, 13, 5, 4), OR);
+        g.relief(etoile(16, 16, 8, 3.5, 4), mix(OR, BLANC, 0.6));
+        g.relief(circ(16, 16, 2.4), BLANC);
+        g.etincelle(5, 5, BLEU);
+        g.etincelle(27, 26, OR);
+    }
+
+    static void titreTrouNoir(Ic g) {
+        g.relief(ell(16, 17, 14.5, 5.5), ORANGE);
+        g.plat(trace(ell(16, 17, 12, 4.2), 1.1), BLE);
+        g.relief(circ(16, 16, 7.5), 0x05070F);
+        g.plat(trace(circ(16, 16, 7.5), 0.9), mix(VIOLET, ORANGE, 0.4));
+        g.relief(inter(ell(16, 17, 14.5, 5.5), rect(0, 17, 32, 15)), ORANGE);
+        g.plat(inter(trace(ell(16, 17, 12, 4.2), 1.1), rect(0, 17, 32, 15)), BLE);
+        g.etincelle(4, 5, VIOLET);
+        g.etincelle(28, 6, BLANC);
+    }
+
+    /** Baguette de vente : manche bleu nuit cerclé d'or, gemme de la couleur du palier, étincelles. */
+    static void baguette(Ic g, int gemme) {
+        g.relief(trait(7, 27, 19.5, 12.5, 3.2), NUIT);
+        for (int k = 0; k < 3; k++) {
+            double t = 0.2 + k * 0.28;
+            double x = 7 + (19.5 - 7) * t, y = 27 + (12.5 - 27) * t;
+            g.relief(trait(x - 1.4, y - 1.2, x + 1.4, y + 1.2, 1.4), OR);
+        }
+        g.relief(etoile(22, 10, 7.5, 3.2, 4), OR);
+        g.relief(circ(22, 10, 3.6), gemme);
+        g.plat(circ(21, 9, 1.2), mix(gemme, BLANC, 0.7));
+        g.etincelle(28, 3, gemme);
+        g.etincelle(13, 6, BLANC);
+        g.etincelle(28, 20, gemme);
+    }
+
+    /** Astral : couronne d'or sur un astre violet cerclé d'un anneau bleu glacé, éclats d'étoiles. */
+    static void gradeAstral(Ic g) {
+        g.relief(trace(ell(16, 19, 14.5, 5), 1.6), BLEU);
+        g.relief(circ(16, 19, 8.5), mix(VIOLET, NUIT, 0.25));
+        g.plat(ell(13.3, 16.2, 3, 2), mix(VIOLET, BLANC, 0.45));
+        g.relief(inter(trace(ell(16, 19, 14.5, 5), 1.6), rect(0, 19, 32, 13)), BLEU);
+        g.relief(poly(8.5, 9.5, 11.5, 3.5, 14, 8, 16, 2, 18, 8, 20.5, 3.5, 23.5, 9.5, 22, 11.5, 10, 11.5), OR);
+        g.plat(rect(10.5, 9.6, 11, 1.2), mix(OR, BOIS, 0.35));
+        g.point(16, 5, BLANC);
+        g.etincelle(4, 6, BLANC);
+        g.etincelle(28, 5, VIOLET);
+        g.etincelle(27, 28, BLEU);
+    }
+
     // ------------------------------------------------------------------ médaillons des catégories
 
     static Consumer<Ic> medaillon(int accent, Consumer<Ic> symbole) {
@@ -673,6 +821,29 @@ public class NavIcones {
         // Boutique
         m.put("boutique_ouvrir", NavIcones::sac);
         m.put("boutique_pnj", NavIcones::casque);
+        m.put("boutique_grades", g -> {
+            g.relief(etoile(16, 16, 13, 5.5, 5), OR);
+            g.relief(etoile(16, 16, 6, 2.6, 5), VIOLET);
+            g.etincelle(26, 5, BLEU);
+        });
+        m.put("boutique_cles", g -> { cle(g); g.etincelle(26, 6, VIOLET); });
+        m.put("boutique_items", g -> { coffre(g, false); g.etincelle(26, 5, VIOLET); });
+        // Insignes des 4 grades (écussons, du plus simple au plus prestigieux).
+        m.put("grade_pilote", NavIcones::gradePilote);
+        m.put("grade_commandant", NavIcones::gradeCommandant);
+        m.put("grade_amiral", NavIcones::gradeAmiral);
+        m.put("grade_astral", NavIcones::gradeAstral);
+        // Titres de la boutique : une image spatiale par thème.
+        m.put("titre_fusee", NavIcones::titreFusee);
+        m.put("titre_satellite", NavIcones::titreSatellite);
+        m.put("titre_comete", NavIcones::titreComete);
+        m.put("titre_galaxie", NavIcones::titreGalaxie);
+        m.put("titre_etoile", NavIcones::titreEtoile);
+        m.put("titre_trou_noir", NavIcones::titreTrouNoir);
+        // Baguettes de vente (sell wands) : la gemme change de couleur avec le multiplicateur.
+        m.put("baguette_1", g -> baguette(g, BLEU));
+        m.put("baguette_2", g -> baguette(g, VIOLET));
+        m.put("baguette_3", g -> baguette(g, OR));
         // Quêtes
         m.put("quetes_mes", NavIcones::parchemin);
         m.put("quetes_pavillon", NavIcones::boussole);

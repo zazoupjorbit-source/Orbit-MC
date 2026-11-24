@@ -416,7 +416,11 @@ final class Monnaies implements Listener {
         // Équipements de farm portés (Equipements.java) : même % sur ressources, monnaie et XP.
         double equip = plugin.equipements() == null ? 0 : plugin.equipements().bonus(p, outil);
         quantite = Equipements.appliquer(quantite, equip);
-        double multEquip = 1 + equip / 100.0;
+        // Armures premium (boutique) : % de Crédits, Flux et XP avec tous les outils (pas de ressources en plus).
+        double premium = outil == null || plugin.equipements() == null ? 0 : plugin.equipements().bonusPremium(p);
+        // Grade (Grades.java) : % de Crédits, Flux et XP d'outil.
+        double grade = outil == null || plugin.grades() == null ? 0 : plugin.grades().bonus(p);
+        double multEquip = (1 + equip / 100.0) * (1 + premium / 100.0) * (1 + grade / 100.0);
         // Boosters orbitaux actifs (lots des coffres, Boosters.java).
         Boosters bst = plugin.boosters();
         double bCredit = bst == null ? 1 : bst.mult(uid, Boosters.Sorte.CREDITS);

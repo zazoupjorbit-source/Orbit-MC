@@ -193,6 +193,18 @@ final class Butin implements Listener {
         return true;
     }
 
+    /** Titre affiché devant le pseudo (null = aucun). */
+    String affiche(UUID id) { return affiches.get(id); }
+
+    /** Affiche un titre déjà possédé (boutique, rayon Titres). */
+    void afficher(Player p, String titre) {
+        if (!possede(p.getUniqueId(), titre)) return;
+        affiches.put(p.getUniqueId(), titre);
+        sauverTitres();
+        OrbitTycoon.msg(p, "<gray>Titre affiché : " + texteTitre(titre));
+        p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1.4f);
+    }
+
     private static final class MenuTitres implements InventoryHolder {
         Inventory inv;
         final List<String> ids = new ArrayList<>();

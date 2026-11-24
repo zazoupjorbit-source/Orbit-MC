@@ -44,18 +44,24 @@ import static fr.orbit.tycoon.Navigateur.texte;
 final class Outil implements Listener {
 
     enum Mode {
-        PIOCHE("pioche", "Pioche", Material.IRON_PICKAXE, "#B0BEC5", "Mine", "Minerais en filons, du charbon aux débris antiques"),
-        HACHE("hache", "Hache", Material.IRON_AXE, "#C8894B", "Bûcheron", "Chênes de l'île du bûcheron"),
-        HOUE("houe", "Houe", Material.IRON_HOE, "#F5D442", "Agriculture", "Blé des champs"),
-        CANNE("peche", "Canne à pêche", Material.FISHING_ROD, "#3FA9F5", "Pêche", "Poissons du lac"),
-        EPEE("epee", "Épée", Material.IRON_SWORD, "#FF4D4D", "Mobzone", "Monstres des spawners");
+        PIOCHE("pioche", "Pioche", Material.IRON_PICKAXE, "#B0BEC5", "Mine", "Minerais en filons, du charbon aux débris antiques",
+                "Minerai stellaire", "◆"),
+        HACHE("hache", "Hache", Material.IRON_AXE, "#C8894B", "Bûcheron", "Chênes de l'île du bûcheron",
+                "Bois sidéral", "♣"),
+        HOUE("houe", "Houe", Material.IRON_HOE, "#F5D442", "Agriculture", "Blé des champs",
+                "Biomasse orbitale", "✿"),
+        CANNE("peche", "Canne à pêche", Material.FISHING_ROD, "#3FA9F5", "Pêche", "Poissons du lac",
+                "Perles abyssales", "≈"),
+        EPEE("epee", "Épée", Material.IRON_SWORD, "#FF4D4D", "Mobzone", "Monstres des spawners",
+                "Essence du vide", "☠");
 
-        /** id = clé courte sans accent (fichiers joueurs, commandes). */
-        final String id, nom, couleur, zone, recolte;
+        /** id = clé courte sans accent (fichiers joueurs, commandes). ressource/symbole = ce que l'outil récolte (HUD). */
+        final String id, nom, couleur, zone, recolte, ressource, symbole;
         final Material type;
 
-        Mode(String id, String nom, Material type, String couleur, String zone, String recolte) {
+        Mode(String id, String nom, Material type, String couleur, String zone, String recolte, String ressource, String symbole) {
             this.id = id; this.nom = nom; this.type = type; this.couleur = couleur; this.zone = zone; this.recolte = recolte;
+            this.ressource = ressource; this.symbole = symbole;
         }
 
         Mode suivant() { return values()[(ordinal() + 1) % values().length]; }
@@ -146,6 +152,7 @@ final class Outil implements Listener {
         plugin.tuto().fait(p, Tuto.Etape.OUTIL);
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 0.6f, 1.4f + m.ordinal() * 0.1f);
         p.sendActionBar(texte("<gray>Outil orbital <dark_gray>» <" + m.couleur + "><bold>" + m.nom + "</bold> <dark_gray>(" + m.zone + ")"));
+        plugin.hud().bientot(p);
     }
 
     /** Anti double déclenchement (le client envoie parfois deux paquets pour un seul clic). */
