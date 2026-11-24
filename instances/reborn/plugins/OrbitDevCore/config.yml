@@ -86,3 +86,6 @@ resource-pack:
   serve-local: false
   public-url: ""
   required: false
+
+# Logo du mode dans le menu Echap (pack ajoute par-dessus celui du lobby) : survie, extraction, practice, mmo.
+menu-echap: mmo

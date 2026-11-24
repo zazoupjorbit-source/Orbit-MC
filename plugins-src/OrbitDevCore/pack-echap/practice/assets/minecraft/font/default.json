@@ -1,0 +1,9 @@
+{
+  "providers": [
+    {"type": "space", "advances": {"": -1}},
+    {"type": "bitmap", "file": "orbitdev:font/echap_practice_0.png", "height": 60, "ascent": 41, "chars": [""]},
+    {"type": "bitmap", "file": "orbitdev:font/echap_practice_1.png", "height": 60, "ascent": 41, "chars": [""]},
+    {"type": "bitmap", "file": "orbitdev:font/echap_practice_2.png", "height": 60, "ascent": 41, "chars": [""]},
+    {"type": "bitmap", "file": "orbitdev:font/echap_practice_3.png", "height": 60, "ascent": 41, "chars": [""]}
+  ]
+}

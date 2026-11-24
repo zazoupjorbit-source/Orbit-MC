@@ -65,6 +65,21 @@ $archive.Dispose()
 $fs.Close()
 Write-Host ("Pack du lobby : {0} Ko" -f [Math]::Round((Get-Item $packZip).Length / 1KB))
 
+# Menus Echap des modes (logos dessines par scripts\gen-echap.ps1) : pack-echap\<mode> -> echap-<mode>.zip,
+# envoye par-dessus le pack du lobby sur le serveur dont la config indique menu-echap: <mode>.
+foreach ($modeDir in Get-ChildItem (Join-Path $root 'pack-echap') -Directory -ErrorAction SilentlyContinue) {
+    $zipPath = Join-Path $out ("echap-" + $modeDir.Name + ".zip")
+    $fsE = [IO.File]::Open($zipPath, [IO.FileMode]::Create)
+    $arch = New-Object IO.Compression.ZipArchive($fsE, [IO.Compression.ZipArchiveMode]::Create)
+    $baseE = $modeDir.FullName.TrimEnd('\') + '\'
+    Get-ChildItem $modeDir.FullName -Recurse -File | Sort-Object FullName | ForEach-Object {
+        $entry = $arch.CreateEntry($_.FullName.Substring($baseE.Length).Replace('\', '/'), [IO.Compression.CompressionLevel]::Optimal)
+        $entry.LastWriteTime = $fixed
+        $s = $entry.Open(); $bytes = [IO.File]::ReadAllBytes($_.FullName); $s.Write($bytes, 0, $bytes.Length); $s.Close()
+    }
+    $arch.Dispose(); $fsE.Close()
+}
+
 if (Test-Path $target) { Remove-Item $target -Force }
 & $jarExe --create --file $target -C $out .
 if ($LASTEXITCODE -ne 0) { throw "Echec de la création du jar." }

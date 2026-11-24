@@ -1,5 +1,9 @@
 {
   "providers": [
-    {"type": "bitmap", "file": "orbittycoon:font/echap_titre.png", "height": 64, "ascent": 41, "chars": [""]}
+    {"type": "space", "advances": {"": -1}},
+    {"type": "bitmap", "file": "orbittycoon:font/echap_tycoon_0.png", "height": 60, "ascent": 41, "chars": [""]},
+    {"type": "bitmap", "file": "orbittycoon:font/echap_tycoon_1.png", "height": 60, "ascent": 41, "chars": [""]},
+    {"type": "bitmap", "file": "orbittycoon:font/echap_tycoon_2.png", "height": 60, "ascent": 41, "chars": [""]},
+    {"type": "bitmap", "file": "orbittycoon:font/echap_tycoon_3.png", "height": 60, "ascent": 41, "chars": [""]}
   ]
 }
