@@ -1,0 +1,122 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&display=block" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:#030814;width:1024px;height:1024px;overflow:hidden}
+  svg{display:block}
+</style></head>
+<body>
+<svg id="logo" width="1024" height="1024" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="fond" cx="50%" cy="42%" r="70%">
+      <stop offset="0" stop-color="#123563"/>
+      <stop offset=".55" stop-color="#081A36"/>
+      <stop offset="1" stop-color="#02060F"/>
+    </radialGradient>
+    <radialGradient id="nebBleu" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#62CFF4" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#62CFF4" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebOr" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#E0B864" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#E0B864" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="planete" cx="35%" cy="30%" r="80%">
+      <stop offset="0" stop-color="#C9F1FF"/>
+      <stop offset=".25" stop-color="#62CFF4"/>
+      <stop offset=".65" stop-color="#1D6FA8"/>
+      <stop offset="1" stop-color="#0A2347"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset=".6" stop-color="#62CFF4" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#62CFF4" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="anneau" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8A6A2A"/>
+      <stop offset=".35" stop-color="#F6DC9A"/>
+      <stop offset=".6" stop-color="#E0B864"/>
+      <stop offset="1" stop-color="#7A5A20"/>
+    </linearGradient>
+    <linearGradient id="texteBleu" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset=".55" stop-color="#9FE4FB"/>
+      <stop offset="1" stop-color="#62CFF4"/>
+    </linearGradient>
+    <linearGradient id="texteOr" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFF1C7"/>
+      <stop offset=".5" stop-color="#F0CD7A"/>
+      <stop offset="1" stop-color="#C79A3E"/>
+    </linearGradient>
+    <filter id="lueur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <!-- moitié arrière / avant de l'anneau -->
+    <clipPath id="arriere"><rect x="0" y="0" width="512" height="208"/></clipPath>
+    <clipPath id="avant"><rect x="0" y="208" width="512" height="304"/></clipPath>
+    <clipPath id="planeteClip"><circle cx="256" cy="208" r="98"/></clipPath>
+  </defs>
+
+  <!-- fond -->
+  <rect width="512" height="512" fill="url(#fond)"/>
+  <ellipse cx="140" cy="140" rx="200" ry="140" fill="url(#nebBleu)"/>
+  <ellipse cx="400" cy="380" rx="190" ry="130" fill="url(#nebOr)"/>
+  <ellipse cx="380" cy="110" rx="140" ry="90" fill="url(#nebBleu)" opacity=".6"/>
+  <g id="etoiles"></g>
+
+  <!-- anneau arrière -->
+  <g transform="rotate(-14 256 208)" clip-path="url(#arriere)">
+    <ellipse cx="256" cy="208" rx="200" ry="50" fill="none" stroke="url(#anneau)" stroke-width="9" opacity=".85"/>
+    <ellipse cx="256" cy="208" rx="222" ry="58" fill="none" stroke="#E0B864" stroke-width="2" opacity=".45"/>
+  </g>
+
+  <!-- planète -->
+  <circle cx="256" cy="208" r="128" fill="url(#halo)"/>
+  <circle cx="256" cy="208" r="98" fill="url(#planete)"/>
+  <g clip-path="url(#planeteClip)" opacity=".35">
+    <path d="M150 180 Q210 160 270 178 T370 170" stroke="#C9F1FF" stroke-width="10" fill="none"/>
+    <path d="M150 222 Q220 205 290 222 T370 214" stroke="#0A2347" stroke-width="14" fill="none"/>
+    <path d="M150 256 Q230 240 300 258 T370 252" stroke="#62CFF4" stroke-width="8" fill="none"/>
+    <circle cx="300" cy="250" r="110" fill="#02060F" opacity=".55" transform="translate(40 30)"/>
+  </g>
+  <circle cx="256" cy="208" r="98" fill="none" stroke="#C9F1FF" stroke-width="2" opacity=".5"/>
+
+  <!-- anneau avant -->
+  <g transform="rotate(-14 256 208)" clip-path="url(#avant)">
+    <ellipse cx="256" cy="208" rx="200" ry="50" fill="none" stroke="url(#anneau)" stroke-width="9" filter="url(#lueur)"/>
+    <ellipse cx="256" cy="208" rx="222" ry="58" fill="none" stroke="#E0B864" stroke-width="2" opacity=".6"/>
+  </g>
+  <!-- satellite -->
+  <g transform="rotate(-14 256 208)">
+    <circle cx="430" cy="232" r="9" fill="#FFF1C7" filter="url(#lueur)"/>
+  </g>
+
+  <!-- texte -->
+  <g font-family="'Chakra Petch', sans-serif" font-weight="700" font-size="96" text-anchor="middle">
+    <text x="256" y="408" fill="none" stroke="#02060F" stroke-width="14" stroke-linejoin="round" opacity=".9">Orbit<tspan>Mc</tspan></text>
+    <text x="256" y="408" filter="url(#lueur)"><tspan fill="url(#texteBleu)">Orbit</tspan><tspan fill="url(#texteOr)">Mc</tspan></text>
+  </g>
+  <rect x="186" y="428" width="140" height="4" rx="2" fill="#E0B864" opacity=".85"/>
+</svg>
+<script>
+  // étoiles déterministes
+  let s = 7; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const g = document.getElementById('etoiles'), ns = 'http://www.w3.org/2000/svg';
+  for (let i = 0; i < 140; i++) {
+    const c = document.createElementNS(ns, 'circle');
+    c.setAttribute('cx', (r() * 512).toFixed(1));
+    c.setAttribute('cy', (r() * 512).toFixed(1));
+    const t = r(); c.setAttribute('r', (t < .9 ? .6 + r() * .8 : 1.6 + r()).toFixed(2));
+    c.setAttribute('fill', r() < .2 ? '#F6DC9A' : (r() < .5 ? '#C9F1FF' : '#FFFFFF'));
+    c.setAttribute('opacity', (.35 + r() * .65).toFixed(2));
+    g.appendChild(c);
+  }
+  // étoiles scintillantes (croix)
+  [[96,92,10],[420,70,8],[78,300,7],[448,330,9],[150,470,6]].forEach(([x,y,l])=>{
+    const p = document.createElementNS(ns,'path');
+    p.setAttribute('d',`M${x-l} ${y} L${x+l} ${y} M${x} ${y-l} L${x} ${y+l}`);
+    p.setAttribute('stroke','#FFFFFF'); p.setAttribute('stroke-width','1.4'); p.setAttribute('opacity','.85');
+    p.setAttribute('filter','url(#lueur)'); g.appendChild(p);
+  });
+</script>
+</body></html>

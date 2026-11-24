@@ -161,3 +161,11 @@ runtime.json
 /instances/*/plugins/OrbitSurvie/ile-generee
 /instances/*/plugins/OrbitSurvie/ile-apercu.png
 /instances/*/plugins/OrbitSurvie/*.ancien
+
+# --- Visuels à partager (logo Discord) ---
+!/marketing/
+/marketing/*
+!/marketing/discord/
+/marketing/discord/*
+!/marketing/discord/logo-orbitmc-discord.png
+!/marketing/discord/logo-orbitmc.html
