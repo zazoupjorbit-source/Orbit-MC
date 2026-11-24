@@ -12,6 +12,24 @@ spawn:
   # Fait réapparaître le joueur au spawn après une mort.
   teleport-on-respawn: true
 
+# Message de bienvenue envoyé à l'arrivée sur le réseau (MiniMessage, <joueur> = pseudo).
+bienvenue:
+  actif: true
+  # Pas de nouveau message si le joueur en a déjà reçu un depuis moins de X minutes
+  # (évite de le répéter à chaque retour d'un mode vers le lobby).
+  delai-minutes: 30
+  # Première connexion au réseau.
+  premiere:
+    - ""
+    - "<gradient:#62CFF4:#E0B864><b>✦ Bienvenue sur Orbit MC, <joueur> ! ✦</b></gradient>"
+    - "<#D7DCE2>Tu es à bord de <#62CFF4>La Station</#62CFF4>, le cœur du réseau."
+    - "<#D7DCE2>Passe une des <#E0B864>4 portes</#E0B864> ou parle aux PNJ pour rejoindre un mode."
+    - "<#D7DCE2>Bon voyage dans l'univers <#62CFF4>ORBIT</#62CFF4> !"
+    - ""
+  # Connexions suivantes.
+  retour:
+    - "<#62CFF4>✦</#62CFF4> <#D7DCE2>Bon retour à bord, <#E0B864><joueur></#E0B864> !"
+
 compass:
   # Donne la boussole à la connexion et à la réapparition (si le joueur ne l'a pas déjà).
   give-on-join: true
