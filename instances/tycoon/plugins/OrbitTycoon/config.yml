@@ -1,13 +1,234 @@
 # Orbit Tycoon — réglages.
 # Après une modification : /tycoon reload (jamais /reload du serveur).
 
+tab:
+  actif: true
+pets:
+  niveau-max: 100
+  xp:
+    base: 10
+    par-niveau: 2
+    par-recolte: 1
+  bonus:
+    commun: 5
+    rare: 10
+    epique: 15
+    legendaire: 25
+  chances:
+    commun: 70
+    rare: 22
+    epique: 7.5
+    legendaire: 0.5
+# Noyau Orbital : balise posée au nord du pad de chaque île (clic droit = menu). Son niveau = niveau de l'île (20 niveaux).
+# Pour monter d'un niveau : déposer les objets des générateurs ci-dessous + payer iles.couts (Crédits orbitaux).
+# Les dépôts sont partagés entre les membres ; seul un Officier ou le Chef lance l'amélioration.
+noyau:
+  # objets[0] = pour passer du niveau 1 au 2, objets[1] = du 2 au 3… jusqu'à objets[18] = du 19 au 20 (id de générateur: nombre).
+  objets:
+  - ble: 1500
+    carotte: 800
+    pomme_de_terre: 400
+  - carotte: 2000
+    pomme_de_terre: 1200
+    betterave: 600
+  - betterave: 2500
+    canne_a_sucre: 1500
+    bambou: 800
+  - bambou: 3000
+    citrouille: 2000
+    pasteque: 1000
+  - pasteque: 3500
+    cactus: 2500
+    cacao: 1500
+  - cacao: 4000
+    champignon_rouge: 3000
+    champignon_brun: 2000
+  - champignon_brun: 5000
+    verrue: 3500
+    chene: 2000
+  - chene: 6000
+    bouleau: 4000
+    epicea: 2500
+  - epicea: 7000
+    acajou: 5000
+    acacia: 3000
+  - acacia: 8000
+    chene_noir: 6000
+    mangrove: 4000
+  - mangrove: 9000
+    cerisier: 7000
+    os: 5000
+  - os: 10000
+    ficelle: 8000
+    poudre: 6000
+  - poudre: 12000
+    miel: 9000
+    slime: 7000
+  - slime: 14000
+    perle: 10000
+    blaze: 8000
+  - blaze: 16000
+    charbon: 12000
+    cuivre: 9000
+  - cuivre: 18000
+    fer: 14000
+    lapis: 10000
+    redstone: 6000
+  - redstone: 20000
+    quartz: 16000
+    or: 12000
+    amethyste: 8000
+  - amethyste: 24000
+    glowstone: 18000
+    prismarine: 14000
+    obsidienne: 10000
+  - obsidienne: 30000
+    diamant: 22000
+    emeraude: 16000
+    netherite: 12000
+  # Niveau max des enchantements de l'Outil orbital autorisé par le Noyau : enchants[0] = Noyau niveau 1, etc.
+  enchants:
+  - fortune: 4
+    savoir: 4
+    echo: 4
+  - fortune: 10
+    savoir: 10
+    echo: 10
+    rafale: 2
+  - fortune: 14
+    savoir: 14
+    echo: 14
+    rafale: 4
+  - fortune: 20
+    savoir: 20
+    echo: 20
+    rafale: 8
+    meteore: 2
+  - fortune: 24
+    savoir: 24
+    echo: 24
+    rafale: 10
+    meteore: 4
+  - fortune: 30
+    savoir: 30
+    echo: 30
+    rafale: 12
+    meteore: 6
+  - fortune: 34
+    savoir: 34
+    echo: 34
+    rafale: 14
+    meteore: 8
+  - fortune: 40
+    savoir: 40
+    echo: 40
+    rafale: 18
+    meteore: 10
+  - fortune: 44
+    savoir: 44
+    echo: 44
+    rafale: 20
+    meteore: 12
+  - fortune: 50
+    savoir: 50
+    echo: 50
+    rafale: 22
+    meteore: 14
+  - fortune: 54
+    savoir: 54
+    echo: 54
+    rafale: 24
+    meteore: 16
+  - fortune: 60
+    savoir: 60
+    echo: 60
+    rafale: 28
+    meteore: 18
+  - fortune: 64
+    savoir: 64
+    echo: 64
+    rafale: 30
+    meteore: 20
+  - fortune: 70
+    savoir: 70
+    echo: 70
+    rafale: 32
+    meteore: 22
+  - fortune: 74
+    savoir: 74
+    echo: 74
+    rafale: 34
+    meteore: 24
+  - fortune: 80
+    savoir: 80
+    echo: 80
+    rafale: 38
+    meteore: 28
+  - fortune: 84
+    savoir: 84
+    echo: 84
+    rafale: 40
+    meteore: 30
+  - fortune: 90
+    savoir: 90
+    echo: 90
+    rafale: 44
+    meteore: 34
+  - fortune: 94
+    savoir: 94
+    echo: 94
+    rafale: 46
+    meteore: 36
+  - fortune: 100
+    savoir: 100
+    echo: 100
+    rafale: 50
+    meteore: 40
+
+enchants:
+  fortune:
+    effet: 5
+    prix: 50000
+    multiplicateur: 1.27
+    seuil: 50
+    multiplicateur-apres: 1.06
+  echo:
+    effet: 5
+    prix: 40000
+    multiplicateur: 1.27
+    seuil: 50
+    multiplicateur-apres: 1.06
+  savoir:
+    effet: 5
+    prix: 40000
+    multiplicateur: 1.27
+    seuil: 50
+    multiplicateur-apres: 1.06
+  rafale:
+    effet: 2
+    prix: 150000
+    multiplicateur: 1.54
+    seuil: 25
+    multiplicateur-apres: 1.08
+  meteore:
+    effet: 0.5
+    prix: 500000
+    multiplicateur: 1.685
+    seuil: 20
+    multiplicateur-apres: 1.08
+    multiplicateur-credits: 10
 voteparty:
-  coffre-collecteur:
-    prix-credits: 10000
   actif: true
   objectif: 100
   recompenses:
   - tycoon cle 1 {joueur} 1
+votes:
+  actif: true
+  hote: 0.0.0.0
+  port: 8192
+  cle: 1
+  nombre: 1
+  annonce: true
 nettoyage:
   barre-secondes: 60
   actif: true
@@ -17,287 +238,309 @@ nettoyage:
   - 10
   garder-ressources-generateurs: true
 generateurs:
+  offerts:
+    nombre: 5
+    type: ''
   collecteur:
     prix-plasma: 500
     balayage-secondes: 10 # ramassage des ressources déjà au sol dans le chunk
-  intervalle-secondes: 30
+  intervalle-secondes: 5
+  par-cycle: 3 # objets produits par générateur à chaque intervalle
+  # Coffre collecteur (menu /gen) : comme le Collecteur, mais il RANGE les ressources dans le coffre (ne vend pas).
+  coffre-collecteur:
+    prix-credits: 600000
   pile-max: 64
   emplacements:
   - 8
   - 10
   - 12
-  - 15
+  - 14
+  - 16
   - 18
+  - 20
   - 22
   - 25
+  - 28
+  - 31
+  - 34
+  - 37
+  - 40
+  - 44
+  - 48
+  - 52
+  - 56
+  - 60
+  - 65
   max-au-sol: 512
   liste:
   - id: ble
     nom: Blé
     bloc: HAY_BLOCK
     objet: WHEAT
-    prix: 240
-    vente: 1
+    prix: 680
+    vente: 0.63
   - id: carotte
     nom: Carotte
     bloc: ORANGE_TERRACOTTA
     objet: CARROT
-    prix: 280
-    vente: 1.12
+    prix: 750
+    vente: 0.68
   - id: pomme_de_terre
     nom: Pomme de terre
     bloc: BROWN_TERRACOTTA
     objet: POTATO
-    prix: 320
-    vente: 1.25
+    prix: 840
+    vente: 0.74
   - id: betterave
     nom: Betterave
     bloc: RED_TERRACOTTA
     objet: BEETROOT
-    prix: 360
-    vente: 1.4
+    prix: 930
+    vente: 0.8
   - id: canne_a_sucre
     nom: Canne à sucre
     bloc: GREEN_TERRACOTTA
     objet: SUGAR_CANE
-    prix: 410
-    vente: 1.57
+    prix: 1030
+    vente: 0.87
   - id: bambou
     nom: Bambou
     bloc: BAMBOO_BLOCK
     objet: BAMBOO
-    prix: 480
-    vente: 1.76
+    prix: 1140
+    vente: 0.94
   - id: citrouille
     nom: Citrouille
     bloc: PUMPKIN
     objet: PUMPKIN
-    prix: 540
-    vente: 1.97
+    prix: 1260
+    vente: 1.02
   - id: pasteque
     nom: Pastèque
     bloc: MELON
     objet: MELON_SLICE
-    prix: 620
-    vente: 2.21
+    prix: 1400
+    vente: 1.11
   - id: cactus
     nom: Cactus
     bloc: GREEN_GLAZED_TERRACOTTA
     objet: CACTUS
-    prix: 710
-    vente: 2.48
+    prix: 1550
+    vente: 1.2
   - id: cacao
     nom: Cacao
     bloc: BROWN_GLAZED_TERRACOTTA
     objet: COCOA_BEANS
-    prix: 810
-    vente: 2.77
+    prix: 1710
+    vente: 1.3
   - id: champignon_rouge
     nom: Champignon rouge
     bloc: RED_MUSHROOM_BLOCK
     objet: RED_MUSHROOM
-    prix: 930
-    vente: 3.11
+    prix: 1890
+    vente: 1.41
   - id: champignon_brun
     nom: Champignon brun
     bloc: BROWN_MUSHROOM_BLOCK
     objet: BROWN_MUSHROOM
-    prix: 1100
-    vente: 3.48
+    prix: 2100
+    vente: 1.53
   - id: verrue
     nom: Verrue du Nether
     bloc: NETHER_WART_BLOCK
     objet: NETHER_WART
-    prix: 1200
-    vente: 3.9
+    prix: 2320
+    vente: 1.66
   - id: chene
     nom: Chêne
     bloc: OAK_WOOD
     objet: OAK_LOG
-    prix: 1400
-    vente: 4.36
+    prix: 2560
+    vente: 1.8
   - id: bouleau
     nom: Bouleau
     bloc: BIRCH_WOOD
     objet: BIRCH_LOG
-    prix: 1600
-    vente: 4.89
+    prix: 2840
+    vente: 1.96
   - id: epicea
     nom: Épicéa
     bloc: SPRUCE_WOOD
     objet: SPRUCE_LOG
-    prix: 1800
-    vente: 5.47
+    prix: 3130
+    vente: 2.12
   - id: acajou
     nom: Acajou
     bloc: JUNGLE_WOOD
     objet: JUNGLE_LOG
-    prix: 2100
-    vente: 6.13
+    prix: 3450
+    vente: 2.3
   - id: acacia
     nom: Acacia
     bloc: ACACIA_WOOD
     objet: ACACIA_LOG
-    prix: 2300
-    vente: 6.87
+    prix: 3800
+    vente: 2.49
   - id: chene_noir
     nom: Chêne noir
     bloc: DARK_OAK_WOOD
     objet: DARK_OAK_LOG
-    prix: 2700
-    vente: 7.69
+    prix: 4200
+    vente: 2.7
   - id: mangrove
     nom: Palétuvier
     bloc: MANGROVE_WOOD
     objet: MANGROVE_LOG
-    prix: 3000
-    vente: 8.61
+    prix: 4630
+    vente: 2.93
   - id: cerisier
     nom: Cerisier
     bloc: CHERRY_WOOD
     objet: CHERRY_LOG
-    prix: 3500
-    vente: 9.65
+    prix: 5110
+    vente: 3.18
   - id: os
     nom: Os
     bloc: BONE_BLOCK
     objet: BONE
-    prix: 4000
-    vente: 10.8
+    prix: 5620
+    vente: 3.44
   - id: ficelle
     nom: Ficelle
     bloc: WHITE_WOOL
     objet: STRING
-    prix: 4500
-    vente: 12.1
+    prix: 6190
+    vente: 3.73
   - id: poudre
     nom: Poudre à canon
     bloc: GRAY_GLAZED_TERRACOTTA
     objet: GUNPOWDER
-    prix: 5100
-    vente: 13.55
+    prix: 6830
+    vente: 4.05
   - id: miel
     nom: Rayon de miel
     bloc: HONEYCOMB_BLOCK
     objet: HONEYCOMB
-    prix: 5800
-    vente: 15.18
+    prix: 7520
+    vente: 4.39
   - id: slime
     nom: Boule de slime
     bloc: SLIME_BLOCK
     objet: SLIME_BALL
-    prix: 6600
-    vente: 17
+    prix: 8280
+    vente: 4.76
   - id: perle
     nom: Perle de l'Ender
     bloc: PURPUR_BLOCK
     objet: ENDER_PEARL
-    prix: 7500
-    vente: 19.04
+    prix: 9110
+    vente: 5.16
   - id: blaze
     nom: Bâton de blaze
     bloc: ORANGE_GLAZED_TERRACOTTA
     objet: BLAZE_ROD
-    prix: 8600
-    vente: 21.32
+    prix: 10030
+    vente: 5.6
   - id: charbon
     nom: Charbon
     bloc: COAL_BLOCK
     objet: COAL
-    prix: 9700
-    vente: 23.88
+    prix: 11030
+    vente: 6.07
   - id: cuivre
     nom: Cuivre
     bloc: WAXED_COPPER_BLOCK
     objet: COPPER_INGOT
-    prix: 11000
-    vente: 26.75
+    prix: 12130
+    vente: 6.58
   - id: fer
     nom: Fer
     bloc: IRON_BLOCK
     objet: IRON_INGOT
-    prix: 13000
-    vente: 29.96
+    prix: 13330
+    vente: 7.13
   - id: lapis
     nom: Lapis-lazuli
     bloc: LAPIS_BLOCK
     objet: LAPIS_LAZULI
-    prix: 14000
-    vente: 33.56
+    prix: 14680
+    vente: 7.74
   - id: redstone
     nom: Redstone
     bloc: REDSTONE_BLOCK
     objet: REDSTONE
-    prix: 16000
-    vente: 37.58
+    prix: 16130
+    vente: 8.39
   - id: quartz
     nom: Quartz
     bloc: QUARTZ_BLOCK
     objet: QUARTZ
-    prix: 18000
-    vente: 42.09
+    prix: 17720
+    vente: 9.09
   - id: or
     nom: Or
     bloc: GOLD_BLOCK
     objet: GOLD_INGOT
-    prix: 21000
-    vente: 47.14
+    prix: 19480
+    vente: 9.86
   - id: amethyste
     nom: Améthyste
     bloc: AMETHYST_BLOCK
     objet: AMETHYST_SHARD
-    prix: 24000
-    vente: 52.8
+    prix: 21400
+    vente: 10.69
   - id: glowstone
     nom: Glowstone
     bloc: GLOWSTONE
     objet: GLOWSTONE_DUST
-    prix: 27000
-    vente: 59.14
+    prix: 23510
+    vente: 11.59
   - id: prismarine
     nom: Prismarine
     bloc: PRISMARINE
     objet: PRISMARINE_SHARD
-    prix: 31000
-    vente: 66.23
+    prix: 25830
+    vente: 12.57
   - id: obsidienne
     nom: Obsidienne
     bloc: OBSIDIAN
     objet: OBSIDIAN
-    prix: 35000
-    vente: 74.18
+    prix: 28360
+    vente: 13.63
   - id: diamant
     nom: Diamant
     bloc: DIAMOND_BLOCK
     objet: DIAMOND
-    prix: 39000
-    vente: 83.08
+    prix: 31150
+    vente: 14.78
   - id: emeraude
     nom: Émeraude
     bloc: EMERALD_BLOCK
     objet: EMERALD
-    prix: 45000
-    vente: 93.05
+    prix: 34180
+    vente: 16.02
   - id: netherite
     nom: Netherite
     bloc: NETHERITE_BLOCK
     objet: NETHERITE_SCRAP
-    prix: 51000
-    vente: 104.22
+    prix: 37520
+    vente: 17.37
   depart: 10
 progression:
   niveau-max: 100
   prestige-max: 100
   # XP pour passer du niveau N au suivant = (xp-base + xp-par-niveau × (N - 1)) × (1 + xp-bonus-prestige × prestige)
-  xp-base: 25
-  xp-par-niveau: 5
-  xp-bonus-prestige: 0.1
+  xp-base: 250
+  xp-par-niveau: 40
+  xp-bonus-prestige: 0.04
   # XP gagnée par ressource récoltée (clé = nom du bloc, du poisson ou du mob, comme pour les monnaies).
   xp:
-    defaut: 1
+    defaut: 30
     ressources: {}
-  # Coût pour passer prestige = prestige-cout-base × (prestige actuel + 1), en Crédits orbitaux.
-  prestige-cout-base: 10000
+  # Coût du prestige (Crédits) = crédits de la meilleure ressource débloquée × (récoltes pour monter 1 → 100
+  # + prestige-minutes-manquantes × 60 × recoltes-par-seconde). Au niveau 100, il manque ces minutes de farm.
+  prestige-minutes-manquantes: 15
+  recoltes-par-seconde: 1
   # Cases d'amélioration (9 par outil), noms et prérequis à définir. Une liste par outil possible :
   # ameliorations.pioche, .hache, .houe, .peche, .epee ; sinon .defaut. Champs : nom, objet, description, prerequis.
   ameliorations:
@@ -341,7 +584,7 @@ progression:
 quetes:
   pas: 10
   # Récompense PROVISOIRE si rien n'est réglé ci-dessous : palier × credit-par-palier Crédits orbitaux.
-  credit-par-palier: 500
+  credit-par-palier: 1500
   # Vraies récompenses (à définir) : recompenses.<outil>.<palier> ou recompenses.tous.<palier>.
   # Champs : credit, flux, texte (affiché), commandes (console, %joueur% = pseudo). Exemple :
   #   tous:
@@ -359,59 +602,59 @@ ressources:
   pioche:
   - nom: Charbon
     bloc: COAL_ORE
-    credit: 8
-    flux: 10
-    xp: 2
-  - nom: Cuivre
-    bloc: COPPER_ORE
-    credit: 12
-    flux: 15
-    xp: 2
-  - nom: Fer
-    bloc: IRON_ORE
-    credit: 16
-    flux: 20
-    xp: 3
-  - nom: Lapis-lazuli
-    bloc: LAPIS_ORE
     credit: 24
     flux: 30
-    xp: 3
+    xp: 30
+  - nom: Cuivre
+    bloc: COPPER_ORE
+    credit: 36
+    flux: 45
+    xp: 30
+  - nom: Fer
+    bloc: IRON_ORE
+    credit: 48
+    flux: 60
+    xp: 45
+  - nom: Lapis-lazuli
+    bloc: LAPIS_ORE
+    credit: 72
+    flux: 90
+    xp: 45
   - nom: Redstone
     bloc: REDSTONE_ORE
-    credit: 32
-    flux: 40
-    xp: 4
+    credit: 96
+    flux: 120
+    xp: 60
   - nom: Or
     bloc: GOLD_ORE
-    credit: 44
-    flux: 55
-    xp: 5
+    credit: 132
+    flux: 165
+    xp: 75
   - nom: Quartz
     bloc: NETHER_QUARTZ_ORE
-    credit: 60
-    flux: 75
-    xp: 6
-  - nom: Améthyste
-    bloc: AMETHYST_BLOCK
-    credit: 80
-    flux: 100
-    xp: 7
-  - nom: Diamant
-    bloc: DIAMOND_ORE
-    credit: 108
-    flux: 135
-    xp: 8
-  - nom: Émeraude
-    bloc: EMERALD_ORE
-    credit: 140
-    flux: 175
-    xp: 10
-  - nom: Débris antiques
-    bloc: ANCIENT_DEBRIS
     credit: 180
     flux: 225
-    xp: 12
+    xp: 90
+  - nom: Améthyste
+    bloc: AMETHYST_BLOCK
+    credit: 240
+    flux: 300
+    xp: 105
+  - nom: Diamant
+    bloc: DIAMOND_ORE
+    credit: 324
+    flux: 405
+    xp: 120
+  - nom: Émeraude
+    bloc: EMERALD_ORE
+    credit: 420
+    flux: 525
+    xp: 150
+  - nom: Débris antiques
+    bloc: ANCIENT_DEBRIS
+    credit: 540
+    flux: 675
+    xp: 180
   hache:
   - nom: Chêne
     origine: true
@@ -419,63 +662,63 @@ ressources:
   - nom: Bouleau
     bloc: BIRCH_LOG
     feuilles: BIRCH_LEAVES
-    credit: 2
-    flux: 2
-    xp: 2
+    credit: 36
+    flux: 45
+    xp: 30
   - nom: Épicéa
     bloc: SPRUCE_LOG
     feuilles: SPRUCE_LEAVES
-    credit: 3
-    flux: 3
-    xp: 2
+    credit: 48
+    flux: 60
+    xp: 30
   - nom: Acajou
     bloc: JUNGLE_LOG
     feuilles: JUNGLE_LEAVES
-    credit: 4
-    flux: 4
-    xp: 3
+    credit: 72
+    flux: 90
+    xp: 45
   - nom: Acacia
     bloc: ACACIA_LOG
     feuilles: ACACIA_LEAVES
-    credit: 6
-    flux: 6
-    xp: 3
+    credit: 96
+    flux: 120
+    xp: 45
   - nom: Chêne noir
     bloc: DARK_OAK_LOG
     feuilles: DARK_OAK_LEAVES
-    credit: 8
-    flux: 8
-    xp: 4
+    credit: 132
+    flux: 165
+    xp: 60
   - nom: Palétuvier
     bloc: MANGROVE_LOG
     feuilles: MANGROVE_LEAVES
-    credit: 11
-    flux: 11
-    xp: 5
+    credit: 180
+    flux: 225
+    xp: 75
   - nom: Cerisier
     bloc: CHERRY_LOG
     feuilles: CHERRY_LEAVES
-    credit: 15
-    flux: 15
-    xp: 6
+    credit: 240
+    flux: 300
+    xp: 90
   - nom: Chêne pâle
     bloc: PALE_OAK_LOG
     feuilles: PALE_OAK_LEAVES
-    credit: 20
-    flux: 20
-    xp: 7
+    credit: 324
+    flux: 405
+    xp: 105
   - nom: Carmin
     bloc: CRIMSON_STEM
     feuilles: NETHER_WART_BLOCK
-    credit: 27
-    flux: 27
-    xp: 8
+    credit: 420
+    flux: 525
+    xp: 120
   - nom: Biscornu
     bloc: WARPED_STEM
     feuilles: WARPED_WART_BLOCK
-    credit: 35
-    flux: 35
-    xp: 10
+    credit: 540
+    flux: 675
+    xp: 150
   houe:
   - nom: Blé
     origine: true
@@ -483,179 +726,179 @@ ressources:
   - nom: Carotte
     bloc: CARROTS
     icone: CARROT
-    credit: 2
-    flux: 2
-    xp: 2
+    credit: 36
+    flux: 45
+    xp: 30
   - nom: Pomme de terre
     bloc: POTATOES
     icone: POTATO
-    credit: 3
-    flux: 3
-    xp: 2
+    credit: 48
+    flux: 60
+    xp: 30
   - nom: Betterave
     bloc: BEETROOTS
     icone: BEETROOT
-    credit: 4
-    flux: 4
-    xp: 3
+    credit: 72
+    flux: 90
+    xp: 45
   - nom: Canne à sucre
     bloc: SUGAR_CANE
-    credit: 6
-    flux: 6
-    xp: 3
+    credit: 96
+    flux: 120
+    xp: 45
   - nom: Champignon brun
     bloc: BROWN_MUSHROOM
-    credit: 8
-    flux: 8
-    xp: 4
+    credit: 132
+    flux: 165
+    xp: 60
   - nom: Champignon rouge
     bloc: RED_MUSHROOM
-    credit: 11
-    flux: 11
-    xp: 5
+    credit: 180
+    flux: 225
+    xp: 75
   - nom: Verrue du Nether
     bloc: NETHER_WART
-    credit: 15
-    flux: 15
-    xp: 6
+    credit: 240
+    flux: 300
+    xp: 90
   - nom: Fleur-torche
     bloc: TORCHFLOWER_CROP
     mur: TORCHFLOWER
     icone: TORCHFLOWER
-    credit: 20
-    flux: 20
-    xp: 7
+    credit: 324
+    flux: 405
+    xp: 105
   - nom: Champignon carmin
     bloc: CRIMSON_FUNGUS
-    credit: 27
-    flux: 27
-    xp: 8
+    credit: 420
+    flux: 525
+    xp: 120
   - nom: Champignon biscornu
     bloc: WARPED_FUNGUS
-    credit: 35
-    flux: 35
-    xp: 10
+    credit: 540
+    flux: 675
+    xp: 150
   peche:
   - nom: Poissons du lac
     origine: true
     icone: COD
   - nom: Saumon
     bloc: SALMON
-    credit: 6
-    flux: 6
-    xp: 2
+    credit: 36
+    flux: 45
+    xp: 30
   - nom: Poisson-globe
     bloc: PUFFERFISH
-    credit: 9
-    flux: 9
-    xp: 2
+    credit: 48
+    flux: 60
+    xp: 30
   - nom: Poisson tropical
     bloc: TROPICAL_FISH
-    credit: 12
-    flux: 12
-    xp: 3
+    credit: 72
+    flux: 90
+    xp: 45
   - nom: Encre de calamar
     bloc: INK_SAC
-    credit: 18
-    flux: 18
-    xp: 3
+    credit: 96
+    flux: 120
+    xp: 45
   - nom: Encre luisante
     bloc: GLOW_INK_SAC
-    credit: 24
-    flux: 24
-    xp: 4
+    credit: 132
+    flux: 165
+    xp: 60
   - nom: Éclat de prismarine
     bloc: PRISMARINE_SHARD
-    credit: 33
-    flux: 33
-    xp: 5
+    credit: 180
+    flux: 225
+    xp: 75
   - nom: Cristaux de prismarine
     bloc: PRISMARINE_CRYSTALS
-    credit: 45
-    flux: 45
-    xp: 6
+    credit: 240
+    flux: 300
+    xp: 90
   - nom: Coquille de nautile
     bloc: NAUTILUS_SHELL
-    credit: 60
-    flux: 60
-    xp: 7
+    credit: 324
+    flux: 405
+    xp: 105
   - nom: Cœur de la mer
     bloc: HEART_OF_THE_SEA
-    credit: 81
-    flux: 81
-    xp: 8
+    credit: 420
+    flux: 525
+    xp: 120
   - nom: Trident abyssal
     bloc: TRIDENT
-    credit: 105
-    flux: 105
-    xp: 10
+    credit: 540
+    flux: 675
+    xp: 150
   epee:
   - nom: Zombies
     mob: ZOMBIE
     bloc: ROTTEN_FLESH
-    credit: 4
-    flux: 5
-    xp: 1
+    credit: 12
+    flux: 15
+    xp: 15
   - nom: Squelettes
     mob: SKELETON
     bloc: BONE
-    credit: 6
-    flux: 8
-    xp: 2
+    credit: 18
+    flux: 24
+    xp: 30
   - nom: Araignées
     mob: SPIDER
     bloc: SPIDER_EYE
-    credit: 9
-    flux: 12
-    xp: 2
+    credit: 27
+    flux: 36
+    xp: 30
   - nom: Creepers
     mob: CREEPER
     bloc: GUNPOWDER
-    credit: 12
-    flux: 16
-    xp: 3
+    credit: 36
+    flux: 48
+    xp: 45
   - nom: Endermen
     mob: ENDERMAN
     bloc: ENDER_PEARL
-    credit: 18
-    flux: 24
-    xp: 3
+    credit: 54
+    flux: 72
+    xp: 45
   - nom: Sorcières
     mob: WITCH
     bloc: GLASS_BOTTLE
-    credit: 24
-    flux: 32
-    xp: 4
+    credit: 72
+    flux: 96
+    xp: 60
   - nom: Blazes
     mob: BLAZE
     bloc: BLAZE_ROD
-    credit: 33
-    flux: 44
-    xp: 5
+    credit: 99
+    flux: 132
+    xp: 75
   - nom: Wither squelettes
     mob: WITHER_SKELETON
     bloc: WITHER_SKELETON_SKULL
-    credit: 45
-    flux: 60
-    xp: 6
+    credit: 135
+    flux: 180
+    xp: 90
   - nom: Évocateurs
     mob: EVOKER
     bloc: TOTEM_OF_UNDYING
-    credit: 60
-    flux: 80
-    xp: 7
+    credit: 180
+    flux: 240
+    xp: 105
   - nom: Ravageurs
     mob: RAVAGER
     bloc: SADDLE
-    credit: 81
-    flux: 108
-    xp: 8
+    credit: 243
+    flux: 324
+    xp: 120
   - nom: Gardiens du vide
     mob: SHULKER
     bloc: SHULKER_SHELL
-    credit: 105
-    flux: 140
-    xp: 10
+    credit: 315
+    flux: 420
+    xp: 150
 hdv:
   taxe: 5 # % retenu sur chaque vente
   max-offres: 10 # par joueur, expirées comprises
@@ -666,8 +909,8 @@ tuto:
   actif: true
   recoltes: 10 # ressources à récolter à l'étape 5
   zones: 5 # îles de farm à visiter à l'étape 6 (1 à 5)
-  cle-coffre: 1 # coffre (1 à 5) dont la clé est offerte à l'étape 7
-  recompense-credits: 500 # Crédits orbitaux donnés une seule fois à la fin du tuto
+  cle-coffre: 1 # coffre (1 à 6) dont la clé est offerte à l'étape 7
+  recompense-credits: 1500 # Crédits orbitaux donnés une seule fois à la fin du tuto
 coffres:
   loots: {}
   noms:
@@ -676,30 +919,63 @@ coffres:
   - Event
   - Saturne
   - Neptune
+  - Pets
   angle: 36 # direction depuis le centre du spawn (degrés), entre deux avenues
   rayon: 36
+  # Clé Farm : chance (en %) à chaque récolte faite avec l'Outil orbital en main, donnée dans l'inventaire.
+  cle-farm:
+    chance: 2.0
+    coffre: 2 # coffre (1 à 6) dont la clé tombe : 2 = « Farm »
 classement:
   periode-secondes: 60
+  panneau-echelle: 1.8 # taille des panneaux « Top 10 » à côté des anneaux-portails
   podium:
     angle: 108 # direction depuis le centre du spawn (degrés), entre deux avenues
     rayon: 97 # distance au centre (97 = dans le pavillon « Classement »)
 iles:
+  # 20 niveaux : taille de la zone (côté en blocs, 900 max) et prix en Crédits pour atteindre ce niveau.
   tailles:
   - 100
-  - 125
-  - 150
+  - 115
+  - 130
+  - 145
+  - 160
+  - 180
   - 200
-  - 250
+  - 220
+  - 245
+  - 270
   - 300
+  - 330
+  - 360
   - 400
+  - 440
+  - 490
+  - 540
+  - 600
+  - 660
+  - 750
   couts:
   - 0
-  - 25000
-  - 100000
-  - 300000
-  - 750000
-  - 2000000
+  - 500000
+  - 1200000
+  - 2500000
   - 5000000
+  - 9000000
+  - 16000000
+  - 28000000
+  - 48000000
+  - 80000000
+  - 135000000
+  - 225000000
+  - 375000000
+  - 620000000
+  - 1000000000
+  - 1700000000
+  - 2800000000
+  - 4600000000
+  - 7500000000
+  - 12000000000
 hud:
   # Le classement global (aux Crédits orbitaux) est recalculé toutes les X secondes.
   classement-secondes: 60
@@ -717,79 +993,83 @@ hud:
     vip: <b><#62CFF4>ᴠɪᴘ</b>
   grade-defaut: <b><gradient:#8C96A3:#B8C0CA>ᴊᴏᴜᴇᴜʀ</gradient></b>
 flux-stellaire:
-  defaut: 1
+  defaut: 3
   ressources:
+    PUFFERFISH: 60
+    COD: 30
+    SALMON: 45
+    WHEAT: 30
+    TROPICAL_FISH: 150
+    OAK_LOG: 30
     OAK_LEAVES: 0
-    COD: 2
-    SALMON: 3
-    PUFFERFISH: 5
-    TROPICAL_FISH: 12
-    ZOMBIE: 3
-    SKELETON: 3
-    SPIDER: 3
-    CREEPER: 4
-    ENDERMAN: 6
-    WITCH: 6
-    BLAZE: 6
-    WITHER_SKELETON: 8
-    RAVAGER: 15
-    EVOKER: 12
-    MELON: 2
-    PUMPKIN: 2
-    STONE: 1
-    COBBLESTONE: 1
-    COAL_ORE: 2
-    COPPER_ORE: 3
-    IRON_ORE: 4
-    DEEPSLATE_IRON_ORE: 4
-    GOLD_ORE: 6
-    DEEPSLATE_GOLD_ORE: 6
-    REDSTONE_ORE: 6
-    DEEPSLATE_REDSTONE_ORE: 6
-    LAPIS_ORE: 7
-    DEEPSLATE_LAPIS_ORE: 7
-    DEEPSLATE_DIAMOND_ORE: 12
-    DEEPSLATE_EMERALD_ORE: 15
-    AMETHYST_BLOCK: 10
-    NETHER_QUARTZ_ORE: 8
-    ANCIENT_DEBRIS: 25
+    ZOMBIE: 9
+    SKELETON: 9
+    SPIDER: 9
+    CREEPER: 12
+    ENDERMAN: 18
+    WITCH: 18
+    BLAZE: 18
+    WITHER_SKELETON: 24
+    RAVAGER: 45
+    EVOKER: 36
+    MELON: 6
+    PUMPKIN: 6
+    STONE: 3
+    COBBLESTONE: 3
+    COAL_ORE: 6
+    COPPER_ORE: 9
+    IRON_ORE: 12
+    DEEPSLATE_IRON_ORE: 12
+    GOLD_ORE: 18
+    DEEPSLATE_GOLD_ORE: 18
+    REDSTONE_ORE: 18
+    DEEPSLATE_REDSTONE_ORE: 18
+    LAPIS_ORE: 21
+    DEEPSLATE_LAPIS_ORE: 21
+    DEEPSLATE_DIAMOND_ORE: 36
+    DEEPSLATE_EMERALD_ORE: 45
+    AMETHYST_BLOCK: 30
+    NETHER_QUARTZ_ORE: 24
+    ANCIENT_DEBRIS: 75
 credit-orbital:
-  defaut: 1
+  defaut: 3
   ressources:
+    PUFFERFISH: 48
+    COD: 24
+    SALMON: 36
+    WHEAT: 24
+    TROPICAL_FISH: 120
+    OAK_LOG: 24
     OAK_LEAVES: 0
     STONE: 0
     COBBLESTONE: 0
-    COAL_ORE: 1
-    COPPER_ORE: 2
-    IRON_ORE: 3
-    DEEPSLATE_IRON_ORE: 3
-    GOLD_ORE: 5
-    DEEPSLATE_GOLD_ORE: 5
-    REDSTONE_ORE: 4
-    DEEPSLATE_REDSTONE_ORE: 4
-    LAPIS_ORE: 5
-    DEEPSLATE_LAPIS_ORE: 5
-    DEEPSLATE_DIAMOND_ORE: 10
-    DEEPSLATE_EMERALD_ORE: 12
-    AMETHYST_BLOCK: 8
-    NETHER_QUARTZ_ORE: 6
-    ANCIENT_DEBRIS: 20
-    MELON: 2
-    PUMPKIN: 2
-    COD: 2
-    SALMON: 3
-    PUFFERFISH: 4
-    TROPICAL_FISH: 10
-    ZOMBIE: 2
-    SKELETON: 2
-    SPIDER: 2
-    CREEPER: 3
-    ENDERMAN: 5
-    WITCH: 5
-    BLAZE: 5
-    WITHER_SKELETON: 7
-    RAVAGER: 12
-    EVOKER: 10
+    COAL_ORE: 3
+    COPPER_ORE: 6
+    IRON_ORE: 9
+    DEEPSLATE_IRON_ORE: 9
+    GOLD_ORE: 15
+    DEEPSLATE_GOLD_ORE: 15
+    REDSTONE_ORE: 12
+    DEEPSLATE_REDSTONE_ORE: 12
+    LAPIS_ORE: 15
+    DEEPSLATE_LAPIS_ORE: 15
+    DEEPSLATE_DIAMOND_ORE: 30
+    DEEPSLATE_EMERALD_ORE: 36
+    AMETHYST_BLOCK: 24
+    NETHER_QUARTZ_ORE: 18
+    ANCIENT_DEBRIS: 60
+    MELON: 6
+    PUMPKIN: 6
+    ZOMBIE: 6
+    SKELETON: 6
+    SPIDER: 6
+    CREEPER: 9
+    ENDERMAN: 15
+    WITCH: 15
+    BLAZE: 15
+    WITHER_SKELETON: 21
+    RAVAGER: 36
+    EVOKER: 30
 navigateur:
   slot: 8
 
@@ -833,3 +1113,10 @@ pack:
 boutique:
   avenues:
   - mobzone
+
+# Magasin de blocs (PNJ Bâtisseur au Marché orbital, ou /blocs) : tous les blocs posables pour décorer son île,
+# payés en Crédits orbitaux. Jamais les blocs des générateurs ni les blocs techniques/dangereux. /tycoon reload après un changement.
+magasin-blocs:
+  multiplicateur: 1.0 # tous les prix du barème × ce nombre
+  prix: {}
+  exclus: []

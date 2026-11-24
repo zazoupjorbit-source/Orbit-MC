@@ -164,6 +164,9 @@ final class Hud implements Listener {
         };
     }
 
+    /** Rang au classement global (null = pas encore classé). */
+    Integer rang(UUID id) { return rangs.get(id); }
+
     /** Grade LuckPerms le plus haut (liste hud.grades de config.yml, du plus haut au plus bas). */
     private String grade(Player p) {
         ConfigurationSection s = plugin.getConfig().getConfigurationSection("hud.grades");

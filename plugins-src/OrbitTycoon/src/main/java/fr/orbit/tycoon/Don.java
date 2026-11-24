@@ -104,7 +104,7 @@ final class Don {
     private Objet objet(String quoi) {
         if (quoi.equals("collecteur")) return new Objet("Collecteur orbital", () -> plugin.collecteurs().objetCollecteur(false));
         if (quoi.equals("coffre-collecteur")) return new Objet("Coffre collecteur", () -> plugin.collecteurs().objetCollecteur(true));
-        if (quoi.matches("cle-[1-5]")) {
+        if (quoi.matches("cle-[1-6]")) {
             int n = quoi.charAt(4) - '1';
             return new Objet("Clé « " + plugin.coffres().nom(n) + " »", () -> plugin.coffres().cle(n, 1));
         }
@@ -145,7 +145,7 @@ final class Don {
     private List<String> tousLesIds() {
         List<String> ids = new ArrayList<>();
         for (Monnaies.Monnaie m : Monnaies.Monnaie.values()) ids.add(m.id);
-        for (int i = 1; i <= 5; i++) ids.add("cle-" + i);
+        for (int i = 1; i <= Coffres.NB; i++) ids.add("cle-" + i);
         for (String id : plugin.generateurs().ids()) { ids.add("gen-" + id); ids.add("ressource-" + id); }
         ids.addAll(List.of("collecteur", "coffre-collecteur", "outil", "navigateur", "guide"));
         return ids;

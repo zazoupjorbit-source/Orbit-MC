@@ -91,6 +91,17 @@ public final class StationDesign {
         data("minecraft:white_concrete_slab[type=top]");
         data("minecraft:candle");
         data("minecraft:cyan_candle");
+        // déco des halls et de l'atrium (23/11)
+        for (String f : List.of("north", "east", "south", "west")) {
+            data("minecraft:smooth_quartz_stairs[facing=" + f + "]");
+            data("minecraft:blue_wall_banner[facing=" + f + "]");
+            data("minecraft:yellow_wall_banner[facing=" + f + "]");
+        }
+        data("minecraft:lantern[hanging=true]");
+        data("minecraft:soul_lantern[hanging=true]");
+        data("minecraft:spruce_fence[north=true,south=true]");
+        data("minecraft:spruce_fence[east=true,west=true]");
+        data("minecraft:iron_trapdoor[half=top]");
         for (int level = 0; level <= 15; level++) {
             data("minecraft:light[level=" + level + "]");
         }
@@ -271,16 +282,72 @@ public final class StationDesign {
                 }
             }
         }
+        // socle à gradins du noyau, quatre conduits de cuivre et deux anneaux flottants reliés au noyau
+        for (int x = -7; x <= 7; x++) {
+            for (int z = -7; z <= 7; z++) {
+                double r = Math.hypot(x, z);
+                if (r > 3.2 && r <= 4.3) {
+                    set(x, 2, z, x == 0 || z == 0 ? gold : hull);
+                }
+                for (int ry : new int[]{12, 19}) {
+                    if (r > 3.2 && r < 5.5 && (x == 0 || z == 0)) {
+                        set(x, ry, z, gold);
+                    } else if (r >= 5.5 && r <= 6.4) {
+                        set(x, ry, z, Math.floorMod((int) Math.round(Math.atan2(z, x) * 4 / Math.PI), 2) == 0 ? gold : accent);
+                    }
+                }
+            }
+        }
+        for (int cx : new int[]{-3, 3}) {
+            for (int cz : new int[]{-3, 3}) {
+                set(cx, 2, cz, Material.WAXED_CUT_COPPER);
+                set(cx, 3, cz, Material.WAXED_CUT_COPPER);
+                set(cx, 4, cz, Material.LIGHTNING_ROD);
+            }
+        }
         holo(0.5, 8.2, 5.5, label("ORBIT MC", ICE, true), 3.2f);
         holo(0.5, 6.6, 5.5, label("LA STATION", GOLD, true), 1.4f);
 
-        // rose des vents sous le spawn
-        int sz = spawnZ();
-        for (int d = -3; d <= 3; d++) {
-            set(d, 0, sz, gold);
-            set(0, 0, sz + d, gold);
+        // allées lumineuses : du noyau vers chaque porte, à la couleur du mode, rails gris pointillés d'or
+        Material[] lanes = {Material.ORANGE_STAINED_GLASS, Material.RED_STAINED_GLASS, Material.LIGHT_BLUE_STAINED_GLASS,
+                Material.PURPLE_STAINED_GLASS};
+        for (int dir = 0; dir < 4; dir++) {
+            for (int u = 6; u <= a - 2; u++) {
+                set(wx(dir, u, 0), 0, wz(dir, u, 0), lanes[dir]);
+                set(wx(dir, u, 0), -1, wz(dir, u, 0), light);
+                for (int v : new int[]{-1, 1}) {
+                    set(wx(dir, u, v), 0, wz(dir, u, v), Math.floorMod(u, 4) == 0 ? gold : trim);
+                }
+            }
         }
-        set(0, 0, sz, Material.CHISELED_QUARTZ_BLOCK);
+
+        // estrade du spawn : disque de quartz, rose des vents à 8 branches, cerclage bleu et 4 bornes lumineuses
+        int sz = spawnZ();
+        for (int dx = -6; dx <= 6; dx++) {
+            for (int dz = -6; dz <= 6; dz++) {
+                double r = Math.hypot(dx, dz);
+                if (r > 5.4) {
+                    continue;
+                }
+                Material m;
+                if (r < 0.5) {
+                    m = Material.CHISELED_QUARTZ_BLOCK;
+                } else if (r > 4.6) {
+                    m = accent;
+                } else if ((dx == 0 || dz == 0) && r <= 4.4) {
+                    m = gold;
+                } else if (Math.abs(dx) == Math.abs(dz) && r <= 3.2) {
+                    m = ring;
+                } else {
+                    m = hull;
+                }
+                set(dx, 0, sz + dz, m);
+            }
+        }
+        for (int[] p : new int[][]{{-5, -2}, {5, -2}, {-5, 2}, {5, 2}}) {
+            set(p[0], 1, sz + p[1], Material.CHISELED_QUARTZ_BLOCK);
+            set(p[0], 2, sz + p[1], Material.END_ROD);
+        }
         plan.point("spawn", 0.5, 1, sz + 0.5, 180f);
         plan.point("pnj.guide", 4.5, 1, sz + 0.5, 90f);
 
@@ -362,6 +429,52 @@ public final class StationDesign {
         plan.text(zone, -c + 0.5, 4.3, c + 2.8, 180f, label("RÉSEAU ORBIT MC", ICE, true), 1.1f);
         plan.text(zone, -c + 0.5, 3.2, c + 2.8, 180f, label("compteurs à venir", GOLD, false), 0.9f);
         plan.point("ecran.reseau", -c + 0.5, 3.2, c + 2.8, 180f);
+
+        // de chaque côté des portes : pilastre de quartz cerclé d'or, jardinière d'azalées et banc dos au mur.
+        // Rien n'est posé sur le chemin de l'aile Tycoon (pan sud-ouest).
+        for (int dir = 0; dir < 4; dir++) {
+            BlockData bench = data("minecraft:smooth_quartz_stairs[facing=" + face(dir, 1, 0) + "]");
+            for (int side : new int[]{-1, 1}) {
+                int pv = side * (hw + 2);
+                int ix = wx(dir, a - 1, pv), iz = wz(dir, a - 1, pv);
+                if (!nearTycoon(ix, iz)) {
+                    for (int y = 1; y <= wallH - 1; y++) {
+                        set(ix, y, iz, y == 1 || y == wallH - 1 ? gold : Material.QUARTZ_PILLAR);
+                    }
+                }
+                for (int k = hw + 3; k <= hw + 4; k++) {
+                    int qx = wx(dir, a - 1, side * k), qz = wz(dir, a - 1, side * k);
+                    if (!nearTycoon(qx, qz)) {
+                        set(qx, 1, qz, Material.MOSS_BLOCK);
+                        set(qx, 2, qz, k == hw + 4 ? Material.FLOWERING_AZALEA : Material.AZALEA);
+                    }
+                    int bx = wx(dir, a - 3, side * k), bz = wz(dir, a - 3, side * k);
+                    if (!nearTycoon(bx, bz)) {
+                        plan.set(bx, 1, bz, bench);
+                    }
+                }
+            }
+        }
+
+        // lustres : 8 lanternes en croix pendues au dôme par une chaîne, entre le belvédère et les murs
+        BlockData chain = data(Material.IRON_CHAIN);
+        BlockData hanging = data("minecraft:lantern[hanging=true]");
+        BlockData rodDown = data("minecraft:end_rod[facing=down]");
+        for (int i = 0; i < 8; i++) {
+            double ang = Math.PI / 8 + i * Math.PI / 4;
+            int lx = (int) Math.round(18 * Math.cos(ang)), lz = (int) Math.round(18 * Math.sin(ang));
+            int bottom = domeBottom(lx, lz, r -> wallH + cap(r, rc, domeH));
+            int hy = 18;
+            for (int y = hy + 1; y < bottom; y++) {
+                plan.set(lx, y, lz, chain);
+            }
+            set(lx, hy, lz, rib);
+            plan.set(lx, hy - 1, lz, rodDown);
+            for (int[] n : N4) {
+                set(lx + n[0], hy, lz + n[1], gold);
+                plan.set(lx + n[0], hy - 1, lz + n[1], hanging);
+            }
+        }
 
         // éclairage d'ambiance : lumières invisibles à hauteur de tête
         for (int x = -a; x <= a; x += 4) {
@@ -666,8 +779,9 @@ public final class StationDesign {
                 if (f == Material.GRASS_BLOCK && !clear && r < R - 2) {
                     double h = hash(u, v, 7);
                     if (h < 0.22) {
-                        Material[] plants = {Material.SHORT_GRASS, Material.SHORT_GRASS, Material.SHORT_GRASS, Material.POPPY,
-                                Material.DANDELION, Material.CORNFLOWER, Material.ALLIUM, Material.OXEYE_DAISY};
+                        Material[] plants = {Material.SHORT_GRASS, Material.SHORT_GRASS, Material.SHORT_GRASS, Material.FERN,
+                                Material.FERN, Material.POPPY, Material.DANDELION, Material.CORNFLOWER, Material.ALLIUM,
+                                Material.OXEYE_DAISY, Material.AZALEA};
                         wset(dir, u, 1, v, plants[(int) (h / 0.22 * plants.length) % plants.length]);
                     }
                 }
@@ -689,13 +803,86 @@ public final class StationDesign {
         for (int[] t : trees) {
             tree(dir, (int) Math.round(t[0] * k), (int) Math.round(t[1] * k));
         }
-        // coin potager
-        int hu = (int) Math.round(-5 * k), hv = (int) Math.round(14 * k);
-        wset(dir, hu, 1, hv, Material.HAY_BLOCK);
-        wset(dir, hu + 1, 1, hv, Material.HAY_BLOCK);
-        wset(dir, hu, 2, hv, Material.HAY_BLOCK);
-        wset(dir, hu + 2, 1, hv + 1, Material.COMPOSTER);
-        wset(dir, hu - 1, 1, hv + 1, Material.BARREL);
+        // ponts de bois là où la rivière coupe le chemin, garde-corps de chaque côté (sauf sous une lanterne)
+        BlockData rail = data("minecraft:spruce_fence[" + (FWD[dir][0] == 0 ? "north=true,south=true" : "east=true,west=true") + "]");
+        for (int u = -R + 3; u <= R - 3; u++) {
+            int v0 = (int) Math.round(7 * Math.sin(u / 4.0));
+            if (v0 < -3 || v0 > 2) {
+                continue;
+            }
+            for (int v = -1; v <= 1; v++) {
+                wset(dir, u, 0, v, Material.SPRUCE_PLANKS);
+            }
+            boolean lanternRow = u >= -R + 6 && u <= gateU - 5 && Math.floorMod(u + R - 6, 6) == 0;
+            if (!lanternRow) {
+                for (int v : new int[]{-2, 2}) {
+                    plan.set(wx(dir, centerD + u, v), 1, wz(dir, centerD + u, v), rail);
+                }
+            }
+        }
+        // mare aux nénuphars, bordée de pierres moussues et de fougères
+        int pu = (int) Math.round(4 * k), pv = (int) Math.round(-14 * k);
+        for (int du = -5; du <= 5; du++) {
+            for (int dv = -4; dv <= 4; dv++) {
+                double e = (du / 3.2) * (du / 3.2) + (dv / 2.4) * (dv / 2.4);
+                if (e <= 1) {
+                    wset(dir, pu + du, 0, pv + dv, Material.WATER);
+                    wset(dir, pu + du, 1, pv + dv, hash(du, dv, 15) < 0.22 ? Material.LILY_PAD : Material.AIR);
+                } else if (e <= 1.6) {
+                    double h = hash(du, dv, 19);
+                    if (h < 0.35) {
+                        wset(dir, pu + du, 0, pv + dv, Material.MOSSY_COBBLESTONE);
+                        wset(dir, pu + du, 1, pv + dv, Material.AIR);
+                    } else if (h < 0.7) {
+                        wset(dir, pu + du, 1, pv + dv, Material.FERN);
+                    }
+                }
+            }
+        }
+        // rochers moussus
+        for (int[] p : new int[][]{{-15, -5}, {0, -8}, {-8, 5}, {14, -12}}) {
+            rock(dir, (int) Math.round(p[0] * k), (int) Math.round(p[1] * k));
+        }
+        // camp du survivant : feu de camp, souches pour s'asseoir, tente ouverte vers le feu
+        int cu = (int) Math.round(-3 * k), cv = (int) Math.round(11 * k);
+        for (int du = -3; du <= 3; du++) {
+            for (int dv = -3; dv <= 3; dv++) {
+                if (Math.hypot(du, dv) <= 2.6) {
+                    wset(dir, cu + du, 0, cv + dv, Material.COARSE_DIRT);
+                    wset(dir, cu + du, 1, cv + dv, Material.AIR);
+                }
+            }
+        }
+        wset(dir, cu, 1, cv, Material.CAMPFIRE);
+        for (int[] s : new int[][]{{-2, 0}, {2, 0}, {0, -2}}) {
+            wset(dir, cu + s[0], 1, cv + s[1], Material.STRIPPED_OAK_LOG);
+        }
+        wset(dir, cu + 2, 2, cv, Material.LANTERN);
+        for (int dv = 3; dv <= 5; dv++) {
+            for (int du = -2; du <= 2; du++) {
+                int y = 3 - Math.abs(du);
+                wset(dir, cu + du, y, cv + dv, Material.ORANGE_WOOL);
+                for (int yy = 1; yy < y; yy++) {
+                    wset(dir, cu + du, yy, cv + dv, dv == 5 ? Material.WHITE_WOOL : Material.AIR);
+                }
+            }
+        }
+        wset(dir, cu - 1, 1, cv + 4, Material.BARREL);
+        // potager : bac bordé de dalles, citrouilles et pastèques, pots de fleurs, composteur et foin
+        int gu = (int) Math.round(6 * k), gv = (int) Math.round(12 * k);
+        Material[] crops = {Material.PUMPKIN, Material.MELON, Material.PUMPKIN};
+        Material[] pots = {Material.POTTED_RED_TULIP, Material.POTTED_CORNFLOWER, Material.POTTED_OXEYE_DAISY};
+        for (int du = 0; du <= 4; du++) {
+            for (int dv = 0; dv <= 3; dv++) {
+                boolean border = du == 0 || du == 4 || dv == 0 || dv == 3;
+                // sous une dalle, l'herbe meurt en jeu : terre partout dans le bac
+                wset(dir, gu + du, 0, gv + dv, Material.COARSE_DIRT);
+                wset(dir, gu + du, 1, gv + dv, border ? Material.SPRUCE_SLAB : dv == 1 ? crops[du - 1] : pots[du - 1]);
+            }
+        }
+        wset(dir, gu + 5, 1, gv + 1, Material.COMPOSTER);
+        wset(dir, gu + 5, 1, gv + 2, Material.HAY_BLOCK);
+        wset(dir, gu + 5, 2, gv + 2, Material.HAY_BLOCK);
 
         for (int u = -R; u <= R; u += 4) {
             for (int v = -R; v <= R; v += 4) {
@@ -726,6 +913,29 @@ public final class StationDesign {
         for (int y = 1; y <= h + 1; y++) {
             wset(dir, u, y, v, Material.OAK_LOG);
         }
+    }
+
+    /** Rocher moussu de 3 x 3 (plus haut au centre), coiffé de tapis de mousse. */
+    private void rock(int dir, int u, int v) {
+        Material[] stones = {Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.ANDESITE, Material.TUFF};
+        for (int du = -1; du <= 1; du++) {
+            for (int dv = -1; dv <= 1; dv++) {
+                int d = Math.abs(du) + Math.abs(dv);
+                int h = d == 0 ? 3 : d == 1 ? (hash(u + du, v + dv, 17) < 0.3 ? 1 : 2) : (hash(u + du, v + dv, 16) < 0.5 ? 1 : 0);
+                for (int y = 1; y <= h; y++) {
+                    wset(dir, u + du, y, v + dv, stones[(int) (hash(u + du + y, v + dv, 18) * stones.length)]);
+                }
+                if (h > 0) {
+                    wset(dir, u + du, h + 1, v + dv, h >= 2 || hash(u + du, v + dv, 20) < 0.5 ? Material.MOSS_CARPET : Material.AIR);
+                }
+            }
+        }
+    }
+
+    /** Sacs de sable : un bloc de boue tassée surmonté d'une dalle. */
+    private void sandbag(int dir, int u, int v) {
+        wset(dir, u, 1, v, Material.PACKED_MUD);
+        wset(dir, u, 2, v, Material.MUD_BRICK_SLAB);
     }
 
     // ------------------------------------------------------------------ Extraction : le sas
@@ -830,6 +1040,86 @@ public final class StationDesign {
                 }
             }
         }
+        // poste de contrôle : murets de sacs de sable devant le quai, allée centrale libre
+        for (int side : new int[]{-1, 1}) {
+            for (int k = hw + 1; k <= hw + 4; k++) {
+                sandbag(dir, gateU - 7, side * k);
+            }
+            for (int u = gateU - 6; u <= gateU - 5; u++) {
+                sandbag(dir, u, side * (hw + 4));
+            }
+        }
+        // piles de caisses militaires dans les coins
+        for (int side : new int[]{-1, 1}) {
+            for (int[] p : new int[][]{{-8, 10}, {-7, 10}, {-8, 11}, {-8, 12}, {-7, 12}, {14, 10}, {15, 10}, {15, 11}, {14, 12}, {15, 12}, {16, 11}}) {
+                int h = 1 + (int) (hash(p[0], p[1] * side, 32) * 3);
+                for (int y = 1; y <= h; y++) {
+                    wset(dir, p[0], y, side * p[1], Math.floorMod(p[0] + p[1] + y, 2) == 0 ? Material.GREEN_TERRACOTTA : Material.STRIPPED_SPRUCE_WOOD);
+                }
+            }
+        }
+        // table de la carte devant un écran rétroéclairé
+        for (int u = -2; u <= 2; u++) {
+            for (int y = 1; y <= 5; y++) {
+                boolean fr = Math.abs(u) == 2 || y == 1 || y == 5;
+                wset(dir, u, y, 11, fr ? metal : Material.CYAN_STAINED_GLASS);
+                if (!fr) {
+                    wset(dir, u, y, 12, light);
+                }
+            }
+        }
+        for (int u = -1; u <= 1; u++) {
+            wset(dir, u, 1, 9, u == 0 ? Material.CARTOGRAPHY_TABLE : metal);
+        }
+        wsign(dir, 0, 3.6, 10.4, 0, -1, label("CARTE DE LA ZONE", ICE, true), 0.9f);
+        wsign(dir, 0, 2.8, 10.4, 0, -1, label("◉ secteur 7 · contaminé", RED, false), 0.6f);
+        // groupe électrogène, câble jusqu'au plafond
+        for (int u = -1; u <= 1; u++) {
+            for (int v = -12; v <= -11; v++) {
+                wset(dir, u, 1, v, u == 0 && v == -11 ? Material.BLAST_FURNACE : Material.IRON_BLOCK);
+                wset(dir, u, 2, v, Material.WAXED_WEATHERED_CUT_COPPER);
+            }
+        }
+        wset(dir, -1, 3, -12, Material.LIGHTNING_ROD);
+        wset(dir, 1, 3, -12, Material.LIGHTNING_ROD);
+        for (int y = 3; y < top; y++) {
+            wset(dir, 0, y, -12, Material.IRON_CHAIN);
+        }
+        wsign(dir, 0, 3.4, -10.4, 0, 1, label("GROUPE ÉLECTROGÈNE · 12 %", ALERT, true), 0.6f);
+        // tuyaux et grilles d'aération sous le plafond, néons grillés par endroits
+        BlockData vent = data("minecraft:iron_trapdoor[half=top]");
+        for (int u = inner + 1; u <= L - 1; u++) {
+            for (int side : new int[]{-1, 1}) {
+                wset(dir, u, top - 1, side * hw, Math.floorMod(u, 6) == 0 ? metal : Material.WAXED_WEATHERED_CUT_COPPER);
+                if (Math.floorMod(u, 6) == 3) {
+                    for (int v = W - 5; v <= W - 4; v++) {
+                        plan.set(wx(dir, centerD + u, side * v), top - 1, wz(dir, centerD + u, side * v), vent);
+                    }
+                }
+            }
+            for (int v : new int[]{-W / 2, 0, W / 2}) {
+                if (hash(u, v, 31) < 0.15) {
+                    wset(dir, u, top, v, Material.REDSTONE_LAMP);
+                    wset(dir, u, top - 1, v, Material.AIR);
+                }
+            }
+        }
+        // bandes de danger : en haut des murs latéraux et en bas du mur du quai
+        for (int u = -L + 1; u <= L - 1; u++) {
+            for (int side : new int[]{-1, 1}) {
+                wset(dir, u, 9, side * W, Math.floorMod(u, 2) == 0 ? yellow : black);
+            }
+        }
+        for (int v = -W + 1; v <= W - 1; v++) {
+            wset(dir, L, 2, v, Math.floorMod(v, 2) == 0 ? yellow : black);
+        }
+        // traces de lutte : crânes et taches au sol
+        wset(dir, -4, 1, -13, Material.SKELETON_SKULL);
+        wset(dir, 9, 1, 12, Material.SKELETON_SKULL);
+        for (int[] p : new int[][]{{2, -5}, {3, -5}, {2, -6}, {3, -4}, {8, 6}, {9, 6}, {8, 7}}) {
+            wset(dir, p[0], 0, p[1], hash(p[0], p[1], 33) < 0.6 ? Material.RED_TERRACOTTA : Material.BROWN_TERRACOTTA);
+        }
+
         // panneaux peints sur les murs : vus en arrivant par le sas, puis dans la salle des casiers
         wsign(dir, inner - 0.7, 7.2, 0, -1, 0, label("⚠ QUARANTAINE ⚠", RED, true), 1.5f);
         wsign(dir, inner - 0.7, 6.3, 0, -1, 0, label("ZONE CONTAMINÉE · ACCÈS RESTREINT", ALERT, false), 0.7f);
@@ -923,6 +1213,76 @@ public final class StationDesign {
                 }
             }
         }
+        // logo au centre de la piste : cercle d'or et deux lames croisées
+        for (int u = -4; u <= 4; u++) {
+            for (int v = -4; v <= 4; v++) {
+                double r = Math.hypot(u, v);
+                if (r < 0.5) {
+                    wset(dir, u, 0, v, light);
+                } else if (r > 2.5 && r <= 3.4) {
+                    wset(dir, u, 0, v, Material.GOLD_BLOCK);
+                } else if (Math.abs(u) == Math.abs(v) && r <= 2.4) {
+                    wset(dir, u, 0, v, accent);
+                }
+            }
+        }
+        // plots de départ face à face : équipe bleue contre équipe or
+        for (int side : new int[]{-1, 1}) {
+            Material rim = side < 0 ? Material.BLUE_CONCRETE : Material.GOLD_BLOCK;
+            for (int du = -1; du <= 1; du++) {
+                for (int dv = -1; dv <= 1; dv++) {
+                    wset(dir, du, 0, side * 9 + dv, du == 0 && dv == 0 ? light : rim);
+                }
+            }
+            wtext(dir, 0, 3.2, side * 9, side < 0 ? label("ÉQUIPE BLEUE", 0x4A7BFF, true) : label("ÉQUIPE OR", GOLD, true), 1.0f);
+        }
+        // podium de la saison, en haut des gradins (1 or, 2 fer, 3 cuivre)
+        for (int u = -3; u <= 3; u++) {
+            for (int v = -20; v <= -16; v++) {
+                double r = Math.hypot(u, v);
+                if (r <= inner + 1.5 || r > standEnd + 0.5) {
+                    continue;
+                }
+                for (int y = 1; y <= 4; y++) {
+                    wset(dir, u, y, v, y == 4 ? accent : stand);
+                }
+            }
+        }
+        wset(dir, 0, 5, -18, stand);
+        wset(dir, 0, 6, -18, stand);
+        wset(dir, 0, 7, -18, Material.GOLD_BLOCK);
+        wset(dir, -2, 5, -18, stand);
+        wset(dir, -2, 6, -18, Material.IRON_BLOCK);
+        wset(dir, 2, 5, -18, Material.WAXED_COPPER_BLOCK);
+        wsign(dir, 0, 9.6, -17.4, 0, 1, label("PODIUM DE LA SAISON", GOLD, true), 1.0f);
+        // fanions d'équipe sur le mur d'enceinte (bleus d'un côté, or de l'autre) et projecteurs aux diagonales
+        for (int i = 0; i < 24; i++) {
+            double ang = i * Math.PI / 12;
+            int u = (int) Math.round(20 * Math.cos(ang)), v = (int) Math.round(20 * Math.sin(ang));
+            if (Math.abs(v) <= hw + 1 || Math.hypot(u, v) > standEnd + 0.5) {
+                continue;
+            }
+            int fu = Math.abs(u) >= Math.abs(v) ? -Integer.signum(u) : 0;
+            int fv = Math.abs(u) >= Math.abs(v) ? 0 : -Integer.signum(v);
+            String color = v < 0 ? "blue" : "yellow";
+            plan.set(wx(dir, centerD + u, v), 8, wz(dir, centerD + u, v),
+                    data("minecraft:" + color + "_wall_banner[facing=" + face(dir, fu, fv) + "]"));
+            if (i % 6 == 3) {
+                wset(dir, u, 9, v, light);
+                wset(dir, u, 10, v, dark);
+            }
+        }
+        // présentoirs des kits, de chaque côté de l'entrée
+        Material[] kits = {Material.ANVIL, Material.ENCHANTING_TABLE, Material.BREWING_STAND, Material.TARGET};
+        int n = 0;
+        for (int side : new int[]{-1, 1}) {
+            for (int u : new int[]{-17, -15}) {
+                wset(dir, u, 1, side * hw, accent);
+                wset(dir, u, 2, side * hw, kits[n++]);
+            }
+        }
+        wtext(dir, -16, 3.8, 0, label("KITS", ICE, true), 1.2f);
+
         // tableau des meilleurs Elo : un cube suspendu sous la verrière, lisible depuis tous les gradins
         int by = ARENA_WALL + DH - 8;
         for (int u = -3; u <= 3; u++) {
@@ -1041,6 +1401,80 @@ public final class StationDesign {
                 }
             }
         }
+        // allée dorée : de l'entrée au cercle central, puis du cercle au portail
+        for (int u = -R + 2; u <= gateU - 1; u++) {
+            if (Math.abs(u) < 8) {
+                continue;
+            }
+            wset(dir, u, 0, 0, Material.GILDED_BLACKSTONE);
+            wset(dir, u, 0, -1, Material.POLISHED_BLACKSTONE_BRICKS);
+            wset(dir, u, 0, 1, Material.POLISHED_BLACKSTONE_BRICKS);
+        }
+        // arche en ruine au-dessus de l'allée, linteau effondré au milieu
+        int au = (int) Math.round(-12 * k);
+        for (int side : new int[]{-1, 1}) {
+            for (int y = 1; y <= 7; y++) {
+                double hm = hash(au, side * 5 + y, 34);
+                wset(dir, au, y, side * 5, y == 1 || y == 7 ? Material.CHISELED_STONE_BRICKS
+                        : hm < 0.5 ? Material.STONE_BRICKS : hm < 0.75 ? Material.MOSSY_STONE_BRICKS : Material.CRACKED_STONE_BRICKS);
+            }
+        }
+        for (int v = -5; v <= 5; v++) {
+            if (v >= -1 && v <= 2) {
+                continue;
+            }
+            wset(dir, au, 8, v, hash(au, v, 35) < 0.4 ? Material.MOSSY_STONE_BRICKS : Material.STONE_BRICKS);
+        }
+        // autels des deux factions : Lumière (Auréval) d'un côté de l'allée, Ombre (Morneval) de l'autre
+        for (int side : new int[]{-1, 1}) {
+            boolean lumiere = side < 0;
+            int tu = (int) Math.round(3 * k), tv = side * (int) Math.round(10 * k);
+            for (int du = -2; du <= 2; du++) {
+                for (int dv = -2; dv <= 2; dv++) {
+                    double r = Math.hypot(du, dv);
+                    if (r > 2.5) {
+                        continue;
+                    }
+                    boolean mark = (du == 0) != (dv == 0) && r == 2;
+                    wset(dir, tu + du, 1, tv + dv, mark ? (lumiere ? gold : Material.CRYING_OBSIDIAN)
+                            : lumiere ? Material.QUARTZ_BRICKS : Material.POLISHED_BLACKSTONE);
+                    if (r <= 1.5) {
+                        wset(dir, tu + du, 2, tv + dv, lumiere ? Material.CHISELED_QUARTZ_BLOCK : Material.POLISHED_BLACKSTONE_BRICKS);
+                        if (Math.abs(du) == 1 && Math.abs(dv) == 1) {
+                            wset(dir, tu + du, 3, tv + dv, lumiere ? Material.END_ROD : Material.AMETHYST_CLUSTER);
+                        }
+                    }
+                }
+            }
+            for (int y = 3; y <= 5; y++) {
+                wset(dir, tu, y, tv, lumiere ? Material.QUARTZ_PILLAR : y == 3 ? Material.CHISELED_POLISHED_BLACKSTONE : Material.OBSIDIAN);
+            }
+            wset(dir, tu, 6, tv, lumiere ? gold : Material.CRYING_OBSIDIAN);
+            wset(dir, tu, 7, tv, lumiere ? Material.OCHRE_FROGLIGHT : Material.SOUL_LANTERN);
+            wtext(dir, tu, 9.8, tv, label(lumiere ? "LUMIÈRE" : "OMBRE", lumiere ? GOLD : VIOLET, true), 1.6f);
+            wtext(dir, tu, 9.0, tv, label(lumiere ? "Auréval" : "Morneval", lumiere ? WARM : 0x8F6BD8, false), 1.0f);
+        }
+        // cristaux d'améthyste : quatre amas et quelques éclats dans les ruines
+        for (int[] p : new int[][]{{-7, 8}, {-7, -8}, {12, 7}, {12, -7}}) {
+            int gu = (int) Math.round(p[0] * k), gv = (int) Math.round(p[1] * k);
+            wset(dir, gu, 1, gv, Material.AMETHYST_BLOCK);
+            wset(dir, gu, 2, gv, Material.AMETHYST_CLUSTER);
+            wset(dir, gu + 1, 1, gv, Material.AMETHYST_CLUSTER);
+            wset(dir, gu, 1, gv + Integer.signum(gv), Material.AMETHYST_CLUSTER);
+        }
+        // lanternes d'âme pendues au dôme
+        BlockData chain = data(Material.IRON_CHAIN);
+        BlockData soul = data("minecraft:soul_lantern[hanging=true]");
+        for (int i = 0; i < 6; i++) {
+            double ang = Math.PI / 6 + i * Math.PI / 3;
+            int lu = (int) Math.round(12 * Math.cos(ang)), lv = (int) Math.round(12 * Math.sin(ang));
+            int bottom = domeBottom(lu, lv, r -> cap(r, Rd + 0.5, Hd));
+            for (int y = 12; y < bottom; y++) {
+                plan.set(wx(dir, centerD + lu, lv), y, wz(dir, centerD + lu, lv), chain);
+            }
+            plan.set(wx(dir, centerD + lu, lv), 11, wz(dir, centerD + lu, lv), soul);
+        }
+
         // portail : anneau-portail Orbit (l'ancien anneau de pierre et son rideau violet sont vidés)
         for (int v = -8; v <= 8; v++) {
             for (int y = 1; y <= 16; y++) {
@@ -1281,6 +1715,24 @@ public final class StationDesign {
 
     private static double tyZ(double u, double v) {
         return TY_OZ + (u - v) / S2;
+    }
+
+    /** Vrai si (x, z) de l'atrium est sur le chemin qui mène à l'aile Tycoon : rien n'y est posé. */
+    private static boolean nearTycoon(int x, int z) {
+        return x < 0 && z > 0 && Math.abs(tyV(x, z)) < 6;
+    }
+
+    /**
+     * Plus bas bloc d'un dôme dans une colonne, avec la même règle que son dessin : top(r) donne le haut du dôme
+     * à la distance r de l'axe. Ce qui pend du dôme s'arrête juste en dessous, sans percer la coque.
+     */
+    private static int domeBottom(int x, int z, java.util.function.DoubleToIntFunction top) {
+        int t = top.applyAsInt(Math.hypot(x, z));
+        int low = t;
+        for (int[] n : N4) {
+            low = Math.min(low, top.applyAsInt(Math.hypot(x + n[0], z + n[1])) + 1);
+        }
+        return Math.min(low, t);
     }
 
     private static int wx(int dir, int u, int v) {

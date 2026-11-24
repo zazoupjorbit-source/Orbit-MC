@@ -8,7 +8,8 @@
     {"when": "cle_solaire", "model": {"type": "minecraft:model", "model": "orbittycoon:item/cle_solaire"}},
     {"when": "cle_nebuleuse", "model": {"type": "minecraft:model", "model": "orbittycoon:item/cle_nebuleuse"}},
     {"when": "cle_asteroide", "model": {"type": "minecraft:model", "model": "orbittycoon:item/cle_asteroide"}},
-    {"when": "cle_reacteur", "model": {"type": "minecraft:model", "model": "orbittycoon:item/cle_reacteur"}}
+    {"when": "cle_reacteur", "model": {"type": "minecraft:model", "model": "orbittycoon:item/cle_reacteur"}},
+    {"when": "cle_menagerie", "model": {"type": "minecraft:model", "model": "orbittycoon:item/cle_menagerie"}}
     ],
     "fallback": {"type": "minecraft:model", "model": "minecraft:item/tripwire_hook"}
   }

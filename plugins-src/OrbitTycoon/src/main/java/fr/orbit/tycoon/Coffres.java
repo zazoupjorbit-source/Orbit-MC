@@ -15,6 +15,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
@@ -41,7 +42,8 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Baie des coffres au spawn : 5 coffres, chacun avec son propre décor (Cryo, Solaire, Nébuleuse, Astéroïde, Réacteur).
+ * Baie des coffres au spawn : 6 coffres en deux ailes de 3, face à face de part et d'autre d'une allée lumineuse,
+ * chacun avec son propre décor (Cryo, Solaire, Nébuleuse | Astéroïde, Réacteur, Ménagerie = coffre des pets).
  * Les noms viennent de config.yml (coffres.noms). Clic gauche = aperçu du contenu (coffres.loots), clic droit avec la clé en main = ouverture.
  * Blocs posés une fois par « /tycoon coffres poser » ; textes recréés au chargement de leur chunk.
  */
@@ -51,15 +53,20 @@ final class Coffres implements Listener {
     private static final int Y = Zone.Y;
     private static final String TAG = "orbit_coffres";
 
-    /** Les 5 styles, dans l'ordre (style, couleur du nom). */
-    private static final String[] STYLES = {"Cryo", "Solaire", "Nébuleuse", "Astéroïde", "Réacteur"};
-    private static final String[] COULEURS = {"#62CFF4", "#E0B864", "#C77DFF", "#7CFC9A", "#FF4D4D"};
+    /** Nombre de coffres (les 5 de l'arc + la Ménagerie). */
+    static final int NB = 6;
+    /** Les 6 styles, dans l'ordre (style, couleur du nom). */
+    private static final String[] STYLES = {"Cryo", "Solaire", "Nébuleuse", "Astéroïde", "Réacteur", "Ménagerie"};
+    private static final String[] COULEURS = {"#62CFF4", "#E0B864", "#C77DFF", "#7CFC9A", "#FF4D4D", "#FF8FC7"};
 
     private final OrbitTycoon plugin;
-    private final TextDisplay[] textes = new TextDisplay[6];
+    private final TextDisplay[] textes = new TextDisplay[NB + 1];
+
+    private final AnimationCoffre animation;
 
     Coffres(OrbitTycoon plugin) {
         this.plugin = plugin;
+        this.animation = new AnimationCoffre(plugin);
     }
 
     // ------------------------------------------------------------------ positions
@@ -68,29 +75,69 @@ final class Coffres implements Listener {
 
     private double rayon() { return plugin.getConfig().getDouble("coffres.rayon", 36); }
 
-    /** Centre (bloc) du socle n (0 à 4), en arc de cercle face au centre du spawn. */
+    /** Écart (blocs) entre l'axe de l'allée et chaque aile ; pas (blocs) entre deux coffres d'une même aile. */
+    private static final int ECART_AILE = 7, PAS_AILE = 6;
+
+    /**
+     * Centre (bloc) du socle n : deux ailes de 3 coffres face à face, de part et d'autre de l'allée centrale
+     * (axe = coffres.angle). Aile gauche (vue depuis le point de TP) : 0, 1, 2 du fond vers l'entrée ; aile droite : 3, 4, 5.
+     */
     private int[] centre(int n) {
-        double r = rayon(), pas = 7.0 / r;   // 7 blocs entre deux coffres
+        double a = Math.toRadians(angle());
+        double along = rayon() + 2 - PAS_AILE * (n % 3);           // 38, 32, 26 avec rayon 36
+        double side = (n < 3 ? -1 : 1) * ECART_AILE;               // gauche = côté négatif
+        return new int[]{(int) Math.floor(along * Math.cos(a) - side * Math.sin(a)),
+                (int) Math.floor(along * Math.sin(a) + side * Math.cos(a))};
+    }
+
+    /** Ancienne place du coffre n (0 à 4) : l'arc de 5 coffres d'avant les ailes (pour les retirer une fois). */
+    private int[] ancienCentre(int n) {
+        double r = rayon(), pas = 7.0 / r;
         double a = Math.toRadians(angle()) + (n - 2) * pas;
         return new int[]{(int) Math.floor(Math.cos(a) * r), (int) Math.floor(Math.sin(a) * r)};
+    }
+
+    /** Face (cardinale) du coffre n : tournée vers l'allée centrale. */
+    private BlockFace versAllee(int n) {
+        double a = Math.toRadians(angle()), s = n < 3 ? 1 : -1;      // vers l'axe = +v pour la gauche, -v pour la droite
+        double vx = -Math.sin(a) * s, vz = Math.cos(a) * s;
+        if (Math.abs(vx) > Math.abs(vz)) return vx > 0 ? BlockFace.EAST : BlockFace.WEST;
+        return vz > 0 ? BlockFace.SOUTH : BlockFace.NORTH;
     }
 
     private int[] coffre(int n) { int[] c = centre(n); return new int[]{c[0], hauteurCoffre(n), c[1]}; }
 
     private static int hauteurCoffre(int n) { return n == 1 ? Y + 3 : Y + 2; }
 
+    /** Numéro du coffre Ménagerie : il donne des pets (Pets.java) au lieu des loots de config.yml. */
+    static final int MENAGERIE = 5;
+
     String nom(int n) {
         List<String> noms = plugin.getConfig().getStringList("coffres.noms");
         return n < noms.size() && !noms.get(n).isBlank() ? noms.get(n) : "Coffre " + (n + 1);
     }
 
-    /** Face (cardinale) vers le centre du spawn. */
-    private static BlockFace versCentre(int x, int z) {
-        if (Math.abs(x) > Math.abs(z)) return x > 0 ? BlockFace.WEST : BlockFace.EAST;
-        return z > 0 ? BlockFace.NORTH : BlockFace.SOUTH;
+    // ------------------------------------------------------------------ textes
+
+    /**
+     * Apparence des coffres : un modèle 3D du pack (orbittycoon:coffre_<style>, tools/CoffresModeles.java) posé
+     * pile sur le bloc coffre, qu'il recouvre. Visible seulement des joueurs qui ont chargé le pack ;
+     * les autres voient le coffre vanilla (le bloc reste là : c'est lui qu'on clique).
+     */
+    private final ItemDisplay[] modeles = new ItemDisplay[NB];
+    private static final String[] MODELES_COFFRE = {"coffre_cryo", "coffre_solaire", "coffre_nebuleuse",
+            "coffre_asteroide", "coffre_reacteur", "coffre_menagerie"};
+
+    private ItemStack objetModele(int n) {
+        ItemStack it = new ItemStack(Material.PAPER);
+        it.editMeta(m -> m.setItemModel(new NamespacedKey("orbittycoon", MODELES_COFFRE[n])));
+        return it;
     }
 
-    // ------------------------------------------------------------------ textes
+    /** Montre les modèles de coffres à un joueur qui vient de charger le pack. */
+    void montrerModeles(Player p) {
+        for (ItemDisplay d : modeles) if (d != null && d.isValid()) p.showEntity(plugin, d);
+    }
 
     void demarrer() {
         World w = plugin.monde();
@@ -99,22 +146,45 @@ final class Coffres implements Listener {
     }
 
     void arreter() {
+        animation.toutTerminer();
         for (TextDisplay t : textes) if (t != null && t.isValid()) t.remove();
+        for (ItemDisplay d : modeles) if (d != null && d.isValid()) d.remove();
     }
 
     void rafraichir() {
         World w = plugin.monde();
-        for (int n = 0; n < 5; n++) {
+        for (int n = 0; n < NB; n++) {
             int[] c = centre(n);
             Location loc = new Location(w, c[0] + 0.5, Y + (n == 1 ? 6.6 : 5.6), c[1] + 0.5);
             Component t = MM.deserialize("<" + COULEURS[n] + "><bold>" + MM.escapeTags(nom(n)) + "</bold>\n<gray>Clic gauche : contenu · Clic droit : ouvrir");
             textes[n] = majTexte(textes[n], loc, t, 1.3f);
+            // Modèle 3D posé au centre du bloc coffre ; le modèle a ses serrures au nord et au sud :
+            // tourné d'un quart de tour si le coffre regarde vers l'est ou l'ouest.
+            Location lc = new Location(w, c[0] + 0.5, hauteurCoffre(n) + 0.5, c[1] + 0.5);
+            if (lc.isChunkLoaded() && (modeles[n] == null || !modeles[n].isValid())) {
+                int num = n;
+                BlockFace f = versAllee(n);
+                float quart = f == BlockFace.EAST || f == BlockFace.WEST ? (float) (Math.PI / 2) : 0f;
+                modeles[n] = w.spawn(lc, ItemDisplay.class, d -> {
+                    d.setItemStack(objetModele(num));
+                    d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
+                    d.setPersistent(false);
+                    d.setVisibleByDefault(false);
+                    d.addScoreboardTag(TAG);
+                    d.setBrightness(new Display.Brightness(13, 15));
+                    d.setViewRange(1.5f);
+                    d.setTransformation(new Transformation(new Vector3f(), new AxisAngle4f(quart, 0, 1, 0),
+                            new Vector3f(1, 1, 1), new AxisAngle4f()));
+                });
+                for (Player pl : Bukkit.getOnlinePlayers())
+                    if (plugin.pack() != null && plugin.pack().charge(pl)) pl.showEntity(plugin, modeles[n]);
+            }
         }
         // Grand titre au-dessus du mur du fond : visible de loin dans tout le spawn.
         double a = Math.toRadians(angle()), r = rayon() + MUR - 0.5;
         Location titre = new Location(w, Math.cos(a) * r + 0.5, Y + 13.5, Math.sin(a) * r + 0.5);
-        textes[5] = majTexte(textes[5], titre, MM.deserialize(
-                "<gradient:#62CFF4:#E0B864><bold>COFFRES ORBITAUX</bold></gradient>\n<gray>5 coffres, 5 trésors de la station"), 3.0f);
+        textes[NB] = majTexte(textes[NB], titre, MM.deserialize(
+                "<gradient:#62CFF4:#E0B864><bold>COFFRES ORBITAUX</bold></gradient>\n<gray>6 coffres, 6 trésors de la station"), 3.0f);
     }
 
     /** Point de TP (/coffres) : au bord de l'espace des coffres, tourné vers eux. */
@@ -143,7 +213,7 @@ final class Coffres implements Listener {
     @EventHandler
     public void chunk(ChunkLoadEvent e) {
         if (!e.getWorld().equals(plugin.monde())) return;
-        for (int n = 0; n < 5; n++) {
+        for (int n = 0; n < NB; n++) {
             int[] c = centre(n);
             if (c[0] >> 4 == e.getChunk().getX() && c[1] >> 4 == e.getChunk().getZ()) {
                 Bukkit.getScheduler().runTask(plugin, this::rafraichir);
@@ -152,10 +222,10 @@ final class Coffres implements Listener {
         }
     }
 
-    /** Numéro (0 à 4) du coffre à cet endroit, ou -1. */
+    /** Numéro (0 à 5) du coffre à cet endroit, ou -1. */
     private int numero(Block b) {
         if (!b.getWorld().equals(plugin.monde())) return -1;
-        for (int n = 0; n < 5; n++) {
+        for (int n = 0; n < NB; n++) {
             int[] c = coffre(n);
             if (b.getX() == c[0] && b.getY() == c[1] && b.getZ() == c[2]) return n;
         }
@@ -187,6 +257,12 @@ final class Coffres implements Listener {
     // ------------------------------------------------------------------ loots (à remplir dans config.yml)
 
     private record Loot(Material objet, int nombre, double chance, String nom) {}
+
+    /** Le coffre n est-il le coffre Farm (celui de la Clé Farm) ? Il donne les équipements de farm. */
+    private boolean estFarm(int n) {
+        var cfg = plugin.getConfig();
+        return cfg.getBoolean("equipements.coffre-farm", true) && n == cfg.getInt("coffres.cle-farm.coffre", 2) - 1;
+    }
 
     /** Loots du coffre n lus dans coffres.loots.<n+1> ; les lignes invalides sont ignorées. */
     private List<Loot> loots(int n) {
@@ -228,7 +304,7 @@ final class Coffres implements Listener {
 
     /** Icône du coffre (en-tête du menu), dans la couleur de son style. */
     private static final Material[] ICONES = {Material.BLUE_ICE, Material.GOLD_BLOCK, Material.AMETHYST_BLOCK,
-            Material.MOSSY_COBBLESTONE, Material.REDSTONE_BLOCK};
+            Material.MOSSY_COBBLESTONE, Material.REDSTONE_BLOCK, Material.LEAD};
 
     private void apercu(Player p, int n) {
         List<Loot> loots = loots(n);
@@ -240,7 +316,24 @@ final class Coffres implements Listener {
 
         // 28 cases : les loots dans l'ordre de config.yml, puis des cases vides « à venir ».
         double total = loots.stream().mapToDouble(Loot::chance).sum();
-        for (int i = 0; i < CASES.length; i++) {
+        if (n == MENAGERIE) plugin.pets().remplirApercu(inv, CASES);
+        else if (estFarm(n)) {
+            List<ItemStack> pieces = plugin.equipements().toutes();
+            String pct = String.format(Locale.FRANCE, "%.1f", 100.0 / pieces.size());
+            for (int i = 0; i < CASES.length; i++) {
+                if (i < pieces.size()) {
+                    ItemStack it = pieces.get(i);
+                    it.editMeta(m -> {
+                        List<Component> l = new ArrayList<>(m.lore() == null ? List.of() : m.lore());
+                        l.add(MM.deserialize("<!italic><gray>Chance : <#E0B864>" + pct + " %"));
+                        m.lore(l);
+                    });
+                    inv.setItem(CASES[i], it);
+                } else inv.setItem(CASES[i], info(Material.LIGHT_GRAY_STAINED_GLASS_PANE,
+                        "<!italic><dark_gray>Case " + (i + 1), "<!italic><gray>Récompense bientôt dévoilée"));
+            }
+        }
+        else for (int i = 0; i < CASES.length; i++) {
             if (i < loots.size()) {
                 Loot l = loots.get(i);
                 ItemStack it = objet(l);
@@ -256,8 +349,10 @@ final class Coffres implements Listener {
         }
         // En-tête : le coffre et son nombre de récompenses.
         inv.setItem(4, info(ICONES[n], "<!italic>" + titre(n),
-                "<!italic><gray>" + (loots.isEmpty() ? "Contenu bientôt dévoilé" : loots.size() + " récompense(s) possible(s)"),
-                "<!italic><gray>Une seule récompense tirée au hasard", "<!italic><gray>par clé utilisée."));
+                (n == MENAGERIE ? "<!italic><gray>20 pets, 4 raretés : 80 pets à collectionner"
+                        : estFarm(n) ? "<!italic><gray>5 sets d'équipement de farm, 4 pièces chacun" : "<!italic><gray>" + (loots.isEmpty() ? "Contenu bientôt dévoilé" : loots.size() + " récompense(s) possible(s)")),
+                n == MENAGERIE ? "<!italic><gray>Un pet tiré au hasard par clé :" : "<!italic><gray>Une seule récompense tirée au hasard",
+                n == MENAGERIE ? "<!italic><gray>d'abord la rareté, puis l'espèce." : "<!italic><gray>par clé utilisée."));
         // Bas : la clé qui ouvre ce coffre (avec son vrai design).
         ItemStack cle = cle(n, 1);
         cle.editMeta(m -> m.lore(List.of(
@@ -293,7 +388,7 @@ final class Coffres implements Listener {
     private NamespacedKey cleCoffre() { return new NamespacedKey(plugin, "cle_coffre"); }
 
     /** Modèle du pack (custom_model_data) de la clé de chaque style : tools/gen-cles.ps1. */
-    private static final String[] MODELES = {"cle_cryo", "cle_solaire", "cle_nebuleuse", "cle_asteroide", "cle_reacteur"};
+    private static final String[] MODELES = {"cle_cryo", "cle_solaire", "cle_nebuleuse", "cle_asteroide", "cle_reacteur", "cle_menagerie"};
 
     /**
      * Clé du coffre n : un crochet dont le pack change l'apparence (design propre à chaque coffre).
@@ -331,7 +426,33 @@ final class Coffres implements Listener {
             p.playSound(b.getLocation(), Sound.BLOCK_CHEST_LOCKED, 0.8f, 1.2f);
             return;
         }
+        if (animation.enCours(p.getUniqueId())) {
+            OrbitTycoon.msg(p, "<gray>Attends la fin de l'ouverture en cours !");
+            return;
+        }
         plugin.tuto().fait(p, Tuto.Etape.COFFRE_OUVRIR);
+        Color couleur = Color.fromRGB(Integer.parseInt(COULEURS[n].substring(1), 16));
+        if (n == MENAGERIE) {
+            main.setAmount(main.getAmount() - 1);
+            Pets pets = plugin.pets();
+            Pets.Pet pet = pets.tirer();
+            animation.lancer(p, b, couleur, pets.defilement(), pets.carte(pet), pet.rarete().ordinal(),
+                    () -> pets.recevoir(p, pet));
+            return;
+        }
+        if (estFarm(n)) {   // coffre Farm : une pièce d'équipement de farm au hasard (Equipements.java)
+            main.setAmount(main.getAmount() - 1);
+            Equipements eq = plugin.equipements();
+            ItemStack gagne = eq.tirer();
+            List<AnimationCoffre.Carte> defilement = eq.toutes().stream()
+                    .map(it -> new AnimationCoffre.Carte(it, it.getItemMeta().itemName())).toList();
+            Component nomGagne = gagne.getItemMeta().itemName();
+            animation.lancer(p, b, couleur, defilement, new AnimationCoffre.Carte(gagne, nomGagne), 1, () -> {
+                for (ItemStack reste : p.getInventory().addItem(gagne).values()) p.getWorld().dropItemNaturally(p.getLocation(), reste);
+                OrbitTycoon.msg(p, titre(n) + "<gray> : tu obtiens <white>" + MM.serialize(nomGagne) + "<gray> !");
+            });
+            return;
+        }
         List<Loot> loots = loots(n);
         if (loots.isEmpty()) {   // pas de loots définis : on ne consomme pas la clé
             OrbitTycoon.msg(p, titre(n) + "<gray> : le contenu n'est pas encore prêt, garde ta clé !");
@@ -339,40 +460,135 @@ final class Coffres implements Listener {
             return;
         }
         main.setAmount(main.getAmount() - 1);
-        double r = ThreadLocalRandom.current().nextDouble(loots.stream().mapToDouble(Loot::chance).sum());
-        Loot gagne = loots.getLast();
-        for (Loot l : loots) { r -= l.chance(); if (r < 0) { gagne = l; break; } }
-        ItemStack it = objet(gagne);
-        it.setAmount(gagne.nombre());   // au-delà d'une pile, addItem répartit
-        for (ItemStack reste : p.getInventory().addItem(it).values()) p.getWorld().dropItemNaturally(p.getLocation(), reste);
-        OrbitTycoon.msg(p, titre(n) + "<gray> : tu obtiens <white>" + gagne.nombre() + "× </white>"
-                + (gagne.nom() != null ? gagne.nom() : "<lang:" + gagne.objet().translationKey() + ">") + "<gray> !");
-        p.playSound(b.getLocation(), Sound.BLOCK_CHEST_OPEN, 0.8f, 1f);
-        p.playSound(b.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.6f, 1.4f);
-        b.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b.getLocation().add(0.5, 1, 0.5), 30, 0.3, 0.4, 0.3, 0.2);
+        double total = loots.stream().mapToDouble(Loot::chance).sum();
+        double r = ThreadLocalRandom.current().nextDouble(total);
+        Loot tire = loots.getLast();
+        for (Loot l : loots) { r -= l.chance(); if (r < 0) { tire = l; break; } }
+        Loot gagne = tire;
+        // Intensité des effets selon la rareté du gain : < 1 % = légendaire, < 5 % = épique, < 15 % = rare.
+        double part = gagne.chance() / total;
+        int niveau = part < 0.01 ? 3 : part < 0.05 ? 2 : part < 0.15 ? 1 : 0;
+        List<AnimationCoffre.Carte> defilement = loots.stream().map(Coffres::carte).toList();
+        animation.lancer(p, b, couleur, defilement, carte(gagne), niveau, () -> {
+            ItemStack it = objet(gagne);
+            it.setAmount(gagne.nombre());   // au-delà d'une pile, addItem répartit
+            for (ItemStack reste : p.getInventory().addItem(it).values()) p.getWorld().dropItemNaturally(p.getLocation(), reste);
+            OrbitTycoon.msg(p, titre(n) + "<gray> : tu obtiens <white>" + gagne.nombre() + "× </white>"
+                    + (gagne.nom() != null ? gagne.nom() : "<lang:" + gagne.objet().translationKey() + ">") + "<gray> !");
+        });
     }
+
+    private static AnimationCoffre.Carte carte(Loot l) {
+        Component nom = MM.deserialize("<white>" + l.nombre() + "× </white>"
+                + (l.nom() != null ? l.nom() : "<lang:" + l.objet().translationKey() + ">"));
+        return new AnimationCoffre.Carte(objet(l), nom);
+    }
+
+    @EventHandler
+    public void quitter(org.bukkit.event.player.PlayerQuitEvent e) { animation.terminer(e.getPlayer().getUniqueId()); }
 
     // ------------------------------------------------------------------ construction (une seule fois)
 
     private World w;
     private int poses;
+    /** Mode retrait : air()/poserCoffre() enlèvent le bloc s'il est exactement celui que le décor aurait posé. */
+    private boolean retrait;
+    /** Face du coffre en cours de pose. */
+    private BlockFace face = BlockFace.NORTH;
 
-    /** Pose les 5 socles et leurs coffres. Ne remplace que de l'air (et le dallage du sol sous les socles). */
-    int poser() {
+    /** Fichier témoin : l'ancien arc de 5 coffres a déjà été retiré (passage aux deux ailes). */
+    private java.io.File temoinAiles() { return new java.io.File(plugin.getDataFolder(), "coffres-ailes.ok"); }
+
+    /**
+     * Pose les 6 socles et leurs coffres. Ne remplace que de l'air (et le dallage du sol sous les socles).
+     * La première fois avec les ailes, retire d'abord l'ancien arc de 5 coffres (seulement ses propres blocs).
+     * Renvoie un résumé.
+     */
+    String poser() {
         w = plugin.monde();
+        String retires = "";
+        if (!temoinAiles().exists()) {
+            retires = retirerAncienArc() + " blocs de l'ancien arc retirés, ";
+            try { temoinAiles().createNewFile(); } catch (java.io.IOException ignore) { }
+        }
         poses = 0;
         espace();
-        for (int n = 0; n < 5; n++) {
+        for (int n = 0; n < NB; n++) {
             int[] c = centre(n);
-            switch (n) {
-                case 0 -> cryo(c[0], c[1]);
-                case 1 -> solaire(c[0], c[1]);
-                case 2 -> nebuleuse(c[0], c[1]);
-                case 3 -> asteroide(c[0], c[1]);
-                default -> reacteur(c[0], c[1]);
+            face = versAllee(n);
+            decor(n, c[0], c[1]);
+        }
+        return retires + poses + " blocs posés.";
+    }
+
+    private void decor(int n, int cx, int cz) {
+        switch (n) {
+            case 0 -> cryo(cx, cz);
+            case 1 -> solaire(cx, cz);
+            case 2 -> nebuleuse(cx, cz);
+            case 3 -> asteroide(cx, cz);
+            case 4 -> reacteur(cx, cz);
+            default -> menagerie(cx, cz);
+        }
+    }
+
+    /**
+     * Retire l'ancien arc de 5 coffres : rejoue chaque décor à son ancienne place en mode retrait (un bloc n'est enlevé
+     * que s'il est exactement celui que le décor avait posé), puis remet le sol des anciens dallages hors de l'esplanade
+     * (le sol de l'esplanade est refait par espace()).
+     */
+    private int retirerAncienArc() {
+        poses = 0;
+        retrait = true;
+        try {
+            for (int n = 0; n < 5; n++) { int[] c = ancienCentre(n); decor(n, c[0], c[1]); }
+        } finally { retrait = false; }
+        int retires = poses;
+        for (int n = 0; n < 5; n++) {
+            int[] c = ancienCentre(n);
+            for (int dx = -3; dx <= 3; dx++) for (int dz = -3; dz <= 3; dz++) {
+                if (Math.sqrt(dx * dx + dz * dz) > 3.2) continue;
+                int x = c[0] + dx, z = c[1] + dz;
+                if (dansEsplanade(x, z)) continue;
+                int[] src = solVoisin(x, z);
+                if (src == null) continue;
+                Block b = w.getBlockAt(x, Y, z);
+                Material m = w.getBlockAt(src[0], Y, src[1]).getType();
+                if (!m.isAir() && w.getBlockAt(x, Y + 1, z).getType().isAir() && b.getType() != m) b.setType(m, false);
             }
         }
-        return poses;
+        return retires;
+    }
+
+    /** Vrai si (x, z) est dans le sol de l'esplanade que refait espace(). */
+    private boolean dansEsplanade(int x, int z) {
+        double d = Math.sqrt((double) x * x + (double) z * z), e = ecart(x + 0.5, z + 0.5);
+        return d >= rayon() - 10 && d <= rayon() + MUR && Math.abs(e) <= Math.toRadians(DEMI) && distAvenue(x + 0.5, z + 0.5) >= 8;
+    }
+
+    /**
+     * Sol d'origine probable près d'une avenue : le bloc 9 ou 10 blocs plus loin dans le sens de l'avenue la plus proche
+     * (le motif d'une avenue se répète le long de son axe), hors des anciens dallages.
+     */
+    private int[] solVoisin(int x, int z) {
+        Zone proche = null;
+        double best = 99;
+        for (Zone zo : Zone.farms()) {
+            double al = (x + 0.5) * zo.ux() + (z + 0.5) * zo.uz();
+            double pe = Math.abs(-(x + 0.5) * zo.uz() + (z + 0.5) * zo.ux());
+            if (al > 0 && pe < best) { best = pe; proche = zo; }
+        }
+        if (proche == null) return null;
+        for (int k : new int[]{9, -9, 10, -10}) {
+            int sx = (int) Math.round(x + k * proche.ux()), sz = (int) Math.round(z + k * proche.uz());
+            boolean libre = true;
+            for (int n = 0; n < 5 && libre; n++) {
+                int[] c = ancienCentre(n);
+                if (Math.hypot(sx - c[0], sz - c[1]) < 3.6) libre = false;
+            }
+            if (libre) return new int[]{sx, sz};
+        }
+        return null;
     }
 
     // ------------------------------------------------------------------ espace des coffres
@@ -426,9 +642,13 @@ final class Coffres implements Listener {
                 sol(x, z, Material.GOLD_BLOCK);
                 continue;
             }
-            // Sol : damier sombre, bordure dorée, arc bleu lumineux devant les coffres.
+            // Sol : damier sombre, bordure dorée, allée lumineuse entre les deux ailes, arc bleu lumineux en travers.
+            double ax = Math.toRadians(angle());
+            double al = (x + 0.5) * Math.cos(ax) + (z + 0.5) * Math.sin(ax), sd = -(x + 0.5) * Math.sin(ax) + (z + 0.5) * Math.cos(ax);
             Material m;
             if (d < r0 + 1 || Math.abs(e) > demi - 1.0 / d) m = Material.GOLD_BLOCK;
+            else if (Math.abs(sd) < 0.8) m = Math.floorMod((int) Math.floor(al), 3) == 0 ? Material.SEA_LANTERN : Material.LIGHT_BLUE_CONCRETE;
+            else if (Math.abs(sd) < 1.8) m = Material.GOLD_BLOCK;
             else if (Math.abs(d - (rayon() - 5)) < 0.5) m = Math.floorMod(x + z, 4) == 0 ? Material.SEA_LANTERN : Material.LIGHT_BLUE_CONCRETE;
             else m = (((x >> 1) + (z >> 1)) & 1) == 0 ? Material.POLISHED_DEEPSLATE : Material.DEEPSLATE_TILES;
             sol(x, z, m);
@@ -446,12 +666,17 @@ final class Coffres implements Listener {
 
     private void air(int x, int y, int z, Material m) {
         Block b = w.getBlockAt(x, y, z);
+        if (retrait) {
+            if (b.getType() == m) { b.setType(Material.AIR, false); poses++; }
+            return;
+        }
         if (!b.getType().isAir()) return;
         b.setType(m, false);
         poses++;
     }
 
     private void sol(int x, int z, Material m) {
+        if (retrait) return;   // le sol des anciens dallages est remis à part
         Block b = w.getBlockAt(x, Y, z);
         if (b.getType().isAir() || !w.getBlockAt(x, Y + 1, z).getType().isAir()) return;
         b.setType(m, false);
@@ -460,10 +685,17 @@ final class Coffres implements Listener {
 
     private void poserCoffre(int x, int y, int z, Material m) {
         Block b = w.getBlockAt(x, y, z);
+        if (retrait) {
+            if (b.getType() != m) return;
+            if (b.getState() instanceof org.bukkit.block.Container co) co.getInventory().clear();
+            b.setType(Material.AIR, false);
+            poses++;
+            return;
+        }
         if (!b.getType().isAir()) return;
         b.setType(m, false);
         if (b.getBlockData() instanceof Directional d) {
-            d.setFacing(versCentre(x, z));
+            d.setFacing(face);
             b.setBlockData(d, false);
         }
         poses++;
@@ -567,5 +799,26 @@ final class Coffres implements Listener {
             air(cx + 2, Y + 1, cz + t, Material.WAXED_COPPER_BARS);
             air(cx - 2, Y + 1, cz + t, Material.WAXED_COPPER_BARS);
         }
+    }
+
+    /**
+     * 6 — Ménagerie (pets) : petit jardin de mousse bordé de rose, coffre sur une botte de foin,
+     * azalées en fleurs, pétales roses et 4 lanternes sur piquets.
+     */
+    private void menagerie(int cx, int cz) {
+        dalle(cx, cz, Material.PINK_CONCRETE, Material.MOSS_BLOCK);
+        air(cx, Y + 1, cz, Material.HAY_BLOCK);
+        poserCoffre(cx, Y + 2, cz, Material.CHEST);
+        for (int sx = -2; sx <= 2; sx += 4) for (int sz = -2; sz <= 2; sz += 4) {
+            air(cx + sx, Y + 1, cz + sz, Material.OAK_FENCE);
+            air(cx + sx, Y + 2, cz + sz, Material.OAK_FENCE);
+            air(cx + sx, Y + 3, cz + sz, Material.LANTERN);
+        }
+        air(cx + 2, Y + 1, cz, Material.FLOWERING_AZALEA);
+        air(cx - 2, Y + 1, cz, Material.FLOWERING_AZALEA);
+        air(cx, Y + 1, cz + 2, Material.FLOWERING_AZALEA);
+        air(cx, Y + 1, cz - 2, Material.FLOWERING_AZALEA);
+        int[][] petales = {{1, 1}, {-1, -1}, {1, -1}, {-1, 1}};
+        for (int[] p : petales) air(cx + p[0], Y + 1, cz + p[1], Material.PINK_PETALS);
     }
 }

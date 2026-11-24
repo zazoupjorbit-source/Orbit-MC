@@ -34,6 +34,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
@@ -79,7 +80,7 @@ final class Generateurs implements Listener {
 
     /** Un générateur posé : type, nombre empilé, île. */
     static final class Pose {
-        final String type;
+        String type;   // change quand on améliore le générateur
         int pile;
         final int ile;
         Pose(String type, int pile, int ile) { this.type = type; this.pile = pile; this.ile = ile; }
@@ -103,6 +104,12 @@ final class Generateurs implements Listener {
         this.plugin = plugin;
         cleGen = new NamespacedKey(plugin, "generateur");
         cleProduit = new NamespacedKey(plugin, "produit");
+    }
+
+    /** Vrai si ce bloc est celui d'un générateur (exclu du Magasin de blocs). */
+    boolean blocGenerateur(Material m) {
+        for (Type t : types) if (t.bloc() == m) return true;
+        return false;
     }
 
     // ------------------------------------------------------------------ cycle de vie
@@ -166,6 +173,9 @@ final class Generateurs implements Listener {
 
     private int intervalle() { return (int) Math.max(5, plugin.getConfig().getLong("generateurs.intervalle-secondes", 30)); }
 
+    /** Objets produits par générateur à chaque intervalle (config generateurs.par-cycle). */
+    private int parCycle() { return Math.max(1, Math.min(64, plugin.getConfig().getInt("generateurs.par-cycle", 1))); }
+
     // ------------------------------------------------------------------ sauvegarde
 
     private File fichier() { return new File(plugin.getDataFolder(), "generateurs.yml"); }
@@ -223,7 +233,7 @@ final class Generateurs implements Listener {
     }
 
     private String gain(Type t, int pile) {
-        double parHeure = t.vente() * pile * 3600.0 / intervalle();
+        double parHeure = t.vente() * pile * parCycle() * 3600.0 / intervalle();
         return Hud.nombre(Math.round(parHeure)) + " ⛃/h";
     }
 
@@ -233,12 +243,13 @@ final class Generateurs implements Listener {
         it.editMeta(m -> {
             m.displayName(texte("<gradient:#62CFF4:#E0B864><bold>Générateur de " + t.nom() + "</bold></gradient>"));
             m.lore(List.of(
-                    texte("<gray>Produit : <white>1 " + t.nom() + " <gray>toutes les <white>" + intervalle() + " s"),
+                    texte("<gray>Produit : <white>" + parCycle() + " " + t.nom() + " <gray>toutes les <white>" + intervalle() + " s"),
                     texte("<gray>Vente : <#E0B864>" + vente(t.vente()) + " ⛃ <gray>l'unité <dark_gray>(" + gain(t, 1) + ")"),
                     texte(""),
                     texte("<#62CFF4>➜ Pose-le sur ton île /is"),
                     texte("<#62CFF4>➜ Clic droit sur un générateur pareil : l'empiler <dark_gray>(x" + pileMax() + " max)"),
-                    texte("<dark_gray>Shift + clic droit : toute la pile")));
+                    texte("<dark_gray>Shift + clic droit : toute la pile"),
+                    texte("<#62CFF4>➜ Posé : <gray>clic gauche = ramasser, clic droit = améliorer")));
             m.getPersistentDataContainer().set(cleGen, PersistentDataType.STRING, t.id());
         });
         return it;
@@ -284,6 +295,28 @@ final class Generateurs implements Listener {
         }
     }
 
+    /**
+     * Cadeau de bienvenue : à la création de sa première île (/is create), X générateurs gratuits
+     * (config generateurs.offerts.nombre / .type ; type vide = le premier de la liste, le blé).
+     * Une seule fois par joueur (marque dans ses données) : quitter puis recréer une île ne redonne rien.
+     */
+    void cadeauIle(Player p) {
+        NamespacedKey cle = new NamespacedKey(plugin, "cadeau-ile");
+        if (p.getPersistentDataContainer().has(cle, PersistentDataType.BYTE)) return;
+        int nombre = Math.max(0, plugin.getConfig().getInt("generateurs.offerts.nombre", 5));
+        if (nombre == 0 || types.isEmpty()) return;
+        Type t = parId.getOrDefault(plugin.getConfig().getString("generateurs.offerts.type", "").toLowerCase(), types.get(0));
+        p.getPersistentDataContainer().set(cle, PersistentDataType.BYTE, (byte) 1);
+        // Un peu après la téléportation sur l'île.
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (!p.isOnline()) return;
+            donnerGenerateurs(p, t, nombre);
+            p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.8f, 1.4f);
+            OrbitTycoon.msg(p, "<#E0B864>Cadeau de bienvenue :<gray> tu reçois <white>" + nombre + " Générateurs de " + t.nom()
+                    + "<gray> ! Pose-les sur ton île <#E0B864>/is</#E0B864><gray>.");
+        }, 40L);
+    }
+
     // ------------------------------------------------------------------ îles
 
     IlesJoueurs iles() { return plugin.ilesJoueurs(); }
@@ -314,10 +347,12 @@ final class Generateurs implements Listener {
     private void produire() {
         World w = monde();
         if (w == null || poses.isEmpty()) return;
+        // Une île ne produit que si un de ses membres est physiquement dessus (pas juste connecté ailleurs) :
+        // évite d'accumuler des tonnes de ressources pendant que personne n'y est.
         Set<Integer> actives = new HashSet<>();
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            IlesJoueurs.Ile ile = iles().ileDe(p.getUniqueId());
-            if (ile != null) actives.add(ile.index);
+        for (Player p : w.getPlayers()) {
+            IlesJoueurs.Ile ici = iles().ileA(p.getLocation().getX(), p.getLocation().getZ());
+            if (ici != null && ici == iles().ileDe(p.getUniqueId())) actives.add(ici.index);
         }
         if (actives.isEmpty()) return;
         int maxSol = Math.max(64, plugin.getConfig().getInt("generateurs.max-au-sol", 512));
@@ -330,7 +365,7 @@ final class Generateurs implements Listener {
             if (!w.isChunkLoaded(c[0] >> 4, c[2] >> 4)) continue;
             // Un collecteur dans le chunk : la production est vendue (Collecteur orbital) ou rangée (Coffre collecteur),
             // sans objet au sol ; seul ce qui ne rentre pas dans un coffre plein tombe au sol.
-            int pile = plugin.collecteurs().absorber(c[0] >> 4, c[2] >> 4, g.ile, t, g.pile);
+            int pile = plugin.collecteurs().absorber(c[0] >> 4, c[2] >> 4, g.ile, t, g.pile * parCycle());
             if (pile <= 0) continue;
             Location l = new Location(w, c[0] + 0.5, c[1] + 1.15, c[2] + 0.5);
             ItemStack modele = produit(t, 1);
@@ -427,13 +462,24 @@ final class Generateurs implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void clic(PlayerInteractEvent e) {
-        if (e.getAction() != Action.RIGHT_CLICK_BLOCK || e.getHand() != EquipmentSlot.HAND) return;
+        boolean gauche = e.getAction() == Action.LEFT_CLICK_BLOCK;
+        if ((!gauche && e.getAction() != Action.RIGHT_CLICK_BLOCK) || e.getHand() != EquipmentSlot.HAND) return;
         Block b = e.getClickedBlock();
         if (b == null || !IlesJoueurs.estMonde(b.getWorld())) return;
         String k = cle(b);
         Pose g = poses.get(k);
         if (g == null) return;
         Player p = e.getPlayer();
+        if (gauche) {
+            // Clic gauche : le générateur (toute sa pile) revient directement dans l'inventaire, sans attendre de le casser.
+            e.setCancelled(true);
+            IlesJoueurs.Ile ileG = iles().ileA(b.getX(), b.getZ());
+            if (!membre(p, ileG) && !Zones.constructeur(p)) { OrbitTycoon.msg(p, "<#FF4D4D>Ce générateur n'est pas à ton île."); return; }
+            b.setType(Material.AIR);
+            recuperer(p, k, g);
+            p.playSound(b.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.8f, 1.1f);
+            return;
+        }
         ItemStack main = p.getInventory().getItemInMainHand();
         Type enMain = typeGen(main);
         // Shift avec un bloc (ou un autre type de générateur) : on le laisse se poser contre le générateur.
@@ -441,7 +487,10 @@ final class Generateurs implements Listener {
         e.setCancelled(true);
         Type t = parId.get(g.type);
         IlesJoueurs.Ile ile = iles().ileA(b.getX(), b.getZ());
-        if (enMain == null) { info(p, g, t); return; }
+        if (enMain == null) {
+            if (membre(p, ile) || Zones.constructeur(p)) ouvrirAmelioration(p, k); else info(p, g, t);
+            return;
+        }
         if (!membre(p, ile) && !Zones.constructeur(p)) { OrbitTycoon.msg(p, "<#FF4D4D>Ce générateur n'est pas à ton île."); return; }
         if (t == null || !enMain.id().equals(t.id())) { OrbitTycoon.msg(p, "Il faut un <#E0B864>Générateur de " + (t == null ? g.type : t.nom()) + "<gray> pour l'empiler ici."); return; }
         int place = pileMax() - g.pile;
@@ -458,7 +507,7 @@ final class Generateurs implements Listener {
 
     private void info(Player p, Pose g, Type t) {
         if (t == null) { OrbitTycoon.msg(p, "Générateur inconnu (« " + g.type + " » retiré de la config)."); return; }
-        p.sendActionBar(texte("<#E0B864>Générateur de " + t.nom() + " <#62CFF4>x" + g.pile + "<dark_gray> · <gray>" + g.pile
+        p.sendActionBar(texte("<#E0B864>Générateur de " + t.nom() + " <#62CFF4>x" + g.pile + "<dark_gray> · <gray>" + g.pile * parCycle()
                 + " toutes les " + intervalle() + " s <dark_gray>· <gray>" + gain(t, g.pile)));
     }
 
@@ -474,6 +523,11 @@ final class Generateurs implements Listener {
         if (!membre(p, ile) && !Zones.constructeur(p)) { e.setCancelled(true); return; }
         e.setDropItems(false);
         e.setExpToDrop(0);
+        recuperer(p, k, g);
+    }
+
+    /** Retire le générateur posé (déjà enlevé du monde ou en train de l'être) et rend toute sa pile au joueur. */
+    private void recuperer(Player p, String k, Pose g) {
         poses.remove(k);
         sauver();
         titre(k);
@@ -482,6 +536,121 @@ final class Generateurs implements Listener {
             donnerGenerateurs(p, t, g.pile);
             OrbitTycoon.msg(p, "Générateur de <#E0B864>" + t.nom() + " x" + g.pile + "<gray> récupéré.");
         }
+    }
+
+    // ------------------------------------------------------------------ menu d'amélioration (clic droit sur un générateur posé)
+
+    private static final int AM_ACTUEL = 11, AM_AMELIORER = 13, AM_SUIVANT = 15, AM_RAMASSER = 21, AM_FERMER = 23;
+
+    private static final class MenuAmelioration implements InventoryHolder {
+        Inventory inv;
+        final String cle;
+        MenuAmelioration(String cle) { this.cle = cle; }
+        @Override public Inventory getInventory() { return inv; }
+    }
+
+    /** Type suivant de la liste (null si c'est déjà le dernier). */
+    private Type suivant(Type t) {
+        return t == null || t.rang() + 1 >= types.size() ? null : types.get(t.rang() + 1);
+    }
+
+    void ouvrirAmelioration(Player p, String k) {
+        Pose g = poses.get(k);
+        if (g == null) { p.closeInventory(); return; }
+        Type t = parId.get(g.type);
+        if (t == null) { info(p, g, null); return; }
+        Type s = suivant(t);
+        MenuAmelioration h = new MenuAmelioration(k);
+        Inventory inv = Bukkit.createInventory(h, 27, Habillage.titre(plugin, p, 3, "Améliorer le générateur"));
+        h.inv = inv;
+        long solde = plugin.monnaies().solde(p.getUniqueId(), Monnaies.Monnaie.CREDIT);
+
+        ItemStack actuel = new ItemStack(t.bloc(), Math.max(1, Math.min(64, g.pile)));
+        actuel.editMeta(m -> {
+            m.displayName(texte("<#E0B864><bold>Générateur de " + t.nom() + " <#62CFF4>x" + g.pile));
+            m.lore(List.of(texte("<gray>Produit : <white>" + g.pile * parCycle() + " " + t.nom() + " <gray>/ " + intervalle() + " s"),
+                    texte("<gray>Gain : <#E0B864>" + gain(t, g.pile))));
+        });
+        inv.setItem(AM_ACTUEL, actuel);
+
+        if (s == null) {
+            inv.setItem(AM_AMELIORER, objet(Material.NETHER_STAR, "<#E0B864><bold>Niveau maximum", false,
+                    "<gray>Ce générateur est déjà le meilleur."));
+        } else {
+            long cout = s.prix() * g.pile;
+            boolean assez = solde >= cout;
+            inv.setItem(AM_AMELIORER, objet(assez ? Material.LIME_DYE : Material.RED_DYE,
+                    (assez ? "<#62CFF4>" : "<#FF4D4D>") + "<bold>Améliorer" + (g.pile > 1 ? " toute la pile (x" + g.pile + ")" : ""), false,
+                    "<gray>" + t.nom() + " <dark_gray>➜ <#E0B864>" + s.nom(),
+                    "<gray>Prix : " + (assez ? "<#E0B864>" : "<#FF4D4D>") + Hud.nombre(cout) + " ⛃"
+                            + (g.pile > 1 ? " <dark_gray>(" + Hud.nombre(s.prix()) + " × " + g.pile + ")" : ""),
+                    "<gray>Gain : " + gain(t, g.pile) + " <dark_gray>➜ <#E0B864>" + gain(s, g.pile),
+                    "",
+                    "<gray>Solde : <#E0B864>" + Hud.nombre(solde) + " ⛃",
+                    assez ? "<#62CFF4>Clic : améliorer" : "<#FF4D4D>Pas assez de Crédits"));
+            ItemStack apres = new ItemStack(s.bloc(), Math.max(1, Math.min(64, g.pile)));
+            apres.editMeta(m -> {
+                m.displayName(texte("<#E0B864><bold>Générateur de " + s.nom() + " <#62CFF4>x" + g.pile));
+                m.lore(List.of(texte("<gray>Produit : <white>" + g.pile * parCycle() + " " + s.nom() + " <gray>/ " + intervalle() + " s"),
+                        texte("<gray>Gain : <#E0B864>" + gain(s, g.pile))));
+            });
+            inv.setItem(AM_SUIVANT, apres);
+        }
+        inv.setItem(AM_RAMASSER, objet(Material.HOPPER, "<#62CFF4><bold>Ramasser", false,
+                "<gray>Remet les <white>" + g.pile + "<gray> générateur(s)", "<gray>dans ton inventaire.", "", "<dark_gray>(ou clic gauche sur le bloc)"));
+        inv.setItem(AM_FERMER, objet(Material.BARRIER, "<#FF4D4D>Fermer", false));
+        Habillage.fond(plugin, p, inv);
+        p.openInventory(inv);
+    }
+
+    @EventHandler
+    public void clicAmelioration(InventoryClickEvent e) {
+        if (!(e.getView().getTopInventory().getHolder() instanceof MenuAmelioration h)) return;
+        e.setCancelled(true);
+        if (!(e.getWhoClicked() instanceof Player p) || e.getClickedInventory() != e.getView().getTopInventory()) return;
+        int slot = e.getSlot();
+        if (slot == AM_FERMER) { p.closeInventory(); return; }
+        Pose g = poses.get(h.cle);
+        World w = monde();
+        if (g == null || w == null) { p.closeInventory(); return; }
+        int[] c = coords(h.cle);
+        IlesJoueurs.Ile ile = iles().ileA(c[0], c[2]);
+        if (!membre(p, ile) && !Zones.constructeur(p)) { p.closeInventory(); return; }
+        Block b = w.getBlockAt(c[0], c[1], c[2]);
+        if (slot == AM_RAMASSER) {
+            p.closeInventory();
+            b.setType(Material.AIR);
+            recuperer(p, h.cle, g);
+            p.playSound(b.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.8f, 1.1f);
+            return;
+        }
+        if (slot != AM_AMELIORER) return;
+        Type t = parId.get(g.type), s = suivant(t);
+        if (s == null) return;
+        long cout = s.prix() * g.pile;
+        if (!plugin.monnaies().retirer(p.getUniqueId(), Monnaies.Monnaie.CREDIT, cout)) {
+            OrbitTycoon.msg(p, "<#FF4D4D>Pas assez de Crédits</#FF4D4D> <gray>: il faut " + Monnaies.Monnaie.CREDIT.format(cout) + "<gray>.");
+            p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.7f, 1f);
+            return;
+        }
+        g.type = s.id();
+        b.setType(s.bloc());
+        // Comme en posant : avoir un générateur de rang N débloque le N+1 pour l'île.
+        if (ile != null && s.rang() + 1 > debloque.getOrDefault(ile.index, 0) && s.rang() + 1 < types.size()) {
+            debloque.put(ile.index, s.rang() + 1);
+            OrbitTycoon.msg(p, "<#62CFF4>Nouveau générateur débloqué :</#62CFF4> <#E0B864>" + types.get(s.rang() + 1).nom() + "<gray> (menu <#E0B864>/gen<gray>).");
+        }
+        sauver();
+        titre(h.cle);
+        OrbitTycoon.msg(p, "Amélioré : <#E0B864>" + g.pile + " Générateur(s) de " + s.nom() + "<gray> pour " + Monnaies.Monnaie.CREDIT.format(cout) + "<gray>.");
+        p.playSound(b.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.7f, 1.5f);
+        w.spawnParticle(Particle.HAPPY_VILLAGER, b.getLocation().add(0.5, 1.1, 0.5), 14, 0.35, 0.3, 0.35, 0);
+        ouvrirAmelioration(p, h.cle);
+    }
+
+    @EventHandler
+    public void glisserAmelioration(InventoryDragEvent e) {
+        if (e.getView().getTopInventory().getHolder() instanceof MenuAmelioration) e.setCancelled(true);
     }
 
     // Le bloc ne doit jamais bouger ni disparaître sans passer par casser() : sinon le générateur resterait « fantôme ».
@@ -583,7 +752,7 @@ final class Generateurs implements Listener {
                 it.editMeta(m -> {
                     m.displayName(texte("<#E0B864><bold>Générateur de " + t.nom()));
                     m.lore(List.of(
-                            texte("<gray>Produit : <white>1 " + t.nom() + " <gray>/ " + intervalle() + " s"),
+                            texte("<gray>Produit : <white>" + parCycle() + " " + t.nom() + " <gray>/ " + intervalle() + " s"),
                             texte("<gray>Vente : <#E0B864>" + vente(t.vente()) + " ⛃ <gray>l'unité <dark_gray>(" + gain(t, 1) + ")"),
                             texte("<gray>Prix : " + (assez ? "<#E0B864>" : "<#FF4D4D>") + Hud.nombre(t.prix()) + " ⛃"),
                             texte(""),

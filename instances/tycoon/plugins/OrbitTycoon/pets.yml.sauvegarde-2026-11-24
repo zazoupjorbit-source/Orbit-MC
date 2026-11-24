@@ -1,0 +1,11 @@
+75744c5d-dec0-435f-b8d1-90ab90e76dcf:
+  possedes:
+    brise_commun: 1
+  equipes: []
+6f410c3b-592d-4835-ad04-1b91e2ec0245:
+  possedes:
+    magma_epique: 1
+    chauve_souris_commun: 1
+  equipes:
+  - magma_epique
+  - chauve_souris_commun

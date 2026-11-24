@@ -94,7 +94,10 @@ final class Pack implements Listener {
     public void statut(PlayerResourcePackStatusEvent e) {
         if (id == null || !id.equals(e.getID())) return;
         switch (e.getStatus()) {
-            case SUCCESSFULLY_LOADED -> charges.add(e.getPlayer().getUniqueId());
+            case SUCCESSFULLY_LOADED -> {
+                charges.add(e.getPlayer().getUniqueId());
+                if (plugin.coffres() != null) plugin.coffres().montrerModeles(e.getPlayer());   // apparence 3D des coffres
+            }
             case DECLINED, FAILED_DOWNLOAD, FAILED_RELOAD, INVALID_URL, DISCARDED -> charges.remove(e.getPlayer().getUniqueId());
             default -> { }
         }

@@ -93,11 +93,14 @@ final class Quetes implements Listener {
         for (int i = 0; i < modes.length; i++) {
             Outil.Mode m = modes[i];
             int faites = plugin.monnaies().quetes(id, m).size(), pretes = pretes(id, m);
-            inv.setItem(SLOTS_OUTILS[i], objet(m.type, "<" + m.couleur + "><bold>" + m.nom, pretes > 0,
+            // Icône du plus haut palier atteint (la plus stylée débloquée).
+            int atteints = 0, prestige = plugin.monnaies().prestige(id, m);
+            for (int pal : paliers()) if (prestige >= pal) atteints++;
+            inv.setItem(SLOTS_OUTILS[i], icone(objet(m.type, "<" + m.couleur + "><bold>" + m.nom, pretes > 0,
                     "<gray>Prestige : <#E0B864>✪ " + plugin.monnaies().prestige(id, m),
                     "<gray>Quêtes récupérées : <white>" + faites + " <dark_gray>/ " + total,
                     pretes > 0 ? "<#7CFC9A>" + pretes + " quête" + (pretes > 1 ? "s" : "") + " à récupérer !" : "<dark_gray>Aucune quête prête.",
-                    "", "<#62CFF4>➜ Clic pour voir les quêtes"));
+                    "", "<#62CFF4>➜ Clic pour voir les quêtes"), m, atteints == 0 ? 1 : rang(atteints - 1, total), false));
         }
         Habillage.fond(plugin, p, inv);
         p.openInventory(inv);
@@ -116,13 +119,25 @@ final class Quetes implements Listener {
         inv.setItem(4, objet(m.type, "<" + m.couleur + "><bold>" + m.nom, false,
                 "<gray>Ton prestige : <#E0B864>✪ " + prestige,
                 "<gray>Quêtes récupérées : <white>" + faites.size() + " <dark_gray>/ " + paliers.size()));
-        for (int i = 0; i < paliers.size(); i++) inv.setItem(SLOTS_PALIERS[i], quete(m, paliers.get(i), prestige, faites));
+        for (int i = 0; i < paliers.size(); i++) inv.setItem(SLOTS_PALIERS[i], quete(m, paliers.get(i), prestige, faites, rang(i, paliers.size())));
         inv.setItem(SLOT_RETOUR, objet(Material.ARROW, "<#62CFF4>← Retour", false, "<gray>Revenir à la liste des outils."));
         Habillage.fond(plugin, p, inv);
         p.openInventory(inv);
     }
 
-    private ItemStack quete(Outil.Mode m, int palier, int prestige, Set<Integer> faites) {
+    /** Rang d'icône (1 à 10, de plus en plus stylé) du i-ème palier sur n : tools/gen-quetes.ps1 en dessine 10 par outil. */
+    private static int rang(int i, int n) {
+        return Math.max(1, Math.min(10, (int) Math.ceil((i + 1) * 10.0 / n)));
+    }
+
+    /** Icône dessinée du pack ; sans le pack, l'objet de base reste affiché. */
+    private static ItemStack icone(ItemStack it, Outil.Mode m, int rang, boolean verrou) {
+        String modele = "quete_" + m.id + "_" + rang + (verrou ? "_verrou" : "");
+        it.editMeta(meta -> meta.setItemModel(new org.bukkit.NamespacedKey("orbittycoon", modele)));
+        return it;
+    }
+
+    private ItemStack quete(Outil.Mode m, int palier, int prestige, Set<Integer> faites, int rang) {
         List<String> lore = new ArrayList<>();
         lore.add("<gray>Objectif : passer ton " + m.nom);
         lore.add("<gray>au <#E0B864>prestige ✪ " + palier + "<gray>.");
@@ -134,14 +149,14 @@ final class Quetes implements Listener {
         lore.add("");
         if (faites.contains(palier)) {
             lore.add("<#7CFC9A>✔ Déjà récupérée");
-            return objet(Material.LIME_DYE, "<#7CFC9A><bold>Quête · Prestige " + palier, false, lore.toArray(String[]::new));
+            return icone(objet(Material.LIME_DYE, "<#7CFC9A><bold>Quête · Prestige " + palier, false, lore.toArray(String[]::new)), m, rang, false);
         }
         if (prestige >= palier) {
             lore.add("<#E0B864>➜ Clic pour récupérer !");
-            return objet(Material.CHEST, "<#E0B864><bold>Quête · Prestige " + palier, true, lore.toArray(String[]::new));
+            return icone(objet(Material.CHEST, "<#E0B864><bold>Quête · Prestige " + palier, true, lore.toArray(String[]::new)), m, rang, false);
         }
         lore.add("<#FF4D4D>🔒 Prestige " + palier + " requis <dark_gray>(actuel : " + prestige + ")");
-        return objet(Material.GRAY_DYE, "<gray><bold>Quête · Prestige " + palier, false, lore.toArray(String[]::new));
+        return icone(objet(Material.GRAY_DYE, "<gray><bold>Quête · Prestige " + palier, false, lore.toArray(String[]::new)), m, rang, true);
     }
 
     // ------------------------------------------------------------------ récompenses

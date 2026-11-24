@@ -56,6 +56,10 @@ commands:
     description: Hôtel des ventes (achat et vente entre joueurs en Crédits orbitaux).
     usage: /hdv [vendre <prix>|ventes|aide]
     aliases: [ah, hoteldesventes]
+  blocs:
+    description: Magasin de blocs de décoration pour construire ton île (Crédits orbitaux).
+    usage: /blocs
+    aliases: [deco, batisseur]
   staff:
     description: Modération du Tycoon (mode staff, joueurs, geler, inspecter, mute, kick, ban, journal).
     usage: /staff [joueurs|tp|geler|inv|ender|mute|demute|kick|ban|deban|chat|journal]
@@ -84,7 +88,7 @@ commands:
     permission: orbittycoon.admin
   tycoon:
     description: Administration du Tycoon.
-    usage: /tycoon <generer|tp|equiper|reload|monnaie|tuto|nettoyage|voteparty>
+    usage: /tycoon <generer|tp|equiper|reload|monnaie|tuto|nettoyage|voteparty|vote>
     permission: orbittycoon.admin
 
 permissions:

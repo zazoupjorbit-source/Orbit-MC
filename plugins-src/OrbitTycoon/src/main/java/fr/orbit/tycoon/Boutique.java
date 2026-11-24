@@ -72,6 +72,13 @@ final class Boutique implements Listener {
                 Zone.yaw(-Math.cos(angle(i)), -Math.sin(angle(i))), 0f);
     }
 
+    /** Point de téléportation : au milieu de la 1re avenue, tourné vers le PNJ Boutique. */
+    Location pointTp() {
+        double[] p = point(0, R, 2);
+        return new Location(plugin.monde(), Math.floor(p[0]) + 0.5, Y + 1, Math.floor(p[1]) + 0.5,
+                Zone.yaw(-Math.sin(angle(0)), Math.cos(angle(0))), 0f);
+    }
+
     private Location posTitre(int i) {
         double[] p = point(i, R, 0);
         return new Location(plugin.monde(), Math.floor(p[0]) + 0.5, Y + 12, Math.floor(p[1]) + 0.5);

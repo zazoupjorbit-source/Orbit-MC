@@ -269,6 +269,8 @@ final class Staff implements Listener {
 
     boolean enMode(Player p) { return enMode.containsKey(p.getUniqueId()); }
 
+    boolean invisible(Player p) { return invisibles.contains(p.getUniqueId()); }
+
     private void rendreInvisible(Player p, boolean oui) {
         if (oui) invisibles.add(p.getUniqueId()); else invisibles.remove(p.getUniqueId());
         for (Player autre : Bukkit.getOnlinePlayers()) {

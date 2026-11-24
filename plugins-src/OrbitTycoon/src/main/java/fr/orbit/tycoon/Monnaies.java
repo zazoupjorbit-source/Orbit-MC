@@ -2,6 +2,7 @@ package fr.orbit.tycoon;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -404,11 +405,32 @@ final class Monnaies implements Listener {
         StringBuilder texte = new StringBuilder();
         if (choisie != null) texte.append("<white>").append(choisie.nom()).append(" <dark_gray>· ");
         int debut = texte.length();
+        // Enchantements de l'Outil orbital (achetés au Noyau Orbital, plafonnés par le niveau du Noyau de l'île).
+        // Pets équipés pour cet outil (Pets.java) : Fortune, XP, Money et Proc, en %.
+        UUID uid = p.getUniqueId();
+        Pets pets = plugin.pets();
+        double petXp = pets == null ? 0 : pets.bonus(uid, outil, Pets.Stat.XP);
+        double petMoney = pets == null ? 0 : pets.bonus(uid, outil, Pets.Stat.MONEY);
+        double petProc = pets == null ? 0 : pets.bonus(uid, outil, Pets.Stat.PROC);
+        if (pets != null && outil != null) quantite = pets.fortune(uid, outil, quantite);
+        // Équipements de farm portés (Equipements.java) : même % sur ressources, monnaie et XP.
+        double equip = plugin.equipements() == null ? 0 : plugin.equipements().bonus(p, outil);
+        quantite = Equipements.appliquer(quantite, equip);
+        double multEquip = 1 + equip / 100.0;
+        Noyau.Bonus bonus = outil == null ? Noyau.Bonus.AUCUN : plugin.noyau().bonus(p, 1 + petProc / 100.0);
+        String extra = null;
+        if (bonus.rafale()) { quantite *= 2; extra = "<#62CFF4>✦ Rafale ×2"; }
+        boolean meteore = bonus.meteore();
+        if (meteore) extra = "<#E0B864><bold>☄ Météore ×" + bonus.multMeteore() + "</bold>";
         for (Monnaie m : new Monnaie[]{Monnaie.FLUX, Monnaie.CREDIT}) {
             String section = m == Monnaie.FLUX ? "flux-stellaire" : "credit-orbital";
             long gain = choisie != null ? (m == Monnaie.FLUX ? choisie.flux() : choisie.credit()) * quantite
                     : (long) cfg.getInt(section + ".ressources." + cle, cfg.getInt(section + ".defaut", 1)) * quantite;
             if (gain <= 0) continue;
+            if (m == Monnaie.CREDIT) {
+                gain = Math.round(gain * bonus.multCredit() * (1 + petMoney / 100.0) * multEquip);
+                if (meteore) gain *= bonus.multMeteore();
+            } else gain = Math.round(gain * bonus.multFlux() * multEquip);
             ajouter(p.getUniqueId(), m, gain);
             if (texte.length() > debut) texte.append("   ");
             texte.append("<").append(m.couleur).append(">+").append(gain).append(" ").append(m.symbole).append(" ")
@@ -416,13 +438,36 @@ final class Monnaies implements Listener {
         }
         if (outil != null) {
             ajouterRecoltes(p.getUniqueId(), outil, quantite);
-            String xp = choisie != null ? plugin.progression().gagner(p, outil, choisie.xp() * quantite) : plugin.progression().gagner(p, outil, cle, quantite);
+            if (pets != null) pets.gagnerXp(p, quantite);
+            long xpBase = choisie != null ? choisie.xp() * quantite
+                    : (long) cfg.getInt("progression.xp.ressources." + cle, cfg.getInt("progression.xp.defaut", 1)) * quantite;
+            String xp = plugin.progression().gagner(p, outil, Math.round(xpBase * bonus.multXp() * (1 + petXp / 100.0) * multEquip));
             if (xp != null) {
                 if (texte.length() > debut) texte.append("   ");
                 texte.append(xp);
             }
+            if (extra != null) texte.append("   ").append(extra);
+            if (meteore) p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 0.7f, 1.4f);
         }
         if (!texte.isEmpty()) p.sendActionBar(MiniMessage.miniMessage().deserialize(texte.toString()));
         plugin.tuto().recolte(p, quantite);
+        cleFarm(p, outil);
+    }
+
+    /**
+     * Clé Farm : petite chance (coffres.cle-farm.chance, en %) à chaque récolte faite avec l'Outil orbital en main
+     * (pioche, hache, houe, canne, épée). Donnée directement dans l'inventaire (au sol seulement s'il est plein).
+     */
+    private void cleFarm(Player p, Outil.Mode outil) {
+        if (outil == null || plugin.coffres() == null || plugin.outil() == null) return;
+        if (!plugin.outil().est(p.getInventory().getItemInMainHand())) return;
+        double chance = plugin.getConfig().getDouble("coffres.cle-farm.chance", 2.0);
+        if (chance <= 0 || java.util.concurrent.ThreadLocalRandom.current().nextDouble(100) >= chance) return;
+        int n = Math.max(0, Math.min(Coffres.NB - 1, plugin.getConfig().getInt("coffres.cle-farm.coffre", 2) - 1));
+        for (var reste : p.getInventory().addItem(plugin.coffres().cle(n, 1)).values())
+            p.getWorld().dropItemNaturally(p.getLocation(), reste);
+        OrbitTycoon.msg(p, "<gray>Tu as trouvé une <#E0B864><bold>Clé " + MiniMessage.miniMessage().escapeTags(plugin.coffres().nom(n))
+                + "</bold></#E0B864><gray> en farmant !");
+        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.6f, 1.6f);
     }
 }

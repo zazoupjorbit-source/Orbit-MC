@@ -1,0 +1,20 @@
+debloque:
+  '1': 1
+  '5': 2
+poses:
+  1001_101_-2:
+    type: ble
+    pile: 1
+    ile: 1
+  1000_101_-2:
+    type: ble
+    pile: 1
+    ile: 1
+  '5002_101_1':
+    type: carotte
+    pile: 1
+    ile: 5
+  '5003_101_1':
+    type: carotte
+    pile: 5
+    ile: 5

@@ -1,0 +1,5 @@
+{
+  "providers": [
+    {"type": "bitmap", "file": "orbittycoon:font/echap_titre.png", "height": 64, "ascent": 41, "chars": [""]}
+  ]
+}

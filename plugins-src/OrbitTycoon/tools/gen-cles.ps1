@@ -1,8 +1,8 @@
-# Dessine les 5 clés des coffres orbitaux (pixel art 16x16), une par style de coffre :
+# Dessine les 6 clés des coffres orbitaux (pixel art 16x16), une par style de coffre :
 #   Cryo (cristal de glace), Solaire (soleil à rayons), Nébuleuse (anneau violet + étoile),
-#   Astéroïde (roche + cristaux verts), Réacteur (cœur hexagonal rouge).
+#   Astéroïde (roche + cristaux verts), Réacteur (cœur hexagonal rouge), Ménagerie (patte rose, coffre des pets).
 # Sorties : pack\assets\orbittycoon\textures\item\cle_<style>.png
-#           + maquettes\cles_coffres_apercu.png (aperçu agrandi des 5 clés, à la racine du dépôt).
+#           + maquettes\cles_coffres_apercu.png (aperçu agrandi des 6 clés, à la racine du dépôt).
 # Usage : powershell -File tools\gen-cles.ps1
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Drawing
@@ -19,6 +19,7 @@ $styles = [ordered]@{
     nebuleuse = @{ a = C '#C77DFF'; b = C '#E8C6FF'; c = C '#7B3FB8'; d = C '#FFFFFF'; e = C '#FF7AD9'; o = C '#2A0B48' }
     asteroide = @{ a = C '#8E9AA6'; b = C '#C3CCD4'; c = C '#5A646E'; d = C '#7CFC9A'; e = C '#2FCB62'; o = C '#1C2228' }
     reacteur  = @{ a = C '#FF4D4D'; b = C '#FFB0A0'; c = C '#5A5F6B'; d = C '#FFF3B0'; e = C '#FF9A3B'; o = C '#24080A' }
+    menagerie = @{ a = C '#FF8FC7'; b = C '#FFD1E8'; c = C '#C2508A'; d = C '#FFFFFF'; e = C '#E0B864'; o = C '#4A0B2A' }
 }
 
 # Tige et dents communes (la tête est dessinée par style, centrée en (cx, cy)).
@@ -87,6 +88,18 @@ function Tete($g, [string]$style) {
                     if ($r -le 0.6) { $m = 'd' }
                     if ($hex -gt 3.4 -and $hex -le 4.2 -and $dy -lt 0) { $m = 'b' }
                 }
+                'menagerie' {
+                    # Patte : coussinet ovale (reflet clair en haut à gauche, ombre en bas à droite) + 4 doigts.
+                    $py = ($dy - 1.5) / 1.9; $px = $dx / 2.4
+                    if ($px * $px + $py * $py -le 1) {
+                        if ($dx -le -1 -and $dy -le 1) { $m = 'b' } elseif ($dx -ge 1 -and $dy -ge 2) { $m = 'c' } else { $m = 'a' }
+                    }
+                    foreach ($t in @(@(-3.4, -1.2), @(-1.4, -3.6), @(1.4, -3.6), @(3.4, -1.2))) {
+                        $tx = $dx - $t[0]; $ty = $dy - $t[1]
+                        if ($tx * $tx + $ty * $ty -le 0.9) { $m = $(if ($tx -lt 0 -and $ty -lt 0) { 'b' } else { 'a' }) }
+                    }
+                    if ($dx -eq -1 -and $dy -eq 1) { $m = 'd' }
+                }
             }
             if ($m) { $g[$y][$x] = $m }
         }
@@ -116,9 +129,9 @@ foreach ($nom in $styles.Keys) {
     $images[$nom] = $bmp
 }
 
-# Aperçu : les 5 clés agrandies x12 sur fond bleu nuit, dans l'ordre des coffres.
+# Aperçu : les clés agrandies x12 sur fond bleu nuit, dans l'ordre des coffres.
 $z = 12; $marge = 24
-$ap = New-Object System.Drawing.Bitmap (5 * (16 * $z + $marge) + $marge), (16 * $z + 2 * $marge)
+$ap = New-Object System.Drawing.Bitmap ($styles.Count * (16 * $z + $marge) + $marge), (16 * $z + 2 * $marge)
 $gr = [System.Drawing.Graphics]::FromImage($ap)
 $gr.Clear((C '#0A1428'))
 $gr.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::NearestNeighbor
@@ -131,4 +144,4 @@ foreach ($nom in $styles.Keys) {
 $gr.Dispose()
 $maquettes = Join-Path $PSScriptRoot '..\..\..\maquettes'
 if (Test-Path $maquettes) { $ap.Save((Join-Path $maquettes 'cles_coffres_apercu.png'), [System.Drawing.Imaging.ImageFormat]::Png) }
-Write-Host "5 clés dessinées dans $dest"
+Write-Host "$($styles.Count) clés dessinées dans $dest"
