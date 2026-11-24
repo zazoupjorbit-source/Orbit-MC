@@ -87,6 +87,14 @@
       pet: axolotl_commun
       niveau: 0
       xp: 1
+    d527e46563:
+      pet: perroquet_rare
+      niveau: 0
+      xp: 0
+    97b18c2096:
+      pet: axolotl_epique
+      niveau: 0
+      xp: 0
   equipes:
   - 1c62955c0
   - b7566f1cae

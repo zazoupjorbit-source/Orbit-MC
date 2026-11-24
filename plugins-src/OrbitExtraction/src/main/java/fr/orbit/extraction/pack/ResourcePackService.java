@@ -88,7 +88,8 @@ public final class ResourcePackService implements Listener {
             throw new IllegalStateException(e);
         }
         packId = UUID.nameUUIDFromBytes(("orbitextraction:" + hash).getBytes(StandardCharsets.UTF_8));
-        if (publicUrl.isEmpty() && !startHttp()) {
+        // serve-local (true par défaut) : servir même avec public-url, pour un tunnel qui relaie vers ce port.
+        if ((publicUrl.isEmpty() || c.getBoolean("resource-pack.serve-local", true)) && !startHttp()) {
             return;
         }
         enabled = true;

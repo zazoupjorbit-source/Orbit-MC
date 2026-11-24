@@ -8,9 +8,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.trim.ArmorTrim;
-import org.bukkit.inventory.meta.trim.TrimMaterial;
-import org.bukkit.inventory.meta.trim.TrimPattern;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.Equippable;
+import net.kyori.adventure.key.Key;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
@@ -24,7 +29,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * (Crédits + Flux), seulement en récoltant avec l'outil de son set. Set complet : +15 % (equipements.bonus-set).
  * Obtenus seulement dans le coffre Farm (Coffres.java).
  */
-final class Equipements {
+final class Equipements implements Listener {
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
 
@@ -50,15 +55,16 @@ final class Equipements {
     }
 
     enum Piece {
-        CASQUE("Casque", Material.LEATHER_HELMET),
-        PLASTRON("Plastron", Material.LEATHER_CHESTPLATE),
-        JAMBIERES("Jambières", Material.LEATHER_LEGGINGS),
-        BOTTES("Bottes", Material.LEATHER_BOOTS);
+        CASQUE("Casque", Material.LEATHER_HELMET, EquipmentSlot.HEAD),
+        PLASTRON("Plastron", Material.LEATHER_CHESTPLATE, EquipmentSlot.CHEST),
+        JAMBIERES("Jambières", Material.LEATHER_LEGGINGS, EquipmentSlot.LEGS),
+        BOTTES("Bottes", Material.LEATHER_BOOTS, EquipmentSlot.FEET);
 
         final String nom;
         final Material type;
+        final EquipmentSlot slot;
 
-        Piece(String nom, Material type) { this.nom = nom; this.type = type; }
+        Piece(String nom, Material type, EquipmentSlot slot) { this.nom = nom; this.type = type; this.slot = slot; }
     }
 
     private final OrbitTycoon plugin;
@@ -74,7 +80,22 @@ final class Equipements {
 
     // ------------------------------------------------------------------ objets
 
-    /** La pièce p du set s (cuir teint à la couleur de l'outil, liseré doré, incassable). */
+    /** Nom du set dans le pack : equipment/&lt;set&gt;.json et textures armure_&lt;set&gt;_&lt;piece&gt; (tools/gen-armures.ps1). */
+    private static String idPack(Set s) {
+        return switch (s) {
+            case CRATERE -> "cratere"; case SYLVANOVA -> "sylvanova"; case MOISSON -> "moisson";
+            case MAREE -> "maree"; case SUPERNOVA -> "supernova";
+        };
+    }
+
+    private static String idPiece(Piece p) {
+        return switch (p) { case CASQUE -> "casque"; case PLASTRON -> "plastron"; case JAMBIERES -> "jambieres"; case BOTTES -> "bottes"; };
+    }
+
+    /**
+     * La pièce p du set s (incassable) : combinaison spatiale du pack Tycoon, portée (composant equippable → equipment
+     * orbittycoon:&lt;set&gt;) et en icône (item_model). Le cuir reste teint à la couleur du set (valeur d'armure du cuir).
+     */
     ItemStack objet(Set s, Piece p) {
         ItemStack it = new ItemStack(p.type);
         it.editMeta(LeatherArmorMeta.class, m -> {
@@ -84,11 +105,30 @@ final class Equipements {
             m.addItemFlags(ItemFlag.HIDE_DYE, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_UNBREAKABLE);
             m.lore(lore(s).stream().map(l -> MM.deserialize("<!italic>" + l)).toList());
             m.getPersistentDataContainer().set(cle, PersistentDataType.STRING, s.name() + ":" + p.name());
+            m.setItemModel(new NamespacedKey("orbittycoon", "armure_" + idPack(s) + "_" + idPiece(p)));
         });
-        // Liseré doré (DA or) : composant « trim » (LeatherArmorMeta n'a plus setTrim en 26.3).
-        it.setData(io.papermc.paper.datacomponent.DataComponentTypes.TRIM,
-                io.papermc.paper.datacomponent.item.ItemArmorTrim.itemArmorTrim(new ArmorTrim(TrimMaterial.GOLD, TrimPattern.SPIRE)));
+        it.setData(DataComponentTypes.EQUIPPABLE, Equippable.equippable(p.slot)
+                .assetId(Key.key("orbittycoon", idPack(s))).build());
         return it;
+    }
+
+    /** Remet à jour les pièces d'avant les textures (trim doré, pas de modèle) dans l'inventaire du joueur. */
+    @EventHandler
+    public void connexion(PlayerJoinEvent e) {
+        PlayerInventory inv = e.getPlayer().getInventory();
+        ItemStack[] contenu = inv.getContents();
+        boolean change = false;
+        for (int i = 0; i < contenu.length; i++) {
+            ItemStack it = contenu[i];
+            Set s = setDe(it);
+            if (s == null || it.getItemMeta().hasItemModel()) continue;
+            String v = it.getItemMeta().getPersistentDataContainer().get(cle, PersistentDataType.STRING);
+            try {
+                contenu[i] = objet(s, Piece.valueOf(v.substring(v.indexOf(':') + 1)));
+                change = true;
+            } catch (RuntimeException ignore) { }
+        }
+        if (change) inv.setContents(contenu);
     }
 
     /** Description d'une pièce : outil à utiliser, bonus de la pièce, bonus du set complet. */

@@ -55,7 +55,8 @@ final class Pack implements Listener {
         id = UUID.nameUUIDFromBytes(("orbittycoon:" + hash).getBytes(StandardCharsets.UTF_8));
         int port = plugin.getConfig().getInt("pack.port", 8794);
         String publique = plugin.getConfig().getString("pack.url-publique", "").trim();
-        if (publique.isEmpty()) {
+        // Toujours servi en local : avec url-publique, c'est le tunnel (Cloudflare) qui relaie vers ce port.
+        {
             try {
                 http = HttpServer.create(new InetSocketAddress(port), 0);
                 http.createContext("/", this::servir);
@@ -67,8 +68,8 @@ final class Pack implements Listener {
                 zip = null;
                 return;
             }
-            url = "http://127.0.0.1:" + port + "/orbittycoon.zip";
-        } else url = publique;
+        }
+        url = publique.isEmpty() ? "http://127.0.0.1:" + port + "/orbittycoon.zip" : publique;
         plugin.getLogger().info("Pack Tycoon prêt (" + zip.length / 1024 + " Ko) : " + url);
     }
 

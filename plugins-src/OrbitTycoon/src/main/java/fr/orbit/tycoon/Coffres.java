@@ -256,7 +256,31 @@ final class Coffres implements Listener {
 
     // ------------------------------------------------------------------ loots (à remplir dans config.yml)
 
-    private record Loot(Material objet, int nombre, double chance, String nom) {}
+    /**
+     * Une ligne de coffres.loots.<n>. type : objet (vanilla), capsule (Crédits/Flux = minutes de farm), booster,
+     * cle (d'un autre coffre), generateur (relatif au palier débloqué de l'île), titre (plaque cosmétique),
+     * equipement (pièce de farm au hasard). rarete : commun → mythique (sinon déduite de la chance).
+     */
+    private record Loot(String type, Material objet, int nombre, double chance, String nom, Rarete rarete, Map<?, ?> d) {
+        String texte(String k, String def) { return d.get(k) instanceof Object o ? String.valueOf(o) : def; }
+        double reel(String k, double def) { return d.get(k) instanceof Number x ? x.doubleValue() : def; }
+        int entier(String k, int def) { return d.get(k) instanceof Number x ? x.intValue() : def; }
+    }
+
+    /** Raretés des lots : couleur, nom, intensité de l'animation ; Légendaire et Mythique sont annoncés à tous. */
+    enum Rarete {
+        COMMUN("Commun", "<#A8B3C2>", 0), RARE("Rare", "<#62CFF4>", 1), EPIQUE("Épique", "<#C77DFF>", 2),
+        LEGENDAIRE("Légendaire", "<#E0B864>", 3), MYTHIQUE("Mythique", "<gradient:#62CFF4:#E0B864>", 3);
+        final String nom, couleur; final int niveau;
+        Rarete(String nom, String couleur, int niveau) { this.nom = nom; this.couleur = couleur; this.niveau = niveau; }
+        String etiquette() { return couleur + "<bold>" + nom.toUpperCase(Locale.FRANCE) + "</bold>" + (this == MYTHIQUE ? "</gradient>" : ""); }
+        static Rarete parse(Object o) {
+            if (o == null) return null;
+            String s = java.text.Normalizer.normalize(String.valueOf(o), java.text.Normalizer.Form.NFD).replaceAll("\\p{M}", "");
+            for (Rarete r : values()) if (r.name().equalsIgnoreCase(s)) return r;
+            return null;
+        }
+    }
 
     /** Le coffre n est-il le coffre Farm (celui de la Clé Farm) ? Il donne les équipements de farm. */
     private boolean estFarm(int n) {
@@ -264,25 +288,57 @@ final class Coffres implements Listener {
         return cfg.getBoolean("equipements.coffre-farm", true) && n == cfg.getInt("coffres.cle-farm.coffre", 2) - 1;
     }
 
+    private static final java.util.Set<String> TYPES = java.util.Set.of("objet", "capsule", "booster", "cle", "generateur", "titre", "equipement");
+
     /** Loots du coffre n lus dans coffres.loots.<n+1> ; les lignes invalides sont ignorées. */
     private List<Loot> loots(int n) {
         List<Loot> res = new ArrayList<>();
         for (Map<?, ?> m : plugin.getConfig().getMapList("coffres.loots." + (n + 1))) {
-            Material mat = Material.matchMaterial(String.valueOf(m.get("objet")));
-            if (mat == null || !mat.isItem() || mat.isAir()) continue;
+            String type = m.get("type") instanceof String s ? s.toLowerCase(Locale.ROOT) : "objet";
+            if (!TYPES.contains(type)) continue;
+            Material mat = null;
+            if (type.equals("objet")) {
+                mat = Material.matchMaterial(String.valueOf(m.get("objet")));
+                if (mat == null || !mat.isItem() || mat.isAir()) continue;
+            }
             int nombre = m.get("nombre") instanceof Number x ? Math.max(1, x.intValue()) : 1;
             double chance = m.get("chance") instanceof Number x ? x.doubleValue() : 1;
             if (chance <= 0) continue;
             String nom = m.get("nom") instanceof String s && !s.isBlank() ? s : null;
-            res.add(new Loot(mat, nombre, chance, nom));
+            res.add(new Loot(type, mat, nombre, chance, nom, Rarete.parse(m.get("rarete")), m));
         }
         return res;
     }
 
-    private static ItemStack objet(Loot l) {
-        ItemStack it = new ItemStack(l.objet(), Math.min(l.nombre(), l.objet().getMaxStackSize()));
+    private static Rarete rarete(Loot l, double total) {
+        if (l.rarete() != null) return l.rarete();
+        double part = l.chance() / total;
+        return part < 0.01 ? Rarete.LEGENDAIRE : part < 0.05 ? Rarete.EPIQUE : part < 0.15 ? Rarete.RARE : Rarete.COMMUN;
+    }
+
+    /** L'objet donné par ce lot à ce joueur (générateur : selon le palier de son île ; équipement : pièce au hasard). */
+    private ItemStack objet(Loot l, Player p) {
+        ItemStack it = switch (l.type()) {
+            case "capsule" -> plugin.butin().capsule(l.texte("monnaie", "credits").startsWith("flux") ? Monnaies.Monnaie.FLUX
+                    : Monnaies.Monnaie.CREDIT, l.entier("minutes", 5), l.entier("taille", 1), l.nombre());
+            case "booster" -> {
+                Boosters.Sorte s = Boosters.Sorte.parse(l.texte("booster", "credits"));
+                yield plugin.boosters().objet(s == null ? Boosters.Sorte.CREDITS : s, l.reel("mult", 1.5), l.entier("minutes", 15), l.nombre());
+            }
+            case "cle" -> cle(Math.max(0, Math.min(NB - 1, l.entier("coffre", 1) - 1)), l.nombre());
+            case "generateur" -> plugin.generateurs().generateurRelatif(p.getUniqueId(), l.entier("ecart", 0), l.nombre());
+            case "titre" -> plugin.butin().plaque(l.texte("titre", "?"));
+            case "equipement" -> plugin.equipements().tirer();
+            default -> new ItemStack(l.objet(), Math.min(l.nombre(), l.objet().getMaxStackSize()));
+        };
         if (l.nom() != null) it.editMeta(m -> m.itemName(MM.deserialize(l.nom())));
         return it;
+    }
+
+    /** Nom affiché d'un lot (« 3× Grande Capsule de Crédits »). */
+    private static Component nomLot(Loot l, ItemStack it) {
+        Component nom = l.nom() != null ? MM.deserialize(l.nom()) : it.effectiveName();
+        return l.nombre() > 1 ? MM.deserialize("<white>" + l.nombre() + "× </white>").append(nom) : nom;
     }
 
     // ------------------------------------------------------------------ aperçu (clic gauche)
@@ -317,7 +373,7 @@ final class Coffres implements Listener {
         // 28 cases : les loots dans l'ordre de config.yml, puis des cases vides « à venir ».
         double total = loots.stream().mapToDouble(Loot::chance).sum();
         if (n == MENAGERIE) plugin.pets().remplirApercu(inv, CASES);
-        else if (estFarm(n)) {
+        else if (estFarm(n) && loots.isEmpty()) {
             List<ItemStack> pieces = plugin.equipements().toutes();
             String pct = String.format(Locale.FRANCE, "%.1f", 100.0 / pieces.size());
             for (int i = 0; i < CASES.length; i++) {
@@ -336,11 +392,24 @@ final class Coffres implements Listener {
         else for (int i = 0; i < CASES.length; i++) {
             if (i < loots.size()) {
                 Loot l = loots.get(i);
-                ItemStack it = objet(l);
-                String pct = String.format(Locale.FRANCE, "%.1f", l.chance() * 100 / total);
-                it.editMeta(m -> m.lore(List.of(
-                        MM.deserialize("<!italic><gray>Quantité : <white>" + l.nombre()),
-                        MM.deserialize("<!italic><gray>Chance : <#E0B864>" + pct + " %"))));
+                ItemStack it = objet(l, p);
+                double v = l.chance() * 100 / total;
+                String pct = String.format(Locale.FRANCE, v < 1 ? "%.2f" : "%.1f", v);
+                Rarete r = rarete(l, total);
+                Component nom = nomLot(l, it);
+                it.editMeta(m -> {
+                    m.itemName(nom);
+                    List<Component> lore = new ArrayList<>();
+                    lore.add(MM.deserialize("<!italic>" + r.etiquette()));
+                    if (l.type().equals("equipement")) lore.add(MM.deserialize("<!italic><gray>Une des 20 pièces de farm (5 sets × 4)"));
+                    else if (l.type().equals("generateur")) lore.add(MM.deserialize("<!italic><gray>" + (l.entier("ecart", 0) == 0
+                            ? "Ton meilleur générateur débloqué" : l.entier("ecart", 0) > 0 ? l.entier("ecart", 0) + " palier(s) au-dessus de ton meilleur"
+                            : (-l.entier("ecart", 0)) + " palier(s) sous ton meilleur")));
+                    else if (m.lore() != null) for (Component c : m.lore()) if (!c.equals(Component.empty())) lore.add(c);
+                    lore.add(Component.empty());
+                    lore.add(MM.deserialize("<!italic><gray>Chance : <#E0B864>" + pct + " %"));
+                    m.lore(lore);
+                });
                 inv.setItem(CASES[i], it);
             } else {
                 inv.setItem(CASES[i], info(Material.LIGHT_GRAY_STAINED_GLASS_PANE,
@@ -350,7 +419,7 @@ final class Coffres implements Listener {
         // En-tête : le coffre et son nombre de récompenses.
         inv.setItem(4, info(ICONES[n], "<!italic>" + titre(n),
                 (n == MENAGERIE ? "<!italic><gray>20 pets, 4 raretés : 80 pets à collectionner"
-                        : estFarm(n) ? "<!italic><gray>5 sets d'équipement de farm, 4 pièces chacun" : "<!italic><gray>" + (loots.isEmpty() ? "Contenu bientôt dévoilé" : loots.size() + " récompense(s) possible(s)")),
+                        : estFarm(n) && loots.isEmpty() ? "<!italic><gray>5 sets d'équipement de farm, 4 pièces chacun" : "<!italic><gray>" + (loots.isEmpty() ? "Contenu bientôt dévoilé" : loots.size() + " récompense(s) possible(s)")),
                 n == MENAGERIE ? "<!italic><gray>Un pet tiré au hasard par clé :" : "<!italic><gray>Une seule récompense tirée au hasard",
                 n == MENAGERIE ? "<!italic><gray>d'abord la rareté, puis l'espèce." : "<!italic><gray>par clé utilisée."));
         // Bas : la clé qui ouvre ce coffre (avec son vrai design).
@@ -440,7 +509,8 @@ final class Coffres implements Listener {
                     () -> pets.recevoir(p, pet));
             return;
         }
-        if (estFarm(n)) {   // coffre Farm : une pièce d'équipement de farm au hasard (Equipements.java)
+        List<Loot> loots = loots(n);
+        if (estFarm(n) && loots.isEmpty()) {   // coffre Farm sans loots : une pièce d'équipement de farm au hasard
             main.setAmount(main.getAmount() - 1);
             Equipements eq = plugin.equipements();
             ItemStack gagne = eq.tirer();
@@ -453,7 +523,6 @@ final class Coffres implements Listener {
             });
             return;
         }
-        List<Loot> loots = loots(n);
         if (loots.isEmpty()) {   // pas de loots définis : on ne consomme pas la clé
             OrbitTycoon.msg(p, titre(n) + "<gray> : le contenu n'est pas encore prêt, garde ta clé !");
             p.playSound(b.getLocation(), Sound.BLOCK_CHEST_LOCKED, 0.8f, 1.2f);
@@ -465,23 +534,31 @@ final class Coffres implements Listener {
         Loot tire = loots.getLast();
         for (Loot l : loots) { r -= l.chance(); if (r < 0) { tire = l; break; } }
         Loot gagne = tire;
-        // Intensité des effets selon la rareté du gain : < 1 % = légendaire, < 5 % = épique, < 15 % = rare.
-        double part = gagne.chance() / total;
-        int niveau = part < 0.01 ? 3 : part < 0.05 ? 2 : part < 0.15 ? 1 : 0;
-        List<AnimationCoffre.Carte> defilement = loots.stream().map(Coffres::carte).toList();
-        animation.lancer(p, b, couleur, defilement, carte(gagne), niveau, () -> {
-            ItemStack it = objet(gagne);
-            it.setAmount(gagne.nombre());   // au-delà d'une pile, addItem répartit
-            for (ItemStack reste : p.getInventory().addItem(it).values()) p.getWorld().dropItemNaturally(p.getLocation(), reste);
-            OrbitTycoon.msg(p, titre(n) + "<gray> : tu obtiens <white>" + gagne.nombre() + "× </white>"
-                    + (gagne.nom() != null ? gagne.nom() : "<lang:" + gagne.objet().translationKey() + ">") + "<gray> !");
+        Rarete rar = rarete(gagne, total);
+        ItemStack lot = objet(gagne, p);   // tiré maintenant : l'animation montre exactement ce qui sera donné
+        Component nom = nomLot(gagne, lot);
+        List<AnimationCoffre.Carte> defilement = new ArrayList<>();
+        for (Loot l : loots) { ItemStack it = objet(l, p); defilement.add(new AnimationCoffre.Carte(it, nomLot(l, it))); }
+        animation.lancer(p, b, couleur, defilement, new AnimationCoffre.Carte(lot.clone(), nom), rar.niveau, () -> {
+            List<ItemStack> piles = new ArrayList<>();
+            int reste = gagne.type().equals("objet") ? gagne.nombre() : lot.getAmount();
+            while (reste > 0) {   // au-delà d'une pile : plusieurs piles
+                ItemStack it = lot.clone();
+                it.setAmount(Math.min(reste, it.getMaxStackSize()));
+                reste -= it.getAmount();
+                piles.add(it);
+            }
+            for (ItemStack it : piles)
+                for (ItemStack trop : p.getInventory().addItem(it).values()) p.getWorld().dropItemNaturally(p.getLocation(), trop);
+            String texte = MM.serialize(nom);
+            OrbitTycoon.msg(p, titre(n) + "<gray> : " + rar.etiquette() + " <gray>tu obtiens <white>" + texte + "<gray> !");
+            if (rar.ordinal() >= Rarete.LEGENDAIRE.ordinal()) {
+                Bukkit.broadcast(MM.deserialize("<#62CFF4>✦ <white>" + MM.escapeTags(p.getName()) + "<gray> a ouvert le coffre "
+                        + titre(n) + "<gray> et obtient " + rar.etiquette() + " <white>" + texte + "<gray> !"));
+                for (Player pl : Bukkit.getOnlinePlayers())
+                    pl.playSound(pl.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.5f, rar == Rarete.MYTHIQUE ? 0.8f : 1.2f);
+            }
         });
-    }
-
-    private static AnimationCoffre.Carte carte(Loot l) {
-        Component nom = MM.deserialize("<white>" + l.nombre() + "× </white>"
-                + (l.nom() != null ? l.nom() : "<lang:" + l.objet().translationKey() + ">"));
-        return new AnimationCoffre.Carte(objet(l), nom);
     }
 
     @EventHandler

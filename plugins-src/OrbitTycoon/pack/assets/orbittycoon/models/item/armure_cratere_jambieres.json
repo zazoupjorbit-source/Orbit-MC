@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {"layer0": "orbittycoon:item/armure_cratere_jambieres"}
+}

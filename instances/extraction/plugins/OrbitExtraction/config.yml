@@ -19,7 +19,7 @@ resource-pack:
   # qu'ils ont utilisée pour se connecter : ouvre ce port (TCP) comme le port du jeu. (8790 = OrbitMMO.)
   port: 8791
   # Si le pack est hébergé ailleurs (CDN, site web), mets son URL ici : le serveur intégré ne démarre pas.
-  public-url: ""
+  public-url: "https://claimed-stunning-already-terrain.trycloudflare.com/orbitextraction.zip"
   # true = refuser le pack expulse le joueur.
   required: false
 

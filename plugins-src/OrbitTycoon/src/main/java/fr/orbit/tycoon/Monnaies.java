@@ -417,6 +417,11 @@ final class Monnaies implements Listener {
         double equip = plugin.equipements() == null ? 0 : plugin.equipements().bonus(p, outil);
         quantite = Equipements.appliquer(quantite, equip);
         double multEquip = 1 + equip / 100.0;
+        // Boosters orbitaux actifs (lots des coffres, Boosters.java).
+        Boosters bst = plugin.boosters();
+        double bCredit = bst == null ? 1 : bst.mult(uid, Boosters.Sorte.CREDITS);
+        double bFlux = bst == null ? 1 : bst.mult(uid, Boosters.Sorte.FLUX);
+        double bXp = bst == null ? 1 : bst.mult(uid, Boosters.Sorte.XP);
         Noyau.Bonus bonus = outil == null ? Noyau.Bonus.AUCUN : plugin.noyau().bonus(p, 1 + petProc / 100.0);
         String extra = null;
         if (bonus.rafale()) { quantite *= 2; extra = "<#62CFF4>✦ Rafale ×2"; }
@@ -428,9 +433,9 @@ final class Monnaies implements Listener {
                     : (long) cfg.getInt(section + ".ressources." + cle, cfg.getInt(section + ".defaut", 1)) * quantite;
             if (gain <= 0) continue;
             if (m == Monnaie.CREDIT) {
-                gain = Math.round(gain * bonus.multCredit() * (1 + petMoney / 100.0) * multEquip);
+                gain = Math.round(gain * bonus.multCredit() * (1 + petMoney / 100.0) * multEquip * bCredit);
                 if (meteore) gain *= bonus.multMeteore();
-            } else gain = Math.round(gain * bonus.multFlux() * multEquip);
+            } else gain = Math.round(gain * bonus.multFlux() * multEquip * bFlux);
             ajouter(p.getUniqueId(), m, gain);
             if (texte.length() > debut) texte.append("   ");
             texte.append("<").append(m.couleur).append(">+").append(gain).append(" ").append(m.symbole).append(" ")
@@ -441,7 +446,7 @@ final class Monnaies implements Listener {
             if (pets != null) pets.gagnerXp(p, quantite);
             long xpBase = choisie != null ? choisie.xp() * quantite
                     : (long) cfg.getInt("progression.xp.ressources." + cle, cfg.getInt("progression.xp.defaut", 1)) * quantite;
-            String xp = plugin.progression().gagner(p, outil, Math.round(xpBase * bonus.multXp() * (1 + petXp / 100.0) * multEquip));
+            String xp = plugin.progression().gagner(p, outil, Math.round(xpBase * bonus.multXp() * (1 + petXp / 100.0) * multEquip * bXp));
             if (xp != null) {
                 if (texte.length() > debut) texte.append("   ");
                 texte.append(xp);

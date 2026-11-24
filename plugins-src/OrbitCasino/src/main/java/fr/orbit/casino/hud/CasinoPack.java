@@ -49,6 +49,7 @@ public final class CasinoPack implements Listener {
     private int port;
     private HttpServer http;
     private ExecutorService pool;
+    private String publicUrl = "";
 
     public CasinoPack(OrbitCasino plugin) {
         this.plugin = plugin;
@@ -56,6 +57,8 @@ public final class CasinoPack implements Listener {
 
     public void enable() {
         port = plugin.getConfig().getInt("casino.pack-port", 8793);
+        // URL d'un tunnel (ex. Cloudflare) vers ce port, pour les joueurs qui passent par playit. Vide = adresse du joueur + port.
+        publicUrl = plugin.getConfig().getString("casino.pack-public-url", "").trim();
         try (InputStream in = plugin.getResource("pack.zip")) {
             if (in == null) {
                 plugin.getLogger().warning("pack.zip absent du jar : tables sans écran HD (boutons du chat).");
@@ -140,7 +143,9 @@ public final class CasinoPack implements Listener {
 
     private ResourcePackRequest request(UUID player, String host, CompletableFuture<Void> done) {
         ResourcePackInfo info = ResourcePackInfo.resourcePackInfo(packId,
-                URI.create("http://" + host + ":" + port + "/orbit-casino-" + hash.substring(0, 12) + ".zip"), hash);
+                URI.create(publicUrl.isEmpty()
+                        ? "http://" + host + ":" + port + "/orbit-casino-" + hash.substring(0, 12) + ".zip"
+                        : publicUrl + (publicUrl.contains("?") ? "&" : "?") + "v=" + hash.substring(0, 12)), hash);
         return ResourcePackRequest.resourcePackRequest()
                 .packs(info)
                 .replace(false)

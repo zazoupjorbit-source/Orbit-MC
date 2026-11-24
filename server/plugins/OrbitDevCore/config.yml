@@ -134,3 +134,13 @@ cosmetics:
   unlock-all: true
   # Dossier partage par le lobby et les instances : on garde ses cosmetiques en changeant de serveur.
   data-folder: "../../../shared/cosmetics"
+
+# Pack du lobby (menus, anneaux-portails, menus Echap des modes), servi sur le port 8792.
+# public-url : tunnel Cloudflare (tools\cloudflared.exe) vers 8792, pour les joueurs qui passent par playit.
+# L'adresse change a chaque relance du tunnel : la remettre ici et dans les OrbitDevCore des instances.
+resource-pack:
+  enabled: true
+  port: 8792
+  serve-local: true
+  public-url: "https://drawing-anti-moving-institute.trycloudflare.com/orbit-lobby.zip"
+  required: false

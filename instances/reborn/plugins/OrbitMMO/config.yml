@@ -62,7 +62,7 @@ resource-pack:
   port: 8790
   # Pour héberger le pack ailleurs (CDN, site), mets son URL ici : le serveur intégré n'est alors pas lancé.
   # Tunnel Cloudflare gratuit (tools\cloudflared.exe) vers le port 8790 : l'adresse change à chaque relance.
-  public-url: https://homes-original-diamonds-deals.trycloudflare.com/orbitmmo.zip
+  public-url: https://specifically-same-rows-bundle.trycloudflare.com/orbitmmo.zip
   # true : le serveur intégré reste lancé même avec public-url (nécessaire pour un tunnel).
   serve-local: true
   # true : refuser le pack déconnecte le joueur.

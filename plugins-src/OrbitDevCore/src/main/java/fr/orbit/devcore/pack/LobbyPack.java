@@ -110,8 +110,9 @@ public final class LobbyPack implements Listener {
         packId = UUID.nameUUIDFromBytes(("orbitdev:" + hash).getBytes(StandardCharsets.UTF_8));
         loadEchap(c.getString("menu-echap", "").trim().toLowerCase(java.util.Locale.ROOT));
         // serve-local: false (autres serveurs du réseau) : le pack, identique, est déjà servi par le lobby sur ce port.
+        // Avec public-url (tunnel vers ce port), le lobby continue de servir : le tunnel relaie vers lui.
         boolean serve = c.getBoolean("resource-pack.serve-local", true);
-        if (publicUrl.isEmpty() && serve && !startHttp()) {
+        if (serve && !startHttp()) {
             return;
         }
         enabled = true;
@@ -137,8 +138,6 @@ public final class LobbyPack implements Listener {
         }
         if (!echapZips.containsKey(mode)) {
             plugin.getLogger().warning("menu-echap: " + mode + " inconnu (modes : " + String.join(", ", ECHAP_MODES) + ").");
-        } else if (!publicUrl.isEmpty()) {
-            plugin.getLogger().warning("menu-echap ignoré : avec resource-pack.public-url, le pack du menu Échap n'est pas hébergé.");
         } else {
             echapMode = mode;
             echapId = UUID.nameUUIDFromBytes(("orbitdev-echap:" + echapHashes.get(mode)).getBytes(StandardCharsets.UTF_8));
@@ -233,6 +232,15 @@ public final class LobbyPack implements Listener {
         return "http://" + host + ":" + port + "/orbit-lobby-" + v + ".zip";
     }
 
+    /** Racine du serveur de packs : celle de public-url (tunnel) si renseignée, sinon l'adresse du joueur + port. */
+    private String base(String host) {
+        if (!publicUrl.isEmpty()) {
+            URI u = URI.create(publicUrl);
+            return u.getScheme() + "://" + u.getRawAuthority();
+        }
+        return "http://" + host + ":" + port;
+    }
+
     /** Adresse utilisée par le joueur pour se connecter : le pack est servi par la même machine. */
     private static String host(InetSocketAddress virtualHost) {
         if (virtualHost == null) {
@@ -262,7 +270,7 @@ public final class LobbyPack implements Listener {
             // Ajouté après le pack du lobby : il passe par-dessus (logo du mode dans le menu Échap).
             String v = echapHashes.get(echapMode).substring(0, 12);
             infos.add(ResourcePackInfo.resourcePackInfo(echapId,
-                    URI.create("http://" + host + ":" + port + "/orbit-echap-" + echapMode + "-" + v + ".zip"), echapHashes.get(echapMode)));
+                    URI.create(base(host) + "/orbit-echap-" + echapMode + "-" + v + ".zip"), echapHashes.get(echapMode)));
         }
         AtomicInteger pending = new AtomicInteger(infos.size());
         return ResourcePackRequest.resourcePackRequest()

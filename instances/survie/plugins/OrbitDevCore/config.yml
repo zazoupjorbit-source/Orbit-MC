@@ -83,7 +83,7 @@ resource-pack:
   enabled: true
   port: 8792
   serve-local: false
-  public-url: ""
+  public-url: "https://drawing-anti-moving-institute.trycloudflare.com/orbit-lobby.zip"
   required: false
 
 # Logo du mode dans le menu Echap (pack ajoute par-dessus celui du lobby) : survie, extraction, practice, mmo.

@@ -230,12 +230,70 @@ coffres:
     chance: 2.0
     coffre: 2      # coffre (1 à 6) dont la clé tombe : 2 = « Farm »
   # Clic gauche sur un coffre = aperçu du contenu ; clic droit avec la bonne clé en main = ouverture.
-  # Contenu de chaque coffre (1 à 6), à remplir plus tard. Vide = « contenu bientôt dévoilé ».
-  # Format : objet (nom Bukkit), nombre, chance (poids relatif), nom affiché (optionnel). Exemple :
-  #   1:
-  #     - {objet: DIAMOND, nombre: 3, chance: 10, nom: "Diamants"}
-  #     - {objet: IRON_INGOT, nombre: 16, chance: 90}
-  loots: {}
+  # Contenu de chaque coffre (1 à 6). Vide = « contenu bientôt dévoilé » (Saturne et Neptune : plus tard).
+  # Une ligne = un lot ; chance = poids relatif (ici chaque coffre fait 100 → chance = %).
+  # rarete : commun, rare, epique, legendaire, mythique (légendaire et mythique sont annoncés à tout le serveur).
+  # Types :
+  #   objet      : {objet: DIAMOND, nombre: 3}                         objet vanilla
+  #   capsule    : {monnaie: credits|flux, minutes: 5, taille: 1-3}    clic droit = N min de farm de la meilleure ressource
+  #   booster    : {booster: credits|flux|xp, mult: 2, minutes: 30}    clic droit = activé (temps connecté seulement)
+  #   cle        : {coffre: 1-6, nombre: 2}                            clé d'un autre coffre
+  #   generateur : {ecart: 0, nombre: 2}                               0 = meilleur générateur débloqué de l'île, -1 = un cran dessous
+  #   titre      : {titre: id}                                         plaque de titre cosmétique (titres.liste)
+  #   equipement : {}                                                  pièce d'équipement de farm au hasard (20 pièces)
+  # nom: "..." (optionnel) remplace le nom affiché.
+  loots:
+    # Coffre Vote : petit mais régulier (une clé par vote), pousse vers les clés Farm et Event.
+    1:
+      - {type: capsule, monnaie: credits, minutes: 5, taille: 1, chance: 25, rarete: commun}
+      - {type: capsule, monnaie: flux, minutes: 5, taille: 1, chance: 20, rarete: commun}
+      - {type: cle, coffre: 2, nombre: 2, chance: 15, rarete: commun}
+      - {type: booster, booster: credits, mult: 1.5, minutes: 15, chance: 12, rarete: rare}
+      - {type: booster, booster: flux, mult: 1.5, minutes: 15, chance: 8, rarete: rare}
+      - {type: generateur, ecart: 0, nombre: 2, chance: 8, rarete: rare}
+      - {type: capsule, monnaie: credits, minutes: 20, taille: 2, chance: 5, rarete: epique}
+      - {type: booster, booster: xp, mult: 2, minutes: 30, chance: 4, rarete: epique}
+      - {type: cle, coffre: 3, nombre: 1, chance: 2, rarete: epique}
+      - {type: titre, titre: electeur, chance: 0.8, rarete: legendaire}
+      - {type: capsule, monnaie: credits, minutes: 60, taille: 3, chance: 0.2, rarete: mythique}
+    # Coffre Farm : clé trouvée en farmant (2 % par récolte), donc beaucoup de clés → lots modestes.
+    # Équipements de farm : 10 % du coffre (0,5 % par pièce), choix de Wane le 24/11/2026.
+    2:
+      - {type: capsule, monnaie: credits, minutes: 2, taille: 1, chance: 27, rarete: commun}
+      - {type: equipement, chance: 10, rarete: rare}
+      - {type: capsule, monnaie: flux, minutes: 2, taille: 1, chance: 23, rarete: commun}
+      - {type: booster, booster: xp, mult: 1.5, minutes: 10, chance: 12, rarete: rare}
+      - {type: booster, booster: credits, mult: 1.5, minutes: 10, chance: 10, rarete: rare}
+      - {type: capsule, monnaie: credits, minutes: 10, taille: 2, chance: 8, rarete: rare}
+      - {type: generateur, ecart: -1, nombre: 2, chance: 4, rarete: epique}
+      - {type: booster, booster: xp, mult: 2, minutes: 20, chance: 3, rarete: epique}
+      - {type: cle, coffre: 3, nombre: 1, chance: 1.5, rarete: legendaire}
+      - {type: capsule, monnaie: flux, minutes: 10, taille: 2, chance: 1, rarete: epique}
+      - {type: titre, titre: moissonneur, chance: 0.5, rarete: legendaire}
+    # Coffre Event : clés données pendant les événements (staff) → les plus gros lots du moment.
+    3:
+      - {type: capsule, monnaie: credits, minutes: 15, taille: 2, chance: 20, rarete: commun}
+      - {type: capsule, monnaie: flux, minutes: 15, taille: 2, chance: 16, rarete: commun}
+      - {type: booster, booster: credits, mult: 2, minutes: 30, chance: 14, rarete: rare}
+      - {type: booster, booster: xp, mult: 2, minutes: 30, chance: 12, rarete: rare}
+      - {type: generateur, ecart: 0, nombre: 8, chance: 10, rarete: rare}
+      - {type: booster, booster: flux, mult: 2, minutes: 30, chance: 8, rarete: rare}
+      - {type: cle, coffre: 2, nombre: 5, chance: 8, rarete: rare}
+      - {type: capsule, monnaie: credits, minutes: 45, taille: 3, chance: 5, rarete: epique}
+      - {type: generateur, ecart: 1, nombre: 2, chance: 3, rarete: epique}
+      - {type: booster, booster: credits, mult: 3, minutes: 60, chance: 1.5, rarete: legendaire}
+      - {type: titre, titre: comete, chance: 1.5, rarete: legendaire}
+      - {type: titre, titre: legende, chance: 0.5, rarete: mythique}
+      - {type: capsule, monnaie: flux, minutes: 120, taille: 3, chance: 0.5, rarete: mythique}
+
+# Titres cosmétiques (Butin.java) : gagnés en plaques dans les coffres, choisis avec /titre, affichés devant
+# le pseudo dans le chat. id → texte MiniMessage. Purement cosmétique (règles Mojang).
+titres:
+  liste:
+    electeur: "<#62CFF4>Électeur fidèle"
+    moissonneur: "<#7CFC9A>Moissonneur cosmique"
+    comete: "<#C77DFF>Chasseur de comètes"
+    legende: "<gradient:#62CFF4:#E0B864>Légende orbitale</gradient>"
 
 # Équipements de farm (Equipements.java) : 1 set de 4 pièces par outil (Cratère = pioche, Sylvanova = hache,
 # Moisson Solaire = houe, Marée Lunaire = canne, Supernova = épée). Pièce PORTÉE + outil du set en main :

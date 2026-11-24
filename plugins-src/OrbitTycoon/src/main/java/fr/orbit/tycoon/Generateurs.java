@@ -337,6 +337,12 @@ final class Generateurs implements Listener {
         return n;
     }
 
+    /** Générateur relatif au palier de l'île du joueur (ecart 0 = son meilleur débloqué, -1 = celui d'en dessous…). */
+    ItemStack generateurRelatif(UUID joueur, int ecart, int nombre) {
+        int rang = Math.max(0, Math.min(types.size() - 1, rangDebloque(joueur) + ecart));
+        return generateur(types.get(rang), nombre);
+    }
+
     private int rangDebloque(UUID joueur) {
         IlesJoueurs.Ile ile = iles().ileDe(joueur);
         return ile == null ? 0 : debloque.getOrDefault(ile.index, 0);
@@ -717,6 +723,7 @@ final class Generateurs implements Listener {
     }
 
     private void payer(Player p, double montant, int objets) {
+        if (plugin.boosters() != null) montant *= plugin.boosters().mult(p.getUniqueId(), Boosters.Sorte.CREDITS);
         double avecReste = montant + restes.getOrDefault(p.getUniqueId(), 0.0);
         long credits = (long) Math.floor(avecReste);
         restes.put(p.getUniqueId(), avecReste - credits);

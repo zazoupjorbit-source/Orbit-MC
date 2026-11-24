@@ -337,6 +337,7 @@ final class Collecteurs implements Listener {
             e.setValue(montant - credits);
             int objets = objetsEnAttente.getOrDefault(e.getKey(), 0);
             if (credits <= 0) continue;
+            if (plugin.boosters() != null) credits = Math.round(credits * plugin.boosters().mult(e.getKey(), Boosters.Sorte.CREDITS));
             plugin.monnaies().ajouter(e.getKey(), Monnaies.Monnaie.CREDIT, credits);
             objetsEnAttente.remove(e.getKey());
             Player p = Bukkit.getPlayer(e.getKey());

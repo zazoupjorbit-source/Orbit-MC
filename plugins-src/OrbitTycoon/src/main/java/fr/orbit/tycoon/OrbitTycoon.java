@@ -62,6 +62,8 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     private Noyau noyau;
     private Pets pets;
     private Equipements equipements;
+    private Boosters boosters;
+    private Butin butin;
     private final Nettoyage nettoyage = new Nettoyage(this);
     private final VoteParty voteParty = new VoteParty(this);
     private final Votes votes = new Votes(this);
@@ -104,6 +106,8 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         noyau = new Noyau(this);
         pets = new Pets(this);
         equipements = new Equipements(this);
+        boosters = new Boosters(this);
+        butin = new Butin(this);
         navigateur.iles(ilesJoueurs);
         navigateur.pack(pack);
         outil.pack(pack);
@@ -143,6 +147,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         pm.registerEvents(progression, this);
         pm.registerEvents(confirmer, this);
         pm.registerEvents(quetes, this);
+        pm.registerEvents(equipements, this);
         pm.registerEvents(ressources, this);
         pm.registerEvents(hdv, this);
         pm.registerEvents(magasinBlocs, this);
@@ -152,6 +157,8 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         pm.registerEvents(collecteurs, this);
         pm.registerEvents(noyau, this);
         pm.registerEvents(pets, this);
+        pm.registerEvents(boosters, this);
+        pm.registerEvents(butin, this);
         pm.registerEvents(new Piles(this), this);
         pm.registerEvents(voteParty, this);
         pm.registerEvents(votes, this);
@@ -206,6 +213,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         if (generateurs != null) generateurs.arreter();
         if (noyau != null) noyau.arreter();
         if (pets != null) pets.arreter();
+        if (boosters != null) boosters.arreter();
         if (ilesJoueurs != null) ilesJoueurs.arreter();
         if (monnaies != null) monnaies.arreter();
     }
@@ -217,6 +225,8 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     IlesJoueurs ilesJoueurs() { return ilesJoueurs; }
     Noyau noyau() { return noyau; }
     Pets pets() { return pets; }
+    Boosters boosters() { return boosters; }
+    Butin butin() { return butin; }
     Equipements equipements() { return equipements; }
     Staff staff() { return staff; }
 
@@ -317,6 +327,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         if (cmd.getName().equalsIgnoreCase("blocs")) return magasinBlocs.commande(s, args);
         if (cmd.getName().equalsIgnoreCase("staff")) return staff.commande(s, args);
         if (cmd.getName().equalsIgnoreCase("guide")) return guide.commande(s, args);
+        if (cmd.getName().equalsIgnoreCase("titre")) return butin.commande(s, args);
         if (cmd.getName().equalsIgnoreCase("gen")) return generateurs.commande(s, args);
         if (cmd.getName().equalsIgnoreCase("vendre")) return generateurs.vendre(s, args);
         if (cmd.getName().equalsIgnoreCase("donner")) return don.commande(s, args);

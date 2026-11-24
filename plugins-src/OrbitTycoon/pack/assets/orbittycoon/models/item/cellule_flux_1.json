@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {"layer0": "orbittycoon:item/cellule_flux_1"}
+}
