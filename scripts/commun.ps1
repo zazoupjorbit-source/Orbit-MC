@@ -248,6 +248,7 @@ $Plugins = @(
     @{ Nom = 'OrbitArene';      Type = 'ps1';    Dossier = 'plugins-src\OrbitArene';      Jar = 'plugins-src\OrbitArene\target\OrbitArene.jar';           Vers = @('server') },
     @{ Nom = 'OrbitChasseurs';  Type = 'ps1';    Dossier = 'plugins-src\OrbitChasseurs';  Jar = 'plugins-src\OrbitChasseurs\target\OrbitChasseurs.jar';   Vers = @('server') },
     @{ Nom = 'OrbitTele';       Type = 'ps1';    Dossier = 'plugins-src\OrbitTele';       Jar = 'plugins-src\OrbitTele\target\OrbitTele.jar';             Vers = @('server') },
+    @{ Nom = 'OrbitCasino';     Type = 'ps1';    Dossier = 'plugins-src\OrbitCasino';     Jar = 'plugins-src\OrbitCasino\target\OrbitCasino.jar';         Vers = @('server') },
     @{ Nom = 'PanelBridge';     Type = 'bridge'; Dossier = 'panel\bridge';                Jar = 'panel\bridge\PanelBridge.jar';                           Vers = @('server') },
     @{ Nom = 'OrbitStaff';      Type = 'maven';  Dossier = 'mods-src\orbitstaff';         Jar = 'mods-src\orbitstaff\orbitstaff-core\target\OrbitStaff-0.1.0-SNAPSHOT.jar'; Vers = @('server'); Optionnel = $true }
 )

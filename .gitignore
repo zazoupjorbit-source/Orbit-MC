@@ -40,6 +40,7 @@
 
 # --- Lore, maquettes, base ---
 !/lore/
+!/docs/
 !/maquettes/
 !/setup/
 /setup/*.properties
