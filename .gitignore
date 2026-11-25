@@ -41,6 +41,7 @@
 # --- Lore, maquettes, base ---
 !/lore/
 !/docs/
+!/site/
 !/maquettes/
 !/setup/
 /setup/*.properties
