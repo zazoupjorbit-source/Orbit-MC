@@ -6,14 +6,15 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Un talent d'un arbre de spécialisation. Palier 0 à 8, colonne 0 à 2. Les paliers 0 à 5 s'ouvrent tous les
- * 5 points dépensés dans l'arbre, les paliers avancés 6 à 8 (niveau max 80) à 35, 45 et 55 points.
+ * Un talent d'un arbre de spécialisation. Palier 0 à 11, colonne 0 à 2. Les paliers 0 à 5 s'ouvrent tous les
+ * 5 points dépensés dans l'arbre, les paliers avancés 6 à 8 à 35, 45 et 55 points, les paliers de maître 9 à 11
+ * à 62, 70 et 78 points (81 points au niveau 90, arbres de ~100 rangs : on ne peut pas tout prendre).
  * Les effets sont donnés par rang.
  */
 public final class TalentDef {
 
     /** Points à avoir dépensés dans l'arbre pour ouvrir chaque palier. */
-    private static final int[] REQUIRED = {0, 5, 10, 15, 20, 25, 35, 45, 55};
+    private static final int[] REQUIRED = {0, 5, 10, 15, 20, 25, 35, 45, 55, 62, 70, 78};
     public static final int TIERS = REQUIRED.length;
     /** Paliers affichés par page du menu (un coffre a 6 rangées). */
     public static final int TIERS_PER_PAGE = 6;

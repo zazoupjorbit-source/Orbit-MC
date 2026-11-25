@@ -53,6 +53,12 @@ public final class Screens implements Listener {
         return pack.isLoaded(p);
     }
 
+    /** L'écran de cette table est-il affiché en ce moment ? */
+    public boolean isOpen(Player p, String table) {
+        Screen s = screens.get(p.getUniqueId());
+        return s != null && s.table.equals(table) && p.getOpenInventory().getTopInventory().getHolder() == s;
+    }
+
     /** L'écran du joueur est-il affiché en ce moment ? */
     public boolean isOpen(Player p) {
         Screen s = screens.get(p.getUniqueId());
@@ -141,6 +147,7 @@ public final class Screens implements Listener {
         final String[] keys = new String[54];
         final ItemStack[] items = new ItemStack[54];
         final Runnable[] actions = new Runnable[54];
+        final Runnable[] rightActions = new Runnable[54];
         final boolean[] card = new boolean[54];
         final List<Integer> dealOrder = new ArrayList<>();
 
@@ -202,6 +209,13 @@ public final class Screens implements Listener {
             return this;
         }
 
+        /** Objet avec une action au clic gauche et une autre au clic droit. */
+        public Frame item(int slot, ItemStack it, String key, Runnable left, Runnable right) {
+            item(slot, it, key, left);
+            rightActions[slot] = right;
+            return this;
+        }
+
         /** Sablier avec les secondes restantes. */
         public Frame timer(int slot, int seconds) {
             if (seconds <= 0) {
@@ -249,6 +263,7 @@ public final class Screens implements Listener {
         final String[] keys = new String[54];
         final String[] finalKeys = new String[54];
         final Runnable[] actions = new Runnable[54];
+        final Runnable[] rightActions = new Runnable[54];
         final BukkitTask[] anims = new BukkitTask[54];
 
         Screen(UUID player, String table) {
@@ -285,6 +300,7 @@ public final class Screens implements Listener {
             }
             for (int slot : order) {
                 actions[slot] = f.actions[slot];
+                rightActions[slot] = f.rightActions[slot];
                 String want = f.keys[slot];
                 if (Objects.equals(finalKeys[slot], want)) {
                     continue;
@@ -394,7 +410,8 @@ public final class Screens implements Listener {
         if (event.getClickedInventory() != s.inventory || event.getRawSlot() < 0 || event.getRawSlot() >= 54) {
             return;
         }
-        Runnable action = s.actions[event.getRawSlot()];
+        Runnable action = event.isRightClick() && s.rightActions[event.getRawSlot()] != null
+                ? s.rightActions[event.getRawSlot()] : s.actions[event.getRawSlot()];
         if (action != null && event.getWhoClicked() instanceof Player p) {
             p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 0.4f, 1.4f);
             Bukkit.getScheduler().runTask(plugin, action);

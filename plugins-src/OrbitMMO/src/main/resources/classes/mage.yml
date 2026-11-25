@@ -64,6 +64,16 @@ specialisations:
       soleil_captif: { nom: "Soleil captif", icone: SHROOMLIGHT, palier: 8, colonne: 0, rangs: 1, sort: soleil_captif, requiert: colonne_de_feu, description: "Apprend Soleil captif : un fragment de la lumière de l'Astre qui explose en un brasier." }
       embrasement_total: { nom: "Embrasement total", icone: FIRE_CHARGE, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
       coeur_ardent: { nom: "Cœur ardent", icone: BLAZE_POWDER, palier: 8, colonne: 2, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      pilier_ardent: { nom: "Pilier ardent", icone: MAGMA_BLOCK, palier: 9, colonne: 0, rangs: 3, requiert: colonne_de_feu, effets: { degats.colonne_de_feu: 10 }, description: "Colonne de feu inflige {degats.colonne_de_feu} % de dégâts en plus." }
+      soleil_dechaine: { nom: "Soleil déchaîné", icone: FIRE_CHARGE, palier: 9, colonne: 1, rangs: 3, requiert: soleil_captif, effets: { degats.soleil_captif: 10 }, description: "Soleil captif inflige {degats.soleil_captif} % de dégâts en plus." }
+      chair_de_cendre: { nom: "Chair de cendre", icone: GUNPOWDER, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      flamme_vive: { nom: "Flamme vive", icone: BLAZE_POWDER, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      embrasement_hatif: { nom: "Embrasement hâtif", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.embrasement: 10 }, description: "Recharge d'Embrasement réduite de {recharge.embrasement} s." }
+      braise_eternelle: { nom: "Braise éternelle", icone: CAMPFIRE, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de mana régénéré." }
+      feu_ancestral: { nom: "Feu ancestral", icone: FIRE_CHARGE, palier: 11, colonne: 0, rangs: 3, effets: { degats.boule_de_feu: 5 }, description: "Boule de feu inflige {degats.boule_de_feu} % de dégâts en plus." }
+      coeur_du_brasier: { nom: "Cœur du brasier", icone: LAVA_BUCKET, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, critdeg: 10 }, description: "Talent de maître : +{degats} % de dégâts et coups critiques +{critdeg} % de dégâts." }
+      fournaise_vivante: { nom: "Fournaise vivante", icone: BLAST_FURNACE, palier: 11, colonne: 2, rangs: 3, effets: { degats.pluie_de_flammes: 8 }, description: "Pluie de flammes inflige {degats.pluie_de_flammes} % de dégâts en plus." }
 
   foudroyeur:
     nom: Foudroyeur
@@ -105,6 +115,16 @@ specialisations:
       colere_du_ciel: { nom: "Colère du ciel", icone: LIGHTNING_ROD, palier: 8, colonne: 0, rangs: 1, sort: colere_du_ciel, requiert: champ_statique, description: "Apprend Colère du ciel : la foudre s'abat sans relâche sur une large zone." }
       tempete_vivante: { nom: "Tempête vivante", icone: TRIDENT, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
       arc_parfait: { nom: "Arc parfait", icone: ENDER_EYE, palier: 8, colonne: 2, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      champ_survolte: { nom: "Champ survolté", icone: LIGHTNING_ROD, palier: 9, colonne: 0, rangs: 3, requiert: champ_statique, effets: { degats.champ_statique: 10 }, description: "Champ statique inflige {degats.champ_statique} % de dégâts en plus." }
+      ciel_furieux: { nom: "Ciel furieux", icone: TRIDENT, palier: 9, colonne: 1, rangs: 3, requiert: colere_du_ciel, effets: { degats.colere_du_ciel: 10 }, description: "Colère du ciel inflige {degats.colere_du_ciel} % de dégâts en plus." }
+      corps_conducteur: { nom: "Corps conducteur", icone: COPPER_INGOT, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      tension_extreme: { nom: "Tension extrême", icone: GLOWSTONE_DUST, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      surcharge_hative: { nom: "Surcharge hâtive", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.surcharge: 10 }, description: "Recharge de Surcharge réduite de {recharge.surcharge} s." }
+      pile_vivante: { nom: "Pile vivante", icone: REDSTONE_TORCH, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de mana régénéré." }
+      eclair_ancestral: { nom: "Éclair ancestral", icone: END_ROD, palier: 11, colonne: 0, rangs: 3, effets: { degats.eclair: 5 }, description: "Éclair inflige {degats.eclair} % de dégâts en plus." }
+      oeil_du_cyclone: { nom: "Œil du cyclone", icone: HEART_OF_THE_SEA, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, crit: 3 }, description: "Talent de maître : +{degats} % de dégâts et +{crit} % de chances de coup critique." }
+      arc_survolte: { nom: "Arc survolté", icone: IRON_CHAIN, palier: 11, colonne: 2, rangs: 3, effets: { degats.arc_electrique: 8 }, description: "Arc électrique inflige {degats.arc_electrique} % de dégâts en plus." }
 
   necromancien:
     nom: Nécromancien
@@ -146,6 +166,16 @@ specialisations:
       armee_des_oublies: { nom: "Armée des Oubliés", icone: WITHER_SKELETON_SKULL, palier: 8, colonne: 0, rangs: 1, sort: armee_des_oublies, requiert: horde_affamee, description: "Apprend Armée des Oubliés : les morts de la Chute se relèvent et ravagent une large zone." }
       seigneur_des_morts: { nom: "Seigneur des morts", icone: NETHERITE_HELMET, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
       soif_d_ames: { nom: "Soif d'âmes", icone: GHAST_TEAR, palier: 8, colonne: 2, rangs: 3, requiert: drain_vorace, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      horde_innombrable: { nom: "Horde innombrable", icone: ROTTEN_FLESH, palier: 9, colonne: 0, rangs: 3, requiert: horde_affamee, effets: { degats.horde_affamee: 10 }, description: "Horde affamée inflige {degats.horde_affamee} % de dégâts en plus." }
+      legion_des_oublies: { nom: "Légion des oubliés", icone: SKELETON_SKULL, palier: 9, colonne: 1, rangs: 3, requiert: armee_des_oublies, effets: { degats.armee_des_oublies: 10 }, description: "Armée des Oubliés inflige {degats.armee_des_oublies} % de dégâts en plus." }
+      os_durcis: { nom: "Os durcis", icone: BONE_BLOCK, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      froid_des_cryptes: { nom: "Froid des cryptes", icone: BLUE_ICE, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      liche_hative: { nom: "Liche hâtive", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.forme_de_liche: 10 }, description: "Recharge de Forme de liche réduite de {recharge.forme_de_liche} s." }
+      ames_captives: { nom: "Âmes captives", icone: SOUL_LANTERN, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de mana régénéré." }
+      os_ancestral: { nom: "Os ancestral", icone: BONE, palier: 11, colonne: 0, rangs: 3, effets: { degats.lance_d_os: 6 }, description: "Lance d'os inflige {degats.lance_d_os} % de dégâts en plus." }
+      roi_des_morts: { nom: "Roi des morts", icone: WITHER_SKELETON_SKULL, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, vol-de-vie: 2 }, description: "Talent de maître : +{degats} % de dégâts et {vol-de-vie} % des dégâts infligés vous soignent." }
+      moisson_abondante: { nom: "Moisson abondante", icone: SOUL_SAND, palier: 11, colonne: 2, rangs: 3, effets: { degats.moisson_d_ames: 8 }, description: "Moisson d'âmes inflige {degats.moisson_d_ames} % de dégâts en plus." }
 
   pestilence:
     nom: Pestilence
@@ -187,6 +217,16 @@ specialisations:
       grande_peste: { nom: "Grande Peste", icone: WITHER_ROSE, palier: 8, colonne: 0, rangs: 1, sort: grande_peste, requiert: miasmes, description: "Apprend Grande Peste : une épidémie qui ronge et affaiblit toute une zone." }
       pandemie: { nom: "Pandémie", icone: SLIME_BLOCK, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
       sang_noir: { nom: "Sang noir", icone: GHAST_TEAR, palier: 8, colonne: 2, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      miasmes_epais: { nom: "Miasmes épais", icone: SLIME_BALL, palier: 9, colonne: 0, rangs: 3, requiert: miasmes, effets: { degats.miasmes: 10 }, description: "Miasmes inflige {degats.miasmes} % de dégâts en plus." }
+      peste_noire: { nom: "Peste noire", icone: WITHER_ROSE, palier: 9, colonne: 1, rangs: 3, requiert: grande_peste, effets: { degats.grande_peste: 10 }, description: "Grande Peste inflige {degats.grande_peste} % de dégâts en plus." }
+      chair_immunisee: { nom: "Chair immunisée", icone: MILK_BUCKET, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      souche_virulente: { nom: "Souche virulente", icone: SPIDER_EYE, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      fleau_hatif: { nom: "Fléau hâtif", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.fleau_incarne: 10 }, description: "Recharge de Fléau incarné réduite de {recharge.fleau_incarne} s." }
+      bile_noire: { nom: "Bile noire", icone: INK_SAC, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de mana régénéré." }
+      venin_ancestral: { nom: "Venin ancestral", icone: FERMENTED_SPIDER_EYE, palier: 11, colonne: 0, rangs: 3, effets: { degats.venin: 6 }, description: "Venin inflige {degats.venin} % de dégâts en plus." }
+      patient_zero: { nom: "Patient zéro", icone: DRAGON_BREATH, palier: 11, colonne: 1, rangs: 1, effets: { degats: 8 }, description: "Talent de maître : +{degats} % de dégâts." }
+      nuee_vorace: { nom: "Nuée vorace", icone: COBWEB, palier: 11, colonne: 2, rangs: 3, effets: { degats.nuee_pestilentielle: 8 }, description: "Nuée pestilentielle inflige {degats.nuee_pestilentielle} % de dégâts en plus." }
 
 sorts:
   # ---------------- Toute la classe (les deux formes) ----------------

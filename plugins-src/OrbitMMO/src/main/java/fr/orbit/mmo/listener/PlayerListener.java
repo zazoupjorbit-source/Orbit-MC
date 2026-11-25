@@ -49,7 +49,12 @@ public final class PlayerListener implements Listener {
         PlayerData d = plugin.players().get(p);
         d.name = p.getName();
         Items.applyModels(p);
-        fr.orbit.mmo.item.Loot.migrate(p); // anciennes armes et armures → raretés et châsses
+        fr.orbit.mmo.item.Loot.migrate(p); // anciennes armes et armures → raretés et châsses, types d'armure, liaison
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (p.isOnline() && plugin.progression().valid(d)) {
+                plugin.binding().checkWorn(p, d);
+            }
+        }, 40L);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (!p.isOnline()) {
                 return;

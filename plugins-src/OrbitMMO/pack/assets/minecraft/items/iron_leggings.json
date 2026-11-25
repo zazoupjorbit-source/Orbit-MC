@@ -1,0 +1,112 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {"when": "orbitmmo:armure/tissu_legs_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/tissu_legs_0"}},
+      {"when": "orbitmmo:armure/tissu_legs_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/tissu_legs_1"}},
+      {"when": "orbitmmo:armure/tissu_legs_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/tissu_legs_2"}},
+      {"when": "orbitmmo:armure/tissu_legs_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/tissu_legs_3"}},
+      {"when": "orbitmmo:armure/cuir_legs_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/cuir_legs_0"}},
+      {"when": "orbitmmo:armure/cuir_legs_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/cuir_legs_1"}},
+      {"when": "orbitmmo:armure/cuir_legs_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/cuir_legs_2"}},
+      {"when": "orbitmmo:armure/cuir_legs_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/cuir_legs_3"}},
+      {"when": "orbitmmo:armure/mailles_legs_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/mailles_legs_0"}},
+      {"when": "orbitmmo:armure/mailles_legs_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/mailles_legs_1"}},
+      {"when": "orbitmmo:armure/mailles_legs_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/mailles_legs_2"}},
+      {"when": "orbitmmo:armure/mailles_legs_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/mailles_legs_3"}},
+      {"when": "orbitmmo:armure/plaques_legs_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/plaques_legs_0"}},
+      {"when": "orbitmmo:armure/plaques_legs_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/plaques_legs_1"}},
+      {"when": "orbitmmo:armure/plaques_legs_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/plaques_legs_2"}},
+      {"when": "orbitmmo:armure/plaques_legs_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/plaques_legs_3"}}
+    ],
+    "fallback": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_leggings_quartz_trim"
+        },
+        "when": "minecraft:quartz"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_leggings_iron_trim"
+        },
+        "when": "minecraft:iron"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_leggings_netherite_trim"
+        },
+        "when": "minecraft:netherite"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_leggings_redstone_trim"
+        },
+        "when": "minecraft:redstone"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_leggings_copper_trim"
+        },
+        "when": "minecraft:copper"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_leggings_gold_trim"
+        },
+        "when": "minecraft:gold"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_leggings_emerald_trim"
+        },
+        "when": "minecraft:emerald"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_leggings_diamond_trim"
+        },
+        "when": "minecraft:diamond"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_leggings_lapis_trim"
+        },
+        "when": "minecraft:lapis"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_leggings_amethyst_trim"
+        },
+        "when": "minecraft:amethyst"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_leggings_resin_trim"
+        },
+        "when": "minecraft:resin"
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "minecraft:item/iron_leggings"
+    },
+    "property": "minecraft:trim_material"
+  }
+  }
+}

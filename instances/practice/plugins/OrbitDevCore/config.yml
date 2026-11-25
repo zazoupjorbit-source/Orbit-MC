@@ -80,6 +80,7 @@ cosmetics:
 
 # Pack du lobby (textures des anneaux-portails) : le même pack, servi par le lobby (port 8792).
 resource-pack:
+  theme: practice
   enabled: true
   port: 8792
   serve-local: false

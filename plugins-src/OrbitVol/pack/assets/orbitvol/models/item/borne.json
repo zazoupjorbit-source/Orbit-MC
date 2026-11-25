@@ -1,0 +1,15 @@
+{
+  "textures": {
+    "particle": "orbitvol:item/d_metal",
+    "d_metal": "orbitvol:item/d_metal",
+    "d_or": "orbitvol:item/d_or",
+    "d_ecran": "orbitvol:item/d_ecran"
+  },
+  "elements": [
+    {"from": [3, 0, 3], "to": [13, 2, 13], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_or"}}},
+    {"from": [5, 2, 5], "to": [11, 11, 11], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}}},
+    {"from": [2, 10, 4], "to": [14, 18, 10], "rotation": {"angle": -22.5, "axis": "x", "origin": [8, 10, 7]}, "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_ecran"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}}},
+    {"from": [1.5, 9.5, 3.5], "to": [14.5, 10.5, 10.5], "rotation": {"angle": -22.5, "axis": "x", "origin": [8, 10, 7]}, "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_or"}}}
+  ],
+  "display": {"gui": {"rotation": [30, 225, 0], "scale": [0.6, 0.6, 0.6]}}
+}

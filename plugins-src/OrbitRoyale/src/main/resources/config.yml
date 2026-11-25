@@ -1,0 +1,39 @@
+# ------------------------------------------------------------------
+#  OrbitRoyale — SIÈGE ORBITAL, bataille de tours 1v1 à cartes et plasma
+#  (arcade cachée de La Station, lobby seulement). Jeu original ORBIT.
+#  Les cartes se débloquent en jouant (trophées), JAMAIS en payant.
+# ------------------------------------------------------------------
+
+base:
+  # Accès MariaDB du réseau. « auto » cherche ../setup/db.properties puis ../../setup/db.properties.
+  fichier: auto
+
+monde: royale
+# Nombre d'arènes (parties en même temps).
+arenes: 8
+
+pnj:
+  monde: casino
+  position: [12.5, 64.0, 389.5, 0.0]
+
+partie:
+  # Durée normale puis prolongation (secondes).
+  duree: 180
+  prolongation: 60
+  # Secondes d'attente d'un autre joueur avant qu'un bot du Néant prenne la place.
+  attente-bot: 8
+  # Plasma : 1 point toutes les N ticks (moitié pendant la dernière minute et la prolongation).
+  plasma-ticks: 56
+  plasma-depart: 5
+
+recompenses:
+  trophees-victoire: 30
+  trophees-defaite: 15
+  oc-victoire: 60
+  oc-defaite: 20
+  oc-par-etoile: 10
+  # Plafond d'Orbit Coins gagnés au Siège par jour et par joueur.
+  plafond-oc-jour: 600
+
+pack:
+  port: 8798

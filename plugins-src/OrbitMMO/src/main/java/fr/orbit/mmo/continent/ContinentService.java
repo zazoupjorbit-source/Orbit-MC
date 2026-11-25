@@ -1,7 +1,9 @@
 package fr.orbit.mmo.continent;
 
 import fr.orbit.mmo.OrbitMMO;
+import fr.orbit.mmo.hud.ZoneBanner;
 import fr.orbit.mmo.util.Text;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
@@ -44,6 +46,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -67,8 +70,19 @@ public final class ContinentService implements Listener {
     private SiteService sites;
     private ContinentFauna fauna;
     private fr.orbit.mmo.ambient.AmbientService ambient;
-    /** Dernière zone annoncée à chaque joueur. */
+    private Landscape landscape;
+    /** Zone où se trouve chaque joueur (clé « lieu: », « site: », « region: » ou « mer »). */
     private final Map<UUID, String> zones = new HashMap<>();
+    /** Zones dont le bandeau a été montré à chaque joueur, avec l'heure (pas deux fois la même en moins d'une minute). */
+    private final Map<UUID, Map<String, Long>> announced = new HashMap<>();
+    /** Temps passé dans une nouvelle zone avant que son bandeau s'affiche (ticks). */
+    private static final long SETTLE_TICKS = 12;
+    private static final long RECENT_MS = 60_000;
+    private static final TextColor INFO = TextColor.color(0xB8C0CA);
+    private static final TextColor SAFE = TextColor.color(0x5EE89A);
+    private static final TextColor DANGER = TextColor.color(0xFF8A7A);
+    private static final TextColor LIEU_DIT = TextColor.color(0xE8C77A);
+    private static final TextColor LIEU_DIT_NAME = TextColor.color(0xF3E2B5);
     /** Entrée de donjon par laquelle chaque joueur est passé (pour l'y ramener à la sortie de l'étage). */
     private final Map<UUID, String> cameFrom = new HashMap<>();
     private final Map<UUID, Long> portalCooldown = new HashMap<>();
@@ -313,7 +327,7 @@ public final class ContinentService implements Listener {
         p.teleportAsync(to).thenAccept(ok -> {
             if (ok && p.isOnline() && effects) {
                 fr.orbit.mmo.util.Fx.teleport(to);
-                Text.title(p, factionColor(c.faction()) + "<b>" + Text.esc(c.name()) + "</b>", "<#D7DCE2>" + placeKind(c), 5, 50, 15);
+                announce(p, "lieu:" + c.name(), banner(c.faction(), placeKind(c), c.name(), "Zone sûre", SAFE), true);
             }
         });
         return c.name();
@@ -389,7 +403,8 @@ public final class ContinentService implements Listener {
         p.teleportAsync(back.clone()).thenAccept(ok -> {
             if (ok && p.isOnline()) {
                 fr.orbit.mmo.util.Fx.teleport(back);
-                Text.title(p, "<#7FD4FF><b>" + Text.esc(s.name()) + "</b>", "<#D7DCE2>De retour sur le continent", 5, 40, 15);
+                announce(p, "site:" + s.id(), banner(s.faction(), "De retour sur le continent", s.name(),
+                        s.floor() > 0 ? "Donjon · étage " + s.floor() : "Donjon", INFO), true);
             }
         });
         return true;
@@ -548,26 +563,91 @@ public final class ContinentService implements Listener {
         if (key.equals(zones.put(p.getUniqueId(), key))) {
             return;
         }
-        if (here != null) {
-            SiteDesign.Site s = here.site();
-            String what = switch (s.kind()) {
-                case "village" -> "Hameau <#5A6270>·</#5A6270> zone sûre";
-                case "donjon" -> s.floor() > 0 ? "Donjon <#5A6270>·</#5A6270> étage " + s.floor() : "Donjon <#5A6270>·</#5A6270> portail scellé";
-                case "camp" -> "Camp de monstres <#5A6270>·</#5A6270> niveau " + Math.min(s.levelMax(), fauna.levelAt(s.x(), s.z()) + 1);
-                case "ruine" -> "Ruine";
-                default -> factionName(s.faction());
-            };
-            Text.title(p, factionColor(s.kind().equals("camp") ? "neutre" : s.faction()) + "<b>" + Text.esc(s.name()) + "</b>", "<#D7DCE2>" + what, 8, 50, 16);
+        ZoneBanner.Banner banner = banner(x, z, place, region, here);
+        if (banner == null) {
             return;
         }
-        if (place != null) {
-            Text.title(p, factionColor(place.faction()) + "<b>" + Text.esc(place.name()) + "</b>",
-                    "<#D7DCE2>" + placeKind(place) + " <#5A6270>·</#5A6270> zone sûre", 8, 50, 16);
-        } else if (region != null && data.biome(x, z) != ContinentData.OCEAN) {
-            Text.title(p, factionColor(region.faction()) + "<b>" + Text.esc(region.name()) + "</b>",
-                    "<#D7DCE2>" + factionName(region.faction()) + " <#5A6270>·</#5A6270> niveaux " + region.levelMin() + " à "
-                            + region.levelMax(), 8, 50, 16);
+        // Annoncée seulement si le joueur est encore dans la zone un instant plus tard : longer une frontière (A, B, A,
+        // B…) ne fait pas clignoter le bandeau, une zone traversée en coup de vent n'est pas annoncée.
+        UUID id = p.getUniqueId();
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            if (p.isOnline() && key.equals(zones.get(id)) && here(p.getWorld())) {
+                announce(p, key, banner, false);
+            }
+        }, SETTLE_TICKS);
+    }
+
+    /** Bandeau HD d'une zone (hud/ZoneBanner) ; null : rien à annoncer (en mer). */
+    private ZoneBanner.Banner banner(int x, int z, ContinentData.Place place, ContinentData.Region region, SiteService.Built site) {
+        if (site != null) {
+            SiteDesign.Site s = site.site();
+            if (s.kind().equals("decor")) {
+                // Lieu-dit : petite plaque discrète, pas un grand bandeau.
+                return new ZoneBanner.Banner(ZoneBanner.Size.SMALL, "Lieu-dit", s.name(), null, LIEU_DIT, LIEU_DIT_NAME, INFO);
+            }
+            String faction = s.kind().equals("camp") ? "neutre" : s.faction();
+            return switch (s.kind()) {
+                case "village" -> banner(faction, "Hameau", s.name(), "Zone sûre", SAFE);
+                case "donjon" -> banner(faction, "Donjon", s.name(), s.floor() > 0 ? "Étage " + s.floor() : "Portail scellé", INFO);
+                case "camp" -> banner(faction, "Camp de monstres", s.name(),
+                        "Niveau " + Math.min(s.levelMax(), fauna.levelAt(s.x(), s.z()) + 1), DANGER);
+                case "ruine" -> banner(faction, "Ruine", s.name(), region == null ? null : levels(region), INFO);
+                default -> banner(faction, factionName(s.faction()), s.name(), null, INFO);
+            };
         }
+        if (place != null) {
+            return banner(place.faction(), placeKind(place), place.name(), "Zone sûre", SAFE);
+        }
+        if (region != null && data.biome(x, z) != ContinentData.OCEAN) {
+            return banner(region.faction(), factionName(region.faction()), region.name(), levels(region), INFO);
+        }
+        return null;
+    }
+
+    private static String levels(ContinentData.Region r) {
+        return "Niveaux " + r.levelMin() + " à " + r.levelMax();
+    }
+
+    private static ZoneBanner.Banner banner(String faction, String label, String name, String info, TextColor infoColor) {
+        return new ZoneBanner.Banner(ZoneBanner.Size.LARGE, label, name, info, accent(faction), nameColor(faction), infoColor);
+    }
+
+    /**
+     * Affiche le bandeau d'une zone, sauf si elle a déjà été annoncée à ce joueur il y a moins de {@link #RECENT_MS} ms
+     * ({@code force} : toujours, pour une arrivée par téléportation).
+     */
+    private void announce(Player p, String key, ZoneBanner.Banner b, boolean force) {
+        Map<String, Long> seen = announced.computeIfAbsent(p.getUniqueId(), k -> new LinkedHashMap<>(16, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<String, Long> eldest) {
+                return size() > 24;
+            }
+        });
+        long now = System.currentTimeMillis();
+        Long last = seen.get(key);
+        if (!force && last != null && now - last < RECENT_MS) {
+            return;
+        }
+        seen.put(key, now);
+        ZoneBanner.show(plugin, p, b);
+    }
+
+    /** Teinte des filets et de l'étiquette du bandeau. */
+    private static TextColor accent(String faction) {
+        return TextColor.color(switch (faction) {
+            case "lumiere" -> 0xFFD66E;
+            case "ombre" -> 0xA97BFF;
+            default -> 0xFF9A4D;
+        });
+    }
+
+    /** Couleur du nom dans le bandeau (plus claire que la teinte, lisible sur le fond bleu nuit). */
+    private static TextColor nameColor(String faction) {
+        return TextColor.color(switch (faction) {
+            case "lumiere" -> 0xFFE7A3;
+            case "ombre" -> 0xD7C2FF;
+            default -> 0xFFD2B0;
+        });
     }
 
     /** Portail d'un donjon construit : ouvert, il mène à la ville de son étage ; scellé, il le dit. */
@@ -599,6 +679,11 @@ public final class ContinentService implements Listener {
             plugin.hud().flash(p, "<#FF8A3B>Ce portail s'ouvrira quand vous ou votre guilde aurez vaincu le boss de l'étage " + (s.floor() - 1) + ".", 60);
             return;
         }
+        String ilvlGate = fr.orbit.mmo.item.Loot.itemLevelGate(plugin, p, d, "pilier"); // niveau d'objet minimum (0 = aucun)
+        if (ilvlGate != null) {
+            plugin.hud().flash(p, "<#FF8A3B>" + ilvlGate, 60);
+            return;
+        }
         cameFrom.put(p.getUniqueId(), s.id());
         plugin.floors().teleport(p, s.floor(), true);
     }
@@ -606,6 +691,7 @@ public final class ContinentService implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         zones.remove(e.getPlayer().getUniqueId());
+        announced.remove(e.getPlayer().getUniqueId());
         cameFrom.remove(e.getPlayer().getUniqueId());
         portalCooldown.remove(e.getPlayer().getUniqueId());
     }
@@ -870,6 +956,227 @@ public final class ContinentService implements Listener {
         job = p;
         plugin.getLogger().info("Continent : pré-génération lancée, " + p.status() + ".");
         return null;
+    }
+
+    // ------------------------------------------------------------------ Paysage (vie entre les sites)
+    /** Le paysage : bosquets, petits lieux, étangs… tirés de la position. Construit au premier usage. */
+    Landscape landscape() {
+        if (landscape == null && data != null) {
+            java.util.List<int[]> quest = new java.util.ArrayList<>();
+            try {
+                for (fr.orbit.mmo.quest.QuestPoints.Point qp : plugin.quests().points().all().values()) {
+                    if (world != null && world.getName().equals(qp.world())) {
+                        quest.add(new int[]{(int) Math.floor(qp.x()), (int) Math.floor(qp.z())});
+                    }
+                }
+            } catch (RuntimeException e) {
+                plugin.getLogger().log(Level.WARNING, "Paysage : points de quête illisibles, ils ne seront pas évités", e);
+            }
+            landscape = new Landscape(data, generator, sites == null ? null : sites.catalog(), quest);
+        }
+        return landscape;
+    }
+
+    /** Habille les chunks : toute la carte (ordre des fichiers de région, reprise possible) ou une zone. */
+    private final class Dress extends Job {
+        final int cMin, cMax, rMin, side, end;
+        final long total;
+        final long before;
+        final long[] area;
+        final CommandSender who;
+        final String label;
+        int index;
+        long blocks, savedBlocks, lastLog = System.currentTimeMillis(), lastSave = lastLog;
+
+        Dress(CommandSender who, int from, long[] area, String label) {
+            this.who = who;
+            this.area = area;
+            this.label = label;
+            int half = data.size / 2;
+            cMin = -half >> 4;
+            cMax = (half - 1) >> 4;
+            rMin = cMin >> 5;
+            side = (cMax >> 5) - rMin + 1;
+            end = area != null ? area.length : side * side * 1024;
+            total = area != null ? area.length : (long) (cMax - cMin + 1) * (cMax - cMin + 1);
+            long n = 0;
+            if (area == null) {
+                for (int i = 0; i < from && i < end; i++) {
+                    if (valid(i)) {
+                        n++;
+                    }
+                }
+            }
+            before = n;
+            index = Math.max(0, Math.min(end, from));
+        }
+
+        int cx(int i) {
+            return (rMin + (i >> 10) % side) * 32 + (i & 31);
+        }
+
+        int cz(int i) {
+            return (rMin + (i >> 10) / side) * 32 + ((i >> 5) & 31);
+        }
+
+        boolean valid(int i) {
+            int x = cx(i), z = cz(i);
+            return x >= cMin && x <= cMax && z >= cMin && z <= cMax;
+        }
+
+        @Override
+        boolean hasNext() {
+            if (area != null) {
+                return index < end;
+            }
+            while (index < end && !valid(index)) {
+                index++;
+            }
+            return index < end;
+        }
+
+        @Override
+        long next() {
+            int i = index++;
+            if (area != null) {
+                return area[i];
+            }
+            return ((long) cx(i) << 32) | (cz(i) & 0xFFFFFFFFL);
+        }
+
+        @Override
+        void chunk(Chunk c) {
+            blocks += landscape().apply(c);
+        }
+
+        @Override
+        void tick() {
+            long now = System.currentTimeMillis();
+            if (area == null && now - lastSave > 30_000) {
+                lastSave = now;
+                store(false);
+            }
+            if (now - lastLog > 60_000) {
+                plugin.getLogger().info("Paysage : " + status());
+                lastLog = now;
+            }
+        }
+
+        void store(boolean finished) {
+            YamlConfiguration state = state();
+            state.set("paysage.index", finished ? end : Math.max(0, index - parallel * 4));
+            state.set("paysage.fini", finished);
+            state.set("paysage.version", Landscape.VERSION);
+            state.set("paysage.blocs", state.getLong("paysage.blocs") + blocks - savedBlocks);
+            savedBlocks = blocks;
+            save(state);
+        }
+
+        @Override
+        String status() {
+            long made = before + done;
+            double seconds = Math.max(1, (System.currentTimeMillis() - startedAt) / 1000.0);
+            double rate = done / seconds;
+            String rest = rate > 0.5 ? ", reste environ " + duration((long) ((total - made) / rate)) : "";
+            return String.format(Locale.FRENCH, "paysage%s %,d / %,d chunks (%.1f %%), %,d blocs, %.0f chunks/s%s",
+                    label == null ? "" : " (" + label + ")", made, total, made * 100.0 / total, blocks, rate, rest);
+        }
+
+        @Override
+        void end(boolean complete) {
+            if (area == null) {
+                store(complete);
+            }
+            if (world != null) {
+                world.save();
+            }
+            String msg = (complete ? "Paysage posé" : "Paysage arrêté") + (label == null ? "" : " (" + label + ")") + " : "
+                    + String.format(Locale.FRENCH, "%,d", done) + " chunks, " + String.format(Locale.FRENCH, "%,d", blocks)
+                    + " blocs en " + duration((System.currentTimeMillis() - startedAt) / 1000) + (failed > 0 ? " (" + failed + " en échec)" : "")
+                    + (complete || area != null ? "." : ". « /continent paysage lancer » reprend.");
+            plugin.getLogger().info(msg);
+            plugin.getLogger().info("Paysage : " + landscape().counts);
+            if (who instanceof Player p && p.isOnline()) {
+                Text.msg(p, "<#7FD4FF>" + Text.esc(msg));
+            }
+        }
+    }
+
+    private String busyReason() {
+        if (job != null) {
+            return "Un travail est déjà en cours : " + job.status() + ".";
+        }
+        if (capitals != null && capitals.busy()) {
+            return "Une capitale est en travaux : " + capitals.status() + ".";
+        }
+        if (sites != null && sites.busy()) {
+            return "Des sites sont en travaux : " + sites.status() + ".";
+        }
+        return null;
+    }
+
+    /**
+     * Pose le paysage sur toute la carte (reprend où il s'était arrêté).
+     *
+     * @return message d'erreur, ou null si c'est lancé
+     */
+    public String dress(CommandSender who, boolean restart) {
+        String busy = busyReason();
+        if (busy != null) {
+            return busy;
+        }
+        YamlConfiguration state = state();
+        if (!restart && state.getBoolean("paysage.fini") && state.getInt("paysage.version") == Landscape.VERSION) {
+            return "Le paysage est déjà posé sur toute la carte. « /continent paysage refaire » repasse partout (sans rien abîmer).";
+        }
+        landscape().counts.clear();
+        Dress d = new Dress(who, restart ? 0 : state.getInt("paysage.index"), null, null);
+        job = d;
+        plugin.getLogger().info("Paysage : lancé, " + d.status() + ".");
+        return null;
+    }
+
+    /** Pose le paysage dans un carré de chunks autour d'un point (essai). */
+    public String dressArea(CommandSender who, String label, int x, int z, int radius) {
+        String busy = busyReason();
+        if (busy != null) {
+            return busy;
+        }
+        int r = Math.max(16, Math.min(1024, radius));
+        java.util.List<Long> keys = new java.util.ArrayList<>();
+        for (int cx = (x - r) >> 4; cx <= (x + r) >> 4; cx++) {
+            for (int cz = (z - r) >> 4; cz <= (z + r) >> 4; cz++) {
+                if (data.inside(cx << 4, cz << 4)) {
+                    keys.add(((long) cx << 32) | (cz & 0xFFFFFFFFL));
+                }
+            }
+        }
+        long[] area = new long[keys.size()];
+        for (int i = 0; i < area.length; i++) {
+            area[i] = keys.get(i);
+        }
+        landscape().counts.clear();
+        job = new Dress(who, 0, area, (label != null ? label : x + ", " + z) + ", rayon " + r);
+        return null;
+    }
+
+    /** Petits lieux et lacs prévus dans un carré, sans rien poser. */
+    public Map<String, Integer> census(int x, int z, int radius) {
+        return landscape().census(x - radius, z - radius, x + radius, z + radius);
+    }
+
+    /** État du paysage sur la carte. */
+    public String dressState() {
+        YamlConfiguration state = state();
+        if (state.getBoolean("paysage.fini")) {
+            return String.format(Locale.FRENCH, "posé sur toute la carte (version %d, %,d blocs)", state.getInt("paysage.version"),
+                    state.getLong("paysage.blocs"));
+        }
+        if (state.contains("paysage.index")) {
+            if (job instanceof Dress d && d.area == null) return "passe sur toute la carte en cours";
+            return String.format(Locale.FRENCH, "commencé, arrêté en route (%,d blocs posés)", state.getLong("paysage.blocs"));
+        }
+        return "pas encore posé sur la carte";
     }
 
     // ------------------------------------------------------------------ Aperçus PNG

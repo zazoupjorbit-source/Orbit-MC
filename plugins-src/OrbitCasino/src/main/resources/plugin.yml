@@ -2,7 +2,7 @@ name: OrbitCasino
 version: '0.1.0'
 main: fr.orbit.casino.OrbitCasino
 api-version: '1.21'
-description: Casino caché de La Station (machines à sous, blackjack, poker, roulette) et Orbit Coins de jeu, échangés contre des cosmétiques sur tout le réseau. Aucun achat réel.
+description: Casino caché de La Station (machines à sous, blackjack, poker, roulette, Crash, Mines, Plinko, roue, billard, jukebox) et Orbit Coins de jeu, échangés contre des cosmétiques sur tout le réseau. Aucun achat réel.
 authors: [ORBIT]
 softdepend: [OrbitDevCore, LuckPerms]
 
@@ -18,6 +18,14 @@ commands:
     description: Administration du casino.
     usage: /casino <generer|tp|bouton|donner|retirer|solde|recharger>
     permission: orbitcasino.admin
+
+  cj:
+    description: "Jeux du Salon des Étoiles (Crash, Mines, roue, billard) et jukebox : actions des boutons du chat."
+    usage: "/cj <crash|mines|roue|jukebox|billard> [action]"
+
+  arcade:
+    description: "Salle d'arcade cachée : ORBIT RUSH (classement, rejouer, abandonner) et administration."
+    usage: "/arcade [top|rejouer|quitter]"
 
 permissions:
   orbitcasino.admin:

@@ -25,11 +25,16 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HexFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.UUID;
@@ -69,6 +74,12 @@ public final class LobbyPack implements Listener {
     private String publicUrl;
     private boolean required;
     private HttpServer http;
+    /** Theme d'interface de ce serveur (station, survie, extraction, practice, mmo, tycoon, vol). */
+    private String theme = "station";
+    /** Dossier des packs complets par theme (MinecraftDev/shared/ui-packs, écrits par tools/gen-ui.ps1), null si absent. */
+    private Path uiDir;
+    /** Cache des packs de thème servis : nom -> {date de modification, octets}. */
+    private final Map<String, Object[]> uiCache = new ConcurrentHashMap<>();
     private ExecutorService httpPool;
 
     /** Packs « menu Échap » de chaque mode (tous chargés : le serveur qui sert les packs doit pouvoir tous les fournir). */
@@ -92,15 +103,29 @@ public final class LobbyPack implements Listener {
         port = c.getInt("resource-pack.port", 8792);
         publicUrl = c.getString("resource-pack.public-url", "").trim();
         required = c.getBoolean("resource-pack.required", false);
-        try (InputStream in = plugin.getResource("pack.zip")) {
-            if (in == null) {
-                plugin.getLogger().warning("pack.zip absent du jar : menus sans textures (vitres colorées).");
+        theme = c.getString("resource-pack.theme", "station").trim().toLowerCase(Locale.ROOT);
+        if (!theme.matches("[a-z0-9_-]+")) {
+            theme = "station";
+        }
+        uiDir = findUiDir(c.getString("resource-pack.ui-dir", ""));
+        // Pack complet du thème (menus du lobby + interface HD du mode) ; sinon le pack de base du jar.
+        byte[] ui = uiZip(theme);
+        boolean themed = ui != null;
+        if (themed) {
+            zip = ui;
+        } else {
+            try (InputStream in = plugin.getResource("pack.zip")) {
+                if (in == null) {
+                    plugin.getLogger().warning("pack.zip absent du jar : menus sans textures (vitres colorées).");
+                    return;
+                }
+                zip = in.readAllBytes();
+            } catch (IOException e) {
+                plugin.getLogger().log(Level.WARNING, "Lecture de pack.zip impossible", e);
                 return;
             }
-            zip = in.readAllBytes();
-        } catch (IOException e) {
-            plugin.getLogger().log(Level.WARNING, "Lecture de pack.zip impossible", e);
-            return;
+            plugin.getLogger().warning("Interface HD « " + theme + " » introuvable (" + uiDir + ") : pack de base seulement."
+                    + " Lance plugins-src/OrbitDevCore/tools/gen-ui.ps1.");
         }
         try {
             hash = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(zip));
@@ -115,7 +140,7 @@ public final class LobbyPack implements Listener {
             return;
         }
         enabled = true;
-        plugin.getLogger().info("Pack du lobby prêt (" + (zip.length / 1024) + " Ko, sha1 " + hash.substring(0, 12) + ") — "
+        plugin.getLogger().info("Pack ORBIT prêt (interface " + (themed ? theme : "de base") + ", " + (zip.length / 1024) + " Ko, sha1 " + hash.substring(0, 12) + ") — "
                 + (publicUrl.isEmpty() ? (serve ? "servi sur le port " : "servi par le lobby sur le port ") + port : "URL publique " + publicUrl) + ".");
     }
 
@@ -172,17 +197,26 @@ public final class LobbyPack implements Listener {
                 ex.sendResponseHeaders(405, -1);
                 return;
             }
-            // /orbit-echap-<mode>-<version>.zip : pack du menu Échap d'un mode ; sinon le pack du lobby.
             byte[] data = zip;
             String path = ex.getRequestURI().getPath();
             int i = path.indexOf("/orbit-echap-");
             if (i >= 0) {
+                // /orbit-echap-<mode>-<version>.zip : logo du menu Échap d'un mode (posé par-dessus le pack ORBIT).
                 String rest = path.substring(i + "/orbit-echap-".length());
                 int dash = rest.lastIndexOf('-');
                 data = dash > 0 ? echapZips.get(rest.substring(0, dash)) : null;
                 if (data == null) {
                     ex.sendResponseHeaders(404, -1);
                     return;
+                }
+            } else {
+                // /orbit-<thème>-<version>.zip : pack du thème demandé (les autres serveurs du réseau passent par ce port).
+                Matcher m = THEMED.matcher(path);
+                if (m.matches() && !m.group(1).equals("lobby")) {
+                    byte[] ui = uiZip(m.group(1));
+                    if (ui != null) {
+                        data = ui;
+                    }
                 }
             }
             ex.getResponseHeaders().set("Content-Type", "application/zip");
@@ -230,7 +264,49 @@ public final class LobbyPack implements Listener {
         if (!publicUrl.isEmpty()) {
             return publicUrl + (publicUrl.contains("?") ? "&" : "?") + "v=" + v;
         }
-        return "http://" + host + ":" + port + "/orbit-lobby-" + v + ".zip";
+        return "http://" + host + ":" + port + "/orbit-" + theme + "-" + v + ".zip";
+    }
+
+    private static final Pattern THEMED = Pattern.compile("/orbit-([a-z0-9_]+)-[0-9a-f]+\\.zip");
+
+    /** Dossier shared/ui-packs : réglage ui-dir, sinon cherché au-dessus du dossier du serveur (lobby ou instance). */
+    private Path findUiDir(String configured) {
+        if (!configured.isBlank()) {
+            return Path.of(configured);
+        }
+        Path dir = plugin.getServer().getWorldContainer().getAbsoluteFile().toPath().normalize();
+        for (int i = 0; i < 4 && dir != null; i++) {
+            Path p = dir.resolve("shared").resolve("ui-packs");
+            if (Files.isDirectory(p)) {
+                return p;
+            }
+            dir = dir.getParent();
+        }
+        return null;
+    }
+
+    /** Pack complet d'un thème, relu si le fichier a changé (régénération sans redémarrer le lobby). */
+    private byte[] uiZip(String name) {
+        if (uiDir == null || !name.matches("[a-z0-9_]+")) {
+            return null;
+        }
+        Path f = uiDir.resolve(name + ".zip");
+        try {
+            if (!Files.isRegularFile(f)) {
+                return null;
+            }
+            long t = Files.getLastModifiedTime(f).toMillis();
+            Object[] c = uiCache.get(name);
+            if (c != null && (long) c[0] == t) {
+                return (byte[]) c[1];
+            }
+            byte[] b = Files.readAllBytes(f);
+            uiCache.put(name, new Object[]{t, b});
+            return b;
+        } catch (IOException e) {
+            plugin.getLogger().log(Level.WARNING, "Lecture de " + f + " impossible", e);
+            return null;
+        }
     }
 
     /** Adresse utilisée par le joueur pour se connecter : le pack est servi par la même machine. */
@@ -269,7 +345,7 @@ public final class LobbyPack implements Listener {
                 .packs(infos)
                 .replace(replace)
                 .required(required)
-                .prompt(Messages.mini("<#8DB8FF><b>ORBIT</b></#8DB8FF>\n<#D7DCE2>Menus du lobby et anneaux-portails du réseau."))
+                .prompt(Messages.mini("<#8DB8FF><b>ORBIT</b></#8DB8FF>\n<#D7DCE2>Interface HD du réseau : inventaires, menus et anneaux-portails."))
                 .callback((id, status, audience) -> {
                     if (status.intermediate()) {
                         return;

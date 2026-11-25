@@ -1,0 +1,17 @@
+name: OrbitVol
+version: '0.2.0'
+main: fr.orbit.vol.OrbitVol
+api-version: '1.21'
+description: Vole mon Orbito — achète des Orbitos sur le Tapis stellaire, ils te rapportent des crédits, et vole ceux des autres.
+authors: [ORBIT]
+softdepend: [OrbitDevCore, LuckPerms]
+
+commands:
+  vol:
+    description: Vole mon Orbito (aide, profil, ascension ; administration pour le staff).
+    usage: '/vol [ascension|echange|oeufs|musique|tuto] — staff : generer|donner|meteores|evenement|orbito|liste'
+
+permissions:
+  orbitvol.admin:
+    description: Générer l'arène, donner des crédits, lancer une pluie de météores, faire passer un Orbito.
+    default: op

@@ -1,0 +1,59 @@
+# =====================================================================
+#  OrbitStaff - Configuration principale du plugin (orbitstaff-core)
+#  Toutes les valeurs ont une valeur par defaut sure.
+#  AUCUN secret ici : la cle de service et l'URL sont lues via variables
+#  d'environnement (voir .env.example) ou remplacees au deploiement.
+# =====================================================================
+
+# Version du schema de configuration (permet la migration automatique).
+config-version: 1
+
+# --- Identite du serveur aupres de l'API ---
+server:
+  # Identifiant unique de ce serveur (doit exister cote API : table servers).
+  id: "${ORBITSTAFF_CORE_SERVER_ID}"
+  # Langue par defaut de l'interface en jeu : fr | en
+  language: "fr"
+
+# --- Connexion a l'API OrbitStaff (JAMAIS la base MariaDB directement) ---
+api:
+  base-url: "${ORBITSTAFF_CORE_API_URL}"
+  # La cle de service est injectee par variable d'environnement, jamais ecrite ici.
+  service-key-env: "ORBITSTAFF_CORE_SERVICE_KEY"
+  # Delais et robustesse reseau (le thread Paper n'est jamais bloque).
+  connect-timeout-ms: 3000
+  read-timeout-ms: 5000
+  max-retries: 2
+  # Comportement degrade si l'API est injoignable.
+  degraded-mode:
+    # Autoriser la consultation depuis le cache local.
+    allow-local-read: true
+    # Refuser proprement les sanctions plutot que de les perdre.
+    reject-critical-actions: true
+
+# --- Cache local (reduit la charge et couvre les coupures reseau) ---
+cache:
+  player-profile-seconds: 60
+  max-entries: 500
+
+# --- Mode staff ---
+staff-mode:
+  vanish-on-enable: true
+  fly-on-enable: true
+  invincible: true
+  disable-pickup: true
+  disable-damage: true
+  # Duree maximale d'un freeze avant rappel automatique au staff (minutes).
+  freeze-max-minutes: 15
+
+# --- Inspection ---
+inspection:
+  # L'inventaire est TOUJOURS en lecture seule par defaut.
+  inventory-read-only: true
+  # La modification exige permission + confirmation + motif + snapshot (voir sanctions.yml).
+  require-reason-on-modify: true
+
+# --- Journalisation locale (jamais de secret dans les logs) ---
+logging:
+  level: "INFO"       # DEBUG | INFO | WARN | ERROR
+  audit-to-api: true

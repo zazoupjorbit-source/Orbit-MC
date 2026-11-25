@@ -67,6 +67,7 @@ final class SiteCatalog {
         c.hamlets(cfg.getConfigurationSection("hameaux"));
         c.craters(cfg.getConfigurationSection("crateres"), frozen);
         c.scatter(frozen);
+        c.decor(cfg.getConfigurationSection("decor"), cfg.getConfigurationSection("regions"), frozen);
         c.overlaps();
         return c;
     }
@@ -394,6 +395,108 @@ final class SiteCatalog {
         }
         add(new SiteDesign.Site(id, type, name, r == null ? "neutre" : r.faction(), x, z, type.equals("ruine") ? 11 : 12,
                 rule == null ? "neutre" : rule.style(), theme, seed(id), 0, 0, "", 0, 0, List.of(), mobs, r == null ? 1 : r.levelMin(),
+                r == null ? 1 : r.levelMax()));
+    }
+
+    // ------------------------------------------------------------------ Décor (lieux-dits sans monstres)
+    private static final String[] SUFFIXES = {"des Brumes", "du Vieux Chêne", "de l'Aube", "du Couchant", "des Ronces", "de la Colline",
+            "du Gué", "des Corbeaux", "du Vent", "des Saules", "de la Lande", "des Échos", "du Ruisseau", "des Pèlerins", "de Vieille-Pierre",
+            "du Soir", "des Lucioles", "du Berger", "des Chardons", "de la Source", "des Trois Bornes", "du Guetteur", "des Veilleurs", "d'Ambre"};
+
+    /** Décors tirés par défaut selon le style de la région (un thème répété est plus fréquent). */
+    private static List<String> decorPool(String style) {
+        return switch (style) {
+            case "desert" -> List.of("monument", "monument", "arche", "arche", "puits", "puits", "campement", "tour", "statue", "sanctuaire", "menhirs");
+            case "givre" -> List.of("tour", "tour", "cabane", "cabane", "menhirs", "arche", "sanctuaire", "campement", "statue");
+            case "cendre" -> List.of("monument", "statue", "arche", "arche", "menhirs", "menhirs", "tour", "campement");
+            case "marais" -> List.of("cabane", "cabane", "sanctuaire", "menhirs", "campement", "tour", "puits", "statue");
+            case "ombre" -> List.of("tour", "cabane", "menhirs", "sanctuaire", "monument", "statue", "campement", "puits", "ferme", "moulin", "verger");
+            default -> List.of("ferme", "ferme", "moulin", "moulin", "verger", "verger", "tour", "tour", "monument", "statue", "menhirs",
+                    "sanctuaire", "cabane", "puits", "campement", "arche");
+        };
+    }
+
+    /**
+     * Lieux-dits semés sur tout le continent (tours, moulins, fermes, monuments…) : une case de la grille sur deux
+     * environ en reçoit un, sur du terrain sec et presque plat, loin des routes, des lieux et des autres sites.
+     * Figés dans sites-places.yml comme les camps et les ruines.
+     */
+    private void decor(ConfigurationSection cfg, ConfigurationSection rs, ConfigurationSection frozen) {
+        if (cfg != null && !cfg.getBoolean("actif", true)) {
+            return;
+        }
+        boolean known = false;
+        if (frozen != null) {
+            for (String id : frozen.getKeys(false)) {
+                if (frozen.getString(id + ".type", "").equals("decor")) {
+                    known = true;
+                    decorSite(id, frozen.getInt(id + ".x"), frozen.getInt(id + ".z"), frozen.getString(id + ".theme", "tour"));
+                }
+            }
+        }
+        if (known) {
+            return;
+        }
+        int cell = cfg == null ? 200 : Math.max(120, cfg.getInt("cellule", 200));
+        int gap = cfg == null ? 110 : Math.max(60, cfg.getInt("ecart", 110));
+        int half = data.size / 2;
+        List<SiteDesign.Site> before = new ArrayList<>(sites.values());
+        List<int[]> taken = new ArrayList<>();
+        Map<String, Integer> counts = new TreeMap<>();
+        for (int gz = -half + cell / 2; gz < half; gz += cell) {
+            for (int gx = -half + cell / 2; gx < half; gx += cell) {
+                for (int attempt = 0; attempt < 8; attempt++) {
+                    int x = gx + (int) ((ContinentGenerator.rnd(gx, gz, 1200 + attempt * 2) - 0.5) * cell * 0.8);
+                    int z = gz + (int) ((ContinentGenerator.rnd(gx, gz, 1201 + attempt * 2) - 0.5) * cell * 0.8);
+                    ContinentData.Region r = data.region(x, z);
+                    if (r == null || !regions.containsKey(r.id()) || Math.abs(x) > half - 50 || Math.abs(z) > half - 50) {
+                        continue;
+                    }
+                    RegionRule rule = regions.get(r.id());
+                    List<String> pool = rs != null && rs.isList(r.id() + ".decors") ? rs.getStringList(r.id() + ".decors") : decorPool(rule.style());
+                    if (pool.isEmpty()) {
+                        break;
+                    }
+                    String theme = pool.get((int) (ContinentGenerator.rnd(x, z, 1250) * pool.size()));
+                    int radius = SiteDesign.decorRadius(theme);
+                    int rel = relief(x, z, radius, 10);
+                    if (rel < 0 || rel > (theme.equals("ferme") || theme.equals("verger") ? 3 : 5) || !apart(x, z, 50)) {
+                        continue;
+                    }
+                    boolean free = true;
+                    for (SiteDesign.Site s : before) {
+                        if (Math.hypot(x - s.x(), z - s.z()) < s.outer() + radius + 40) {
+                            free = false;
+                            break;
+                        }
+                    }
+                    for (int[] t : taken) {
+                        if (free && Math.hypot(x - t[0], z - t[1]) < gap) {
+                            free = false;
+                        }
+                    }
+                    if (!free) {
+                        continue;
+                    }
+                    taken.add(new int[]{x, z});
+                    int n = counts.merge(r.id(), 1, Integer::sum);
+                    String id = "decor-" + r.id().toLowerCase(java.util.Locale.ROOT) + n;
+                    computed.put(id, new String[]{"decor", String.valueOf(x), String.valueOf(z), theme});
+                    decorSite(id, x, z, theme);
+                    break;
+                }
+            }
+        }
+        notes.add(taken.size() + " lieux-dits placés : " + counts);
+    }
+
+    private void decorSite(String id, int x, int z, String theme) {
+        ContinentData.Region r = data.region(x, z);
+        RegionRule rule = r == null ? null : regions.get(r.id());
+        long sd = seed(id);
+        String name = SiteDesign.decorName(theme) + " " + SUFFIXES[(int) (sd % SUFFIXES.length)];
+        add(new SiteDesign.Site(id, "decor", name, r == null ? "neutre" : r.faction(), x, z, SiteDesign.decorRadius(theme),
+                rule == null ? "neutre" : rule.style(), theme, sd, 0, 0, "", 0, 0, List.of(), List.of(), r == null ? 1 : r.levelMin(),
                 r == null ? 1 : r.levelMax()));
     }
 }

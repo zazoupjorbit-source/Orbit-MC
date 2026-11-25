@@ -1,0 +1,15 @@
+# Sanctions prédéfinies du menu /sanction (et du bouton « Sanctionner » du panel).
+# type : WARN, MUTE, KICK, TEMPBAN, BAN. duree : 30m, 2h, 3j, 1w (semaine), 1mo, perm.
+# icone : matériau Minecraft. permission : celle du type (orbitstaff.mute, .tempban...).
+sanctions:
+  spam:        { nom: "Spam",                   type: MUTE,    duree: 30m,  motif: "Spam dans le chat",             icone: PAPER }
+  insultes:    { nom: "Insultes",               type: MUTE,    duree: 2h,   motif: "Insultes / propos déplacés",    icone: WRITABLE_BOOK }
+  pub:         { nom: "Publicité",              type: MUTE,    duree: 1j,   motif: "Publicité non autorisée",       icone: OAK_SIGN }
+  harcelement: { nom: "Harcèlement",            type: TEMPBAN, duree: 3j,   motif: "Harcèlement",                   icone: SKELETON_SKULL }
+  triche:      { nom: "Triche",                 type: BAN,     duree: perm, motif: "Triche (client modifié)",       icone: DIAMOND_SWORD }
+  bug:         { nom: "Exploitation de bug",    type: TEMPBAN, duree: 7j,   motif: "Exploitation de bug",           icone: SPIDER_EYE }
+  contournement: { nom: "Contournement",        type: BAN,     duree: perm, motif: "Contournement de sanction",     icone: ENDER_EYE }
+  grief:       { nom: "Grief",                  type: TEMPBAN, duree: 3j,   motif: "Grief",                         icone: TNT }
+  refus-verif: { nom: "Refus de vérification",  type: TEMPBAN, duree: 7j,   motif: "Refus de vérification (screenshare)", icone: BARRIER }
+  pseudo:      { nom: "Pseudo / skin interdit", type: KICK,                 motif: "Pseudo ou skin interdit",       icone: NAME_TAG }
+  avertissement: { nom: "Avertissement",        type: WARN,                 motif: "Non-respect du règlement",      icone: BELL }

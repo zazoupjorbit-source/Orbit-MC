@@ -35,6 +35,8 @@ public final class OrbitMMO extends JavaPlugin {
 
     private GameRegistry registry;
     private ClassRegistry classes;
+    private fr.orbit.mmo.item.SetRegistry sets;
+    private fr.orbit.mmo.item.Binding binding;
     private PlayerStore players;
     private Progression progression;
     private PartyService parties;
@@ -71,6 +73,8 @@ public final class OrbitMMO extends JavaPlugin {
         registry.load();
         classes = new ClassRegistry(this);
         classes.load();
+        sets = new fr.orbit.mmo.item.SetRegistry(this);
+        sets.load();
         players = new PlayerStore(this);
         progression = new Progression(this);
         parties = new PartyService(this);
@@ -87,6 +91,7 @@ public final class OrbitMMO extends JavaPlugin {
         damageNumbers = new fr.orbit.mmo.hud.DamageNumbers(this);
         playerListener = new PlayerListener(this);
         gear = new fr.orbit.mmo.item.Gear(this);
+        binding = new fr.orbit.mmo.item.Binding(this);
         market = new fr.orbit.mmo.market.Market(this);
         pack = new ResourcePackService(this);
         pack.enable();
@@ -104,6 +109,7 @@ public final class OrbitMMO extends JavaPlugin {
         pm.registerEvents(floors, this);
         pm.registerEvents(pack, this);
         pm.registerEvents(gear, this);
+        pm.registerEvents(binding, this);
         pm.registerEvents(market, this);
         pm.registerEvents(guilds, this);
 
@@ -157,6 +163,9 @@ public final class OrbitMMO extends JavaPlugin {
         inns.enable();
         pm.registerEvents(inns, this);
 
+        // Tenues 3D (paquet fr.orbit.mmo.outfit) : épaulières, cape, casque 3D ; sous-commande /mmoadmin tenue.
+        fr.orbit.mmo.outfit.OutfitService.start(this);
+
         for (Player p : getServer().getOnlinePlayers()) {
             playerListener.join(p);
             if (pack.enabled()) {
@@ -169,6 +178,7 @@ public final class OrbitMMO extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        fr.orbit.mmo.outfit.OutfitService.stop();
         if (nameplates != null) {
             nameplates.stop();
         }
@@ -241,6 +251,16 @@ public final class OrbitMMO extends JavaPlugin {
 
     public GameRegistry registry() {
         return registry;
+    }
+
+    /** Sets d'équipement (sets.yml). */
+    public fr.orbit.mmo.item.SetRegistry sets() {
+        return sets;
+    }
+
+    /** Liaison des objets et contrôle de l'équipement porté. */
+    public fr.orbit.mmo.item.Binding binding() {
+        return binding;
     }
 
     public ClassRegistry classes() {
@@ -342,5 +362,15 @@ public final class OrbitMMO extends JavaPlugin {
     /** Auberges et cristal de téléportation. */
     public fr.orbit.mmo.inn.InnService inns() {
         return inns;
+    }
+
+    /** OrbitStaff : objets du MMO pour le catalogue du staff (appel par réflexion). */
+    public java.util.Map<String, java.util.List<org.bukkit.inventory.ItemStack>> orbitCatalogue() {
+        return StaffPont.catalogue(this);
+    }
+
+    /** OrbitStaff : lignes de stats du joueur pour le livre du staff (appel par réflexion). */
+    public java.util.List<String> orbitStatsJoueur(Player p) {
+        return StaffPont.stats(this, p);
     }
 }

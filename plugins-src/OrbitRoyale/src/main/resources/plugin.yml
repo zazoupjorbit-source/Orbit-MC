@@ -1,0 +1,18 @@
+name: OrbitRoyale
+version: '0.1.0'
+main: fr.orbit.royale.OrbitRoyale
+api-version: '1.21'
+description: "Siège Orbital : bataille de tours 1v1 à cartes et plasma dans l'arcade cachée de La Station (lobby seulement)."
+authors: [ORBIT]
+softdepend: [OrbitCasino]
+
+commands:
+  siege:
+    description: "Siège Orbital : jouer, deck, classement, abandonner."
+    usage: "/siege [jouer|bot|deck|cartes|top|quitter]"
+    aliases: [royale]
+
+permissions:
+  orbitroyale.admin:
+    description: "Reconstruire les arènes, reposer le PNJ, se téléporter."
+    default: op

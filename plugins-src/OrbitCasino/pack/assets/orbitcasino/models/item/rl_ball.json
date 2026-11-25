@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {"layer0": "orbitcasino:item/rl_ball"},
+  "gui_light": "front",
+  "display": {
+    "gui": {"rotation": [0, 0, 0], "translation": [-3.50, 3.50, 0], "scale": [0.550, 0.550, 1]}
+  }
+}

@@ -207,7 +207,7 @@ public final class MobService implements Listener {
             line.append("  <#D7DCE2>+1 ").append(Text.esc(ms.def.drop().name())).append("</#D7DCE2>");
         }
         // Équipement (Inhabituel → Légendaire) et runes : petites chances à chaque monstre.
-        fr.orbit.mmo.item.Loot.rollMobLoot(plugin, killer, kd, ms.level);
+        fr.orbit.mmo.item.Loot.rollMobLoot(plugin, killer, kd, ms.level, ms.floor);
         plugin.hud().flash(killer, line.toString(), 40);
     }
 

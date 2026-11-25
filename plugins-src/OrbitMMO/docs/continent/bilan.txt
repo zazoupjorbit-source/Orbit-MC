@@ -56,6 +56,25 @@ Lieux (region, altitude, distance a la mer) :
   donjon   Forge éteinte                    ( 1750, -2700)  Terres de Cendre     Y  85  mer a 192
   donjon   Cœur de la Fournaise             ( -150, -3060)  La Fournaise         Y 182  mer a 630
 
+Reperes des cartes (ajoutes en jeu, absents de continent.dat), a jour au 25/11/2026 :
+  cratere  Champs Vitrifiés                 (-2253,   934)  Prés d'Auréval       Y  68
+  cratere  Cratère des Murmures             ( 2535,   615)  Landes de Morneval   Y  71
+  hameau   Veillemont                       (-2383,   934)  Prés d'Auréval       Y  69
+  hameau   Nidnoir                          ( 2394,   666)  Landes de Morneval   Y  71
+  Par region (camps de monstres, ruines, lieux-dits) :
+    A Prés d'Auréval        8 camps,  4 ruines,  86 lieux-dits
+    B Bois de l'Aube        8 camps,  4 ruines,  69 lieux-dits
+    C Collines du Ponant    8 camps,  4 ruines,  60 lieux-dits
+    D Landes de Morneval    8 camps,  4 ruines,  78 lieux-dits
+    E Sylve Noire           8 camps,  4 ruines,  69 lieux-dits
+    F Marais des Murmures   8 camps,  4 ruines, 107 lieux-dits
+    G La Marche            10 camps,  5 ruines, 139 lieux-dits
+    H Désert d'Ocre         8 camps,  4 ruines, 105 lieux-dits
+    J Cimes de Givre        5 camps,  2 ruines,  71 lieux-dits
+    K Terres de Cendre      8 camps,  4 ruines,  67 lieux-dits
+    L La Fournaise          2 camps,  1 ruines,  26 lieux-dits
+    Total                  81 camps, 40 ruines, 877 lieux-dits
+
 Routes :
   Voie Royale              5198 blocs, 3 pont(s), pente max 0.25, tranchee max 1 blocs, talus max 1 blocs
   Route du Col             3279 blocs, 0 pont(s), pente max 0.40, tranchee max 10 blocs, talus max 10 blocs

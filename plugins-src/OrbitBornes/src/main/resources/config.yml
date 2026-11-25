@@ -1,0 +1,32 @@
+# OrbitBornes : bornes d'arcade solo de la salle cachée (lobby seulement).
+# Les Orbit Coins (OC) ne s'achètent jamais : chaque jeu en verse en jouant, avec un plafond par jour et par joueur.
+
+monde: bornes            # monde vide des parties (créé par le plugin)
+pack-port: 8796          # port du petit serveur HTTP qui sert le pack (cristaux, drones, écran HD)
+places: 12               # parties en même temps par jeu
+
+# PNJ dans la salle d'arcade (monde du casino), contrat docs\arcade-jeux.md
+pnj:
+  monde: casino
+  y: 64
+  z: 411.5
+  yaw: 180
+
+astroblocs:
+  oc-diviseur: 100       # OC = score / diviseur
+  bonus-victoire: 40     # OC en plus pour un duel gagné
+  plafond-oc-jour: 800
+  attente-duel: 10       # secondes avant de jouer contre le bot
+  bot-vitesse: 6         # ticks entre deux gestes du bot (plus petit = plus fort)
+
+cristaux:
+  oc-par-etoile: 15
+  plafond-oc-jour: 600
+
+defense:
+  oc-diviseur: 15
+  plafond-oc-jour: 800
+
+pulsar:
+  oc-diviseur: 500
+  plafond-oc-jour: 800

@@ -63,6 +63,7 @@ public final class OrbitDevCore extends JavaPlugin {
     private FireworkGame fireworkGame;
     private fr.orbit.devcore.anneau.Anneaux anneaux;
     private fr.orbit.devcore.chat.Annonces annonces;
+    private fr.orbit.devcore.chat.ClearLag clearLag;
 
     @Override
     public void onEnable() {
@@ -111,6 +112,8 @@ public final class OrbitDevCore extends JavaPlugin {
         fireworkGame.start();
         annonces = new fr.orbit.devcore.chat.Annonces(this);
         annonces.start();
+        clearLag = new fr.orbit.devcore.chat.ClearLag(this);
+        clearLag.start();
 
         SpawnCommand spawn = new SpawnCommand(this);
         register("spawn", spawn);
@@ -141,6 +144,9 @@ public final class OrbitDevCore extends JavaPlugin {
     public void onDisable() {
         if (annonces != null) {
             annonces.stop();
+        }
+        if (clearLag != null) {
+            clearLag.stop();
         }
         if (anneaux != null) {
             anneaux.stop();
@@ -175,6 +181,7 @@ public final class OrbitDevCore extends JavaPlugin {
         messages.load();
         chat.load(getConfig().getConfigurationSection("chat"));
         annonces.start();
+        clearLag.start();
         worlds.load();
         station.load();
         locations.load();
@@ -274,6 +281,10 @@ public final class OrbitDevCore extends JavaPlugin {
 
     public fr.orbit.devcore.anneau.Anneaux anneaux() {
         return anneaux;
+    }
+
+    public fr.orbit.devcore.chat.ClearLag clearLag() {
+        return clearLag;
     }
 
     public FireworkGame fireworkGame() {

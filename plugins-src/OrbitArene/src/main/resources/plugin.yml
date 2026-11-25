@@ -1,0 +1,17 @@
+name: OrbitArene
+version: '0.1.0'
+main: fr.orbit.arene.OrbitArene
+api-version: '1.21'
+description: "Arène de la salle d'arcade cachée : Nébuleuse (grossir / comète), Charge Nova, Palet Orbital et Turbo-Sphère. Orbit Coins de jeu seulement."
+authors: [ORBIT]
+softdepend: [OrbitCasino]
+
+commands:
+  arene:
+    description: "Jeux de l'arène : rejoindre, quitter, rejouer, records."
+    usage: "/arene [jouer <jeu> [mode]|quitter|rejouer|top <jeu>|admin ...]"
+
+permissions:
+  orbitarene.admin:
+    description: Reconstruire les arènes, reposer les PNJ, voir les parties.
+    default: op

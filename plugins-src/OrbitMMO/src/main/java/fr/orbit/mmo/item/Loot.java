@@ -206,8 +206,27 @@ public final class Loot {
             this.implicit = implicit;
         }
 
+        /** Matériau d'une pièce de plaques (icônes des menus). */
         public Material material(int tier) {
-            return mat(ARMOR_METAL[Math.max(0, Math.min(TIERS - 1, tier))] + "_" + piece, mat("IRON_" + piece, Material.IRON_CHESTPLATE));
+            return material(ArmorType.PLAQUES, tier);
+        }
+
+        public Material material(ArmorType type, int tier) {
+            return mat(type.metal(tier) + "_" + piece, mat("IRON_" + piece, Material.IRON_CHESTPLATE));
+        }
+
+        /** Modèle d'icône HD du pack : « armure/plaques_chest_2 » (4 variantes pour 8 paliers). */
+        public String model(ArmorType type, int tier) {
+            return "armure/" + type.id + "_" + id + "_" + PACK_TIER[Math.max(0, Math.min(TIERS - 1, tier))];
+        }
+
+        public static Slot byId(String id) {
+            for (Slot s : values()) {
+                if (s.id.equals(id)) {
+                    return s;
+                }
+            }
+            return null;
         }
 
         static Slot of(Material m) {
@@ -253,16 +272,26 @@ public final class Loot {
         return shield(t, Rarity.COMMUN, TIER_LEVEL[t], TIER_LEVEL[t], null);
     }
 
+    /** Pièce de plaques (ancienne signature). */
     public static ItemStack shopArmor(Slot s, int tier, Color dye) {
-        int t = clampTier(tier);
-        return armor(s, t, Rarity.COMMUN, TIER_LEVEL[t], TIER_LEVEL[t], dye, null);
+        return shopArmor(ArmorType.PLAQUES, s, tier, dye);
     }
 
-    /** Ensemble complet (casque, plastron, jambières, bottes). */
+    public static ItemStack shopArmor(ArmorType type, Slot s, int tier, Color dye) {
+        int t = clampTier(tier);
+        return armor(type, s, t, Rarity.COMMUN, TIER_LEVEL[t], TIER_LEVEL[t], dye, null);
+    }
+
+    /** Ensemble de plaques complet (ancienne signature). */
     public static ItemStack[] armorSet(int tier, Color dye) {
+        return armorSet(ArmorType.PLAQUES, tier, dye);
+    }
+
+    /** Ensemble complet (casque, plastron, jambières, bottes) du type donné. */
+    public static ItemStack[] armorSet(ArmorType type, int tier, Color dye) {
         ItemStack[] out = new ItemStack[4];
         for (Slot s : Slot.values()) {
-            out[s.ordinal()] = shopArmor(s, tier, dye);
+            out[s.ordinal()] = shopArmor(type == null ? ArmorType.PLAQUES : type, s, tier, dye);
         }
         return out;
     }
@@ -300,7 +329,7 @@ public final class Loot {
         pdc.set(Keys.WEAPON, PersistentDataType.STRING, b.type.name());
         pdc.set(Keys.ATK, PersistentDataType.INTEGER, atk);
         Map<Stat, Double> stats = roll(b.implicit, 0.6, b.type.magic() ? CASTER_POOL : WEAPON_POOL, r, statLevel, rnd);
-        write(pdc, r, t, req, b.id, title(b.label, t, r, stats, b.implicit, rnd), stats, r.sockets);
+        write(pdc, r, t, req, b.id, title(b.label, TIER_NAMES[t], r, stats, b.implicit, rnd), stats, r.sockets);
         it.setItemMeta(meta);
         if (b.model != null) {
             Items.model(it, b.model + "_" + PACK_TIER[t]);
@@ -309,17 +338,28 @@ public final class Loot {
         return it;
     }
 
+    /** Pièce de plaques (ancienne signature). */
     public static ItemStack armor(Slot s, int tier, Rarity r, int statLevel, int req, Color dye, Random rnd) {
+        return armor(ArmorType.PLAQUES, s, tier, r, statLevel, req, dye, rnd);
+    }
+
+    /**
+     * Pièce d'armure : points d'armure selon le type (plaques 100 %, mailles 80 %, cuir 60 %, tissu 40 %),
+     * bonus propre selon le type et la pièce, bonus aléatoires tirés dans la réserve du type.
+     */
+    public static ItemStack armor(ArmorType type, Slot s, int tier, Rarity r, int statLevel, int req, Color dye, Random rnd) {
+        ArmorType ty = type == null ? ArmorType.PLAQUES : type;
         int t = clampTier(tier);
-        int pts = Math.max(1, (int) Math.round(ARMOR_SET[t] * s.share * (1 + 0.04 * r.ordinal())));
-        ItemStack it = new ItemStack(s.material(t));
+        int pts = Math.max(1, (int) Math.round(ARMOR_SET[t] * s.share * ty.armorMult * (1 + 0.04 * r.ordinal())));
+        ItemStack it = new ItemStack(s.material(ty, t));
         ItemMeta meta = it.getItemMeta();
         meta.setUnbreakable(true);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_DYE);
         meta.addAttributeModifier(Attribute.ARMOR, new AttributeModifier(key("armor_" + s.id), pts,
                 AttributeModifier.Operation.ADD_NUMBER, s.group));
-        if (meta instanceof LeatherArmorMeta leather && dye != null) {
-            leather.setColor(dye);
+        Color tint = ty.dye(t, dye);
+        if (meta instanceof LeatherArmorMeta leather && tint != null) {
+            leather.setColor(tint);
         }
         if (t >= 6 || r == Rarity.LEGENDAIRE) {
             meta.setEnchantmentGlintOverride(true);
@@ -327,9 +367,14 @@ public final class Loot {
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
         pdc.set(Keys.ITEM, PersistentDataType.STRING, "armor");
         pdc.set(Keys.ARMOR_PTS, PersistentDataType.INTEGER, pts);
-        Map<Stat, Double> stats = roll(s.implicit, 0.5, ARMOR_POOL, r, statLevel, rnd);
-        write(pdc, r, t, req, s.id, title(s.label, t, r, stats, s.implicit, rnd), stats, 0);
+        pdc.set(Keys.ARMOR_TYPE, PersistentDataType.STRING, ty.id);
+        pdc.set(Keys.OUTFIT, PersistentDataType.STRING, ty.outfit(t));
+        pdc.set(Keys.OUTFIT_BASE, PersistentDataType.STRING, ty.outfit(t));
+        Stat implicit = ty.implicit(s);
+        Map<Stat, Double> stats = roll(implicit, ty.implicitFactor * s.share / 0.25, ty.pool, r, statLevel, rnd);
+        write(pdc, r, t, req, s.id, title(ty.piece(s), ty.tierName(t), r, stats, implicit, rnd), stats, 0);
         it.setItemMeta(meta);
+        Items.model(it, s.model(ty, t));
         refresh(it);
         return it;
     }
@@ -352,7 +397,7 @@ public final class Loot {
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
         pdc.set(Keys.ITEM, PersistentDataType.STRING, "shield");
         Map<Stat, Double> stats = roll(Stat.PARADE, 1.0, SHIELD_POOL, r, statLevel, rnd);
-        write(pdc, r, t, req, "shield", title("Bouclier", t, r, stats, Stat.PARADE, rnd), stats, 0);
+        write(pdc, r, t, req, "shield", title("Bouclier", TIER_NAMES[t], r, stats, Stat.PARADE, rnd), stats, 0);
         it.setItemMeta(meta);
         refresh(it);
         return it;
@@ -379,7 +424,7 @@ public final class Loot {
         return Math.round(v * 10) / 10.0;
     }
 
-    private static String title(String label, int t, Rarity r, Map<Stat, Double> stats, Stat implicit, Random rnd) {
+    private static String title(String label, String tierName, Rarity r, Map<Stat, Double> stats, Stat implicit, Random rnd) {
         if (r == Rarity.LEGENDAIRE) {
             return label + " " + LEGEND[(rnd == null ? ThreadLocalRandom.current() : rnd).nextInt(LEGEND.length)];
         }
@@ -390,7 +435,7 @@ public final class Loot {
                 break;
             }
         }
-        return label + " " + TIER_NAMES[t] + (main == null ? "" : " " + main.suffix);
+        return label + " " + tierName + (main == null ? "" : " " + main.suffix);
     }
 
     private static void write(PersistentDataContainer pdc, Rarity r, int t, int req, String base, String title,
@@ -408,6 +453,9 @@ public final class Loot {
             sb.append(e.getKey().mod).append('=').append(String.format(Locale.ROOT, "%.1f", e.getValue()));
         }
         pdc.set(Keys.STATS, PersistentDataType.STRING, sb.toString());
+        if (!pdc.has(Keys.BIND)) {
+            pdc.set(Keys.BIND, PersistentDataType.STRING, Binding.EQUIP);
+        }
         if (sockets > 0) {
             pdc.set(Keys.SOCKETS, PersistentDataType.INTEGER, sockets);
             pdc.set(Keys.RUNES, PersistentDataType.STRING, ",".repeat(sockets - 1));
@@ -416,8 +464,14 @@ public final class Loot {
 
     // ------------------------------------------------------------------ Butin des boss
 
-    /** Récompense du dernier coup d'un boss : objet Épique nommé d'après le boss. */
-    public static ItemStack bossLab(BossDef boss, WeaponType held, int level, Color dye) {
+    /** Bonus de niveau d'objet du butin de boss. */
+    public static final int BOSS_ITEM_LEVEL_BONUS = 5;
+
+    /**
+     * Récompense du dernier coup d'un boss : objet Épique nommé d'après le boss, lié quand ramassé
+     * (à lier au joueur qui le reçoit : {@link Binding#onLoot}). L'armure prend le type de la classe.
+     */
+    public static ItemStack bossLab(BossDef boss, WeaponType held, ArmorType type, int level, Color dye) {
         Random rnd = ThreadLocalRandom.current();
         int t = tierForLevel(level);
         int req = Math.max(1, Math.min(level, TIER_LEVEL[t]));
@@ -425,22 +479,23 @@ public final class Loot {
         if ("armor".equalsIgnoreCase(boss.labKind())) {
             Material m = boss.labMaterial() == null ? Material.LEATHER_CHESTPLATE : boss.labMaterial();
             Slot s = Slot.of(m);
-            it = armor(s, t, Rarity.EPIQUE, level + 2, req, dye, rnd);
-            if (m != it.getType()) {
-                it = it.withType(m);
-            }
+            ArmorType ty = type == null ? ArmorType.PLAQUES : type;
+            it = armor(ty, s, t, Rarity.EPIQUE, level + 2, req, dye, rnd);
             ItemMeta meta = it.getItemMeta();
-            if (meta instanceof LeatherArmorMeta leather) {
+            if (meta instanceof LeatherArmorMeta leather && ty == ArmorType.PLAQUES) {
                 leather.setColor(Color.fromRGB(0x15161C));
             }
             PersistentDataContainer pdc = meta.getPersistentDataContainer();
-            int pts = Math.max(pdc.getOrDefault(Keys.ARMOR_PTS, PersistentDataType.INTEGER, 1), boss.labValue());
+            int pts = Math.max(pdc.getOrDefault(Keys.ARMOR_PTS, PersistentDataType.INTEGER, 1),
+                    (int) Math.round(boss.labValue() * ty.armorMult));
             meta.removeAttributeModifier(Attribute.ARMOR);
             meta.addAttributeModifier(Attribute.ARMOR, new AttributeModifier(key("armor_" + s.id), pts,
                     AttributeModifier.Operation.ADD_NUMBER, s.group));
             pdc.set(Keys.ARMOR_PTS, PersistentDataType.INTEGER, pts);
             pdc.set(Keys.TITLE, PersistentDataType.STRING, boss.labName());
             pdc.set(Keys.FLAVOR, PersistentDataType.STRING, "<#FFD66E>Butin de boss · " + Text.esc(boss.name()));
+            pdc.set(Keys.BIND, PersistentDataType.STRING, Binding.PICKUP);
+            pdc.set(Keys.ILVL_BONUS, PersistentDataType.INTEGER, BOSS_ITEM_LEVEL_BONUS);
             it.setItemMeta(meta);
         } else {
             Base b = Base.defaultFor(held);
@@ -450,6 +505,8 @@ public final class Loot {
             pdc.set(Keys.ATK, PersistentDataType.INTEGER, pdc.getOrDefault(Keys.ATK, PersistentDataType.INTEGER, 10) + boss.labValue());
             pdc.set(Keys.TITLE, PersistentDataType.STRING, boss.labName());
             pdc.set(Keys.FLAVOR, PersistentDataType.STRING, "<#FFD66E>Butin de boss · " + Text.esc(boss.name()));
+            pdc.set(Keys.BIND, PersistentDataType.STRING, Binding.PICKUP);
+            pdc.set(Keys.ILVL_BONUS, PersistentDataType.INTEGER, BOSS_ITEM_LEVEL_BONUS);
             it.setItemMeta(meta);
         }
         refresh(it);
@@ -466,11 +523,16 @@ public final class Loot {
         return x < 0.5 ? Rarity.LEGENDAIRE : x < 5 ? Rarity.EPIQUE : x < 30 ? Rarity.RARE : Rarity.INHABITUEL;
     }
 
-    /** Arme (de préférence de la classe), pièce d'armure ou bouclier, du niveau du monstre. */
+    /** Ancienne signature : armure en plaques. */
     public static ItemStack randomGear(int level, Rarity r, List<WeaponType> prefer, boolean shieldUser, Color dye, Random rnd) {
+        return randomGear(level, r, prefer, shieldUser, ArmorType.PLAQUES, dye, rnd);
+    }
+
+    /** Arme (de préférence de la classe), pièce d'armure (du type de la classe) ou bouclier, du niveau du monstre. */
+    public static ItemStack randomGear(int level, Rarity r, List<WeaponType> prefer, boolean shieldUser, ArmorType type, Color dye, Random rnd) {
         int lvl = Math.max(1, level);
         int t = tierForLevel(lvl);
-        int req = Math.max(TIER_LEVEL[t], Math.min(lvl - 2, 80));
+        int req = Math.max(TIER_LEVEL[t], Math.min(lvl - 2, OrbitMMO.getPlugin(OrbitMMO.class).progression().maxLevel()));
         double x = rnd.nextDouble();
         if (x < 0.5) {
             List<Base> pool = new ArrayList<>();
@@ -488,7 +550,8 @@ public final class Loot {
             return shield(t, r, lvl, req, rnd);
         }
         Slot s = Slot.values()[rnd.nextInt(Slot.values().length)];
-        return armor(s, t, r, lvl, req, dye, rnd);
+        ArmorType ty = type != null ? type : ArmorType.values()[rnd.nextInt(ArmorType.values().length)];
+        return armor(ty, s, t, r, lvl, req, dye, rnd);
     }
 
     public static Rune.Ref randomRune(Random rnd, boolean boss) {
@@ -503,8 +566,13 @@ public final class Loot {
         return new Rune.Ref(pool.get(rnd.nextInt(pool.size())), rank);
     }
 
-    /** Monstre tué : petite chance d'équipement et de rune. */
+    /** Ancienne signature (hors des étages du Pilier). */
     public static void rollMobLoot(OrbitMMO plugin, Player p, PlayerData d, int level) {
+        rollMobLoot(plugin, p, d, level, 0);
+    }
+
+    /** Monstre tué : petite chance d'équipement et de rune ; dans le Pilier, pièces des sets « donjon » de l'étage. */
+    public static void rollMobLoot(OrbitMMO plugin, Player p, PlayerData d, int level, int floor) {
         Random rnd = ThreadLocalRandom.current();
         if (rnd.nextDouble() < plugin.getConfig().getDouble("butin.equipement", 0.06)) {
             Rarity r = rollRarity(rnd, false);
@@ -514,17 +582,50 @@ public final class Loot {
             Rune.Ref ref = randomRune(rnd, false);
             give(plugin, p, ref.rune().item(ref.rank()), ref.rank() >= 3 ? Rarity.EPIQUE : ref.rank() == 2 ? Rarity.RARE : Rarity.INHABITUEL);
         }
+        if (floor > 0 && plugin.sets() != null) {
+            ItemStack piece = plugin.sets().rollFloor(floor, classDye(plugin, d), rnd);
+            if (piece != null) {
+                Binding.onLoot(piece, p);
+                give(plugin, p, piece, rarity(piece));
+            }
+        }
     }
 
-    /** Boss vaincu : chaque participant reçoit un objet Rare ou mieux, et parfois une rune. */
+    /** Ancienne signature (sans boss précis). */
     public static void rollBossLoot(OrbitMMO plugin, Player p, PlayerData d, int level) {
+        rollBossLoot(plugin, p, d, level, null);
+    }
+
+    /**
+     * Boss vaincu : chaque participant reçoit un objet Rare ou mieux (lié quand ramassé), parfois une rune,
+     * et peut-être une pièce d'un set « boss » de ce boss.
+     */
+    public static void rollBossLoot(OrbitMMO plugin, Player p, PlayerData d, int level, String bossId) {
         Random rnd = ThreadLocalRandom.current();
         Rarity r = rollRarity(rnd, true);
-        give(plugin, p, randomFor(plugin, d, level + 2, r, rnd), r);
+        ItemStack gear = randomFor(plugin, d, level + 2, r, rnd);
+        ItemMeta meta = gear.getItemMeta();
+        meta.getPersistentDataContainer().set(Keys.BIND, PersistentDataType.STRING, Binding.PICKUP);
+        meta.getPersistentDataContainer().set(Keys.ILVL_BONUS, PersistentDataType.INTEGER, BOSS_ITEM_LEVEL_BONUS);
+        gear.setItemMeta(meta);
+        Binding.onLoot(gear, p);
+        give(plugin, p, gear, r);
         if (rnd.nextDouble() < 0.4) {
             Rune.Ref ref = randomRune(rnd, true);
             give(plugin, p, ref.rune().item(ref.rank()), ref.rank() >= 3 ? Rarity.EPIQUE : Rarity.RARE);
         }
+        if (plugin.sets() != null) {
+            ItemStack piece = plugin.sets().rollBoss(bossId, classDye(plugin, d), rnd);
+            if (piece != null) {
+                Binding.onLoot(piece, p);
+                give(plugin, p, piece, rarity(piece));
+            }
+        }
+    }
+
+    private static Color classDye(OrbitMMO plugin, PlayerData d) {
+        ClassDef c = plugin.progression().cls(d);
+        return c == null ? null : fr.orbit.mmo.util.Fx.color(c.hex);
     }
 
     private static ItemStack randomFor(OrbitMMO plugin, PlayerData d, int level, Rarity r, Random rnd) {
@@ -533,10 +634,12 @@ public final class Loot {
         List<WeaponType> prefer = new ArrayList<>();
         boolean shield = false;
         Color dye = null;
+        ArmorType type = null;
         if (c != null) {
             prefer.add(c.weapon);
             shield = c.shield;
             dye = fr.orbit.mmo.util.Fx.color(c.hex);
+            type = ArmorType.of(c);
         }
         if (s != null) {
             if (s.weapon != null && !prefer.contains(s.weapon)) {
@@ -544,7 +647,7 @@ public final class Loot {
             }
             shield |= s.shield;
         }
-        return randomGear(level, r, prefer, shield, dye, rnd);
+        return randomGear(level, r, prefer, shield, type, dye, rnd);
     }
 
     private static void give(OrbitMMO plugin, Player p, ItemStack it, Rarity r) {
@@ -687,9 +790,38 @@ public final class Loot {
                 }
             }
         }
+        // Bonus de set : 2, 4, 5 pièces portées (au niveau requis).
+        OrbitMMO plugin = OrbitMMO.getPlugin(OrbitMMO.class);
+        if (plugin.sets() == null) {
+            return;
+        }
+        for (Map.Entry<GearSet, Integer> e : setCounts(p, d, weapon).entrySet()) {
+            for (Map.Entry<Integer, Map<String, Double>> b : e.getKey().bonuses.entrySet()) {
+                if (e.getValue() >= b.getKey()) {
+                    m.add(b.getValue(), 1);
+                }
+            }
+        }
     }
 
-    private static List<ItemStack> worn(Player p, ItemStack weapon) {
+    /** Pièces de chaque set portées (une par emplacement, niveau requis atteint). */
+    public static Map<GearSet, Integer> setCounts(Player p, PlayerData d, ItemStack weapon) {
+        Map<GearSet, Integer> out = new LinkedHashMap<>();
+        OrbitMMO plugin = OrbitMMO.getPlugin(OrbitMMO.class);
+        if (plugin.sets() == null) {
+            return out;
+        }
+        for (ItemStack it : worn(p, weapon)) {
+            GearSet s = plugin.sets().of(it);
+            if (s != null && requiredLevel(it) <= d.level) {
+                out.merge(s, 1, Integer::sum);
+            }
+        }
+        return out;
+    }
+
+    /** Objets portés : arme active, 4 pièces d'armure, bouclier en main secondaire. */
+    public static List<ItemStack> worn(Player p, ItemStack weapon) {
         PlayerInventory inv = p.getInventory();
         List<ItemStack> out = new ArrayList<>(6);
         if (weapon != null && "weapon".equals(Items.type(weapon))) {
@@ -753,10 +885,13 @@ public final class Loot {
             lore.add("<#8C96A3>Matériau : <white>" + TIER_LABELS[t]);
         } else {
             Slot s = Slot.of(it.getType());
-            lore.add(r.tag() + " <#5A6270>· <#8C96A3>Armure · " + s.label);
+            ArmorType at = armorType(it);
+            lore.add(r.tag() + " <#5A6270>· <#8C96A3>Armure " + (at == null ? "" : "de " + at.tag().toLowerCase(Locale.ROOT) + " ")
+                    + "<#5A6270>· <#8C96A3>" + s.label);
             lore.add("<#8C96A3>Armure : <white>" + pdc.getOrDefault(Keys.ARMOR_PTS, PersistentDataType.INTEGER, 0)
                     + " <#5A6270>· " + TIER_LABELS[t]);
         }
+        lore.add("<#8C96A3>Niveau d'objet : <#FFD66E>" + itemLevel(it));
         Map<String, Double> stats = stats(it);
         if (!stats.isEmpty()) {
             lore.add("");
@@ -783,10 +918,27 @@ public final class Loot {
             lore.add("");
             lore.add(Gear.bonusLine(it));
         }
+        OrbitMMO plugin = OrbitMMO.getPlugin(OrbitMMO.class);
+        GearSet set = plugin.sets() == null ? null : plugin.sets().of(it);
+        if (set != null) {
+            lore.add("");
+            lore.add("<#FFD66E>Set : " + Text.esc(set.name) + " <#5A6270>(" + set.pieces.size() + " pièces)");
+            lore.addAll(set.describe(-1));
+        }
+        String look = pdc.get(Keys.OUTFIT, PersistentDataType.STRING);
+        String base = pdc.get(Keys.OUTFIT_BASE, PersistentDataType.STRING);
+        if (look != null && base != null && !look.equals(base)) {
+            lore.add("");
+            lore.add("<#B9A6FF>Apparence : <white>" + Wardrobe.lookLabel(look) + " <#5A6270>(garde-robe)");
+        }
         lore.add("");
         int req = pdc.getOrDefault(Keys.ILVL, PersistentDataType.INTEGER, 0);
         if (req > 1) {
             lore.add("<#8C96A3>Niveau requis : <white>" + req + " <#5A6270>(bonus inactifs en dessous)");
+        }
+        String bind = Binding.line(it);
+        if (bind != null) {
+            lore.add(bind);
         }
         String flavor = pdc.get(Keys.FLAVOR, PersistentDataType.STRING);
         if (flavor != null) {
@@ -867,15 +1019,137 @@ public final class Loot {
         return true;
     }
 
-    /** À la connexion : convertit les anciennes armes et armures du joueur. */
+    /**
+     * Refonte du 24/11 (types d'armure, liaison, garde-robe) : une armure sans type devient des plaques
+     * (tout ce qui existait était porté par des Guerriers), avec sa clé de tenue et son icône HD ;
+     * le butin de boss devient « lié quand ramassé » et se lie au joueur qui l'a ; le reste « lié quand équipé ».
+     * Renvoie true si l'objet a changé.
+     */
+    public static boolean upgrade(ItemStack it, Player holder) {
+        if (!isNew(it) || !Gear.isGear(it) && !"shield".equals(Items.type(it))) {
+            return false;
+        }
+        ItemMeta meta = it.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        if (pdc.has(Keys.BIND) && (pdc.has(Keys.ARMOR_TYPE) || !Gear.isArmorPiece(it))) {
+            return false;
+        }
+        int t = clampTier(pdc.getOrDefault(Keys.TIER, PersistentDataType.INTEGER, 0));
+        if (Gear.isArmorPiece(it) && !pdc.has(Keys.ARMOR_TYPE)) {
+            pdc.set(Keys.ARMOR_TYPE, PersistentDataType.STRING, ArmorType.PLAQUES.id);
+            pdc.set(Keys.OUTFIT, PersistentDataType.STRING, ArmorType.PLAQUES.outfit(t));
+            pdc.set(Keys.OUTFIT_BASE, PersistentDataType.STRING, ArmorType.PLAQUES.outfit(t));
+        }
+        boolean bound = false;
+        if (!pdc.has(Keys.BIND)) {
+            String flavor = pdc.get(Keys.FLAVOR, PersistentDataType.STRING);
+            boolean boss = "lab".equals(Items.type(it)) || (flavor != null && flavor.contains("Butin de boss"));
+            pdc.set(Keys.BIND, PersistentDataType.STRING, boss ? Binding.PICKUP : Binding.EQUIP);
+            if (boss) {
+                pdc.set(Keys.ILVL_BONUS, PersistentDataType.INTEGER, BOSS_ITEM_LEVEL_BONUS);
+                bound = holder != null;
+            }
+        }
+        it.setItemMeta(meta);
+        if (Gear.isArmorPiece(it)) {
+            Items.model(it, Slot.of(it.getType()).model(ArmorType.PLAQUES, t));
+        }
+        if (bound) {
+            Binding.bind(it, holder);
+        } else {
+            refresh(it);
+        }
+        return true;
+    }
+
+    /** À la connexion : convertit les anciennes armes et armures du joueur (raretés, puis types d'armure et liaison). */
     public static void migrate(Player p) {
         PlayerInventory inv = p.getInventory();
         ItemStack[] contents = inv.getContents();
         for (int i = 0; i < contents.length; i++) {
             ItemStack it = contents[i];
-            if (adopt(it)) {
+            boolean changed = adopt(it);
+            changed |= upgrade(it, p);
+            if (changed) {
                 inv.setItem(i, it);
             }
         }
+    }
+
+    // ------------------------------------------------------------------ Type d'armure et niveau d'objet
+
+    /** Type d'une pièce d'armure (null : pas une armure du MMO). Une armure d'avant la refonte compte comme plaques. */
+    public static ArmorType armorType(ItemStack it) {
+        if (!isNew(it) || !Gear.isArmorPiece(it)) {
+            return null;
+        }
+        ArmorType t = ArmorType.byId(it.getItemMeta().getPersistentDataContainer().get(Keys.ARMOR_TYPE, PersistentDataType.STRING));
+        return t == null ? ArmorType.PLAQUES : t;
+    }
+
+    private static final int[] RARITY_ITEM_LEVEL = {0, 4, 8, 13, 20};
+
+    /**
+     * Niveau d'objet : 20 + 20 par palier (recrue 20 → orbitium 160), + rareté (0 / 4 / 8 / 13 / 20),
+     * + niveau dans le palier (0 à 10, d'après le niveau requis), + 3 par amélioration (+1 à +10),
+     * + bonus de l'objet (butin de boss +5, sets). 0 : pas un équipement du MMO.
+     */
+    public static int itemLevel(ItemStack it) {
+        if (!isNew(it)) {
+            return 0;
+        }
+        PersistentDataContainer pdc = it.getItemMeta().getPersistentDataContainer();
+        int t = clampTier(pdc.getOrDefault(Keys.TIER, PersistentDataType.INTEGER, 0));
+        int req = pdc.getOrDefault(Keys.ILVL, PersistentDataType.INTEGER, 0);
+        int within = Math.max(0, Math.min(10, req - TIER_LEVEL[t]));
+        int upgrade = pdc.getOrDefault(Keys.UPGRADE, PersistentDataType.INTEGER, 0);
+        int bonus = pdc.getOrDefault(Keys.ILVL_BONUS, PersistentDataType.INTEGER, 0);
+        Rarity r = Rarity.of(pdc.get(Keys.RARITY, PersistentDataType.STRING));
+        return 20 + 20 * t + RARITY_ITEM_LEVEL[r.ordinal()] + within + 3 * upgrade + bonus;
+    }
+
+    /** Le personnage se sert-il d'un bouclier (classe ou spécialisation) ? */
+    public static boolean shieldUser(OrbitMMO plugin, PlayerData d) {
+        ClassDef c = plugin.progression().cls(d);
+        SpecDef spec = plugin.progression().spec(d);
+        if (c == null) {
+            return false;
+        }
+        return spec != null && spec.weapon != null ? spec.shield : c.shield || (spec != null && spec.shield);
+    }
+
+    /**
+     * Niveau d'objet moyen : arme active + 4 pièces d'armure (+ main secondaire pour une classe à bouclier) ;
+     * un emplacement vide compte 0.
+     */
+    public static int averageItemLevel(OrbitMMO plugin, Player p, PlayerData d) {
+        ItemStack weapon = plugin.bar().weapon(p, d);
+        int sum = "weapon".equals(Items.type(weapon)) ? itemLevel(weapon) : 0;
+        int slots = 5;
+        for (ItemStack a : p.getInventory().getArmorContents()) {
+            sum += itemLevel(a);
+        }
+        if (shieldUser(plugin, d)) {
+            slots++;
+            ItemStack off = p.getInventory().getItemInOffHand();
+            sum += "shield".equals(Items.type(off)) ? itemLevel(off) : 0;
+        }
+        return (int) Math.floor(sum / (double) slots);
+    }
+
+    /**
+     * Niveau d'objet minimum pour entrer (config « niveau-objet.pilier » / « niveau-objet.raid », 0 = pas de minimum).
+     * Renvoie le message de refus, ou null si l'entrée est permise.
+     */
+    public static String itemLevelGate(OrbitMMO plugin, Player p, PlayerData d, String what) {
+        int min = plugin.getConfig().getInt("niveau-objet." + what, 0);
+        if (min <= 0 || p.hasPermission("orbitmmo.admin")) {
+            return null;
+        }
+        int mine = averageItemLevel(plugin, p, d);
+        if (mine >= min) {
+            return null;
+        }
+        return "Niveau d'objet " + min + " requis (le vôtre : " + mine + "). Améliorez votre équipement chez Torvald.";
     }
 }

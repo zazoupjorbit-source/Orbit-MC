@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {"layer0": "orbitbornes:item/bolt"},
+  "gui_light": "front",
+  "display": {
+    "gui": {"rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [1.000, 1.000, 1]},
+    "fixed": {"rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [1, 1, 1]}
+  }
+}

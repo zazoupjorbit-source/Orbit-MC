@@ -1,0 +1,174 @@
+/* ORBIT TV — habillage commun à la page de diffusion et à la page d'écoute.
+   DA Orbit MC : bleu glacé + or, cadres « menus HD » du jeu (dégradé marine, contour sombre, liseré or puis bleu).
+   Polices : celles de l'écran en jeu (Tektur pour les titres, Outfit pour l'interface), servies par le plugin. */
+
+@font-face { font-family: "Tektur"; src: url("/polices/titre.ttf") format("truetype"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Outfit"; src: url("/polices/texte.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+
+:root {
+  --nuit: #060a14;
+  --marine-1: #1a2844;
+  --marine-2: #0c1427;
+  --creux: #080e1c;
+  --contour: #03060d;
+  --or: #e0b864;
+  --or-fonce: #c9a24a;
+  --or-clair: #f3d894;
+  --glace: #62cff4;
+  --bleu: #3a7fff;
+  --lisere: #4a6ca6;
+  --orange: #f2913d;
+  --rouge: #ff4d5e;
+  --vert: #4be38a;
+  --encre: #eef2ff;
+  --gris: #9aa6c0;
+  --titre: "Tektur", "Segoe UI", system-ui, sans-serif;
+  --interface: "Outfit", "Segoe UI", system-ui, sans-serif;
+  --texte: "Segoe UI", system-ui, -apple-system, sans-serif;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--nuit); }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--encre);
+  font: 15px/1.55 var(--texte);
+  background:
+    radial-gradient(900px 520px at 12% -8%, rgba(58, 127, 255, .26), transparent 62%),
+    radial-gradient(760px 480px at 100% 108%, rgba(224, 184, 100, .13), transparent 60%),
+    linear-gradient(180deg, #0a1124 0%, var(--nuit) 70%);
+  background-attachment: fixed;
+}
+/* poussière d'étoiles */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .75;
+  background-image:
+    radial-gradient(1.2px 1.2px at 24px 38px, #fff 50%, transparent 52%),
+    radial-gradient(1px 1px at 142px 96px, rgba(98, 207, 244, .9) 50%, transparent 52%),
+    radial-gradient(1.4px 1.4px at 212px 22px, rgba(243, 216, 148, .9) 50%, transparent 52%),
+    radial-gradient(1px 1px at 78px 168px, rgba(255, 255, 255, .7) 50%, transparent 52%),
+    radial-gradient(1px 1px at 186px 204px, rgba(255, 255, 255, .55) 50%, transparent 52%),
+    radial-gradient(1.2px 1.2px at 268px 142px, rgba(98, 207, 244, .7) 50%, transparent 52%);
+  background-size: 300px 240px;
+}
+main { position: relative; max-width: 1120px; margin: 0 auto; padding: 26px 20px 56px; }
+main.etroit { max-width: 560px; }
+
+/* ---------------------------------------------------------------- en-tête */
+.tete { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+.logo { width: 64px; height: 64px; flex: none; filter: drop-shadow(0 0 18px rgba(58, 127, 255, .45)); }
+.marque { min-width: 0; }
+.marque h1 {
+  margin: 0;
+  font: 500 34px/1 var(--titre);
+  letter-spacing: .06em;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, .55);
+}
+.metal {
+  background: linear-gradient(180deg, #fffaf0 0%, var(--or-clair) 38%, var(--or-fonce) 62%, #8a6424 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 3px 0 #1a1205);
+}
+.marque p { margin: 6px 0 0; color: var(--glace); font: 500 13px/1 var(--titre); letter-spacing: .14em; text-transform: uppercase; }
+.marque p span { color: var(--gris); letter-spacing: .04em; text-transform: none; }
+.etat {
+  margin-left: auto;
+  padding: 9px 16px;
+  font: 700 14px/1 var(--interface);
+  color: var(--gris);
+  background: var(--creux);
+  border: 2px solid var(--contour);
+  border-radius: 3px;
+  box-shadow: inset 0 2px 0 rgba(74, 108, 166, .55);
+}
+.etat.direct { color: #fff; background: linear-gradient(180deg, #5a1622, #2c0b13); box-shadow: inset 0 2px 0 var(--rouge), 0 0 22px rgba(255, 77, 94, .3); }
+.etat.direct::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 8px; border-radius: 50%; background: var(--rouge); animation: battre 1.4s ease-in-out infinite; }
+.etat.console { color: var(--or); box-shadow: inset 0 2px 0 var(--or-fonce); }
+@keyframes battre { 50% { opacity: .35; } }
+
+/* ---------------------------------------------------------------- cadres HD */
+.cadre-hd {
+  position: relative;
+  padding: 20px;
+  background: linear-gradient(180deg, var(--marine-1) 0%, var(--marine-2) 100%);
+  border: 2px solid var(--contour);
+  border-radius: 4px;
+  box-shadow: inset 0 2px 0 var(--or-fonce), inset 0 3px 0 rgba(141, 184, 255, .4), inset 0 -2px 0 rgba(0, 0, 0, .45), 0 10px 34px rgba(0, 0, 0, .45);
+}
+.cadre-hd + .cadre-hd { margin-top: 16px; }
+.titre-cadre { margin: 0 0 14px; font: 500 15px/1.2 var(--titre); letter-spacing: .12em; text-transform: uppercase; }
+.creux {
+  background: var(--creux);
+  border: 2px solid var(--contour);
+  border-radius: 3px;
+  box-shadow: inset 0 2px 0 rgba(0, 0, 0, .6), inset 0 -1px 0 rgba(74, 108, 166, .45);
+}
+
+/* ---------------------------------------------------------------- champs */
+label, .etiquette { display: block; margin-bottom: 7px; color: var(--glace); font: 500 11.5px/1.2 var(--titre); letter-spacing: .1em; text-transform: uppercase; }
+label span, .etiquette span { color: var(--or); }
+select {
+  width: 100%;
+  padding: 10px 12px;
+  font: 700 14px/1.2 var(--interface);
+  color: var(--encre);
+  background: var(--creux);
+  border: 2px solid var(--contour);
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 rgba(74, 108, 166, .5);
+}
+select:disabled { opacity: .5; }
+input[type=range] { width: 100%; height: 22px; margin: 8px 0 0; accent-color: var(--or); background: transparent; }
+
+button {
+  padding: 12px 20px;
+  font: 700 15px/1 var(--interface);
+  letter-spacing: .02em;
+  color: var(--encre);
+  cursor: pointer;
+  background: linear-gradient(180deg, #2d4c86 0%, #1c3263 48%, #122247 52%, #0d1838 100%);
+  border: 2px solid var(--contour);
+  border-radius: 3px;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, .6);
+  box-shadow: inset 0 2px 0 var(--lisere), inset 0 -2px 0 rgba(0, 0, 0, .4), 0 3px 0 rgba(0, 0, 0, .35);
+  transition: filter .15s, box-shadow .15s, transform .08s;
+}
+button:hover:not(:disabled) { filter: brightness(1.16); }
+button:active:not(:disabled) { transform: translateY(2px); box-shadow: inset 0 2px 0 var(--lisere), inset 0 -2px 0 rgba(0, 0, 0, .4); }
+button.principal { box-shadow: inset 0 2px 0 var(--or-fonce), inset 0 3px 0 rgba(141, 184, 255, .45), inset 0 -2px 0 #9c7432, 0 3px 0 rgba(0, 0, 0, .35); }
+button.principal:hover:not(:disabled) { box-shadow: inset 0 2px 0 var(--or-clair), inset 0 3px 0 rgba(141, 184, 255, .6), inset 0 -2px 0 var(--or-fonce), 0 0 0 1px rgba(141, 184, 255, .35), 0 0 22px rgba(98, 207, 244, .3); }
+button.arret { background: linear-gradient(180deg, #7a1f2d 0%, #561422 48%, #3d0d18 52%, #2a0810 100%); box-shadow: inset 0 2px 0 var(--rouge), inset 0 -2px 0 rgba(0, 0, 0, .4), 0 3px 0 rgba(0, 0, 0, .35); }
+button:disabled { opacity: .38; cursor: not-allowed; }
+button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--glace); outline-offset: 2px; }
+
+.message { min-height: 1.55em; margin-top: 14px; color: var(--or); font-weight: 600; }
+.aide { margin: 16px 0 0; color: var(--gris); font-size: 13.5px; }
+.aide b { color: var(--encre); font-weight: 600; }
+.aide code { padding: 1px 6px; color: var(--or); font: 600 13px/1.4 ui-monospace, Consolas, monospace; background: var(--creux); border-radius: 3px; }
+
+/* ---------------------------------------------------------------- vumètre */
+.vu { display: flex; gap: 3px; height: 14px; padding: 3px; }
+.vu i { flex: 1; background: #16223c; border-radius: 1px; transition: background .08s; }
+.vu i.on { background: var(--glace); box-shadow: 0 0 8px rgba(98, 207, 244, .55); }
+.vu i.on.haut { background: var(--or); box-shadow: 0 0 8px rgba(224, 184, 100, .55); }
+.vu i.on.fort { background: var(--orange); box-shadow: 0 0 8px rgba(242, 145, 61, .6); }
+
+@media (max-width: 560px) {
+  main { padding: 18px 14px 44px; }
+  .logo { width: 52px; height: 52px; }
+  .marque h1 { font-size: 28px; }
+  .etat { margin-left: 0; }
+  .cadre-hd { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

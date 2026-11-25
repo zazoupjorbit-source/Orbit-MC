@@ -83,8 +83,8 @@ final class Pack implements Listener {
     void envoyer(Player p) {
         if (zip == null || url == null) return;
         ResourcePackInfo info = ResourcePackInfo.resourcePackInfo(id, URI.create(url), hash);
-        // replace : retire les packs des serveurs précédents (pas de pack du lobby sur Tycoon).
-        p.sendResourcePacks(ResourcePackRequest.resourcePackRequest().packs(info).replace(true).required(false)
+        // replace(false) : passe par-dessus le pack ORBIT (interface HD) envoyé par OrbitDevCore à la connexion.
+        p.sendResourcePacks(ResourcePackRequest.resourcePackRequest().packs(info).replace(false).required(false)
                 .prompt(Navigateur.texte("<gradient:#62CFF4:#E0B864>Orbit Tycoon</gradient> <gray>: textures des anneaux-portails")).build());
     }
 

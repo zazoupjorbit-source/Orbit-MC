@@ -9,7 +9,7 @@ start:
   gold: 100
 
 progression:
-  max-level: 80
+  max-level: 90
   # Niveau du choix de la spécialisation ; 1 point de talent par niveau à partir de celui-ci.
   spec-level: 10
 
@@ -71,6 +71,15 @@ resource-pack:
 hud:
   # Décalage horizontal de la barre de vie dessinée, en pixels d'interface (négatif = vers la gauche).
   offset-x: 0
+
+# Monstres du continent (hors boss) : moins de pression quand on joue seul.
+monstres-dehors:
+  # Secondes entre deux coups de mêlée d'un même monstre.
+  delai-attaque: 1.8
+  # Secondes minimum entre deux coups de mêlée reçus, tous monstres confondus.
+  ecart-entre-monstres: 0.6
+  # Multiplicateur de leurs dégâts.
+  degats: 0.8
 
 spawning:
   interval-ticks: 80
@@ -290,3 +299,9 @@ bosses:
 # recharge-secondes : temps entre deux usages (0 = aucune recharge).
 cristal:
   recharge-secondes: 600
+
+# Niveau d'objet minimum pour entrer (moyenne de l'equipement porte : arme + 4 pieces, + bouclier pour
+# une classe a bouclier ; voir docs/objets.md). 0 = pas de minimum (reglage par defaut, en attendant le choix de Zazou).
+niveau-objet:
+  pilier: 0   # entree dans le Pilier des Astres (gardien de la capitale, portails du continent)
+  raid: 0     # pas encore de raid : reserve pour plus tard

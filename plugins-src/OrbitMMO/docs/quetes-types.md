@@ -308,6 +308,20 @@ Au chargement (`/quetes admin recharger`), la console signale chaque étape qui 
 
 Comme avant, une quête ne démarre que si tous ses points sont posés (`/quetes admin manquants`). Cela comprend les points du chemin, des traces, des indices, `depart` et `apparition`.
 
+## Quêtes répétables (contrats)
+
+Pour qu'un joueur ait toujours une quête, une quête peut revenir :
+
+```yaml
+repetable: 20      # de nouveau proposée 20 h après avoir été finie (0 ou absent = une seule fois)
+```
+
+Dans le générateur : `rep: 20` sur la quête.
+
+- Une fois finie, la quête reste comptée comme terminée : les quêtes qui la demandent (`requiert`) restent ouvertes.
+- L'heure de fin est gardée dans le fichier du joueur (`terminees-le`). Passé le délai, le donneur la propose à nouveau.
+- `/quetes admin reset` efface aussi cette heure.
+
 ## Quêtes d'essai (admins seulement)
 
 `tools\quetes\zones\essais-types.js` → `essais-types.yml` : 12 quêtes, une par type, plus une suite qui n'existe que si l'on a répondu « aider » au choix.

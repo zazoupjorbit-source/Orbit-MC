@@ -62,6 +62,16 @@ specialisations:
       miracle_de_l_aube: { nom: "Miracle de l'Aube", icone: BEACON, palier: 8, colonne: 0, rangs: 1, sort: miracle_de_l_aube, requiert: bouclier_sacre, description: "Apprend Miracle de l'Aube : rend 40 % des PV au groupe et le protège." }
       main_de_l_astre: { nom: "Main de l'Astre", icone: NETHER_STAR, palier: 8, colonne: 1, rangs: 3, effets: { soins.grand_soin: 8 }, description: "Grand soin soigne {soins.grand_soin} % de plus." }
       gardien_de_la_foi: { nom: "Gardien de la foi", icone: TOTEM_OF_UNDYING, palier: 8, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      cercle_radieux: { nom: "Cercle radieux", icone: GLOWSTONE, palier: 9, colonne: 0, rangs: 3, requiert: cercle_de_lumiere, effets: { soins.cercle_de_lumiere: 8 }, description: "Cercle de lumière soigne {soins.cercle_de_lumiere} % de plus." }
+      miracle_hatif: { nom: "Miracle hâtif", icone: CLOCK, palier: 9, colonne: 1, rangs: 3, requiert: miracle_de_l_aube, effets: { recharge.miracle_de_l_aube: 10 }, description: "Recharge de Miracle de l'Aube réduite de {recharge.miracle_de_l_aube} s." }
+      chair_benie: { nom: "Chair bénie", icone: GOLDEN_APPLE, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      grace_abondante: { nom: "Grâce abondante", icone: GLISTERING_MELON_SLICE, palier: 10, colonne: 0, rangs: 3, effets: { soins.grand_soin: 6 }, description: "Grand soin soigne {soins.grand_soin} % de plus." }
+      hymne_hatif: { nom: "Hymne hâtif", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.hymne_de_l_aube: 15 }, description: "Recharge de Hymne de l'Aube réduite de {recharge.hymne_de_l_aube} s." }
+      foi_sereine: { nom: "Foi sereine", icone: CANDLE, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de mana régénéré." }
+      priere_ancestrale: { nom: "Prière ancestrale", icone: ENCHANTED_BOOK, palier: 11, colonne: 0, rangs: 3, effets: { soins.priere_de_soins: 6 }, description: "Prière de soins soigne {soins.priere_de_soins} % de plus." }
+      paume_de_l_astre: { nom: "Paume de l'Astre", icone: NETHER_STAR, palier: 11, colonne: 1, rangs: 1, effets: { soins: 8, ressource: 5 }, description: "Talent de maître : +{soins} % de soins prodigués et +{ressource} % de mana régénéré." }
+      robe_de_lumiere: { nom: "Robe de lumière", icone: WHITE_WOOL, palier: 11, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
 
   chatiment:
     nom: Châtiment
@@ -103,6 +113,16 @@ specialisations:
       rayon_de_l_astre: { nom: "Rayon de l'Astre", icone: BEACON, palier: 8, colonne: 0, rangs: 1, sort: rayon_de_l_astre, requiert: nova_sacree, description: "Apprend Rayon de l'Astre : un rayon de lumière brûle longtemps une large zone." }
       main_vengeresse: { nom: "Main vengeresse", icone: GOLDEN_SWORD, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
       flamme_purificatrice: { nom: "Flamme purificatrice", icone: SOUL_TORCH, palier: 8, colonne: 2, rangs: 3, requiert: lumiere_nourriciere, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      nova_fulgurante: { nom: "Nova fulgurante", icone: GLOWSTONE, palier: 9, colonne: 0, rangs: 3, requiert: nova_sacree, effets: { degats.nova_sacree: 10 }, description: "Nova sacrée inflige {degats.nova_sacree} % de dégâts en plus." }
+      rayon_implacable: { nom: "Rayon implacable", icone: END_ROD, palier: 9, colonne: 1, rangs: 3, requiert: rayon_de_l_astre, effets: { degats.rayon_de_l_astre: 10 }, description: "Rayon de l'Astre inflige {degats.rayon_de_l_astre} % de dégâts en plus." }
+      chair_eprouvee: { nom: "Chair éprouvée", icone: COOKED_BEEF, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      ardeur_sacree: { nom: "Ardeur sacrée", icone: BLAZE_POWDER, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      courroux_hatif: { nom: "Courroux hâtif", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.courroux_divin: 10 }, description: "Recharge de Courroux divin réduite de {recharge.courroux_divin} s." }
+      foi_ardente: { nom: "Foi ardente", icone: CANDLE, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de mana régénéré." }
+      chatiment_ancestral: { nom: "Châtiment ancestral", icone: GOLDEN_SWORD, palier: 11, colonne: 0, rangs: 3, effets: { degats.chatiment: 5 }, description: "Châtiment inflige {degats.chatiment} % de dégâts en plus." }
+      bras_de_l_astre: { nom: "Bras de l'Astre", icone: NETHER_STAR, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, crit: 3 }, description: "Talent de maître : +{degats} % de dégâts et +{crit} % de chances de coup critique." }
+      lance_radieuse: { nom: "Lance radieuse", icone: SPECTRAL_ARROW, palier: 11, colonne: 2, rangs: 3, effets: { degats.lance_de_lumiere: 8 }, description: "Lance de lumière inflige {degats.lance_de_lumiere} % de dégâts en plus." }
 
   ames:
     nom: Âmes
@@ -144,6 +164,16 @@ specialisations:
       moisson_du_neant: { nom: "Moisson du Néant", icone: WITHER_ROSE, palier: 8, colonne: 0, rangs: 1, sort: moisson_du_neant, requiert: voile_des_ames, description: "Apprend Moisson du Néant : arrache la vie des ennemis autour et la rend au groupe." }
       passeur_d_ames: { nom: "Passeur d'âmes", icone: SOUL_LANTERN, palier: 8, colonne: 1, rangs: 3, effets: { soins.transfert_d_ame: 8 }, description: "Transfert d'âme soigne {soins.transfert_d_ame} % de plus." }
       soif_eternelle: { nom: "Soif éternelle", icone: GHAST_TEAR, palier: 8, colonne: 2, rangs: 3, requiert: siphon_vorace, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      gardien_fidele: { nom: "Gardien fidèle", icone: SOUL_LANTERN, palier: 9, colonne: 0, rangs: 3, requiert: esprit_gardien, effets: { soins.esprit_gardien: 8 }, description: "Esprit gardien soigne {soins.esprit_gardien} % de plus." }
+      moisson_hative: { nom: "Moisson hâtive", icone: CLOCK, palier: 9, colonne: 1, rangs: 3, requiert: moisson_du_neant, effets: { recharge.moisson_du_neant: 10 }, description: "Recharge de Moisson du Néant réduite de {recharge.moisson_du_neant} s." }
+      enveloppe_spectrale: { nom: "Enveloppe spectrale", icone: PHANTOM_MEMBRANE, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      transfert_genereux: { nom: "Transfert généreux", icone: SOUL_TORCH, palier: 10, colonne: 0, rangs: 3, effets: { soins.transfert_d_ame: 6 }, description: "Transfert d'âme soigne {soins.transfert_d_ame} % de plus." }
+      communion_hative: { nom: "Communion hâtive", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.communion_des_ames: 15 }, description: "Recharge de Communion des âmes réduite de {recharge.communion_des_ames} s." }
+      ames_nourricieres: { nom: "Âmes nourricières", icone: SOUL_SAND, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de mana régénéré." }
+      lien_ancestral: { nom: "Lien ancestral", icone: ECHO_SHARD, palier: 11, colonne: 0, rangs: 3, effets: { soins.lien_d_ame: 5 }, description: "Lien d'âme soigne {soins.lien_d_ame} % de plus." }
+      grand_passeur: { nom: "Grand passeur", icone: SOUL_CAMPFIRE, palier: 11, colonne: 1, rangs: 1, effets: { soins: 8, vol-de-vie: 2 }, description: "Talent de maître : +{soins} % de soins prodigués et {vol-de-vie} % des dégâts infligés vous soignent." }
+      linceul_epais: { nom: "Linceul épais", icone: BLACK_WOOL, palier: 11, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
 
   maledictions:
     nom: Malédictions
@@ -185,6 +215,16 @@ specialisations:
       damnation: { nom: "Damnation", icone: WITHER_SKELETON_SKULL, palier: 8, colonne: 0, rangs: 1, sort: damnation, requiert: cercle_de_maledictions, description: "Apprend Damnation : une malédiction qui éclate, ronge et terrifie." }
       voix_du_neant: { nom: "Voix du Néant", icone: SCULK_SHRIEKER, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
       vampirisme: { nom: "Vampirisme", icone: GHAST_TEAR, palier: 8, colonne: 2, rangs: 3, requiert: drain_avide, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      cercle_funeste: { nom: "Cercle funeste", icone: CRYING_OBSIDIAN, palier: 9, colonne: 0, rangs: 3, requiert: cercle_de_maledictions, effets: { degats.cercle_de_maledictions: 10 }, description: "Cercle de malédictions inflige {degats.cercle_de_maledictions} % de dégâts en plus." }
+      damnation_eternelle: { nom: "Damnation éternelle", icone: WITHER_ROSE, palier: 9, colonne: 1, rangs: 3, requiert: damnation, effets: { degats.damnation: 10 }, description: "Damnation inflige {degats.damnation} % de dégâts en plus." }
+      chair_maudite: { nom: "Chair maudite", icone: ROTTEN_FLESH, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      oeil_funeste: { nom: "Œil funeste", icone: ENDER_EYE, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      avatar_hatif: { nom: "Avatar hâtif", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.avatar_du_neant: 10 }, description: "Recharge d'Avatar du Néant réduite de {recharge.avatar_du_neant} s." }
+      neant_nourricier: { nom: "Néant nourricier", icone: ENDER_PEARL, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de mana régénéré." }
+      agonie_ancestrale: { nom: "Agonie ancestrale", icone: FERMENTED_SPIDER_EYE, palier: 11, colonne: 0, rangs: 3, effets: { degats.agonie: 6 }, description: "Agonie inflige {degats.agonie} % de dégâts en plus." }
+      bouche_du_neant: { nom: "Bouche du Néant", icone: DRAGON_BREATH, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, vol-de-vie: 2 }, description: "Talent de maître : +{degats} % de dégâts et {vol-de-vie} % des dégâts infligés vous soignent." }
+      drain_vorace: { nom: "Drain vorace", icone: GHAST_TEAR, palier: 11, colonne: 2, rangs: 3, effets: { degats.drain_de_vie: 8 }, description: "Drain de vie inflige {degats.drain_de_vie} % de dégâts en plus." }
 
 sorts:
   # ---------------- Toute la classe (les deux formes) ----------------

@@ -104,11 +104,12 @@ public final class QuestDefs {
     /**
      * Une quête. giver nul ou auto = démarre seule dès que les conditions sont remplies.
      * startPoint : téléportation au démarrage (facultatif). admin : réservée à l'administration (orbitmmo.admin),
-     * pour les quêtes d'essai.
+     * pour les quêtes d'essai. repeatHours : quête répétable (contrats), de nouveau proposée ce nombre d'heures après
+     * avoir été finie ; 0 = une seule fois.
      */
     public record QuestDef(String id, String file, String name, Faction faction, int level, List<String> requires,
                            String giver, boolean auto, String startPoint, List<String> summary,
                            List<Line> offer, List<Line> intro, List<StepDef> steps, List<Line> outro, RewardDef reward,
-                           boolean admin) {
+                           boolean admin, double repeatHours) {
     }
 }

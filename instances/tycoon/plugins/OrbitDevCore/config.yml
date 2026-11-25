@@ -77,3 +77,12 @@ cosmetics:
   unlock-all: true
   # Dossier partage par le lobby et les instances : on garde ses cosmetiques en changeant de serveur.
   data-folder: "../../../../shared/cosmetics"
+
+# Pack ORBIT (interface HD du mode) servi par le lobby sur le port 8792.
+resource-pack:
+  enabled: true
+  theme: tycoon
+  port: 8792
+  serve-local: false
+  public-url: ""
+  required: false

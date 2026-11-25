@@ -1,0 +1,62 @@
+# OrbitArene : jeux de l'arène (salle d'arcade cachée du lobby). Rien ne s'achète : les Orbit Coins gagnés ici
+# sont des OC de jeu, versés par OrbitCasino avec un plafond par jour et par joueur pour chaque jeu.
+
+base:
+  fichier: auto            # setup/db.properties du réseau
+
+monde: arene               # monde vide créé par le plugin
+salle:
+  monde: casino            # salle d'arcade (créée par OrbitCasino)
+
+pack:
+  actif: true
+  port: 8797               # icônes des objets de la barre (charge, boost, quitter)
+
+attente:
+  secondes: 12             # temps laissé aux autres joueurs avant de compléter avec des bots
+
+# ----------------------------------------------------------------- Nébuleuse
+nebuleuse:
+  places: 3                # parties en même temps
+  gravite:
+    joueurs-max: 8         # humains + bots
+    duree: 180             # secondes
+    orbes: 150
+    plafond-oc-jour: 600
+  comete:
+    joueurs-max: 6
+    duree: 180
+    orbes: 45
+    ticks-par-case: 3      # vitesse normale (2 en boost)
+    plafond-oc-jour: 600
+
+# ----------------------------------------------------------------- Charge Nova
+charge:
+  places: 3
+  joueurs-max: 4
+  duree: 180
+  meche: 50                # ticks avant l'explosion
+  caisses: 0.72            # part des cases cassables remplies
+  bonus: 0.32              # chance qu'une caisse lâche un bonus
+  plafond-oc-jour: 600
+
+# ----------------------------------------------------------------- Palet Orbital
+palet:
+  places: 3
+  buts-pour-gagner: 7
+  vitesse-bot: 0.30        # blocs/tick (joueur : 0.42)
+  attente-duel: 20         # secondes avant de prendre un bot en duel
+  plafond-oc-jour: 500
+
+# ----------------------------------------------------------------- Turbo-Sphère
+turbo:
+  places: 2
+  duree: 180
+  prolongation: 90
+  decalage-siege: 0.35
+  plafond-oc-jour: 800
+
+# Hauteur du siège (support invisible sous les joueurs assis) et lissage des déplacements (ticks).
+siege:
+  decalage: 0.35
+  lissage: 2

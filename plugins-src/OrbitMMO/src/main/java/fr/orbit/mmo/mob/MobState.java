@@ -29,6 +29,8 @@ public final class MobState {
     /** Retiré sans avoir été tué (plus de joueur à portée, entrée en zone sûre). */
     public boolean despawned;
     public boolean revealed;
+    /** Dernier coup de mêlée porté à un joueur (ms), pour le délai entre deux attaques dehors. */
+    public long lastMeleeAt;
 
     MobState(LivingEntity entity, MobDef def, int level, int floor, BossDef boss, double maxHp) {
         this.entity = entity;

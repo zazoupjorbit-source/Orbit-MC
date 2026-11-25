@@ -44,9 +44,62 @@ public final class ContinentCommand implements TabExecutor {
             case "quetes", "quêtes" -> quests(sender, args);
             case "ambiance" -> ambient(sender, args);
             case "aubergistes", "aubergiste" -> innkeepers(sender, args);
+            case "paysage" -> landscape(sender, args);
             default -> help(sender);
         }
         return true;
+    }
+
+    /**
+     * « /continent paysage » : la vie entre les sites (bosquets, rochers, herbes et fleurs, étangs, lacs, maisons
+     * abandonnées, tours de guet, champs…). etat | compter [lieu | x z] [rayon] | essai [lieu | x z] [rayon] | lancer | refaire | stop.
+     */
+    private void landscape(CommandSender s, String[] args) {
+        String sub = args.length < 2 ? "etat" : args[1].toLowerCase(Locale.ROOT);
+        switch (sub) {
+            case "etat" -> {
+                String job = service.jobStatus();
+                Text.msg(s, "<#7FD4FF>Paysage : <#D7DCE2>" + Text.esc(service.dressState()) + "."
+                        + (job != null ? " En cours : " + Text.esc(job) + "." : ""));
+                Text.msg(s, "<#FFD66E>/continent paysage compter [lieu | x z] [rayon] <#D7DCE2>petits lieux et lacs prévus, sans rien poser");
+                Text.msg(s, "<#FFD66E>/continent paysage essai [lieu | x z] [rayon] <#D7DCE2>pose le paysage autour d'un point (160 blocs par défaut)");
+                Text.msg(s, "<#FFD66E>/continent paysage lancer <#D7DCE2>pose (ou reprend) sur toute la carte ; refaire = repasse partout");
+                Text.msg(s, "<#FFD66E>/continent paysage stop <#D7DCE2>arrête le travail en cours");
+            }
+            case "stop" -> Text.msg(s, service.stopJob() ? "<#7FD4FF>Arrêt demandé." : "<#D7DCE2>Aucun travail en cours.");
+            case "lancer", "refaire" -> {
+                String error = service.dress(s, sub.equals("refaire"));
+                Text.msg(s, error != null ? "<#FF5C5C>" + Text.esc(error)
+                        : "<#7FD4FF>Paysage lancé sur toute la carte. <#D7DCE2>/continent paysage etat pour suivre, stop pour l'arrêter.");
+            }
+            case "compter", "essai" -> {
+                String[] label = new String[1];
+                int[] t = target(s, args, 2, label);
+                if (t == null) {
+                    return;
+                }
+                int radius = 160;
+                if (args.length > 2 + t[2]) {
+                    Integer n = number(args[2 + t[2]]);
+                    if (n != null) {
+                        radius = n;
+                    }
+                }
+                if (sub.equals("compter")) {
+                    radius = Math.max(16, Math.min(4000, radius));
+                    java.util.Map<String, Integer> c = service.census(t[0], t[1], radius);
+                    int total = c.values().stream().mapToInt(Integer::intValue).sum();
+                    Text.msg(s, "<#7FD4FF>" + total + " petits lieux prévus <#D7DCE2>à " + radius + " blocs de "
+                            + Text.esc(label[0] != null ? label[0] : t[0] + ", " + t[1]) + " : " + Text.esc(c.toString()));
+                    return;
+                }
+                String error = service.dressArea(s, label[0], t[0], t[1], radius);
+                Text.msg(s, error != null ? "<#FF5C5C>" + Text.esc(error)
+                        : "<#7FD4FF>Paysage en cours autour de " + Text.esc(label[0] != null ? label[0] : t[0] + ", " + t[1])
+                        + "<#D7DCE2> (rayon " + radius + ").");
+            }
+            default -> Text.msg(s, "<#FF5C5C>Usage : /continent paysage [etat | compter | essai | lancer | refaire | stop]");
+        }
     }
 
     /** « /continent aubergistes [poser | retirer] » : un aubergiste par capitale et par village (cristal de téléportation). */
@@ -76,6 +129,7 @@ public final class ContinentCommand implements TabExecutor {
         Text.msg(s, "<#FFD66E>/continent quetes <#D7DCE2>poser les points de quête dessinés par les sites");
         Text.msg(s, "<#FFD66E>/continent ambiance <#D7DCE2>gardes, villageois, bétail et voyageurs (sans quête)");
         Text.msg(s, "<#FFD66E>/continent aubergistes <poser | retirer> <#D7DCE2>aubergistes des capitales et villages (cristal)");
+        Text.msg(s, "<#FFD66E>/continent paysage <#D7DCE2>bosquets, étangs, ruines, champs… entre les sites");
     }
 
     /** « /continent ambiance » : état des PNJ d'ambiance, essai sans joueur, relecture de ambiance.yml. */
@@ -219,10 +273,11 @@ public final class ContinentCommand implements TabExecutor {
     }
 
     // ------------------------------------------------------------------ Sites
-    private static final List<String> KINDS = List.of("village", "donjon", "camp", "ruine", "crateres");
+    private static final List<String> KINDS = List.of("village", "donjon", "camp", "ruine", "crateres", "decor");
 
     private static String kindName(String kind) {
         return switch (kind) {
+            case "decor" -> "lieux-dits (tours, moulins, fermes, monuments…)";
             case "village" -> "villages et hameaux";
             case "donjon" -> "entrées de donjon";
             case "camp" -> "camps de monstres";
@@ -627,7 +682,9 @@ public final class ContinentCommand implements TabExecutor {
         String last = args.length == 0 ? "" : args[args.length - 1].toLowerCase(Locale.ROOT);
         List<String> options = new ArrayList<>();
         if (args.length <= 1) {
-            options.addAll(List.of("info", "lieux", "tp", "pregen", "apercu", "capitale", "site", "quetes", "ambiance", "aubergistes"));
+            options.addAll(List.of("info", "lieux", "tp", "pregen", "apercu", "capitale", "site", "quetes", "ambiance", "aubergistes", "paysage"));
+        } else if (args[0].equalsIgnoreCase("paysage") && args.length == 2) {
+            options.addAll(List.of("etat", "compter", "essai", "lancer", "refaire", "stop"));
         } else if (args[0].equalsIgnoreCase("aubergistes") && args.length == 2) {
             options.addAll(List.of("poser", "retirer"));
         } else if (args[0].equalsIgnoreCase("pregen") && args.length == 2) {

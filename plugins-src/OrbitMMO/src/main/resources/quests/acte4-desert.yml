@@ -1,0 +1,3560 @@
+# ------------------------------------------------------------------
+#  Acte IV — Le Désert d'Ocre : « Le sable noir » (niv. 34 à 48). Hub neutre : l'Oasis d'Ambre.
+#  Principales Lumière (a4_l_*) et Ombre (a4_o_*), annexes neutres (a4_n_*), contrats répétables du tableau (a4_c_*).
+#  FICHIER GÉNÉRÉ par tools\quetes\gen-quetes.js depuis tools\quetes\zones\acte4-desert.js : modifier la source, pas ce fichier.
+# ------------------------------------------------------------------
+
+pnj:
+  a4_ishara:
+    nom: "Ishara"
+    titre: "Gardienne de l'Oasis"
+    titre-en: "Keeper of the Oasis"
+    couleur: "#E8B45A"
+    type: MANNEQUIN
+    visage: sunny
+    point: a4_ishara
+    repliques:
+      - "L'Astre se posait ici. Nous l'accueillions. Nous ne l'avons jamais retenu."
+    repliques-en:
+      - "The Star used to come down here. We welcomed it. We never held it back."
+  a4_tamel:
+    nom: "Tamel"
+    titre: "Maître caravanier"
+    titre-en: "Caravan master"
+    couleur: "#D9A066"
+    type: MANNEQUIN
+    visage: kai
+    point: a4_tamel
+    main: LEAD
+    repliques:
+      - "Une caravane, c'est de l'eau qui marche. Si elle s'arrête, tout le monde a soif."
+    repliques-en:
+      - "A caravan is water that walks. If it stops, everyone goes thirsty."
+  a4_saadi:
+    nom: "Saadi"
+    titre: "Lecteur des étoiles"
+    titre-en: "Star reader"
+    couleur: "#9FC8FF"
+    type: MANNEQUIN
+    visage: efe
+    point: a4_saadi
+    main: SPYGLASS
+    repliques:
+      - "Nos ancêtres n'écrivaient pas. Ils regardaient. Le ciel était leur livre."
+    repliques-en:
+      - "Our ancestors did not write. They watched. The sky was their book."
+  a4_naim:
+    nom: "Naïm"
+    titre: "Éclaireur astréen"
+    titre-en: "Astrean scout"
+    couleur: "#F2D08A"
+    type: MANNEQUIN
+    visage: ari
+    point: a4_naim
+    main: BOW
+    repliques:
+      - "Je cours plus vite que le vent des dunes. Presque."
+    repliques-en:
+      - "I run faster than the dune wind. Almost."
+  a4_oumaya:
+    nom: "Oumaya"
+    titre: "Herboriste"
+    titre-en: "Herbalist"
+    couleur: "#B7D98B"
+    type: MANNEQUIN
+    visage: makena
+    point: a4_oumaya
+    repliques:
+      - "Dans le désert, tout pique, tout mord, et tout soigne. Il suffit de savoir quoi."
+    repliques-en:
+      - "In the desert, everything stings, everything bites, and everything heals. You only need to know which."
+  a4_kesh:
+    nom: "Kesh"
+    titre: "Ancien pillard"
+    titre-en: "Former raider"
+    couleur: "#A0826D"
+    type: MANNEQUIN
+    visage: steve
+    point: a4_kesh
+    main: IRON_SWORD
+    repliques:
+      - "Ne me regarde pas comme ça. Je regarde déjà assez mal mon reflet."
+    repliques-en:
+      - "Don't look at me like that. I already look badly enough at my reflection."
+  a4_djanel:
+    nom: "Djanel"
+    titre: "Tableau des contrats"
+    titre-en: "Contract board"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: alex
+    point: a4_djanel
+    main: PAPER
+    repliques:
+      - "Chaque jour, le désert a besoin de bras. Revenez demain : il en aura encore besoin."
+    repliques-en:
+      - "Every day, the desert needs hands. Come back tomorrow: it will still need them."
+  a4_aldren:
+    nom: "Chevalier Aldren"
+    nom-en: "Sir Aldren"
+    titre: "Envoyé de l'Aube"
+    titre-en: "Envoy of the Dawn"
+    couleur: "#F7E7A1"
+    type: MANNEQUIN
+    visage: steve
+    point: a4_aldren
+    main: GOLDEN_SWORD
+    repliques:
+      - "On m'a offert de l'eau et rien d'autre. Ici, c'est presque une déclaration de guerre."
+    repliques-en:
+      - "I was offered water and nothing else. Here, that's almost a declaration of war."
+  a4_vesper:
+    nom: "Dame Vesper"
+    nom-en: "Lady Vesper"
+    titre: "Envoyée de la Citadelle"
+    titre-en: "Envoy of the Citadel"
+    couleur: "#B48CFF"
+    type: MANNEQUIN
+    visage: noor
+    point: a4_vesper
+    main: NETHERITE_SWORD
+    repliques:
+      - "Le sable entre partout. Même dans les secrets."
+    repliques-en:
+      - "Sand gets in everywhere. Even into secrets."
+  a4_helis:
+    nom: "Capitaine Hélis"
+    nom-en: "Captain Hélis"
+    titre: "Lames du Bastion"
+    titre-en: "Blades of the Bastion"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: makena
+    point: a4_helis
+    main: GOLDEN_SWORD
+    repliques:
+      - "La Haute-Prélate veut l'Éclat. Les sentiments, je les laisse au chevalier Aldren."
+    repliques-en:
+      - "The High Prelate wants the Shard. I leave feelings to Sir Aldren."
+  a4_sarn:
+    nom: "Sarn"
+    titre: "Lame de la Citadelle"
+    titre-en: "Blade of the Citadel"
+    couleur: "#B36BFF"
+    type: MANNEQUIN
+    visage: efe
+    point: a4_sarn
+    main: NETHERITE_AXE
+    repliques:
+      - "Vharos ne demande pas deux fois. Moi non plus."
+    repliques-en:
+      - "Vharos does not ask twice. Neither do I."
+  a4_morvain:
+    nom: "Morvain"
+    titre: "Chevalier noir"
+    titre-en: "Black Knight"
+    couleur: "#9A8CB8"
+    type: MANNEQUIN
+    visage: zuri
+    point: a4_morvain
+    main: NETHERITE_SWORD
+    repliques:
+      - "Le sable oublie vite. Les pierres, non."
+    repliques-en:
+      - "Sand forgets quickly. Stones do not."
+  a4_porteuse:
+    nom: "Lilah"
+    titre: "Porteuse d'eau"
+    titre-en: "Water bearer"
+    couleur: "#E3C48C"
+    type: MANNEQUIN
+    visage: noor
+    point: a4_caravane_depart
+    repliques:
+      - "Les jarres sont pleines. Il ne manque que quelqu'un pour marcher à côté."
+    repliques-en:
+      - "The jars are full. All that is missing is someone to walk beside them."
+  a4_yared:
+    nom: "Yared"
+    titre: "Caravanier blessé"
+    titre-en: "Wounded caravaneer"
+    couleur: "#C9A27A"
+    type: MANNEQUIN
+    visage: kai
+    point: a4_bivouac
+    repliques:
+      - "Un scorpion. Un seul. Et me voilà couché depuis trois jours."
+    repliques-en:
+      - "A scorpion. Just one. And here I've been lying for three days."
+  a4_hadi:
+    nom: "Hadi"
+    titre: "Vigie astréenne"
+    titre-en: "Astrean lookout"
+    couleur: "#E0B870"
+    type: MANNEQUIN
+    visage: ari
+    point: a4_vigie
+    main: SPYGLASS
+    repliques:
+      - "D'ici, je vois tout ce qui vient de l'est. Ces temps-ci, il en vient beaucoup."
+    repliques-en:
+      - "From here, I see everything that comes from the east. These days, a lot comes."
+
+monstres:
+  a4_fils_sable:
+    nom: "Fils du Sable"
+    type: HUSK
+    pv: 1.1
+    degats: 1.05
+    vitesse: 1
+    arme: IRON_SWORD
+  a4_sentinelle_sable:
+    nom: "Sentinelle des Fils du Sable"
+    type: SKELETON
+    pv: 1
+    degats: 1
+    vitesse: 0.95
+    arme: BOW
+  a4_lame_aube:
+    nom: "Lame du Bastion"
+    type: VINDICATOR
+    pv: 1.2
+    degats: 1.1
+    vitesse: 1
+    arme: GOLDEN_AXE
+  a4_lame_ombre:
+    nom: "Lame de la Citadelle"
+    type: WITHER_SKELETON
+    pv: 1.2
+    degats: 1.1
+    vitesse: 1
+    arme: STONE_SWORD
+  a4_creux_sable:
+    nom: "Creux des sables noirs"
+    type: HUSK
+    taille: 1.05
+    pv: 1.25
+    degats: 1.15
+    vitesse: 1
+  a4_scarabee:
+    nom: "Scarabée noir"
+    type: CAVE_SPIDER
+    taille: 1.5
+    pv: 0.9
+    degats: 1
+    vitesse: 1.05
+  a4_chacal:
+    nom: "Chacal des dunes"
+    type: WOLF
+    pv: 0.9
+    degats: 1
+    vitesse: 1.15
+  a4_momie_ancienne:
+    nom: "Momie ancienne"
+    type: HUSK
+    taille: 1.1
+    pv: 1.35
+    degats: 1.1
+    vitesse: 0.85
+  a4_gardien_tombe:
+    nom: "Gardien du Premier Hôte"
+    type: WITHER_SKELETON
+    taille: 1.3
+    pv: 1.6
+    degats: 1.3
+    vitesse: 0.9
+    arme: GOLDEN_SWORD
+  a4_reine:
+    nom: "La Reine des Sables Noirs"
+    type: HUSK
+    taille: 2.1
+    pv: 16
+    degats: 1.5
+    vitesse: 0.95
+    xp: 18
+    or: 15
+    arme: NETHERITE_SWORD
+  a4_scorpion_roi:
+    nom: "Scorpion-Roi"
+    type: ENDERMITE
+    taille: 3
+    pv: 9
+    degats: 1.4
+    vitesse: 1.1
+    xp: 10
+    or: 10
+
+apparitions:
+  a4_ap_gardiens_tombe:
+    point: a4_tombeau_parvis
+    monstre: a4_gardien_tombe
+    niveau: [44, 46]
+    nombre: 4
+    rayon: 9
+  a4_ap_creux_tombe:
+    point: a4_tombeau_parvis
+    monstre: a4_creux_sable
+    niveau: [45, 47]
+    nombre: 5
+    rayon: 12
+  a4_ap_reine:
+    point: a4_tombeau_parvis
+    monstre: a4_reine
+    niveau: 47
+    nombre: 1
+    rayon: 4
+  a4_ap_sentinelles_repaire:
+    point: a4_repaire
+    monstre: a4_sentinelle_sable
+    niveau: [41, 43]
+    nombre: 4
+    rayon: 7
+  a4_ap_fils_repaire:
+    point: a4_repaire
+    monstre: a4_fils_sable
+    niveau: [42, 44]
+    nombre: 5
+    rayon: 10
+  a4_ap_scarabees:
+    point: a4_nid_scorpions
+    monstre: a4_scarabee
+    niveau: [37, 40]
+    nombre: 6
+    rayon: 10
+  a4_ap_scorpion_roi:
+    point: a4_nid_scorpions
+    monstre: a4_scorpion_roi
+    niveau: 46
+    nombre: 1
+    rayon: 6
+  a4_ap_chacals:
+    point: a4_faucon_fin
+    monstre: a4_chacal
+    niveau: [37, 38]
+    nombre: 4
+    rayon: 8
+  a4_ap_creux_reliquat:
+    point: a4_reliquat
+    monstre: a4_creux_sable
+    niveau: [44, 46]
+    nombre: 5
+    rayon: 10
+  a4_ap_momies_h4:
+    point: a4_ruine_h4
+    monstre: a4_momie_ancienne
+    niveau: [45, 46]
+    nombre: 4
+    rayon: 9
+  a4_ap_momies_hotes:
+    point: a4_tombe_hotes
+    monstre: a4_momie_ancienne
+    niveau: [42, 43]
+    nombre: 4
+    rayon: 9
+
+quetes:
+
+  # ================================================================ PRINCIPALES — LUMIÈRE (a4_l_*) ET OMBRE (a4_o_*)
+
+  a4_l_le_cratere_vide:
+    nom: "Le cratère vide"
+    nom-en: "The Empty Crater"
+    faction: lumiere
+    niveau: 34
+    requiert: [l_le_pacte_des_deux_ciels]
+    donneur: aldren
+    resume:
+      - "L'Éclat-Cœur a disparu dans la nuit."
+    resume-en:
+      - "The Heart-Shard vanished in the night."
+    offre:
+      - "aldren: Réveillez-vous. L'Éclat-Cœur n'est plus dans les Ruines. Personne ne l'a pris : il est parti."
+    offre-en:
+      - "aldren: Wake up. The Heart-Shard is no longer in the Ruins. Nobody took it: it left."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre le cratère de l'Éclat-Cœur"
+        texte-en: "Reach the Heart-Shard's crater"
+        point: marche_portail
+        rayon: 8
+        apres:
+          - "Un cratère vide, encore tiède. Au fond, le sable a fondu en verre. Une traînée part vers le sud : dorée d'un côté, noire comme l'encre de l'autre."
+        apres-en:
+          - "An empty crater, still warm. At the bottom, the sand has melted into glass. A trail leads south: golden on one side, black as ink on the other."
+      - type: INTERAGIR
+        texte: "Toucher le verre du cratère"
+        texte-en: "Touch the glass of the crater"
+        point: marche_portail
+        rayon: 6
+        apres:
+          - "Sous tes doigts, le verre bat encore. Une seule voix, cette fois, très loin : « Là où l'on m'accueillait. »"
+        apres-en:
+          - "Under your fingers, the glass still beats. A single voice this time, very far away: « Where I was welcomed. »"
+      - type: PARLER
+        texte: "Revenir voir Aldren"
+        texte-en: "Return to Aldren"
+        pnj: aldren
+        dialogue:
+          - "aldren: « Là où on l'accueillait » ? Qui a jamais accueilli l'Astre ?"
+          - "aldren: Le Bastion a déjà envoyé deux compagnies vers le sud, sous la capitaine Hélis. Je pars aussi, et vous venez avec moi."
+          - "aldren: Vesper prend la même route. Pour une fois, nous ne ferons pas semblant de ne pas le savoir."
+        dialogue-en:
+          - "aldren: « Where it was welcomed »? Who ever welcomed the Star?"
+          - "aldren: The Bastion has already sent two companies south, under Captain Hélis. I am going too, and you are coming with me."
+          - "aldren: Vesper is taking the same road. For once, we will not pretend not to know it."
+    recompenses:
+      xp: 9130
+      or: 915
+
+  a4_o_le_cratere_vide:
+    nom: "Le cratère vide"
+    nom-en: "The Empty Crater"
+    faction: ombre
+    niveau: 34
+    requiert: [o_le_pacte_des_deux_ciels]
+    donneur: vesper
+    resume:
+      - "L'Éclat-Cœur a disparu dans la nuit."
+    resume-en:
+      - "The Heart-Shard vanished in the night."
+    offre:
+      - "vesper: Debout. L'Éclat-Cœur a quitté les Ruines cette nuit. Personne ne l'a porté. Il est parti seul."
+    offre-en:
+      - "vesper: Get up. The Heart-Shard left the Ruins tonight. Nobody carried it. It went alone."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre le cratère de l'Éclat-Cœur"
+        texte-en: "Reach the Heart-Shard's crater"
+        point: marche_portail
+        rayon: 8
+        apres:
+          - "Un cratère vide, encore tiède. Au fond, le sable a fondu en verre. Une traînée part vers le sud : dorée d'un côté, noire comme l'encre de l'autre."
+        apres-en:
+          - "An empty crater, still warm. At the bottom, the sand has melted into glass. A trail leads south: golden on one side, black as ink on the other."
+      - type: INTERAGIR
+        texte: "Toucher le verre du cratère"
+        texte-en: "Touch the glass of the crater"
+        point: marche_portail
+        rayon: 6
+        apres:
+          - "Sous tes doigts, le verre bat encore. Une seule voix, cette fois, très loin : « Là où l'on m'accueillait. »"
+        apres-en:
+          - "Under your fingers, the glass still beats. A single voice this time, very far away: « Where I was welcomed. »"
+      - type: PARLER
+        texte: "Revenir voir Vesper"
+        texte-en: "Return to Vesper"
+        pnj: vesper
+        dialogue:
+          - "vesper: « Là où on l'accueillait. » Les vieux de la Citadelle parlaient d'un peuple du désert qui chantait pour le ciel. Je les croyais fous."
+          - "vesper: Vharos a déjà lancé ses Lames vers le sud, sous les ordres de Sarn. Je n'aime pas Sarn. Toi, tu viens avec moi."
+          - "vesper: Aldren part aussi. Nous ferons la route à une distance polie."
+        dialogue-en:
+          - "vesper: « Where it was welcomed. » The old ones at the Citadel spoke of a desert people who sang to the sky. I thought they were mad."
+          - "vesper: Vharos has already sent his Blades south, under Sarn. I do not like Sarn. You are coming with me."
+          - "vesper: Aldren is leaving too. We will travel at a polite distance."
+    recompenses:
+      xp: 9130
+      or: 915
+
+  a4_l_le_sable_de_deux_couleurs:
+    nom: "Le sable de deux couleurs"
+    nom-en: "Sand of Two Colours"
+    faction: lumiere
+    niveau: 35
+    requiert: [a4_l_le_cratere_vide]
+    donneur: aldren
+    resume:
+      - "La traînée de l'Éclat-Cœur file vers le Désert d'Ocre."
+    resume-en:
+      - "The Heart-Shard's trail runs toward the Ochre Desert."
+    offre:
+      - "aldren: La traînée descend plein sud, vers le Désert d'Ocre. Prenez la route du Sud jusqu'aux premières dunes et retrouvez-la. Je vous rejoins à l'Oasis d'Ambre."
+    offre-en:
+      - "aldren: The trail runs due south, toward the Ochre Desert. Take the southern road to the first dunes and find it again. I will meet you at the Amber Oasis."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la lisière du Désert d'Ocre"
+        texte-en: "Reach the edge of the Ochre Desert"
+        point: a4_lisiere
+        rayon: 12
+        apres:
+          - "Le vent sent la pierre chaude. Plus loin, le sable brille, comme si quelqu'un y avait marché avec une torche."
+        apres-en:
+          - "The wind smells of hot stone. Further on, the sand shines, as if someone had walked across it with a torch."
+      - type: PISTER
+        texte: "Suivre la traînée d'or et de nuit"
+        texte-en: "Follow the trail of gold and night"
+        traces: [a4_trace_1, a4_trace_2, a4_trace_3, a4_trace_fin]
+        apres:
+          - "La traînée s'arrête net. Autour, des sabots, et des sillons de lances plantées dans le sable. Quelqu'un est venu la chercher avant toi."
+          - "Un cavalier en voile ocre t'observe du haut d'une dune. Il lève la main, paume ouverte, puis montre le sud : l'Oasis d'Ambre."
+        apres-en:
+          - "The trail stops dead. Around it, hoofprints, and furrows of spears driven into the sand. Someone came for it before you."
+          - "A rider in an ochre veil watches you from the top of a dune. He raises his hand, palm open, then points south: the Amber Oasis."
+      - type: PARLER
+        texte: "Rejoindre le cavalier à l'Oasis d'Ambre"
+        texte-en: "Join the rider at the Amber Oasis"
+        pnj: a4_naim
+        dialogue:
+          - "a4_naim: Tu as suivi la traînée jusqu'au bout. Les autres ont fait demi-tour au premier scorpion."
+          - "a4_naim: Je m'appelle Naïm. Ici, c'est chez les Astréens. Tu peux entrer, si tu laisses ta colère à la porte. La Gardienne veut te voir."
+        dialogue-en:
+          - "a4_naim: You followed the trail to the end. The others turned back at the first scorpion."
+          - "a4_naim: My name is Naïm. This is the home of the Astreans. You may come in, if you leave your anger at the door. The Keeper wants to see you."
+    recompenses:
+      xp: 9680
+      or: 970
+
+  a4_o_le_sable_de_deux_couleurs:
+    nom: "Le sable de deux couleurs"
+    nom-en: "Sand of Two Colours"
+    faction: ombre
+    niveau: 35
+    requiert: [a4_o_le_cratere_vide]
+    donneur: vesper
+    resume:
+      - "La traînée de l'Éclat-Cœur file vers le Désert d'Ocre."
+    resume-en:
+      - "The Heart-Shard's trail runs toward the Ochre Desert."
+    offre:
+      - "vesper: La traînée descend plein sud. Prends la route jusqu'aux premières dunes et suis-la. On se retrouve à l'Oasis d'Ambre."
+    offre-en:
+      - "vesper: The trail runs due south. Take the road to the first dunes and follow it. We meet at the Amber Oasis."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la lisière du Désert d'Ocre"
+        texte-en: "Reach the edge of the Ochre Desert"
+        point: a4_lisiere
+        rayon: 12
+        apres:
+          - "Le vent sent la pierre chaude. Plus loin, le sable brille, comme si quelqu'un y avait marché avec une torche."
+        apres-en:
+          - "The wind smells of hot stone. Further on, the sand shines, as if someone had walked across it with a torch."
+      - type: PISTER
+        texte: "Suivre la traînée d'or et de nuit"
+        texte-en: "Follow the trail of gold and night"
+        traces: [a4_trace_1, a4_trace_2, a4_trace_3, a4_trace_fin]
+        apres:
+          - "La traînée s'arrête net. Autour, des sabots, et des sillons de lances plantées dans le sable. Quelqu'un est venu la chercher avant toi."
+          - "Un cavalier en voile ocre t'observe du haut d'une dune. Il lève la main, paume ouverte, puis montre le sud : l'Oasis d'Ambre."
+        apres-en:
+          - "The trail stops dead. Around it, hoofprints, and furrows of spears driven into the sand. Someone came for it before you."
+          - "A rider in an ochre veil watches you from the top of a dune. He raises his hand, palm open, then points south: the Amber Oasis."
+      - type: PARLER
+        texte: "Rejoindre le cavalier à l'Oasis d'Ambre"
+        texte-en: "Join the rider at the Amber Oasis"
+        pnj: a4_naim
+        dialogue:
+          - "a4_naim: Tu as suivi la traînée jusqu'au bout. Les autres ont fait demi-tour au premier scorpion."
+          - "a4_naim: Je m'appelle Naïm. Ici, c'est chez les Astréens. Tu peux entrer, si tu laisses ta colère à la porte. La Gardienne veut te voir."
+        dialogue-en:
+          - "a4_naim: You followed the trail to the end. The others turned back at the first scorpion."
+          - "a4_naim: My name is Naïm. This is the home of the Astreans. You may come in, if you leave your anger at the door. The Keeper wants to see you."
+    recompenses:
+      xp: 9680
+      or: 970
+
+  a4_l_l_oasis_d_ambre:
+    nom: "L'Oasis d'Ambre"
+    nom-en: "The Amber Oasis"
+    faction: lumiere
+    niveau: 36
+    requiert: [a4_l_le_sable_de_deux_couleurs]
+    donneur: a4_naim
+    resume:
+      - "La Gardienne de l'Oasis veut voir le Marqué venu du nord."
+    resume-en:
+      - "The Keeper of the Oasis wants to see the Marked who came from the north."
+    offre:
+      - "a4_naim: Elle s'appelle Ishara. Elle te posera une question. Réfléchis avant de répondre : ici, on se souvient des réponses."
+    offre-en:
+      - "a4_naim: Her name is Ishara. She will ask you a question. Think before you answer: here, answers are remembered."
+    etapes:
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage de l'Oasis"
+        texte-en: "Touch the Oasis' anchoring Shard"
+        point: a4_ancre_oasis
+        rayon: 4
+      - type: CHOIX
+        texte: "Répondre à la Gardienne Ishara"
+        texte-en: "Answer Keeper Ishara"
+        pnj: a4_ishara
+        choix: a4-presentation
+        question: "Qui êtes-vous, ici ?"
+        question-en: "Who are you, here?"
+        reponses:
+          - id: banniere
+            texte: "Un serviteur de l'Aube."
+            texte-en: "A servant of the Dawn."
+            reponse:
+              - "a4_ishara: Alors tu es un invité poli de plus. Nous en avons beaucoup, ces jours-ci. Bois, et ne touche à rien."
+            reponse-en:
+              - "a4_ishara: Then you are one more polite guest. We have many these days. Drink, and touch nothing."
+            or: 205
+          - id: marque
+            texte: "Un Marqué. Rien de plus."
+            texte-en: "One of the Marked. Nothing more."
+            reponse:
+              - "a4_ishara: Un Marqué. Une page de ciel qui marche. Alors tu peux t'asseoir à mon feu."
+            reponse-en:
+              - "a4_ishara: One of the Marked. A page of sky that walks. Then you may sit at my fire."
+            xp: 2050
+        dialogue:
+          - "a4_ishara: Tu portes une Marque. Tu portes aussi des couleurs."
+          - "a4_ishara: L'Aube et l'Ombre sont venues ce matin. Toutes les deux veulent ce qui est passé chez nous cette nuit. Toutes les deux ont dit « nous »."
+        dialogue-en:
+          - "a4_ishara: You bear a Mark. You also wear colours."
+          - "a4_ishara: The Dawn and the Shadow came this morning. Both want what passed through here last night. Both said « we »."
+      - type: PARLER
+        texte: "Retrouver Aldren à l'Oasis"
+        texte-en: "Find Aldren at the Oasis"
+        pnj: a4_aldren
+        dialogue:
+          - "a4_aldren: Vous avez vu la Gardienne ? Elle m'a offert de l'eau et rien d'autre."
+          - "a4_aldren: Ils savent où est l'Éclat-Cœur. Ils ne le diront à personne. Et je crois qu'ils ont raison de se méfier."
+        dialogue-en:
+          - "a4_aldren: You saw the Keeper? She offered me water and nothing else."
+          - "a4_aldren: They know where the Heart-Shard is. They will tell no one. And I think they are right to be wary."
+    recompenses:
+      xp: 10240
+      or: 1025
+
+  a4_o_l_oasis_d_ambre:
+    nom: "L'Oasis d'Ambre"
+    nom-en: "The Amber Oasis"
+    faction: ombre
+    niveau: 36
+    requiert: [a4_o_le_sable_de_deux_couleurs]
+    donneur: a4_naim
+    resume:
+      - "La Gardienne de l'Oasis veut voir le Marqué venu du nord."
+    resume-en:
+      - "The Keeper of the Oasis wants to see the Marked who came from the north."
+    offre:
+      - "a4_naim: Elle s'appelle Ishara. Elle te posera une question. Réfléchis avant de répondre : ici, on se souvient des réponses."
+    offre-en:
+      - "a4_naim: Her name is Ishara. She will ask you a question. Think before you answer: here, answers are remembered."
+    etapes:
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage de l'Oasis"
+        texte-en: "Touch the Oasis' anchoring Shard"
+        point: a4_ancre_oasis
+        rayon: 4
+      - type: CHOIX
+        texte: "Répondre à la Gardienne Ishara"
+        texte-en: "Answer Keeper Ishara"
+        pnj: a4_ishara
+        choix: a4-presentation
+        question: "Qui êtes-vous, ici ?"
+        question-en: "Who are you, here?"
+        reponses:
+          - id: banniere
+            texte: "Une lame de la Citadelle."
+            texte-en: "A blade of the Citadel."
+            reponse:
+              - "a4_ishara: Alors tu es un invité poli de plus. Nous en avons beaucoup, ces jours-ci. Bois, et ne touche à rien."
+            reponse-en:
+              - "a4_ishara: Then you are one more polite guest. We have many these days. Drink, and touch nothing."
+            or: 205
+          - id: marque
+            texte: "Un Marqué. Rien de plus."
+            texte-en: "One of the Marked. Nothing more."
+            reponse:
+              - "a4_ishara: Un Marqué. Une page de ciel qui marche. Alors tu peux t'asseoir à mon feu."
+            reponse-en:
+              - "a4_ishara: One of the Marked. A page of sky that walks. Then you may sit at my fire."
+            xp: 2050
+        dialogue:
+          - "a4_ishara: Tu portes une Marque. Tu portes aussi des couleurs."
+          - "a4_ishara: L'Aube et l'Ombre sont venues ce matin. Toutes les deux veulent ce qui est passé chez nous cette nuit. Toutes les deux ont dit « nous »."
+        dialogue-en:
+          - "a4_ishara: You bear a Mark. You also wear colours."
+          - "a4_ishara: The Dawn and the Shadow came this morning. Both want what passed through here last night. Both said « we »."
+      - type: PARLER
+        texte: "Retrouver Vesper à l'Oasis"
+        texte-en: "Find Vesper at the Oasis"
+        pnj: a4_vesper
+        dialogue:
+          - "a4_vesper: La Gardienne m'a servi de l'eau dans une coupe fêlée. Je crois que c'était voulu."
+          - "a4_vesper: Ils savent où est l'Éclat-Cœur. Ils ne le donneront ni à nous ni à l'Aube. Ça me les rend presque sympathiques."
+        dialogue-en:
+          - "a4_vesper: The Keeper served me water in a cracked cup. I believe it was deliberate."
+          - "a4_vesper: They know where the Heart-Shard is. They won't give it to us or to the Dawn. That almost makes me like them."
+    recompenses:
+      xp: 10240
+      or: 1025
+
+  a4_l_les_ordres:
+    nom: "Les ordres du Bastion"
+    nom-en: "The Bastion's Orders"
+    faction: lumiere
+    niveau: 37
+    requiert: [a4_l_l_oasis_d_ambre]
+    donneur: a4_aldren
+    resume:
+      - "La capitaine Hélis campe au nord-est de l'Oasis."
+    resume-en:
+      - "Captain Hélis is camped north-east of the Oasis."
+    offre:
+      - "a4_aldren: La capitaine Hélis campe au nord-est, avec deux compagnies. Elle n'a pas le droit d'entrer à l'Oasis. Elle veut vous voir quand même."
+    offre-en:
+      - "a4_aldren: Captain Hélis is camped to the north-east, with two companies. She may not enter the Oasis. She wants to see you all the same."
+    etapes:
+      - type: PARLER
+        texte: "Parler à la capitaine Hélis"
+        texte-en: "Talk to Captain Hélis"
+        pnj: a4_helis
+        dialogue:
+          - "a4_helis: Le Marqué d'Aldren. Bien. Moi, je n'ai pas de patience pour les Gardiennes."
+          - "a4_helis: La Haute-Prélate veut l'Éclat-Cœur au Bastion avant la nouvelle lune. Les nomades l'ont caché. Trouvez où."
+        dialogue-en:
+          - "a4_helis: Aldren's Marked. Good. I have no patience for Keepers."
+          - "a4_helis: The High Prelate wants the Heart-Shard at the Bastion before the new moon. The nomads have hidden it. Find out where."
+      - type: ENQUETE
+        texte: "Chercher où les Astréens ont caché l'Éclat-Cœur"
+        texte-en: "Find where the Astreans hid the Heart-Shard"
+        pnj: a4_aldren
+        indices:
+          - point: a4_indice_chariot
+            texte: "Des traces de chariot lourd"
+            texte-en: "Tracks of a heavy cart"
+            apres:
+              - "Un chariot chargé, tiré à bras. Les roues s'enfoncent profond. Il allait vers le sud-est."
+            apres-en:
+              - "A laden cart, pulled by hand. The wheels sink deep. It was heading south-east."
+          - point: a4_indice_sable
+            texte: "Du sable de verre, tamisé"
+            texte-en: "Sifted glass sand"
+            apres:
+              - "Quelqu'un a tamisé le sable vitrifié et l'a emporté dans des sacs. Ils effacent la traînée derrière eux."
+            apres-en:
+              - "Someone sifted the vitrified sand and carried it off in sacks. They are erasing the trail behind them."
+          - point: a4_indice_chant
+            texte: "Une pierre gravée de signes"
+            texte-en: "A stone carved with signs"
+            apres:
+              - "Des signes en forme d'étoiles. Le même revient trois fois, avec une flèche vers le sud : vers le grand tombeau."
+            apres-en:
+              - "Star-shaped signs. The same one comes back three times, with an arrow pointing south: toward the great tomb."
+        dialogue:
+          - "joueur: Un chariot vers le sud-est, une traînée qu'on efface, et un signe qui montre le grand tombeau."
+          - "a4_aldren: Le Tombeau. Ils l'ont ramené là où ils le gardaient autrefois."
+          - "a4_aldren: N'en dites rien à Hélis. Pas encore. Si elle l'apprend, elle mettra le feu au désert pour l'ouvrir."
+        dialogue-en:
+          - "joueur: A cart heading south-east, a trail being erased, and a sign pointing to the great tomb."
+          - "a4_aldren: The Tomb. They took it back to where they kept it long ago."
+          - "a4_aldren: Say nothing to Hélis. Not yet. If she learns of it, she will set the desert on fire to open it."
+    recompenses:
+      xp: 10820
+      or: 1080
+
+  a4_o_les_ordres:
+    nom: "Les ordres de la Citadelle"
+    nom-en: "The Citadel's Orders"
+    faction: ombre
+    niveau: 37
+    requiert: [a4_o_l_oasis_d_ambre]
+    donneur: a4_vesper
+    resume:
+      - "Sarn, Lame de la Citadelle, campe à l'ouest de l'Oasis."
+    resume-en:
+      - "Sarn, Blade of the Citadel, is camped west of the Oasis."
+    offre:
+      - "a4_vesper: Sarn campe à l'ouest avec ses Lames. Il ne met pas les pieds à l'Oasis : on l'y tuerait. Il te réclame."
+    offre-en:
+      - "a4_vesper: Sarn is camped to the west with his Blades. He doesn't set foot in the Oasis: they would kill him there. He is asking for you."
+    etapes:
+      - type: PARLER
+        texte: "Parler à Sarn"
+        texte-en: "Talk to Sarn"
+        pnj: a4_sarn
+        dialogue:
+          - "a4_sarn: Le chien de Vesper. Elle te laisse courir loin de sa main."
+          - "a4_sarn: Vharos veut l'Éclat-Cœur à la Citadelle avant que l'Aube ne pose la main dessus. Les nomades l'ont enterré quelque part. Trouve où."
+        dialogue-en:
+          - "a4_sarn: Vesper's hound. She lets you run far from her hand."
+          - "a4_sarn: Vharos wants the Heart-Shard at the Citadel before the Dawn lays a hand on it. The nomads buried it somewhere. Find out where."
+      - type: ENQUETE
+        texte: "Chercher où les Astréens ont caché l'Éclat-Cœur"
+        texte-en: "Find where the Astreans hid the Heart-Shard"
+        pnj: a4_vesper
+        indices:
+          - point: a4_indice_chariot
+            texte: "Des traces de chariot lourd"
+            texte-en: "Tracks of a heavy cart"
+            apres:
+              - "Un chariot chargé, tiré à bras. Les roues s'enfoncent profond. Il allait vers le sud-est."
+            apres-en:
+              - "A laden cart, pulled by hand. The wheels sink deep. It was heading south-east."
+          - point: a4_indice_sable
+            texte: "Du sable de verre, tamisé"
+            texte-en: "Sifted glass sand"
+            apres:
+              - "Quelqu'un a tamisé le sable vitrifié et l'a emporté dans des sacs. Ils effacent la traînée derrière eux."
+            apres-en:
+              - "Someone sifted the vitrified sand and carried it off in sacks. They are erasing the trail behind them."
+          - point: a4_indice_chant
+            texte: "Une pierre gravée de signes"
+            texte-en: "A stone carved with signs"
+            apres:
+              - "Des signes en forme d'étoiles. Le même revient trois fois, avec une flèche vers le sud : vers le grand tombeau."
+            apres-en:
+              - "Star-shaped signs. The same one comes back three times, with an arrow pointing south: toward the great tomb."
+        dialogue:
+          - "joueur: Un chariot vers le sud-est, une traînée qu'on efface, et un signe qui montre le grand tombeau."
+          - "a4_vesper: Le Tombeau. Ils l'ont remis là où il dormait avant nous tous."
+          - "a4_vesper: Pas un mot à Sarn. Il raserait l'Oasis pour une pierre, et il appellerait ça une victoire."
+        dialogue-en:
+          - "joueur: A cart heading south-east, a trail being erased, and a sign pointing to the great tomb."
+          - "a4_vesper: The Tomb. They put it back where it slept before any of us."
+          - "a4_vesper: Not a word to Sarn. He would raze the Oasis for a stone, and call it a victory."
+    recompenses:
+      xp: 10820
+      or: 1080
+
+  a4_l_l_or_des_deux_camps:
+    nom: "L'or des deux camps"
+    nom-en: "Gold from Both Sides"
+    faction: lumiere
+    niveau: 38
+    requiert: [a4_l_les_ordres]
+    donneur: a4_tamel
+    resume:
+      - "Des pillards attaquent les caravanes astréennes."
+    resume-en:
+      - "Raiders are attacking the Astrean caravans."
+    offre:
+      - "a4_tamel: Trois caravanes perdues en dix jours. Les pillards savent où nous passons. Quelqu'un les renseigne, et quelqu'un les paie."
+      - "a4_tamel: Leur camp est au nord, sur la route des dunes. Va voir qui signe leurs gages."
+    offre-en:
+      - "a4_tamel: Three caravans lost in ten days. The raiders know where we pass. Someone is informing them, and someone is paying them."
+      - "a4_tamel: Their camp is to the north, on the dune road. Go and see who signs their wages."
+    etapes:
+      - type: TUER
+        texte: "Briser le camp des pillards au nord"
+        texte-en: "Break the raiders' camp to the north"
+        monstres: [pillard, pillard_archer]
+        nombre: 12
+        point: a4_pillards_h3
+      - type: INTERAGIR
+        texte: "Fouiller le coffre des pillards"
+        texte-en: "Search the raiders' chest"
+        point: a4_pillards_h3
+        rayon: 6
+        apres:
+          - "Deux bourses. L'une pleine de pièces d'or frappées du soleil du Bastion. L'autre pleine d'éclats noirs taillés, la monnaie de la Citadelle."
+          - "Et un ordre, sans signature : « Faire peur aux nomades. Qu'ils rendent ce qu'ils cachent. »"
+        apres-en:
+          - "Two purses. One full of gold coins struck with the Bastion's sun. The other full of cut black shards, the Citadel's currency."
+          - "And an order, unsigned: « Frighten the nomads. Make them give back what they are hiding. »"
+      - type: PARLER
+        texte: "Montrer les bourses à Tamel"
+        texte-en: "Show the purses to Tamel"
+        pnj: a4_tamel
+        dialogue:
+          - "a4_tamel: L'or du soleil et les pierres de la nuit. Les deux camps paient les mêmes chiens."
+          - "a4_tamel: Ton Ordre veut nous faire peur. Il nous connaît mal : nous avons survécu à la Chute."
+        dialogue-en:
+          - "a4_tamel: The sun's gold and the night's stones. Both sides pay the same dogs."
+          - "a4_tamel: Your Order wants to frighten us. It knows us poorly: we survived the Fall."
+    recompenses:
+      xp: 11410
+      or: 1140
+
+  a4_o_l_or_des_deux_camps:
+    nom: "L'or des deux camps"
+    nom-en: "Gold from Both Sides"
+    faction: ombre
+    niveau: 38
+    requiert: [a4_o_les_ordres]
+    donneur: a4_tamel
+    resume:
+      - "Des pillards attaquent les caravanes astréennes."
+    resume-en:
+      - "Raiders are attacking the Astrean caravans."
+    offre:
+      - "a4_tamel: Trois caravanes perdues en dix jours. Les pillards savent où nous passons. Quelqu'un les renseigne, et quelqu'un les paie."
+      - "a4_tamel: Leur camp est au nord, sur la route des dunes. Va voir qui signe leurs gages."
+    offre-en:
+      - "a4_tamel: Three caravans lost in ten days. The raiders know where we pass. Someone is informing them, and someone is paying them."
+      - "a4_tamel: Their camp is to the north, on the dune road. Go and see who signs their wages."
+    etapes:
+      - type: TUER
+        texte: "Briser le camp des pillards au nord"
+        texte-en: "Break the raiders' camp to the north"
+        monstres: [pillard, pillard_archer]
+        nombre: 12
+        point: a4_pillards_h3
+      - type: INTERAGIR
+        texte: "Fouiller le coffre des pillards"
+        texte-en: "Search the raiders' chest"
+        point: a4_pillards_h3
+        rayon: 6
+        apres:
+          - "Deux bourses. L'une pleine de pièces d'or frappées du soleil du Bastion. L'autre pleine d'éclats noirs taillés, la monnaie de la Citadelle."
+          - "Et un ordre, sans signature : « Faire peur aux nomades. Qu'ils rendent ce qu'ils cachent. »"
+        apres-en:
+          - "Two purses. One full of gold coins struck with the Bastion's sun. The other full of cut black shards, the Citadel's currency."
+          - "And an order, unsigned: « Frighten the nomads. Make them give back what they are hiding. »"
+      - type: PARLER
+        texte: "Montrer les bourses à Tamel"
+        texte-en: "Show the purses to Tamel"
+        pnj: a4_tamel
+        dialogue:
+          - "a4_tamel: L'or du soleil et les pierres de la nuit. Les deux camps paient les mêmes chiens."
+          - "a4_tamel: Ta Citadelle veut nous faire peur. Elle nous connaît mal : nous avons survécu à la Chute."
+        dialogue-en:
+          - "a4_tamel: The sun's gold and the night's stones. Both sides pay the same dogs."
+          - "a4_tamel: Your Citadel wants to frighten us. It knows us poorly: we survived the Fall."
+    recompenses:
+      xp: 11410
+      or: 1140
+
+  a4_l_la_caravane_de_l_eau:
+    nom: "La caravane de l'eau"
+    nom-en: "The Water Caravan"
+    faction: lumiere
+    niveau: 39
+    requiert: [a4_l_l_or_des_deux_camps]
+    donneur: a4_tamel
+    resume:
+      - "La caravane de l'eau doit atteindre le Puits de Sel."
+    resume-en:
+      - "The water caravan must reach the Salt Well."
+    offre:
+      - "a4_tamel: Lilah conduit la caravane de l'eau jusqu'au Puits de Sel, au sud. Les Fils du Sable l'attendent, j'en suis sûr. Marche avec elle."
+      - "a4_tamel: Elle part de la porte du sud, en bas de l'Oasis."
+    offre-en:
+      - "a4_tamel: Lilah is leading the water caravan to the Salt Well, to the south. The Sons of the Sand are waiting for her, I am sure of it. Walk with her."
+      - "a4_tamel: She leaves from the south gate, below the Oasis."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter Lilah jusqu'au Puits de Sel"
+        texte-en: "Escort Lilah to the Salt Well"
+        pnj: a4_porteuse
+        chemin: [a4_caravane_1, a4_caravane_2, a4_puits_sel]
+        monstres: [a4_fils_sable]
+        nombre: 3
+        vagues: 3
+        pv: 140
+        degats: 5
+        apres:
+          - "a4_porteuse: Le Puits de Sel. Tamel dira que tu as de bonnes jambes. Chez nous, c'est un grand compliment."
+        apres-en:
+          - "a4_porteuse: The Salt Well. Tamel will say you have good legs. Among us, that is high praise."
+      - type: PARLER
+        texte: "Revenir voir Tamel"
+        texte-en: "Return to Tamel"
+        pnj: a4_tamel
+        dialogue:
+          - "a4_tamel: L'eau est passée. Les familles du sud boiront ce soir."
+          - "a4_tamel: Ishara m'a demandé de te présenter à Saadi. Il veut t'apprendre à lire. Pas les livres : le ciel."
+        dialogue-en:
+          - "a4_tamel: The water got through. The southern families will drink tonight."
+          - "a4_tamel: Ishara asked me to introduce you to Saadi. He wants to teach you to read. Not books: the sky."
+    recompenses:
+      xp: 12020
+      or: 1200
+
+  a4_o_la_caravane_de_l_eau:
+    nom: "La caravane de l'eau"
+    nom-en: "The Water Caravan"
+    faction: ombre
+    niveau: 39
+    requiert: [a4_o_l_or_des_deux_camps]
+    donneur: a4_tamel
+    resume:
+      - "La caravane de l'eau doit atteindre le Puits de Sel."
+    resume-en:
+      - "The water caravan must reach the Salt Well."
+    offre:
+      - "a4_tamel: Lilah conduit la caravane de l'eau jusqu'au Puits de Sel, au sud. Les Fils du Sable l'attendent, j'en suis sûr. Marche avec elle."
+      - "a4_tamel: Elle part de la porte du sud, en bas de l'Oasis."
+    offre-en:
+      - "a4_tamel: Lilah is leading the water caravan to the Salt Well, to the south. The Sons of the Sand are waiting for her, I am sure of it. Walk with her."
+      - "a4_tamel: She leaves from the south gate, below the Oasis."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter Lilah jusqu'au Puits de Sel"
+        texte-en: "Escort Lilah to the Salt Well"
+        pnj: a4_porteuse
+        chemin: [a4_caravane_1, a4_caravane_2, a4_puits_sel]
+        monstres: [a4_fils_sable]
+        nombre: 3
+        vagues: 3
+        pv: 140
+        degats: 5
+        apres:
+          - "a4_porteuse: Le Puits de Sel. Tamel dira que tu as de bonnes jambes. Chez nous, c'est un grand compliment."
+        apres-en:
+          - "a4_porteuse: The Salt Well. Tamel will say you have good legs. Among us, that is high praise."
+      - type: PARLER
+        texte: "Revenir voir Tamel"
+        texte-en: "Return to Tamel"
+        pnj: a4_tamel
+        dialogue:
+          - "a4_tamel: L'eau est passée. Les familles du sud boiront ce soir."
+          - "a4_tamel: Ishara m'a demandé de te présenter à Saadi. Il veut t'apprendre à lire. Pas les livres : le ciel."
+        dialogue-en:
+          - "a4_tamel: The water got through. The southern families will drink tonight."
+          - "a4_tamel: Ishara asked me to introduce you to Saadi. He wants to teach you to read. Not books: the sky."
+    recompenses:
+      xp: 12020
+      or: 1200
+
+  a4_l_la_langue_des_etoiles:
+    nom: "La langue des étoiles"
+    nom-en: "The Language of the Stars"
+    faction: lumiere
+    niveau: 40
+    requiert: [a4_l_la_caravane_de_l_eau]
+    donneur: a4_saadi
+    resume:
+      - "Saadi veut apprendre au Marqué la langue des étoiles."
+    resume-en:
+      - "Saadi wants to teach the Marked the language of the stars."
+    offre:
+      - "a4_saadi: Les Hôtes n'écrivaient pas avec des lettres. Ils gravaient le ciel. Trois stèles t'attendent au nord, dans le cercle de pierres. Lis-les."
+      - "a4_saadi: Après, tu sauras ce que tu demandes quand tu demandes l'Éclat."
+    offre-en:
+      - "a4_saadi: The Hosts did not write with letters. They carved the sky. Three steles await you to the north, in the stone circle. Read them."
+      - "a4_saadi: Afterwards, you will know what you are asking for when you ask for the Shard."
+    etapes:
+      - type: ENQUETE
+        texte: "Lire les trois stèles"
+        texte-en: "Read the three steles"
+        pnj: a4_saadi
+        indices:
+          - point: a4_stele_1
+            texte: "La stèle de l'Astre qui descend"
+            texte-en: "The stele of the descending Star"
+            apres:
+              - "Un astre, et sous lui des silhouettes aux bras ouverts. Le signe sous l'astre se lit « invité »."
+            apres-en:
+              - "A star, and beneath it figures with open arms. The sign beneath the star reads « guest »."
+          - point: a4_stele_2
+            texte: "La stèle du départ"
+            texte-en: "The stele of the departure"
+            apres:
+              - "L'astre remonte. Les silhouettes saluent. Le signe se lit « il repart, et c'est bien »."
+            apres-en:
+              - "The star rises again. The figures wave. The sign reads « it leaves, and that is good »."
+          - point: a4_stele_3
+            texte: "La stèle martelée"
+            texte-en: "The hammered stele"
+            apres:
+              - "Une seule silhouette tend une chaîne vers l'astre. Le reste de la pierre a été martelé, il y a très longtemps."
+            apres-en:
+              - "A single figure holds out a chain toward the star. The rest of the stone was hammered away, a very long time ago."
+        dialogue:
+          - "a4_saadi: Invité. Il repart, et c'est bien. Et la troisième, martelée par nos propres ancêtres."
+          - "a4_saadi: Nous étions les Hôtes. L'Astre descendait se poser chez nous, puis il repartait. Nous ne l'avons jamais retenu."
+          - "a4_saadi: Un seul l'a voulu pour lui. Nous ne disons pas son nom. Nous l'avons effacé de la pierre."
+        dialogue-en:
+          - "a4_saadi: Guest. It leaves, and that is good. And the third, hammered by our own ancestors."
+          - "a4_saadi: We were the Hosts. The Star came down to rest among us, then it left again. We never held it back."
+          - "a4_saadi: Only one wanted it for himself. We do not say his name. We erased it from the stone."
+    recompenses:
+      xp: 12640
+      or: 1265
+      objets:
+        - materiau: MAP
+          nom: "Ciel des Hôtes"
+          nom-en: "Sky of the Hosts"
+          description:
+            - "Les trois signes des stèles : invité, départ, chaîne."
+          description-en:
+            - "The three signs of the steles: guest, departure, chain."
+
+  a4_o_la_langue_des_etoiles:
+    nom: "La langue des étoiles"
+    nom-en: "The Language of the Stars"
+    faction: ombre
+    niveau: 40
+    requiert: [a4_o_la_caravane_de_l_eau]
+    donneur: a4_saadi
+    resume:
+      - "Saadi veut apprendre au Marqué la langue des étoiles."
+    resume-en:
+      - "Saadi wants to teach the Marked the language of the stars."
+    offre:
+      - "a4_saadi: Les Hôtes n'écrivaient pas avec des lettres. Ils gravaient le ciel. Trois stèles t'attendent au nord, dans le cercle de pierres. Lis-les."
+      - "a4_saadi: Après, tu sauras ce que tu demandes quand tu demandes l'Éclat."
+    offre-en:
+      - "a4_saadi: The Hosts did not write with letters. They carved the sky. Three steles await you to the north, in the stone circle. Read them."
+      - "a4_saadi: Afterwards, you will know what you are asking for when you ask for the Shard."
+    etapes:
+      - type: ENQUETE
+        texte: "Lire les trois stèles"
+        texte-en: "Read the three steles"
+        pnj: a4_saadi
+        indices:
+          - point: a4_stele_1
+            texte: "La stèle de l'Astre qui descend"
+            texte-en: "The stele of the descending Star"
+            apres:
+              - "Un astre, et sous lui des silhouettes aux bras ouverts. Le signe sous l'astre se lit « invité »."
+            apres-en:
+              - "A star, and beneath it figures with open arms. The sign beneath the star reads « guest »."
+          - point: a4_stele_2
+            texte: "La stèle du départ"
+            texte-en: "The stele of the departure"
+            apres:
+              - "L'astre remonte. Les silhouettes saluent. Le signe se lit « il repart, et c'est bien »."
+            apres-en:
+              - "The star rises again. The figures wave. The sign reads « it leaves, and that is good »."
+          - point: a4_stele_3
+            texte: "La stèle martelée"
+            texte-en: "The hammered stele"
+            apres:
+              - "Une seule silhouette tend une chaîne vers l'astre. Le reste de la pierre a été martelé, il y a très longtemps."
+            apres-en:
+              - "A single figure holds out a chain toward the star. The rest of the stone was hammered away, a very long time ago."
+        dialogue:
+          - "a4_saadi: Invité. Il repart, et c'est bien. Et la troisième, martelée par nos propres ancêtres."
+          - "a4_saadi: Nous étions les Hôtes. L'Astre descendait se poser chez nous, puis il repartait. Nous ne l'avons jamais retenu."
+          - "a4_saadi: Un seul l'a voulu pour lui. Nous ne disons pas son nom. Nous l'avons effacé de la pierre."
+        dialogue-en:
+          - "a4_saadi: Guest. It leaves, and that is good. And the third, hammered by our own ancestors."
+          - "a4_saadi: We were the Hosts. The Star came down to rest among us, then it left again. We never held it back."
+          - "a4_saadi: Only one wanted it for himself. We do not say his name. We erased it from the stone."
+    recompenses:
+      xp: 12640
+      or: 1265
+      objets:
+        - materiau: MAP
+          nom: "Ciel des Hôtes"
+          nom-en: "Sky of the Hosts"
+          description:
+            - "Les trois signes des stèles : invité, départ, chaîne."
+          description-en:
+            - "The three signs of the steles: guest, departure, chain."
+
+  a4_l_la_lettre_scellee:
+    nom: "La lettre scellée"
+    nom-en: "The Sealed Letter"
+    faction: lumiere
+    niveau: 41
+    requiert: [a4_l_la_langue_des_etoiles]
+    donneur: a4_aldren
+    resume:
+      - "Aldren veut faire passer une lettre à Vesper."
+    resume-en:
+      - "Aldren wants to get a letter to Vesper."
+    offre:
+      - "a4_aldren: J'ai écrit à Vesper. Si l'Aube et la Citadelle se battent pour le Tombeau, les Astréens mourront les premiers. Portez-lui ceci. Sans que la capitaine le voie."
+    offre-en:
+      - "a4_aldren: I have written to Vesper. If the Dawn and the Citadel fight over the Tomb, the Astreans will die first. Take this to her. Without the captain seeing."
+    etapes:
+      - type: LIVRER
+        texte: "Porter la lettre à Dame Vesper"
+        texte-en: "Carry the letter to Lady Vesper"
+        pnj: a4_vesper
+        materiau: PAPER
+        objet: "Lettre d'Aldren"
+        objet-en: "Aldren's letter"
+        dialogue:
+          - "a4_vesper: Aldren m'écrit des lettres, maintenant. Il devrait se méfier : on va finir par nous croire amis."
+          - "a4_vesper: Il a raison. Dis-lui que Sarn ne bougera pas tant que je suis là. Je ne sais pas combien de temps je serai là."
+        dialogue-en:
+          - "a4_vesper: Aldren writes me letters now. He should be careful: people will end up thinking we are friends."
+          - "a4_vesper: He is right. Tell him Sarn will not move while I am here. I do not know how long I will be here."
+      - type: CHOIX
+        texte: "Répondre à la capitaine Hélis"
+        texte-en: "Answer Captain Hélis"
+        pnj: a4_helis
+        choix: a4-loyaute
+        question: "Que dites-vous à Hélis ?"
+        question-en: "What do you tell Hélis?"
+        reponses:
+          - id: capitaine
+            texte: "La vérité : Aldren écrit à l'ennemi."
+            texte-en: "The truth: Aldren writes to the enemy."
+            reponse:
+              - "a4_helis: Je le savais. Le Bastion saura récompenser votre loyauté. Aldren, lui, rentrera sous escorte."
+            reponse-en:
+              - "a4_helis: I knew it. The Bastion will know how to reward your loyalty. Aldren will go home under escort."
+            or: 400
+          - id: envoye
+            texte: "Rien : j'achetais des dattes."
+            texte-en: "Nothing: I was buying dates."
+            reponse:
+              - "a4_helis: Des dattes. Bien sûr. Je vous ai à l'œil, Marqué."
+            reponse-en:
+              - "a4_helis: Dates. Of course. I have my eye on you, Marked."
+            xp: 3980
+        dialogue:
+          - "a4_helis: On vous a vu entrer chez l'envoyée de la Citadelle avec un papier. Ne me mentez pas : que trame le chevalier Aldren ?"
+        dialogue-en:
+          - "a4_helis: You were seen going into the Citadel envoy's tent with a paper. Do not lie to me: what is Sir Aldren plotting?"
+      - type: PARLER
+        texte: "Revenir voir Aldren"
+        texte-en: "Return to Aldren"
+        pnj: a4_aldren
+        dialogue:
+          - "a4_aldren: Hélis m'a fait savoir que je rentrerai au Bastion à la fin de la lune. Sous escorte."
+          - "a4_aldren: Vous avez fait votre devoir. Je ne vous en veux pas. Pas beaucoup."
+        dialogue-en:
+          - "a4_aldren: Hélis has let me know I will return to the Bastion at the end of the moon. Under escort."
+          - "a4_aldren: You did your duty. I do not hold it against you. Not much."
+        si: "a4-loyaute=capitaine"
+      - type: PARLER
+        texte: "Revenir voir Aldren"
+        texte-en: "Return to Aldren"
+        pnj: a4_aldren
+        dialogue:
+          - "a4_aldren: Hélis vous a interrogé, et vous n'avez rien dit."
+          - "a4_aldren: Merci. Il y a des loyautés qui ne portent pas de bannière."
+        dialogue-en:
+          - "a4_aldren: Hélis questioned you, and you said nothing."
+          - "a4_aldren: Thank you. Some loyalties carry no banner."
+        si: "a4-loyaute=envoye"
+    recompenses:
+      xp: 13280
+      or: 1330
+
+  a4_o_la_lettre_scellee:
+    nom: "La lettre scellée"
+    nom-en: "The Sealed Letter"
+    faction: ombre
+    niveau: 41
+    requiert: [a4_o_la_langue_des_etoiles]
+    donneur: a4_vesper
+    resume:
+      - "Vesper veut faire passer une lettre à Aldren."
+    resume-en:
+      - "Vesper wants to get a letter to Aldren."
+    offre:
+      - "a4_vesper: J'ai écrit à Aldren. Si nos deux armées se battent pour le Tombeau, les nomades seront écrasés entre les deux. Porte-lui ça. Et que Sarn ne le voie pas."
+    offre-en:
+      - "a4_vesper: I have written to Aldren. If our two armies fight over the Tomb, the nomads will be crushed between them. Take this to him. And do not let Sarn see it."
+    etapes:
+      - type: LIVRER
+        texte: "Porter la lettre au chevalier Aldren"
+        texte-en: "Carry the letter to Sir Aldren"
+        pnj: a4_aldren
+        materiau: PAPER
+        objet: "Lettre de Vesper"
+        objet-en: "Vesper's letter"
+        dialogue:
+          - "a4_aldren: Une lettre de Vesper. Elle écrit comme elle se bat : sans un mot de trop."
+          - "a4_aldren: Dites-lui qu'Hélis ne bougera pas tant que je serai là. Et que je ne sais pas combien de temps on me laissera ici."
+        dialogue-en:
+          - "a4_aldren: A letter from Vesper. She writes the way she fights: not a word too many."
+          - "a4_aldren: Tell her Hélis will not move while I am here. And that I do not know how long they will leave me here."
+      - type: CHOIX
+        texte: "Répondre à Sarn"
+        texte-en: "Answer Sarn"
+        pnj: a4_sarn
+        choix: a4-loyaute
+        question: "Que dites-vous à Sarn ?"
+        question-en: "What do you tell Sarn?"
+        reponses:
+          - id: capitaine
+            texte: "La vérité : Vesper écrit à l'ennemi."
+            texte-en: "The truth: Vesper writes to the enemy."
+            reponse:
+              - "a4_sarn: Bien. Vharos aime les chiens qui mordent la bonne main. Vesper rentrera à la Citadelle, et elle n'en ressortira pas de sitôt."
+            reponse-en:
+              - "a4_sarn: Good. Vharos likes hounds that bite the right hand. Vesper will go back to the Citadel, and she will not come out again soon."
+            or: 400
+          - id: envoye
+            texte: "Rien : j'achetais des dattes."
+            texte-en: "Nothing: I was buying dates."
+            reponse:
+              - "a4_sarn: Des dattes. Tu mens mal. Un jour, ça te coûtera cher."
+            reponse-en:
+              - "a4_sarn: Dates. You lie badly. One day, it will cost you dearly."
+            xp: 3980
+        dialogue:
+          - "a4_sarn: On t'a vu entrer chez le chevalier de l'Aube avec une lettre. Vesper trahit, ou tu trahis ? Choisis bien."
+        dialogue-en:
+          - "a4_sarn: You were seen going into the Dawn knight's tent with a letter. Is Vesper betraying us, or are you? Choose well."
+      - type: PARLER
+        texte: "Revenir voir Vesper"
+        texte-en: "Return to Vesper"
+        pnj: a4_vesper
+        dialogue:
+          - "a4_vesper: Sarn m'a fait porter un message : je rentre à la Citadelle à la fin de la lune."
+          - "a4_vesper: Tu as choisi ton camp. C'est ce qu'on t'a appris. Je ne t'en veux pas. Pas beaucoup."
+        dialogue-en:
+          - "a4_vesper: Sarn sent me a message: I go back to the Citadel at the end of the moon."
+          - "a4_vesper: You chose your side. That is what you were taught. I do not hold it against you. Not much."
+        si: "a4-loyaute=capitaine"
+      - type: PARLER
+        texte: "Revenir voir Vesper"
+        texte-en: "Return to Vesper"
+        pnj: a4_vesper
+        dialogue:
+          - "a4_vesper: Sarn t'a cuisiné, et tu lui as parlé de dattes."
+          - "a4_vesper: Je n'oublierai pas. À la Citadelle, c'est une promesse qui vaut cher."
+        dialogue-en:
+          - "a4_vesper: Sarn grilled you, and you talked to him about dates."
+          - "a4_vesper: I will not forget. At the Citadel, that is a costly promise."
+        si: "a4-loyaute=envoye"
+    recompenses:
+      xp: 13280
+      or: 1330
+
+  a4_l_le_chant_de_naim:
+    nom: "Le chant de Naïm"
+    nom-en: "Naïm's Song"
+    faction: lumiere
+    niveau: 42
+    requiert: [a4_l_la_lettre_scellee]
+    donneur: a4_ishara
+    resume:
+      - "Naïm est parti seul vers le Tombeau du Premier Hôte."
+    resume-en:
+      - "Naïm has gone alone toward the Tomb of the First Host."
+    offre:
+      - "a4_ishara: Naïm est parti cette nuit. Il veut voir le Tombeau de ses propres yeux, et le sable noir qui en sort. Il a seize ans."
+      - "a4_ishara: Ses traces partent au sud-est de l'Oasis. Ramène-le."
+    offre-en:
+      - "a4_ishara: Naïm left last night. He wants to see the Tomb with his own eyes, and the black sand coming out of it. He is sixteen."
+      - "a4_ishara: His tracks lead south-east of the Oasis. Bring him back."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les traces de Naïm"
+        texte-en: "Follow Naïm's tracks"
+        traces: [a4_naim_1, a4_naim_2, a4_naim_3, a4_cuvette]
+        apres:
+          - "Les traces finissent au fond d'une cuvette. Le sable y est noir et froid. Il bouge."
+        apres-en:
+          - "The tracks end at the bottom of a hollow. The sand there is black and cold. It moves."
+      - type: SURVIE
+        texte: "Tenir dans la tempête de sable noir"
+        texte-en: "Hold out in the black sandstorm"
+        point: a4_cuvette
+        rayon: 14
+        duree: 45
+        mode: resserre
+        rayon-fin: 5
+        degats: 5
+        monstres: [a4_creux_sable]
+        nombre: 2
+        intervalle: 15
+        apres:
+          - "La tempête retombe d'un coup. Sous le sable, à tes pieds, un voile ocre : Naïm, sonné, vivant. Il se relève et file vers l'Oasis sans un mot."
+        apres-en:
+          - "The storm drops all at once. Under the sand, at your feet, an ochre veil: Naïm, dazed, alive. He gets up and runs off toward the Oasis without a word."
+      - type: PARLER
+        texte: "Retrouver Naïm à l'Oasis"
+        texte-en: "Find Naïm at the Oasis"
+        pnj: a4_naim
+        dialogue:
+          - "a4_naim: Je l'ai vue. Une femme, au bord du Tombeau. Une Astréenne. Mais vide. Le sable noir lui coulait des mains."
+          - "a4_naim: Les vieux disent que c'est la Reine. La première d'entre nous à avoir été vidée, la nuit de la Chute. Elle garde le Tombeau depuis. Pour qui, personne ne sait."
+          - "a4_naim: Merci. Ne le dis pas à Ishara. Elle le sait déjà, de toute façon."
+        dialogue-en:
+          - "a4_naim: I saw her. A woman, at the edge of the Tomb. An Astrean. But empty. Black sand was pouring from her hands."
+          - "a4_naim: The elders say it is the Queen. The first of us to be emptied, on the night of the Fall. She has guarded the Tomb ever since. For whom, nobody knows."
+          - "a4_naim: Thank you. Do not tell Ishara. She knows already, anyway."
+    recompenses:
+      xp: 13940
+      or: 1395
+
+  a4_o_le_chant_de_naim:
+    nom: "Le chant de Naïm"
+    nom-en: "Naïm's Song"
+    faction: ombre
+    niveau: 42
+    requiert: [a4_o_la_lettre_scellee]
+    donneur: a4_ishara
+    resume:
+      - "Naïm est parti seul vers le Tombeau du Premier Hôte."
+    resume-en:
+      - "Naïm has gone alone toward the Tomb of the First Host."
+    offre:
+      - "a4_ishara: Naïm est parti cette nuit. Il veut voir le Tombeau de ses propres yeux, et le sable noir qui en sort. Il a seize ans."
+      - "a4_ishara: Ses traces partent au sud-est de l'Oasis. Ramène-le."
+    offre-en:
+      - "a4_ishara: Naïm left last night. He wants to see the Tomb with his own eyes, and the black sand coming out of it. He is sixteen."
+      - "a4_ishara: His tracks lead south-east of the Oasis. Bring him back."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les traces de Naïm"
+        texte-en: "Follow Naïm's tracks"
+        traces: [a4_naim_1, a4_naim_2, a4_naim_3, a4_cuvette]
+        apres:
+          - "Les traces finissent au fond d'une cuvette. Le sable y est noir et froid. Il bouge."
+        apres-en:
+          - "The tracks end at the bottom of a hollow. The sand there is black and cold. It moves."
+      - type: SURVIE
+        texte: "Tenir dans la tempête de sable noir"
+        texte-en: "Hold out in the black sandstorm"
+        point: a4_cuvette
+        rayon: 14
+        duree: 45
+        mode: resserre
+        rayon-fin: 5
+        degats: 5
+        monstres: [a4_creux_sable]
+        nombre: 2
+        intervalle: 15
+        apres:
+          - "La tempête retombe d'un coup. Sous le sable, à tes pieds, un voile ocre : Naïm, sonné, vivant. Il se relève et file vers l'Oasis sans un mot."
+        apres-en:
+          - "The storm drops all at once. Under the sand, at your feet, an ochre veil: Naïm, dazed, alive. He gets up and runs off toward the Oasis without a word."
+      - type: PARLER
+        texte: "Retrouver Naïm à l'Oasis"
+        texte-en: "Find Naïm at the Oasis"
+        pnj: a4_naim
+        dialogue:
+          - "a4_naim: Je l'ai vue. Une femme, au bord du Tombeau. Une Astréenne. Mais vide. Le sable noir lui coulait des mains."
+          - "a4_naim: Les vieux disent que c'est la Reine. La première d'entre nous à avoir été vidée, la nuit de la Chute. Elle garde le Tombeau depuis. Pour qui, personne ne sait."
+          - "a4_naim: Merci. Ne le dis pas à Ishara. Elle le sait déjà, de toute façon."
+        dialogue-en:
+          - "a4_naim: I saw her. A woman, at the edge of the Tomb. An Astrean. But empty. Black sand was pouring from her hands."
+          - "a4_naim: The elders say it is the Queen. The first of us to be emptied, on the night of the Fall. She has guarded the Tomb ever since. For whom, nobody knows."
+          - "a4_naim: Thank you. Do not tell Ishara. She knows already, anyway."
+    recompenses:
+      xp: 13940
+      or: 1395
+
+  a4_l_le_siege_du_puits:
+    nom: "Le siège du puits"
+    nom-en: "The Siege of the Well"
+    faction: lumiere
+    niveau: 44
+    requiert: [a4_l_le_chant_de_naim]
+    donneur: a4_ishara
+    resume:
+      - "Des Lames de la Citadelle marchent sur le Puits des Hôtes."
+    resume-en:
+      - "Blades of the Citadel are marching on the Hosts' Well."
+    offre:
+      - "a4_ishara: Des soldats de la Citadelle marchent sur le Puits des Hôtes, à l'ouest. Ils prendront l'eau tant que nous ne rendrons pas l'Éclat."
+      - "a4_ishara: Ce n'est pas ton camp. Tu peux te battre contre eux sans te renier. Tiens le puits."
+    offre-en:
+      - "a4_ishara: Citadel soldiers are marching on the Hosts' Well, to the west. They will take the water until we give back the Shard."
+      - "a4_ishara: It is not your side. You can fight them without betraying yourself. Hold the well."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre le Puits des Hôtes"
+        texte-en: "Defend the Hosts' Well"
+        point: a4_puits_hotes
+        monstres: [a4_lame_ombre]
+        nombre: 3
+        vagues: 4
+        apparition: a4_puits_assaut
+        pv: 200
+        degats: 5
+        cible: "Le Puits des Hôtes"
+        cible-en: "The Hosts' Well"
+        apres:
+          - "Les derniers soldats de la Citadelle reculent dans les dunes. L'un d'eux a laissé tomber un ordre : « Prendre le puits de l'ouest. Le Bastion prendra celui de l'est. — V. »"
+        apres-en:
+          - "The last Citadel soldiers fall back into the dunes. One of them dropped an order: « Take the western well. The Bastion will take the eastern one. — V. »"
+      - type: PARLER
+        texte: "Revenir voir Ishara"
+        texte-en: "Return to Ishara"
+        pnj: a4_ishara
+        dialogue:
+          - "a4_ishara: Ils assiègent ensemble, chacun de son côté. Et demain, ils diront qu'ils se battaient l'un contre l'autre."
+          - "a4_ishara: Il est temps que tu voies le Tombeau. Pas pour le prendre. Pour comprendre."
+        dialogue-en:
+          - "a4_ishara: They besiege us together, each from his own side. And tomorrow, they will say they were fighting each other."
+          - "a4_ishara: It is time you saw the Tomb. Not to take it. To understand."
+    recompenses:
+      xp: 15290
+      or: 1530
+
+  a4_o_le_siege_du_puits:
+    nom: "Le siège du puits"
+    nom-en: "The Siege of the Well"
+    faction: ombre
+    niveau: 44
+    requiert: [a4_o_le_chant_de_naim]
+    donneur: a4_ishara
+    resume:
+      - "Des Lames du Bastion marchent sur le Puits des Hôtes."
+    resume-en:
+      - "Blades of the Bastion are marching on the Hosts' Well."
+    offre:
+      - "a4_ishara: Des soldats du Bastion marchent sur le Puits des Hôtes, à l'ouest. Leur capitaine a perdu patience. Ils prendront l'eau tant que nous ne rendrons pas l'Éclat."
+      - "a4_ishara: Ce n'est pas ton camp. Tu peux te battre contre eux sans te renier. Tiens le puits."
+    offre-en:
+      - "a4_ishara: Bastion soldiers are marching on the Hosts' Well, to the west. Their captain has lost patience. They will take the water until we give back the Shard."
+      - "a4_ishara: It is not your side. You can fight them without betraying yourself. Hold the well."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre le Puits des Hôtes"
+        texte-en: "Defend the Hosts' Well"
+        point: a4_puits_hotes
+        monstres: [a4_lame_aube]
+        nombre: 3
+        vagues: 4
+        apparition: a4_puits_assaut
+        pv: 200
+        degats: 5
+        cible: "Le Puits des Hôtes"
+        cible-en: "The Hosts' Well"
+        apres:
+          - "Les derniers soldats du Bastion reculent dans les dunes. L'un d'eux a laissé tomber un ordre : « Prendre le puits de l'ouest. La Citadelle prendra celui de l'est. — S. »"
+        apres-en:
+          - "The last Bastion soldiers fall back into the dunes. One of them dropped an order: « Take the western well. The Citadel will take the eastern one. — S. »"
+      - type: PARLER
+        texte: "Revenir voir Ishara"
+        texte-en: "Return to Ishara"
+        pnj: a4_ishara
+        dialogue:
+          - "a4_ishara: Ils assiègent ensemble, chacun de son côté. Et demain, ils diront qu'ils se battaient l'un contre l'autre."
+          - "a4_ishara: Il est temps que tu voies le Tombeau. Pas pour le prendre. Pour comprendre."
+        dialogue-en:
+          - "a4_ishara: They besiege us together, each from his own side. And tomorrow, they will say they were fighting each other."
+          - "a4_ishara: It is time you saw the Tomb. Not to take it. To understand."
+    recompenses:
+      xp: 15290
+      or: 1530
+
+  a4_l_le_voile_de_l_hote:
+    nom: "Le voile de l'Hôte"
+    nom-en: "The Host's Veil"
+    faction: lumiere
+    niveau: 45
+    requiert: [a4_l_le_siege_du_puits]
+    donneur: a4_ishara
+    resume:
+      - "Ishara confie au Marqué le voile des Hôtes."
+    resume-en:
+      - "Ishara entrusts the Marked with the veil of the Hosts."
+    offre:
+      - "a4_ishara: Les gardiens du Tombeau frappent tout ce qui vient prendre. Ils laissent passer les Hôtes."
+      - "a4_ishara: Porte ce voile, et marche jusqu'au seuil. Ne frappe aucun d'eux, ou ils sauront que tu n'es pas des nôtres."
+    offre-en:
+      - "a4_ishara: The Tomb's guardians strike everything that comes to take. They let the Hosts pass."
+      - "a4_ishara: Wear this veil, and walk to the threshold. Strike none of them, or they will know you are not one of us."
+    etapes:
+      - type: DEGUISEMENT
+        texte: "Atteindre le seuil du Tombeau sous le voile"
+        texte-en: "Reach the Tomb's threshold under the veil"
+        point: a4_tombeau_seuil
+        monstres: [a4_gardien_tombe]
+        materiau: LEATHER_HELMET
+        couleur: "#C8873A"
+        objet: "Voile d'Hôte"
+        objet-en: "Host's veil"
+        apres:
+          - "Les gardiens tournent la tête vers toi, puis s'écartent. Ils ne s'inclinent pas. Ils te laissent passer, comme on laisse passer quelqu'un de la maison."
+        apres-en:
+          - "The guardians turn their heads toward you, then step aside. They do not bow. They let you pass, the way one lets someone of the house pass."
+      - type: INTERAGIR
+        texte: "Examiner la porte du Tombeau"
+        texte-en: "Examine the Tomb's door"
+        point: a4_fresque
+        rayon: 5
+        apres:
+          - "Sur la porte, gravés en spirale, des centaines de noms d'Hôtes. Au centre, un nom martelé, comme sur la stèle de Saadi."
+          - "Du sable noir suinte des joints de la pierre. Derrière, quelque chose respire."
+        apres-en:
+          - "On the door, carved in a spiral, hundreds of Hosts' names. In the centre, one name hammered away, as on Saadi's stele."
+          - "Black sand seeps from the joints of the stone. Behind it, something breathes."
+      - type: PARLER
+        texte: "Revenir voir Ishara"
+        texte-en: "Return to Ishara"
+        pnj: a4_ishara
+        dialogue:
+          - "a4_ishara: Ils t'ont laissé passer. Alors ils t'ont reconnu."
+          - "a4_ishara: L'Éclat-Cœur est au fond du Tombeau, là où l'Astre se posait. La Reine en garde la porte. Il faut la libérer avant que l'Aube ou l'Ombre ne s'en chargent à leur façon."
+        dialogue-en:
+          - "a4_ishara: They let you pass. So they recognised you."
+          - "a4_ishara: The Heart-Shard lies at the bottom of the Tomb, where the Star used to rest. The Queen guards its door. She must be freed before the Dawn or the Shadow deal with it in their own way."
+    recompenses:
+      xp: 16000
+      or: 1600
+
+  a4_o_le_voile_de_l_hote:
+    nom: "Le voile de l'Hôte"
+    nom-en: "The Host's Veil"
+    faction: ombre
+    niveau: 45
+    requiert: [a4_o_le_siege_du_puits]
+    donneur: a4_ishara
+    resume:
+      - "Ishara confie au Marqué le voile des Hôtes."
+    resume-en:
+      - "Ishara entrusts the Marked with the veil of the Hosts."
+    offre:
+      - "a4_ishara: Les gardiens du Tombeau frappent tout ce qui vient prendre. Ils laissent passer les Hôtes."
+      - "a4_ishara: Porte ce voile, et marche jusqu'au seuil. Ne frappe aucun d'eux, ou ils sauront que tu n'es pas des nôtres."
+    offre-en:
+      - "a4_ishara: The Tomb's guardians strike everything that comes to take. They let the Hosts pass."
+      - "a4_ishara: Wear this veil, and walk to the threshold. Strike none of them, or they will know you are not one of us."
+    etapes:
+      - type: DEGUISEMENT
+        texte: "Atteindre le seuil du Tombeau sous le voile"
+        texte-en: "Reach the Tomb's threshold under the veil"
+        point: a4_tombeau_seuil
+        monstres: [a4_gardien_tombe]
+        materiau: LEATHER_HELMET
+        couleur: "#C8873A"
+        objet: "Voile d'Hôte"
+        objet-en: "Host's veil"
+        apres:
+          - "Les gardiens tournent la tête vers toi, puis s'écartent. Ils ne s'inclinent pas. Ils te laissent passer, comme on laisse passer quelqu'un de la maison."
+        apres-en:
+          - "The guardians turn their heads toward you, then step aside. They do not bow. They let you pass, the way one lets someone of the house pass."
+      - type: INTERAGIR
+        texte: "Examiner la porte du Tombeau"
+        texte-en: "Examine the Tomb's door"
+        point: a4_fresque
+        rayon: 5
+        apres:
+          - "Sur la porte, gravés en spirale, des centaines de noms d'Hôtes. Au centre, un nom martelé, comme sur la stèle de Saadi."
+          - "Du sable noir suinte des joints de la pierre. Derrière, quelque chose respire."
+        apres-en:
+          - "On the door, carved in a spiral, hundreds of Hosts' names. In the centre, one name hammered away, as on Saadi's stele."
+          - "Black sand seeps from the joints of the stone. Behind it, something breathes."
+      - type: PARLER
+        texte: "Revenir voir Ishara"
+        texte-en: "Return to Ishara"
+        pnj: a4_ishara
+        dialogue:
+          - "a4_ishara: Ils t'ont laissé passer. Alors ils t'ont reconnu."
+          - "a4_ishara: L'Éclat-Cœur est au fond du Tombeau, là où l'Astre se posait. La Reine en garde la porte. Il faut la libérer avant que l'Aube ou l'Ombre ne s'en chargent à leur façon."
+        dialogue-en:
+          - "a4_ishara: They let you pass. So they recognised you."
+          - "a4_ishara: The Heart-Shard lies at the bottom of the Tomb, where the Star used to rest. The Queen guards its door. She must be freed before the Dawn or the Shadow deal with it in their own way."
+    recompenses:
+      xp: 16000
+      or: 1600
+
+  a4_l_la_reine_des_sables_noirs:
+    nom: "La Reine des Sables Noirs"
+    nom-en: "The Queen of the Black Sands"
+    faction: lumiere
+    niveau: 46
+    requiert: [a4_l_le_voile_de_l_hote]
+    donneur: a4_ishara
+    resume:
+      - "La Reine des Sables Noirs garde le Tombeau du Premier Hôte."
+    resume-en:
+      - "The Queen of the Black Sands guards the Tomb of the First Host."
+    offre:
+      - "a4_ishara: Elle s'appelait Nahra. La nuit de la Chute, elle veillait au Tombeau. Quand le ciel s'est déchiré, elle a été la première à être vidée."
+      - "a4_ishara: Elle n'est plus là depuis mille ans. Ne la laisse pas souffrir un jour de plus."
+    offre-en:
+      - "a4_ishara: Her name was Nahra. On the night of the Fall, she was keeping watch at the Tomb. When the sky tore, she was the first to be emptied."
+      - "a4_ishara: She has not been there for a thousand years. Do not let her suffer one more day."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre le parvis du Tombeau"
+        texte-en: "Reach the Tomb's forecourt"
+        point: a4_tombeau_parvis
+        rayon: 10
+      - type: TUER
+        texte: "Abattre les Creux des sables noirs"
+        texte-en: "Destroy the Hollow of the black sands"
+        monstres: [a4_creux_sable]
+        nombre: 8
+        point: a4_tombeau_parvis
+      - type: TUER
+        texte: "Vaincre la Reine des Sables Noirs"
+        texte-en: "Defeat the Queen of the Black Sands"
+        monstres: [a4_reine]
+        point: a4_tombeau_parvis
+        apres:
+          - "La Reine tombe à genoux. Le sable noir quitte son corps comme une eau qui s'écoule. Une seconde, son visage redevient celui d'une femme."
+          - "Elle murmure : « Il a froid. Rendez-le-lui. » Puis il ne reste que du sable, doré, ordinaire."
+        apres-en:
+          - "The Queen falls to her knees. The black sand leaves her body like flowing water. For a second, her face becomes a woman's again."
+          - "She whispers: « It is cold. Give it back to it. » Then only sand remains, golden, ordinary."
+      - type: PARLER
+        texte: "Revenir voir Ishara"
+        texte-en: "Return to Ishara"
+        pnj: a4_ishara
+        dialogue:
+          - "a4_ishara: Nahra est libre. Mille ans à garder une porte, pour un ciel qui avait froid."
+          - "a4_ishara: Il reste une chose que tu dois voir. Une seule. Après, tu choisiras."
+        dialogue-en:
+          - "a4_ishara: Nahra is free. A thousand years guarding a door, for a sky that was cold."
+          - "a4_ishara: There is one thing left you must see. Only one. Afterwards, you will choose."
+    recompenses:
+      xp: 16720
+      or: 1670
+      objets:
+        - materiau: BLACK_DYE
+          nom: "Sable de la Reine"
+          nom-en: "The Queen's sand"
+          description:
+            - "Noir quand on le serre, doré quand on le lâche."
+          description-en:
+            - "Black when you clench it, golden when you let go."
+
+  a4_o_la_reine_des_sables_noirs:
+    nom: "La Reine des Sables Noirs"
+    nom-en: "The Queen of the Black Sands"
+    faction: ombre
+    niveau: 46
+    requiert: [a4_o_le_voile_de_l_hote]
+    donneur: a4_ishara
+    resume:
+      - "La Reine des Sables Noirs garde le Tombeau du Premier Hôte."
+    resume-en:
+      - "The Queen of the Black Sands guards the Tomb of the First Host."
+    offre:
+      - "a4_ishara: Elle s'appelait Nahra. La nuit de la Chute, elle veillait au Tombeau. Quand le ciel s'est déchiré, elle a été la première à être vidée."
+      - "a4_ishara: Elle n'est plus là depuis mille ans. Ne la laisse pas souffrir un jour de plus."
+    offre-en:
+      - "a4_ishara: Her name was Nahra. On the night of the Fall, she was keeping watch at the Tomb. When the sky tore, she was the first to be emptied."
+      - "a4_ishara: She has not been there for a thousand years. Do not let her suffer one more day."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre le parvis du Tombeau"
+        texte-en: "Reach the Tomb's forecourt"
+        point: a4_tombeau_parvis
+        rayon: 10
+      - type: TUER
+        texte: "Abattre les Creux des sables noirs"
+        texte-en: "Destroy the Hollow of the black sands"
+        monstres: [a4_creux_sable]
+        nombre: 8
+        point: a4_tombeau_parvis
+      - type: TUER
+        texte: "Vaincre la Reine des Sables Noirs"
+        texte-en: "Defeat the Queen of the Black Sands"
+        monstres: [a4_reine]
+        point: a4_tombeau_parvis
+        apres:
+          - "La Reine tombe à genoux. Le sable noir quitte son corps comme une eau qui s'écoule. Une seconde, son visage redevient celui d'une femme."
+          - "Elle murmure : « Il a froid. Rendez-le-lui. » Puis il ne reste que du sable, doré, ordinaire."
+        apres-en:
+          - "The Queen falls to her knees. The black sand leaves her body like flowing water. For a second, her face becomes a woman's again."
+          - "She whispers: « It is cold. Give it back to it. » Then only sand remains, golden, ordinary."
+      - type: PARLER
+        texte: "Revenir voir Ishara"
+        texte-en: "Return to Ishara"
+        pnj: a4_ishara
+        dialogue:
+          - "a4_ishara: Nahra est libre. Mille ans à garder une porte, pour un ciel qui avait froid."
+          - "a4_ishara: Il reste une chose que tu dois voir. Une seule. Après, tu choisiras."
+        dialogue-en:
+          - "a4_ishara: Nahra is free. A thousand years guarding a door, for a sky that was cold."
+          - "a4_ishara: There is one thing left you must see. Only one. Afterwards, you will choose."
+    recompenses:
+      xp: 16720
+      or: 1670
+      objets:
+        - materiau: BLACK_DYE
+          nom: "Sable de la Reine"
+          nom-en: "The Queen's sand"
+          description:
+            - "Noir quand on le serre, doré quand on le lâche."
+          description-en:
+            - "Black when you clench it, golden when you let go."
+
+  a4_l_la_fresque_du_premier_hote:
+    nom: "La fresque du Premier Hôte"
+    nom-en: "The Fresco of the First Host"
+    faction: lumiere
+    niveau: 47
+    requiert: [a4_l_la_reine_des_sables_noirs]
+    donneur: a4_ishara
+    resume:
+      - "Au cœur du Tombeau, une fresque attend depuis mille ans."
+    resume-en:
+      - "At the heart of the Tomb, a fresco has waited a thousand years."
+    offre:
+      - "a4_ishara: Il y a une fresque, au seuil du Tombeau, sous le sable que gardait Nahra. Je ne l'ai jamais montrée à personne de l'Aube ou de l'Ombre."
+    offre-en:
+      - "a4_ishara: There is a fresco at the threshold of the Tomb, under the sand Nahra guarded. I have never shown it to anyone of the Dawn or the Shadow."
+    etapes:
+      - type: INTERAGIR
+        texte: "Regarder la fresque du Premier Hôte"
+        texte-en: "Look at the fresco of the First Host"
+        point: a4_fresque
+        rayon: 5
+        apres:
+          - "Le sable noir parti, la pierre montre un homme en habit d'Hôte, ocre et or, les mains tendues vers l'Astre. Autour de ses poignets, déjà, des anneaux de lumière."
+          - "Sous ses pieds, son nom, que personne n'a pu marteler ici : Aurélien."
+          - "Aurélien le Premier. Le fondateur de l'Aube. Un Hôte, qui a trahi son peuple parce qu'il ne supportait pas de voir l'Astre repartir. Ton Ordre est né ici, d'une trahison."
+        apres-en:
+          - "With the black sand gone, the stone shows a man in Host's garb, ochre and gold, hands held out toward the Star. Around his wrists, already, rings of light."
+          - "Beneath his feet, his name, which nobody could hammer away here: Aurélien."
+          - "Aurélien the First. The founder of the Dawn. A Host, who betrayed his people because he could not bear to see the Star leave. Your Order was born here, of a betrayal."
+      - type: PARLER
+        texte: "Parler au chevalier qui attend au bord des dunes"
+        texte-en: "Talk to the knight waiting at the edge of the dunes"
+        pnj: a4_morvain
+        dialogue:
+          - "a4_morvain: Vous l'avez vue. Je connais cette fresque. Je connais ce visage, mieux que je ne voudrais."
+          - "a4_morvain: Il disait qu'aimer quelque chose, c'est l'empêcher de partir. Il avait tort. Il m'a fallu longtemps pour en être sûr."
+          - "a4_morvain: Le Tombeau garde l'Éclat-Cœur. Les Astréens le garderont mieux que vos chefs. Réfléchissez à ce que vous allez dire chez vous."
+        dialogue-en:
+          - "a4_morvain: You saw it. I know that fresco. I know that face, better than I would like."
+          - "a4_morvain: He used to say that to love something is to stop it from leaving. He was wrong. It took me a long time to be sure."
+          - "a4_morvain: The Tomb keeps the Heart-Shard. The Astreans will keep it better than your leaders. Think about what you will say back home."
+    recompenses:
+      xp: 17450
+      or: 1745
+
+  a4_o_la_fresque_du_premier_hote:
+    nom: "La fresque du Premier Hôte"
+    nom-en: "The Fresco of the First Host"
+    faction: ombre
+    niveau: 47
+    requiert: [a4_o_la_reine_des_sables_noirs]
+    donneur: a4_ishara
+    resume:
+      - "Au cœur du Tombeau, une fresque attend depuis mille ans."
+    resume-en:
+      - "At the heart of the Tomb, a fresco has waited a thousand years."
+    offre:
+      - "a4_ishara: Il y a une fresque, au seuil du Tombeau, sous le sable que gardait Nahra. Je ne l'ai jamais montrée à personne de l'Aube ou de l'Ombre."
+    offre-en:
+      - "a4_ishara: There is a fresco at the threshold of the Tomb, under the sand Nahra guarded. I have never shown it to anyone of the Dawn or the Shadow."
+    etapes:
+      - type: INTERAGIR
+        texte: "Regarder la fresque du Premier Hôte"
+        texte-en: "Look at the fresco of the First Host"
+        point: a4_fresque
+        rayon: 5
+        apres:
+          - "Le sable noir parti, la pierre montre un homme en habit d'Hôte, ocre et or, les mains tendues vers l'Astre. Autour de ses poignets, déjà, des anneaux de lumière."
+          - "Sous ses pieds, son nom, que personne n'a pu marteler ici : Aurélien."
+          - "Aurélien le Premier, le fondateur de l'Aube. Un Hôte. La Citadelle répète depuis toujours que l'Aube est née d'un mensonge. Elle n'a jamais dit lequel. Elle le savait."
+        apres-en:
+          - "With the black sand gone, the stone shows a man in Host's garb, ochre and gold, hands held out toward the Star. Around his wrists, already, rings of light."
+          - "Beneath his feet, his name, which nobody could hammer away here: Aurélien."
+          - "Aurélien the First, the founder of the Dawn. A Host. The Citadel has always said the Dawn was born of a lie. It never said which. It knew."
+      - type: PARLER
+        texte: "Parler au chevalier qui attend au bord des dunes"
+        texte-en: "Talk to the knight waiting at the edge of the dunes"
+        pnj: a4_morvain
+        dialogue:
+          - "a4_morvain: Vous l'avez vue. Je connais cette fresque. Je connais ce visage, mieux que je ne voudrais."
+          - "a4_morvain: Il disait qu'aimer quelque chose, c'est l'empêcher de partir. Il avait tort. Il m'a fallu longtemps pour en être sûr."
+          - "a4_morvain: Le Tombeau garde l'Éclat-Cœur. Les Astréens le garderont mieux que vos chefs. Réfléchissez à ce que vous allez dire chez vous."
+        dialogue-en:
+          - "a4_morvain: You saw it. I know that fresco. I know that face, better than I would like."
+          - "a4_morvain: He used to say that to love something is to stop it from leaving. He was wrong. It took me a long time to be sure."
+          - "a4_morvain: The Tomb keeps the Heart-Shard. The Astreans will keep it better than your leaders. Think about what you will say back home."
+    recompenses:
+      xp: 17450
+      or: 1745
+
+  a4_l_ce_que_le_sable_a_vu:
+    nom: "Ce que le sable a vu"
+    nom-en: "What the Sand Saw"
+    faction: lumiere
+    niveau: 48
+    requiert: [a4_l_la_fresque_du_premier_hote]
+    donneur: a4_aldren
+    resume:
+      - "Il faut décider ce que saura votre camp."
+    resume-en:
+      - "You must decide what your side will know."
+    offre:
+      - "a4_aldren: Hélis attend votre rapport. La Haute-Prélate aussi. Ce que vous direz maintenant, le Bastion le croira."
+    offre-en:
+      - "a4_aldren: Hélis is waiting for your report. So is the High Prelate. Whatever you say now, the Bastion will believe."
+    etapes:
+      - type: CHOIX
+        texte: "Décider ce que vous direz à votre camp"
+        texte-en: "Decide what you will tell your side"
+        pnj: a4_aldren
+        choix: a4-secret
+        question: "Que direz-vous au Bastion ?"
+        question-en: "What will you tell the Bastion?"
+        reponses:
+          - id: taire
+            texte: "Que l'Éclat-Cœur a disparu. Rien de plus."
+            texte-en: "That the Heart-Shard is gone. Nothing more."
+            reponse:
+              - "a4_aldren: Alors je dirai la même chose. Les Astréens l'ont mérité."
+            reponse-en:
+              - "a4_aldren: Then I will say the same. The Astreans have earned it."
+            xp: 5460
+          - id: reveler
+            texte: "Toute la vérité : il est au Tombeau."
+            texte-en: "The whole truth: it is in the Tomb."
+            reponse:
+              - "a4_aldren: Le Bastion viendra le chercher. Avec des chaînes, comme la première fois. J'espère que vous savez ce que vous faites."
+            reponse-en:
+              - "a4_aldren: The Bastion will come for it. With chains, like the first time. I hope you know what you are doing."
+            or: 545
+        dialogue:
+          - "a4_aldren: J'ai vu la fresque, moi aussi. Je suis allé voir, cette nuit."
+          - "a4_aldren: Notre Ordre est né d'une trahison. Et l'Éclat-Cœur dort chez ceux qu'il a trahis."
+        dialogue-en:
+          - "a4_aldren: I saw the fresco too. I went to look, last night."
+          - "a4_aldren: Our Order was born of a betrayal. And the Heart-Shard sleeps among those it betrayed."
+      - type: PARLER
+        texte: "Faire vos adieux à Ishara"
+        texte-en: "Say farewell to Ishara"
+        pnj: a4_ishara
+        dialogue:
+          - "a4_ishara: Tu as gardé notre secret. Tant que l'Oasis existera, tu seras un Hôte ici."
+        dialogue-en:
+          - "a4_ishara: You kept our secret. As long as the Oasis stands, you will be a Host here."
+        si: "a4-secret=taire"
+      - type: PARLER
+        texte: "Faire vos adieux à Ishara"
+        texte-en: "Say farewell to Ishara"
+        pnj: a4_ishara
+        dialogue:
+          - "a4_ishara: Tu as dit la vérité à ton camp. Je ne peux pas te le reprocher. Mais cette nuit, nous déplacerons l'Éclat, et toi, tu ne sauras pas où."
+        dialogue-en:
+          - "a4_ishara: You told your side the truth. I cannot blame you for it. But tonight we will move the Shard, and you will not know where."
+        si: "a4-secret=reveler"
+      - type: PARLER
+        texte: "Écouter les nouvelles du nord avec Aldren"
+        texte-en: "Hear the news from the north with Aldren"
+        pnj: a4_aldren
+        dialogue:
+          - "a4_aldren: Un corbeau du nord. Au Bastion, on dit que la Citadelle a volé l'Éclat-Cœur. À la Citadelle, on dit que c'est nous."
+          - "a4_aldren: Le Pacte des Deux Ciels se brise. Ce sera la guerre, et elle commencera dans les Cimes de Givre. À suivre."
+        dialogue-en:
+          - "a4_aldren: A raven from the north. At the Bastion, they say the Citadel stole the Heart-Shard. At the Citadel, they say it was us."
+          - "a4_aldren: The Pact of the Two Skies is breaking. It will be war, and it will begin in the Frost Peaks. To be continued."
+    recompenses:
+      xp: 18200
+      or: 1820
+      objets:
+        - materiau: LEATHER_HELMET
+          nom: "Voile d'Hôte"
+          nom-en: "Host's veil"
+          description:
+            - "Les gardiens du Tombeau s'écartent devant celui qui le porte."
+          description-en:
+            - "The Tomb's guardians step aside before whoever wears it."
+
+  a4_o_ce_que_le_sable_a_vu:
+    nom: "Ce que le sable a vu"
+    nom-en: "What the Sand Saw"
+    faction: ombre
+    niveau: 48
+    requiert: [a4_o_la_fresque_du_premier_hote]
+    donneur: a4_vesper
+    resume:
+      - "Il faut décider ce que saura votre camp."
+    resume-en:
+      - "You must decide what your side will know."
+    offre:
+      - "a4_vesper: Sarn attend ton rapport, et Vharos derrière lui. Ce que tu diras maintenant deviendra la vérité de la Citadelle."
+    offre-en:
+      - "a4_vesper: Sarn is waiting for your report, and Vharos behind him. Whatever you say now will become the Citadel's truth."
+    etapes:
+      - type: CHOIX
+        texte: "Décider ce que vous direz à votre camp"
+        texte-en: "Decide what you will tell your side"
+        pnj: a4_vesper
+        choix: a4-secret
+        question: "Que direz-vous à la Citadelle ?"
+        question-en: "What will you tell the Citadel?"
+        reponses:
+          - id: taire
+            texte: "Que l'Éclat-Cœur a disparu. Rien de plus."
+            texte-en: "That the Heart-Shard is gone. Nothing more."
+            reponse:
+              - "a4_vesper: Alors je mentirai avec toi. Ça me changera de mentir pour quelqu'un."
+            reponse-en:
+              - "a4_vesper: Then I will lie with you. It will make a change to lie for someone."
+            xp: 5460
+          - id: reveler
+            texte: "Toute la vérité : il est au Tombeau."
+            texte-en: "The whole truth: it is in the Tomb."
+            reponse:
+              - "a4_vesper: Vharos enverra ses Lames au Tombeau. J'espère que tu sais ce que tu fais."
+            reponse-en:
+              - "a4_vesper: Vharos will send his Blades to the Tomb. I hope you know what you are doing."
+            or: 545
+        dialogue:
+          - "a4_vesper: J'ai fouillé les lettres de Sarn. Vharos savait. Depuis toujours. Il sait qui était Aurélien, et il n'a jamais rien dit."
+          - "a4_vesper: Un secret pareil, on le garde pour le jour où il fera le plus de mal. Ce que tu diras à la Citadelle, il s'en servira."
+        dialogue-en:
+          - "a4_vesper: I went through Sarn's letters. Vharos knew. He always knew. He knows who Aurélien was, and he never said a word."
+          - "a4_vesper: A secret like that, you keep it for the day it will do the most harm. Whatever you tell the Citadel, he will use."
+      - type: PARLER
+        texte: "Faire vos adieux à Ishara"
+        texte-en: "Say farewell to Ishara"
+        pnj: a4_ishara
+        dialogue:
+          - "a4_ishara: Tu as gardé notre secret. Tant que l'Oasis existera, tu seras un Hôte ici."
+        dialogue-en:
+          - "a4_ishara: You kept our secret. As long as the Oasis stands, you will be a Host here."
+        si: "a4-secret=taire"
+      - type: PARLER
+        texte: "Faire vos adieux à Ishara"
+        texte-en: "Say farewell to Ishara"
+        pnj: a4_ishara
+        dialogue:
+          - "a4_ishara: Tu as dit la vérité à ton camp. Je ne peux pas te le reprocher. Mais cette nuit, nous déplacerons l'Éclat, et toi, tu ne sauras pas où."
+        dialogue-en:
+          - "a4_ishara: You told your side the truth. I cannot blame you for it. But tonight we will move the Shard, and you will not know where."
+        si: "a4-secret=reveler"
+      - type: PARLER
+        texte: "Écouter les nouvelles du nord avec Vesper"
+        texte-en: "Hear the news from the north with Vesper"
+        pnj: a4_vesper
+        dialogue:
+          - "a4_vesper: Un corbeau du nord. La Citadelle accuse l'Aube d'avoir volé l'Éclat-Cœur. L'Aube nous accuse. Chacun croit l'autre."
+          - "a4_vesper: Le Pacte des Deux Ciels se brise. Ce sera la guerre, et elle commencera dans les Cimes de Givre. À suivre."
+        dialogue-en:
+          - "a4_vesper: A raven from the north. The Citadel accuses the Dawn of stealing the Heart-Shard. The Dawn accuses us. Each believes the other."
+          - "a4_vesper: The Pact of the Two Skies is breaking. It will be war, and it will begin in the Frost Peaks. To be continued."
+    recompenses:
+      xp: 18200
+      or: 1820
+      objets:
+        - materiau: LEATHER_HELMET
+          nom: "Voile d'Hôte"
+          nom-en: "Host's veil"
+          description:
+            - "Les gardiens du Tombeau s'écartent devant celui qui le porte."
+          description-en:
+            - "The Tomb's guardians step aside before whoever wears it."
+
+  # ================================================================ ANNEXES NEUTRES — L'OASIS D'AMBRE (toutes factions)
+
+  a4_n_les_scarabees_noirs:
+    nom: "Les scarabées noirs"
+    nom-en: "The Black Beetles"
+    niveau: 36
+    donneur: a4_oumaya
+    resume:
+      - "Oumaya a besoin de carapaces de scarabée noir."
+    resume-en:
+      - "Oumaya needs black beetle shells."
+    offre:
+      - "a4_oumaya: Les scarabées noirs nichent à l'ouest, près du nid des scorpions. Leur carapace pilée fait tomber la fièvre. Rapporte-m'en."
+    offre-en:
+      - "a4_oumaya: Black beetles nest to the west, near the scorpions' nest. Their crushed shell brings fever down. Bring me some."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer des carapaces de scarabée"
+        texte-en: "Collect beetle shells"
+        monstres: [a4_scarabee]
+        nombre: 8
+        chance: 0.6
+        point: a4_nid_scorpions
+        objet: "Carapace de scarabée noir"
+        objet-en: "Black beetle shell"
+      - type: PARLER
+        texte: "Rapporter les carapaces à Oumaya"
+        texte-en: "Bring the shells to Oumaya"
+        pnj: a4_oumaya
+        dialogue:
+          - "a4_oumaya: Parfait. Pilées avec du miel de dune, elles feront des miracles. Enfin, des petits miracles."
+        dialogue-en:
+          - "a4_oumaya: Perfect. Crushed with dune honey, they will work miracles. Well, small miracles."
+    recompenses:
+      xp: 8700
+      or: 870
+
+  a4_n_l_eau_de_la_source:
+    nom: "L'eau de la source"
+    nom-en: "Water from the Spring"
+    niveau: 38
+    requiert: [a4_n_les_scarabees_noirs]
+    donneur: a4_oumaya
+    resume:
+      - "Un caravanier blessé attend de l'eau pure à l'ouest."
+    resume-en:
+      - "A wounded caravaneer is waiting for pure water to the west."
+    offre:
+      - "a4_oumaya: Yared s'est fait piquer. Il est couché au bivouac de l'ouest. Il lui faut l'eau de la source haute, au bord du lac. Prends une monture : à pied, l'eau chauffe et ne vaut plus rien."
+    offre-en:
+      - "a4_oumaya: Yared was stung. He is lying at the western bivouac. He needs water from the high spring, at the lake's edge. Take a mount: on foot, the water warms and is worthless."
+    etapes:
+      - type: TRANSPORT
+        texte: "Porter l'eau de la source au bivouac, à dos de monture"
+        texte-en: "Carry the spring water to the bivouac, on a mount"
+        point: a4_bivouac
+        depart: a4_source
+        materiau: DECORATED_POT
+        rayon: 5
+        objet: "Jarre de la source haute"
+        objet-en: "Jar from the high spring"
+        apres:
+          - "a4_yared: De l'eau froide. Dans ce désert. Tu es un sorcier, ou un ami d'Oumaya."
+        apres-en:
+          - "a4_yared: Cold water. In this desert. You are either a sorcerer, or a friend of Oumaya."
+      - type: PARLER
+        texte: "Revenir voir Oumaya"
+        texte-en: "Return to Oumaya"
+        pnj: a4_oumaya
+        dialogue:
+          - "a4_oumaya: Il a bu ? Bien. Maintenant, le remède."
+        dialogue-en:
+          - "a4_oumaya: He drank? Good. Now, the remedy."
+    recompenses:
+      xp: 9700
+      or: 970
+
+  a4_n_le_baume_d_oumaya:
+    nom: "Le baume d'Oumaya"
+    nom-en: "Oumaya's Balm"
+    niveau: 40
+    requiert: [a4_n_l_eau_de_la_source]
+    donneur: a4_oumaya
+    resume:
+      - "Oumaya a préparé un baume pour Yared."
+    resume-en:
+      - "Oumaya has prepared a balm for Yared."
+    offre:
+      - "a4_oumaya: Carapace, miel, et une larme de l'eau de la source. Porte ce baume à Yared. Et dis-lui de ne plus marcher pieds nus."
+    offre-en:
+      - "a4_oumaya: Shell, honey, and a drop of the spring water. Take this balm to Yared. And tell him to stop walking barefoot."
+    etapes:
+      - type: LIVRER
+        texte: "Porter le baume à Yared"
+        texte-en: "Take the balm to Yared"
+        pnj: a4_yared
+        materiau: HONEY_BOTTLE
+        objet: "Baume d'Oumaya"
+        objet-en: "Oumaya's balm"
+        dialogue:
+          - "a4_yared: Ça brûle. Ça brûle beaucoup. … Ça brûle moins."
+          - "a4_yared: Dis à Oumaya que je marcherai avec des bottes. Des bottes de l'Aube, s'il le faut. Elles sont plus solides que leurs promesses."
+        dialogue-en:
+          - "a4_yared: It burns. It burns a lot. … It burns less."
+          - "a4_yared: Tell Oumaya I'll walk in boots. Dawn boots, if I must. They're sturdier than their promises."
+    recompenses:
+      xp: 10740
+      or: 1075
+
+  a4_n_le_pillard_repenti:
+    nom: "Le pillard repenti"
+    nom-en: "The Repentant Raider"
+    niveau: 39
+    donneur: a4_kesh
+    resume:
+      - "Un ancien Fils du Sable demande qu'on l'écoute."
+    resume-en:
+      - "A former Son of the Sand asks to be heard."
+    offre:
+      - "a4_kesh: Tu as une tête à écouter. Je n'en vois pas beaucoup, ici."
+    offre-en:
+      - "a4_kesh: You have a face that listens. I do not see many here."
+    etapes:
+      - type: CHOIX
+        texte: "Écouter Kesh"
+        texte-en: "Listen to Kesh"
+        pnj: a4_kesh
+        choix: a4-kesh
+        question: "Que faites-vous de Kesh ?"
+        question-en: "What do you do with Kesh?"
+        reponses:
+          - id: croire
+            texte: "Je te crois. Où est ton frère ?"
+            texte-en: "I believe you. Where is your brother?"
+            reponse:
+              - "a4_kesh: Au repaire de l'ouest, derrière les dunes rouges. Ils sont nombreux. Il faudra passer sans être vu."
+            reponse-en:
+              - "a4_kesh: At the western hideout, beyond the red dunes. There are many of them. You will have to get through unseen."
+            xp: 2400
+          - id: livrer
+            texte: "Tamel doit savoir qui tu es."
+            texte-en: "Tamel must know who you are."
+            reponse:
+              - "a4_kesh: … Oui. C'est juste. Dis-lui que le repaire est à l'ouest, derrière les dunes rouges. Qu'il en fasse ce qu'il veut. De moi aussi."
+            reponse-en:
+              - "a4_kesh: … Yes. That is fair. Tell him the hideout is to the west, beyond the red dunes. Let him do what he wants with it. With me too."
+            or: 240
+        dialogue:
+          - "a4_kesh: J'étais un Fils du Sable. J'ai vendu des caravanes astréennes aux deux camps. Je savais par où passait l'eau."
+          - "a4_kesh: Je suis parti. Mon frère Rami, lui, est resté. Ils le gardent en cage, pour que je me taise."
+        dialogue-en:
+          - "a4_kesh: I was a Son of the Sand. I sold Astrean caravans to both sides. I knew which way the water went."
+          - "a4_kesh: I left. My brother Rami stayed. They keep him in a cage, so that I will keep quiet."
+      - type: PARLER
+        texte: "Rassurer Kesh"
+        texte-en: "Reassure Kesh"
+        pnj: a4_kesh
+        dialogue:
+          - "a4_kesh: Si tu ramènes Rami, je te devrai plus que ma vie. Elle ne vaut pas grand-chose, mais c'est tout ce que j'ai."
+        dialogue-en:
+          - "a4_kesh: If you bring Rami back, I'll owe you more than my life. It isn't worth much, but it's all I have."
+        si: "a4-kesh=croire"
+      - type: PARLER
+        texte: "Tout raconter à Tamel"
+        texte-en: "Tell Tamel everything"
+        pnj: a4_tamel
+        dialogue:
+          - "a4_tamel: Kesh. Je l'ai nourri trois hivers. Et il vendait mes caravanes."
+          - "a4_tamel: Chez nous, on ne tue pas un homme qui avoue. On le chasse. Mais d'abord, on brûle son ancien repaire."
+        dialogue-en:
+          - "a4_tamel: Kesh. I fed him for three winters. And he was selling my caravans."
+          - "a4_tamel: Among us, you do not kill a man who confesses. You drive him out. But first, you burn his old hideout."
+        si: "a4-kesh=livrer"
+    recompenses:
+      xp: 10210
+      or: 1020
+
+  a4_n_le_frere_de_kesh:
+    nom: "Le frère de Kesh"
+    nom-en: "Kesh's Brother"
+    niveau: 41
+    requiert: [a4_n_le_pillard_repenti, "choix:a4-kesh=croire"]
+    donneur: a4_kesh
+    resume:
+      - "Rami est enfermé au repaire des Fils du Sable."
+    resume-en:
+      - "Rami is locked up at the hideout of the Sons of the Sand."
+    offre:
+      - "a4_kesh: Le repaire est à l'ouest. Les sentinelles regardent la route, pas les dunes. Passe derrière elles, baissé, et tu atteindras la cage."
+    offre-en:
+      - "a4_kesh: The hideout is to the west. The sentries watch the road, not the dunes. Go behind them, crouching, and you will reach the cage."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre les dunes au bord du repaire"
+        texte-en: "Reach the dunes at the hideout's edge"
+        point: a4_repaire_lisiere
+        rayon: 6
+      - type: INFILTRER
+        texte: "Atteindre la cage sans être vu"
+        texte-en: "Reach the cage unseen"
+        point: a4_repaire_cage
+        depart: a4_repaire_lisiere
+        monstres: [a4_sentinelle_sable]
+        vue: 10
+        rayon: 3
+        apres:
+          - "Rami lève la tête. Il a les yeux de Kesh, en plus jeunes. Tu forces le cadenas ; il file dans les dunes sans un bruit."
+        apres-en:
+          - "Rami raises his head. He has Kesh's eyes, but younger. You force the padlock; he slips away into the dunes without a sound."
+      - type: PARLER
+        texte: "Revenir voir Kesh"
+        texte-en: "Return to Kesh"
+        pnj: a4_kesh
+        dialogue:
+          - "a4_kesh: Il est arrivé. Couvert de sable, affamé, vivant."
+          - "a4_kesh: Je ne sais pas dire merci. Chez les Fils du Sable, on ne l'apprend pas. Je vais apprendre."
+        dialogue-en:
+          - "a4_kesh: He made it. Covered in sand, starving, alive."
+          - "a4_kesh: I don't know how to say thank you. The Sons of the Sand don't teach it. I'll learn."
+    recompenses:
+      xp: 11290
+      or: 1130
+
+  a4_n_les_fils_du_sable:
+    nom: "Les Fils du Sable"
+    nom-en: "The Sons of the Sand"
+    niveau: 43
+    requiert: [a4_n_le_frere_de_kesh]
+    donneur: a4_kesh
+    resume:
+      - "Les Fils du Sable vont se venger sur l'Oasis."
+    resume-en:
+      - "The Sons of the Sand are going to take revenge on the Oasis."
+    offre:
+      - "a4_kesh: Ils savent que Rami s'est enfui. Ils viendront. Autant aller les trouver avant. Et dans le coffre du chef, il y a les noms de ceux qui les paient."
+    offre-en:
+      - "a4_kesh: They know Rami escaped. They'll come. Better to find them first. And in the chief's chest are the names of those who pay them."
+    etapes:
+      - type: TUER
+        texte: "Abattre les Fils du Sable au repaire"
+        texte-en: "Bring down the Sons of the Sand at the hideout"
+        monstres: [a4_fils_sable]
+        nombre: 10
+        point: a4_repaire
+      - type: INTERAGIR
+        texte: "Fouiller le coffre du chef"
+        texte-en: "Search the chief's chest"
+        point: a4_repaire
+        rayon: 5
+        apres:
+          - "Un registre. Deux colonnes de paiements. En tête de l'une : « H., capitaine du Bastion ». En tête de l'autre : « S., Lame de la Citadelle ». Les mêmes dates."
+        apres-en:
+          - "A ledger. Two columns of payments. At the head of one: « H., captain of the Bastion ». At the head of the other: « S., Blade of the Citadel ». The same dates."
+      - type: PARLER
+        texte: "Montrer le registre à Kesh"
+        texte-en: "Show the ledger to Kesh"
+        pnj: a4_kesh
+        dialogue:
+          - "a4_kesh: Hélis et Sarn. Ils se détestent, paraît-il. Ils paient le même jour, les mêmes hommes."
+          - "a4_kesh: Garde ce registre. Un jour, quelqu'un te demandera qui a commencé cette guerre."
+        dialogue-en:
+          - "a4_kesh: Hélis and Sarn. They hate each other, so they say. They pay on the same day, the same men."
+          - "a4_kesh: Keep this ledger. One day, someone will ask you who started this war."
+    recompenses:
+      xp: 12420
+      or: 1240
+      objets:
+        - materiau: WRITABLE_BOOK
+          nom: "Registre des Fils du Sable"
+          nom-en: "Ledger of the Sons of the Sand"
+          description:
+            - "Deux colonnes, deux camps, les mêmes dates."
+          description-en:
+            - "Two columns, two sides, the same dates."
+
+  a4_n_la_justice_des_sables:
+    nom: "La justice des sables"
+    nom-en: "Justice of the Sands"
+    niveau: 41
+    requiert: [a4_n_le_pillard_repenti, "choix:a4-kesh=livrer"]
+    donneur: a4_tamel
+    resume:
+      - "Tamel veut brûler le repaire des Fils du Sable."
+    resume-en:
+      - "Tamel wants to burn the hideout of the Sons of the Sand."
+    offre:
+      - "a4_tamel: Kesh nous a donné le repaire. Va le vider. Ce soir, je déciderai de son sort."
+    offre-en:
+      - "a4_tamel: Kesh gave us the hideout. Go and clear it. Tonight, I will decide his fate."
+    etapes:
+      - type: TUER
+        texte: "Vider le repaire des Fils du Sable"
+        texte-en: "Clear the hideout of the Sons of the Sand"
+        monstres: [a4_fils_sable]
+        nombre: 12
+        point: a4_repaire
+      - type: INTERAGIR
+        texte: "Ouvrir la cage du repaire"
+        texte-en: "Open the hideout's cage"
+        point: a4_repaire_cage
+        rayon: 4
+        apres:
+          - "Un jeune homme aux yeux de Kesh. Rami. Il te regarde sans comprendre, puis s'enfuit vers l'Oasis."
+        apres-en:
+          - "A young man with Kesh's eyes. Rami. He looks at you without understanding, then runs off toward the Oasis."
+      - type: PARLER
+        texte: "Revenir voir Tamel"
+        texte-en: "Return to Tamel"
+        pnj: a4_tamel
+        dialogue:
+          - "a4_tamel: Rami est arrivé. Il a raconté pour Kesh, et pour la cage."
+          - "a4_tamel: Kesh restera. Il portera l'eau aux familles pendant un an, sans salaire. C'est la justice des sables : on répare avec ses mains."
+        dialogue-en:
+          - "a4_tamel: Rami has arrived. He told us about Kesh, and the cage."
+          - "a4_tamel: Kesh will stay. He will carry water to the families for a year, without pay. That is the justice of the sands: you mend with your hands."
+    recompenses:
+      xp: 11290
+      or: 1130
+
+  a4_n_la_carte_du_ciel:
+    nom: "La carte du ciel"
+    nom-en: "The Sky Map"
+    niveau: 37
+    donneur: a4_saadi
+    resume:
+      - "Une chapelle de l'est cache un ciel gravé."
+    resume-en:
+      - "An eastern chapel hides a carved sky."
+    offre:
+      - "a4_saadi: Tout à l'est du désert, une chapelle en ruine. Les vieux disent que son plafond montre le ciel d'avant la Chute. Va voir, et décris-le-moi."
+    offre-en:
+      - "a4_saadi: At the far east of the desert, a ruined chapel. The elders say its ceiling shows the sky before the Fall. Go and see, and describe it to me."
+    etapes:
+      - type: INTERAGIR
+        texte: "Regarder le plafond de la chapelle"
+        texte-en: "Look at the chapel's ceiling"
+        point: a4_ruine_h3
+        rayon: 7
+        apres:
+          - "Un ciel peint, écaillé. Au centre, l'Astre, entier. Autour, des centaines de petites lumières reliées à lui par des fils d'or."
+        apres-en:
+          - "A painted sky, flaking. In the centre, the Star, whole. Around it, hundreds of small lights linked to it by golden threads."
+      - type: PARLER
+        texte: "Décrire le plafond à Saadi"
+        texte-en: "Describe the ceiling to Saadi"
+        pnj: a4_saadi
+        dialogue:
+          - "a4_saadi: Des petites lumières reliées à l'Astre. Les vieux disaient que chaque étoile du ciel était un de ses souvenirs."
+          - "a4_saadi: Peut-être que vous, les Marqués, vous êtes ces petites lumières tombées."
+        dialogue-en:
+          - "a4_saadi: Small lights linked to the Star. The elders said each star in the sky was one of its memories."
+          - "a4_saadi: Perhaps you, the Marked, are those small fallen lights."
+    recompenses:
+      xp: 9190
+      or: 920
+
+  a4_n_l_heure_des_etoiles:
+    nom: "L'heure des étoiles"
+    nom-en: "The Hour of the Stars"
+    niveau: 40
+    requiert: [a4_n_la_carte_du_ciel]
+    donneur: a4_saadi
+    resume:
+      - "Saadi veut une mesure prise à l'heure exacte où l'étoile du soir se couche."
+    resume-en:
+      - "Saadi wants a reading taken at the exact hour the evening star sets."
+    offre:
+      - "a4_saadi: L'étoile du soir se couche derrière la vigie de l'ouest. Il faut y être avant elle, avec mon astrolabe. Tu as quatre minutes. Cours, ou monte."
+    offre-en:
+      - "a4_saadi: The evening star sets behind the western lookout. You must be there before it, with my astrolabe. You have four minutes. Run, or ride."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la vigie de l'ouest avant le coucher de l'étoile"
+        texte-en: "Reach the western lookout before the star sets"
+        point: a4_ouest_vigie
+        rayon: 6
+        apres:
+          - "L'étoile touche l'horizon. L'astrolabe s'aligne tout seul, comme s'il reconnaissait la place."
+        apres-en:
+          - "The star touches the horizon. The astrolabe aligns by itself, as if it recognised the spot."
+        chrono: 240
+        echec:
+          - "a4_saadi: Trop tard. L'étoile est couchée. Reviens, on recommence demain soir. Enfin, tout de suite."
+        echec-en:
+          - "a4_saadi: Too late. The star has set. Come back, we will try again tomorrow evening. Well, right now."
+      - type: PARLER
+        texte: "Rapporter l'astrolabe à Saadi"
+        texte-en: "Bring the astrolabe back to Saadi"
+        pnj: a4_saadi
+        dialogue:
+          - "a4_saadi: L'aiguille s'est arrêtée sur le Tombeau. Toutes les mesures mènent là-bas. Ça ne me rassure pas."
+        dialogue-en:
+          - "a4_saadi: The needle stopped on the Tomb. Every reading leads there. That does not reassure me."
+    recompenses:
+      xp: 10740
+      or: 1075
+
+  a4_n_les_noms_effaces:
+    nom: "Les noms effacés"
+    nom-en: "The Erased Names"
+    niveau: 43
+    requiert: [a4_n_l_heure_des_etoiles]
+    donneur: a4_saadi
+    resume:
+      - "Des noms ont été martelés sur les tombes des Hôtes."
+    resume-en:
+      - "Names have been hammered off the tombs of the Hosts."
+    offre:
+      - "a4_saadi: Sur trois vieilles tombes, des noms ont été martelés. Pas un seul : plusieurs. Je veux savoir qui nos ancêtres ont voulu oublier."
+    offre-en:
+      - "a4_saadi: On three old tombs, names were hammered away. Not just one: several. I want to know whom our ancestors wanted to forget."
+    etapes:
+      - type: ENQUETE
+        texte: "Examiner les tombes effacées"
+        texte-en: "Examine the erased tombs"
+        pnj: a4_saadi
+        indices:
+          - point: a4_tombe_hotes
+            texte: "La tombe des sables"
+            texte-en: "The tomb of the sands"
+            apres:
+              - "Sept noms martelés. Sous chacun, le même signe, plus récent : un soleil."
+            apres-en:
+              - "Seven names hammered away. Beneath each, the same sign, more recent: a sun."
+          - point: a4_ruine_h1
+            texte: "La tour du guet des Hôtes"
+            texte-en: "The Hosts' watchtower"
+            apres:
+              - "Une liste de veilleurs. La moitié des noms sont effacés. À la place, quelqu'un a gravé : « partis vers le nord avec lui »."
+            apres-en:
+              - "A list of watchmen. Half the names are erased. In their place, someone carved: « gone north with him »."
+          - point: a4_camp_h4
+            texte: "Le cimetière de l'est"
+            texte-en: "The eastern graveyard"
+            apres:
+              - "Une tombe vide, ouverte de l'intérieur il y a longtemps. Le nom est effacé, mais pas le titre : « écuyer »."
+            apres-en:
+              - "An empty grave, opened from the inside long ago. The name is erased, but not the title: « squire »."
+        dialogue:
+          - "joueur: Des noms sous un soleil. Des veilleurs partis vers le nord « avec lui ». Et la tombe vide d'un écuyer."
+          - "a4_saadi: Ceux qui ont suivi le traître. Les premiers de l'Aube étaient des nôtres. Nous les avons effacés par honte."
+          - "a4_saadi: Une tombe ouverte de l'intérieur… Je préfère ne pas y penser."
+        dialogue-en:
+          - "joueur: Names under a sun. Watchmen gone north « with him ». And the empty grave of a squire."
+          - "a4_saadi: Those who followed the traitor. The first of the Dawn were of our people. We erased them out of shame."
+          - "a4_saadi: A grave opened from the inside… I would rather not think about it."
+    recompenses:
+      xp: 12420
+      or: 1240
+
+  a4_n_le_dernier_lecteur:
+    nom: "Le dernier lecteur"
+    nom-en: "The Last Reader"
+    niveau: 46
+    requiert: [a4_n_les_noms_effaces]
+    donneur: a4_saadi
+    resume:
+      - "Une tour au sud gardait l'astrolabe du dernier lecteur des Hôtes."
+    resume-en:
+      - "A tower to the south held the last Host reader's astrolabe."
+    offre:
+      - "a4_saadi: Le dernier lecteur des Hôtes vivait dans une tour, tout au sud. Ses morts la gardent encore. S'il reste son astrolabe, il te revient."
+    offre-en:
+      - "a4_saadi: The last reader of the Hosts lived in a tower, far to the south. His dead still guard it. If his astrolabe remains, it is yours."
+    etapes:
+      - type: TUER
+        texte: "Rendre au repos les gardiens de la tour"
+        texte-en: "Lay the tower's guardians to rest"
+        monstres: [a4_momie_ancienne]
+        nombre: 6
+        point: a4_ruine_h4
+      - type: INTERAGIR
+        texte: "Chercher l'astrolabe du dernier lecteur"
+        texte-en: "Look for the last reader's astrolabe"
+        point: a4_ruine_h4
+        rayon: 6
+        apres:
+          - "Sous une dalle, un astrolabe de cuivre, et un mot : « Il est reparti. C'était bien. Ne pleurez pas. »"
+        apres-en:
+          - "Under a slab, a copper astrolabe, and a note: « It has left again. It was good. Do not weep. »"
+      - type: PARLER
+        texte: "Revenir voir Saadi"
+        texte-en: "Return to Saadi"
+        pnj: a4_saadi
+        dialogue:
+          - "a4_saadi: « Il est reparti. C'était bien. » Il a écrit ça le jour de la Chute, sans savoir que cette fois, l'Astre ne repartait pas : il se brisait."
+          - "a4_saadi: Garde son astrolabe. Tu lis le ciel mieux que la plupart d'entre nous, maintenant."
+        dialogue-en:
+          - "a4_saadi: « It has left again. It was good. » He wrote that on the day of the Fall, not knowing that this time the Star was not leaving: it was breaking."
+          - "a4_saadi: Keep his astrolabe. You read the sky better than most of us now."
+    recompenses:
+      xp: 14210
+      or: 1420
+      objets:
+        - materiau: CLOCK
+          nom: "Astrolabe du dernier lecteur"
+          nom-en: "The last reader's astrolabe"
+          description:
+            - "« Il est reparti. C'était bien. »"
+          description-en:
+            - "« It has left again. It was good. »"
+
+  a4_n_le_faucon_de_naim:
+    nom: "Le faucon de Naïm"
+    nom-en: "Naïm's Falcon"
+    niveau: 37
+    donneur: a4_naim
+    resume:
+      - "Le faucon de Naïm n'est pas revenu."
+    resume-en:
+      - "Naïm's falcon has not come back."
+    offre:
+      - "a4_naim: Mon faucon n'est pas rentré. Il chassait au nord-ouest. Ses plumes tombent quand il se bat : suis-les."
+    offre-en:
+      - "a4_naim: My falcon has not come home. It was hunting to the north-west. Its feathers fall when it fights: follow them."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les plumes du faucon"
+        texte-en: "Follow the falcon's feathers"
+        traces: [a4_faucon_1, a4_faucon_2, a4_faucon_3, a4_faucon_fin]
+        apres:
+          - "Le faucon est perché sur un rocher, une aile pendante. Autour, des chacals tournent en grognant."
+        apres-en:
+          - "The falcon is perched on a rock, one wing hanging. Around it, jackals circle, growling."
+      - type: TUER
+        texte: "Chasser les chacals"
+        texte-en: "Drive off the jackals"
+        monstres: [a4_chacal]
+        nombre: 4
+        point: a4_faucon_fin
+      - type: PARLER
+        texte: "Ramener des nouvelles à Naïm"
+        texte-en: "Bring news to Naïm"
+        pnj: a4_naim
+        dialogue:
+          - "a4_naim: Il est rentré seul, en boitant dans le ciel. Il t'a laissé une plume. Ça veut dire qu'il t'aime bien. Ou qu'il perd ses plumes."
+        dialogue-en:
+          - "a4_naim: He came home alone, limping through the sky. He left you a feather. It means he likes you. Or that he is losing his feathers."
+    recompenses:
+      xp: 9190
+      or: 920
+      objets:
+        - materiau: FEATHER
+          nom: "Plume du faucon de Naïm"
+          nom-en: "Feather of Naïm's falcon"
+          description:
+            - "Il ne la donne pas à tout le monde."
+          description-en:
+            - "He does not give it to just anyone."
+
+  a4_n_la_course_des_dunes:
+    nom: "La course des dunes"
+    nom-en: "The Dune Race"
+    niveau: 39
+    requiert: [a4_n_le_faucon_de_naim]
+    donneur: a4_naim
+    resume:
+      - "Naïm défie le Marqué à la course."
+    resume-en:
+      - "Naïm challenges the Marked to a race."
+    offre:
+      - "a4_naim: Jusqu'au rocher plat, à l'est. Deux minutes. Personne ne l'a jamais fait en moins, à part moi. Partez !"
+    offre-en:
+      - "a4_naim: To the flat rock, to the east. Two minutes. Nobody has ever done it in less, except me. Go!"
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre le rocher plat de l'est à temps"
+        texte-en: "Reach the flat rock to the east in time"
+        point: a4_course
+        rayon: 5
+        apres:
+          - "Tu arrives au rocher. Il n'y a personne. Naïm n'est pas parti : il voulait seulement voir si tu irais."
+        apres-en:
+          - "You reach the rock. There is nobody. Naïm never left: he only wanted to see whether you would go."
+        chrono: 120
+        echec:
+          - "a4_naim: Trop lent ! Le sable t'a mangé les jambes. Encore une fois."
+        echec-en:
+          - "a4_naim: Too slow! The sand ate your legs. Once more."
+      - type: PARLER
+        texte: "Revenir voir Naïm"
+        texte-en: "Return to Naïm"
+        pnj: a4_naim
+        dialogue:
+          - "a4_naim: Tu es allé jusqu'au bout. Chez nous, ça compte plus que de gagner."
+        dialogue-en:
+          - "a4_naim: You went all the way. Among us, that counts for more than winning."
+    recompenses:
+      xp: 10210
+      or: 1020
+
+  a4_n_le_mirage:
+    nom: "Le mirage"
+    nom-en: "The Mirage"
+    niveau: 42
+    requiert: [a4_n_la_course_des_dunes]
+    donneur: a4_naim
+    resume:
+      - "Une ville apparaît certains soirs à l'ouest du désert."
+    resume-en:
+      - "A city appears on certain evenings in the west of the desert."
+    offre:
+      - "a4_naim: Certains soirs, à l'ouest, on voit une ville blanche au-dessus du sable. Les vieux disent que c'est l'endroit où l'Astre se posait avant le Tombeau. Ceux qui y vont reviennent brûlés."
+    offre-en:
+      - "a4_naim: Some evenings, to the west, you can see a white city above the sand. The elders say it is where the Star rested before the Tomb. Those who go there come back burnt."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Marcher vers le mirage"
+        texte-en: "Walk toward the mirage"
+        point: a4_mirage
+        rayon: 10
+      - type: SURVIE
+        texte: "Traverser le sable brûlant"
+        texte-en: "Cross the burning sand"
+        point: a4_mirage
+        rayon: 12
+        duree: 40
+        mode: brule
+        degats: 5
+        apres:
+          - "La chaleur retombe. La ville blanche n'est plus là. À sa place, un cercle de pierres noircies."
+        apres-en:
+          - "The heat drops. The white city is gone. In its place, a ring of blackened stones."
+      - type: INTERAGIR
+        texte: "Examiner le cercle de pierres"
+        texte-en: "Examine the ring of stones"
+        point: a4_mirage_2
+        rayon: 6
+        apres:
+          - "Au centre, le sable a fondu en un miroir. Dedans, l'espace d'un instant, ce n'est pas ton visage : c'est un ciel immense, vu d'en haut."
+        apres-en:
+          - "In the centre, the sand has melted into a mirror. In it, for an instant, it is not your face: it is an immense sky, seen from above."
+      - type: PARLER
+        texte: "Raconter le mirage à Naïm"
+        texte-en: "Tell Naïm about the mirage"
+        pnj: a4_naim
+        dialogue:
+          - "a4_naim: Un ciel vu d'en haut. Comme si tu avais été l'Astre, une seconde."
+          - "a4_naim: Les Marqués voient des choses que nous ne voyons pas. Ça doit être lourd."
+        dialogue-en:
+          - "a4_naim: A sky seen from above. As if you had been the Star, for a second."
+          - "a4_naim: The Marked see things we do not. That must be heavy."
+    recompenses:
+      xp: 11850
+      or: 1185
+
+  a4_n_les_puisatiers:
+    nom: "Les puisatiers"
+    nom-en: "The Well-Diggers"
+    niveau: 38
+    donneur: a4_tamel
+    resume:
+      - "Des puisatiers creusent un puits ensablé au nord de l'Oasis."
+    resume-en:
+      - "Well-diggers are clearing a sanded-up well north of the Oasis."
+    offre:
+      - "a4_tamel: Mes puisatiers dégagent le vieux puits, au nord, sur le plateau. Les scarabées sortent du sable dès qu'on creuse. Garde-les le temps qu'ils finissent."
+    offre-en:
+      - "a4_tamel: My diggers are clearing the old well, to the north, on the plateau. Beetles come out of the sand as soon as we dig. Guard them until they finish."
+    etapes:
+      - type: DEFENSE
+        texte: "Protéger les puisatiers"
+        texte-en: "Protect the well-diggers"
+        point: a4_fouilles
+        monstres: [a4_scarabee, a4_creux_sable]
+        nombre: 3
+        duree: 75
+        intervalle: 15
+        apparition: a4_fouilles_assaut
+        pv: 160
+        degats: 4
+        cible: "Les puisatiers"
+        cible-en: "The well-diggers"
+        apres:
+          - "Un dernier coup de pioche, et l'eau remonte, trouble puis claire."
+        apres-en:
+          - "One last swing of the pick, and the water rises, cloudy then clear."
+      - type: PARLER
+        texte: "Revenir voir Tamel"
+        texte-en: "Return to Tamel"
+        pnj: a4_tamel
+        dialogue:
+          - "a4_tamel: Un puits de plus. Dans le désert, c'est une ville de plus."
+        dialogue-en:
+          - "a4_tamel: One more well. In the desert, that is one more town."
+    recompenses:
+      xp: 9700
+      or: 970
+
+  a4_n_les_jarres_de_sel:
+    nom: "Les jarres de sel"
+    nom-en: "The Salt Jars"
+    niveau: 41
+    requiert: [a4_n_les_puisatiers]
+    donneur: a4_tamel
+    resume:
+      - "La vigie de l'est attend ses jarres de sel."
+    resume-en:
+      - "The eastern lookout is waiting for its salt jars."
+    offre:
+      - "a4_tamel: Hadi, à la vigie de l'est, n'a plus de sel. Charge ces jarres sur ta monture, au vieux puits, et porte-les-lui. Si tu tombes, elles tombent."
+    offre-en:
+      - "a4_tamel: Hadi, at the eastern lookout, has run out of salt. Load these jars on your mount, at the old well, and take them to him. If you fall, they fall."
+    etapes:
+      - type: TRANSPORT
+        texte: "Porter les jarres de sel à la vigie de l'est"
+        texte-en: "Carry the salt jars to the eastern lookout"
+        point: a4_vigie
+        depart: a4_fouilles
+        materiau: DECORATED_POT
+        rayon: 5
+        objet: "Jarres de sel"
+        objet-en: "Salt jars"
+        apres:
+          - "a4_hadi: Du sel ! Je mangeais mes dattes nature depuis une semaine. Une semaine."
+        apres-en:
+          - "a4_hadi: Salt! I have been eating my dates plain for a week. A week."
+      - type: PARLER
+        texte: "Parler à Hadi"
+        texte-en: "Talk to Hadi"
+        pnj: a4_hadi
+        dialogue:
+          - "a4_hadi: Dis à Tamel que de la vigie, je vois des feux à l'est chaque nuit. Plus nombreux chaque nuit."
+        dialogue-en:
+          - "a4_hadi: Tell Tamel that from the lookout I see fires to the east every night. More of them each night."
+    recompenses:
+      xp: 11290
+      or: 1130
+
+  a4_n_le_marche_de_l_eau:
+    nom: "Le marché de l'eau"
+    nom-en: "The Water Bargain"
+    niveau: 44
+    requiert: [a4_n_les_jarres_de_sel]
+    donneur: a4_tamel
+    resume:
+      - "Les deux camps veulent acheter l'eau des Astréens."
+    resume-en:
+      - "Both sides want to buy the Astreans' water."
+    offre:
+      - "a4_tamel: Un intendant du Bastion et un intendant de la Citadelle sont venus le même jour. Ils veulent notre eau, au triple du prix. Toi qui viens de chez eux : que ferais-tu ?"
+    offre-en:
+      - "a4_tamel: A Bastion steward and a Citadel steward came on the same day. They want our water, at three times the price. You who come from them: what would you do?"
+    etapes:
+      - type: CHOIX
+        texte: "Conseiller Tamel"
+        texte-en: "Advise Tamel"
+        pnj: a4_tamel
+        choix: a4-commerce
+        question: "Que conseillez-vous ?"
+        question-en: "What do you advise?"
+        reponses:
+          - id: refuser
+            texte: "Refuse. Qu'ils repartent assoiffés."
+            texte-en: "Refuse. Let them leave thirsty."
+            reponse:
+              - "a4_tamel: Assoiffés, ils partiront plus vite. Et ils reviendront plus fâchés. Mais ils partiront."
+            reponse-en:
+              - "a4_tamel: Thirsty, they will leave sooner. And come back angrier. But they will leave."
+            xp: 3060
+          - id: vendre
+            texte: "Vends. Et creuse tes dix puits."
+            texte-en: "Sell. And dig your ten wells."
+            reponse:
+              - "a4_tamel: Dix puits. Mes petits-enfants boiront l'or de l'Aube et de l'Ombre. Il y a une justice, quelque part."
+            reponse-en:
+              - "a4_tamel: Ten wells. My grandchildren will drink the gold of the Dawn and the Shadow. There is justice somewhere."
+            or: 460
+        dialogue:
+          - "a4_tamel: Avec leur or, je creuse dix puits. Sans eau, leurs soldats repartent. Les deux me plaisent."
+        dialogue-en:
+          - "a4_tamel: With their gold, I dig ten wells. Without water, their soldiers leave. I like both."
+    recompenses:
+      xp: 13000
+      or: 1300
+
+  a4_n_les_morts_qui_marchent:
+    nom: "Les morts qui marchent"
+    nom-en: "The Walking Dead"
+    niveau: 36
+    donneur: a4_hadi
+    resume:
+      - "Un cimetière s'est réveillé à l'est de la vigie."
+    resume-en:
+      - "A graveyard has woken east of the lookout."
+    offre:
+      - "a4_hadi: À l'est, un vieux cimetière s'est réveillé. La nuit, ses morts viennent jusqu'au pied de ma tour. Ils regardent en l'air. Comme moi."
+    offre-en:
+      - "a4_hadi: To the east, an old graveyard has woken. At night, its dead come to the foot of my tower. They look up. Like me."
+    etapes:
+      - type: TUER
+        texte: "Rendre au repos les morts de l'est"
+        texte-en: "Lay the eastern dead to rest"
+        monstres: [squelette, revenant, momie]
+        nombre: 12
+        point: a4_camp_h4
+      - type: PARLER
+        texte: "Revenir voir Hadi"
+        texte-en: "Return to Hadi"
+        pnj: a4_hadi
+        dialogue:
+          - "a4_hadi: La nuit sera calme. Enfin, calme pour le désert."
+        dialogue-en:
+          - "a4_hadi: The night will be quiet. Well, quiet for the desert."
+    recompenses:
+      xp: 8700
+      or: 870
+
+  a4_n_le_cimetiere_du_sel:
+    nom: "Le cimetière du sel"
+    nom-en: "The Salt Graveyard"
+    niveau: 40
+    requiert: [a4_n_les_morts_qui_marchent]
+    donneur: a4_hadi
+    resume:
+      - "Un cimetière se vide à l'ouest de l'Oasis."
+    resume-en:
+      - "A graveyard is emptying west of the Oasis."
+    offre:
+      - "a4_hadi: À l'ouest de l'Oasis, le cimetière du sel se vide aussi. On y enterrait les caravaniers. Ils marchent encore, comme s'ils avaient une livraison à finir."
+    offre-en:
+      - "a4_hadi: West of the Oasis, the salt graveyard is emptying too. Caravaneers were buried there. They still walk, as if they had a delivery to finish."
+    etapes:
+      - type: TUER
+        texte: "Rendre au repos les caravaniers"
+        texte-en: "Lay the caravaneers to rest"
+        monstres: [squelette, revenant, momie]
+        nombre: 12
+        point: a4_camp_h6
+      - type: INTERAGIR
+        texte: "Lire les tombes du sel"
+        texte-en: "Read the salt graves"
+        point: a4_camp_h6
+        rayon: 6
+        apres:
+          - "Sur chaque tombe, une jarre gravée et le nom d'une route. Aucune ne mène vers l'Aube ou l'Ombre : elles vont toutes d'un puits à l'autre."
+        apres-en:
+          - "On each grave, a carved jar and the name of a road. None leads to the Dawn or the Shadow: they all go from one well to the next."
+      - type: PARLER
+        texte: "Revenir voir Hadi"
+        texte-en: "Return to Hadi"
+        pnj: a4_hadi
+        dialogue:
+          - "a4_hadi: D'un puits à l'autre. C'est tout ce qu'on a jamais voulu, nous."
+        dialogue-en:
+          - "a4_hadi: From one well to the next. That is all we ever wanted."
+    recompenses:
+      xp: 10740
+      or: 1075
+
+  a4_n_le_cimetiere_du_sud:
+    nom: "Le cimetière du sud"
+    nom-en: "The Southern Graveyard"
+    niveau: 44
+    requiert: [a4_n_le_cimetiere_du_sel]
+    donneur: a4_hadi
+    resume:
+      - "Le plus vieux cimetière du désert s'est réveillé au sud."
+    resume-en:
+      - "The oldest graveyard in the desert has woken to the south."
+    offre:
+      - "a4_hadi: Le plus vieux cimetière est au sud. Celui-là, même les vieux n'en parlent pas. Ses morts portent des voiles d'Hôtes."
+    offre-en:
+      - "a4_hadi: The oldest graveyard is to the south. That one, even the elders do not speak of. Its dead wear Hosts' veils."
+    etapes:
+      - type: TUER
+        texte: "Rendre au repos les morts du sud"
+        texte-en: "Lay the southern dead to rest"
+        monstres: [squelette, revenant, momie]
+        nombre: 14
+        point: a4_camp_h8
+      - type: INTERAGIR
+        texte: "Examiner les tombes voilées"
+        texte-en: "Examine the veiled graves"
+        point: a4_camp_h8
+        rayon: 6
+        apres:
+          - "Des Hôtes, enterrés le visage tourné vers le ciel. Sur chaque dalle, la même phrase : « Nous l'avons laissé partir. »"
+        apres-en:
+          - "Hosts, buried facing the sky. On every slab, the same sentence: « We let it go. »"
+      - type: PARLER
+        texte: "Revenir voir Hadi"
+        texte-en: "Return to Hadi"
+        pnj: a4_hadi
+        dialogue:
+          - "a4_hadi: « Nous l'avons laissé partir. » Ça devrait être écrit sur les portes du Bastion. Et sur celles de la Citadelle."
+        dialogue-en:
+          - "a4_hadi: « We let it go. » That should be written on the gates of the Bastion. And on those of the Citadel."
+    recompenses:
+      xp: 13000
+      or: 1300
+
+  a4_n_le_reliquat:
+    nom: "Le reliquat"
+    nom-en: "The Remnant"
+    niveau: 46
+    requiert: [a4_n_le_cimetiere_du_sud]
+    donneur: a4_hadi
+    resume:
+      - "Du sable noir s'étend au sud du désert."
+    resume-en:
+      - "Black sand is spreading in the south of the desert."
+    offre:
+      - "a4_hadi: Au sud, une tache de sable noir grandit. La Reine est tombée, mais le sable continue. Va voir ce qui le nourrit."
+    offre-en:
+      - "a4_hadi: To the south, a patch of black sand is growing. The Queen has fallen, but the sand goes on. Go and see what feeds it."
+    etapes:
+      - type: TUER
+        texte: "Abattre les Creux du sable noir"
+        texte-en: "Destroy the Hollow of the black sand"
+        monstres: [a4_creux_sable]
+        nombre: 8
+        point: a4_reliquat
+      - type: INTERAGIR
+        texte: "Chercher ce qui nourrit le sable noir"
+        texte-en: "Look for what feeds the black sand"
+        point: a4_reliquat
+        rayon: 6
+        apres:
+          - "Un Éclat, à moitié enterré, noirci jusqu'au cœur. Il ne brille plus : il aspire. Autour de lui, le sable gèle."
+          - "Une voix minuscule, glacée : « Rendez-moi. » Tu l'arraches du sable. Il se tait."
+        apres-en:
+          - "A Shard, half buried, blackened to the core. It no longer shines: it draws in. Around it, the sand freezes."
+          - "A tiny, freezing voice: « Give me back. » You pull it out of the sand. It falls silent."
+      - type: PARLER
+        texte: "Revenir voir Hadi"
+        texte-en: "Return to Hadi"
+        pnj: a4_hadi
+        dialogue:
+          - "a4_hadi: Un Éclat qui a froid. Les Marqués de l'Ombre entendent ça tout le temps, paraît-il. Je ne les envie pas."
+        dialogue-en:
+          - "a4_hadi: A Shard that is cold. The Marked of the Shadow hear that all the time, they say. I don't envy them."
+    recompenses:
+      xp: 14210
+      or: 1420
+
+  a4_n_les_pillards_du_nord_ouest:
+    nom: "Les pillards du nord-ouest"
+    nom-en: "The North-Western Raiders"
+    niveau: 37
+    donneur: a4_tamel
+    resume:
+      - "Des pillards tiennent la piste du nord-ouest."
+    resume-en:
+      - "Raiders hold the north-western track."
+    offre:
+      - "a4_tamel: Au nord-ouest, à l'entrée du désert, des pillards rançonnent tout ce qui arrive des Prés d'Auréval. Mes caravanes y passent aussi."
+    offre-en:
+      - "a4_tamel: To the north-west, at the entrance of the desert, raiders hold to ransom everything arriving from the Meadows of Auréval. My caravans pass there too."
+    etapes:
+      - type: TUER
+        texte: "Briser le camp du nord-ouest"
+        texte-en: "Break the north-western camp"
+        monstres: [pillard, pillard_archer]
+        nombre: 12
+        point: a4_camp_h5
+      - type: PARLER
+        texte: "Revenir voir Tamel"
+        texte-en: "Return to Tamel"
+        pnj: a4_tamel
+        dialogue:
+          - "a4_tamel: La piste est libre. Pour une lune, peut-être deux."
+        dialogue-en:
+          - "a4_tamel: The track is clear. For a moon, maybe two."
+    recompenses:
+      xp: 9190
+      or: 920
+
+  a4_n_le_cimetiere_de_l_ouest:
+    nom: "Le cimetière de l'ouest"
+    nom-en: "The Western Graveyard"
+    niveau: 38
+    donneur: a4_hadi
+    resume:
+      - "Un cimetière s'agite au nord-ouest de l'Oasis."
+    resume-en:
+      - "A graveyard is stirring north-west of the Oasis."
+    offre:
+      - "a4_hadi: Au nord-ouest, encore un cimetière. Je ne sais pas ce que le ciel a fait aux morts du désert, mais ils n'arrivent plus à dormir."
+    offre-en:
+      - "a4_hadi: To the north-west, another graveyard. I do not know what the sky did to the desert's dead, but they can no longer sleep."
+    etapes:
+      - type: TUER
+        texte: "Rendre au repos les morts du nord-ouest"
+        texte-en: "Lay the north-western dead to rest"
+        monstres: [squelette, revenant, momie]
+        nombre: 12
+        point: a4_camp_h2
+      - type: PARLER
+        texte: "Revenir voir Hadi"
+        texte-en: "Return to Hadi"
+        pnj: a4_hadi
+        dialogue:
+          - "a4_hadi: Merci. Je vais finir par te donner un surnom. Celui qui couche les morts. Ça sonne mal. J'en chercherai un autre."
+        dialogue-en:
+          - "a4_hadi: Thank you. I'll end up giving you a nickname. The one who puts the dead to bed. Sounds bad. I'll find another."
+    recompenses:
+      xp: 9700
+      or: 970
+
+  a4_n_les_pillards_des_hauts:
+    nom: "Les pillards des hauts"
+    nom-en: "The Highland Raiders"
+    niveau: 42
+    requiert: [a4_n_les_pillards_du_nord_ouest]
+    donneur: a4_tamel
+    resume:
+      - "Des pillards tiennent un plateau au sud-ouest."
+    resume-en:
+      - "Raiders hold a plateau to the south-west."
+    offre:
+      - "a4_tamel: Sur le plateau du sud-ouest, un camp de pillards guette les deux routes à la fois. Ce sont eux qui ont pris la caravane de Yared."
+    offre-en:
+      - "a4_tamel: On the south-western plateau, a raider camp watches both roads at once. They are the ones who took Yared's caravan."
+    etapes:
+      - type: TUER
+        texte: "Briser le camp du plateau"
+        texte-en: "Break the plateau camp"
+        monstres: [pillard, pillard_archer]
+        nombre: 12
+        point: a4_camp_h1
+      - type: INTERAGIR
+        texte: "Reprendre les marchandises de Yared"
+        texte-en: "Recover Yared's goods"
+        point: a4_camp_h1
+        rayon: 6
+        apres:
+          - "Des jarres, des tapis, et un petit coffret au nom de Yared. Dedans, une seule chose : un dessin d'enfant."
+        apres-en:
+          - "Jars, rugs, and a small box with Yared's name on it. Inside, a single thing: a child's drawing."
+      - type: PARLER
+        texte: "Revenir voir Tamel"
+        texte-en: "Return to Tamel"
+        pnj: a4_tamel
+        dialogue:
+          - "a4_tamel: Le dessin de sa fille. Il serait reparti le chercher avec une jambe en moins. Merci pour lui."
+        dialogue-en:
+          - "a4_tamel: His daughter's drawing. He'd have gone back for it with one leg less. Thank you for him."
+    recompenses:
+      xp: 11850
+      or: 1185
+
+  a4_n_les_pillards_du_grand_sud:
+    nom: "Les pillards du grand sud"
+    nom-en: "The Deep South Raiders"
+    niveau: 45
+    requiert: [a4_n_les_pillards_des_hauts]
+    donneur: a4_tamel
+    resume:
+      - "Le dernier grand camp de pillards se cache tout au sud."
+    resume-en:
+      - "The last great raider camp hides in the far south."
+    offre:
+      - "a4_tamel: Tout au sud, le dernier grand camp. Celui-là, c'est le bras droit de leur chef qui le tient. Après lui, les Fils du Sable ne seront plus qu'une histoire qu'on raconte aux enfants."
+    offre-en:
+      - "a4_tamel: Far to the south, the last great camp. That one is held by their chief's right hand. After him, the Sons of the Sand will be nothing but a story told to children."
+    etapes:
+      - type: TUER
+        texte: "Détruire le camp du grand sud"
+        texte-en: "Destroy the deep south camp"
+        monstres: [pillard, pillard_archer]
+        nombre: 14
+        point: a4_camp_h7
+      - type: PARLER
+        texte: "Revenir voir Tamel"
+        texte-en: "Return to Tamel"
+        pnj: a4_tamel
+        dialogue:
+          - "a4_tamel: C'est fini. Pour la première fois depuis dix ans, une caravane peut traverser le désert sans gardes."
+          - "a4_tamel: Tu as une place dans toutes mes caravanes. À vie."
+        dialogue-en:
+          - "a4_tamel: It is over. For the first time in ten years, a caravan can cross the desert without guards."
+          - "a4_tamel: You have a place in all my caravans. For life."
+    recompenses:
+      xp: 13600
+      or: 1360
+      objets:
+        - materiau: GOLD_INGOT
+          nom: "Or d'ocre"
+          nom-en: "Ochre gold"
+          description:
+            - "Le tribut des caravanes de Tamel."
+          description-en:
+            - "The tribute of Tamel's caravans."
+
+  a4_n_l_epave:
+    nom: "L'épave de la caravane"
+    nom-en: "The Caravan Wreck"
+    niveau: 40
+    donneur: a4_djanel
+    resume:
+      - "Une caravane a disparu au nord-est du désert."
+    resume-en:
+      - "A caravan has disappeared in the north-east of the desert."
+    offre:
+      - "a4_djanel: Une caravane partie vers les Quatre-Vents n'est jamais arrivée. Elle a dû s'arrêter au nord-est. Trouve-la, et dis-moi ce qui l'a arrêtée."
+    offre-en:
+      - "a4_djanel: A caravan bound for the Four Winds never arrived. It must have stopped in the north-east. Find it, and tell me what stopped it."
+    etapes:
+      - type: ENQUETE
+        texte: "Comprendre ce qui est arrivé à la caravane"
+        texte-en: "Understand what happened to the caravan"
+        pnj: a4_djanel
+        indices:
+          - point: a4_epave
+            texte: "Le chariot renversé"
+            texte-en: "The overturned cart"
+            apres:
+              - "Le chariot est intact. Rien n'a été volé. Les jarres sont pleines."
+            apres-en:
+              - "The cart is intact. Nothing was stolen. The jars are full."
+          - point: a4_ruine_h3
+            texte: "Les traces vers la chapelle"
+            texte-en: "The tracks toward the chapel"
+            apres:
+              - "Des pas de caravaniers, réguliers, sans hâte, jusqu'à la chapelle. Ils sont venus ici de leur plein gré."
+            apres-en:
+              - "Caravaneers' footsteps, steady, unhurried, up to the chapel. They came here of their own free will."
+          - point: a4_camp_h4
+            texte: "Le cimetière voisin"
+            texte-en: "The nearby graveyard"
+            apres:
+              - "Des tombes fraîches, creusées avec soin, par les caravaniers eux-mêmes, pour leurs propres morts. Puis ils sont repartis vers l'est."
+            apres-en:
+              - "Fresh graves, carefully dug, by the caravaneers themselves, for their own dead. Then they set off east."
+        dialogue:
+          - "joueur: Personne ne les a attaqués. Ils ont enterré leurs morts, laissé l'eau, et sont partis vers l'est."
+          - "a4_djanel: Vers l'est… Vers les camps de l'Aube et de l'Ombre. Ils sont allés s'engager. Le désert perd ses enfants à cette guerre."
+        dialogue-en:
+          - "joueur: Nobody attacked them. They buried their dead, left the water, and went east."
+          - "a4_djanel: East… Toward the camps of the Dawn and the Shadow. They went to enlist. The desert is losing its children to this war."
+    recompenses:
+      xp: 10740
+      or: 1075
+
+  # ================================================================ CONTRATS RÉPÉTABLES — TABLEAU DE DJANEL (toutes factions)
+
+  a4_c_scorpions:
+    nom: "Contrat : scorpions des sables"
+    nom-en: "Contract: Sand Scorpions"
+    repetable: 20
+    niveau: 36
+    donneur: a4_djanel
+    resume:
+      - "Contrat du jour : réduire les scorpions autour des pistes."
+    resume-en:
+      - "Daily contract: thin out the scorpions around the tracks."
+    offre:
+      - "a4_djanel: Les scorpions remontent jusqu'aux pistes. Douze de moins, et les caravanes respirent."
+    offre-en:
+      - "a4_djanel: The scorpions are coming up to the tracks. Twelve fewer, and the caravans breathe."
+    etapes:
+      - type: TUER
+        texte: "Tuer des scorpions des sables"
+        texte-en: "Kill sand scorpions"
+        monstres: [scorpion]
+        nombre: 12
+      - type: PARLER
+        texte: "Toucher la prime chez Djanel"
+        texte-en: "Collect the bounty from Djanel"
+        pnj: a4_djanel
+        dialogue:
+          - "a4_djanel: Payé. Ils reviendront demain. Toi aussi, j'espère."
+        dialogue-en:
+          - "a4_djanel: Paid. They will be back tomorrow. So will you, I hope."
+    recompenses:
+      xp: 4610
+      or: 460
+
+  a4_c_carapaces:
+    nom: "Contrat : carapaces noires"
+    nom-en: "Contract: Black Shells"
+    repetable: 20
+    niveau: 39
+    donneur: a4_djanel
+    resume:
+      - "Contrat du jour : des carapaces pour l'herboristerie."
+    resume-en:
+      - "Daily contract: shells for the herbalist."
+    offre:
+      - "a4_djanel: Oumaya en manque toujours. Dix carapaces de scarabée noir, au nid de l'ouest."
+    offre-en:
+      - "a4_djanel: Oumaya is always short. Ten black beetle shells, at the western nest."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer des carapaces de scarabée"
+        texte-en: "Collect beetle shells"
+        monstres: [a4_scarabee]
+        nombre: 10
+        chance: 0.6
+        point: a4_nid_scorpions
+        objet: "Carapace de scarabée noir"
+        objet-en: "Black beetle shell"
+      - type: PARLER
+        texte: "Livrer les carapaces à Djanel"
+        texte-en: "Deliver the shells to Djanel"
+        pnj: a4_djanel
+        dialogue:
+          - "a4_djanel: Oumaya te bénira. À sa manière : en grognant."
+        dialogue-en:
+          - "a4_djanel: Oumaya will bless you. In her own way: grumbling."
+    recompenses:
+      xp: 5410
+      or: 540
+
+  a4_c_momies:
+    nom: "Contrat : momies errantes"
+    nom-en: "Contract: Wandering Mummies"
+    repetable: 20
+    niveau: 41
+    donneur: a4_djanel
+    resume:
+      - "Contrat du jour : rendre des momies au repos."
+    resume-en:
+      - "Daily contract: lay mummies to rest."
+    offre:
+      - "a4_djanel: Les momies sortent des dunes et marchent vers l'Oasis. Douze, et ce sera calme jusqu'à demain."
+    offre-en:
+      - "a4_djanel: Mummies come out of the dunes and walk toward the Oasis. Twelve, and it will be quiet until tomorrow."
+    etapes:
+      - type: TUER
+        texte: "Abattre des momies"
+        texte-en: "Bring down mummies"
+        monstres: [momie]
+        nombre: 12
+      - type: PARLER
+        texte: "Toucher la prime chez Djanel"
+        texte-en: "Collect the bounty from Djanel"
+        pnj: a4_djanel
+        dialogue:
+          - "a4_djanel: Bien. Les morts dorment, les vivants payent."
+        dialogue-en:
+          - "a4_djanel: Good. The dead sleep, the living pay."
+    recompenses:
+      xp: 5980
+      or: 600
+
+  a4_c_pillards:
+    nom: "Contrat : pillards des dunes"
+    nom-en: "Contract: Dune Raiders"
+    repetable: 20
+    niveau: 44
+    donneur: a4_djanel
+    resume:
+      - "Contrat du jour : chasser les pillards des dunes."
+    resume-en:
+      - "Daily contract: hunt the dune raiders."
+    offre:
+      - "a4_djanel: Les camps de pillards se remplissent toujours. Quinze de moins, n'importe où dans le désert."
+    offre-en:
+      - "a4_djanel: The raider camps always fill up again. Fifteen fewer, anywhere in the desert."
+    etapes:
+      - type: TUER
+        texte: "Chasser des pillards des dunes"
+        texte-en: "Hunt dune raiders"
+        monstres: [pillard, pillard_archer]
+        nombre: 15
+      - type: PARLER
+        texte: "Toucher la prime chez Djanel"
+        texte-en: "Collect the bounty from Djanel"
+        pnj: a4_djanel
+        dialogue:
+          - "a4_djanel: Tamel t'envoie ses salutations. Et moi, ton or."
+        dialogue-en:
+          - "a4_djanel: Tamel sends his greetings. And I, your gold."
+    recompenses:
+      xp: 6880
+      or: 690
+
+  a4_c_porteuse:
+    nom: "Contrat : la porteuse d'eau"
+    nom-en: "Contract: The Water Bearer"
+    repetable: 20
+    niveau: 38
+    donneur: a4_djanel
+    resume:
+      - "Contrat du jour : escorter Lilah jusqu'au Puits de Sel."
+    resume-en:
+      - "Daily contract: escort Lilah to the Salt Well."
+    offre:
+      - "a4_djanel: Lilah repart vers le Puits de Sel. Chaque jour, quelqu'un l'attend en chemin. Marche avec elle."
+    offre-en:
+      - "a4_djanel: Lilah is heading to the Salt Well again. Every day, someone waits for her on the way. Walk with her."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter Lilah jusqu'au Puits de Sel"
+        texte-en: "Escort Lilah to the Salt Well"
+        pnj: a4_porteuse
+        chemin: [a4_caravane_1, a4_caravane_2, a4_puits_sel]
+        monstres: [a4_fils_sable, a4_chacal]
+        nombre: 3
+        vagues: 2
+        pv: 140
+        degats: 5
+        apres:
+          - "a4_porteuse: Encore arrivés. On devrait se marier, à force de marcher ensemble. Je plaisante."
+        apres-en:
+          - "a4_porteuse: Here again. We should get married, the way we keep walking together. I am joking."
+      - type: PARLER
+        texte: "Revenir voir Djanel"
+        texte-en: "Return to Djanel"
+        pnj: a4_djanel
+        dialogue:
+          - "a4_djanel: L'eau est passée. Voici ta part."
+        dialogue-en:
+          - "a4_djanel: The water got through. Here is your share."
+    recompenses:
+      xp: 5130
+      or: 515
+
+  a4_c_puits:
+    nom: "Contrat : garder le puits"
+    nom-en: "Contract: Guard the Well"
+    repetable: 20
+    niveau: 42
+    donneur: a4_djanel
+    resume:
+      - "Contrat du jour : tenir le Puits des Hôtes."
+    resume-en:
+      - "Daily contract: hold the Hosts' Well."
+    offre:
+      - "a4_djanel: Les Fils du Sable tournent autour du Puits des Hôtes. Tiens-le une minute, le temps que les familles remplissent leurs outres."
+    offre-en:
+      - "a4_djanel: The Sons of the Sand are circling the Hosts' Well. Hold it for a minute, while the families fill their waterskins."
+    etapes:
+      - type: DEFENSE
+        texte: "Tenir le Puits des Hôtes"
+        texte-en: "Hold the Hosts' Well"
+        point: a4_puits_hotes
+        monstres: [a4_fils_sable]
+        nombre: 3
+        duree: 60
+        intervalle: 15
+        apparition: a4_puits_assaut
+        pv: 180
+        degats: 5
+        cible: "Le Puits des Hôtes"
+        cible-en: "The Hosts' Well"
+        apres:
+          - "Les outres sont pleines. Les familles repartent vers l'Oasis."
+        apres-en:
+          - "The waterskins are full. The families head back to the Oasis."
+      - type: PARLER
+        texte: "Revenir voir Djanel"
+        texte-en: "Return to Djanel"
+        pnj: a4_djanel
+        dialogue:
+          - "a4_djanel: Une minute de plus, et ils auraient eu soif ce soir. Merci."
+        dialogue-en:
+          - "a4_djanel: One more minute, and they would have been thirsty tonight. Thank you."
+    recompenses:
+      xp: 6270
+      or: 625
+
+  a4_c_eau:
+    nom: "Contrat : l'eau de la vigie"
+    nom-en: "Contract: The Lookout's Water"
+    repetable: 20
+    niveau: 40
+    donneur: a4_djanel
+    resume:
+      - "Contrat du jour : porter de l'eau à la vigie de l'est."
+    resume-en:
+      - "Daily contract: carry water to the eastern lookout."
+    offre:
+      - "a4_djanel: Hadi n'a pas de puits, là-haut. Une jarre de la source, à dos de monture, chaque jour."
+    offre-en:
+      - "a4_djanel: Hadi has no well up there. One jar from the spring, on a mount, every day."
+    etapes:
+      - type: TRANSPORT
+        texte: "Porter l'eau à la vigie de l'est, à dos de monture"
+        texte-en: "Carry the water to the eastern lookout, on a mount"
+        point: a4_vigie
+        depart: a4_source
+        materiau: DECORATED_POT
+        rayon: 5
+        objet: "Jarre de la source haute"
+        objet-en: "Jar from the high spring"
+        apres:
+          - "a4_hadi: De l'eau fraîche. Le désert peut attendre une heure, je bois."
+        apres-en:
+          - "a4_hadi: Fresh water. The desert can wait an hour, I am drinking."
+      - type: PARLER
+        texte: "Revenir voir Djanel"
+        texte-en: "Return to Djanel"
+        pnj: a4_djanel
+        dialogue:
+          - "a4_djanel: Hadi boit, donc Hadi veille. Voici ta part."
+        dialogue-en:
+          - "a4_djanel: Hadi drinks, so Hadi keeps watch. Here is your share."
+    recompenses:
+      xp: 5690
+      or: 570
+
+  a4_c_courrier:
+    nom: "Contrat : le courrier de l'Oasis"
+    nom-en: "Contract: The Oasis Courier"
+    repetable: 20
+    niveau: 37
+    donneur: a4_djanel
+    resume:
+      - "Contrat du jour : porter le courrier à la vigie avant la relève."
+    resume-en:
+      - "Daily contract: carry the post to the lookout before the watch changes."
+    offre:
+      - "a4_djanel: Le courrier doit arriver à la vigie de l'est avant la relève. Tu as trois minutes. Monte, ou cours très vite."
+    offre-en:
+      - "a4_djanel: The post must reach the eastern lookout before the watch changes. You have three minutes. Ride, or run very fast."
+    etapes:
+      - type: LIVRER
+        texte: "Porter le courrier à Hadi avant la relève"
+        texte-en: "Carry the post to Hadi before the watch changes"
+        pnj: a4_hadi
+        materiau: PAPER
+        objet: "Courrier de l'Oasis"
+        objet-en: "Oasis post"
+        dialogue:
+          - "a4_hadi: Juste à temps. Des nouvelles de ma mère. Elle trouve que je ne mange pas assez."
+        dialogue-en:
+          - "a4_hadi: Just in time. News from my mother. She thinks I do not eat enough."
+        chrono: 180
+        echec:
+          - "a4_djanel: Trop tard, la relève est passée. On recommence : voici le courrier de la suivante."
+        echec-en:
+          - "a4_djanel: Too late, the watch has changed. We start again: here is the post for the next one."
+      - type: PARLER
+        texte: "Revenir voir Djanel"
+        texte-en: "Return to Djanel"
+        pnj: a4_djanel
+        dialogue:
+          - "a4_djanel: Le courrier est passé. Voici ta part."
+        dialogue-en:
+          - "a4_djanel: The post got through. Here is your share."
+    recompenses:
+      xp: 4870
+      or: 485
+
+  a4_c_tempete:
+    nom: "Contrat : la tempête"
+    nom-en: "Contract: The Storm"
+    repetable: 20
+    niveau: 45
+    donneur: a4_djanel
+    resume:
+      - "Contrat du jour : tenir une balise dans la tempête."
+    resume-en:
+      - "Daily contract: hold a beacon in the storm."
+    offre:
+      - "a4_djanel: Une tempête se lève à l'ouest. Quelqu'un doit garder la balise allumée pour les caravanes perdues. La tempête se resserre ; reste au centre."
+    offre-en:
+      - "a4_djanel: A storm is rising to the west. Someone must keep the beacon lit for lost caravans. The storm closes in; stay in the centre."
+    etapes:
+      - type: SURVIE
+        texte: "Garder la balise allumée dans la tempête"
+        texte-en: "Keep the beacon lit in the storm"
+        point: a4_tempete
+        rayon: 14
+        duree: 60
+        mode: resserre
+        rayon-fin: 4
+        degats: 6
+        monstres: [a4_creux_sable]
+        nombre: 2
+        intervalle: 20
+        apres:
+          - "La tempête passe. Au loin, une caravane retrouve sa route grâce à la balise."
+        apres-en:
+          - "The storm passes. In the distance, a caravan finds its way thanks to the beacon."
+      - type: PARLER
+        texte: "Revenir voir Djanel"
+        texte-en: "Return to Djanel"
+        pnj: a4_djanel
+        dialogue:
+          - "a4_djanel: Une caravane de plus qui rentre. Voici ta part."
+        dialogue-en:
+          - "a4_djanel: One more caravan home. Here is your share."
+    recompenses:
+      xp: 7200
+      or: 720
+
+  a4_c_creux:
+    nom: "Contrat : le sable noir"
+    nom-en: "Contract: The Black Sand"
+    repetable: 20
+    niveau: 46
+    donneur: a4_djanel
+    resume:
+      - "Contrat du jour : contenir le sable noir du sud."
+    resume-en:
+      - "Daily contract: contain the black sand of the south."
+    offre:
+      - "a4_djanel: Le sable noir repousse au sud, chaque nuit. Dix Creux de moins, et il recule d'autant."
+    offre-en:
+      - "a4_djanel: The black sand grows back in the south, every night. Ten fewer Hollow, and it falls back as much."
+    etapes:
+      - type: TUER
+        texte: "Abattre des Creux du sable noir"
+        texte-en: "Destroy Hollow of the black sand"
+        monstres: [a4_creux_sable]
+        nombre: 10
+        point: a4_reliquat
+      - type: PARLER
+        texte: "Revenir voir Djanel"
+        texte-en: "Return to Djanel"
+        pnj: a4_djanel
+        dialogue:
+          - "a4_djanel: Le sable recule. Pour cette nuit."
+        dialogue-en:
+          - "a4_djanel: The sand falls back. For tonight."
+    recompenses:
+      xp: 7520
+      or: 750
+
+  a4_c_prime_scorpion_roi:
+    nom: "Avis de recherche : le Scorpion-Roi"
+    nom-en: "Wanted: The Scorpion King"
+    repetable: 168
+    niveau: 46
+    donneur: a4_djanel
+    resume:
+      - "Prime de la semaine : le Scorpion-Roi, au nid de l'ouest."
+    resume-en:
+      - "Weekly bounty: the Scorpion King, at the western nest."
+    offre:
+      - "a4_djanel: Une fois par lune, le Scorpion-Roi sort du nid de l'ouest. Gros comme un chariot. Rapporte son dard, la prime est pour toi."
+    offre-en:
+      - "a4_djanel: Once a moon, the Scorpion King comes out of the western nest. As big as a cart. Bring back its sting, and the bounty is yours."
+    etapes:
+      - type: TUER
+        texte: "Abattre le Scorpion-Roi"
+        texte-en: "Bring down the Scorpion King"
+        monstres: [a4_scorpion_roi]
+        point: a4_nid_scorpions
+      - type: PARLER
+        texte: "Rapporter le dard à Djanel"
+        texte-en: "Bring the sting to Djanel"
+        pnj: a4_djanel
+        dialogue:
+          - "a4_djanel: Le dard du Roi. On le pendra au-dessus de la porte, avec les autres. Il en manquait un."
+        dialogue-en:
+          - "a4_djanel: The King's sting. We will hang it above the gate, with the others. One was missing."
+    recompenses:
+      xp: 15040
+      or: 2005
+      objets:
+        - materiau: BLAZE_ROD
+          nom: "Dard du Scorpion-Roi"
+          nom-en: "Sting of the Scorpion King"
+          description:
+            - "Encore tiède. Encore venimeux."
+          description-en:
+            - "Still warm. Still venomous."

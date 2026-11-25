@@ -1,0 +1,92 @@
+# ------------------------------------------------------------------
+#  Sets d'équipement d'Orbit MMO (5 pièces, bonus à 2, 4 et 5 pièces portées).
+#  Ce fichier est intégré au plugin ; « /mmoadmin sets exporter » l'écrit dans plugins/OrbitMMO/sets.yml,
+#  qui remplace alors celui du plugin (modifiez-le puis /mmoadmin reload). Détails : docs/objets.md.
+#
+#  nom · type : tissu | cuir | mailles | plaques · palier : 0 (recrue) à 7 (orbitium)
+#  rarete : commun | inhabituel | rare | epique | legendaire
+#  origine : donjon | boss | artisan | raid (affiché ; boss et raid = lié quand ramassé par défaut)
+#  liaison : ramasse | equipe (facultatif)
+#  apparence : clé de tenue propre au set, toujours « set_<nom> » (le préfixe est ajouté s'il manque ; facultatif ;
+#              sans elle : « <type>_<palier> », ex. plaques_3). Sans tenue 3D à ce nom, on voit celle du type et du palier.
+#  bonus-niveau-objet : ajouté au niveau d'objet de chaque pièce (facultatif)
+#  modele-arme : epee, rapiere, katana, espadon, hache, faux, bec, dague, lance, masse, arc, baton, baguette, grimoire
+#  pieces : 5 parmi casque, plastron, jambieres, bottes, arme, bouclier → nom affiché
+#  bonus : <nombre de pièces> → clés de bonus (comme les talents, en %) : degats, crit, critdeg, pv, armure
+#          (dégâts subis en moins), esquive, blocage, vol-de-vie, vitesse, ressource, epines, soins,
+#          degats.<sort>, recharge.<sort> (secondes)…
+#  textes : <nombre de pièces> → description affichée à la place de la liste des bonus (facultatif)
+#  butin : sources ; { boss: "*" | <id> | [ids], chance: 0.1 } pour un boss (chaque participant),
+#          { etages: "2-6", chance: 0.003 } pour chaque monstre tué dans ces étages du Pilier.
+#          Sans butin (artisan) : la pièce ne s'obtient que par l'artisanat (à venir) ou /mmoadmin set.
+# ------------------------------------------------------------------
+
+sets:
+
+  garde_du_pilier:
+    nom: "Garde du Pilier"
+    type: plaques
+    palier: 1
+    rarete: rare
+    origine: donjon
+    liaison: equipe
+    description:
+      - "Portée par les sentinelles des premiers étages."
+    pieces:
+      casque: "Heaume de la Garde"
+      plastron: "Cuirasse de la Garde"
+      jambieres: "Cuissards de la Garde"
+      bottes: "Grèves de la Garde"
+      bouclier: "Pavois de la Garde"
+    bonus:
+      2: { pv: 4 }
+      4: { armure: 3, blocage: 4 }
+      5: { epines: 10, vitesse: 4 }
+    butin:
+      - { etages: "2-6", chance: 0.004 }
+
+  rempart_astral:
+    nom: "Rempart astral"
+    type: plaques
+    palier: 3
+    rarete: epique
+    origine: boss
+    liaison: ramasse
+    bonus-niveau-objet: 5
+    description:
+      - "Forgé dans l'éclat des gardiens du Pilier."
+    pieces:
+      casque: "Heaume du Rempart astral"
+      plastron: "Plastron du Rempart astral"
+      jambieres: "Jambières du Rempart astral"
+      bottes: "Solerets du Rempart astral"
+      bouclier: "Égide du Rempart astral"
+    bonus:
+      2: { armure: 3 }
+      4: { pv: 6, blocage: 6 }
+      5: { degats: 6, vol-de-vie: 2 }
+    textes:
+      5: "+6 % de dégâts et +2 % de vol de vie : le rempart rend coup pour coup"
+    butin:
+      - { boss: "*", chance: 0.12 }
+
+  harnois_de_torvald:
+    nom: "Harnois de Torvald"
+    type: plaques
+    palier: 2
+    rarete: rare
+    origine: artisan
+    liaison: equipe
+    modele-arme: espadon
+    description:
+      - "Le chef-d'œuvre du forgeron d'Auréval, frappé à son poinçon."
+    pieces:
+      casque: "Bassinet de Torvald"
+      plastron: "Brigandine de Torvald"
+      jambieres: "Cuissots de Torvald"
+      bottes: "Sabots de fer de Torvald"
+      arme: "Espadon de Torvald"
+    bonus:
+      2: { critdeg: 10 }
+      4: { degats: 4 }
+      5: { crit: 3, vitesse: 5 }

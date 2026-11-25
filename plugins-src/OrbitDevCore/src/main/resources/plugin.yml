@@ -63,7 +63,7 @@ commands:
     usage: /anneau <creer|retour|retirer|liste>
   orbitdev:
     description: Administration d'OrbitDevCore.
-    usage: /orbitdev <reload|info|pack|feu>
+    usage: /orbitdev <reload|info|pack|feu|clearlag>
 
 permissions:
   orbitdev.spawn:

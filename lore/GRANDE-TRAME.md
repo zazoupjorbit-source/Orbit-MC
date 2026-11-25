@@ -1,4 +1,4 @@
-# La grande trame : du niveau 34 au niveau 80, puis sans fin
+# La grande trame : du niveau 34 au niveau 90, puis sans fin
 
 > **Statut : BROUILLON**, écrit le 23/11/2026 à la demande de Zazou (« le joueur a constamment une mission à faire, principale ou annexe », « des quêtes pas toujours du même style : protection, dialogue, chasse… », « tenir des centaines d'heures »).
 > Respecte le canon ([BIBLE-CANON.md](BIBLE-CANON.md)). Fait suite à [zones/OMBRE-SUITE.md](zones/OMBRE-SUITE.md) (fin de l'acte III aux Quatre-Vents, niv. 34).
@@ -15,6 +15,7 @@
 | III | Collines du Ponant | Marais des Murmures | 16-25 | faites |
 | III (fin) | La Marche, les Quatre-Vents | idem | 26-34 | faites |
 | **IV à VII** | **désert, cimes, cendres, volcan** | idem | **34-80** | **à écrire** |
+| **VIII** | **les Brèches, la Déchirure** (ajouté le 24/11) | idem | **80-90** | **à écrire** |
 
 137 quêtes existent. L'histoire s'arrête sur « À suivre » après le Pacte des Deux Ciels.
 
@@ -68,7 +69,37 @@ Chaque acte révèle une pièce. Le joueur ne les comprend toutes qu'à la fin.
 - Tout converge : l'Éclat-Cœur, les fioles, le Reliquaire, le souffle du Néant, les souvenirs des Marqués.
 - Séraphine et Vharos ont refait leur Pacte en secret pour une dernière fois : ils comptent rassembler l'Astre et **le garder à deux**.
 - **Fin :** raid niveau 80 contre **l'Astre enchaîné**, que les deux chefs ont rallumé en cage. Le joueur brise les chaînes. L'Astre, rassemblé et libre, **ne repart pas** : il reste, pour la première fois depuis mille ans, parce que quelqu'un l'a libéré au lieu de le prendre.
-- Ce qui suit l'histoire principale passe par le Pilier (§ 6).
+- Ce qui suit l'histoire principale passe par l'acte VIII, puis par le Pilier (§ 6).
+
+### Acte VIII — Le Dernier Souffle : « Ce qui a froid » (niv. 80-90)
+
+> Ajouté le 24/11/2026 : Zazou a monté le niveau maximum à 90 (« continue le lore »). Écrit sur sa demande, **pas encore relu par lui**.
+
+**Hubs :** le Guet de la Fournaise, puis **le Seuil**, un camp posé au bord du cratère. **Lieux :** les **Brèches**, des déchirures qui s'ouvrent dans toutes les régions contestées (Marche, Désert, Cimes, Cendres, Fournaise). Aucune nouvelle région à générer : l'acte réutilise la carte. **Raid :** la Déchirure, au-dessus du cratère.
+
+- L'Astre est rassemblé et libre, mais il ne brille qu'à moitié. Il lui manque **son dernier souffle**, et ce souffle, c'est le Néant (canon : « Le Néant est ce qui reste de l'Astre »).
+- Sans les cages de l'Aube ni les Creux de la Citadelle pour le nourrir, le Néant a faim. Il descend. Des **Brèches** s'ouvrent partout, et des Affamés de niveau 80 à 90 en sortent.
+- Le joueur comprend qu'il ne faut pas détruire le Néant, mais **le rendre à l'Astre**. Personne n'a jamais essayé.
+- Les deux chefs tombés tentent chacun un dernier coup :
+  - **Séraphine** veut refermer la Déchirure en y jetant tous les Marqués qui restent (des quêtes pour sauver des Marqués) ;
+  - **Vharos** veut plonger dans le Néant et devenir son maître (des quêtes pour le poursuivre dans les Brèches).
+- **Morvain**, le premier Marqué, propose de porter lui-même le souffle jusqu'à l'Astre, pour réparer les chaînes qu'il a forgées. Ce serait sa fin.
+- **Grand choix de l'acte** (dialogue à choix) : laisser Morvain s'en charger, ou porter le souffle soi-même. Les deux branches mènent au raid, mais avec un dernier chapitre différent.
+- Fil personnel : à mesure que le souffle revient, les souvenirs de l'Astre quittent le joueur. Il ne garde que le sien, la cloche de cuivre (§ 4).
+- **Fin :** raid niveau 90 contre **le Souffle froid**, le Néant devenu forme. Le joueur le ramène à l'Astre. Le ciel se referme et l'Astre brille entier pour la première fois depuis mille ans.
+- **Après l'histoire :** les Brèches ne disparaissent jamais tout à fait. Elles se rouvrent chaque jour, ce qui alimente les contrats sans fin (§ 6).
+
+**Types de quêtes à mêler dans l'acte VIII :**
+
+| Type | Exemple |
+|---|---|
+| défense | tenir une Brèche qui s'ouvre près d'un village |
+| escorte | conduire les Marqués sauvés hors des griffes de Séraphine |
+| pistage | suivre Vharos dans les Brèches |
+| survie | rester dans une Brèche qui se referme |
+| transport | rapporter des fragments du souffle à dos de monture |
+| enquête | comprendre ce qui ouvre les Brèches |
+| choix | décider du sort de Morvain |
 
 ---
 
@@ -147,9 +178,12 @@ Règle d'écriture : dans une même chaîne, jamais deux quêtes de suite du mê
 | V Cimes | 12 + 12 | 30 | 55 |
 | VI Cendres (fidèle + Sans-Bannière) | 14 + 14 + 8 | 30 | 65 |
 | VII Fournaise | 10 + 10 | 20 | 40 |
-| Le Marqué sans nom | 15 | | 15 |
-| Contrats, primes, appels | | modèles qui se répètent | 60 modèles |
-| **Total** | | | **environ 290 quêtes de plus** |
+| VIII Le Dernier Souffle (ajouté le 24/11) | 12 + 12 | 30 | 55 |
+| Le Marqué sans nom (jusqu'au niveau 90) | 17 | | 17 |
+| Contrats, primes, appels | | quêtes **répétables** (`repetable:` en heures, depuis le 24/11) | 60 modèles au moins, dans chaque hub |
+| **Total** | | | **environ 350 quêtes de plus** |
+
+Pour que le joueur ait **toujours** une quête : chaque hub (villages, capitales, Seuil) propose des contrats répétables, qui reviennent après leur délai. Une fois l'histoire finie, ce sont eux qui prennent le relais.
 
 ---
 

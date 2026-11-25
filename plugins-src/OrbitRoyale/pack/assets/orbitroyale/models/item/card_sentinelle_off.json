@@ -1,0 +1,5 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {"layer0": "orbitroyale:item/card_sentinelle_off"},
+  "gui_light": "front"
+}

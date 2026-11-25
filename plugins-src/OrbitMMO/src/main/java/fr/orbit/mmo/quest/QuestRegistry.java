@@ -354,7 +354,8 @@ public final class QuestRegistry {
                     Math.max(1, s.getInt("niveau", 1)), s.getStringList("requiert"), giver,
                     giver == null || s.getBoolean("auto", false), s.getString("depart"), s.getStringList("resume"),
                     lines(s.getStringList("offre")), lines(s.getStringList("intro")), List.copyOf(steps),
-                    lines(s.getStringList("fin")), reward, s.getBoolean("admin", y.getBoolean("admin", false))));
+                    lines(s.getStringList("fin")), reward, s.getBoolean("admin", y.getBoolean("admin", false)),
+                    Math.max(0, s.getDouble("repetable", 0))));
         }
     }
 

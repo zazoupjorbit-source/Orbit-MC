@@ -1,0 +1,1035 @@
+# ------------------------------------------------------------------
+#  Le Marqué sans nom — le fil personnel du joueur, une quête tous les 5 niveaux, du niveau 10 au niveau 90.
+#  Quêtes automatiques (un souvenir se déclenche). Niveaux 10 à 25 : msn_l_* (Lumière) et msn_o_* (Ombre) ; ensuite msn_* pour tous.
+#  Dernière quête : choix « nom ». Le moteur ne sait pas encore saisir un nom libre : à programmer.
+#  FICHIER GÉNÉRÉ par tools\quetes\gen-quetes.js depuis tools\quetes\zones\marque-sans-nom.js : modifier la source, pas ce fichier.
+# ------------------------------------------------------------------
+
+pnj:
+  msn_ama:
+    nom: "Vieille Ama"
+    nom-en: "Old Ama"
+    titre: "Bûcheronne du Bois de l'Aube"
+    titre-en: "Woodcutter of the Dawn Wood"
+    couleur: "#E8C9A0"
+    type: MANNEQUIN
+    visage: makena
+    point: msn_ama
+    repliques:
+      - "Tous les jours, je regarde la route. Un jour, quelqu'un reviendra."
+    repliques-en:
+      - "Every day I watch the road. One day, someone will come back."
+  msn_tarn:
+    nom: "Le vieux Tarn"
+    nom-en: "Old Tarn"
+    titre: "Charbonnier de la Sylve"
+    titre-en: "Charcoal-burner of the Sylve"
+    couleur: "#B8B0A0"
+    type: MANNEQUIN
+    visage: alex
+    point: msn_tarn
+    repliques:
+      - "La Sylve rend toujours ce qu'elle prend. Elle y met le temps."
+    repliques-en:
+      - "The Sylve always gives back what it takes. It takes its time."
+  msn_garin:
+    nom: "Garin"
+    titre: "Soldat de l'Aube"
+    titre-en: "Soldier of the Dawn"
+    couleur: "#F7E7A1"
+    type: MANNEQUIN
+    visage: steve
+    point: msn_garin
+    main: IRON_SWORD
+    repliques:
+      - "Je connais ton visage. Je ne sais plus d'où."
+    repliques-en:
+      - "I know your face. I no longer know from where."
+  msn_mirta:
+    nom: "Mirta"
+    titre: "Passeuse du Marais"
+    titre-en: "Ferrywoman of the Marsh"
+    couleur: "#9FB89A"
+    type: MANNEQUIN
+    visage: noor
+    point: msn_mirta
+    repliques:
+      - "Je passe les vivants et les morts. Toi, je ne sais pas encore."
+    repliques-en:
+      - "I ferry the living and the dead. You, I do not know yet."
+  msn_aieule:
+    nom: "Aïeule Sabra"
+    nom-en: "Elder Sabra"
+    titre: "Mémoire des Astréens"
+    titre-en: "Memory of the Astreans"
+    couleur: "#FFB86B"
+    type: MANNEQUIN
+    visage: kai
+    point: msn_aieule
+    repliques:
+      - "Les Astréens ne gardent rien, sauf les chansons."
+    repliques-en:
+      - "The Astreans keep nothing, except songs."
+  msn_gele:
+    nom: "Le gelé"
+    nom-en: "The frozen one"
+    titre: "Marqué de la Chute"
+    titre-en: "Marked of the Fall"
+    couleur: "#D7E6F5"
+    type: MANNEQUIN
+    visage: efe
+    point: msn_gele
+    repliques:
+      - "…froid… si longtemps…"
+    repliques-en:
+      - "…cold… so long…"
+  msn_ansgar:
+    nom: "Ansgar"
+    titre: "Scribe des Marqués"
+    titre-en: "Scribe of the Marked"
+    couleur: "#C9B6E8"
+    type: MANNEQUIN
+    visage: ari
+    point: msn_ansgar
+    main: WRITABLE_BOOK
+    repliques:
+      - "Chaque Marqué me raconte ses souvenirs. Je les recopie. Ils se ressemblent tous, ou presque."
+    repliques-en:
+      - "Every Marked tells me their memories. I copy them down. They are all alike, or almost."
+
+monstres:
+  msn_reflet:
+    nom: "Reflet sans visage"
+    type: DROWNED
+    pv: 1.3
+    degats: 0.9
+    vitesse: 0.9
+    xp: 2
+    or: 2
+
+apparitions:
+  msn_reflet_lac:
+    point: msn_l20
+    monstre: msn_reflet
+    niveau: [20, 21]
+    nombre: 3
+    rayon: 6
+  msn_reflet_etang:
+    point: msn_o20
+    monstre: msn_reflet
+    niveau: [20, 21]
+    nombre: 3
+    rayon: 6
+
+quetes:
+
+  # ================================================================ LE MARQUÉ SANS NOM — QUÊTES PRINCIPALES, NIVEAUX 10 À 25 (UNE VERSION PAR CAMP)
+
+  msn_l_le_premier_souvenir:
+    nom: "Le premier souvenir"
+    nom-en: "The First Memory"
+    faction: lumiere
+    niveau: 10
+    resume:
+      - "Une odeur de pain chaud, venue de nulle part."
+      - "Votre Marque vous appelle dans le Bois de l'Aube."
+    resume-en:
+      - "A smell of warm bread, from nowhere."
+      - "Your Mark is calling you into the Dawn Wood."
+    intro:
+      - "Une odeur de pain chaud, d'un coup, au milieu de rien. Ta Marque s'allume. Elle tire vers l'est, comme une main sur ta manche."
+    intro-en:
+      - "A smell of warm bread, suddenly, in the middle of nowhere. Your Mark lights up. It pulls eastward, like a hand on your sleeve."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Suivre l'appel de la Marque"
+        texte-en: "Follow the call of the Mark"
+        point: msn_l10
+        rayon: 6
+      - type: INTERAGIR
+        texte: "Toucher la pierre moussue"
+        texte-en: "Touch the mossy stone"
+        point: msn_l10
+        rayon: 4
+        apres:
+          - "Tu vois une ville. Minuscule. Ses toits, ses rues, ses fumées, vus de très haut, comme un oiseau ne monte jamais. Et une cloche qui sonne, en bas."
+          - "Puis plus rien. La pierre est froide. Tu ne sais pas si ce souvenir est le tien."
+        apres-en:
+          - "You see a town. Tiny. Its roofs, its streets, its smoke, seen from very high, higher than any bird climbs. And a bell ringing, down below."
+          - "Then nothing. The stone is cold. You do not know if that memory is yours."
+    recompenses:
+      xp: 2100
+      or: 210
+
+  msn_o_le_premier_souvenir:
+    nom: "Le premier souvenir"
+    nom-en: "The First Memory"
+    faction: ombre
+    niveau: 10
+    resume:
+      - "Une odeur de pain chaud, venue de nulle part."
+      - "Votre Marque vous appelle dans la Sylve Noire."
+    resume-en:
+      - "A smell of warm bread, from nowhere."
+      - "Your Mark is calling you into the Black Sylve."
+    intro:
+      - "Une odeur de pain chaud, d'un coup, au milieu de rien. Le murmure se tait, pour une fois. Ta Marque tire vers une clairière, comme une main sur ta manche."
+    intro-en:
+      - "A smell of warm bread, suddenly, in the middle of nowhere. The whisper falls silent, for once. Your Mark pulls toward a clearing, like a hand on your sleeve."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Suivre l'appel de la Marque"
+        texte-en: "Follow the call of the Mark"
+        point: msn_o10
+        rayon: 6
+      - type: INTERAGIR
+        texte: "Toucher la souche noire"
+        texte-en: "Touch the black stump"
+        point: msn_o10
+        rayon: 4
+        apres:
+          - "Tu vois une ville. Minuscule. Ses toits, ses rues, ses fumées, vus de très haut, comme un oiseau ne monte jamais. Et une cloche qui sonne, en bas."
+          - "Puis plus rien. Le murmure revient. Tu ne sais pas si ce souvenir est le tien."
+        apres-en:
+          - "You see a town. Tiny. Its roofs, its streets, its smoke, seen from very high, higher than any bird climbs. And a bell ringing, down below."
+          - "Then nothing. The whisper returns. You do not know if that memory is yours."
+    recompenses:
+      xp: 2100
+      or: 210
+
+  msn_l_celle_qui_attend:
+    nom: "Celle qui attend"
+    nom-en: "The One Who Waits"
+    faction: lumiere
+    niveau: 15
+    requiert: [msn_l_le_premier_souvenir]
+    resume:
+      - "Une vieille femme vous a reconnu sur la route."
+    resume-en:
+      - "An old woman recognised you on the road."
+    intro:
+      - "Sur la route, une voix casse le silence : « C'est toi ! » Une vieille femme, au bord du bois, te fait signe."
+    intro-en:
+      - "On the road, a voice breaks the silence: « It is you! » An old woman, at the edge of the wood, waves to you."
+    etapes:
+      - type: CHOIX
+        texte: "Parler à la vieille Ama"
+        texte-en: "Talk to old Ama"
+        pnj: msn_ama
+        choix: ama
+        question: "Que lui répondez-vous ?"
+        question-en: "What do you answer?"
+        reponses:
+          - id: oui
+            texte: "Oui. C'est moi."
+            texte-en: "Yes. It is me."
+            reponse:
+              - "msn_ama: Je le savais. Reste un peu. Juste un peu."
+              - "Elle te serre les mains. Les siennes sont chaudes. Tu ne sais pas si tu as menti."
+            reponse-en:
+              - "msn_ama: I knew it. Stay a while. Just a while."
+              - "She squeezes your hands. Hers are warm. You do not know if you lied."
+            or: 30
+          - id: verite
+            texte: "Je ne sais pas qui je suis."
+            texte-en: "I do not know who I am."
+            reponse:
+              - "msn_ama: …Alors tu es peut-être lui, et tu ne le sais pas. Ou tu ne l'es pas, et c'est pareil. Reviens me voir, quand même."
+            reponse-en:
+              - "msn_ama: …Then perhaps you are him and do not know it. Or you are not, and it is the same. Come and see me anyway."
+            xp: 300
+        dialogue:
+          - "msn_ama: C'est toi. Tu es revenu de la guerre. Je savais que tu reviendrais. Tu as les mêmes yeux, et cette lumière-là, au cou."
+          - "msn_ama: Dis-moi que c'est toi."
+        dialogue-en:
+          - "msn_ama: It is you. You came back from the war. I knew you would come back. You have the same eyes, and that light there, on your neck."
+          - "msn_ama: Tell me it is you."
+    recompenses:
+      xp: 3200
+      or: 320
+
+  msn_o_celui_qui_attend:
+    nom: "Celui qui attend"
+    nom-en: "The One Who Waits"
+    faction: ombre
+    niveau: 15
+    requiert: [msn_o_le_premier_souvenir]
+    resume:
+      - "Un vieil homme vous a reconnu dans la Sylve."
+    resume-en:
+      - "An old man recognised you in the Sylve."
+    intro:
+      - "Dans la Sylve, une voix casse le silence : « C'est toi ! » Un vieux charbonnier, près de sa meule, te fait signe."
+    intro-en:
+      - "In the Sylve, a voice breaks the silence: « It is you! » An old charcoal-burner, by his kiln, waves to you."
+    etapes:
+      - type: CHOIX
+        texte: "Parler au vieux Tarn"
+        texte-en: "Talk to old Tarn"
+        pnj: msn_tarn
+        choix: tarn
+        question: "Que lui répondez-vous ?"
+        question-en: "What do you answer?"
+        reponses:
+          - id: oui
+            texte: "Oui. C'est moi."
+            texte-en: "Yes. It is me."
+            reponse:
+              - "msn_tarn: La Sylve rend toujours. Assieds-toi au feu. Juste un peu."
+              - "Il te tend un morceau de pain noir. Tu ne sais pas si tu as menti."
+            reponse-en:
+              - "msn_tarn: The Sylve always gives back. Sit by the fire. Just a while."
+              - "He hands you a piece of black bread. You do not know if you lied."
+            or: 30
+          - id: verite
+            texte: "Je ne sais pas qui je suis."
+            texte-en: "I do not know who I am."
+            reponse:
+              - "msn_tarn: …Alors tu es peut-être lui, et tu ne le sais pas. La Sylve aussi oublie ce qu'elle rend. Reviens quand même."
+            reponse-en:
+              - "msn_tarn: …Then perhaps you are him and do not know it. The Sylve also forgets what it gives back. Come back anyway."
+            xp: 300
+        dialogue:
+          - "msn_tarn: C'est toi. La Sylve t'a pris il y a dix hivers, et elle te rend. Elle rend toujours. Tu as la même démarche, et cette lumière-là, sous la peau."
+          - "msn_tarn: Dis-moi que c'est toi."
+        dialogue-en:
+          - "msn_tarn: It is you. The Sylve took you ten winters ago, and it gives you back. It always gives back. You have the same walk, and that light there, under the skin."
+          - "msn_tarn: Tell me it is you."
+    recompenses:
+      xp: 3200
+      or: 320
+
+  msn_l_le_reflet:
+    nom: "Le reflet"
+    nom-en: "The Reflection"
+    faction: lumiere
+    niveau: 20
+    requiert: [msn_l_celle_qui_attend]
+    resume:
+      - "Au bord du Lac du Ponant, l'eau vous montre un autre visage."
+    resume-en:
+      - "At the edge of the Ponant Lake, the water shows you another face."
+    intro:
+      - "Ta Marque chauffe quand tu passes près du lac. Une envie soudaine de te regarder dans l'eau."
+    intro-en:
+      - "Your Mark grows warm when you pass near the lake. A sudden urge to look at yourself in the water."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Descendre au bord du Lac du Ponant"
+        texte-en: "Go down to the edge of the Ponant Lake"
+        point: msn_l20
+        rayon: 6
+      - type: INTERAGIR
+        texte: "Se pencher sur l'eau"
+        texte-en: "Lean over the water"
+        point: msn_l20
+        rayon: 4
+        apres:
+          - "Ce n'est pas ton visage. Une peau brunie par un autre soleil, des yeux d'or, une femme qui sourit en levant les bras vers toi. Vers le ciel."
+          - "L'eau se trouble. Des formes sans visage en sortent."
+        apres-en:
+          - "It is not your face. Skin browned by another sun, golden eyes, a woman smiling as she raises her arms to you. To the sky."
+          - "The water clouds over. Faceless shapes rise from it."
+      - type: TUER
+        texte: "Repousser les reflets sans visage"
+        texte-en: "Drive back the faceless reflections"
+        monstres: [msn_reflet]
+        nombre: 3
+        point: msn_l20
+        apres:
+          - "Le lac se calme. Ton reflet est revenu. C'est bien le tien. Tu n'en es pas soulagé."
+        apres-en:
+          - "The lake calms. Your reflection has returned. It is indeed yours. You are not relieved."
+    recompenses:
+      xp: 4200
+      or: 420
+
+  msn_o_le_reflet:
+    nom: "Le reflet"
+    nom-en: "The Reflection"
+    faction: ombre
+    niveau: 20
+    requiert: [msn_o_celui_qui_attend]
+    resume:
+      - "Au bord de l'étang des Murmures, l'eau vous montre un autre visage."
+    resume-en:
+      - "At the edge of the Pond of Whispers, the water shows you another face."
+    intro:
+      - "Le murmure devient insistant près de l'étang des Murmures. « Regarde. » Une envie soudaine de te pencher sur l'eau."
+    intro-en:
+      - "The whisper grows insistent near the Pond of Whispers. « Look. » A sudden urge to lean over the water."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Descendre au bord de l'étang des Murmures"
+        texte-en: "Go down to the edge of the Pond of Whispers"
+        point: msn_o20
+        rayon: 6
+      - type: INTERAGIR
+        texte: "Se pencher sur l'eau"
+        texte-en: "Lean over the water"
+        point: msn_o20
+        rayon: 4
+        apres:
+          - "Ce n'est pas ton visage. Une peau brunie par un autre soleil, des yeux d'or, une femme qui sourit en levant les bras vers toi. Vers le ciel."
+          - "L'eau noire se trouble. Des formes sans visage en sortent."
+        apres-en:
+          - "It is not your face. Skin browned by another sun, golden eyes, a woman smiling as she raises her arms to you. To the sky."
+          - "The black water clouds over. Faceless shapes rise from it."
+      - type: TUER
+        texte: "Repousser les reflets sans visage"
+        texte-en: "Drive back the faceless reflections"
+        monstres: [msn_reflet]
+        nombre: 3
+        point: msn_o20
+        apres:
+          - "L'étang se calme. Ton reflet est revenu. C'est bien le tien. Tu n'en es pas soulagé."
+        apres-en:
+          - "The pond calms. Your reflection has returned. It is indeed yours. You are not relieved."
+    recompenses:
+      xp: 4200
+      or: 420
+
+  msn_l_le_frere_d_armes:
+    nom: "Le frère d'armes"
+    nom-en: "The Brother in Arms"
+    faction: lumiere
+    niveau: 25
+    requiert: [msn_l_le_reflet]
+    resume:
+      - "Un soldat blessé croit avoir combattu à vos côtés."
+      - "L'escorter jusqu'au Guet du Ponant."
+    resume-en:
+      - "A wounded soldier believes he fought at your side."
+      - "Escort him to the Ponant Watch."
+    intro:
+      - "Sur la route du Guet, un soldat blessé t'appelle par un nom que tu ne connais pas."
+    intro-en:
+      - "On the road to the Watch, a wounded soldier calls you by a name you do not know."
+    etapes:
+      - type: PARLER
+        texte: "Parler à Garin"
+        texte-en: "Talk to Garin"
+        pnj: msn_garin
+        dialogue:
+          - "msn_garin: On a tenu le pont ensemble, toi et moi. Avant la Nuit des Étoiles. Tu ne te souviens pas ? …Aide-moi à rentrer au Guet. On parlera en marchant."
+        dialogue-en:
+          - "msn_garin: We held the bridge together, you and I. Before the Night of Falling Stars. You do not remember? …Help me get back to the Watch. We will talk as we walk."
+      - type: ESCORTE
+        texte: "Escorter Garin jusqu'au Guet du Ponant"
+        texte-en: "Escort Garin to the Ponant Watch"
+        pnj: msn_garin
+        chemin: [msn_l25_1, msn_l25_2, msn_l25_fin]
+        monstres: [bandit, braconnier]
+        nombre: 2
+        vagues: 2
+        pv: 160
+        degats: 4
+        apres:
+          - "msn_garin: Le Guet. Merci. …Je vais te dire la vérité : je ne me souviens pas de ton visage. Je me souviens de tes yeux. Ceux de quelqu'un d'autre. Quelqu'un qui brillait."
+        apres-en:
+          - "msn_garin: The Watch. Thank you. …I will tell you the truth: I do not remember your face. I remember your eyes. Someone else's. Someone who shone."
+    recompenses:
+      xp: 5300
+      or: 530
+
+  msn_o_la_passeuse:
+    nom: "La passeuse"
+    nom-en: "The Ferrywoman"
+    faction: ombre
+    niveau: 25
+    requiert: [msn_o_le_reflet]
+    resume:
+      - "Une passeuse croit vous avoir déjà fait traverser."
+      - "L'escorter jusqu'aux Pilotis."
+    resume-en:
+      - "A ferrywoman believes she has ferried you across before."
+      - "Escort her to the Pilotis."
+    intro:
+      - "Au bord du marais, une passeuse te regarde comme on regarde un revenant."
+    intro-en:
+      - "At the edge of the marsh, a ferrywoman looks at you the way one looks at a ghost."
+    etapes:
+      - type: PARLER
+        texte: "Parler à Mirta"
+        texte-en: "Talk to Mirta"
+        pnj: msn_mirta
+        dialogue:
+          - "msn_mirta: Je t'ai déjà fait passer. Une nuit, dans l'autre sens. Tu partais, et tu brillais si fort que les noyés se cachaient. …Raccompagne-moi aux Pilotis. Le marais a faim, ce soir."
+        dialogue-en:
+          - "msn_mirta: I have ferried you before. One night, the other way. You were leaving, and you shone so bright the drowned hid. …Walk me back to the Pilotis. The marsh is hungry tonight."
+      - type: ESCORTE
+        texte: "Escorter Mirta jusqu'aux Pilotis"
+        texte-en: "Escort Mirta to the Pilotis"
+        pnj: msn_mirta
+        chemin: [msn_o25_1, msn_o25_2, msn_o25_fin]
+        monstres: [noye, archer_tourbe]
+        nombre: 2
+        vagues: 2
+        pv: 160
+        degats: 4
+        apres:
+          - "msn_mirta: Les Pilotis. Merci. …Ce n'était pas toi, cette nuit-là. Celui-là partait vers le ciel. Mais il avait ta lumière."
+        apres-en:
+          - "msn_mirta: The Pilotis. Thank you. …It was not you, that night. That one was leaving for the sky. But he had your light."
+    recompenses:
+      xp: 5300
+      or: 530
+
+  # ================================================================ LE MARQUÉ SANS NOM — QUÊTES PRINCIPALES, NIVEAUX 30 À 90 (TOUS)
+
+  msn_les_pas_de_la_nuit:
+    nom: "Les pas de la nuit"
+    nom-en: "Footsteps of the Night"
+    niveau: 30
+    resume:
+      - "Des empreintes brillent dans l'herbe de la Marche."
+      - "Ce sont les vôtres."
+    resume-en:
+      - "Footprints glow in the grass of the March."
+      - "They are yours."
+    intro:
+      - "Dans l'herbe de la Marche, des empreintes luisent faiblement. Ta pointure. Ta démarche. Mais tu n'es jamais passé par ici."
+    intro-en:
+      - "In the grass of the March, footprints glow faintly. Your size. Your stride. But you have never been this way."
+    etapes:
+      - type: PISTER
+        texte: "Suivre vos propres empreintes"
+        texte-en: "Follow your own footprints"
+        traces: [msn_30_t1, msn_30_t2, msn_30_t3, msn_30_t4, msn_30_fin]
+        apres:
+          - "Les empreintes s'arrêtent dans un creux d'herbe brûlée, ancien, presque effacé. Quelque chose est tombé ici. Pas cette année. Il y a mille ans."
+        apres-en:
+          - "The footprints stop in a hollow of burnt grass, old, almost erased. Something fell here. Not this year. A thousand years ago."
+      - type: INTERAGIR
+        texte: "Toucher le sol brûlé"
+        texte-en: "Touch the burnt ground"
+        point: msn_30_fin
+        rayon: 4
+        apres:
+          - "Une douleur qui n'est pas la tienne : tomber, se briser, et voir ses morceaux partir dans toutes les directions. Puis le silence."
+        apres-en:
+          - "A pain that is not yours: falling, breaking, and watching your pieces fly off in every direction. Then silence."
+    recompenses:
+      xp: 6300
+      or: 630
+
+  msn_une_chanson_etrangere:
+    nom: "Une chanson étrangère"
+    nom-en: "A Foreign Song"
+    niveau: 35
+    requiert: [msn_les_pas_de_la_nuit]
+    resume:
+      - "Vous fredonnez une chanson que vous n'avez jamais apprise."
+      - "Une aïeule astréenne l'a entendue."
+    resume-en:
+      - "You hum a song you never learned."
+      - "An Astrean elder heard it."
+    intro:
+      - "Tu fredonnes sans y penser. Une chanson lente, dans une langue que tu ne parles pas. Une vieille Astréenne s'est arrêtée pour t'écouter."
+    intro-en:
+      - "You are humming without thinking. A slow song, in a language you do not speak. An old Astrean woman has stopped to listen to you."
+    etapes:
+      - type: CHOIX
+        texte: "Parler à l'aïeule Sabra"
+        texte-en: "Talk to Elder Sabra"
+        pnj: msn_aieule
+        choix: aieule
+        question: "Que faites-vous ?"
+        question-en: "What do you do?"
+        reponses:
+          - id: chanter
+            texte: "Le chanter en entier pour elle"
+            texte-en: "Sing it whole for her"
+            reponse:
+              - "msn_aieule: …C'est bien lui. Mot pour mot. Celui qui te l'a appris ne l'a pas appris d'un homme. Il l'a entendu d'en haut."
+            reponse-en:
+              - "msn_aieule: …It is the very one. Word for word. Whoever taught you did not learn it from a man. They heard it from above."
+            xp: 800
+          - id: taire
+            texte: "Se taire, troublé"
+            texte-en: "Fall silent, troubled"
+            reponse:
+              - "msn_aieule: Tu as peur de ce qui sort de ta bouche. Tu as raison. Ce chant n'est pas à toi. Mais il t'a choisi pour passer."
+            reponse-en:
+              - "msn_aieule: You are afraid of what comes out of your mouth. You are right. That song is not yours. But it chose you to pass through."
+            or: 90
+        dialogue:
+          - "msn_aieule: Où as-tu appris ça ? C'est le chant d'accueil. On le chantait quand l'Astre descendait se poser chez nous. Plus personne ne le connaît en entier. Toi, si."
+        dialogue-en:
+          - "msn_aieule: Where did you learn that? It is the welcoming song. We sang it when the Star came down to rest among us. Nobody knows it whole any more. You do."
+    recompenses:
+      xp: 7400
+      or: 740
+
+  msn_la_ville_vue_d_en_haut:
+    nom: "La ville vue d'en haut"
+    nom-en: "The Town Seen from Above"
+    niveau: 40
+    requiert: [msn_une_chanson_etrangere]
+    resume:
+      - "Une roche gravée montre l'Oasis vue du ciel."
+    resume-en:
+      - "An engraved rock shows the Oasis seen from the sky."
+    intro:
+      - "Le premier souvenir revient : la ville minuscule, vue de très haut. Mais cette fois, tu sais où chercher. Ta Marque tire vers une roche du désert."
+    intro-en:
+      - "The first memory returns: the tiny town, seen from very high. But this time you know where to look. Your Mark pulls toward a rock in the desert."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre la roche gravée"
+        texte-en: "Reach the engraved rock"
+        point: msn_40
+        rayon: 6
+      - type: INTERAGIR
+        texte: "Examiner la gravure"
+        texte-en: "Examine the carving"
+        point: msn_40
+        rayon: 4
+        apres:
+          - "Une gravure très ancienne : l'Oasis, ses palmes, ses toits, vue d'au-dessus. Exactement comme dans ton souvenir. Personne ne l'a jamais vue ainsi. Sauf ce qui venait du ciel."
+          - "Ce n'était pas ta ville. Ce n'était pas ton souvenir."
+        apres-en:
+          - "A very old carving: the Oasis, its palms, its roofs, seen from above. Exactly as in your memory. Nobody has ever seen it like that. Except what came from the sky."
+          - "It was not your town. It was not your memory."
+    recompenses:
+      xp: 8400
+      or: 840
+
+  msn_trois_choses_dans_le_sable:
+    nom: "Trois choses dans le sable"
+    nom-en: "Three Things in the Sand"
+    niveau: 45
+    requiert: [msn_la_ville_vue_d_en_haut]
+    resume:
+      - "Trois objets enfouis vous appellent."
+      - "Les trouver, puis montrer à Sabra."
+    resume-en:
+      - "Three buried objects are calling you."
+      - "Find them, then show Sabra."
+    intro:
+      - "Trois points chauds sous le sable, que ta Marque sent comme des braises. Tu sais, sans savoir pourquoi, ce que tu vas y trouver."
+    intro-en:
+      - "Three warm spots under the sand, which your Mark feels like embers. You know, without knowing why, what you will find there."
+    etapes:
+      - type: ENQUETE
+        texte: "Retrouver les trois objets"
+        texte-en: "Find the three objects"
+        pnj: msn_aieule
+        indices:
+          - point: msn_45_i1
+            texte: "Un bracelet de perles bleues"
+            texte-en: "A bracelet of blue beads"
+            apres:
+              - "Tu le reconnais. Tu l'as vu au poignet de quelqu'un qui levait les bras vers toi."
+            apres-en:
+              - "You recognise it. You saw it on the wrist of someone raising their arms to you."
+          - point: msn_45_i2
+            texte: "Une sandale d'enfant"
+            texte-en: "A child's sandal"
+            apres:
+              - "Tu te souviens de l'enfant. Il riait en te regardant descendre. Il est mort depuis mille ans."
+            apres-en:
+              - "You remember the child. He laughed as he watched you come down. He has been dead a thousand years."
+          - point: msn_45_i3
+            texte: "Une corde dorée, rompue"
+            texte-en: "A golden cord, broken"
+            apres:
+              - "Celle-là, tu la reconnais aussi. Elle a été la première. Avant les chaînes, une corde. Tu t'en souviens comme d'une brûlure."
+            apres-en:
+              - "This one you recognise too. It was the first. Before the chains, a cord. You remember it like a burn."
+        dialogue:
+          - "joueur: Je me souviens de ces objets. De gens morts depuis mille ans."
+          - "msn_aieule: Ce ne sont pas tes souvenirs, enfant. Ce sont ceux de l'Astre. Il en a semé un dans chaque Marqué, comme on laisse des lettres chez des amis avant un long voyage."
+        dialogue-en:
+          - "joueur: I remember these objects. Of people dead for a thousand years."
+          - "msn_aieule: These are not your memories, child. They are the Star's. It sowed one in every Marked, the way one leaves letters with friends before a long journey."
+    recompenses:
+      xp: 9500
+      or: 950
+
+  msn_celui_qui_t_appelle_petit:
+    nom: "Celui qui t'appelle « petit »"
+    nom-en: "The One Who Calls You « Little One »"
+    niveau: 50
+    requiert: [msn_trois_choses_dans_le_sable]
+    resume:
+      - "Un gelé de la Chute dégèle et vous appelle."
+      - "Le protéger pendant qu'il dégèle."
+    resume-en:
+      - "A frozen one of the Fall thaws and calls you."
+      - "Protect him while he thaws."
+    intro:
+      - "Dans les Cimes, une voix sort de la glace : « Petit… c'est toi… ? » Un Marqué de la Chute, pris debout dans un bloc qui fond."
+    intro-en:
+      - "In the Peaks, a voice comes out of the ice: « Little one… is that you…? » A Marked of the Fall, caught standing in a melting block."
+    etapes:
+      - type: DEFENSE
+        texte: "Protéger le gelé pendant qu'il dégèle"
+        texte-en: "Protect the frozen one while he thaws"
+        point: msn_gele
+        monstres: [loup_givre, errant]
+        nombre: 3
+        vagues: 3
+        apparition: msn_50_b
+        pv: 260
+        degats: 6
+        cible: "Le gelé"
+        cible-en: "The frozen one"
+        apres:
+          - "La glace cède. L'homme tombe à genoux, respire, et te regarde."
+        apres-en:
+          - "The ice gives way. The man falls to his knees, breathes, and looks at you."
+      - type: PARLER
+        texte: "Parler au Marqué dégelé"
+        texte-en: "Talk to the thawed Marked"
+        pnj: msn_gele
+        dialogue:
+          - "msn_gele: Petit… non. Pardon. Je t'ai pris pour l'écuyer. Il avait la même lumière que toi, la nuit où je suis tombé. Il pleurait en forgeant."
+          - "msn_gele: Tu n'es pas lui. Mais ta Marque se souvient de lui. Comme la mienne."
+        dialogue-en:
+          - "msn_gele: Little one… no. Forgive me. I took you for the squire. He had the same light as you, the night I fell. He was weeping as he forged."
+          - "msn_gele: You are not him. But your Mark remembers him. As mine does."
+    recompenses:
+      xp: 10500
+      or: 1050
+
+  msn_le_froid_qui_n_est_pas_a_toi:
+    nom: "Le froid qui n'est pas à toi"
+    nom-en: "The Cold That Is Not Yours"
+    niveau: 55
+    requiert: [msn_celui_qui_t_appelle_petit]
+    resume:
+      - "Un froid qui vient de l'intérieur."
+      - "Y survivre."
+    resume-en:
+      - "A cold that comes from within."
+      - "Survive it."
+    intro:
+      - "Un froid te prend, d'un coup, au milieu des Cimes. Pas celui de la neige : un froid de dedans, celui d'une chose qui a perdu sa lumière."
+    intro-en:
+      - "A cold seizes you, suddenly, in the middle of the Peaks. Not the cold of the snow: a cold from within, that of a thing that has lost its light."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Chercher un abri entre les rochers"
+        texte-en: "Look for shelter among the rocks"
+        point: msn_55
+        rayon: 6
+      - type: SURVIE
+        texte: "Tenir pendant que le froid se resserre"
+        texte-en: "Hold on while the cold closes in"
+        point: msn_55
+        rayon: 14
+        duree: 40
+        mode: resserre
+        rayon-fin: 4
+        degats: 6
+        monstres: [loup_givre]
+        nombre: 1
+        intervalle: 15
+        apres:
+          - "Le froid recule. Tu as compris une chose, en le traversant : il n'était pas à toi non plus. Quelqu'un, là-haut, a froid depuis mille ans, et tu l'as senti."
+        apres-en:
+          - "The cold recedes. You understood one thing, crossing it: it was not yours either. Someone, up there, has been cold for a thousand years, and you felt it."
+    recompenses:
+      xp: 11600
+      or: 1160
+
+  msn_le_bruit_des_chaines:
+    nom: "Le bruit des chaînes"
+    nom-en: "The Sound of Chains"
+    niveau: 60
+    requiert: [msn_le_froid_qui_n_est_pas_a_toi]
+    resume:
+      - "Un bruit de chaînes résonne dans les Cendres."
+    resume-en:
+      - "A sound of chains echoes in the Ashes."
+    intro:
+      - "Un bruit de chaînes, dans ta tête. Pas autour de toi : dedans. Il vient de l'est, du côté de la Forge éteinte."
+    intro-en:
+      - "A sound of chains, in your head. Not around you: inside. It comes from the east, toward the Extinguished Forge."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Suivre le bruit des chaînes"
+        texte-en: "Follow the sound of chains"
+        point: msn_60
+        rayon: 6
+      - type: INTERAGIR
+        texte: "Poser la main sur la roche"
+        texte-en: "Lay your hand on the rock"
+        point: msn_60
+        rayon: 4
+        apres:
+          - "Des mains qui t'attachent. Des chaînes de lumière qui serrent. Et une voix, tendre, terrible : « Reste. Je t'aime. Reste. »"
+          - "Tu ouvres les yeux. Tu n'as jamais été enchaîné. Lui, si."
+        apres-en:
+          - "Hands binding you. Chains of light tightening. And a voice, tender, terrible: « Stay. I love you. Stay. »"
+          - "You open your eyes. You have never been chained. It has."
+    recompenses:
+      xp: 12600
+      or: 1260
+
+  msn_ce_qui_est_a_moi:
+    nom: "Ce qui est à moi"
+    nom-en: "What Is Mine"
+    niveau: 65
+    requiert: [msn_le_bruit_des_chaines]
+    resume:
+      - "Une petite cloche sonne quelque part."
+      - "Personne d'autre ne l'entend."
+    resume-en:
+      - "A small bell is ringing somewhere."
+      - "Nobody else hears it."
+    intro:
+      - "Une petite cloche. Le son est clair, aigu, tout proche. Tu te retournes : personne. Personne d'autre ne l'entend."
+    intro-en:
+      - "A small bell. The sound is clear, high, very near. You turn around: nobody. Nobody else hears it."
+    etapes:
+      - type: PISTER
+        texte: "Suivre le son de la cloche"
+        texte-en: "Follow the sound of the bell"
+        traces: [msn_65_t1, msn_65_t2, msn_65_t3, msn_65_cloche]
+        apres:
+          - "Le son s'arrête là. Rien que de la cendre."
+        apres-en:
+          - "The sound stops there. Nothing but ash."
+      - type: INTERAGIR
+        texte: "Fouiller la cendre"
+        texte-en: "Search the ash"
+        point: msn_65_cloche
+        rayon: 4
+        apres:
+          - "Une cloche d'enfant, en cuivre. Pas mille ans : quelques années. Quand tu la secoues, tu vois une rue, une porte bleue, une main qui te tient. Une main ordinaire. Pas de lumière. Pas de ciel."
+          - "Celui-là est à toi. Le seul."
+        apres-en:
+          - "A child's copper bell. Not a thousand years old: a few years. When you shake it, you see a street, a blue door, a hand holding yours. An ordinary hand. No light. No sky."
+          - "That one is yours. The only one."
+    recompenses:
+      xp: 13700
+      or: 1370
+      objets:
+        - materiau: BELL
+          nom: "Cloche de cuivre"
+          nom-en: "Copper bell"
+          description:
+            - "Une rue, une porte bleue, une main."
+            - "Le seul souvenir qui est à vous."
+          description-en:
+            - "A street, a blue door, a hand."
+            - "The only memory that is yours."
+
+  msn_le_carnet:
+    nom: "Le carnet"
+    nom-en: "The Notebook"
+    niveau: 70
+    requiert: [msn_ce_qui_est_a_moi]
+    resume:
+      - "Ansgar, le scribe des Marqués, recopie leurs souvenirs."
+      - "Lui porter les vôtres."
+    resume-en:
+      - "Ansgar, the scribe of the Marked, copies down their memories."
+      - "Bring him yours."
+    intro:
+      - "On t'a parlé d'un scribe, près du Camp des Cendres, qui recopie les souvenirs des Marqués. Tu as noté les tiens, un par un, dans un carnet."
+    intro-en:
+      - "You were told of a scribe near the Camp of Ashes who copies down the memories of the Marked. You have noted yours, one by one, in a notebook."
+    etapes:
+      - type: LIVRER
+        texte: "Porter votre carnet à Ansgar"
+        texte-en: "Bring your notebook to Ansgar"
+        pnj: msn_ansgar
+        materiau: WRITABLE_BOOK
+        objet: "Carnet de vos souvenirs"
+        objet-en: "Notebook of your memories"
+        dialogue:
+          - "msn_ansgar: Voyons. La ville vue d'en haut. Les bras levés. La corde, puis les chaînes. Le froid. …Je les ai tous lus, chez cent Marqués. Les mêmes, dans le désordre."
+          - "msn_ansgar: Mais celui-ci. Une cloche de cuivre, une porte bleue. Celui-là, je ne l'ai jamais lu. Personne d'autre ne l'a. Gardez-le loin de tout le reste."
+        dialogue-en:
+          - "msn_ansgar: Let us see. The town seen from above. The raised arms. The cord, then the chains. The cold. …I have read them all, in a hundred Marked. The same ones, in a different order."
+          - "msn_ansgar: But this one. A copper bell, a blue door. That one I have never read. Nobody else has it. Keep it apart from all the rest."
+    recompenses:
+      xp: 14700
+      or: 1470
+
+  msn_la_chute:
+    nom: "La Chute"
+    nom-en: "The Fall"
+    niveau: 75
+    requiert: [msn_le_carnet]
+    resume:
+      - "Le souvenir de la Chute remonte, et il s'efface déjà."
+      - "Rejoindre le lieu avant qu'il ne disparaisse."
+    resume-en:
+      - "The memory of the Fall rises, and it is already fading."
+      - "Reach the place before it vanishes."
+    intro:
+      - "Sur les pentes du volcan, le souvenir le plus vieux de tous remonte d'un coup. Il s'efface aussi vite. Ta Marque te montre le chemin. Vite."
+    intro-en:
+      - "On the slopes of the volcano, the oldest memory of all rises at once. It fades just as fast. Your Mark shows you the way. Quickly."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre le départ du souvenir"
+        texte-en: "Reach the start of the memory"
+        point: msn_75_dep
+        rayon: 6
+      - type: ATTEINDRE
+        texte: "Atteindre le lieu avant que le souvenir ne s'efface"
+        texte-en: "Reach the place before the memory fades"
+        point: msn_75_but
+        rayon: 5
+        apres:
+          - "Le ciel, déchiré. Une lumière qui se jette contre les chaînes et se brise exprès, pour s'enfuir. Et en bas, un écuyer qui crie un nom."
+          - "L'Astre ne s'est pas brisé. Il a choisi. Tu le sais, maintenant, comme tu sais ton propre souffle."
+        apres-en:
+          - "The sky, torn. A light hurling itself against the chains and breaking on purpose, to escape. And below, a squire shouting a name."
+          - "The Star did not break. It chose. You know it now, as you know your own breath."
+        chrono: 75
+        reprise: 1
+        echec:
+          - "Le souvenir s'est effacé. Il reviendra : retourne au départ."
+        echec-en:
+          - "The memory has faded. It will return: go back to the start."
+    recompenses:
+      xp: 15800
+      or: 1580
+
+  msn_ce_qu_on_rend:
+    nom: "Ce qu'on rend"
+    nom-en: "What Is Given Back"
+    niveau: 80
+    requiert: [msn_la_chute]
+    resume:
+      - "Vos souvenirs commencent à partir."
+      - "Morvain sait pourquoi."
+    resume-en:
+      - "Your memories are starting to leave."
+      - "Morvain knows why."
+    intro:
+      - "Ce matin, tu as cherché la ville vue d'en haut, et elle n'était plus là. Juste un vide, propre, comme une place laissée libre."
+    intro-en:
+      - "This morning you looked for the town seen from above, and it was no longer there. Just a gap, clean, like a seat left empty."
+    etapes:
+      - type: PARLER
+        texte: "Parler à Morvain, au Seuil"
+        texte-en: "Talk to Morvain, at the Threshold"
+        pnj: a8_morvain
+        dialogue:
+          - "a8_morvain: Ils partent. Les souvenirs de l'Astre. À mesure que son souffle revient vers lui, il reprend ce qu'il avait laissé chez nous. Moi aussi, je perds les miens. Mille ans de souvenirs qui n'étaient pas à moi."
+          - "a8_morvain: Allez au bord. Regardez-les partir. Ça fait moins peur quand on les regarde."
+        dialogue-en:
+          - "a8_morvain: They are leaving. The Star's memories. As its breath returns to it, it takes back what it left with us. I am losing mine too. A thousand years of memories that were not mine."
+          - "a8_morvain: Go to the edge. Watch them leave. It is less frightening when you watch them."
+      - type: INTERAGIR
+        texte: "Regarder vos souvenirs partir"
+        texte-en: "Watch your memories leave"
+        point: msn_bord
+        rayon: 4
+        apres:
+          - "Les bras levés, l'enfant qui rit, la corde dorée. Un par un, ils montent comme des étincelles et rejoignent le ciel. Ils ne font pas mal. Ils rentrent chez eux."
+        apres-en:
+          - "The raised arms, the laughing child, the golden cord. One by one they rise like sparks and join the sky. They do not hurt. They are going home."
+    recompenses:
+      xp: 16800
+      or: 1680
+
+  msn_la_cloche_au_bord_du_ciel:
+    nom: "La cloche au bord du ciel"
+    nom-en: "The Bell at the Edge of the Sky"
+    niveau: 85
+    requiert: [msn_ce_qu_on_rend]
+    resume:
+      - "Il ne vous reste presque plus rien."
+      - "Sauf la cloche."
+    resume-en:
+      - "You have almost nothing left."
+      - "Except the bell."
+    intro:
+      - "Il ne te reste presque plus rien de l'Astre. Le chant d'accueil s'est tu. La ville vue d'en haut est partie. Mais la cloche est toujours là."
+    intro-en:
+      - "You have almost nothing of the Star left. The welcoming song has fallen silent. The town seen from above is gone. But the bell is still there."
+    etapes:
+      - type: INTERAGIR
+        texte: "Faire sonner la cloche au bord du ciel"
+        texte-en: "Ring the bell at the edge of the sky"
+        point: msn_bord
+        rayon: 4
+        apres:
+          - "Le son part dans le vide. Et, très loin, très bas, de l'autre côté du monde, une autre cloche répond. Pareille. Quelqu'un, quelque part, a gardé l'autre."
+        apres-en:
+          - "The sound goes out into the void. And, very far, very low, on the other side of the world, another bell answers. The same. Someone, somewhere, kept the other one."
+      - type: PARLER
+        texte: "Raconter à Naïa ce que vous avez entendu"
+        texte-en: "Tell Naïa what you heard"
+        pnj: a8_naia
+        dialogue:
+          - "a8_naia: Une cloche qui répond. Alors quelqu'un t'attend. Pas l'Astre : quelqu'un d'ici, avec une porte et une rue. C'est rare, tu sais. La plupart des Marqués n'ont plus personne."
+        dialogue-en:
+          - "a8_naia: A bell that answers. Then someone is waiting for you. Not the Star: someone from here, with a door and a street. It is rare, you know. Most of the Marked have nobody left."
+    recompenses:
+      xp: 17900
+      or: 1790
+
+  msn_un_nom:
+    nom: "Un nom"
+    nom-en: "A Name"
+    niveau: 90
+    requiert: [msn_la_cloche_au_bord_du_ciel]
+    resume:
+      - "Vous n'avez jamais su votre nom."
+      - "Il est temps d'en avoir un."
+    resume-en:
+      - "You never knew your name."
+      - "It is time to have one."
+    intro:
+      - "Les souvenirs de l'Astre sont partis. Il reste la cloche, une rue, une porte bleue. Et une question que personne ne t'a posée depuis ton réveil."
+    intro-en:
+      - "The Star's memories are gone. What remains is the bell, a street, a blue door. And a question nobody has asked you since you woke."
+    etapes:
+      - type: CHOIX
+        texte: "Répondre à Naïa"
+        texte-en: "Answer Naïa"
+        pnj: a8_naia
+        choix: nom
+        question: "Quel nom gardez-vous ?"
+        question-en: "What name do you keep?"
+        reponses:
+          - id: cloche
+            texte: "Le nom que la cloche appelait"
+            texte-en: "The name the bell was calling"
+            reponse:
+              - "a8_naia: Celui de la porte bleue. Tu ne t'en souviens pas encore, mais tu le retrouveras en suivant la cloche. Il est à toi."
+            reponse-en:
+              - "a8_naia: The one from the blue door. You do not remember it yet, but you will find it by following the bell. It is yours."
+            xp: 5000
+          - id: marque
+            texte: "Marqué. Ça me suffit."
+            texte-en: "Marked. That is enough for me."
+            reponse:
+              - "a8_naia: Marqué. Comme des centaines d'autres, et comme personne d'autre. C'est un beau nom, quand on l'a choisi."
+            reponse-en:
+              - "a8_naia: Marked. Like hundreds of others, and like nobody else. It is a fine name, when you have chosen it."
+            xp: 5000
+          - id: astre
+            texte: "Celui que l'Astre m'aurait donné"
+            texte-en: "The one the Star would have given me"
+            reponse:
+              - "a8_naia: Alors lève les yeux, ce soir. Il brille entier. S'il t'appelle, tu l'entendras sans souvenir pour te le souffler."
+            reponse-en:
+              - "a8_naia: Then look up tonight. It shines whole. If it calls you, you will hear it without any memory to whisper it to you."
+            xp: 5000
+        dialogue:
+          - "a8_naia: Chez nous, quand un invité reste, on lui demande son nom. Pas celui qu'il avait en arrivant : celui qu'il veut garder."
+          - "a8_naia: Tu es resté. Alors, comment t'appelles-tu ?"
+        dialogue-en:
+          - "a8_naia: Among us, when a guest stays, we ask their name. Not the one they had on arrival: the one they want to keep."
+          - "a8_naia: You stayed. So, what is your name?"
+    recompenses:
+      xp: 28400
+      or: 2840
+      objets:
+        - materiau: NAME_TAG
+          nom: "Votre nom"
+          nom-en: "Your name"
+          description:
+            - "Choisi au bord du ciel, au Seuil."
+          description-en:
+            - "Chosen at the edge of the sky, at the Threshold."

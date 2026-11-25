@@ -155,6 +155,10 @@ public final class Market implements Listener {
         if (fr.orbit.mmo.inn.InnService.isCrystal(it)) {
             return "Votre cristal de téléportation est lié à vous : il ne se vend pas.";
         }
+        String bound = fr.orbit.mmo.item.Binding.tradeBlock(it);
+        if (bound != null) {
+            return bound;
+        }
         if ("weapon".equals(Items.type(it))) {
             int weapons = 0;
             for (ItemStack o : p.getInventory().getStorageContents()) {

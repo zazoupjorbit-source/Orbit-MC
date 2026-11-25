@@ -75,6 +75,12 @@ Le bot doit **rester allumé** pour que les boutons, les tickets et le statut fo
 Le bot interroge les serveurs listés dans `config.json → status.servers` toutes les 60 secondes. Il met à jour #statut-serveurs et affiche « X Marqués en jeu » dans son statut.
 Les adresses sont réglées sur `127.0.0.1` (proxy et backends locaux) : le bot doit donc tourner **sur la même machine** que le réseau. Si le bot est hébergé ailleurs, remplace-les par l'adresse publique.
 
+## Guide du staff
+Le bot tient un **guide du staff** au même format que celui d'ORBIT ARK : un panneau dans **📖・guide** (catégorie STAFF, créé par le bot s'il manque), des menus par rubrique et par fiche, une recherche, les nouveautés, et la commande `/guide` (réponses visibles seulement par la personne qui la tape). Réservé aux rôles Fondateur, Administrateur, Développeur, Modérateur et Support.
+- Contenu : un fichier Markdown par fiche dans `guide/` (format dans `guide/08-maintenir/01-ajouter-fiche.md`). Les fiches sont relues à chaque ouverture : pas besoin de redémarrer le bot.
+- Contrôle : `npm run check-guide`.
+- Réglages : `config.json → guide` (salon du panneau, salon des nouveautés, délai de relecture).
+
 ## Personnaliser
 - **Salons, rôles et permissions :** `src/structure.js`, puis `npm run setup`.
 - **Textes (bienvenue, règlement, lore…) :** `src/messages.js`, puis `npm run setup`.

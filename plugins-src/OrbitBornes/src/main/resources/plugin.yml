@@ -1,0 +1,18 @@
+name: OrbitBornes
+version: '0.1.0'
+main: fr.orbit.bornes.OrbitBornes
+api-version: '1.21'
+description: "Bornes d'arcade solo de la salle cachée : ASTROBLOCS (blocs qui tombent, solo et duel), CRISTAUX D'ORBIT (match-3 en écran HD), DÉFENSE ORBITALE (tir spatial) et PULSAR (rythme). Orbit Coins de jeu seulement."
+authors: [ORBIT]
+softdepend: [OrbitCasino]
+
+commands:
+  bornes:
+    description: "Bornes d'arcade : rejouer, classement, quitter une partie."
+    usage: "/bornes [rejouer|top <jeu>|quitter|reprendre|jouer <jeu> [mode]]"
+    aliases: [borne]
+
+permissions:
+  orbitbornes.admin:
+    description: Reposer les PNJ des bornes, voir l'état des parties.
+    default: op

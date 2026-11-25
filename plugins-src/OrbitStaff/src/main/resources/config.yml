@@ -1,0 +1,41 @@
+# =====================================================================
+#  OrbitStaff 1.0 - outils du staff ORBIT
+#  Base : la MariaDB du réseau (setup\db.properties), partagée par tous
+#  les serveurs : un ban posé sur un serveur vaut sur tout le réseau.
+# =====================================================================
+
+# Nom de ce serveur dans les journaux et le livre. Vide = nom du dossier
+# du serveur (« server » devient « lobby »).
+serveur: ""
+
+base:
+  fichier: ../../setup/db.properties
+
+mode-staff:
+  # Mode de jeu pendant le mode staff : SURVIVAL, ADVENTURE, CREATIVE ou SPECTATOR.
+  gamemode: SURVIVAL
+  vol: true
+  invisible: true
+  invincible: true
+  # Ramène le staff là où il était en sortant du mode staff.
+  retour-position: true
+
+freeze:
+  # Rappel au staff toutes les X secondes tant qu'un joueur est gelé.
+  rappel-secondes: 60
+  # Message affiché en titre au joueur gelé.
+  titre: "<#ff5555><bold>TU ES GELÉ"
+  sous-titre: "<gray>Ne te déconnecte pas, un membre du staff arrive."
+
+# Détection simple (alerte le staff, ne sanctionne jamais tout seul).
+combat:
+  cps-alerte: 18
+  allonge-alerte: 3.6
+  # Une alerte du même type pour le même joueur au plus toutes les X secondes.
+  alerte-delai-secondes: 10
+
+# Chat : un joueur muet ne peut pas écrire. Commandes bloquées aussi :
+mute-commandes-bloquees: [msg, tell, w, r, me, say, m, whisper, mail]
+
+# Lien vers le règlement / Discord dans les écrans de ban.
+lien-appel: "discord.gg/orbit-pvp"

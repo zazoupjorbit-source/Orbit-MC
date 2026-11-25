@@ -298,6 +298,7 @@ public final class MarketMenus {
                 "<#8C96A3>Vos annonces : <white>" + count + " / " + market.maxListings(),
                 "",
                 "<#5A6270>Objets de sort et « Mon personnage » : invendables.",
+                "<#5A6270>Objets liés (butin de boss, pièces déjà équipées) : invendables.",
                 "<#5A6270>Pour vendre une partie d'une pile, séparez-la d'abord."), null);
         m.set(18, Items.icon(Material.ARROW, "<#8C96A3>Retour"), t -> open(plugin, p));
         m.set(22, Items.icon(Material.CHEST, "<#5EE89A><b>Mes ventes</b>", "<#5A6270>[Clic] ouvrir"), t -> mine(plugin, p));

@@ -1,0 +1,424 @@
+# ------------------------------------------------------------------
+#  Chaman — voix des éléments, en mailles. Foudre et lave à distance, ou eaux vives qui soignent.
+#  Ressource : Mana. Ses totems sont des cris et des zones (pas de créature posée).
+#  Format des sorts et des talents : voir guerrier.yml.
+# ------------------------------------------------------------------
+
+nom: Chaman
+couleur: "#3FA7D6"
+icone: HEART_OF_THE_SEA
+jouable: true
+ressource: MANA
+armure: MAILLES
+pv: 0.95
+arme: STAFF
+description:
+  - "Parle à la foudre, à la lave et aux eaux vives ;"
+  - "ses totems portent tout le groupe."
+
+specialisations:
+  foudre:
+    nom: Foudre
+    role: DEGATS
+    icone: LIGHTNING_ROD
+    couleur: "#7FD4FF"
+    arme: STAFF
+    description:
+      - "Dégâts à distance : éclairs en chaîne,"
+      - "lave et totems de feu."
+    passifs: { degats: 5, crit: 5 }
+    talents:
+      ciel_charge: { nom: "Ciel chargé", icone: LIGHTNING_ROD, palier: 0, colonne: 0, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      fureur_des_elements: { nom: "Fureur des éléments", icone: BLAZE_POWDER, palier: 0, colonne: 1, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      eaux_calmes: { nom: "Eaux calmes", icone: PRISMARINE_CRYSTALS, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de mana régénéré." }
+      foudre_vive: { nom: "Foudre vive", icone: LIGHTNING_ROD, palier: 1, colonne: 0, rangs: 3, effets: { degats.foudre: 6 }, description: "Foudre inflige {degats.foudre} % de dégâts en plus." }
+      braises_tenaces: { nom: "Braises tenaces", icone: MAGMA_CREAM, palier: 1, colonne: 1, rangs: 3, effets: { degats.horion_de_flammes: 10 }, description: "Horion de flammes et sa brûlure infligent {degats.horion_de_flammes} % de dégâts en plus." }
+      pied_leger: { nom: "Pied léger", icone: FEATHER, palier: 1, colonne: 2, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      explosion_de_lave: { nom: "Explosion de lave", icone: LAVA_BUCKET, palier: 2, colonne: 0, rangs: 1, sort: explosion_de_lave, description: "Apprend Explosion de lave : une gerbe de lave en fusion sur la cible visée." }
+      arcs_multiples: { nom: "Arcs multiples", icone: IRON_CHAIN, palier: 2, colonne: 1, rangs: 3, effets: { degats.chaine_d_eclairs: 8 }, description: "Chaîne d'éclairs inflige {degats.chaine_d_eclairs} % de dégâts en plus." }
+      invocation_rapide: { nom: "Invocation rapide", icone: CLOCK, palier: 2, colonne: 2, rangs: 3, effets: { incantation.foudre: 0.1 }, description: "Incantation de Foudre réduite de {incantation.foudre} s." }
+      totems_ardents: { nom: "Totems ardents", icone: MAGMA_BLOCK, palier: 3, colonne: 0, rangs: 3, effets: { degats.totem_incendiaire: 10 }, description: "Totem incendiaire inflige {degats.totem_incendiaire} % de dégâts en plus." }
+      mailles_du_tonnerre: { nom: "Mailles du tonnerre", icone: CHAINMAIL_CHESTPLATE, palier: 3, colonne: 1, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      terre_grondante: { nom: "Terre grondante", icone: COBBLED_DEEPSLATE_WALL, palier: 3, colonne: 2, rangs: 3, effets: { recharge.totem_de_seisme: 2 }, description: "Recharge de Totem de séisme réduite de {recharge.totem_de_seisme} s." }
+      foudre_devastatrice: { nom: "Foudre dévastatrice", icone: END_ROD, palier: 4, colonne: 0, rangs: 3, effets: { critdeg: 8 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      chaine_rapide: { nom: "Chaîne rapide", icone: CLOCK, palier: 4, colonne: 1, rangs: 2, effets: { recharge.chaine_d_eclairs: 0.5 }, description: "Recharge de Chaîne d'éclairs réduite de {recharge.chaine_d_eclairs} s." }
+      coeur_de_magma: { nom: "Cœur de magma", icone: MAGMA_CREAM, palier: 4, colonne: 2, rangs: 3, requiert: explosion_de_lave, effets: { degats.explosion_de_lave: 10 }, description: "Explosion de lave inflige {degats.explosion_de_lave} % de dégâts en plus." }
+      tremblement_de_terre: { nom: "Tremblement de terre", icone: CRACKED_DEEPSLATE_BRICKS, palier: 5, colonne: 0, rangs: 1, sort: tremblement_de_terre, description: "Apprend Tremblement de terre : le sol se fend sur une large zone pendant 4 s et ralentit les ennemis." }
+      eclair_sur: { nom: "Éclair sûr", icone: SPYGLASS, palier: 5, colonne: 1, rangs: 3, effets: { crit.foudre: 4 }, description: "Foudre : +{crit.foudre} % de critique." }
+      endurance_du_chaman: { nom: "Endurance du chaman", icone: COOKED_BEEF, palier: 5, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      orage_montant: { nom: "Orage montant", icone: ENDER_EYE, palier: 6, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      brasier_durable: { nom: "Brasier durable", icone: CAMPFIRE, palier: 6, colonne: 1, rangs: 3, requiert: totems_ardents, effets: { duree.totem_incendiaire: 1 }, description: "Totem incendiaire dure {duree.totem_incendiaire} s de plus." }
+      foudre_econome: { nom: "Foudre économe", icone: STRING, palier: 6, colonne: 2, rangs: 3, effets: { cout.foudre: 1 }, description: "Foudre coûte {cout.foudre} points de mana de moins." }
+      ascendance_prolongee: { nom: "Ascendance prolongée", icone: NETHER_STAR, palier: 7, colonne: 0, rangs: 2, effets: { duree.ascendance: 2 }, description: "Ascendance dure {duree.ascendance} s de plus." }
+      faille_beante: { nom: "Faille béante", icone: CRACKED_DEEPSLATE_BRICKS, palier: 7, colonne: 1, rangs: 3, requiert: tremblement_de_terre, effets: { degats.tremblement_de_terre: 10 }, description: "Tremblement de terre inflige {degats.tremblement_de_terre} % de dégâts en plus." }
+      esprit_du_vent: { nom: "Esprit du vent", icone: PHANTOM_MEMBRANE, palier: 7, colonne: 2, rangs: 3, effets: { esquive: 1 }, description: "+{esquive} % de chances d'esquiver un coup de mêlée." }
+      tempete_primordiale: { nom: "Tempête primordiale", icone: TRIDENT, palier: 8, colonne: 0, rangs: 1, sort: tempete_primordiale, requiert: tremblement_de_terre, description: "Apprend Tempête primordiale : foudre, grêle et lave s'abattent sur une large zone pendant 5 s." }
+      maitre_des_elements: { nom: "Maître des éléments", icone: CONDUIT, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      foudre_implacable: { nom: "Foudre implacable", icone: LIGHTNING_ROD, palier: 8, colonne: 2, rangs: 3, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      lave_vive: { nom: "Lave vive", icone: LAVA_BUCKET, palier: 9, colonne: 0, rangs: 3, requiert: explosion_de_lave, effets: { recharge.explosion_de_lave: 1 }, description: "Recharge d'Explosion de lave réduite de {recharge.explosion_de_lave} s." }
+      ciel_dechaine: { nom: "Ciel déchaîné", icone: TRIDENT, palier: 9, colonne: 1, rangs: 3, requiert: tempete_primordiale, effets: { degats.tempete_primordiale: 10 }, description: "Tempête primordiale inflige {degats.tempete_primordiale} % de dégâts en plus." }
+      peau_de_roche: { nom: "Peau de roche", icone: STONE, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      surtension: { nom: "Surtension", icone: GLOWSTONE_DUST, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      appel_de_l_orage: { nom: "Appel de l'orage", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.ascendance: 10 }, description: "Recharge d'Ascendance réduite de {recharge.ascendance} s." }
+      mana_des_profondeurs: { nom: "Mana des profondeurs", icone: PRISMARINE_SHARD, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de mana régénéré." }
+      foudre_ancestrale: { nom: "Foudre ancestrale", icone: LIGHTNING_ROD, palier: 11, colonne: 0, rangs: 3, effets: { degats.foudre: 5 }, description: "Foudre inflige {degats.foudre} % de dégâts en plus." }
+      voix_des_elements: { nom: "Voix des éléments", icone: HEART_OF_THE_SEA, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, crit: 3 }, description: "Talent de maître : +{degats} % de dégâts et +{crit} % de chances de coup critique." }
+      magma_profond: { nom: "Magma profond", icone: MAGMA_BLOCK, palier: 11, colonne: 2, rangs: 3, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+
+  marees:
+    nom: Marées
+    role: SOIN
+    icone: NAUTILUS_SHELL
+    couleur: "#5ED6C4"
+    arme: STAFF
+    description:
+      - "Soigneur : vagues de soins, pluies"
+      - "guérisseuses et carapaces d'eau."
+    passifs: { soins: 10 }
+    talents:
+      eau_vive: { nom: "Eau vive", icone: WATER_BUCKET, palier: 0, colonne: 0, rangs: 5, effets: { soins: 1 }, description: "+{soins} % de soins prodigués." }
+      source_claire: { nom: "Source claire", icone: PRISMARINE_CRYSTALS, palier: 0, colonne: 1, rangs: 5, effets: { ressource: 2 }, description: "+{ressource} % de mana régénéré." }
+      foudre_latente: { nom: "Foudre latente", icone: LIGHTNING_ROD, palier: 0, colonne: 2, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      vague_puissante: { nom: "Vague puissante", icone: PRISMARINE_SHARD, palier: 1, colonne: 0, rangs: 3, effets: { soins.vague_de_soins: 6 }, description: "Vague de soins soigne {soins.vague_de_soins} % de plus." }
+      pluie_abondante: { nom: "Pluie abondante", icone: WATER_BUCKET, palier: 1, colonne: 1, rangs: 3, effets: { recharge.pluie_guerisseuse: 1 }, description: "Recharge de Pluie guérisseuse réduite de {recharge.pluie_guerisseuse} s." }
+      courant_porteur: { nom: "Courant porteur", icone: FEATHER, palier: 1, colonne: 2, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      chaine_de_soins: { nom: "Chaîne de soins", icone: PRISMARINE_CRYSTALS, palier: 2, colonne: 0, rangs: 1, sort: chaine_de_soins, description: "Apprend Chaîne de soins : le soin rebondit d'allié en allié, rend 14 % des PV à vous et à votre groupe." }
+      remous_profonds: { nom: "Remous profonds", icone: NAUTILUS_SHELL, palier: 2, colonne: 1, rangs: 3, effets: { soins.remous: 8 }, description: "Remous soigne {soins.remous} % de plus." }
+      flot_rapide: { nom: "Flot rapide", icone: CLOCK, palier: 2, colonne: 2, rangs: 3, effets: { incantation.deferlante: 0.2 }, description: "Incantation de Déferlante réduite de {incantation.deferlante} s." }
+      maree_haute: { nom: "Marée haute", icone: HEART_OF_THE_SEA, palier: 3, colonne: 0, rangs: 3, effets: { soins.deferlante: 6 }, description: "Déferlante soigne {soins.deferlante} % de plus." }
+      mailles_de_corail: { nom: "Mailles de corail", icone: CHAINMAIL_CHESTPLATE, palier: 3, colonne: 1, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      source_feconde: { nom: "Source féconde", icone: PRISMARINE_CRYSTALS, palier: 3, colonne: 2, rangs: 3, effets: { recharge.source_interieure: 10 }, description: "Recharge de Source intérieure réduite de {recharge.source_interieure} s." }
+      eaux_bienfaisantes: { nom: "Eaux bienfaisantes", icone: GLISTERING_MELON_SLICE, palier: 4, colonne: 0, rangs: 3, effets: { soins: 1 }, description: "+{soins} % de soins prodigués." }
+      remous_frequents: { nom: "Remous fréquents", icone: CLOCK, palier: 4, colonne: 1, rangs: 2, effets: { recharge.remous: 1 }, description: "Recharge de Remous réduite de {recharge.remous} s." }
+      chaine_sans_fin: { nom: "Chaîne sans fin", icone: IRON_CHAIN, palier: 4, colonne: 2, rangs: 3, requiert: chaine_de_soins, effets: { soins.chaine_de_soins: 8 }, description: "Chaîne de soins soigne {soins.chaine_de_soins} % de plus." }
+      carapace_des_flots: { nom: "Carapace des flots", icone: TURTLE_HELMET, palier: 5, colonne: 0, rangs: 1, sort: carapace_des_flots, description: "Apprend Carapace des flots : une carapace d'eau protège le groupe, bouclier de 15 % des PV pendant 10 s." }
+      economie_des_eaux: { nom: "Économie des eaux", icone: STRING, palier: 5, colonne: 1, rangs: 3, effets: { cout.vague_de_soins: 1 }, description: "Vague de soins coûte {cout.vague_de_soins} points de mana de moins." }
+      endurance_des_marees: { nom: "Endurance des marées", icone: COOKED_BEEF, palier: 5, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      flots_genereux: { nom: "Flots généreux", icone: SEA_PICKLE, palier: 6, colonne: 0, rangs: 3, effets: { soins: 1 }, description: "+{soins} % de soins prodigués." }
+      pluie_persistante: { nom: "Pluie persistante", icone: WATER_BUCKET, palier: 6, colonne: 1, rangs: 3, requiert: pluie_abondante, effets: { duree.pluie_guerisseuse: 1 }, description: "Pluie guérisseuse dure {duree.pluie_guerisseuse} s de plus." }
+      deferlante_econome: { nom: "Déferlante économe", icone: STRING, palier: 6, colonne: 2, rangs: 3, effets: { cout.deferlante: 2 }, description: "Déferlante coûte {cout.deferlante} points de mana de moins." }
+      maree_longue: { nom: "Marée longue", icone: CONDUIT, palier: 7, colonne: 0, rangs: 2, effets: { duree.maree_de_vie: 2 }, description: "Marée de vie dure {duree.maree_de_vie} s de plus." }
+      carapace_epaisse: { nom: "Carapace épaisse", icone: TURTLE_SCUTE, palier: 7, colonne: 1, rangs: 3, requiert: carapace_des_flots, effets: { duree.carapace_des_flots: 2 }, description: "Carapace des flots dure {duree.carapace_des_flots} s de plus." }
+      ecume_protectrice: { nom: "Écume protectrice", icone: WHITE_WOOL, palier: 7, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      esprit_des_marees: { nom: "Esprit des marées", icone: CONDUIT, palier: 8, colonne: 0, rangs: 1, sort: esprit_des_marees, requiert: carapace_des_flots, description: "Apprend Esprit des marées : rend 35 % des PV au groupe et pose un bouclier de 12 % des PV pendant 10 s." }
+      maitre_des_marees: { nom: "Maître des marées", icone: HEART_OF_THE_SEA, palier: 8, colonne: 1, rangs: 3, effets: { soins: 2 }, description: "+{soins} % de soins prodigués." }
+      source_intarissable: { nom: "Source intarissable", icone: PRISMARINE_CRYSTALS, palier: 8, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de mana régénéré." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      ressac: { nom: "Ressac", icone: PRISMARINE_SHARD, palier: 9, colonne: 0, rangs: 3, requiert: chaine_de_soins, effets: { recharge.chaine_de_soins: 1 }, description: "Recharge de Chaîne de soins réduite de {recharge.chaine_de_soins} s." }
+      esprit_bienveillant: { nom: "Esprit bienveillant", icone: CONDUIT, palier: 9, colonne: 1, rangs: 3, requiert: esprit_des_marees, effets: { recharge.esprit_des_marees: 10 }, description: "Recharge d'Esprit des marées réduite de {recharge.esprit_des_marees} s." }
+      corps_de_corail: { nom: "Corps de corail", icone: BRAIN_CORAL_BLOCK, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      pluie_torrentielle: { nom: "Pluie torrentielle", icone: WATER_BUCKET, palier: 10, colonne: 0, rangs: 3, effets: { cout.pluie_guerisseuse: 2 }, description: "Pluie guérisseuse coûte {cout.pluie_guerisseuse} points de mana de moins." }
+      maree_montante: { nom: "Marée montante", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.maree_de_vie: 15 }, description: "Recharge de Marée de vie réduite de {recharge.maree_de_vie} s." }
+      abysses: { nom: "Abysses", icone: DARK_PRISMARINE, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de mana régénéré." }
+      vague_ancestrale: { nom: "Vague ancestrale", icone: PRISMARINE_SHARD, palier: 11, colonne: 0, rangs: 3, effets: { soins.vague_de_soins: 5 }, description: "Vague de soins soigne {soins.vague_de_soins} % de plus." }
+      voix_des_marees: { nom: "Voix des marées", icone: HEART_OF_THE_SEA, palier: 11, colonne: 1, rangs: 1, effets: { soins: 8, ressource: 5 }, description: "Talent de maître : +{soins} % de soins prodigués et +{ressource} % de mana régénéré." }
+      flots_cuirasses: { nom: "Flots cuirassés", icone: CHAINMAIL_CHESTPLATE, palier: 11, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+
+sorts:
+  # ---------------- Toute la classe ----------------
+  trait_de_foudre:
+    nom: Trait de foudre
+    type: PROJECTILE
+    icone: LIGHTNING_ROD
+    couleur: "#BFE9FF"
+    niveau: 1
+    gain: 5
+    portee: 28
+    puissance: 0.9
+    description: "Un trait de foudre sur la cible visée qui rend un peu de mana."
+  flots_apaisants:
+    nom: Flots apaisants
+    type: SOIN
+    icone: WATER_BUCKET
+    couleur: "#5ED6C4"
+    niveau: 2
+    recharge: 10
+    portee: 25
+    puissance: 1.5
+    duree: 6
+    effets: { soin-par-sec: 1 }
+    description: "Soigne l'allié visé (ou vous) et le soigne encore pendant 6 s."
+  pas_du_vent:
+    nom: Pas du vent
+    type: BOND
+    icone: WIND_CHARGE
+    couleur: "#D7F3FF"
+    niveau: 4
+    recharge: 20
+    portee: 10
+    zone: 3
+    puissance: 0.3
+    effets: { ralentir: 2 }
+    description: "Le vent vous porte vers le point visé ; les ennemis à l'arrivée sont ralentis."
+  totem_de_pierre:
+    nom: Totem de pierre
+    type: CRI
+    icone: MOSSY_COBBLESTONE_WALL
+    couleur: "#B8A27A"
+    niveau: 6
+    recharge: 60
+    gcd: false
+    zone: 20
+    duree: 30
+    effets: { reduction: 5 }
+    description: "Plante un totem de pierre : vous et votre groupe subissez 5 % de dégâts en moins pendant 30 s."
+  totem_de_seisme:
+    nom: Totem de séisme
+    type: ZONE
+    icone: COBBLED_DEEPSLATE_WALL
+    couleur: "#9C8463"
+    niveau: 8
+    cout: 10
+    recharge: 25
+    portee: 20
+    zone: 4
+    duree: 6
+    puissance: 0.3
+    effets: { ralentir: 2 }
+    description: "Plante un totem au point visé : la terre tremble 6 s et ralentit les ennemis."
+  source_interieure:
+    nom: Source intérieure
+    type: BUFF
+    icone: PRISMARINE_CRYSTALS
+    couleur: "#4FA3FF"
+    niveau: 12
+    gain: 40
+    recharge: 90
+    gcd: false
+    description: "Puise dans la source : rend 40 points de mana."
+  loup_fantome:
+    nom: Loup fantôme
+    type: BUFF
+    icone: WOLF_ARMOR
+    couleur: "#C9D6E2"
+    niveau: 16
+    recharge: 45
+    gcd: false
+    duree: 10
+    effets: { vitesse: 2 }
+    description: "Prend l'allure d'un loup fantôme : vitesse de déplacement fortement augmentée pendant 10 s."
+  bourrasque:
+    nom: Bourrasque
+    type: CRI
+    icone: FEATHER
+    couleur: "#D7F3FF"
+    niveau: 20
+    recharge: 30
+    zone: 6
+    puissance: 0.4
+    effets: { repousser: 1.5 }
+    description: "Une rafale repousse les ennemis autour de vous."
+
+  # ---------------- Foudre ----------------
+  foudre:
+    nom: Foudre
+    type: PROJECTILE
+    icone: LIGHTNING_ROD
+    couleur: "#7FD4FF"
+    spe: [foudre]
+    niveau: 2
+    cout: 5
+    incantation: 1.3
+    portee: 30
+    puissance: 2.0
+    description: "Un éclair puissant sur la cible visée (immobile)."
+  horion_de_flammes:
+    nom: Horion de flammes
+    type: PROJECTILE
+    icone: BLAZE_POWDER
+    couleur: "#FF8A3B"
+    spe: [foudre]
+    niveau: 5
+    cout: 8
+    recharge: 8
+    portee: 30
+    puissance: 1.0
+    effets: { saignement: 10, dot: 0.25 }
+    description: "Un choc de feu : la cible brûle pendant 10 s."
+  chaine_d_eclairs:
+    nom: Chaîne d'éclairs
+    type: FRAPPE
+    icone: IRON_CHAIN
+    couleur: "#BFE9FF"
+    spe: [foudre]
+    niveau: 9
+    cout: 12
+    recharge: 6
+    portee: 12
+    arc: 90
+    puissance: 1.4
+    description: "La foudre saute entre tous les ennemis devant vous."
+  totem_incendiaire:
+    nom: Totem incendiaire
+    type: ZONE
+    icone: MAGMA_BLOCK
+    couleur: "#FF6A33"
+    spe: [foudre]
+    niveau: 14
+    cout: 20
+    recharge: 20
+    portee: 20
+    zone: 4
+    duree: 6
+    puissance: 0.6
+    description: "Plante un totem de feu : la zone visée brûle chaque seconde pendant 6 s."
+  ascendance:
+    nom: Ascendance
+    type: BUFF
+    icone: NETHER_STAR
+    couleur: "#7FD4FF"
+    spe: [foudre]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 12
+    effets: { bonus-degats: 20, bonus-crit: 10 }
+    description: "Devient l'orage : +20 % de dégâts et +10 % de critique pendant 12 s."
+  explosion_de_lave:
+    nom: Explosion de lave
+    type: PROJECTILE
+    icone: LAVA_BUCKET
+    couleur: "#FF6A33"
+    spe: [foudre]
+    talent: true
+    cout: 12
+    recharge: 10
+    portee: 30
+    puissance: 2.8
+    description: "Une gerbe de lave en fusion sur la cible visée."
+  tremblement_de_terre:
+    nom: Tremblement de terre
+    type: ZONE
+    icone: CRACKED_DEEPSLATE_BRICKS
+    couleur: "#9C8463"
+    spe: [foudre]
+    talent: true
+    cout: 25
+    recharge: 40
+    portee: 25
+    zone: 5
+    duree: 4
+    puissance: 1.0
+    effets: { ralentir: 1 }
+    description: "Le sol se fend sur une large zone pendant 4 s et ralentit les ennemis."
+  tempete_primordiale:
+    nom: Tempête primordiale
+    type: ZONE
+    icone: TRIDENT
+    couleur: "#7FD4FF"
+    spe: [foudre]
+    talent: true
+    cout: 30
+    recharge: 60
+    portee: 30
+    zone: 6
+    duree: 5
+    puissance: 1.5
+    description: "Foudre, grêle et lave s'abattent sur une large zone pendant 5 s."
+
+  # ---------------- Marées ----------------
+  vague_de_soins:
+    nom: Vague de soins
+    type: SOIN
+    icone: PRISMARINE_SHARD
+    couleur: "#5ED6C4"
+    spe: [marees]
+    niveau: 2
+    cout: 8
+    portee: 25
+    puissance: 1.6
+    description: "Un soin instantané sur l'allié visé."
+  deferlante:
+    nom: Déferlante
+    type: SOIN
+    icone: HEART_OF_THE_SEA
+    couleur: "#5ED6C4"
+    spe: [marees]
+    niveau: 5
+    cout: 14
+    incantation: 2.3
+    portee: 25
+    puissance: 3.8
+    description: "Un soin très puissant, long à incanter (immobile)."
+  pluie_guerisseuse:
+    nom: Pluie guérisseuse
+    type: CRI
+    icone: WATER_BUCKET
+    couleur: "#8FE3D6"
+    spe: [marees]
+    niveau: 9
+    cout: 18
+    recharge: 12
+    zone: 15
+    duree: 8
+    effets: { soin-par-sec: 1.5 }
+    description: "Une pluie douce tombe sur le groupe : 1,5 % des PV rendus par seconde pendant 8 s."
+  remous:
+    nom: Remous
+    type: SOIN
+    icone: NAUTILUS_SHELL
+    couleur: "#5ED6C4"
+    spe: [marees]
+    niveau: 14
+    cout: 10
+    recharge: 8
+    portee: 25
+    puissance: 2.0
+    duree: 6
+    effets: { soin-par-sec: 1 }
+    description: "Soigne l'allié visé, puis 1 % de ses PV par seconde pendant 6 s."
+  maree_de_vie:
+    nom: Marée de vie
+    type: CRI
+    icone: CONDUIT
+    couleur: "#5ED6C4"
+    spe: [marees]
+    niveau: 30
+    recharge: 180
+    gcd: false
+    zone: 20
+    duree: 8
+    effets: { soin: 20, soin-par-sec: 3 }
+    description: "Rend 20 % des PV au groupe, puis 3 % par seconde pendant 8 s."
+  chaine_de_soins:
+    nom: Chaîne de soins
+    type: CRI
+    icone: PRISMARINE_CRYSTALS
+    couleur: "#8FE3D6"
+    spe: [marees]
+    talent: true
+    cout: 16
+    recharge: 15
+    zone: 15
+    effets: { soin: 14 }
+    description: "Le soin rebondit d'allié en allié : rend 14 % des PV à vous et à votre groupe."
+  carapace_des_flots:
+    nom: Carapace des flots
+    type: CRI
+    icone: TURTLE_HELMET
+    couleur: "#5ED6C4"
+    spe: [marees]
+    talent: true
+    cout: 15
+    recharge: 60
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { bouclier: 15 }
+    description: "Une carapace d'eau protège le groupe : bouclier de 15 % des PV pendant 10 s."
+  esprit_des_marees:
+    nom: Esprit des marées
+    type: CRI
+    icone: CONDUIT
+    couleur: "#8FE3D6"
+    spe: [marees]
+    talent: true
+    recharge: 180
+    gcd: false
+    zone: 20
+    duree: 10
+    effets: { soin: 35, bouclier: 12 }
+    description: "Rend 35 % des PV au groupe et pose un bouclier de 12 % des PV pendant 10 s."

@@ -138,7 +138,7 @@ public final class ContinentFauna {
                 continue;
             }
             int near = plugin.mobs().countNear(l, 36);
-            for (int i = 0; i < 2 && near < cat.perPlayer && inWorld < cat.cap; i++) {
+            for (int i = 0; i < 1 && near < cat.perPlayer && inWorld < cat.cap; i++) {
                 Location at = spot(w, px, pz, 14, 30, true);
                 if (at == null) {
                     continue;

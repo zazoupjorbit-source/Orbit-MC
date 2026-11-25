@@ -45,6 +45,9 @@ $packDir = Join-Path $root 'pack'
 if (Test-Path $packDir) { Remove-Item $packDir -Recurse -Force }
 & $java '-Dfile.encoding=UTF-8' (Join-Path $root 'tools\CasinoPackGen.java') $packDir (Join-Path $root 'src\main\resources\hud-font.txt') (Join-Path $dev 'maquettes')
 if ($LASTEXITCODE -ne 0) { throw "Echec de la generation du pack du casino." }
+# Bornes d'arcade 3D de la salle cachee : modele + affiches HD de chaque jeu (apercu maquettes\bornes-arcade.png).
+& $java '-Dfile.encoding=UTF-8' (Join-Path $root 'tools\BornesPackGen.java') $packDir (Join-Path $dev 'maquettes')
+if ($LASTEXITCODE -ne 0) { throw "Echec de la generation des bornes d'arcade." }
 
 Copy-Item (Join-Path $root 'src\main\resources\*') $out -Recurse -Force
 
@@ -72,12 +75,11 @@ if ($LASTEXITCODE -ne 0) { throw "Echec de la creation du jar." }
 Write-Host "Jar cree : $target"
 
 if (-not $NoDeploy) {
-    # Lobby + chaque instance qui a OrbitDevCore (les cosmetiques et les titres suivent le joueur partout).
-    $dossiers = @(Join-Path $dev 'server\plugins') + @(Get-ChildItem (Join-Path $dev 'instances') -Directory |
-        ForEach-Object { Join-Path $_.FullName 'plugins' } | Where-Object { Test-Path (Join-Path $_ 'OrbitDevCore.jar') })
+    # Lobby SEULEMENT (Zazou, 24/11 : le casino n'a rien a faire sur les modes ; sur reborn il volait /monture au MMO).
+    $dossiers = @(Join-Path $dev 'server\plugins')
     foreach ($d in $dossiers) {
         Copy-Item $target $d -Force
         Write-Host "Copie dans $d"
     }
-    Write-Host "Redemarre les serveurs pour charger OrbitCasino."
+    Write-Host "Redemarre le lobby pour charger OrbitCasino."
 }

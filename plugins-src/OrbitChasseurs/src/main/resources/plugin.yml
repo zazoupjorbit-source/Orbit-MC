@@ -1,0 +1,18 @@
+name: OrbitChasseurs
+version: '0.1.0'
+main: fr.orbit.chasseurs.OrbitChasseurs
+api-version: '1.21'
+description: "CHASSEURS D'ORBITE : combat de vaisseaux en apesanteur dans la salle d'arcade cachée (mêlée contre bots, 2v2, convoi coopératif). Vaisseaux et couleurs à débloquer en jouant, Orbit Coins de jeu seulement."
+authors: [ORBIT]
+softdepend: [OrbitCasino]
+
+commands:
+  chasseurs:
+    description: "Chasseurs d'Orbite : jouer, rejouer, hangar, classement, quitter une partie."
+    usage: "/chasseurs [jouer <melee|duo|convoi> [niveau]|rejouer|quitter|hangar|top [mode]|stats]"
+    aliases: [orbite, chasse]
+
+permissions:
+  orbitchasseurs.admin:
+    description: Régénérer les arènes, reposer le PNJ, voir l'état des parties.
+    default: op

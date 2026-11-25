@@ -1,0 +1,3430 @@
+# ------------------------------------------------------------------
+#  Acte V — Les Cimes de Givre : « Ce que la neige a gardé » (niv. 48 à 60). Hub neutre : Fort Blanc.
+#  Principales Lumière (a5_l_*) et Ombre (a5_o_*), annexes neutres (a5_n_*), contrats répétables du tableau (a5_c_*).
+#  FICHIER GÉNÉRÉ par tools\quetes\gen-quetes.js depuis tools\quetes\zones\acte5-cimes.js : modifier la source, pas ce fichier.
+# ------------------------------------------------------------------
+
+pnj:
+  a5_ysarn:
+    nom: "Ysarn"
+    titre: "Gardien de l'Observatoire"
+    titre-en: "Keeper of the Observatory"
+    couleur: "#CFE6FF"
+    type: MANNEQUIN
+    visage: efe
+    point: a5_ysarn
+    main: SPYGLASS
+    repliques:
+      - "Avant d'être un fort, c'était un observatoire. On y regardait le ciel. Maintenant, on regarde les armées."
+    repliques-en:
+      - "Before it was a fort, it was an observatory. We watched the sky. Now, we watch the armies."
+  a5_hild:
+    nom: "Hild"
+    titre: "Sergente de la Garde blanche"
+    titre-en: "Sergeant of the White Guard"
+    couleur: "#E6EEF5"
+    type: MANNEQUIN
+    visage: alex
+    point: a5_hild
+    main: IRON_SWORD
+    repliques:
+      - "Ici, on ne porte pas de bannière. On porte du blanc. Ça se salit vite."
+    repliques-en:
+      - "Here, we wear no banner. We wear white. It gets dirty fast."
+  a5_tobias:
+    nom: "Tobias"
+    titre: "Guide des cimes"
+    titre-en: "Mountain guide"
+    couleur: "#BFD3C1"
+    type: MANNEQUIN
+    visage: kai
+    point: a5_tobias
+    repliques:
+      - "La montagne ne déteste personne. Elle ne pardonne à personne non plus."
+    repliques-en:
+      - "The mountain hates no one. It forgives no one either."
+  a5_liesse:
+    nom: "Liesse"
+    titre: "Guérisseuse"
+    titre-en: "Healer"
+    couleur: "#F4C7D0"
+    type: MANNEQUIN
+    visage: makena
+    point: a5_liesse
+    repliques:
+      - "Le froid garde tout. Les corps, les souvenirs. Il suffit de savoir réchauffer."
+    repliques-en:
+      - "The cold keeps everything. Bodies, memories. You only need to know how to warm them."
+  a5_rask:
+    nom: "Rask"
+    titre: "Tableau des contrats"
+    titre-en: "Contract board"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: sunny
+    point: a5_rask
+    main: PAPER
+    repliques:
+      - "La guerre fait du travail pour tout le monde. Le mien, c'est de le distribuer."
+    repliques-en:
+      - "War makes work for everyone. Mine is handing it out."
+  a5_eira:
+    nom: "Eira"
+    titre: "Marquée de la Chute"
+    titre-en: "Marked of the Fall"
+    couleur: "#B9E3FF"
+    type: MANNEQUIN
+    visage: noor
+    point: a5_eira
+    repliques:
+      - "J'ai dormi mille ans debout. Je ne me souviens que de ce qui n'est pas à moi."
+    repliques-en:
+      - "I slept a thousand years standing. I remember only what is not mine."
+  a5_morvain:
+    nom: "Morvain"
+    titre: "Chevalier noir"
+    titre-en: "Black Knight"
+    couleur: "#9A8CB8"
+    type: MANNEQUIN
+    visage: zuri
+    point: a5_morvain
+    main: NETHERITE_SWORD
+    repliques:
+      - "Le Colosse ne dort pas. Il attend."
+    repliques-en:
+      - "The Colossus does not sleep. It waits."
+  a5_aldren:
+    nom: "Chevalier Aldren"
+    nom-en: "Sir Aldren"
+    titre: "Camp du Soleil"
+    titre-en: "Sun Camp"
+    couleur: "#F7E7A1"
+    type: MANNEQUIN
+    visage: steve
+    point: a5_aldren
+    main: GOLDEN_SWORD
+    repliques:
+      - "Une guerre, pour une pierre que personne n'a volée. Je le sais. Eux aussi, peut-être."
+    repliques-en:
+      - "A war, over a stone nobody stole. I know it. Perhaps they do too."
+  a5_vesper:
+    nom: "Dame Vesper"
+    nom-en: "Lady Vesper"
+    titre: "Camp de la Nuit"
+    titre-en: "Night Camp"
+    couleur: "#B48CFF"
+    type: MANNEQUIN
+    visage: noor
+    point: a5_vesper
+    main: NETHERITE_SWORD
+    repliques:
+      - "On m'a rendu mon épée, pas ma confiance. C'est déjà ça."
+    repliques-en:
+      - "They gave me back my sword, not their trust. That is something."
+  a5_helis:
+    nom: "Capitaine Hélis"
+    nom-en: "Captain Hélis"
+    titre: "Camp du Soleil"
+    titre-en: "Sun Camp"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: makena
+    point: a5_helis
+    main: GOLDEN_SWORD
+    repliques:
+      - "Le Bastion ne perd pas de guerre. Il en gagne lentement."
+    repliques-en:
+      - "The Bastion does not lose wars. It wins them slowly."
+  a5_sarn:
+    nom: "Sarn"
+    titre: "Camp de la Nuit"
+    titre-en: "Night Camp"
+    couleur: "#B36BFF"
+    type: MANNEQUIN
+    visage: efe
+    point: a5_sarn
+    main: NETHERITE_AXE
+    repliques:
+      - "Le froid, c'est le Néant qui nous salue."
+    repliques-en:
+      - "The cold is the Void greeting us."
+  a5_ermite:
+    nom: "Oswin"
+    titre: "Ermite des cimes"
+    titre-en: "Hermit of the peaks"
+    couleur: "#C8C0B0"
+    type: MANNEQUIN
+    visage: steve
+    point: a5_refuge
+    repliques:
+      - "Quarante ans que je vis ici. La neige est une bonne voisine : elle ne parle jamais."
+    repliques-en:
+      - "Forty years I have lived here. Snow is a good neighbour: it never talks."
+  a5_deserteur:
+    nom: "Bram"
+    titre: "Déserteur"
+    titre-en: "Deserter"
+    couleur: "#9C9C9C"
+    type: MANNEQUIN
+    visage: kai
+    point: a5_deserteur
+    repliques:
+      - "Je ne sais plus de quel camp j'étais. C'est peut-être pour ça que je suis parti."
+    repliques-en:
+      - "I no longer know which side I was on. Perhaps that is why I left."
+  a5_pelerin:
+    nom: "Ansel"
+    titre: "Pèlerin de la Chute"
+    titre-en: "Pilgrim of the Fall"
+    couleur: "#D8D2C0"
+    type: MANNEQUIN
+    visage: ari
+    point: a5_pel_depart
+    repliques:
+      - "Nous montons à la tour des Veilleurs, là où l'on a vu l'Astre tomber. Pas seuls, si possible."
+    repliques-en:
+      - "We are climbing to the Watchers' tower, where the Star was seen to fall. Not alone, if possible."
+  a5_gele:
+    nom: "Marqués dégelés"
+    nom-en: "Thawed Marked"
+    titre: "De la nuit de la Chute"
+    titre-en: "From the night of the Fall"
+    couleur: "#B9E3FF"
+    type: MANNEQUIN
+    visage: efe
+    point: a5_convoi_depart
+    repliques:
+      - "Il fait froid. Il a toujours fait froid."
+    repliques-en:
+      - "It is cold. It has always been cold."
+
+monstres:
+  a5_lame_aube:
+    nom: "Lame du Bastion"
+    type: VINDICATOR
+    pv: 1.25
+    degats: 1.15
+    vitesse: 1
+    arme: GOLDEN_AXE
+  a5_lame_ombre:
+    nom: "Lame de la Citadelle"
+    type: WITHER_SKELETON
+    pv: 1.25
+    degats: 1.15
+    vitesse: 1
+    arme: STONE_SWORD
+  a5_garde_aube:
+    nom: "Sentinelle du Bastion"
+    type: SKELETON
+    pv: 1.1
+    degats: 1.05
+    vitesse: 0.95
+    arme: BOW
+  a5_garde_ombre:
+    nom: "Sentinelle de la Citadelle"
+    type: STRAY
+    pv: 1.1
+    degats: 1.05
+    vitesse: 0.95
+    arme: BOW
+  a5_errant_ancien:
+    nom: "Errant de la Chute"
+    type: STRAY
+    taille: 1.1
+    pv: 1.3
+    degats: 1.15
+    vitesse: 0.95
+  a5_loup_blanc:
+    nom: "Loup des neiges"
+    type: WOLF
+    pv: 1
+    degats: 1.05
+    vitesse: 1.15
+  a5_loup_alpha:
+    nom: "Croc-Blanc, chef de meute"
+    type: WOLF
+    taille: 1.8
+    pv: 7
+    degats: 1.4
+    vitesse: 1.15
+    xp: 10
+    or: 10
+  a5_ours_vieux:
+    nom: "Vieux-Croc"
+    type: POLAR_BEAR
+    taille: 1.6
+    pv: 7
+    degats: 1.4
+    vitesse: 1
+    xp: 8
+    or: 8
+  a5_noye_gele:
+    nom: "Noyé du lac gelé"
+    type: DROWNED
+    pv: 1.2
+    degats: 1.1
+    vitesse: 0.95
+  a5_creux_gele:
+    nom: "Creux gelé"
+    type: ZOMBIE
+    pv: 1.3
+    degats: 1.15
+    vitesse: 0.9
+  a5_gardien_givre:
+    nom: "Gardien de givre des Hôtes"
+    type: WITHER_SKELETON
+    taille: 1.4
+    pv: 1.8
+    degats: 1.35
+    vitesse: 0.9
+    arme: DIAMOND_SWORD
+  a5_colosse:
+    nom: "Le Colosse de Givre"
+    type: RAVAGER
+    taille: 1.5
+    pv: 22
+    degats: 1.6
+    vitesse: 0.85
+    xp: 22
+    or: 18
+
+apparitions:
+  a5_ap_errants_fin:
+    point: a5_errant_fin
+    monstre: a5_errant_ancien
+    niveau: [51, 53]
+    nombre: 5
+    rayon: 8
+  a5_ap_gardes_nuit:
+    point: a5_poste_nuit
+    monstre: a5_garde_ombre
+    niveau: [56, 57]
+    nombre: 5
+    rayon: 10
+  a5_ap_gardes_soleil:
+    point: a5_poste_soleil
+    monstre: a5_garde_aube
+    niveau: [56, 57]
+    nombre: 5
+    rayon: 10
+  a5_ap_patrouille_aube:
+    point: a5_passage
+    monstre: a5_garde_aube
+    niveau: [54, 55]
+    nombre: 3
+    rayon: 6
+  a5_ap_patrouille_ombre:
+    point: a5_passage
+    monstre: a5_garde_ombre
+    niveau: [54, 55]
+    nombre: 3
+    rayon: 6
+  a5_ap_gardiens_antre:
+    point: a5_antre_parvis
+    monstre: a5_gardien_givre
+    niveau: [58, 59]
+    nombre: 5
+    rayon: 10
+  a5_ap_colosse:
+    point: a5_antre_parvis
+    monstre: a5_colosse
+    niveau: 60
+    nombre: 1
+    rayon: 4
+  a5_ap_ours_vieux:
+    point: a5_ours_fin
+    monstre: a5_ours_vieux
+    niveau: 55
+    nombre: 1
+    rayon: 5
+  a5_ap_alpha:
+    point: a5_tanieres
+    monstre: a5_loup_alpha
+    niveau: 58
+    nombre: 1
+    rayon: 5
+  a5_ap_creux_mine:
+    point: a5_mine
+    monstre: a5_creux_gele
+    niveau: [53, 55]
+    nombre: 5
+    rayon: 10
+  a5_ap_creux_chapelle:
+    point: a5_chapelle_neige
+    monstre: a5_creux_gele
+    niveau: [56, 57]
+    nombre: 4
+    rayon: 8
+  a5_ap_noyes_lac:
+    point: a5_lac
+    monstre: a5_noye_gele
+    niveau: [52, 54]
+    nombre: 5
+    rayon: 8
+  a5_ap_lames_ombre_col:
+    point: a5_col_blanc
+    monstre: a5_lame_ombre
+    niveau: [55, 58]
+    nombre: 5
+    rayon: 12
+  a5_ap_lames_aube_col:
+    point: a5_col_blanc
+    monstre: a5_lame_aube
+    niveau: [55, 58]
+    nombre: 5
+    rayon: 12
+
+quetes:
+
+  # ================================================================ PRINCIPALES — LUMIÈRE (a5_l_*) ET OMBRE (a5_o_*)
+
+  a5_l_la_guerre_des_deux_ciels:
+    nom: "La guerre des deux ciels"
+    nom-en: "The War of the Two Skies"
+    faction: lumiere
+    niveau: 48
+    requiert: [a4_l_ce_que_le_sable_a_vu]
+    donneur: a4_aldren
+    resume:
+      - "Le Pacte des Deux Ciels est brisé. La guerre commence dans les Cimes de Givre."
+    resume-en:
+      - "The Pact of the Two Skies is broken. The war begins in the Frost Peaks."
+    offre:
+      - "a4_aldren: Le Bastion a déclaré la guerre à la Citadelle. La Citadelle l'a déclarée le même jour : ils n'ont jamais su faire les choses l'un sans l'autre."
+    offre-en:
+      - "a4_aldren: The Bastion has declared war on the Citadel. The Citadel declared it the same day: they never could do anything without each other."
+    etapes:
+      - type: PARLER
+        texte: "Écouter Aldren"
+        texte-en: "Listen to Aldren"
+        pnj: a4_aldren
+        dialogue:
+          - "a4_aldren: Votre rapport a fait le tour du Bastion. Hélis a marché sur le Tombeau : elle n'y a trouvé que du sable, les Astréens étaient partis avec l'Éclat. Alors le Bastion a accusé la Citadelle."
+        dialogue-en:
+          - "a4_aldren: Your report went round the Bastion. Hélis marched on the Tomb: she found only sand, the Astreans had left with the Shard. So the Bastion accused the Citadel."
+        si: "a4-secret=reveler"
+      - type: PARLER
+        texte: "Écouter Aldren"
+        texte-en: "Listen to Aldren"
+        pnj: a4_aldren
+        dialogue:
+          - "a4_aldren: Le Bastion a cru votre rapport : l'Éclat a disparu, donc quelqu'un l'a volé. Pour la Haute-Prélate, ce quelqu'un ne peut être que Vharos."
+        dialogue-en:
+          - "a4_aldren: The Bastion believed your report: the Shard is gone, so someone stole it. For the High Prelate, that someone can only be Vharos."
+        si: "!a4-secret=reveler"
+      - type: ATTEINDRE
+        texte: "Rejoindre Fort Blanc, dans les Cimes de Givre"
+        texte-en: "Reach Fort Blanc, in the Frost Peaks"
+        point: a5_ancre
+        rayon: 25
+        apres:
+          - "Fort Blanc. Un ancien observatoire changé en forteresse, posé sur le col comme une lanterne. Le seul endroit des Cimes où l'on ne se bat pas."
+          - "En bas, de part et d'autre du col, deux camps fument dans la neige : le soleil d'or à l'ouest, la nuit violette à l'est."
+        apres-en:
+          - "Fort Blanc. An old observatory turned fortress, set on the pass like a lantern. The only place in the Peaks where no one fights."
+          - "Below, on either side of the pass, two camps smoke in the snow: the golden sun to the west, the violet night to the east."
+      - type: PARLER
+        texte: "Se présenter au Gardien de Fort Blanc"
+        texte-en: "Introduce yourself to the Keeper of Fort Blanc"
+        pnj: a5_ysarn
+        dialogue:
+          - "a5_ysarn: Un Marqué. Bienvenue à Fort Blanc. Ici, on regardait le ciel. Maintenant, on regarde les deux armées qui s'installent en bas."
+          - "a5_ysarn: Votre camp vous attend sûrement. Mais d'abord, les règles de la maison."
+        dialogue-en:
+          - "a5_ysarn: One of the Marked. Welcome to Fort Blanc. Here, we used to watch the sky. Now, we watch the two armies settling below."
+          - "a5_ysarn: Your side is surely waiting for you. But first, the house rules."
+    recompenses:
+      xp: 18200
+      or: 1820
+
+  a5_o_la_guerre_des_deux_ciels:
+    nom: "La guerre des deux ciels"
+    nom-en: "The War of the Two Skies"
+    faction: ombre
+    niveau: 48
+    requiert: [a4_o_ce_que_le_sable_a_vu]
+    donneur: a4_vesper
+    resume:
+      - "Le Pacte des Deux Ciels est brisé. La guerre commence dans les Cimes de Givre."
+    resume-en:
+      - "The Pact of the Two Skies is broken. The war begins in the Frost Peaks."
+    offre:
+      - "a4_vesper: La Citadelle a déclaré la guerre à l'Aube. L'Aube a fait de même, le même jour. Même dans la haine, ils se tiennent la main."
+    offre-en:
+      - "a4_vesper: The Citadel has declared war on the Dawn. The Dawn did the same, the same day. Even in hatred, they hold hands."
+    etapes:
+      - type: PARLER
+        texte: "Écouter Vesper"
+        texte-en: "Listen to Vesper"
+        pnj: a4_vesper
+        dialogue:
+          - "a4_vesper: Ton rapport est arrivé jusqu'à Vharos. Sarn a marché sur le Tombeau : du sable, rien d'autre. Les nomades étaient partis avec l'Éclat. Alors la Citadelle a accusé l'Aube."
+        dialogue-en:
+          - "a4_vesper: Your report reached Vharos. Sarn marched on the Tomb: sand, nothing else. The nomads had left with the Shard. So the Citadel accused the Dawn."
+        si: "a4-secret=reveler"
+      - type: PARLER
+        texte: "Écouter Vesper"
+        texte-en: "Listen to Vesper"
+        pnj: a4_vesper
+        dialogue:
+          - "a4_vesper: Vharos a cru ton rapport : l'Éclat a disparu, donc on l'a volé. Pour lui, le voleur ne peut être que Séraphine."
+        dialogue-en:
+          - "a4_vesper: Vharos believed your report: the Shard is gone, so it was stolen. For him, the thief can only be Séraphine."
+        si: "!a4-secret=reveler"
+      - type: ATTEINDRE
+        texte: "Rejoindre Fort Blanc, dans les Cimes de Givre"
+        texte-en: "Reach Fort Blanc, in the Frost Peaks"
+        point: a5_ancre
+        rayon: 25
+        apres:
+          - "Fort Blanc. Un ancien observatoire changé en forteresse, posé sur le col comme une lanterne. Le seul endroit des Cimes où l'on ne se bat pas."
+          - "En bas, de part et d'autre du col, deux camps fument dans la neige : le soleil d'or à l'ouest, la nuit violette à l'est."
+        apres-en:
+          - "Fort Blanc. An old observatory turned fortress, set on the pass like a lantern. The only place in the Peaks where no one fights."
+          - "Below, on either side of the pass, two camps smoke in the snow: the golden sun to the west, the violet night to the east."
+      - type: PARLER
+        texte: "Se présenter au Gardien de Fort Blanc"
+        texte-en: "Introduce yourself to the Keeper of Fort Blanc"
+        pnj: a5_ysarn
+        dialogue:
+          - "a5_ysarn: Un Marqué. Bienvenue à Fort Blanc. Ici, on regardait le ciel. Maintenant, on regarde les deux armées qui s'installent en bas."
+          - "a5_ysarn: Votre camp vous attend sûrement. Mais d'abord, les règles de la maison."
+        dialogue-en:
+          - "a5_ysarn: One of the Marked. Welcome to Fort Blanc. Here, we used to watch the sky. Now, we watch the two armies settling below."
+          - "a5_ysarn: Your side is surely waiting for you. But first, the house rules."
+    recompenses:
+      xp: 18200
+      or: 1820
+
+  a5_l_fort_blanc:
+    nom: "Fort Blanc"
+    faction: lumiere
+    niveau: 49
+    requiert: [a5_l_la_guerre_des_deux_ciels]
+    donneur: a5_ysarn
+    resume:
+      - "Fort Blanc a ses règles, et Hild les fait respecter."
+    resume-en:
+      - "Fort Blanc has its rules, and Hild enforces them."
+    offre:
+      - "a5_ysarn: Touche notre Éclat d'ancrage : si tu tombes dans les cimes, tu reviendras ici. Puis va voir Hild, à la porte. Elle te dira ce qu'on attend des invités."
+    offre-en:
+      - "a5_ysarn: Touch our anchoring Shard: if you fall in the peaks, you will come back here. Then go and see Hild, at the gate. She will tell you what we expect of guests."
+    etapes:
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage de Fort Blanc"
+        texte-en: "Touch Fort Blanc's anchoring Shard"
+        point: a5_ancre
+        rayon: 4
+      - type: CHOIX
+        texte: "Répondre à la sergente Hild"
+        texte-en: "Answer Sergeant Hild"
+        pnj: a5_hild
+        choix: a5-banniere
+        question: "Que faites-vous de votre bannière ?"
+        question-en: "What do you do with your banner?"
+        reponses:
+          - id: deposer
+            texte: "Je la dépose à la porte."
+            texte-en: "I leave it at the gate."
+            reponse:
+              - "a5_hild: Bien. Elle t'attendra. Tu verras : on dort mieux sans."
+            reponse-en:
+              - "a5_hild: Good. It will wait for you. You will see: you sleep better without it."
+            xp: 3790
+          - id: garder
+            texte: "Je la garde. Je suis en guerre."
+            texte-en: "I keep it. I am at war."
+            reponse:
+              - "a5_hild: Comme tu veux. Mais si une flèche la trouve, ne viens pas pleurer sous nos murs."
+            reponse-en:
+              - "a5_hild: As you wish. But if an arrow finds it, do not come crying under our walls."
+            or: 380
+        dialogue:
+          - "a5_hild: Une seule règle à Fort Blanc : pas de couleurs. Les deux armées sont en bas, à portée d'arc. Une bannière, ici, c'est une cible."
+          - "a5_hild: Ceux qui veulent dorment chez nous en blanc. Les autres gardent leurs couleurs, et dorment dehors."
+        dialogue-en:
+          - "a5_hild: One rule at Fort Blanc: no colours. Both armies are below, within bowshot. A banner, here, is a target."
+          - "a5_hild: Those who wish sleep with us in white. The others keep their colours, and sleep outside."
+      - type: PARLER
+        texte: "Revenir voir Ysarn"
+        texte-en: "Return to Ysarn"
+        pnj: a5_ysarn
+        dialogue:
+          - "a5_ysarn: Il y a mille ans, les premiers veilleurs de Fort Blanc ont vu l'Astre se briser. Ils ont vu aussi des gens tomber du ciel, dans la neige, autour du col."
+          - "a5_ysarn: Ils y sont toujours. Debout dans la glace. Liesse, notre guérisseuse, dit qu'ils respirent encore."
+        dialogue-en:
+          - "a5_ysarn: A thousand years ago, the first watchers of Fort Blanc saw the Star break. They also saw people fall from the sky, into the snow, around the pass."
+          - "a5_ysarn: They are still there. Standing in the ice. Liesse, our healer, says they are still breathing."
+    recompenses:
+      xp: 18970
+      or: 1895
+
+  a5_o_fort_blanc:
+    nom: "Fort Blanc"
+    faction: ombre
+    niveau: 49
+    requiert: [a5_o_la_guerre_des_deux_ciels]
+    donneur: a5_ysarn
+    resume:
+      - "Fort Blanc a ses règles, et Hild les fait respecter."
+    resume-en:
+      - "Fort Blanc has its rules, and Hild enforces them."
+    offre:
+      - "a5_ysarn: Touche notre Éclat d'ancrage : si tu tombes dans les cimes, tu reviendras ici. Puis va voir Hild, à la porte. Elle te dira ce qu'on attend des invités."
+    offre-en:
+      - "a5_ysarn: Touch our anchoring Shard: if you fall in the peaks, you will come back here. Then go and see Hild, at the gate. She will tell you what we expect of guests."
+    etapes:
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage de Fort Blanc"
+        texte-en: "Touch Fort Blanc's anchoring Shard"
+        point: a5_ancre
+        rayon: 4
+      - type: CHOIX
+        texte: "Répondre à la sergente Hild"
+        texte-en: "Answer Sergeant Hild"
+        pnj: a5_hild
+        choix: a5-banniere
+        question: "Que faites-vous de votre bannière ?"
+        question-en: "What do you do with your banner?"
+        reponses:
+          - id: deposer
+            texte: "Je la dépose à la porte."
+            texte-en: "I leave it at the gate."
+            reponse:
+              - "a5_hild: Bien. Elle t'attendra. Tu verras : on dort mieux sans."
+            reponse-en:
+              - "a5_hild: Good. It will wait for you. You will see: you sleep better without it."
+            xp: 3790
+          - id: garder
+            texte: "Je la garde. Je suis en guerre."
+            texte-en: "I keep it. I am at war."
+            reponse:
+              - "a5_hild: Comme tu veux. Mais si une flèche la trouve, ne viens pas pleurer sous nos murs."
+            reponse-en:
+              - "a5_hild: As you wish. But if an arrow finds it, do not come crying under our walls."
+            or: 380
+        dialogue:
+          - "a5_hild: Une seule règle à Fort Blanc : pas de couleurs. Les deux armées sont en bas, à portée d'arc. Une bannière, ici, c'est une cible."
+          - "a5_hild: Ceux qui veulent dorment chez nous en blanc. Les autres gardent leurs couleurs, et dorment dehors."
+        dialogue-en:
+          - "a5_hild: One rule at Fort Blanc: no colours. Both armies are below, within bowshot. A banner, here, is a target."
+          - "a5_hild: Those who wish sleep with us in white. The others keep their colours, and sleep outside."
+      - type: PARLER
+        texte: "Revenir voir Ysarn"
+        texte-en: "Return to Ysarn"
+        pnj: a5_ysarn
+        dialogue:
+          - "a5_ysarn: Il y a mille ans, les premiers veilleurs de Fort Blanc ont vu l'Astre se briser. Ils ont vu aussi des gens tomber du ciel, dans la neige, autour du col."
+          - "a5_ysarn: Ils y sont toujours. Debout dans la glace. Liesse, notre guérisseuse, dit qu'ils respirent encore."
+        dialogue-en:
+          - "a5_ysarn: A thousand years ago, the first watchers of Fort Blanc saw the Star break. They also saw people fall from the sky, into the snow, around the pass."
+          - "a5_ysarn: They are still there. Standing in the ice. Liesse, our healer, says they are still breathing."
+    recompenses:
+      xp: 18970
+      or: 1895
+
+  a5_l_le_camp_du_soleil:
+    nom: "Le camp du Soleil"
+    nom-en: "The Sun Camp"
+    faction: lumiere
+    niveau: 50
+    requiert: [a5_l_fort_blanc]
+    donneur: a5_hild
+    resume:
+      - "Le camp de l'Aube s'est dressé à l'ouest du col."
+    resume-en:
+      - "The Dawn camp stands west of the pass."
+    offre:
+      - "a5_hild: Tes amis du soleil campent à l'ouest. Ceux de la nuit campent à l'est. Chaque matin, ils comptent leurs morts, et chaque soir, ils recommencent."
+    offre-en:
+      - "a5_hild: Your sun friends are camped to the west. The night ones to the east. Every morning they count their dead, and every evening they start again."
+    etapes:
+      - type: PARLER
+        texte: "Rejoindre Aldren au camp du Soleil"
+        texte-en: "Join Aldren at the Sun camp"
+        pnj: a5_aldren
+        dialogue:
+          - "a5_aldren: Vous voilà. Hélis commande, moi, j'obéis. Le Bastion m'a pardonné ma lettre en me mettant en première ligne."
+          - "a5_aldren: Ils attaquent la bannière chaque soir. Aidez-nous à la tenir. Après, on parlera."
+        dialogue-en:
+          - "a5_aldren: There you are. Hélis commands, I obey. The Bastion forgave my letter by putting me in the front line."
+          - "a5_aldren: They attack the banner every evening. Help us hold it. Afterwards, we will talk."
+      - type: DEFENSE
+        texte: "Tenir la bannière du Soleil"
+        texte-en: "Hold the Sun banner"
+        point: a5_banniere_soleil
+        monstres: [a5_lame_ombre]
+        nombre: 3
+        vagues: 4
+        pv: 220
+        degats: 6
+        cible: "La bannière du Soleil"
+        cible-en: "The Sun banner"
+        apres:
+          - "La dernière vague redescend vers le col. La bannière tient, criblée, debout."
+        apres-en:
+          - "The last wave goes back down toward the pass. The banner holds, riddled, upright."
+      - type: PARLER
+        texte: "Faire votre rapport à la capitaine Hélis"
+        texte-en: "Report to Captain Hélis"
+        pnj: a5_helis
+        dialogue:
+          - "a5_helis: Vous savez tenir une bannière. Bien. Restez près de Fort Blanc : ce qui dort dans la glace, là-haut, intéresse beaucoup le Bastion."
+        dialogue-en:
+          - "a5_helis: You know how to hold a banner. Good. Stay near Fort Blanc: what sleeps in the ice up there interests the Bastion greatly."
+    recompenses:
+      xp: 19750
+      or: 1975
+
+  a5_o_le_camp_de_la_nuit:
+    nom: "Le camp de la Nuit"
+    nom-en: "The Night Camp"
+    faction: ombre
+    niveau: 50
+    requiert: [a5_o_fort_blanc]
+    donneur: a5_hild
+    resume:
+      - "Le camp de la Citadelle s'est dressé à l'est du col."
+    resume-en:
+      - "The Citadel camp stands east of the pass."
+    offre:
+      - "a5_hild: Tes amis de la nuit campent à l'est. Ceux du soleil, à l'ouest. Chaque matin, ils comptent leurs morts, et chaque soir, ils recommencent."
+    offre-en:
+      - "a5_hild: Your night friends are camped to the east. The sun ones, to the west. Every morning they count their dead, and every evening they start again."
+    etapes:
+      - type: PARLER
+        texte: "Rejoindre Vesper au camp de la Nuit"
+        texte-en: "Join Vesper at the Night camp"
+        pnj: a5_vesper
+        dialogue:
+          - "a5_vesper: Tu es venu. Sarn commande, moi, j'obéis. La Citadelle m'a pardonné ma lettre en me donnant le poste le plus froid."
+          - "a5_vesper: Ils montent sur la bannière chaque soir. Aide-nous à la tenir. On parlera après."
+        dialogue-en:
+          - "a5_vesper: You came. Sarn commands, I obey. The Citadel forgave my letter by giving me the coldest post."
+          - "a5_vesper: They come up at the banner every evening. Help us hold it. We will talk afterwards."
+      - type: DEFENSE
+        texte: "Tenir la bannière de la Nuit"
+        texte-en: "Hold the Night banner"
+        point: a5_banniere_nuit
+        monstres: [a5_lame_aube]
+        nombre: 3
+        vagues: 4
+        pv: 220
+        degats: 6
+        cible: "La bannière de la Nuit"
+        cible-en: "The Night banner"
+        apres:
+          - "La dernière vague redescend vers le col. La bannière tient, criblée, debout."
+        apres-en:
+          - "The last wave goes back down toward the pass. The banner holds, riddled, upright."
+      - type: PARLER
+        texte: "Faire ton rapport à Sarn"
+        texte-en: "Report to Sarn"
+        pnj: a5_sarn
+        dialogue:
+          - "a5_sarn: Tu tiens debout dans le froid. Bien. Reste près de Fort Blanc : ce que la glace garde là-haut, Vharos le veut."
+        dialogue-en:
+          - "a5_sarn: You stay standing in the cold. Good. Stay near Fort Blanc: what the ice keeps up there, Vharos wants."
+    recompenses:
+      xp: 19750
+      or: 1975
+
+  a5_l_le_premier_gele:
+    nom: "Le premier gelé"
+    nom-en: "The First Frozen"
+    faction: lumiere
+    niveau: 51
+    requiert: [a5_l_le_camp_du_soleil]
+    donneur: a5_liesse
+    resume:
+      - "Liesse a trouvé quelqu'un debout dans la glace."
+    resume-en:
+      - "Liesse has found someone standing in the ice."
+    offre:
+      - "a5_liesse: Au glacier, au nord du fort, une femme debout dans la glace. Sa Marque brille encore. J'ai besoin de quelqu'un pour garder le feu pendant que je la réchauffe. Le froid se défend."
+    offre-en:
+      - "a5_liesse: At the glacier, north of the fort, a woman standing in the ice. Her Mark still shines. I need someone to keep the fire going while I warm her. The cold fights back."
+    etapes:
+      - type: INTERAGIR
+        texte: "Examiner la femme dans la glace"
+        texte-en: "Examine the woman in the ice"
+        point: a5_glacier
+        rayon: 6
+        apres:
+          - "Elle est debout, les yeux ouverts. Ses vêtements ont mille ans. Sous la glace, sur son cou, une Marque luit, faiblement, comme la tienne."
+        apres-en:
+          - "She is standing, eyes open. Her clothes are a thousand years old. Under the ice, on her neck, a Mark glows faintly, like yours."
+      - type: SURVIE
+        texte: "Garder le feu pendant le dégel"
+        texte-en: "Keep the fire going during the thaw"
+        point: a5_blizzard
+        rayon: 14
+        duree: 50
+        mode: resserre
+        rayon-fin: 5
+        degats: 5
+        monstres: [a5_errant_ancien]
+        nombre: 2
+        intervalle: 15
+        apres:
+          - "La glace craque. La femme tombe à genoux, respire, tousse. Liesse l'enroule dans une couverture et l'emmène vers le fort."
+        apres-en:
+          - "The ice cracks. The woman falls to her knees, breathes, coughs. Liesse wraps her in a blanket and leads her toward the fort."
+      - type: PARLER
+        texte: "Parler à la dégelée, à Fort Blanc"
+        texte-en: "Talk to the thawed woman, at Fort Blanc"
+        pnj: a5_eira
+        dialogue:
+          - "a5_eira: Liesse m'a appelée Eira. Je ne sais pas si c'était mon nom. Je ne sais rien de moi."
+          - "a5_eira: Mais je me souviens d'avoir été très haut. De voir tout le continent d'un seul regard. Et d'avoir froid, d'un coup, partout."
+          - "a5_eira: Ce n'est pas mon souvenir. Je le sais. Il est trop grand pour moi."
+        dialogue-en:
+          - "a5_eira: Liesse called me Eira. I do not know if it was my name. I know nothing of myself."
+          - "a5_eira: But I remember being very high. Seeing the whole continent at a single glance. And being cold, suddenly, everywhere."
+          - "a5_eira: It is not my memory. I know it. It is too big for me."
+    recompenses:
+      xp: 20550
+      or: 2055
+
+  a5_o_le_premier_gele:
+    nom: "Le premier gelé"
+    nom-en: "The First Frozen"
+    faction: ombre
+    niveau: 51
+    requiert: [a5_o_le_camp_de_la_nuit]
+    donneur: a5_liesse
+    resume:
+      - "Liesse a trouvé quelqu'un debout dans la glace."
+    resume-en:
+      - "Liesse has found someone standing in the ice."
+    offre:
+      - "a5_liesse: Au glacier, au nord du fort, une femme debout dans la glace. Sa Marque brille encore. J'ai besoin de quelqu'un pour garder le feu pendant que je la réchauffe. Le froid se défend."
+    offre-en:
+      - "a5_liesse: At the glacier, north of the fort, a woman standing in the ice. Her Mark still shines. I need someone to keep the fire going while I warm her. The cold fights back."
+    etapes:
+      - type: INTERAGIR
+        texte: "Examiner la femme dans la glace"
+        texte-en: "Examine the woman in the ice"
+        point: a5_glacier
+        rayon: 6
+        apres:
+          - "Elle est debout, les yeux ouverts. Ses vêtements ont mille ans. Sous la glace, sur son cou, une Marque luit, faiblement, comme la tienne."
+        apres-en:
+          - "She is standing, eyes open. Her clothes are a thousand years old. Under the ice, on her neck, a Mark glows faintly, like yours."
+      - type: SURVIE
+        texte: "Garder le feu pendant le dégel"
+        texte-en: "Keep the fire going during the thaw"
+        point: a5_blizzard
+        rayon: 14
+        duree: 50
+        mode: resserre
+        rayon-fin: 5
+        degats: 5
+        monstres: [a5_errant_ancien]
+        nombre: 2
+        intervalle: 15
+        apres:
+          - "La glace craque. La femme tombe à genoux, respire, tousse. Liesse l'enroule dans une couverture et l'emmène vers le fort."
+        apres-en:
+          - "The ice cracks. The woman falls to her knees, breathes, coughs. Liesse wraps her in a blanket and leads her toward the fort."
+      - type: PARLER
+        texte: "Parler à la dégelée, à Fort Blanc"
+        texte-en: "Talk to the thawed woman, at Fort Blanc"
+        pnj: a5_eira
+        dialogue:
+          - "a5_eira: Liesse m'a appelée Eira. Je ne sais pas si c'était mon nom. Je ne sais rien de moi."
+          - "a5_eira: Mais je me souviens d'avoir été très haut. De voir tout le continent d'un seul regard. Et d'avoir froid, d'un coup, partout."
+          - "a5_eira: Ce n'est pas mon souvenir. Je le sais. Il est trop grand pour moi."
+        dialogue-en:
+          - "a5_eira: Liesse called me Eira. I do not know if it was my name. I know nothing of myself."
+          - "a5_eira: But I remember being very high. Seeing the whole continent at a single glance. And being cold, suddenly, everywhere."
+          - "a5_eira: It is not my memory. I know it. It is too big for me."
+    recompenses:
+      xp: 20550
+      or: 2055
+
+  a5_l_les_errants:
+    nom: "Les Errants"
+    nom-en: "The Wanderers"
+    faction: lumiere
+    niveau: 52
+    requiert: [a5_l_le_premier_gele]
+    donneur: a5_liesse
+    resume:
+      - "Des Errants rôdent autour du glacier."
+    resume-en:
+      - "Wanderers prowl around the glacier."
+    offre:
+      - "a5_liesse: Les Errants ont suivi Eira jusqu'au fort. Ce sont des gelés eux aussi, mais ils se sont réveillés seuls. Suis leurs traces. Je veux savoir ce qu'ils sont devenus."
+    offre-en:
+      - "a5_liesse: The Wanderers followed Eira to the fort. They are frozen ones too, but they woke alone. Follow their tracks. I want to know what they have become."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les traces des Errants"
+        texte-en: "Follow the Wanderers' tracks"
+        traces: [a5_errant_1, a5_errant_2, a5_errant_3, a5_errant_fin]
+        apres:
+          - "Les traces mènent à un creux sous un surplomb. Ils sont là, debout, tournés vers le ciel, à attendre."
+        apres-en:
+          - "The tracks lead to a hollow under an overhang. They are there, standing, turned toward the sky, waiting."
+      - type: TUER
+        texte: "Libérer les Errants de la Chute"
+        texte-en: "Free the Wanderers of the Fall"
+        monstres: [a5_errant_ancien]
+        nombre: 6
+        point: a5_errant_fin
+      - type: INTERAGIR
+        texte: "Examiner un Errant tombé"
+        texte-en: "Examine a fallen Wanderer"
+        point: a5_errant_fin
+        rayon: 6
+        apres:
+          - "Sa Marque est éteinte. Pas pâle : éteinte. Autour de lui, la neige est plus froide qu'ailleurs, comme si quelque chose avait bu sa lumière."
+        apres-en:
+          - "His Mark is out. Not pale: out. Around him, the snow is colder than elsewhere, as if something had drunk his light."
+      - type: PARLER
+        texte: "Revenir voir Liesse"
+        texte-en: "Return to Liesse"
+        pnj: a5_liesse
+        dialogue:
+          - "a5_liesse: Éteinte. Ils ont dégelé trop vite, sans feu, sans personne. Leur lumière s'est échappée en route."
+          - "a5_liesse: Et quelque chose l'a bue. Ce froid-là, je le connais. C'est celui qui descend du ciel déchiré."
+        dialogue-en:
+          - "a5_liesse: Out. They thawed too fast, without fire, without anyone. Their light escaped on the way."
+          - "a5_liesse: And something drank it. That cold, I know it. It is the one that comes down from the torn sky."
+    recompenses:
+      xp: 21360
+      or: 2135
+
+  a5_o_les_errants:
+    nom: "Les Errants"
+    nom-en: "The Wanderers"
+    faction: ombre
+    niveau: 52
+    requiert: [a5_o_le_premier_gele]
+    donneur: a5_liesse
+    resume:
+      - "Des Errants rôdent autour du glacier."
+    resume-en:
+      - "Wanderers prowl around the glacier."
+    offre:
+      - "a5_liesse: Les Errants ont suivi Eira jusqu'au fort. Ce sont des gelés eux aussi, mais ils se sont réveillés seuls. Suis leurs traces. Je veux savoir ce qu'ils sont devenus."
+    offre-en:
+      - "a5_liesse: The Wanderers followed Eira to the fort. They are frozen ones too, but they woke alone. Follow their tracks. I want to know what they have become."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les traces des Errants"
+        texte-en: "Follow the Wanderers' tracks"
+        traces: [a5_errant_1, a5_errant_2, a5_errant_3, a5_errant_fin]
+        apres:
+          - "Les traces mènent à un creux sous un surplomb. Ils sont là, debout, tournés vers le ciel, à attendre."
+        apres-en:
+          - "The tracks lead to a hollow under an overhang. They are there, standing, turned toward the sky, waiting."
+      - type: TUER
+        texte: "Libérer les Errants de la Chute"
+        texte-en: "Free the Wanderers of the Fall"
+        monstres: [a5_errant_ancien]
+        nombre: 6
+        point: a5_errant_fin
+      - type: INTERAGIR
+        texte: "Examiner un Errant tombé"
+        texte-en: "Examine a fallen Wanderer"
+        point: a5_errant_fin
+        rayon: 6
+        apres:
+          - "Sa Marque est éteinte. Pas pâle : éteinte. Autour de lui, la neige est plus froide qu'ailleurs, comme si quelque chose avait bu sa lumière."
+        apres-en:
+          - "His Mark is out. Not pale: out. Around him, the snow is colder than elsewhere, as if something had drunk his light."
+      - type: PARLER
+        texte: "Revenir voir Liesse"
+        texte-en: "Return to Liesse"
+        pnj: a5_liesse
+        dialogue:
+          - "a5_liesse: Éteinte. Ils ont dégelé trop vite, sans feu, sans personne. Leur lumière s'est échappée en route."
+          - "a5_liesse: Et quelque chose l'a bue. Ce froid-là, je le connais. C'est celui qui descend du ciel déchiré."
+        dialogue-en:
+          - "a5_liesse: Out. They thawed too fast, without fire, without anyone. Their light escaped on the way."
+          - "a5_liesse: And something drank it. That cold, I know it. It is the one that comes down from the torn sky."
+    recompenses:
+      xp: 21360
+      or: 2135
+
+  a5_l_les_pages_du_ciel:
+    nom: "Les pages du ciel"
+    nom-en: "The Pages of the Sky"
+    faction: lumiere
+    niveau: 53
+    requiert: [a5_l_les_errants]
+    donneur: a5_liesse
+    resume:
+      - "Trois autres Marqués dorment dans la glace."
+    resume-en:
+      - "Three more Marked sleep in the ice."
+    offre:
+      - "a5_liesse: Il en reste trois, plus haut. Je ne peux pas tous les dégeler. Mais si tu poses la main sur la glace, ils te donneront ce qu'ils gardent. Eira dit que c'est ce qu'ils attendent."
+    offre-en:
+      - "a5_liesse: There are three left, higher up. I cannot thaw them all. But if you lay your hand on the ice, they will give you what they keep. Eira says that is what they are waiting for."
+    etapes:
+      - type: ENQUETE
+        texte: "Toucher la glace des trois gelés"
+        texte-en: "Touch the ice of the three frozen"
+        pnj: a5_liesse
+        indices:
+          - point: a5_gele_1
+            texte: "Le vieil homme dans la glace"
+            texte-en: "The old man in the ice"
+            apres:
+              - "Sous ta main, la glace devient chaude. Un souvenir : tu descends doucement vers un désert ocre, et des gens chantent, les bras ouverts. Tu es l'invité."
+            apres-en:
+              - "Under your hand, the ice grows warm. A memory: you descend gently toward an ochre desert, and people sing, arms open. You are the guest."
+          - point: a5_gele_2
+            texte: "La soldate en armure dorée"
+            texte-en: "The soldier in golden armour"
+            apres:
+              - "Un souvenir : des mains se tendent vers toi, pleines de lumière tressée. Des chaînes. Tu as peur, pour la première fois de ta longue vie."
+            apres-en:
+              - "A memory: hands reach out toward you, full of braided light. Chains. You are afraid, for the first time in your long life."
+          - point: a5_gele_3
+            texte: "L'enfant dans la glace"
+            texte-en: "The child in the ice"
+            apres:
+              - "Un souvenir : tu choisis. Tu ne te brises pas sous les chaînes. Tu te brises pour leur échapper, en mille morceaux, et chaque morceau tombe en emportant un peu de toi."
+            apres-en:
+              - "A memory: you choose. You do not break under the chains. You break to escape them, into a thousand pieces, and each piece falls carrying a little of you."
+        dialogue:
+          - "joueur: L'Astre descendait chez les Hôtes. On a voulu l'enchaîner. Il s'est brisé pour s'enfuir. Ce sont ses souvenirs, pas les leurs."
+          - "a5_liesse: Alors c'est ça, la Marque. L'Éclat prend tes souvenirs, et il laisse à la place une page du sien."
+          - "a5_liesse: Chaque Marqué porte une page de la mémoire de l'Astre. Toi aussi. Celui qui vous rassemble tous peut lire l'Astre en entier… ou apprendre à le dresser."
+          - "a5_liesse: Voilà pourquoi ton camp veut les Marqués. Voilà pourquoi l'autre aussi."
+        dialogue-en:
+          - "joueur: The Star used to come down among the Hosts. Someone tried to chain it. It broke to get away. These are its memories, not theirs."
+          - "a5_liesse: So that is the Mark. The Shard takes your memories, and leaves in their place a page of its own."
+          - "a5_liesse: Every Marked carries a page of the Star's memory. You too. Whoever gathers you all can read the Star whole… or learn to tame it."
+          - "a5_liesse: That is why your side wants the Marked. That is why the other one does too."
+    recompenses:
+      xp: 22190
+      or: 2220
+
+  a5_o_les_pages_du_ciel:
+    nom: "Les pages du ciel"
+    nom-en: "The Pages of the Sky"
+    faction: ombre
+    niveau: 53
+    requiert: [a5_o_les_errants]
+    donneur: a5_liesse
+    resume:
+      - "Trois autres Marqués dorment dans la glace."
+    resume-en:
+      - "Three more Marked sleep in the ice."
+    offre:
+      - "a5_liesse: Il en reste trois, plus haut. Je ne peux pas tous les dégeler. Mais si tu poses la main sur la glace, ils te donneront ce qu'ils gardent. Eira dit que c'est ce qu'ils attendent."
+    offre-en:
+      - "a5_liesse: There are three left, higher up. I cannot thaw them all. But if you lay your hand on the ice, they will give you what they keep. Eira says that is what they are waiting for."
+    etapes:
+      - type: ENQUETE
+        texte: "Toucher la glace des trois gelés"
+        texte-en: "Touch the ice of the three frozen"
+        pnj: a5_liesse
+        indices:
+          - point: a5_gele_1
+            texte: "Le vieil homme dans la glace"
+            texte-en: "The old man in the ice"
+            apres:
+              - "Sous ta main, la glace devient chaude. Un souvenir : tu descends doucement vers un désert ocre, et des gens chantent, les bras ouverts. Tu es l'invité."
+            apres-en:
+              - "Under your hand, the ice grows warm. A memory: you descend gently toward an ochre desert, and people sing, arms open. You are the guest."
+          - point: a5_gele_2
+            texte: "La soldate en armure dorée"
+            texte-en: "The soldier in golden armour"
+            apres:
+              - "Un souvenir : des mains se tendent vers toi, pleines de lumière tressée. Des chaînes. Tu as peur, pour la première fois de ta longue vie."
+            apres-en:
+              - "A memory: hands reach out toward you, full of braided light. Chains. You are afraid, for the first time in your long life."
+          - point: a5_gele_3
+            texte: "L'enfant dans la glace"
+            texte-en: "The child in the ice"
+            apres:
+              - "Un souvenir : tu choisis. Tu ne te brises pas sous les chaînes. Tu te brises pour leur échapper, en mille morceaux, et chaque morceau tombe en emportant un peu de toi."
+            apres-en:
+              - "A memory: you choose. You do not break under the chains. You break to escape them, into a thousand pieces, and each piece falls carrying a little of you."
+        dialogue:
+          - "joueur: L'Astre descendait chez les Hôtes. On a voulu l'enchaîner. Il s'est brisé pour s'enfuir. Ce sont ses souvenirs, pas les leurs."
+          - "a5_liesse: Alors c'est ça, la Marque. L'Éclat prend tes souvenirs, et il laisse à la place une page du sien."
+          - "a5_liesse: Chaque Marqué porte une page de la mémoire de l'Astre. Toi aussi. Celui qui vous rassemble tous peut lire l'Astre en entier… ou apprendre à le dresser."
+          - "a5_liesse: Voilà pourquoi ton camp veut les Marqués. Voilà pourquoi l'autre aussi."
+        dialogue-en:
+          - "joueur: The Star used to come down among the Hosts. Someone tried to chain it. It broke to get away. These are its memories, not theirs."
+          - "a5_liesse: So that is the Mark. The Shard takes your memories, and leaves in their place a page of its own."
+          - "a5_liesse: Every Marked carries a page of the Star's memory. You too. Whoever gathers you all can read the Star whole… or learn to tame it."
+          - "a5_liesse: That is why your side wants the Marked. That is why the other one does too."
+    recompenses:
+      xp: 22190
+      or: 2220
+
+  a5_l_les_ordres_de_guerre:
+    nom: "Les ordres de guerre"
+    nom-en: "Orders of War"
+    faction: lumiere
+    niveau: 54
+    requiert: [a5_l_les_pages_du_ciel]
+    donneur: a5_aldren
+    resume:
+      - "Un ordre scellé de la Haute-Prélate est arrivé au camp."
+    resume-en:
+      - "A sealed order from the High Prelate has reached the camp."
+    offre:
+      - "a5_aldren: Un ordre de la Haute-Prélate, scellé à l'or. Il vous concerne. Je préférerais qu'il ne vous concerne pas."
+    offre-en:
+      - "a5_aldren: An order from the High Prelate, sealed in gold. It concerns you. I would rather it did not."
+    etapes:
+      - type: CHOIX
+        texte: "Décider du sort des Marqués dégelés"
+        texte-en: "Decide the fate of the thawed Marked"
+        pnj: a5_aldren
+        choix: a5-geles
+        question: "Que faites-vous des dégelés ?"
+        question-en: "What do you do with the thawed?"
+        reponses:
+          - id: livrer
+            texte: "Les ordres sont les ordres. Je les conduirai au camp."
+            texte-en: "Orders are orders. I will bring them to the camp."
+            reponse:
+              - "a5_aldren: … Oui. C'est votre devoir, et c'était le mien avant. Faites au moins qu'ils arrivent vivants."
+            reponse-en:
+              - "a5_aldren: … Yes. It is your duty, and it used to be mine. At least make sure they arrive alive."
+            or: 690
+          - id: cacher
+            texte: "Personne ne les trouvera. Ils resteront à Fort Blanc."
+            texte-en: "No one will find them. They will stay at Fort Blanc."
+            reponse:
+              - "a5_aldren: Je n'ai rien entendu. Et si on me le demande, je n'ai rien entendu deux fois."
+            reponse-en:
+              - "a5_aldren: I heard nothing. And if anyone asks, I heard nothing twice."
+            xp: 6910
+        dialogue:
+          - "a5_aldren: « Rassemblez les Marqués dégelés des cimes et conduisez-les au camp. Ils partiront pour le Cloître Blanc. — S. »"
+          - "a5_aldren: Le Cloître. Vous savez ce qu'on y fait. On chante leur lumière hors d'eux, dans des fioles."
+        dialogue-en:
+          - "a5_aldren: « Gather the thawed Marked of the peaks and bring them to the camp. They will leave for the White Cloister. — S. »"
+          - "a5_aldren: The Cloister. You know what is done there. Their light is sung out of them, into vials."
+      - type: PARLER
+        texte: "Prévenir Liesse"
+        texte-en: "Warn Liesse"
+        pnj: a5_liesse
+        dialogue:
+          - "a5_liesse: Au camp. Pour le Cloître ou pour le Puits, c'est la même chose au bout. Je ne t'aiderai pas à les porter."
+          - "a5_liesse: … Mais je ne les laisserai pas partir seuls dans la neige. Reviens me voir quand tu seras prêt."
+        dialogue-en:
+          - "a5_liesse: To the camp. For the Cloister or for the Well, it is the same thing in the end. I will not help you carry them."
+          - "a5_liesse: … But I will not let them go alone into the snow. Come back to me when you are ready."
+        si: "a5-geles=livrer"
+      - type: PARLER
+        texte: "Prévenir Liesse"
+        texte-en: "Warn Liesse"
+        pnj: a5_liesse
+        dialogue:
+          - "a5_liesse: Tu les caches ? Alors il faudra passer devant les patrouilles de ton propre camp. Elles fouillent déjà le glacier."
+          - "a5_liesse: Reviens me voir quand tu seras prêt. Je les tiendrai au chaud jusque-là."
+        dialogue-en:
+          - "a5_liesse: You are hiding them? Then you will have to get past your own side's patrols. They are already searching the glacier."
+          - "a5_liesse: Come back to me when you are ready. I will keep them warm until then."
+        si: "a5-geles=cacher"
+    recompenses:
+      xp: 23040
+      or: 2305
+
+  a5_o_les_ordres_de_guerre:
+    nom: "Les ordres de guerre"
+    nom-en: "Orders of War"
+    faction: ombre
+    niveau: 54
+    requiert: [a5_o_les_pages_du_ciel]
+    donneur: a5_vesper
+    resume:
+      - "Un ordre scellé de Vharos est arrivé au camp."
+    resume-en:
+      - "A sealed order from Vharos has reached the camp."
+    offre:
+      - "a5_vesper: Un ordre de Vharos, scellé de noir. Il te concerne. J'aurais préféré le brûler sans le lire."
+    offre-en:
+      - "a5_vesper: An order from Vharos, sealed in black. It concerns you. I would rather have burnt it unread."
+    etapes:
+      - type: CHOIX
+        texte: "Décider du sort des Marqués dégelés"
+        texte-en: "Decide the fate of the thawed Marked"
+        pnj: a5_vesper
+        choix: a5-geles
+        question: "Que faites-vous des dégelés ?"
+        question-en: "What do you do with the thawed?"
+        reponses:
+          - id: livrer
+            texte: "Les ordres sont les ordres. Je les conduirai au camp."
+            texte-en: "Orders are orders. I will bring them to the camp."
+            reponse:
+              - "a5_vesper: … Bien. C'est ce qu'on attend de nous. Fais au moins qu'ils arrivent entiers."
+            reponse-en:
+              - "a5_vesper: … Fine. It is what is expected of us. At least make sure they arrive whole."
+            or: 690
+          - id: cacher
+            texte: "Personne ne les trouvera. Ils resteront à Fort Blanc."
+            texte-en: "No one will find them. They will stay at Fort Blanc."
+            reponse:
+              - "a5_vesper: Je n'ai rien entendu. Sarn non plus, s'il tient à ses dents."
+            reponse-en:
+              - "a5_vesper: I heard nothing. Neither did Sarn, if he values his teeth."
+            xp: 6910
+        dialogue:
+          - "a5_vesper: « Rassemblez les Marqués dégelés des cimes et conduisez-les au camp. Ils partiront pour le Puits du Néant. — V. »"
+          - "a5_vesper: Le Puits. Tu sais ce qu'on y fait. Ceux qui en reviennent sont des Creux."
+        dialogue-en:
+          - "a5_vesper: « Gather the thawed Marked of the peaks and bring them to the camp. They will leave for the Well of the Void. — V. »"
+          - "a5_vesper: The Well. You know what is done there. Those who come back are Hollow."
+      - type: PARLER
+        texte: "Prévenir Liesse"
+        texte-en: "Warn Liesse"
+        pnj: a5_liesse
+        dialogue:
+          - "a5_liesse: Au camp. Pour le Cloître ou pour le Puits, c'est la même chose au bout. Je ne t'aiderai pas à les porter."
+          - "a5_liesse: … Mais je ne les laisserai pas partir seuls dans la neige. Reviens me voir quand tu seras prêt."
+        dialogue-en:
+          - "a5_liesse: To the camp. For the Cloister or for the Well, it is the same thing in the end. I will not help you carry them."
+          - "a5_liesse: … But I will not let them go alone into the snow. Come back to me when you are ready."
+        si: "a5-geles=livrer"
+      - type: PARLER
+        texte: "Prévenir Liesse"
+        texte-en: "Warn Liesse"
+        pnj: a5_liesse
+        dialogue:
+          - "a5_liesse: Tu les caches ? Alors il faudra passer devant les patrouilles de ton propre camp. Elles fouillent déjà le glacier."
+          - "a5_liesse: Reviens me voir quand tu seras prêt. Je les tiendrai au chaud jusque-là."
+        dialogue-en:
+          - "a5_liesse: You are hiding them? Then you will have to get past your own side's patrols. They are already searching the glacier."
+          - "a5_liesse: Come back to me when you are ready. I will keep them warm until then."
+        si: "a5-geles=cacher"
+    recompenses:
+      xp: 23040
+      or: 2305
+
+  a5_l_le_convoi_des_geles:
+    nom: "Le convoi des gelés"
+    nom-en: "The Convoy of the Frozen"
+    faction: lumiere
+    niveau: 55
+    requiert: [a5_l_les_ordres_de_guerre]
+    donneur: a5_liesse
+    resume:
+      - "Les Marqués dégelés attendent au pied du glacier."
+    resume-en:
+      - "The thawed Marked are waiting at the foot of the glacier."
+    offre:
+      - "a5_liesse: Ils attendent au pied du glacier, emmitouflés. Ils marchent lentement. Ne les laisse pas seuls."
+    offre-en:
+      - "a5_liesse: They are waiting at the foot of the glacier, wrapped up. They walk slowly. Do not leave them alone."
+    etapes:
+      - type: ESCORTE
+        texte: "Conduire les dégelés au camp du Soleil"
+        texte-en: "Lead the thawed to the Sun camp"
+        pnj: a5_gele
+        chemin: [a5_convoi_ouest, a5_convoi_soleil]
+        monstres: [a5_lame_ombre]
+        nombre: 3
+        vagues: 3
+        pv: 160
+        vitesse: 2
+        degats: 6
+        apres:
+          - "a5_gele: C'est ici, la chaleur ? On nous avait promis la chaleur."
+        apres-en:
+          - "a5_gele: Is this the warmth? We were promised warmth."
+        si: "a5-geles=livrer"
+      - type: PARLER
+        texte: "Remettre les dégelés à la capitaine Hélis"
+        texte-en: "Hand the thawed over to Captain Hélis"
+        pnj: a5_helis
+        dialogue:
+          - "a5_helis: Trois Marqués de la Chute. La Haute-Prélate sera contente. Vous serez cité au Bastion."
+          - "Derrière elle, Aldren regarde les dégelés monter dans un chariot fermé. Il ne dit rien. Il ne te regarde pas."
+        dialogue-en:
+          - "a5_helis: Three Marked of the Fall. The High Prelate will be pleased. You will be mentioned at the Bastion."
+          - "Behind her, Aldren watches the thawed climb into a closed wagon. He says nothing. He does not look at you."
+        si: "a5-geles=livrer"
+      - type: INFILTRER
+        texte: "Faire passer les dégelés derrière les patrouilles de votre camp"
+        texte-en: "Get the thawed past your own side's patrols"
+        point: a5_convoi_1
+        depart: a5_convoi_depart
+        monstres: [a5_garde_aube]
+        vue: 10
+        rayon: 4
+        apres:
+          - "Les patrouilles regardent le glacier. Personne ne regarde le petit groupe qui se glisse derrière elles, vers les murs blancs du fort."
+        apres-en:
+          - "The patrols watch the glacier. Nobody watches the small group slipping behind them, toward the fort's white walls."
+        si: "a5-geles=cacher"
+      - type: PARLER
+        texte: "Revenir voir Liesse"
+        texte-en: "Return to Liesse"
+        pnj: a5_liesse
+        dialogue:
+          - "a5_liesse: Ils sont à l'abri, dans la cave de l'observatoire. Ysarn dit qu'il n'a rien vu. Hild dit qu'elle n'a rien vu non plus."
+          - "a5_liesse: Fort Blanc ne porte pas de bannière. Il paraît que ça veut dire quelque chose, finalement."
+        dialogue-en:
+          - "a5_liesse: They are safe, in the observatory cellar. Ysarn says he saw nothing. Hild says she saw nothing either."
+          - "a5_liesse: Fort Blanc carries no banner. It seems that means something, after all."
+        si: "a5-geles=cacher"
+    recompenses:
+      xp: 23900
+      or: 2390
+
+  a5_o_le_convoi_des_geles:
+    nom: "Le convoi des gelés"
+    nom-en: "The Convoy of the Frozen"
+    faction: ombre
+    niveau: 55
+    requiert: [a5_o_les_ordres_de_guerre]
+    donneur: a5_liesse
+    resume:
+      - "Les Marqués dégelés attendent au pied du glacier."
+    resume-en:
+      - "The thawed Marked are waiting at the foot of the glacier."
+    offre:
+      - "a5_liesse: Ils attendent au pied du glacier, emmitouflés. Ils marchent lentement. Ne les laisse pas seuls."
+    offre-en:
+      - "a5_liesse: They are waiting at the foot of the glacier, wrapped up. They walk slowly. Do not leave them alone."
+    etapes:
+      - type: ESCORTE
+        texte: "Conduire les dégelés au camp de la Nuit"
+        texte-en: "Lead the thawed to the Night camp"
+        pnj: a5_gele
+        chemin: [a5_convoi_est, a5_convoi_nuit]
+        monstres: [a5_lame_aube]
+        nombre: 3
+        vagues: 3
+        pv: 160
+        vitesse: 2
+        degats: 6
+        apres:
+          - "a5_gele: C'est ici, la chaleur ? On nous avait promis la chaleur."
+        apres-en:
+          - "a5_gele: Is this the warmth? We were promised warmth."
+        si: "a5-geles=livrer"
+      - type: PARLER
+        texte: "Remettre les dégelés à Sarn"
+        texte-en: "Hand the thawed over to Sarn"
+        pnj: a5_sarn
+        dialogue:
+          - "a5_sarn: Trois Marqués de la Chute. Vharos boira leur froid avec plaisir. Ton nom remontera jusqu'à lui."
+          - "Derrière lui, Vesper regarde les dégelés monter dans un chariot noir. Elle serre la mâchoire. Elle ne te regarde pas."
+        dialogue-en:
+          - "a5_sarn: Three Marked of the Fall. Vharos will drink their cold with pleasure. Your name will reach him."
+          - "Behind him, Vesper watches the thawed climb into a black wagon. She clenches her jaw. She does not look at you."
+        si: "a5-geles=livrer"
+      - type: INFILTRER
+        texte: "Faire passer les dégelés derrière les patrouilles de votre camp"
+        texte-en: "Get the thawed past your own side's patrols"
+        point: a5_convoi_1
+        depart: a5_convoi_depart
+        monstres: [a5_garde_ombre]
+        vue: 10
+        rayon: 4
+        apres:
+          - "Les patrouilles regardent le glacier. Personne ne regarde le petit groupe qui se glisse derrière elles, vers les murs blancs du fort."
+        apres-en:
+          - "The patrols watch the glacier. Nobody watches the small group slipping behind them, toward the fort's white walls."
+        si: "a5-geles=cacher"
+      - type: PARLER
+        texte: "Revenir voir Liesse"
+        texte-en: "Return to Liesse"
+        pnj: a5_liesse
+        dialogue:
+          - "a5_liesse: Ils sont à l'abri, dans la cave de l'observatoire. Ysarn dit qu'il n'a rien vu. Hild dit qu'elle n'a rien vu non plus."
+          - "a5_liesse: Fort Blanc ne porte pas de bannière. Il paraît que ça veut dire quelque chose, finalement."
+        dialogue-en:
+          - "a5_liesse: They are safe, in the observatory cellar. Ysarn says he saw nothing. Hild says she saw nothing either."
+          - "a5_liesse: Fort Blanc carries no banner. It seems that means something, after all."
+        si: "a5-geles=cacher"
+    recompenses:
+      xp: 23900
+      or: 2390
+
+  a5_l_le_chevalier_noir:
+    nom: "Le chevalier noir"
+    nom-en: "The Black Knight"
+    faction: lumiere
+    niveau: 56
+    requiert: [a5_l_le_convoi_des_geles]
+    donneur: a5_ysarn
+    resume:
+      - "Un chevalier sans bannière demande après le Marqué, devant l'Antre du Colosse."
+    resume-en:
+      - "A knight without a banner is asking for the Marked, before the Lair of the Colossus."
+    offre:
+      - "a5_ysarn: Un chevalier en armure noire est passé cette nuit. Sans bannière. Il a laissé des cairns sur le chemin de l'est, jusqu'à l'Antre du Colosse. Il a dit ton nom, ou plutôt : il a dit que tu n'en avais pas."
+    offre-en:
+      - "a5_ysarn: A knight in black armour passed by last night. Without a banner. He left cairns along the eastern path, all the way to the Lair of the Colossus. He said your name, or rather: he said you had none."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les cairns vers l'Antre du Colosse"
+        texte-en: "Follow the cairns toward the Lair of the Colossus"
+        traces: [a5_cairn_2, a5_cairn_3, a5_morvain]
+        apres:
+          - "Devant l'Antre, assis sur une pierre comme au premier jour, Morvain t'attend."
+        apres-en:
+          - "Before the Lair, sitting on a stone as on the first day, Morvain is waiting for you."
+      - type: PARLER
+        texte: "Parler à Morvain"
+        texte-en: "Talk to Morvain"
+        pnj: a5_morvain
+        dialogue:
+          - "a5_morvain: Vous avez réveillé des gelés. Vous avez entendu l'Astre se souvenir. Alors vous êtes prêt pour la suite."
+          - "a5_morvain: Derrière cette porte dort le Colosse. Les Hôtes l'ont fait de pierre et de glace pour garder un seul souvenir : celui de la Chute. Il l'a vue. Il la garde."
+          - "a5_morvain: Vos deux armées montent vers lui. Elles veulent ce souvenir, en fiole. Il faut l'avoir avant elles."
+        dialogue-en:
+          - "a5_morvain: You woke frozen ones. You heard the Star remember. So you are ready for what comes next."
+          - "a5_morvain: Behind this door sleeps the Colossus. The Hosts made it of stone and ice to keep a single memory: that of the Fall. It saw it. It keeps it."
+          - "a5_morvain: Your two armies are climbing toward it. They want that memory, in a vial. We must have it before them."
+    recompenses:
+      xp: 24770
+      or: 2475
+
+  a5_o_le_chevalier_noir:
+    nom: "Le chevalier noir"
+    nom-en: "The Black Knight"
+    faction: ombre
+    niveau: 56
+    requiert: [a5_o_le_convoi_des_geles]
+    donneur: a5_ysarn
+    resume:
+      - "Un chevalier sans bannière demande après le Marqué, devant l'Antre du Colosse."
+    resume-en:
+      - "A knight without a banner is asking for the Marked, before the Lair of the Colossus."
+    offre:
+      - "a5_ysarn: Un chevalier en armure noire est passé cette nuit. Sans bannière. Il a laissé des cairns sur le chemin de l'est, jusqu'à l'Antre du Colosse. Il a dit ton nom, ou plutôt : il a dit que tu n'en avais pas."
+    offre-en:
+      - "a5_ysarn: A knight in black armour passed by last night. Without a banner. He left cairns along the eastern path, all the way to the Lair of the Colossus. He said your name, or rather: he said you had none."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les cairns vers l'Antre du Colosse"
+        texte-en: "Follow the cairns toward the Lair of the Colossus"
+        traces: [a5_cairn_2, a5_cairn_3, a5_morvain]
+        apres:
+          - "Devant l'Antre, assis sur une pierre comme au premier jour, Morvain t'attend."
+        apres-en:
+          - "Before the Lair, sitting on a stone as on the first day, Morvain is waiting for you."
+      - type: PARLER
+        texte: "Parler à Morvain"
+        texte-en: "Talk to Morvain"
+        pnj: a5_morvain
+        dialogue:
+          - "a5_morvain: Vous avez réveillé des gelés. Vous avez entendu l'Astre se souvenir. Alors vous êtes prêt pour la suite."
+          - "a5_morvain: Derrière cette porte dort le Colosse. Les Hôtes l'ont fait de pierre et de glace pour garder un seul souvenir : celui de la Chute. Il l'a vue. Il la garde."
+          - "a5_morvain: Vos deux armées montent vers lui. Elles veulent ce souvenir, en fiole. Il faut l'avoir avant elles."
+        dialogue-en:
+          - "a5_morvain: You woke frozen ones. You heard the Star remember. So you are ready for what comes next."
+          - "a5_morvain: Behind this door sleeps the Colossus. The Hosts made it of stone and ice to keep a single memory: that of the Fall. It saw it. It keeps it."
+          - "a5_morvain: Your two armies are climbing toward it. They want that memory, in a vial. We must have it before them."
+    recompenses:
+      xp: 24770
+      or: 2475
+
+  a5_l_l_avant_poste:
+    nom: "L'avant-poste de la Citadelle"
+    nom-en: "The Citadel's Outpost"
+    faction: lumiere
+    niveau: 57
+    requiert: [a5_l_le_chevalier_noir]
+    donneur: a5_morvain
+    resume:
+      - "La Citadelle prépare l'assaut de l'Antre depuis un avant-poste au sud-est."
+    resume-en:
+      - "The Citadel is preparing the assault on the Lair from an outpost to the south-east."
+    offre:
+      - "a5_morvain: La Citadelle a un avant-poste au sud-est, au-dessus des cimetières. Leur plan d'assaut y est. Prenez cette cape : leurs sentinelles ne regardent que les couleurs."
+      - "a5_morvain: Ne frappez personne. Une seule lame tirée, et la cape ne vous cachera plus."
+    offre-en:
+      - "a5_morvain: The Citadel has an outpost to the south-east, above the graveyards. Their assault plan is there. Take this cloak: their sentries only look at colours."
+      - "a5_morvain: Strike no one. A single drawn blade, and the cloak will no longer hide you."
+    etapes:
+      - type: DEGUISEMENT
+        texte: "Entrer dans l'avant-poste de la Citadelle, déguisé"
+        texte-en: "Enter the Citadel outpost in disguise"
+        point: a5_poste_nuit_coeur
+        monstres: [a5_garde_ombre]
+        materiau: LEATHER_CHESTPLATE
+        couleur: "#3B2357"
+        objet: "Cape de la Citadelle"
+        objet-en: "Citadel cloak"
+        apres:
+          - "Les sentinelles te saluent d'un signe de tête. Pour elles, tu es un des leurs qui a froid."
+        apres-en:
+          - "The sentries greet you with a nod. To them, you are one of their own, feeling the cold."
+      - type: INTERAGIR
+        texte: "Fouiller la table du commandant"
+        texte-en: "Search the commander's table"
+        point: a5_poste_nuit_coeur
+        rayon: 4
+        apres:
+          - "Le plan d'assaut. Ils attaquent l'Antre à l'aube, par la terrasse. Et dans la marge, une note : « Si l'Aube arrive avant nous, attendre qu'elle réveille le Colosse, puis prendre le souvenir aux survivants. »"
+        apres-en:
+          - "The assault plan. They attack the Lair at dawn, by the terrace. And in the margin, a note: « If the Dawn arrives first, wait for it to wake the Colossus, then take the memory from the survivors. »"
+      - type: PARLER
+        texte: "Rapporter le plan à Morvain"
+        texte-en: "Bring the plan to Morvain"
+        pnj: a5_morvain
+        dialogue:
+          - "a5_morvain: À l'aube. Votre camp attaquera à l'aube aussi : j'ai lu leurs ordres avant vous. Ils ont tous les deux le même plan."
+          - "a5_morvain: Il nous reste une nuit. Et un seul chemin assez court pour arriver avant eux."
+        dialogue-en:
+          - "a5_morvain: At dawn. Your side will attack at dawn too: I read their orders before you. They both have the same plan."
+          - "a5_morvain: We have one night left. And only one path short enough to get there before them."
+    recompenses:
+      xp: 25670
+      or: 2565
+
+  a5_o_l_avant_poste:
+    nom: "L'avant-poste du Bastion"
+    nom-en: "The Bastion's Outpost"
+    faction: ombre
+    niveau: 57
+    requiert: [a5_o_le_chevalier_noir]
+    donneur: a5_morvain
+    resume:
+      - "Le Bastion prépare l'assaut de l'Antre depuis un avant-poste à l'ouest."
+    resume-en:
+      - "The Bastion is preparing the assault on the Lair from an outpost to the west."
+    offre:
+      - "a5_morvain: Le Bastion a un avant-poste loin à l'ouest, sur les pentes. Leur plan d'assaut y est. Prends ce tabard : leurs sentinelles ne regardent que les couleurs."
+      - "a5_morvain: Ne frappez personne. Une seule lame tirée, et la cape ne vous cachera plus."
+    offre-en:
+      - "a5_morvain: The Bastion has an outpost far to the west, on the slopes. Their assault plan is there. Take this tabard: their sentries only look at colours."
+      - "a5_morvain: Strike no one. A single drawn blade, and the cloak will no longer hide you."
+    etapes:
+      - type: DEGUISEMENT
+        texte: "Entrer dans l'avant-poste du Bastion, déguisé"
+        texte-en: "Enter the Bastion outpost in disguise"
+        point: a5_poste_soleil_coeur
+        monstres: [a5_garde_aube]
+        materiau: LEATHER_CHESTPLATE
+        couleur: "#E8D27A"
+        objet: "Tabard du Bastion"
+        objet-en: "Bastion tabard"
+        apres:
+          - "Les sentinelles te saluent d'un signe de tête. Pour elles, tu es un des leurs qui a froid."
+        apres-en:
+          - "The sentries greet you with a nod. To them, you are one of their own, feeling the cold."
+      - type: INTERAGIR
+        texte: "Fouiller la table du commandant"
+        texte-en: "Search the commander's table"
+        point: a5_poste_soleil_coeur
+        rayon: 4
+        apres:
+          - "Le plan d'assaut. Ils attaquent l'Antre à l'aube, par la terrasse. Et dans la marge, une note : « Si la Citadelle arrive avant nous, attendre qu'elle réveille le Colosse, puis prendre le souvenir aux survivants. »"
+        apres-en:
+          - "The assault plan. They attack the Lair at dawn, by the terrace. And in the margin, a note: « If the Citadel arrives first, wait for it to wake the Colossus, then take the memory from the survivors. »"
+      - type: PARLER
+        texte: "Rapporter le plan à Morvain"
+        texte-en: "Bring the plan to Morvain"
+        pnj: a5_morvain
+        dialogue:
+          - "a5_morvain: À l'aube. Votre camp attaquera à l'aube aussi : j'ai lu leurs ordres avant vous. Ils ont tous les deux le même plan."
+          - "a5_morvain: Il nous reste une nuit. Et un seul chemin assez court pour arriver avant eux."
+        dialogue-en:
+          - "a5_morvain: At dawn. Your side will attack at dawn too: I read their orders before you. They both have the same plan."
+          - "a5_morvain: We have one night left. And only one path short enough to get there before them."
+    recompenses:
+      xp: 25670
+      or: 2565
+
+  a5_l_le_couloir_des_avalanches:
+    nom: "Le couloir des avalanches"
+    nom-en: "The Avalanche Corridor"
+    faction: lumiere
+    niveau: 58
+    requiert: [a5_l_l_avant_poste]
+    donneur: a5_morvain
+    resume:
+      - "Le couloir des avalanches est le seul chemin vers l'Antre que personne ne garde."
+    resume-en:
+      - "The avalanche corridor is the only path to the Lair that nobody guards."
+    offre:
+      - "a5_morvain: Les Hôtes venaient voir le Colosse par le couloir des avalanches, à l'ouest de l'Antre. Seuls, sans armée. Il ne se réveille que pour ceux qui viennent comme eux."
+      - "a5_morvain: Une fois engagé, ne vous arrêtez pas. La neige tombe toute seule, là-bas."
+    offre-en:
+      - "a5_morvain: The Hosts came to see the Colossus through the avalanche corridor, west of the Lair. Alone, without an army. It only wakes for those who come as they did."
+      - "a5_morvain: Once you are in, do not stop. The snow falls by itself there."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre l'entrée du couloir des avalanches"
+        texte-en: "Reach the entrance of the avalanche corridor"
+        point: a5_couloir_depart
+        rayon: 6
+      - type: ATTEINDRE
+        texte: "Traverser le couloir avant que la neige ne tombe"
+        texte-en: "Cross the corridor before the snow falls"
+        point: a5_couloir_fin
+        rayon: 6
+        apres:
+          - "Derrière toi, un grondement sourd. Toute la pente se met en marche."
+        apres-en:
+          - "Behind you, a dull rumble. The whole slope starts to move."
+        chrono: 75
+        reprise: 1
+        echec:
+          - "La neige s'effondre devant toi et ferme le passage. Il faut repartir de l'entrée."
+        echec-en:
+          - "The snow collapses in front of you and closes the way. You must start again from the entrance."
+      - type: SURVIE
+        texte: "Survivre à l'avalanche"
+        texte-en: "Survive the avalanche"
+        point: a5_avalanche
+        rayon: 12
+        duree: 40
+        mode: brule
+        degats: 6
+        apres:
+          - "Le grondement s'éteint. Devant toi, la neige fume encore. Le chemin de l'Antre est libre."
+        apres-en:
+          - "The rumble dies away. Before you, the snow still smokes. The way to the Lair is clear."
+      - type: PARLER
+        texte: "Rejoindre Morvain devant l'Antre"
+        texte-en: "Join Morvain before the Lair"
+        pnj: a5_morvain
+        dialogue:
+          - "a5_morvain: Vous êtes passé. Comme eux. Le Colosse vous a entendu venir, j'en suis sûr."
+        dialogue-en:
+          - "a5_morvain: You got through. Like them. The Colossus heard you coming, I am sure of it."
+    recompenses:
+      xp: 26580
+      or: 2660
+
+  a5_o_le_couloir_des_avalanches:
+    nom: "Le couloir des avalanches"
+    nom-en: "The Avalanche Corridor"
+    faction: ombre
+    niveau: 58
+    requiert: [a5_o_l_avant_poste]
+    donneur: a5_morvain
+    resume:
+      - "Le couloir des avalanches est le seul chemin vers l'Antre que personne ne garde."
+    resume-en:
+      - "The avalanche corridor is the only path to the Lair that nobody guards."
+    offre:
+      - "a5_morvain: Les Hôtes venaient voir le Colosse par le couloir des avalanches, à l'ouest de l'Antre. Seuls, sans armée. Il ne se réveille que pour ceux qui viennent comme eux."
+      - "a5_morvain: Une fois engagé, ne vous arrêtez pas. La neige tombe toute seule, là-bas."
+    offre-en:
+      - "a5_morvain: The Hosts came to see the Colossus through the avalanche corridor, west of the Lair. Alone, without an army. It only wakes for those who come as they did."
+      - "a5_morvain: Once you are in, do not stop. The snow falls by itself there."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre l'entrée du couloir des avalanches"
+        texte-en: "Reach the entrance of the avalanche corridor"
+        point: a5_couloir_depart
+        rayon: 6
+      - type: ATTEINDRE
+        texte: "Traverser le couloir avant que la neige ne tombe"
+        texte-en: "Cross the corridor before the snow falls"
+        point: a5_couloir_fin
+        rayon: 6
+        apres:
+          - "Derrière toi, un grondement sourd. Toute la pente se met en marche."
+        apres-en:
+          - "Behind you, a dull rumble. The whole slope starts to move."
+        chrono: 75
+        reprise: 1
+        echec:
+          - "La neige s'effondre devant toi et ferme le passage. Il faut repartir de l'entrée."
+        echec-en:
+          - "The snow collapses in front of you and closes the way. You must start again from the entrance."
+      - type: SURVIE
+        texte: "Survivre à l'avalanche"
+        texte-en: "Survive the avalanche"
+        point: a5_avalanche
+        rayon: 12
+        duree: 40
+        mode: brule
+        degats: 6
+        apres:
+          - "Le grondement s'éteint. Devant toi, la neige fume encore. Le chemin de l'Antre est libre."
+        apres-en:
+          - "The rumble dies away. Before you, the snow still smokes. The way to the Lair is clear."
+      - type: PARLER
+        texte: "Rejoindre Morvain devant l'Antre"
+        texte-en: "Join Morvain before the Lair"
+        pnj: a5_morvain
+        dialogue:
+          - "a5_morvain: Vous êtes passé. Comme eux. Le Colosse vous a entendu venir, j'en suis sûr."
+        dialogue-en:
+          - "a5_morvain: You got through. Like them. The Colossus heard you coming, I am sure of it."
+    recompenses:
+      xp: 26580
+      or: 2660
+
+  a5_l_le_colosse_de_givre:
+    nom: "Le Colosse de Givre"
+    nom-en: "The Frost Colossus"
+    faction: lumiere
+    niveau: 59
+    requiert: [a5_l_le_couloir_des_avalanches]
+    donneur: a5_morvain
+    resume:
+      - "Le Colosse de Givre garde le souvenir de la Chute."
+    resume-en:
+      - "The Frost Colossus keeps the memory of the Fall."
+    offre:
+      - "a5_morvain: Il ne vous donnera rien. Il faut le briser, comme l'Astre s'est brisé : pour que ce qu'il garde puisse enfin sortir."
+    offre-en:
+      - "a5_morvain: It will give you nothing. It must be broken, as the Star broke: so that what it keeps can finally come out."
+    etapes:
+      - type: TUER
+        texte: "Abattre les gardiens de givre des Hôtes"
+        texte-en: "Bring down the Hosts' frost guardians"
+        monstres: [a5_gardien_givre]
+        nombre: 6
+        point: a5_antre_parvis
+      - type: TUER
+        texte: "Vaincre le Colosse de Givre"
+        texte-en: "Defeat the Frost Colossus"
+        monstres: [a5_colosse]
+        point: a5_antre_parvis
+        apres:
+          - "Le Colosse tombe en avant, lentement, comme une montagne qui s'incline. Sa poitrine se fend. À l'intérieur, une lueur bleue, immobile, qui attend."
+        apres-en:
+          - "The Colossus falls forward, slowly, like a mountain bowing. Its chest splits open. Inside, a blue glow, motionless, waiting."
+      - type: PARLER
+        texte: "Revenir voir Morvain"
+        texte-en: "Return to Morvain"
+        pnj: a5_morvain
+        dialogue:
+          - "a5_morvain: Le souvenir est là, dans ce qui reste de lui. Je ne peux pas le toucher. Je sais déjà ce qu'il contient."
+        dialogue-en:
+          - "a5_morvain: The memory is there, in what remains of it. I cannot touch it. I already know what it holds."
+    recompenses:
+      xp: 27500
+      or: 2750
+      objets:
+        - materiau: BLUE_ICE
+          nom: "Cœur de givre du Colosse"
+          nom-en: "The Colossus' frost heart"
+          description:
+            - "Il ne fond pas. Il se souvient."
+          description-en:
+            - "It does not melt. It remembers."
+
+  a5_o_le_colosse_de_givre:
+    nom: "Le Colosse de Givre"
+    nom-en: "The Frost Colossus"
+    faction: ombre
+    niveau: 59
+    requiert: [a5_o_le_couloir_des_avalanches]
+    donneur: a5_morvain
+    resume:
+      - "Le Colosse de Givre garde le souvenir de la Chute."
+    resume-en:
+      - "The Frost Colossus keeps the memory of the Fall."
+    offre:
+      - "a5_morvain: Il ne vous donnera rien. Il faut le briser, comme l'Astre s'est brisé : pour que ce qu'il garde puisse enfin sortir."
+    offre-en:
+      - "a5_morvain: It will give you nothing. It must be broken, as the Star broke: so that what it keeps can finally come out."
+    etapes:
+      - type: TUER
+        texte: "Abattre les gardiens de givre des Hôtes"
+        texte-en: "Bring down the Hosts' frost guardians"
+        monstres: [a5_gardien_givre]
+        nombre: 6
+        point: a5_antre_parvis
+      - type: TUER
+        texte: "Vaincre le Colosse de Givre"
+        texte-en: "Defeat the Frost Colossus"
+        monstres: [a5_colosse]
+        point: a5_antre_parvis
+        apres:
+          - "Le Colosse tombe en avant, lentement, comme une montagne qui s'incline. Sa poitrine se fend. À l'intérieur, une lueur bleue, immobile, qui attend."
+        apres-en:
+          - "The Colossus falls forward, slowly, like a mountain bowing. Its chest splits open. Inside, a blue glow, motionless, waiting."
+      - type: PARLER
+        texte: "Revenir voir Morvain"
+        texte-en: "Return to Morvain"
+        pnj: a5_morvain
+        dialogue:
+          - "a5_morvain: Le souvenir est là, dans ce qui reste de lui. Je ne peux pas le toucher. Je sais déjà ce qu'il contient."
+        dialogue-en:
+          - "a5_morvain: The memory is there, in what remains of it. I cannot touch it. I already know what it holds."
+    recompenses:
+      xp: 27500
+      or: 2750
+      objets:
+        - materiau: BLUE_ICE
+          nom: "Cœur de givre du Colosse"
+          nom-en: "The Colossus' frost heart"
+          description:
+            - "Il ne fond pas. Il se souvient."
+          description-en:
+            - "It does not melt. It remembers."
+
+  a5_l_la_derniere_chaine:
+    nom: "La dernière chaîne"
+    nom-en: "The Last Chain"
+    faction: lumiere
+    niveau: 60
+    requiert: [a5_l_le_colosse_de_givre]
+    donneur: a5_morvain
+    resume:
+      - "Le souvenir de la Chute attend dans le cœur du Colosse."
+    resume-en:
+      - "The memory of the Fall waits in the heart of the Colossus."
+    offre:
+      - "a5_morvain: Allez-y. Touchez-le. Et quand vous reviendrez, vous saurez qui je suis."
+    offre-en:
+      - "a5_morvain: Go on. Touch it. And when you come back, you will know who I am."
+    etapes:
+      - type: INTERAGIR
+        texte: "Toucher le souvenir du Colosse"
+        texte-en: "Touch the Colossus' memory"
+        point: a5_coeur_colosse
+        rayon: 5
+        apres:
+          - "Tu n'es plus toi. Tu es un garçon de quinze ans, les mains noires de suie, dans une forge immense taillée dans la roche. Au-dessus du feu, une chaîne de lumière, presque finie."
+          - "Un homme est derrière toi, en habit d'Hôte, ocre et or. Tu connais son visage : la fresque du Tombeau. Aurélien. « Encore un maillon, Morvain. Le dernier. »"
+          - "Tu frappes. La chaîne se ferme. Au même instant, très haut, l'Astre se brise. Pas sous la chaîne : pour lui échapper."
+          - "Un Éclat traverse le toit de la forge et te frappe en pleine poitrine. Tu as froid, puis chaud, puis tu ne sais plus ton nom. Mais tu sais ce que tu as fait."
+        apres-en:
+          - "You are no longer yourself. You are a boy of fifteen, hands black with soot, in an immense forge carved into the rock. Above the fire, a chain of light, almost finished."
+          - "A man stands behind you, in Host's garb, ochre and gold. You know his face: the fresco in the Tomb. Aurélien. « One more link, Morvain. The last. »"
+          - "You strike. The chain closes. At the same moment, far above, the Star breaks. Not under the chain: to escape it."
+          - "A Shard pierces the forge roof and strikes you full in the chest. You are cold, then hot, then you no longer know your name. But you know what you have done."
+      - type: PARLER
+        texte: "Revenir vers Morvain"
+        texte-en: "Go back to Morvain"
+        pnj: a5_morvain
+        dialogue:
+          - "a5_morvain: Vous avez vu. J'avais quinze ans. J'étais son écuyer. J'ai forgé la dernière chaîne, et l'Éclat m'a touché le premier."
+          - "a5_morvain: Je suis le premier Marqué. Mille ans. Je ne vieillis pas. J'ai oublié mon nom, mais pas ça. Jamais ça."
+          - "a5_morvain: Depuis, j'attends quelqu'un qui pourrait défaire ce que j'ai fait. Je crois que c'est vous. Ou l'un des vôtres."
+        dialogue-en:
+          - "a5_morvain: You saw. I was fifteen. I was his squire. I forged the last chain, and the Shard touched me first."
+          - "a5_morvain: I am the first Marked. A thousand years. I do not age. I forgot my name, but not that. Never that."
+          - "a5_morvain: Since then, I have been waiting for someone who could undo what I did. I think it is you. Or one of your kind."
+      - type: CHOIX
+        texte: "Répondre à Morvain"
+        texte-en: "Answer Morvain"
+        pnj: a5_morvain
+        choix: a5-morvain
+        question: "Que dites-vous à Morvain ?"
+        question-en: "What do you say to Morvain?"
+        reponses:
+          - id: pardonner
+            texte: "Tu étais un enfant. Je te pardonne."
+            texte-en: "You were a child. I forgive you."
+            reponse:
+              - "a5_morvain: Personne ne me l'avait dit en mille ans. Je ne sais pas quoi en faire. Je vais apprendre."
+            reponse-en:
+              - "a5_morvain: No one has said that to me in a thousand years. I do not know what to do with it. I will learn."
+            xp: 5690
+          - id: juger
+            texte: "Mille ans ne suffisent pas à réparer ça."
+            texte-en: "A thousand years are not enough to mend that."
+            reponse:
+              - "a5_morvain: Non. Ils ne suffisent pas. C'est pour ça que je suis encore là."
+            reponse-en:
+              - "a5_morvain: No. They are not enough. That is why I am still here."
+            or: 570
+        dialogue:
+          - "a5_morvain: Vous pouvez me haïr. Beaucoup l'ont fait, sans même savoir pourquoi."
+        dialogue-en:
+          - "a5_morvain: You may hate me. Many have, without even knowing why."
+      - type: PARLER
+        texte: "Écouter Morvain"
+        texte-en: "Listen to Morvain"
+        pnj: a5_morvain
+        dialogue:
+          - "a5_morvain: Les chaînes existent encore. La forge aussi : la Forge éteinte, dans les Terres de Cendre. Et vos deux chefs la veulent rallumée."
+          - "a5_morvain: Séraphine pour remettre l'Astre en cage. Vharos pour enchaîner le Néant à lui seul. Il faut y être avant eux."
+          - "Au loin, sur le col, les deux armées arrivent à l'Antre au lever du jour. Elles ne trouvent qu'un colosse brisé et de la neige. À suivre."
+        dialogue-en:
+          - "a5_morvain: The chains still exist. So does the forge: the Extinguished Forge, in the Ash Lands. And both your leaders want it relit."
+          - "a5_morvain: Séraphine to put the Star back in a cage. Vharos to chain the Void to himself alone. We must get there before them."
+          - "In the distance, on the pass, the two armies reach the Lair at daybreak. They find only a broken colossus and snow. To be continued."
+    recompenses:
+      xp: 28440
+      or: 2845
+      objets:
+        - materiau: CHAIN
+          nom: "Maillon de lumière"
+          nom-en: "Link of light"
+          description:
+            - "Un seul maillon, tiède. Il vient de la dernière chaîne."
+          description-en:
+            - "A single link, warm. It comes from the last chain."
+
+  a5_o_la_derniere_chaine:
+    nom: "La dernière chaîne"
+    nom-en: "The Last Chain"
+    faction: ombre
+    niveau: 60
+    requiert: [a5_o_le_colosse_de_givre]
+    donneur: a5_morvain
+    resume:
+      - "Le souvenir de la Chute attend dans le cœur du Colosse."
+    resume-en:
+      - "The memory of the Fall waits in the heart of the Colossus."
+    offre:
+      - "a5_morvain: Allez-y. Touchez-le. Et quand vous reviendrez, vous saurez qui je suis."
+    offre-en:
+      - "a5_morvain: Go on. Touch it. And when you come back, you will know who I am."
+    etapes:
+      - type: INTERAGIR
+        texte: "Toucher le souvenir du Colosse"
+        texte-en: "Touch the Colossus' memory"
+        point: a5_coeur_colosse
+        rayon: 5
+        apres:
+          - "Tu n'es plus toi. Tu es un garçon de quinze ans, les mains noires de suie, dans une forge immense taillée dans la roche. Au-dessus du feu, une chaîne de lumière, presque finie."
+          - "Un homme est derrière toi, en habit d'Hôte, ocre et or. Tu connais son visage : la fresque du Tombeau. Aurélien. « Encore un maillon, Morvain. Le dernier. »"
+          - "Tu frappes. La chaîne se ferme. Au même instant, très haut, l'Astre se brise. Pas sous la chaîne : pour lui échapper."
+          - "Un Éclat traverse le toit de la forge et te frappe en pleine poitrine. Tu as froid, puis chaud, puis tu ne sais plus ton nom. Mais tu sais ce que tu as fait."
+        apres-en:
+          - "You are no longer yourself. You are a boy of fifteen, hands black with soot, in an immense forge carved into the rock. Above the fire, a chain of light, almost finished."
+          - "A man stands behind you, in Host's garb, ochre and gold. You know his face: the fresco in the Tomb. Aurélien. « One more link, Morvain. The last. »"
+          - "You strike. The chain closes. At the same moment, far above, the Star breaks. Not under the chain: to escape it."
+          - "A Shard pierces the forge roof and strikes you full in the chest. You are cold, then hot, then you no longer know your name. But you know what you have done."
+      - type: PARLER
+        texte: "Revenir vers Morvain"
+        texte-en: "Go back to Morvain"
+        pnj: a5_morvain
+        dialogue:
+          - "a5_morvain: Vous avez vu. J'avais quinze ans. J'étais son écuyer. J'ai forgé la dernière chaîne, et l'Éclat m'a touché le premier."
+          - "a5_morvain: Je suis le premier Marqué. Mille ans. Je ne vieillis pas. J'ai oublié mon nom, mais pas ça. Jamais ça."
+          - "a5_morvain: Depuis, j'attends quelqu'un qui pourrait défaire ce que j'ai fait. Je crois que c'est vous. Ou l'un des vôtres."
+        dialogue-en:
+          - "a5_morvain: You saw. I was fifteen. I was his squire. I forged the last chain, and the Shard touched me first."
+          - "a5_morvain: I am the first Marked. A thousand years. I do not age. I forgot my name, but not that. Never that."
+          - "a5_morvain: Since then, I have been waiting for someone who could undo what I did. I think it is you. Or one of your kind."
+      - type: CHOIX
+        texte: "Répondre à Morvain"
+        texte-en: "Answer Morvain"
+        pnj: a5_morvain
+        choix: a5-morvain
+        question: "Que dites-vous à Morvain ?"
+        question-en: "What do you say to Morvain?"
+        reponses:
+          - id: pardonner
+            texte: "Tu étais un enfant. Je te pardonne."
+            texte-en: "You were a child. I forgive you."
+            reponse:
+              - "a5_morvain: Personne ne me l'avait dit en mille ans. Je ne sais pas quoi en faire. Je vais apprendre."
+            reponse-en:
+              - "a5_morvain: No one has said that to me in a thousand years. I do not know what to do with it. I will learn."
+            xp: 5690
+          - id: juger
+            texte: "Mille ans ne suffisent pas à réparer ça."
+            texte-en: "A thousand years are not enough to mend that."
+            reponse:
+              - "a5_morvain: Non. Ils ne suffisent pas. C'est pour ça que je suis encore là."
+            reponse-en:
+              - "a5_morvain: No. They are not enough. That is why I am still here."
+            or: 570
+        dialogue:
+          - "a5_morvain: Vous pouvez me haïr. Beaucoup l'ont fait, sans même savoir pourquoi."
+        dialogue-en:
+          - "a5_morvain: You may hate me. Many have, without even knowing why."
+      - type: PARLER
+        texte: "Écouter Morvain"
+        texte-en: "Listen to Morvain"
+        pnj: a5_morvain
+        dialogue:
+          - "a5_morvain: Les chaînes existent encore. La forge aussi : la Forge éteinte, dans les Terres de Cendre. Et vos deux chefs la veulent rallumée."
+          - "a5_morvain: Séraphine pour remettre l'Astre en cage. Vharos pour enchaîner le Néant à lui seul. Il faut y être avant eux."
+          - "Au loin, sur le col, les deux armées arrivent à l'Antre au lever du jour. Elles ne trouvent qu'un colosse brisé et de la neige. À suivre."
+        dialogue-en:
+          - "a5_morvain: The chains still exist. So does the forge: the Extinguished Forge, in the Ash Lands. And both your leaders want it relit."
+          - "a5_morvain: Séraphine to put the Star back in a cage. Vharos to chain the Void to himself alone. We must get there before them."
+          - "In the distance, on the pass, the two armies reach the Lair at daybreak. They find only a broken colossus and snow. To be continued."
+    recompenses:
+      xp: 28440
+      or: 2845
+      objets:
+        - materiau: CHAIN
+          nom: "Maillon de lumière"
+          nom-en: "Link of light"
+          description:
+            - "Un seul maillon, tiède. Il vient de la dernière chaîne."
+          description-en:
+            - "A single link, warm. It comes from the last chain."
+
+  # ================================================================ ANNEXES DE FACTION — LA GUERRE DU COL
+
+  a5_l_les_blesses_du_camp:
+    nom: "Les blessés du camp"
+    nom-en: "The Camp Wounded"
+    faction: lumiere
+    niveau: 52
+    requiert: [a5_l_le_camp_du_soleil]
+    donneur: a5_aldren
+    resume:
+      - "Le camp manque de remèdes."
+    resume-en:
+      - "The camp is short of remedies."
+    offre:
+      - "a5_aldren: Nos blessés gèlent plus vite qu'ils ne guérissent. Liesse a préparé une caisse de remèdes à Fort Blanc. Elle soigne tout le monde, même nous. Ramenez-la à dos de monture."
+    offre-en:
+      - "a5_aldren: Our wounded freeze faster than they heal. Liesse has prepared a crate of remedies at Fort Blanc. She treats everyone, even us. Bring it back on a mount."
+    etapes:
+      - type: TRANSPORT
+        texte: "Porter la caisse de remèdes au camp, à dos de monture"
+        texte-en: "Carry the crate of remedies to the camp, on a mount"
+        point: a5_banniere_soleil
+        depart: a5_porte_fort
+        materiau: BARREL
+        rayon: 6
+        objet: "Caisse de remèdes de Liesse"
+        objet-en: "Liesse's crate of remedies"
+        apres:
+          - "La caisse arrive intacte. Les soigneurs la vident avant même que tu sois descendu de selle."
+        apres-en:
+          - "The crate arrives intact. The healers empty it before you have even got out of the saddle."
+      - type: PARLER
+        texte: "Revenir voir Aldren"
+        texte-en: "Return to Aldren"
+        pnj: a5_aldren
+        dialogue:
+          - "a5_aldren: Liesse a mis une étiquette sur chaque fiole : « Pour qui en a besoin. » Pas « pour l'Aube ». J'y penserai."
+        dialogue-en:
+          - "a5_aldren: Liesse put a label on each vial: « For whoever needs it. » Not « for the Dawn ». I will think about that."
+    recompenses:
+      xp: 18160
+      or: 1815
+
+  a5_o_les_blesses_du_camp:
+    nom: "Les blessés du camp"
+    nom-en: "The Camp Wounded"
+    faction: ombre
+    niveau: 52
+    requiert: [a5_o_le_camp_de_la_nuit]
+    donneur: a5_vesper
+    resume:
+      - "Le camp manque de remèdes."
+    resume-en:
+      - "The camp is short of remedies."
+    offre:
+      - "a5_vesper: Nos blessés gèlent plus vite qu'ils ne guérissent. Liesse a préparé une caisse de remèdes à Fort Blanc. Elle soigne tout le monde, même nous. Ramène-la à dos de monture."
+    offre-en:
+      - "a5_vesper: Our wounded freeze faster than they heal. Liesse has prepared a crate of remedies at Fort Blanc. She treats everyone, even us. Bring it back on a mount."
+    etapes:
+      - type: TRANSPORT
+        texte: "Porter la caisse de remèdes au camp, à dos de monture"
+        texte-en: "Carry the crate of remedies to the camp, on a mount"
+        point: a5_banniere_nuit
+        depart: a5_porte_fort
+        materiau: BARREL
+        rayon: 6
+        objet: "Caisse de remèdes de Liesse"
+        objet-en: "Liesse's crate of remedies"
+        apres:
+          - "La caisse arrive intacte. Les soigneurs la vident avant même que tu sois descendu de selle."
+        apres-en:
+          - "The crate arrives intact. The healers empty it before you have even got out of the saddle."
+      - type: PARLER
+        texte: "Revenir voir Vesper"
+        texte-en: "Return to Vesper"
+        pnj: a5_vesper
+        dialogue:
+          - "a5_vesper: Liesse a mis une étiquette sur chaque fiole : « Pour qui en a besoin. » Pas « pour la Citadelle ». J'y penserai."
+        dialogue-en:
+          - "a5_vesper: Liesse put a label on each vial: « For whoever needs it. » Not « for the Citadel ». I will think about that."
+    recompenses:
+      xp: 18160
+      or: 1815
+
+  a5_l_la_patrouille_du_col:
+    nom: "La patrouille du col"
+    nom-en: "The Pass Patrol"
+    faction: lumiere
+    niveau: 56
+    requiert: [a5_l_le_camp_du_soleil]
+    donneur: a5_helis
+    resume:
+      - "Des Lames de la Citadelle tiennent le Col Blanc."
+    resume-en:
+      - "Blades of the Citadel hold the White Pass."
+    offre:
+      - "a5_helis: Une compagnie de la Citadelle tient le Col Blanc, au sud du fort. Délogez-la. Le Bastion n'oublie pas ceux qui ouvrent les routes."
+    offre-en:
+      - "a5_helis: A Citadel company holds the White Pass, south of the fort. Dislodge it. The Bastion does not forget those who open roads."
+    etapes:
+      - type: TUER
+        texte: "Déloger les Lames de la Citadelle du Col Blanc"
+        texte-en: "Dislodge the Citadel Blades from the White Pass"
+        monstres: [a5_lame_ombre]
+        nombre: 10
+        point: a5_col_blanc
+      - type: PARLER
+        texte: "Revenir voir la capitaine Hélis"
+        texte-en: "Return to Captain Hélis"
+        pnj: a5_helis
+        dialogue:
+          - "a5_helis: Le col est à nous. Jusqu'à demain soir, au moins."
+        dialogue-en:
+          - "a5_helis: The pass is ours. Until tomorrow evening, at least."
+    recompenses:
+      xp: 21060
+      or: 2105
+
+  a5_o_la_patrouille_du_col:
+    nom: "La patrouille du col"
+    nom-en: "The Pass Patrol"
+    faction: ombre
+    niveau: 56
+    requiert: [a5_o_le_camp_de_la_nuit]
+    donneur: a5_sarn
+    resume:
+      - "Des Lames du Bastion tiennent le Col Blanc."
+    resume-en:
+      - "Blades of the Bastion hold the White Pass."
+    offre:
+      - "a5_sarn: Une compagnie du Bastion tient le Col Blanc, au sud du fort. Fais-les descendre. Par le chemin court."
+    offre-en:
+      - "a5_sarn: A Bastion company holds the White Pass, south of the fort. Bring them down. The short way."
+    etapes:
+      - type: TUER
+        texte: "Déloger les Lames du Bastion du Col Blanc"
+        texte-en: "Dislodge the Bastion Blades from the White Pass"
+        monstres: [a5_lame_aube]
+        nombre: 10
+        point: a5_col_blanc
+      - type: PARLER
+        texte: "Revenir voir Sarn"
+        texte-en: "Return to Sarn"
+        pnj: a5_sarn
+        dialogue:
+          - "a5_sarn: Le col est à nous. Jusqu'à ce qu'ils reviennent. Ils reviennent toujours."
+        dialogue-en:
+          - "a5_sarn: The pass is ours. Until they come back. They always come back."
+    recompenses:
+      xp: 21060
+      or: 2105
+
+  # ================================================================ ANNEXES NEUTRES — FORT BLANC (toutes factions)
+
+  a5_n_les_loups_du_col:
+    nom: "Les loups du col"
+    nom-en: "The Wolves of the Pass"
+    niveau: 49
+    donneur: a5_hild
+    resume:
+      - "Les loups de givre attaquent les sentinelles du fort."
+    resume-en:
+      - "The frost wolves are attacking the fort's sentries."
+    offre:
+      - "a5_hild: Les loups de givre descendent avec la guerre : il y a des morts partout, ça les attire. Ils commencent à goûter mes sentinelles."
+    offre-en:
+      - "a5_hild: The frost wolves come down with the war: there are dead everywhere, it draws them. They are starting to taste my sentries."
+    etapes:
+      - type: TUER
+        texte: "Chasser les loups de givre"
+        texte-en: "Hunt the frost wolves"
+        monstres: [loup_givre]
+        nombre: 10
+      - type: PARLER
+        texte: "Revenir voir Hild"
+        texte-en: "Return to Hild"
+        pnj: a5_hild
+        dialogue:
+          - "a5_hild: Mes sentinelles dormiront avec leurs deux jambes. Merci."
+        dialogue-en:
+          - "a5_hild: My sentries will sleep with both legs. Thank you."
+    recompenses:
+      xp: 16120
+      or: 1610
+
+  a5_n_la_tour_du_col_blanc:
+    nom: "La tour du Col Blanc"
+    nom-en: "The White Pass Tower"
+    niveau: 51
+    requiert: [a5_n_les_loups_du_col]
+    donneur: a5_hild
+    resume:
+      - "Des soldats des deux armées veulent prendre la tour du Col Blanc."
+    resume-en:
+      - "Soldiers from both armies want to take the White Pass tower."
+    offre:
+      - "a5_hild: La tour du Col Blanc est à nous, à la Garde. Les deux armées la veulent, et cette fois, elles montent en même temps. Tiens-la avec mes hommes."
+    offre-en:
+      - "a5_hild: The White Pass tower is ours, the Guard's. Both armies want it, and this time they are coming up at the same time. Hold it with my men."
+    etapes:
+      - type: DEFENSE
+        texte: "Tenir la tour du Col Blanc"
+        texte-en: "Hold the White Pass tower"
+        point: a5_col_blanc
+        monstres: [a5_lame_aube, a5_lame_ombre]
+        nombre: 3
+        duree: 75
+        intervalle: 15
+        pv: 220
+        degats: 6
+        cible: "La tour du Col Blanc"
+        cible-en: "The White Pass tower"
+        apres:
+          - "Les deux compagnies se retrouvent nez à nez sous la tour, et finissent par se battre entre elles. La tour tient."
+        apres-en:
+          - "The two companies find themselves face to face under the tower, and end up fighting each other. The tower holds."
+      - type: PARLER
+        texte: "Revenir voir Hild"
+        texte-en: "Return to Hild"
+        pnj: a5_hild
+        dialogue:
+          - "a5_hild: Ils se sont battus entre eux sous nos murs. Une fois de plus, le blanc a gagné sans tirer l'épée. Enfin, presque."
+        dialogue-en:
+          - "a5_hild: They fought each other under our walls. Once again, white won without drawing a sword. Well, almost."
+    recompenses:
+      xp: 17470
+      or: 1745
+
+  a5_n_les_deserteurs:
+    nom: "Les déserteurs"
+    nom-en: "The Deserters"
+    niveau: 54
+    requiert: [a5_n_la_tour_du_col_blanc]
+    donneur: a5_hild
+    resume:
+      - "Des déserteurs des deux armées se cachent dans la vieille tour du sud."
+    resume-en:
+      - "Deserters from both armies are hiding in the old southern tower."
+    offre:
+      - "a5_hild: Des déserteurs se cachent dans la vieille tour du sud. Des deux camps, mélangés. Leur chef s'appelle Bram. Va voir ce qu'ils veulent, et dis-moi si je dois les chasser."
+    offre-en:
+      - "a5_hild: Deserters are hiding in the old southern tower. From both sides, mixed. Their leader is called Bram. Go and see what they want, and tell me whether I should drive them out."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre la vieille tour du sud"
+        texte-en: "Reach the old southern tower"
+        point: a5_ruine_j1
+        rayon: 10
+      - type: CHOIX
+        texte: "Écouter Bram"
+        texte-en: "Listen to Bram"
+        pnj: a5_deserteur
+        choix: a5-deserteurs
+        question: "Que conseillerez-vous à Hild ?"
+        question-en: "What will you advise Hild?"
+        reponses:
+          - id: accueillir
+            texte: "Je lui dirai de vous accueillir en blanc."
+            texte-en: "I will tell her to take you in, in white."
+            reponse:
+              - "a5_deserteur: En blanc. Ça doit faire drôle. Merci."
+            reponse-en:
+              - "a5_deserteur: In white. That must feel strange. Thank you."
+            xp: 4610
+          - id: chasser
+            texte: "Partez. Fort Blanc ne peut pas vous protéger."
+            texte-en: "Leave. Fort Blanc cannot protect you."
+            reponse:
+              - "a5_deserteur: Je comprends. On descendra vers le désert. On dit que les nomades ne posent pas de questions."
+            reponse-en:
+              - "a5_deserteur: I understand. We will go down toward the desert. They say the nomads ask no questions."
+            or: 460
+        dialogue:
+          - "a5_deserteur: Je portais l'or. Lui, là, portait le violet. On s'est tiré dessus pendant trois semaines. Puis on a eu froid ensemble, une nuit, et on n'a plus su pourquoi."
+          - "a5_deserteur: On ne veut rien. Juste ne plus tuer personne. Ta sergente nous laissera vivre ici ?"
+        dialogue-en:
+          - "a5_deserteur: I wore gold. Him, there, wore violet. We shot at each other for three weeks. Then we were cold together one night, and we no longer knew why."
+          - "a5_deserteur: We want nothing. Just to stop killing anyone. Will your sergeant let us live here?"
+      - type: PARLER
+        texte: "Revenir voir Hild"
+        texte-en: "Return to Hild"
+        pnj: a5_hild
+        dialogue:
+          - "a5_hild: Des déserteurs dans la Garde blanche. Les deux armées vont hurler. Tant mieux : ça nous fera de l'exercice."
+        dialogue-en:
+          - "a5_hild: Deserters in the White Guard. Both armies will howl. All the better: it will give us exercise."
+        si: "a5-deserteurs=accueillir"
+      - type: PARLER
+        texte: "Revenir voir Hild"
+        texte-en: "Return to Hild"
+        pnj: a5_hild
+        dialogue:
+          - "a5_hild: Partis vers le désert. C'était peut-être plus sage. Ce n'était pas plus juste."
+        dialogue-en:
+          - "a5_hild: Gone toward the desert. Perhaps that was wiser. It was not fairer."
+        si: "a5-deserteurs=chasser"
+    recompenses:
+      xp: 19580
+      or: 1960
+
+  a5_n_la_garde_blanche:
+    nom: "La Garde blanche"
+    nom-en: "The White Guard"
+    niveau: 57
+    requiert: [a5_n_les_deserteurs]
+    donneur: a5_hild
+    resume:
+      - "Hild veut nettoyer le bivouac des Errants, au nord-ouest."
+    resume-en:
+      - "Hild wants to clear the Wanderers' bivouac, to the north-west."
+    offre:
+      - "a5_hild: Il reste un bivouac d'Errants au nord-ouest, sous le glacier. Après ça, je te ferai une proposition."
+    offre-en:
+      - "a5_hild: There is one Wanderers' bivouac left to the north-west, below the glacier. After that, I will make you an offer."
+    etapes:
+      - type: TUER
+        texte: "Nettoyer le bivouac des Errants"
+        texte-en: "Clear the Wanderers' bivouac"
+        monstres: [errant, loup_givre]
+        nombre: 12
+        point: a5_camp_j3
+      - type: PARLER
+        texte: "Revenir voir Hild"
+        texte-en: "Return to Hild"
+        pnj: a5_hild
+        dialogue:
+          - "a5_hild: Voilà ma proposition : cet insigne. Il ne t'engage à rien. Il dit seulement que Fort Blanc te connaît."
+        dialogue-en:
+          - "a5_hild: Here is my offer: this badge. It binds you to nothing. It only says that Fort Blanc knows you."
+    recompenses:
+      xp: 21820
+      or: 2180
+      objets:
+        - materiau: WHITE_BANNER
+          nom: "Insigne de la Garde blanche"
+          nom-en: "Badge of the White Guard"
+          description:
+            - "Fort Blanc te connaît."
+          description-en:
+            - "Fort Blanc knows you."
+
+  a5_n_le_cimetiere_des_cimes:
+    nom: "Le cimetière des cimes"
+    nom-en: "The Peak Graveyard"
+    niveau: 53
+    donneur: a5_hild
+    resume:
+      - "Un cimetière s'est réveillé à l'est du col."
+    resume-en:
+      - "A graveyard has woken east of the pass."
+    offre:
+      - "a5_hild: À l'est, sur la crête, un vieux cimetière de veilleurs s'est réveillé. Mes hommes refusent d'y monter. Je ne leur en veux pas."
+    offre-en:
+      - "a5_hild: To the east, on the ridge, an old watchers' graveyard has woken. My men refuse to go up. I do not blame them."
+    etapes:
+      - type: TUER
+        texte: "Rendre au repos les veilleurs"
+        texte-en: "Lay the watchers to rest"
+        monstres: [squelette, revenant]
+        nombre: 12
+        point: a5_camp_j4
+      - type: INTERAGIR
+        texte: "Lire les tombes des veilleurs"
+        texte-en: "Read the watchers' graves"
+        point: a5_camp_j4
+        rayon: 6
+        apres:
+          - "Sur chaque tombe, une date : la nuit de la Chute. Et la même phrase : « Il a vu tomber le ciel, et il n'a pas détourné les yeux. »"
+        apres-en:
+          - "On each grave, a date: the night of the Fall. And the same sentence: « He saw the sky fall, and did not look away. »"
+      - type: PARLER
+        texte: "Revenir voir Hild"
+        texte-en: "Return to Hild"
+        pnj: a5_hild
+        dialogue:
+          - "a5_hild: Les premiers veilleurs du fort. Ils sont morts de froid à leur poste, en regardant. On fait toujours ça, à Fort Blanc : on regarde."
+        dialogue-en:
+          - "a5_hild: The fort's first watchers. They froze to death at their posts, watching. We still do that at Fort Blanc: we watch."
+    recompenses:
+      xp: 18860
+      or: 1885
+
+  a5_n_le_cimetiere_de_l_est:
+    nom: "Le cimetière de l'est"
+    nom-en: "The Eastern Graveyard"
+    niveau: 58
+    requiert: [a5_n_le_cimetiere_des_cimes]
+    donneur: a5_hild
+    resume:
+      - "Un cimetière se vide tout à l'est des Cimes."
+    resume-en:
+      - "A graveyard is emptying at the far east of the Peaks."
+    offre:
+      - "a5_hild: Tout à l'est, au pied des cimes, un autre cimetière se vide. Ceux-là descendent vers les camps. Si les morts entrent dans la guerre, plus personne ne saura qui gagne."
+    offre-en:
+      - "a5_hild: Far to the east, at the foot of the peaks, another graveyard is emptying. These are going down toward the camps. If the dead join the war, nobody will know who is winning."
+    etapes:
+      - type: TUER
+        texte: "Rendre au repos les morts de l'est"
+        texte-en: "Lay the eastern dead to rest"
+        monstres: [squelette, revenant]
+        nombre: 14
+        point: a5_camp_j2
+      - type: PARLER
+        texte: "Revenir voir Hild"
+        texte-en: "Return to Hild"
+        pnj: a5_hild
+        dialogue:
+          - "a5_hild: Les morts restent hors de la guerre. C'est déjà ça."
+        dialogue-en:
+          - "a5_hild: The dead stay out of the war. That is something."
+    recompenses:
+      xp: 22590
+      or: 2260
+
+  a5_n_les_pelerins:
+    nom: "Les pèlerins de la Chute"
+    nom-en: "The Pilgrims of the Fall"
+    niveau: 50
+    donneur: a5_tobias
+    resume:
+      - "Des pèlerins veulent monter à la tour des Veilleurs."
+    resume-en:
+      - "Pilgrims want to climb to the Watchers' tower."
+    offre:
+      - "a5_tobias: Ansel et ses pèlerins veulent monter à la vieille tour du sud, là où l'on a vu l'Astre tomber. Les loups des neiges les suivent depuis deux jours. Accompagne-les."
+    offre-en:
+      - "a5_tobias: Ansel and his pilgrims want to climb to the old southern tower, where the Star was seen to fall. The snow wolves have been following them for two days. Go with them."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter les pèlerins jusqu'à la tour des Veilleurs"
+        texte-en: "Escort the pilgrims to the Watchers' tower"
+        pnj: a5_pelerin
+        chemin: [a5_pel_1, a5_pel_2, a5_ruine_j1]
+        monstres: [a5_loup_blanc]
+        nombre: 3
+        vagues: 2
+        pv: 140
+        degats: 5
+        apres:
+          - "a5_pelerin: La tour. Ils ont vu le ciel se déchirer d'ici. Nous allons prier pour qu'il se referme."
+        apres-en:
+          - "a5_pelerin: The tower. They saw the sky tear from here. We will pray for it to close again."
+      - type: PARLER
+        texte: "Revenir voir Tobias"
+        texte-en: "Return to Tobias"
+        pnj: a5_tobias
+        dialogue:
+          - "a5_tobias: Prier pour que le ciel se referme. Ils ne savent pas comment, mais ils y croient. C'est déjà plus que les armées."
+        dialogue-en:
+          - "a5_tobias: Praying for the sky to close. They do not know how, but they believe it. That is already more than the armies."
+    recompenses:
+      xp: 16790
+      or: 1680
+
+  a5_n_le_bois_de_chauffe:
+    nom: "Le bois de chauffe"
+    nom-en: "Firewood"
+    niveau: 52
+    requiert: [a5_n_les_pelerins]
+    donneur: a5_tobias
+    resume:
+      - "Fort Blanc manque de bois pour les feux de Liesse."
+    resume-en:
+      - "Fort Blanc is short of wood for Liesse's fires."
+    offre:
+      - "a5_tobias: Liesse brûle trois fagots par dégel. Il ne reste du pin noir qu'au sud-ouest, sur les hauts. Charge-les sur ta monture et ramène-les à la porte du fort."
+    offre-en:
+      - "a5_tobias: Liesse burns three bundles per thaw. Black pine only remains to the south-west, on the heights. Load them on your mount and bring them back to the fort gate."
+    etapes:
+      - type: TRANSPORT
+        texte: "Ramener les fagots au fort, à dos de monture"
+        texte-en: "Bring the bundles back to the fort, on a mount"
+        point: a5_porte_fort
+        depart: a5_bois
+        materiau: SPRUCE_LOG
+        rayon: 6
+        objet: "Fagots de pin noir"
+        objet-en: "Black pine bundles"
+        apres:
+          - "Les fagots arrivent secs. Liesse les compte, deux fois, et sourit."
+        apres-en:
+          - "The bundles arrive dry. Liesse counts them, twice, and smiles."
+      - type: PARLER
+        texte: "Revenir voir Tobias"
+        texte-en: "Return to Tobias"
+        pnj: a5_tobias
+        dialogue:
+          - "a5_tobias: De quoi dégeler encore une dizaine de pauvres âmes. Ou de quoi faire la soupe. On verra ce qui presse le plus."
+        dialogue-en:
+          - "a5_tobias: Enough to thaw a dozen more poor souls. Or to make soup. We will see which is more urgent."
+    recompenses:
+      xp: 18160
+      or: 1815
+
+  a5_n_vieux_croc:
+    nom: "Vieux-Croc"
+    nom-en: "Old Fang"
+    niveau: 55
+    requiert: [a5_n_le_bois_de_chauffe]
+    donneur: a5_tobias
+    resume:
+      - "Un vieil ours des glaces terrorise les pentes de l'est."
+    resume-en:
+      - "An old ice bear terrorises the eastern slopes."
+    offre:
+      - "a5_tobias: Vieux-Croc. Un ours des glaces plus vieux que moi, et plus méchant que mon père. Il a pris deux guides cet hiver. Ses traces partent des pentes de l'est."
+    offre-en:
+      - "a5_tobias: Old Fang. An ice bear older than me, and meaner than my father. He took two guides this winter. His tracks start on the eastern slopes."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les traces de Vieux-Croc"
+        texte-en: "Follow Old Fang's tracks"
+        traces: [a5_ours_trace_1, a5_ours_trace_2, a5_ours_fin]
+        apres:
+          - "Les traces s'arrêtent devant une masse blanche qui se lève lentement. Très lentement. Et très haut."
+        apres-en:
+          - "The tracks stop before a white mass rising slowly. Very slowly. And very high."
+      - type: TUER
+        texte: "Abattre Vieux-Croc"
+        texte-en: "Bring down Old Fang"
+        monstres: [a5_ours_vieux]
+        point: a5_ours_fin
+      - type: PARLER
+        texte: "Rapporter la nouvelle à Tobias"
+        texte-en: "Bring the news to Tobias"
+        pnj: a5_tobias
+        dialogue:
+          - "a5_tobias: Vieux-Croc est tombé. Je vais boire à la santé des deux guides. Et à la tienne."
+        dialogue-en:
+          - "a5_tobias: Old Fang has fallen. I will drink to the two guides. And to you."
+    recompenses:
+      xp: 20310
+      or: 2030
+      objets:
+        - materiau: BONE
+          nom: "Croc de Vieux-Croc"
+          nom-en: "Old Fang's fang"
+          description:
+            - "Long comme une main."
+          description-en:
+            - "As long as a hand."
+
+  a5_n_le_fanal_du_sommet:
+    nom: "Le fanal du sommet"
+    nom-en: "The Summit Beacon"
+    niveau: 58
+    requiert: [a5_n_vieux_croc]
+    donneur: a5_tobias
+    resume:
+      - "Le vieux fanal du plus haut sommet est éteint depuis la Chute."
+    resume-en:
+      - "The old beacon on the highest summit has been out since the Fall."
+    offre:
+      - "a5_tobias: Au plus haut sommet des Cimes, il y a un vieux fanal. Les veilleurs l'allumaient pour dire à l'Astre : on te voit. Personne ne l'a rallumé depuis mille ans. Ysarn voudrait qu'on essaie."
+    offre-en:
+      - "a5_tobias: On the highest summit of the Peaks, there is an old beacon. The watchers lit it to tell the Star: we see you. Nobody has relit it in a thousand years. Ysarn would like us to try."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre le plus haut sommet des Cimes"
+        texte-en: "Reach the highest summit of the Peaks"
+        point: a5_sommet
+        rayon: 8
+        apres:
+          - "Le monde entier, d'un seul regard. Le désert ocre au sud, les cendres au nord, et au-dessus, la déchirure du Néant, toute proche."
+        apres-en:
+          - "The whole world, at a single glance. The ochre desert to the south, the ashes to the north, and above, the tear of the Void, very close."
+      - type: INTERAGIR
+        texte: "Rallumer le fanal"
+        texte-en: "Relight the beacon"
+        point: a5_sommet
+        rayon: 5
+        apres:
+          - "La flamme prend. Elle ne vacille pas, malgré le vent. Très haut, dans la déchirure, quelque chose bouge, comme quelqu'un qui tourne la tête."
+        apres-en:
+          - "The flame catches. It does not flicker, despite the wind. Far above, in the tear, something moves, like someone turning their head."
+      - type: PARLER
+        texte: "Raconter à Ysarn"
+        texte-en: "Tell Ysarn"
+        pnj: a5_ysarn
+        dialogue:
+          - "a5_ysarn: Il a tourné la tête. Mille ans que personne ne lui disait : on te voit. Ce soir, je vais rester dehors un peu plus longtemps."
+        dialogue-en:
+          - "a5_ysarn: It turned its head. A thousand years since anyone told it: we see you. Tonight, I will stay outside a little longer."
+    recompenses:
+      xp: 22590
+      or: 2260
+
+  a5_n_le_bivouac_de_l_ouest:
+    nom: "Le bivouac de l'ouest"
+    nom-en: "The Western Bivouac"
+    niveau: 55
+    donneur: a5_tobias
+    resume:
+      - "Un bivouac d'Errants bloque le chemin de l'ouest."
+    resume-en:
+      - "A Wanderers' bivouac blocks the western path."
+    offre:
+      - "a5_tobias: Loin à l'ouest, au bout des Cimes, un bivouac d'Errants s'est installé sur le chemin des chasseurs. Personne ne passe plus."
+    offre-en:
+      - "a5_tobias: Far to the west, at the end of the Peaks, a Wanderers' bivouac has settled on the hunters' path. Nobody gets through any more."
+    etapes:
+      - type: TUER
+        texte: "Disperser le bivouac de l'ouest"
+        texte-en: "Scatter the western bivouac"
+        monstres: [errant, loup_givre]
+        nombre: 12
+        point: a5_camp_j5
+      - type: PARLER
+        texte: "Revenir voir Tobias"
+        texte-en: "Return to Tobias"
+        pnj: a5_tobias
+        dialogue:
+          - "a5_tobias: Le chemin des chasseurs est rouvert. Ils te devront des peaux. Ils paient toujours en peaux."
+        dialogue-en:
+          - "a5_tobias: The hunters' path is open again. They will owe you hides. They always pay in hides."
+    recompenses:
+      xp: 20310
+      or: 2030
+
+  a5_n_l_ermite_des_cimes:
+    nom: "L'ermite des cimes"
+    nom-en: "The Hermit of the Peaks"
+    niveau: 51
+    donneur: a5_tobias
+    resume:
+      - "Un ermite vit seul au nord-ouest des Cimes depuis quarante ans."
+    resume-en:
+      - "A hermit has lived alone north-west of the Peaks for forty years."
+    offre:
+      - "a5_tobias: Au nord-ouest, il y a un ermite, Oswin. Il ne descend jamais. Il connaît les Cimes mieux que moi. Va le voir de ma part, et apporte-lui des nouvelles : il n'en a pas eu depuis l'hiver."
+    offre-en:
+      - "a5_tobias: To the north-west, there is a hermit, Oswin. He never comes down. He knows the Peaks better than I do. Go and see him for me, and bring him news: he has had none since winter."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre le refuge de l'ermite"
+        texte-en: "Reach the hermit's refuge"
+        point: a5_refuge
+        rayon: 8
+      - type: PARLER
+        texte: "Parler à Oswin"
+        texte-en: "Talk to Oswin"
+        pnj: a5_ermite
+        dialogue:
+          - "a5_ermite: La guerre ? Encore. Je l'entends d'ici, les nuits sans vent."
+          - "a5_ermite: Un chevalier noir passe par ici, parfois. La première fois, j'avais vingt ans. La dernière fois, c'était cet automne. Il avait le même visage."
+        dialogue-en:
+          - "a5_ermite: War? Again. I can hear it from here, on windless nights."
+          - "a5_ermite: A black knight passes by here, sometimes. The first time, I was twenty. The last time was this autumn. He had the same face."
+    recompenses:
+      xp: 17470
+      or: 1745
+
+  a5_n_la_mine_gelee:
+    nom: "La mine gelée"
+    nom-en: "The Frozen Mine"
+    niveau: 54
+    requiert: [a5_n_l_ermite_des_cimes]
+    donneur: a5_ermite
+    resume:
+      - "Des Creux gelés sortent d'une vieille mine à l'ouest."
+    resume-en:
+      - "Frozen Hollow are coming out of an old mine to the west."
+    offre:
+      - "a5_ermite: Une vieille mine, à l'est de mon refuge. Des choses en sortent, la nuit. Des gens, avant. Vides, maintenant. Ils ont froid, et ils cherchent qui réchauffer."
+    offre-en:
+      - "a5_ermite: An old mine, east of my refuge. Things come out of it at night. People, once. Empty, now. They are cold, and they are looking for someone to warm them."
+    etapes:
+      - type: INTERAGIR
+        texte: "Examiner l'entrée de la mine"
+        texte-en: "Examine the mine entrance"
+        point: a5_mine_entree
+        rayon: 6
+        apres:
+          - "Des outils de mineur, abandonnés en hâte. Gravé sur une poutre : « On a trouvé un Éclat noir. Il nous parle. »"
+        apres-en:
+          - "Miner's tools, abandoned in haste. Carved on a beam: « We found a black Shard. It talks to us. »"
+      - type: TUER
+        texte: "Abattre les Creux gelés"
+        texte-en: "Bring down the frozen Hollow"
+        monstres: [a5_creux_gele]
+        nombre: 8
+        point: a5_mine
+      - type: PARLER
+        texte: "Revenir voir Oswin"
+        texte-en: "Return to Oswin"
+        pnj: a5_ermite
+        dialogue:
+          - "a5_ermite: Un Éclat noir qui parle. Il a bu leur lumière, et il a laissé du froid à la place. Comme le ciel."
+        dialogue-en:
+          - "a5_ermite: A black Shard that talks. It drank their light, and left cold in its place. Like the sky."
+    recompenses:
+      xp: 19580
+      or: 1960
+
+  a5_n_la_chapelle_sous_la_neige:
+    nom: "La chapelle sous la neige"
+    nom-en: "The Chapel under the Snow"
+    niveau: 57
+    requiert: [a5_n_la_mine_gelee]
+    donneur: a5_ermite
+    resume:
+      - "Une chapelle des Hôtes dort sous la neige, loin à l'ouest."
+    resume-en:
+      - "A Hosts' chapel sleeps under the snow, far to the west."
+    offre:
+      - "a5_ermite: Loin à l'ouest, une chapelle sous la neige. Les Hôtes y montaient pour être plus près de l'Astre quand il passait. Le froid y a mis des gardiens. Va voir ce qui reste sur l'autel."
+    offre-en:
+      - "a5_ermite: Far to the west, a chapel under the snow. The Hosts climbed there to be closer to the Star when it passed. The cold has set guardians there. Go and see what remains on the altar."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre la chapelle sous la neige"
+        texte-en: "Reach the chapel under the snow"
+        point: a5_chapelle_neige
+        rayon: 10
+      - type: TUER
+        texte: "Abattre les gardiens gelés"
+        texte-en: "Bring down the frozen guardians"
+        monstres: [a5_creux_gele]
+        nombre: 6
+        point: a5_chapelle_neige
+      - type: INTERAGIR
+        texte: "Dégager l'autel"
+        texte-en: "Clear the altar"
+        point: a5_chapelle_neige
+        rayon: 6
+        apres:
+          - "Sur l'autel, deux coupes. L'une pour l'Astre, l'autre pour celui qui l'accueille. Elles sont toujours pleines de neige, comme si on attendait encore quelqu'un."
+        apres-en:
+          - "On the altar, two cups. One for the Star, the other for whoever welcomes it. They are still full of snow, as if someone were still expected."
+      - type: PARLER
+        texte: "Revenir voir Oswin"
+        texte-en: "Return to Oswin"
+        pnj: a5_ermite
+        dialogue:
+          - "a5_ermite: Deux coupes. Une pour lui, une pour nous. Ils ne l'invitaient pas à rester. Ils l'invitaient à revenir."
+        dialogue-en:
+          - "a5_ermite: Two cups. One for it, one for us. They did not invite it to stay. They invited it to come back."
+    recompenses:
+      xp: 21820
+      or: 2180
+
+  a5_n_les_eclats_de_givre:
+    nom: "Les éclats de givre"
+    nom-en: "Frost Shards"
+    niveau: 50
+    donneur: a5_liesse
+    resume:
+      - "Liesse a besoin d'éclats de givre pour ses dégels."
+    resume-en:
+      - "Liesse needs frost shards for her thaws."
+    offre:
+      - "a5_liesse: Les Errants portent des éclats de givre sur eux. Ça brûle au contact, mais pilé dans du suif, ça fait le meilleur onguent contre le gel. Rapporte-m'en."
+    offre-en:
+      - "a5_liesse: The Wanderers carry frost shards on them. They burn to the touch, but crushed in tallow, they make the best ointment against frostbite. Bring me some."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer des éclats de givre sur les Errants"
+        texte-en: "Collect frost shards from the Wanderers"
+        monstres: [errant]
+        nombre: 8
+        chance: 0.5
+        objet: "Éclat de givre"
+        objet-en: "Frost shard"
+      - type: PARLER
+        texte: "Rapporter les éclats à Liesse"
+        texte-en: "Bring the shards to Liesse"
+        pnj: a5_liesse
+        dialogue:
+          - "a5_liesse: Parfait. Ça brûle, ça pique, ça soigne. Comme moi, disent les soldats."
+        dialogue-en:
+          - "a5_liesse: Perfect. It burns, it stings, it heals. Like me, the soldiers say."
+    recompenses:
+      xp: 16790
+      or: 1680
+
+  a5_n_le_lac_gele:
+    nom: "Le lac gelé"
+    nom-en: "The Frozen Lake"
+    niveau: 53
+    requiert: [a5_n_les_eclats_de_givre]
+    donneur: a5_liesse
+    resume:
+      - "Liesse veut de l'eau du Lac des Cimes, gardé par des noyés."
+    resume-en:
+      - "Liesse wants water from the Peak Lake, guarded by drowned ones."
+    offre:
+      - "a5_liesse: L'eau du Lac des Cimes ne gèle jamais tout à fait. Elle réveille les gelés sans les brûler. Des noyés gardent la rive. Ils ne savent plus pourquoi."
+    offre-en:
+      - "a5_liesse: The water of the Peak Lake never quite freezes. It wakes the frozen without burning them. Drowned ones guard the shore. They no longer know why."
+    etapes:
+      - type: TUER
+        texte: "Abattre les noyés du lac"
+        texte-en: "Bring down the drowned of the lake"
+        monstres: [a5_noye_gele]
+        nombre: 6
+        point: a5_lac
+      - type: INTERAGIR
+        texte: "Remplir la gourde au bord du lac"
+        texte-en: "Fill the flask at the lake's edge"
+        point: a5_lac
+        rayon: 6
+        apres:
+          - "L'eau est tiède. Au fond du lac, une lueur dorée, immobile : un Éclat, tombé là il y a mille ans, qui chauffe encore l'eau."
+        apres-en:
+          - "The water is lukewarm. At the bottom of the lake, a golden glow, motionless: a Shard, fallen there a thousand years ago, still warming the water."
+      - type: PARLER
+        texte: "Rapporter l'eau à Liesse"
+        texte-en: "Bring the water to Liesse"
+        pnj: a5_liesse
+        dialogue:
+          - "a5_liesse: Un Éclat au fond du lac. Il a choisi de réchauffer l'eau plutôt que de garder sa lumière. Je l'aime bien, celui-là."
+        dialogue-en:
+          - "a5_liesse: A Shard at the bottom of the lake. It chose to warm the water rather than keep its light. I like that one."
+    recompenses:
+      xp: 18860
+      or: 1885
+
+  a5_n_le_dernier_gele:
+    nom: "Le dernier gelé"
+    nom-en: "The Last Frozen"
+    niveau: 57
+    requiert: [a5_n_le_lac_gele]
+    donneur: a5_liesse
+    resume:
+      - "Un dernier gelé dort au fond d'une combe, au nord-est."
+    resume-en:
+      - "One last frozen one sleeps at the bottom of a combe, to the north-east."
+    offre:
+      - "a5_liesse: Un dernier gelé, au nord-est, dans une combe. Avec l'eau du lac, je peux le dégeler sans feu. Mais les Errants sentent la chaleur. Ils viendront. Tiens-les loin de lui."
+    offre-en:
+      - "a5_liesse: One last frozen one, to the north-east, in a combe. With the lake water, I can thaw him without fire. But the Wanderers sense warmth. They will come. Keep them away from him."
+    etapes:
+      - type: DEFENSE
+        texte: "Protéger le dernier gelé pendant le dégel"
+        texte-en: "Protect the last frozen during the thaw"
+        point: a5_gele_4
+        monstres: [a5_errant_ancien]
+        nombre: 3
+        vagues: 3
+        pv: 180
+        degats: 6
+        cible: "Le Marqué gelé"
+        cible-en: "The frozen Marked"
+        apres:
+          - "Le gelé ouvre les yeux. Il dit un seul mot, d'une voix qui n'est pas la sienne : « Libre. » Puis il dort, d'un sommeil ordinaire."
+        apres-en:
+          - "The frozen one opens his eyes. He says a single word, in a voice that is not his own: « Free. » Then he sleeps, an ordinary sleep."
+      - type: PARLER
+        texte: "Revenir voir Liesse"
+        texte-en: "Return to Liesse"
+        pnj: a5_liesse
+        dialogue:
+          - "a5_liesse: « Libre. » C'est tout ce qu'il avait gardé. Une seule page, avec un seul mot. Je crois que c'était la plus importante."
+        dialogue-en:
+          - "a5_liesse: « Free. » That is all he had kept. A single page, with a single word. I think it was the most important one."
+    recompenses:
+      xp: 21820
+      or: 2180
+
+  a5_n_les_lentilles:
+    nom: "Les lentilles de l'observatoire"
+    nom-en: "The Observatory Lenses"
+    niveau: 49
+    donneur: a5_ysarn
+    resume:
+      - "Des Errants ont emporté les lentilles de l'observatoire."
+    resume-en:
+      - "Wanderers have carried off the observatory's lenses."
+    offre:
+      - "a5_ysarn: Les Errants ont pillé notre réserve, cet hiver. Ils ont emporté les lentilles de la grande lunette dans leur bivouac, à l'est. Ils aiment ce qui brille. Moi aussi."
+    offre-en:
+      - "a5_ysarn: The Wanderers raided our store this winter. They took the great telescope's lenses to their bivouac, to the east. They like what shines. So do I."
+    etapes:
+      - type: TUER
+        texte: "Disperser le bivouac de l'est"
+        texte-en: "Scatter the eastern bivouac"
+        monstres: [errant, loup_givre]
+        nombre: 10
+        point: a5_camp_j1
+      - type: INTERAGIR
+        texte: "Récupérer les lentilles"
+        texte-en: "Recover the lenses"
+        point: a5_camp_j1
+        rayon: 6
+        apres:
+          - "Les lentilles sont là, posées en cercle autour d'un feu éteint, tournées vers le ciel. Les Errants s'en servaient pour regarder en haut."
+        apres-en:
+          - "The lenses are there, set in a circle around a dead fire, turned toward the sky. The Wanderers were using them to look up."
+      - type: PARLER
+        texte: "Rapporter les lentilles à Ysarn"
+        texte-en: "Bring the lenses to Ysarn"
+        pnj: a5_ysarn
+        dialogue:
+          - "a5_ysarn: Ils regardaient le ciel avec. Même éteints, les Marqués cherchent l'Astre. Ça me serre le cœur."
+        dialogue-en:
+          - "a5_ysarn: They were looking at the sky with them. Even extinguished, the Marked look for the Star. It wrings my heart."
+    recompenses:
+      xp: 16120
+      or: 1610
+
+  a5_n_le_cercle_des_veilleurs:
+    nom: "Le cercle des veilleurs"
+    nom-en: "The Watchers' Circle"
+    niveau: 52
+    requiert: [a5_n_les_lentilles]
+    donneur: a5_ysarn
+    resume:
+      - "Un cercle de pierres à l'ouest était le premier observatoire."
+    resume-en:
+      - "A stone circle to the west was the first observatory."
+    offre:
+      - "a5_ysarn: Avant Fort Blanc, il y avait un cercle de pierres, à l'ouest. Le premier observatoire des Hôtes. Va lire l'alignement des pierres et dis-moi ce qu'il montre."
+    offre-en:
+      - "a5_ysarn: Before Fort Blanc, there was a stone circle, to the west. The Hosts' first observatory. Go and read the alignment of the stones and tell me what it shows."
+    etapes:
+      - type: INTERAGIR
+        texte: "Lire l'alignement des pierres"
+        texte-en: "Read the alignment of the stones"
+        point: a5_ruine_j2
+        rayon: 7
+        apres:
+          - "Chaque pierre vise un point du ciel. Toutes ensemble, elles dessinent un chemin, du désert jusqu'aux cimes : la route que suivait l'Astre quand il descendait."
+        apres-en:
+          - "Each stone points at a spot in the sky. Together, they trace a path, from the desert to the peaks: the road the Star followed when it came down."
+      - type: PARLER
+        texte: "Revenir voir Ysarn"
+        texte-en: "Return to Ysarn"
+        pnj: a5_ysarn
+        dialogue:
+          - "a5_ysarn: Il descendait au désert et remontait par ici. Fort Blanc était l'endroit d'où on lui disait au revoir."
+        dialogue-en:
+          - "a5_ysarn: It came down in the desert and went back up through here. Fort Blanc was the place where it was bid farewell."
+    recompenses:
+      xp: 18160
+      or: 1815
+
+  a5_n_le_ciel_d_avant:
+    nom: "Le ciel d'avant"
+    nom-en: "The Sky Before"
+    niveau: 56
+    requiert: [a5_n_le_cercle_des_veilleurs]
+    donneur: a5_ysarn
+    resume:
+      - "Trois cairns anciens gardent des mesures du ciel d'avant la Chute."
+    resume-en:
+      - "Three ancient cairns hold readings of the sky before the Fall."
+    offre:
+      - "a5_ysarn: Les veilleurs laissaient leurs mesures sous des cairns, le long du col. Il en reste trois. Avec les trois, je pourrai redessiner le ciel d'avant la Chute."
+    offre-en:
+      - "a5_ysarn: The watchers left their readings under cairns, along the pass. Three remain. With all three, I can redraw the sky before the Fall."
+    etapes:
+      - type: ENQUETE
+        texte: "Relever les mesures des trois cairns"
+        texte-en: "Take the readings from the three cairns"
+        pnj: a5_ysarn
+        indices:
+          - point: a5_cairn_1
+            texte: "Le cairn de l'ouest"
+            texte-en: "The western cairn"
+            apres:
+              - "Une plaque de cuivre : l'Astre, très haut, et une date. La dernière nuit d'avant la Chute."
+            apres-en:
+              - "A copper plate: the Star, very high, and a date. The last night before the Fall."
+          - point: a5_cairn_2
+            texte: "Le cairn du col"
+            texte-en: "The pass cairn"
+            apres:
+              - "Une plaque : l'Astre, plus bas, entouré d'anneaux de lumière qui n'étaient pas là avant."
+            apres-en:
+              - "A plate: the Star, lower, surrounded by rings of light that were not there before."
+          - point: a5_cairn_3
+            texte: "Le cairn de l'est"
+            texte-en: "The eastern cairn"
+            apres:
+              - "Une plaque, gravée à la hâte : mille points de lumière qui tombent. Et au centre, un vide en forme d'étoile."
+            apres-en:
+              - "A plate, hastily carved: a thousand points of light falling. And in the centre, a star-shaped void."
+        dialogue:
+          - "joueur: L'Astre haut, puis entouré d'anneaux, puis mille lumières qui tombent autour d'un vide."
+          - "a5_ysarn: Les anneaux. Les chaînes. Ils ont vu les chaînes se refermer, d'ici. Et ils ont tout noté, sans rien pouvoir faire."
+        dialogue-en:
+          - "joueur: The Star high, then surrounded by rings, then a thousand lights falling around a void."
+          - "a5_ysarn: The rings. The chains. They saw the chains close, from here. And they noted everything, without being able to do anything."
+    recompenses:
+      xp: 21060
+      or: 2105
+
+  a5_n_la_lentille_d_oswin:
+    nom: "La lentille d'Oswin"
+    nom-en: "Oswin's Lens"
+    niveau: 59
+    requiert: [a5_n_le_ciel_d_avant, a5_n_l_ermite_des_cimes]
+    donneur: a5_ysarn
+    resume:
+      - "Ysarn veut prêter sa meilleure lentille à l'ermite."
+    resume-en:
+      - "Ysarn wants to lend his best lens to the hermit."
+    offre:
+      - "a5_ysarn: Oswin a vu passer le chevalier noir pendant quarante ans. Il regarde plus longtemps que moi. Porte-lui cette lentille : qu'il note ce qu'il voit dans la déchirure, les nuits claires."
+    offre-en:
+      - "a5_ysarn: Oswin has watched the black knight pass for forty years. He looks longer than I do. Take him this lens: let him note what he sees in the tear, on clear nights."
+    etapes:
+      - type: LIVRER
+        texte: "Porter la lentille à Oswin"
+        texte-en: "Take the lens to Oswin"
+        pnj: a5_ermite
+        materiau: GLASS_PANE
+        objet: "Lentille de l'observatoire"
+        objet-en: "Observatory lens"
+        dialogue:
+          - "a5_ermite: Une lentille d'Ysarn. Il me fait confiance, le vieux fou. Je regarderai. Je n'ai que ça à faire, de toute façon."
+        dialogue-en:
+          - "a5_ermite: A lens from Ysarn. He trusts me, the old fool. I will watch. It is all I have to do, anyway."
+      - type: PARLER
+        texte: "Revenir voir Ysarn"
+        texte-en: "Return to Ysarn"
+        pnj: a5_ysarn
+        dialogue:
+          - "a5_ysarn: Deux vieux qui regardent le ciel, chacun sur sa montagne. Il y a des guerres moins utiles."
+        dialogue-en:
+          - "a5_ysarn: Two old men watching the sky, each on his own mountain. There are less useful wars."
+    recompenses:
+      xp: 23370
+      or: 2335
+
+  # ================================================================ CONTRATS RÉPÉTABLES — TABLEAU DE RASK (Fort Blanc)
+
+  a5_c_loups:
+    nom: "Contrat : loups de givre"
+    nom-en: "Contract: Frost Wolves"
+    repetable: 20
+    niveau: 50
+    donneur: a5_rask
+    resume:
+      - "Contrat du jour : chasser les loups de givre."
+    resume-en:
+      - "Daily contract: hunt frost wolves."
+    offre:
+      - "a5_rask: Douze loups de givre. N'importe où dans les cimes. Ils ne manquent jamais."
+    offre-en:
+      - "a5_rask: Twelve frost wolves. Anywhere in the peaks. There are never too few."
+    etapes:
+      - type: TUER
+        texte: "Chasser des loups de givre"
+        texte-en: "Hunt frost wolves"
+        monstres: [loup_givre]
+        nombre: 12
+      - type: PARLER
+        texte: "Toucher la prime chez Rask"
+        texte-en: "Collect the bounty from Rask"
+        pnj: a5_rask
+        dialogue:
+          - "a5_rask: Payé. Reviens demain, ils seront revenus aussi."
+        dialogue-en:
+          - "a5_rask: Paid. Come back tomorrow, they will be back too."
+    recompenses:
+      xp: 8890
+      or: 890
+
+  a5_c_ours:
+    nom: "Contrat : ours des glaces"
+    nom-en: "Contract: Ice Bears"
+    repetable: 20
+    niveau: 52
+    donneur: a5_rask
+    resume:
+      - "Contrat du jour : abattre des ours des glaces."
+    resume-en:
+      - "Daily contract: bring down ice bears."
+    offre:
+      - "a5_rask: Six ours des glaces. La Garde a besoin de fourrures, et les ours ont besoin d'apprendre la politesse."
+    offre-en:
+      - "a5_rask: Six ice bears. The Guard needs furs, and the bears need to learn manners."
+    etapes:
+      - type: TUER
+        texte: "Abattre des ours des glaces"
+        texte-en: "Bring down ice bears"
+        monstres: [ours]
+        nombre: 6
+      - type: PARLER
+        texte: "Toucher la prime chez Rask"
+        texte-en: "Collect the bounty from Rask"
+        pnj: a5_rask
+        dialogue:
+          - "a5_rask: Six fourrures. Hild aura chaud cet hiver. Elle ne te remerciera pas, elle n'est pas comme ça."
+        dialogue-en:
+          - "a5_rask: Six furs. Hild will be warm this winter. She will not thank you, she is not like that."
+    recompenses:
+      xp: 9610
+      or: 960
+
+  a5_c_errants:
+    nom: "Contrat : Errants"
+    nom-en: "Contract: Wanderers"
+    repetable: 20
+    niveau: 54
+    donneur: a5_rask
+    resume:
+      - "Contrat du jour : libérer des Errants."
+    resume-en:
+      - "Daily contract: free Wanderers."
+    offre:
+      - "a5_rask: Douze Errants. Liesse dit qu'il faut les libérer, pas les tuer. Moi, je paie pareil."
+    offre-en:
+      - "a5_rask: Twelve Wanderers. Liesse says they must be freed, not killed. I pay the same either way."
+    etapes:
+      - type: TUER
+        texte: "Libérer des Errants"
+        texte-en: "Free Wanderers"
+        monstres: [errant]
+        nombre: 12
+      - type: PARLER
+        texte: "Toucher la prime chez Rask"
+        texte-en: "Collect the bounty from Rask"
+        pnj: a5_rask
+        dialogue:
+          - "a5_rask: Payé. Liesse a allumé une bougie pour eux. Elle en allume beaucoup."
+        dialogue-en:
+          - "a5_rask: Paid. Liesse lit a candle for them. She lights many."
+    recompenses:
+      xp: 10370
+      or: 1035
+
+  a5_c_eclats:
+    nom: "Contrat : éclats de givre"
+    nom-en: "Contract: Frost Shards"
+    repetable: 20
+    niveau: 51
+    donneur: a5_rask
+    resume:
+      - "Contrat du jour : des éclats de givre pour l'infirmerie."
+    resume-en:
+      - "Daily contract: frost shards for the infirmary."
+    offre:
+      - "a5_rask: L'infirmerie de Liesse en consomme dix par jour. Sur les Errants, comme d'habitude."
+    offre-en:
+      - "a5_rask: Liesse's infirmary uses ten a day. From the Wanderers, as usual."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer des éclats de givre"
+        texte-en: "Collect frost shards"
+        monstres: [errant]
+        nombre: 10
+        chance: 0.5
+        objet: "Éclat de givre"
+        objet-en: "Frost shard"
+      - type: PARLER
+        texte: "Livrer les éclats à Rask"
+        texte-en: "Deliver the shards to Rask"
+        pnj: a5_rask
+        dialogue:
+          - "a5_rask: Dix. Liesse les attendait hier. Elle les attend toujours hier."
+        dialogue-en:
+          - "a5_rask: Ten. Liesse was expecting them yesterday. She always expects them yesterday."
+    recompenses:
+      xp: 9250
+      or: 925
+
+  a5_c_pelerins:
+    nom: "Contrat : les pèlerins"
+    nom-en: "Contract: The Pilgrims"
+    repetable: 20
+    niveau: 51
+    donneur: a5_rask
+    resume:
+      - "Contrat du jour : accompagner les pèlerins à la tour."
+    resume-en:
+      - "Daily contract: accompany the pilgrims to the tower."
+    offre:
+      - "a5_rask: Ansel remonte à la tour des Veilleurs avec un nouveau groupe. Les loups aussi ont leurs habitudes."
+    offre-en:
+      - "a5_rask: Ansel is going up to the Watchers' tower again with a new group. The wolves have their habits too."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter les pèlerins jusqu'à la tour des Veilleurs"
+        texte-en: "Escort the pilgrims to the Watchers' tower"
+        pnj: a5_pelerin
+        chemin: [a5_pel_1, a5_pel_2, a5_ruine_j1]
+        monstres: [a5_loup_blanc]
+        nombre: 3
+        vagues: 2
+        pv: 140
+        degats: 5
+        apres:
+          - "a5_pelerin: Arrivés. Encore une fois. Merci, Marqué."
+        apres-en:
+          - "a5_pelerin: Arrived. Once again. Thank you, Marked."
+      - type: PARLER
+        texte: "Revenir voir Rask"
+        texte-en: "Return to Rask"
+        pnj: a5_rask
+        dialogue:
+          - "a5_rask: Les pèlerins sont arrivés. Voici ta part."
+        dialogue-en:
+          - "a5_rask: The pilgrims arrived. Here is your share."
+    recompenses:
+      xp: 9250
+      or: 925
+
+  a5_c_tour:
+    nom: "Contrat : la tour du col"
+    nom-en: "Contract: The Pass Tower"
+    repetable: 20
+    niveau: 55
+    donneur: a5_rask
+    resume:
+      - "Contrat du jour : tenir la tour du Col Blanc."
+    resume-en:
+      - "Daily contract: hold the White Pass tower."
+    offre:
+      - "a5_rask: Les deux armées tâtent la tour du Col Blanc chaque jour. Une minute à tenir, pas plus."
+    offre-en:
+      - "a5_rask: Both armies probe the White Pass tower every day. One minute to hold, no more."
+    etapes:
+      - type: DEFENSE
+        texte: "Tenir la tour du Col Blanc"
+        texte-en: "Hold the White Pass tower"
+        point: a5_col_blanc
+        monstres: [a5_lame_aube, a5_lame_ombre]
+        nombre: 3
+        duree: 60
+        intervalle: 15
+        pv: 200
+        degats: 6
+        cible: "La tour du Col Blanc"
+        cible-en: "The White Pass tower"
+        apres:
+          - "Les soldats redescendent. La tour reste blanche."
+        apres-en:
+          - "The soldiers go back down. The tower stays white."
+      - type: PARLER
+        texte: "Revenir voir Rask"
+        texte-en: "Return to Rask"
+        pnj: a5_rask
+        dialogue:
+          - "a5_rask: La tour tient. Voici ta part."
+        dialogue-en:
+          - "a5_rask: The tower holds. Here is your share."
+    recompenses:
+      xp: 10750
+      or: 1075
+
+  a5_c_bois:
+    nom: "Contrat : le bois de chauffe"
+    nom-en: "Contract: Firewood"
+    repetable: 20
+    niveau: 53
+    donneur: a5_rask
+    resume:
+      - "Contrat du jour : ramener du pin noir au fort."
+    resume-en:
+      - "Daily contract: bring black pine back to the fort."
+    offre:
+      - "a5_rask: Il faut du bois tous les jours. Pin noir, sur les hauts du sud-ouest, à dos de monture."
+    offre-en:
+      - "a5_rask: Wood is needed every day. Black pine, on the south-western heights, on a mount."
+    etapes:
+      - type: TRANSPORT
+        texte: "Ramener les fagots au fort, à dos de monture"
+        texte-en: "Bring the bundles back to the fort, on a mount"
+        point: a5_porte_fort
+        depart: a5_bois
+        materiau: SPRUCE_LOG
+        rayon: 6
+        objet: "Fagots de pin noir"
+        objet-en: "Black pine bundles"
+        apres:
+          - "Les fagots arrivent secs."
+        apres-en:
+          - "The bundles arrive dry."
+      - type: PARLER
+        texte: "Revenir voir Rask"
+        texte-en: "Return to Rask"
+        pnj: a5_rask
+        dialogue:
+          - "a5_rask: Du bois sec. Ce soir, le fort aura chaud. Voici ta part."
+        dialogue-en:
+          - "a5_rask: Dry wood. Tonight, the fort will be warm. Here is your share."
+    recompenses:
+      xp: 9990
+      or: 1000
+
+  a5_c_blizzard:
+    nom: "Contrat : le blizzard"
+    nom-en: "Contract: The Blizzard"
+    repetable: 20
+    niveau: 56
+    donneur: a5_rask
+    resume:
+      - "Contrat du jour : garder le feu du glacier dans le blizzard."
+    resume-en:
+      - "Daily contract: keep the glacier fire going in the blizzard."
+    offre:
+      - "a5_rask: Liesse dégèle encore au glacier. Le blizzard se lève chaque après-midi. Quelqu'un doit garder le feu. Reste au centre."
+    offre-en:
+      - "a5_rask: Liesse is still thawing at the glacier. The blizzard rises every afternoon. Someone must keep the fire going. Stay in the centre."
+    etapes:
+      - type: SURVIE
+        texte: "Garder le feu du glacier dans le blizzard"
+        texte-en: "Keep the glacier fire going in the blizzard"
+        point: a5_blizzard
+        rayon: 14
+        duree: 60
+        mode: resserre
+        rayon-fin: 4
+        degats: 6
+        monstres: [a5_errant_ancien]
+        nombre: 2
+        intervalle: 20
+        apres:
+          - "Le blizzard tombe. Le feu tient. Liesse lève la main sans se retourner."
+        apres-en:
+          - "The blizzard drops. The fire holds. Liesse raises a hand without turning round."
+      - type: PARLER
+        texte: "Revenir voir Rask"
+        texte-en: "Return to Rask"
+        pnj: a5_rask
+        dialogue:
+          - "a5_rask: Le feu a tenu. Voici ta part."
+        dialogue-en:
+          - "a5_rask: The fire held. Here is your share."
+    recompenses:
+      xp: 11150
+      or: 1115
+
+  a5_c_courrier:
+    nom: "Contrat : le courrier du refuge"
+    nom-en: "Contract: The Refuge Post"
+    repetable: 20
+    niveau: 50
+    donneur: a5_rask
+    resume:
+      - "Contrat du jour : porter le courrier à l'ermite avant la nuit."
+    resume-en:
+      - "Daily contract: carry the post to the hermit before nightfall."
+    offre:
+      - "a5_rask: Oswin veut ses nouvelles avant la nuit, sinon il ne les lit pas. Quatre minutes. Monte, ou cours."
+    offre-en:
+      - "a5_rask: Oswin wants his news before nightfall, or he will not read it. Four minutes. Ride, or run."
+    etapes:
+      - type: LIVRER
+        texte: "Porter le courrier à Oswin avant la nuit"
+        texte-en: "Carry the post to Oswin before nightfall"
+        pnj: a5_ermite
+        materiau: PAPER
+        objet: "Courrier de Fort Blanc"
+        objet-en: "Fort Blanc post"
+        dialogue:
+          - "a5_ermite: Avant la nuit. Bien. Je vais lire ça au coin du feu en râlant."
+        dialogue-en:
+          - "a5_ermite: Before nightfall. Good. I will read this by the fire, grumbling."
+        chrono: 240
+        echec:
+          - "a5_rask: Trop tard, la nuit est tombée. Voici le courrier de demain : recommence."
+        echec-en:
+          - "a5_rask: Too late, night has fallen. Here is tomorrow's post: start again."
+      - type: PARLER
+        texte: "Revenir voir Rask"
+        texte-en: "Return to Rask"
+        pnj: a5_rask
+        dialogue:
+          - "a5_rask: Le courrier est passé. Voici ta part."
+        dialogue-en:
+          - "a5_rask: The post got through. Here is your share."
+    recompenses:
+      xp: 8890
+      or: 890
+
+  a5_c_front_l:
+    nom: "Contrat : le front du col"
+    nom-en: "Contract: The Pass Front"
+    faction: lumiere
+    repetable: 20
+    niveau: 57
+    donneur: a5_rask
+    resume:
+      - "Contrat du jour : repousser les Lames de la Citadelle au Col Blanc."
+    resume-en:
+      - "Daily contract: push back the Citadel Blades at the White Pass."
+    offre:
+      - "a5_rask: Je ne prends pas parti. Mais ton capitaine paie bien, et la Citadelle remonte au Col Blanc chaque jour. Dix Lames."
+    offre-en:
+      - "a5_rask: I take no side. But your captain pays well, and the Citadel comes back up to the White Pass every day. Ten Blades."
+    etapes:
+      - type: TUER
+        texte: "Repousser les Lames de la Citadelle"
+        texte-en: "Push back the Citadel Blades"
+        monstres: [a5_lame_ombre]
+        nombre: 10
+        point: a5_col_blanc
+      - type: PARLER
+        texte: "Revenir voir Rask"
+        texte-en: "Return to Rask"
+        pnj: a5_rask
+        dialogue:
+          - "a5_rask: Payé, de la part du Bastion. Ne dis pas à Hild que je fais le facteur pour les armées."
+        dialogue-en:
+          - "a5_rask: Paid, on behalf of the Bastion. Do not tell Hild I play postman for the armies."
+    recompenses:
+      xp: 11550
+      or: 1155
+
+  a5_c_front_o:
+    nom: "Contrat : le front du col"
+    nom-en: "Contract: The Pass Front"
+    faction: ombre
+    repetable: 20
+    niveau: 57
+    donneur: a5_rask
+    resume:
+      - "Contrat du jour : repousser les Lames du Bastion au Col Blanc."
+    resume-en:
+      - "Daily contract: push back the Bastion Blades at the White Pass."
+    offre:
+      - "a5_rask: Je ne prends pas parti. Mais Sarn paie bien, et le Bastion remonte au Col Blanc chaque jour. Dix Lames."
+    offre-en:
+      - "a5_rask: I take no side. But Sarn pays well, and the Bastion comes back up to the White Pass every day. Ten Blades."
+    etapes:
+      - type: TUER
+        texte: "Repousser les Lames du Bastion"
+        texte-en: "Push back the Bastion Blades"
+        monstres: [a5_lame_aube]
+        nombre: 10
+        point: a5_col_blanc
+      - type: PARLER
+        texte: "Revenir voir Rask"
+        texte-en: "Return to Rask"
+        pnj: a5_rask
+        dialogue:
+          - "a5_rask: Payé, de la part de la Citadelle. Ne dis pas à Hild que je fais le facteur pour les armées."
+        dialogue-en:
+          - "a5_rask: Paid, on behalf of the Citadel. Do not tell Hild I play postman for the armies."
+    recompenses:
+      xp: 11550
+      or: 1155
+
+  a5_c_prime_croc_blanc:
+    nom: "Avis de recherche : Croc-Blanc"
+    nom-en: "Wanted: White Fang"
+    repetable: 168
+    niveau: 58
+    donneur: a5_rask
+    resume:
+      - "Prime de la semaine : Croc-Blanc, le chef de meute des tanières de l'est."
+    resume-en:
+      - "Weekly bounty: White Fang, the pack leader of the eastern dens."
+    offre:
+      - "a5_rask: Une fois par semaine, Croc-Blanc sort des tanières de l'est et emmène sa meute jusqu'aux camps. Les deux armées ont mis sa tête à prix. Moi aussi."
+    offre-en:
+      - "a5_rask: Once a week, White Fang comes out of the eastern dens and leads his pack down to the camps. Both armies have put a price on his head. So have I."
+    etapes:
+      - type: TUER
+        texte: "Abattre Croc-Blanc"
+        texte-en: "Bring down White Fang"
+        monstres: [a5_loup_alpha]
+        point: a5_tanieres
+      - type: PARLER
+        texte: "Rapporter la preuve à Rask"
+        texte-en: "Bring the proof to Rask"
+        pnj: a5_rask
+        dialogue:
+          - "a5_rask: Croc-Blanc. Les deux armées vont payer la même prime. Pour une fois qu'elles sont d'accord sur quelque chose."
+        dialogue-en:
+          - "a5_rask: White Fang. Both armies will pay the same bounty. For once they agree on something."
+    recompenses:
+      xp: 23920
+      or: 3190
+      objets:
+        - materiau: WHITE_WOOL
+          nom: "Fourrure de Croc-Blanc"
+          nom-en: "White Fang's fur"
+          description:
+            - "Blanche comme le col en janvier."
+          description-en:
+            - "White as the pass in January."

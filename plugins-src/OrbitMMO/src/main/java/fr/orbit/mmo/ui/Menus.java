@@ -114,7 +114,7 @@ public final class Menus {
         Menu m = new Menu(4, Text.mm("<" + f.hex + "><b>" + f.label + "</b></" + f.hex + "> <#8C96A3>· choisissez votre classe"))
                 .skin("Votre classe", f.label, null);
         m.forceOpen = true;
-        int[] slots = {10, 11, 12, 13, 14, 15, 16, 22};
+        int[] slots = {10, 11, 12, 13, 14, 15, 16, 20, 22, 24, 19, 21, 23, 25};
         int i = 0;
         for (ClassDef c : plugin.classes().all()) {
             if (i >= slots.length) {
@@ -233,7 +233,7 @@ public final class Menus {
         if (shield) {
             p.getInventory().setItemInOffHand(Items.shield());
         }
-        Items.equip(p, Items.armorSet(0, Fx.color(c.hex)));
+        Items.equip(p, fr.orbit.mmo.item.Loot.armorSet(fr.orbit.mmo.item.ArmorType.of(c), 0, Fx.color(c.hex)));
         p.closeInventory();
         plugin.progression().learnNew(p, d, java.util.Set.of("*"));
         Items.give(p, Items.potion(5));
@@ -533,7 +533,7 @@ public final class Menus {
         talents(plugin, p, specId, 0);
     }
 
-    /** Page 0 : paliers 1 à 6 ; page 1 : paliers avancés 7 à 9. */
+    /** Page 0 : paliers 1 à 6 ; page 1 : paliers avancés 7 à 9 et paliers de maître 10 à 12. */
     public static void talents(OrbitMMO plugin, Player p, String specId, int page) {
         PlayerData d = plugin.players().get(p);
         SpecDef spec = plugin.classes().spec(specId != null ? specId : d.specId);
@@ -575,17 +575,18 @@ public final class Menus {
         if (pg == 0 && pages > 1) {
             int need = TalentDef.required(TalentDef.TIERS_PER_PAGE);
             boolean ok = spent >= need;
-            m.set(45, Items.icon(ok ? Material.NETHER_STAR : Material.FIREWORK_STAR, "<#FFD66E><b>Paliers avancés ▶</b>",
+            m.set(45, Items.icon(ok ? Material.NETHER_STAR : Material.FIREWORK_STAR, "<#FFD66E><b>Paliers avancés et de maître ▶</b>",
                     "<#8C96A3>Paliers " + (TalentDef.TIERS_PER_PAGE + 1) + " à " + TalentDef.TIERS + " : les talents de fin de",
-                    "<#8C96A3>progression (" + TalentDef.required(TalentDef.TIERS_PER_PAGE) + ", " + TalentDef.required(TalentDef.TIERS_PER_PAGE + 1)
-                            + " et " + TalentDef.required(TalentDef.TIERS - 1) + " points dans l'arbre).",
+                    "<#8C96A3>progression (de " + TalentDef.required(TalentDef.TIERS_PER_PAGE) + " à "
+                            + TalentDef.required(TalentDef.TIERS - 1) + " points dans l'arbre).",
                     ok ? "<#5EE89A>Ouverts" : "<#5A6270>" + spent + " / " + need + " points pour ouvrir le palier " + (TalentDef.TIERS_PER_PAGE + 1),
                     "", "<#5A6270>[Clic] voir"), t -> talents(plugin, p, spec.id, 1));
         } else if (pg > 0) {
             m.set(45, Items.icon(Material.SPECTRAL_ARROW, "<#D7DCE2>◀ Paliers 1 à " + TalentDef.TIERS_PER_PAGE),
                     t -> talents(plugin, p, spec.id, pg - 1));
             int maxPoints = Math.max(0, plugin.progression().maxLevel() - plugin.progression().specLevel() + 1);
-            m.set(40, Items.icon(Material.OAK_HANGING_SIGN, "<#FFD66E><b>Paliers avancés</b>",
+            // Case 18 (colonne de gauche) : les 6 rangées de la page sont prises par les paliers.
+            m.set(18, Items.icon(Material.OAK_HANGING_SIGN, "<#FFD66E><b>Paliers avancés et de maître</b>",
                     "<#D7DCE2>Les talents de fin de progression.",
                     "<#8C96A3>Au niveau " + plugin.progression().maxLevel() + " : <white>" + maxPoints + " points</white>,",
                     "<#8C96A3>l'arbre en compte <white>" + spec.totalRanks() + "</white> : impossible",
@@ -712,6 +713,11 @@ public final class Menus {
                     if (!canTravel) {
                         Text.msg(p, here > 0 ? "<#FF5C5C>Utilisez la porte de téléportation d'une ville du Pilier."
                                 : "<#FF5C5C>On entre dans le Pilier des Astres par son gardien, devant le donjon de votre capitale.");
+                        return;
+                    }
+                    String gate = here > 0 ? null : fr.orbit.mmo.item.Loot.itemLevelGate(plugin, p, d, "pilier");
+                    if (gate != null) {
+                        Text.msg(p, "<#FF8A3B>" + gate);
                         return;
                     }
                     p.closeInventory();

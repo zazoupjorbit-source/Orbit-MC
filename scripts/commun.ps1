@@ -242,6 +242,12 @@ $Plugins = @(
     @{ Nom = 'OrbitTycoon';     Type = 'ps1';    Dossier = 'plugins-src\OrbitTycoon';     Jar = 'plugins-src\OrbitTycoon\target\OrbitTycoon.jar';         Vers = @('instances\tycoon') },
     @{ Nom = 'OrbitPractice';   Type = 'ps1';    Dossier = 'plugins-src\OrbitPractice';   Jar = 'plugins-src\OrbitPractice\target\OrbitPractice.jar';     Vers = @('instances\practice') },
     @{ Nom = 'OrbitSurvie';     Type = 'ps1';    Dossier = 'plugins-src\OrbitSurvie';     Jar = 'plugins-src\OrbitSurvie\target\OrbitSurvie.jar';         Vers = @('instances\survie') },
+    @{ Nom = 'OrbitVol';        Type = 'ps1';    Dossier = 'plugins-src\OrbitVol';        Jar = 'plugins-src\OrbitVol\target\OrbitVol.jar';             Vers = @('instances\vol') },
+    @{ Nom = 'OrbitRoyale';     Type = 'ps1';    Dossier = 'plugins-src\OrbitRoyale';     Jar = 'plugins-src\OrbitRoyale\target\OrbitRoyale.jar';         Vers = @('server') },
+    @{ Nom = 'OrbitBornes';     Type = 'ps1';    Dossier = 'plugins-src\OrbitBornes';     Jar = 'plugins-src\OrbitBornes\target\OrbitBornes.jar';         Vers = @('server') },
+    @{ Nom = 'OrbitArene';      Type = 'ps1';    Dossier = 'plugins-src\OrbitArene';      Jar = 'plugins-src\OrbitArene\target\OrbitArene.jar';           Vers = @('server') },
+    @{ Nom = 'OrbitChasseurs';  Type = 'ps1';    Dossier = 'plugins-src\OrbitChasseurs';  Jar = 'plugins-src\OrbitChasseurs\target\OrbitChasseurs.jar';   Vers = @('server') },
+    @{ Nom = 'OrbitTele';       Type = 'ps1';    Dossier = 'plugins-src\OrbitTele';       Jar = 'plugins-src\OrbitTele\target\OrbitTele.jar';             Vers = @('server') },
     @{ Nom = 'PanelBridge';     Type = 'bridge'; Dossier = 'panel\bridge';                Jar = 'panel\bridge\PanelBridge.jar';                           Vers = @('server') },
     @{ Nom = 'OrbitStaff';      Type = 'maven';  Dossier = 'mods-src\orbitstaff';         Jar = 'mods-src\orbitstaff\orbitstaff-core\target\OrbitStaff-0.1.0-SNAPSHOT.jar'; Vers = @('server'); Optionnel = $true }
 )

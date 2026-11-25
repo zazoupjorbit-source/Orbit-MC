@@ -1,0 +1,29 @@
+{
+  "providers": [
+    {"type": "space", "advances": {"\uF801": -1, "\uF802": -2, "\uF803": -4, "\uF804": -8, "\uF805": -16, "\uF806": -32, "\uF807": -64, "\uF808": -128, "\uF821": 1, "\uF822": 2, "\uF823": 4, "\uF824": 8, "\uF825": 16, "\uF826": 32, "\uF827": 64, "\uF828": 128}},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0030.png", "ascent": 1, "height": 12, "chars": ["0"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0031.png", "ascent": 1, "height": 12, "chars": ["1"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0032.png", "ascent": 1, "height": 12, "chars": ["2"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0033.png", "ascent": 1, "height": 12, "chars": ["3"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0034.png", "ascent": 1, "height": 12, "chars": ["4"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0035.png", "ascent": 1, "height": 12, "chars": ["5"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0036.png", "ascent": 1, "height": 12, "chars": ["6"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0037.png", "ascent": 1, "height": 12, "chars": ["7"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0038.png", "ascent": 1, "height": 12, "chars": ["8"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0039.png", "ascent": 1, "height": 12, "chars": ["9"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_002c.png", "ascent": 1, "height": 12, "chars": [","]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_002e.png", "ascent": 1, "height": 12, "chars": ["."]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_002b.png", "ascent": 1, "height": 12, "chars": ["+"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_002d.png", "ascent": 1, "height": 12, "chars": ["-"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_002f.png", "ascent": 1, "height": 12, "chars": ["/"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0020.png", "ascent": 1, "height": 12, "chars": [" "]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_006b.png", "ascent": 1, "height": 12, "chars": ["k"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_004d.png", "ascent": 1, "height": 12, "chars": ["M"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0064.png", "ascent": 1, "height": 12, "chars": ["d"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0054.png", "ascent": 1, "height": 12, "chars": ["T"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0073.png", "ascent": 1, "height": 12, "chars": ["s"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_2726.png", "ascent": 1, "height": 12, "chars": ["\u2726"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_0025.png", "ascent": 1, "height": 12, "chars": ["%"]},
+    {"type": "bitmap", "file": "orbitvol:font/c_haut_00d7.png", "ascent": 1, "height": 12, "chars": ["\u00D7"]}
+  ]
+}

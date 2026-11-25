@@ -34,6 +34,8 @@ public final class QuestProgress {
     public final Set<String> done = new LinkedHashSet<>();
     /** Réponses des dialogues à choix : id du choix → id de la réponse. Gardées après la quête (branches, conditions). */
     public final Map<String, String> choices = new LinkedHashMap<>();
+    /** Quêtes répétables : heure (ms) où elles ont été finies pour la dernière fois. */
+    public final Map<String, Long> doneAt = new LinkedHashMap<>();
     /** Éclat d'ancrage choisi (nom de point) : lieu de réapparition. */
     public String anchor;
     /** Quête suivie (celle que la traînée de guidage montre) ; null = la première en cours. */
@@ -56,6 +58,7 @@ public final class QuestProgress {
         active.clear();
         done.clear();
         choices.clear();
+        doneAt.clear();
         anchor = null;
         tracked = null;
         dirty = true;
@@ -76,6 +79,12 @@ public final class QuestProgress {
                 act.marks.addAll(a.getStringList(k + ".marques"));
                 act.deadline = a.getLong(k + ".limite");
                 active.put(k, act);
+            }
+        }
+        ConfigurationSection t = y.getConfigurationSection("terminees-le");
+        if (t != null) {
+            for (String k : t.getKeys(false)) {
+                doneAt.put(k, t.getLong(k));
             }
         }
         ConfigurationSection c = y.getConfigurationSection("choix");
@@ -105,6 +114,9 @@ public final class QuestProgress {
         }
         for (Map.Entry<String, String> e : choices.entrySet()) {
             y.set("choix." + e.getKey(), e.getValue());
+        }
+        for (Map.Entry<String, Long> e : doneAt.entrySet()) {
+            y.set("terminees-le." + e.getKey(), e.getValue());
         }
     }
 }
