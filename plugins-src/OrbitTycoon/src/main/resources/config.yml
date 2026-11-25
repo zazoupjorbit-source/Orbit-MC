@@ -670,6 +670,25 @@ votes:
   nombre: 1
   annonce: true
 
+# Événement de farm automatique : toutes les « intervalle-minutes », un outil tiré au hasard dans « outils »
+# (jamais deux fois le même de suite). Pendant « duree-minutes », celui qui récolte le plus avec cet outil gagne.
+# « annonce-minutes » avant : barre de compte à rebours sous la Vote Party. Pendant : HUD à gauche (top 3 + son total).
+# recompenses : une ligne par place (1er, 2e, 3e…) « <n° de coffre> <nombre> » — coffres : 1 Vote, 2 Farm, 3 Event,
+# 4 Saturne, 5 Neptune, 6 Pets. Les clés vont dans l'inventaire (ou attendent la connexion si inventaire plein / absent).
+# hud-decalage : distance (pixels GUI) entre le centre de l'écran et le début du HUD de gauche.
+# Admin : /tycoon evenement [lancer [outil]|arreter]
+evenement-farm:
+  actif: true
+  intervalle-minutes: 20
+  duree-minutes: 5
+  annonce-minutes: 5
+  outils: [pioche, hache, houe, peche, epee]
+  recompenses:
+    - "4 1"     # 1er : 1 Clé Saturne
+    - "3 2"     # 2e : 2 Clés Event
+    - "3 1"     # 3e : 1 Clé Event
+  hud-decalage: 225
+
 
 # Magasin de blocs (PNJ Bâtisseur au Marché orbital, ou /blocs) : tous les blocs posables pour décorer son île,
 # payés en Crédits orbitaux. Jamais les blocs des générateurs ni les blocs techniques/dangereux. /tycoon reload après un changement.

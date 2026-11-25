@@ -127,7 +127,7 @@ commands:
     permission: orbittycoon.admin
   tycoon:
     description: Administration du Tycoon.
-    usage: /tycoon <generer|tp|equiper|reload|monnaie|tuto|nettoyage|voteparty|vote>
+    usage: /tycoon <generer|tp|equiper|reload|monnaie|tuto|nettoyage|voteparty|vote|evenement>
     permission: orbittycoon.admin
 
 permissions:

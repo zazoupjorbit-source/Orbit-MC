@@ -521,6 +521,7 @@ final class Monnaies implements Listener {
         }
         if (outil != null) {
             ajouterRecoltes(p.getUniqueId(), outil, quantite);
+            plugin.evenementFarm().compter(p, outil, quantite);
             if (pets != null) pets.gagnerXp(p, quantite);
             long xpBase = choisie != null ? choisie.xp() * quantite
                     : (long) cfg.getInt("progression.xp.ressources." + cle, cfg.getInt("progression.xp.defaut", 1)) * quantite;

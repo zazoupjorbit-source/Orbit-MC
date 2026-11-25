@@ -71,6 +71,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     private final Nettoyage nettoyage = new Nettoyage(this);
     private final VoteParty voteParty = new VoteParty(this);
     private final Votes votes = new Votes(this);
+    private final EvenementFarm evenementFarm = new EvenementFarm(this);
     private boolean chantierEnCours;
 
     @Override
@@ -174,6 +175,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         pm.registerEvents(new Piles(this), this);
         pm.registerEvents(voteParty, this);
         pm.registerEvents(votes, this);
+        pm.registerEvents(evenementFarm, this);
         pm.registerEvents(this, this);
         mobzone.demarrer();
         portails.demarrer();
@@ -207,6 +209,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         nettoyage.demarrer();
         voteParty.demarrer();
         votes.demarrer();
+        evenementFarm.demarrer();
 
         if (donnees().getInt("version", donnees().getBoolean("genere") ? 1 : 0) < VERSION_DESSIN)
             getLogger().warning("Le dessin du Tycoon n'est pas à jour : lance « tycoon generer tout confirmer » dans la console.");
@@ -232,6 +235,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         nettoyage.arreter();
         voteParty.arreter();
         votes.arreter();
+        evenementFarm.arreter();
         if (collecteurs != null) collecteurs.arreter();
         if (generateurs != null) generateurs.arreter();
         if (noyau != null) noyau.arreter();
@@ -299,6 +303,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     Boutique boutique() { return boutique; }
 
     VoteParty voteParty() { return voteParty; }
+    EvenementFarm evenementFarm() { return evenementFarm; }
 
     /** Renvoie le joueur au spawn (Base Orbit). */
     void versBase(Player p) { navigateur.teleporter(p, Zone.BASE, Zone.BASE.arrivee(monde())); }
@@ -438,6 +443,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
                 nettoyage.demarrer();
                 ressources.recharger();
                 voteParty.demarrer();
+                evenementFarm.recharger();
                 msg(s, "Configuration rechargée.");
             }
             case "nettoyage", "clearlag" -> {
@@ -448,6 +454,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
                     msg(s, r < 0 ? "Nettoyage automatique désactivé (config : nettoyage.actif)." : "Prochain nettoyage dans <white>" + (r / 60) + " min " + (r % 60) + " s<gray>. Forcer : /tycoon nettoyage maintenant");
                 }
             }
+            case "evenement", "event" -> msg(s, evenementFarm.commande(args));
             case "voteparty" -> {
                 String act = args.length > 1 ? args[1].toLowerCase() : "";
                 int n = args.length > 2 && args[2].matches("\\d{1,6}") ? Integer.parseInt(args[2]) : -1;
@@ -798,13 +805,15 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
             return res;
         }
         if (!cmd.getName().equalsIgnoreCase("tycoon")) return List.of();
-        if (args.length == 1) res.addAll(List.of("generer", "tp", "equiper", "reload", "monnaie", "prestige", "test", "mobzone", "ile", "classement", "coffres", "cle", "pet", "equipement", "boutique", "dome", "iles", "tuto", "deco", "gen", "nettoyage", "voteparty", "vote"));
+        if (args.length == 1) res.addAll(List.of("generer", "tp", "equiper", "reload", "monnaie", "prestige", "test", "mobzone", "ile", "classement", "coffres", "cle", "pet", "equipement", "boutique", "dome", "iles", "tuto", "deco", "gen", "nettoyage", "voteparty", "vote", "evenement"));
         else if (args[0].equalsIgnoreCase("nettoyage") && args.length == 2) res.add("maintenant");
         else if (args[0].equalsIgnoreCase("pet") && args.length == 2) res.addAll(List.of("donner", "niveau"));
         else if (args[0].equalsIgnoreCase("equipement") && args.length == 2) res.add("donner");
         else if (args[0].equalsIgnoreCase("equipement") && args.length == 3) res.addAll(List.of("pioche", "hache", "houe", "canne", "epee", "tout", "nebuleuse", "zenith", "saturne", "neptune"));
         else if (args[0].equalsIgnoreCase("pet") && args.length == 3) res.addAll(args[1].equalsIgnoreCase("niveau") ? List.of("0", "50", "100") : Pets.ids());
         else if (args[0].equalsIgnoreCase("voteparty") && args.length == 2) res.addAll(List.of("ajouter", "definir"));
+        else if (args[0].equalsIgnoreCase("evenement") && args.length == 2) res.addAll(List.of("lancer", "arreter"));
+        else if (args[0].equalsIgnoreCase("evenement") && args.length == 3) res.addAll(List.of("pioche", "hache", "houe", "peche", "epee"));
         else if (args[0].equalsIgnoreCase("vote") && args.length == 2) return null;
         else if (args[0].equalsIgnoreCase("gen")) {
             if (args.length == 2) res.addAll(List.of("donner", "collecteur", "coffre", "liste"));
