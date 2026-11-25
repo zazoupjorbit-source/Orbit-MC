@@ -70,7 +70,10 @@ final class Butin implements Listener {
         var cfg = plugin.getConfig();
         String section = mon == Monnaies.Monnaie.FLUX ? "flux-stellaire" : "credit-orbital";
         long meilleur = cfg.getLong(section + ".defaut", 1);
-        for (Outil.Mode m : Outil.Mode.values()) {
+        // Flux : chaque outil a le sien → seulement l'outil qui le recevra (celui en main).
+        Outil.Mode[] outils = mon == Monnaies.Monnaie.FLUX
+                ? new Outil.Mode[]{plugin.monnaies().outilCible(id)} : Outil.Mode.values();
+        for (Outil.Mode m : outils) {
             List<Ressources.Palier> liste = plugin.ressources().liste(m);
             if (liste == null) continue;
             for (int i = liste.size() - 1; i >= 0; i--) {
@@ -103,7 +106,8 @@ final class Butin implements Listener {
                     MM.deserialize("<!italic><dark_gray>" + (flux ? "Énergie stellaire condensée" : "Réserve de la Banque orbitale")),
                     Component.empty(),
                     MM.deserialize("<!italic><gray>Contient <white>" + minutes + " min</white> de farm de ta"),
-                    MM.deserialize("<!italic><gray>meilleure ressource en <" + mon.couleur + ">" + mon.symbole + " " + mon.pluriel + "</" + mon.couleur + ">."),
+                    MM.deserialize(flux ? "<!italic><gray>meilleure ressource de <" + mon.couleur + ">l'outil en main</" + mon.couleur + ">."
+                            : "<!italic><gray>meilleure ressource en <" + mon.couleur + ">" + mon.symbole + " " + mon.pluriel + "</" + mon.couleur + ">."),
                     MM.deserialize("<!italic><dark_gray>Plus tu progresses, plus elle rapporte."),
                     Component.empty(),
                     MM.deserialize("<!italic><#62CFF4>➜ Clic droit pour l'ouvrir <dark_gray>(Shift : toute la pile)")));
@@ -140,8 +144,11 @@ final class Butin implements Listener {
         long total = montant(p.getUniqueId(), mon, minutes) * n;
         it.setAmount(it.getAmount() - n);
         plugin.monnaies().ajouter(p.getUniqueId(), mon, total);
-        OrbitTycoon.msg(p, "<gray>" + (n > 1 ? n + " capsules ouvertes" : "Capsule ouverte") + " : <" + mon.couleur + "><bold>+"
-                + Hud.nombre(total) + " " + mon.symbole + " " + (total > 1 ? mon.pluriel : mon.nom) + "</bold>");
+        Outil.Mode cible = mon == Monnaies.Monnaie.FLUX ? plugin.monnaies().outilCible(p.getUniqueId()) : null;
+        String gain = cible != null
+                ? "<" + cible.couleur + "><bold>+" + Hud.nombre(total) + " " + cible.symbole + " " + cible.ressource + "</bold>"
+                : "<" + mon.couleur + "><bold>+" + Hud.nombre(total) + " " + mon.symbole + " " + (total > 1 ? mon.pluriel : mon.nom) + "</bold>";
+        OrbitTycoon.msg(p, "<gray>" + (n > 1 ? n + " capsules ouvertes" : "Capsule ouverte") + " : " + gain);
         p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 0.9f, 1.5f);
         p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.7f, 0.8f);
     }

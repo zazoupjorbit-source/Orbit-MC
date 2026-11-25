@@ -25,19 +25,19 @@ import java.util.UUID;
 /**
  * Les 4 grades du Tycoon, achetés en Plasma à la boutique : bonus de gains (Crédits, Flux, XP d'outil, production
  * des générateurs : grades.<id>.bonus en %), confort (vol sur l'île, offres HDV, accès au serveur plein) et cosmétiques. Le grade est un groupe LuckPerms donné avec le contexte server=tycoon.
- * Monter de grade = payer la différence avec le grade déjà possédé. Réglages : grades.&lt;id&gt; dans config.yml.
+ * Grades achetés dans l ordre, chacun au prix plein. Réglages : grades.&lt;id&gt; dans config.yml.
  */
 final class Grades implements Listener {
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
 
     enum Grade {
-        PILOTE("pilote", "Pilote", "<b><gradient:#9FB8D0:#D8F6FF>Pilote</gradient></b>", 1500, 5, 5, false, false, null),
-        COMMANDANT("commandant", "Commandant", "<b><gradient:#3FA9F5:#62CFF4>Commandant</gradient></b>", 3500, 10, 10, true, false,
+        PILOTE("pilote", "Pilote", "<b><gradient:#9FB8D0:#D8F6FF>Pilote</gradient></b>", 1000, 5, 5, false, false, null),
+        COMMANDANT("commandant", "Commandant", "<b><gradient:#3FA9F5:#62CFF4>Commandant</gradient></b>", 1500, 10, 10, true, false,
                 Color.fromRGB(0x62CFF4)),
-        AMIRAL("amiral", "Amiral", "<b><gradient:#E0B864:#FFF1A0>Amiral</gradient></b>", 7500, 15, 20, true, true,
+        AMIRAL("amiral", "Amiral", "<b><gradient:#E0B864:#FFF1A0>Amiral</gradient></b>", 2000, 15, 20, true, true,
                 Color.fromRGB(0xE0B864)),
-        ASTRAL("astral", "Astral", "<b><gradient:#C77DFF:#62CFF4>Astral</gradient></b>", 15000, 25, 30, true, true,
+        ASTRAL("astral", "Astral", "<b><gradient:#C77DFF:#62CFF4>Astral</gradient></b>", 4500, 25, 30, true, true,
                 Color.fromRGB(0xC77DFF));
 
         final String id, nom, joli;
@@ -89,11 +89,18 @@ final class Grades implements Listener {
         return plugin.getConfig().getInt("hdv.max-offres", 10) + (g == null ? 0 : offresHdv(g));
     }
 
-    /** Prix à payer pour passer au grade g (différence avec le grade actuel), -1 si déjà au moins ce grade. */
+    /** Prix à payer pour le grade g (prix plein), -1 si déjà au moins ce grade. */
     long prixPour(Player p, Grade g) {
         Grade a = grade(p);
         if (a != null && a.ordinal() >= g.ordinal()) return -1;
-        return Math.max(0, prix(g) - (a == null ? 0 : prix(a)));
+        return prix(g);
+    }
+
+    /** Grade à acheter avant g (null si g est achetable maintenant) : on monte un grade à la fois. */
+    Grade manquant(Player p, Grade g) {
+        Grade a = grade(p);
+        int suivant = a == null ? 0 : a.ordinal() + 1;
+        return g.ordinal() > suivant ? Grade.values()[g.ordinal() - 1] : null;
     }
 
     /** Avantages du grade g (cumulés avec ceux des grades en dessous), pour la boutique. */
@@ -135,6 +142,12 @@ final class Grades implements Listener {
     void acheter(Player p, Grade g) {
         long prix = prixPour(p, g);
         if (prix < 0) { OrbitTycoon.msg(p, "<gray>Tu as déjà ce grade (ou mieux)."); return; }
+        Grade avant = manquant(p, g);
+        if (avant != null) {
+            OrbitTycoon.msg(p, "<#FF4D4D>Achète d'abord le grade " + avant.joli + " <#FF4D4D>.");
+            p.playSound(p.getLocation(), Sound.BLOCK_CHEST_LOCKED, 0.6f, 1.3f);
+            return;
+        }
         if (Bukkit.getPluginManager().getPlugin("LuckPerms") == null) {
             OrbitTycoon.msg(p, "<#FF4D4D>Les grades sont indisponibles pour l'instant (LuckPerms absent).");
             return;

@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * HUD permanent à droite de l'écran (barre latérale du tableau des scores, chiffres masqués) :
- * pseudo, grade, les trois monnaies, l'outil utilisé (niveau, sa ressource propre récoltée, prestige),
+ * pseudo, grade, Crédits + Flux de l'outil en main (sa ressource) + Plasma, l'outil utilisé (niveau, prestige),
  * prestige total, classement global (aux Crédits orbitaux), nom de l'île et générateurs (posés / max).
  * Rafraîchi chaque seconde ; une ligne n'est renvoyée au joueur que si son texte a changé.
  */
@@ -130,24 +130,26 @@ final class Hud implements Listener {
         l.add(TRAIT);
         l.add("<#62CFF4>◈ <white><bold>" + echapper(p.getName()) + "</bold> <dark_gray>· " + grade(p));
         l.add("<#E0B864><bold>MONNAIES");
-        for (Monnaies.Monnaie m : Monnaies.Monnaie.values()) {
-            long v = monnaies.solde(id, m);
-            l.add("<" + m.couleur + ">" + m.symbole + " <white>" + nombre(v) + " <gray>" + court(m));
-        }
         Outil.Mode outil = outilUtilise(p);
+        Monnaies.Monnaie credit = Monnaies.Monnaie.CREDIT, plasma = Monnaies.Monnaie.PLASMA;
+        l.add("<" + credit.couleur + ">" + credit.symbole + " <white>" + nombre(monnaies.solde(id, credit)) + " <gray>" + court(credit));
+        // Le Flux est propre à chaque outil : la ligne suit l'outil en main (Minerai stellaire, Bois sidéral…).
+        if (outil == null) {
+            Monnaies.Monnaie f = Monnaies.Monnaie.FLUX;
+            l.add("<" + f.couleur + ">" + f.symbole + " <white>" + nombre(monnaies.solde(id, f)) + " <gray>" + court(f));
+        } else {
+            l.add("<" + outil.couleur + ">" + outil.symbole + " <white>" + nombre(monnaies.flux(id, outil)) + " <gray>" + outil.ressource);
+        }
+        l.add("<" + plasma.couleur + ">" + plasma.symbole + " <white>" + nombre(monnaies.solde(id, plasma)) + " <gray>" + court(plasma));
         if (outil == null) {
             l.add("<#E0B864><bold>OUTIL <dark_gray>» <dark_gray><i>aucun</i>");
             l.add("<dark_gray>Ton Outil orbital revient");
             l.add("<dark_gray>à ta prochaine connexion.");
-            l.add("  ");
         } else {
             Progression prog = plugin.progression();
             int niveau = Math.min(monnaies.niveau(id, outil), prog.niveauMax());
             l.add("<#E0B864><bold>OUTIL <dark_gray>» <" + outil.couleur + "><bold>" + outil.nom);
             l.add("<gray>Niveau <dark_gray>» <#3DDCB0>" + niveau + " <dark_gray>/ " + prog.niveauMax());
-            // Chaque outil a sa propre ressource : la ligne suit l'outil en main.
-            l.add("<" + outil.couleur + ">" + outil.symbole + " <white>" + nombre(monnaies.recoltes(id, outil))
-                    + " <gray>" + outil.ressource);
             l.add("<gray>Prestige <dark_gray>» <#E0B864>✪ " + monnaies.prestige(id, outil) + " <dark_gray>/ " + prog.prestigeMax());
         }
         l.add(" ");

@@ -126,6 +126,7 @@ hud:
     modo: "<b><gradient:#1FBF6A:#5EE89A>ᴍᴏᴅᴏ</gradient></b>"
     helpeur: "<b><gradient:#22C1D6:#7FE7F2>ʜᴇʟᴘᴇᴜʀ</gradient></b>"
     builder: "<b><gradient:#F5B400:#FFE066>ʙᴜɪʟᴅᴇʀ</gradient></b>"
+    partenaire: "<b><gradient:#FF6FD8:#FFB3EC>ᴘᴀʀᴛᴇɴᴀɪʀᴇ</gradient></b>"
     orbit: "<b><gradient:#62CFF4:#E0B864>ᴏʀʙɪᴛ</gradient></b>"
     astral: "<b><gradient:#C77DFF:#62CFF4>ᴀꜱᴛʀᴀʟ</gradient></b>"
     amiral: "<b><gradient:#E0B864:#FFF1A0>ᴀᴍɪʀᴀʟ</gradient></b>"
@@ -213,6 +214,22 @@ enchants:
   rafale: {effet: 2, prix: 150000, multiplicateur: 1.54, seuil: 25, multiplicateur-apres: 1.08}   # % de chance de récolte ×2
   meteore: {effet: 0.5, prix: 500000, multiplicateur: 1.685, seuil: 20, multiplicateur-apres: 1.08, multiplicateur-credits: 10}   # % de chance de Crédits ×10
 
+# Enchantements propres à chaque outil (menu de l'Outil orbital → livre enchanté), payés avec la ressource de l'outil.
+# 100 niveaux chacun. Prix du niveau n+1 = prix × croissance^n × saut^(n / palier), arrondi à la centaine.
+# Par enchantement (facultatif) : effet (par niveau), prix (de base), prestige (prestige de l'outil requis).
+# Ids : abondance, avidite, erudition, marchand, cles, celerite, explosion, foreuse, filon, seisme, abattage, seve, eclats,
+#       tornade, engrais, moisson, divine, fertilite, tempete, appat, double, tresor, banc, leviathan,
+#       tranchant, carnage, butin, massacre, execution.
+enchants-outils:
+  croissance: 1.07
+  saut: 2.0
+  palier: 25
+  abondance: {effet: 1.0, prix: 800, prestige: 0}      # +% de ressources récoltées
+  avidite: {effet: 1.5, prix: 1000, prestige: 0}       # +% de ressource de l'outil
+  erudition: {effet: 1.0, prix: 1000, prestige: 0}     # +% d'XP de l'outil
+  marchand: {effet: 1.0, prix: 1500, prestige: 3}      # +% de Crédits orbitaux
+  cles: {effet: 0.05, prix: 3000, prestige: 10}        # +% de chance de Clé Farm
+
 # Classement prestige au spawn : un panneau Top 10 à côté de chaque anneau-portail + podium des 3 meilleurs (skins).
 # Les socles et le podium se posent une fois avec « /tycoon classement poser ».
 classement:
@@ -234,7 +251,7 @@ coffres:
     chance: 2.0
     coffre: 2      # coffre (1 à 6) dont la clé tombe : 2 = « Farm »
   # Clic gauche sur un coffre = aperçu du contenu ; clic droit avec la bonne clé en main = ouverture.
-  # Contenu de chaque coffre (1 à 6). Vide = « contenu bientôt dévoilé » (Saturne et Neptune : plus tard).
+  # Contenu de chaque coffre (1 à 6). Vide = « contenu bientôt dévoilé ».
   # Une ligne = un lot ; chance = poids relatif (ici chaque coffre fait 100 → chance = %).
   # rarete : commun, rare, epique, legendaire, mythique (légendaire et mythique sont annoncés à tout le serveur).
   # Types :
@@ -245,6 +262,8 @@ coffres:
   #   generateur : {ecart: 0, nombre: 2}                               0 = meilleur générateur débloqué de l'île, -1 = un cran dessous
   #   titre      : {titre: id}                                         plaque de titre cosmétique (titres.liste)
   #   equipement : {}                                                  pièce d'équipement de farm au hasard (20 pièces)
+  #   generateur : {id: plasma, nombre: 1}                             générateur précis (ici le Générateur de Plasma)
+  #   armure     : {armure: saturne|neptune, piece: hasard}           pièce d.armure de coffre (casque, plastron, jambieres, bottes ou hasard)
   # nom: "..." (optionnel) remplace le nom affiché.
   loots:
     # Coffre Vote : petit mais régulier (une clé par vote), pousse vers les clés Farm et Event.
@@ -289,6 +308,41 @@ coffres:
       - {type: titre, titre: comete, chance: 1.5, rarete: legendaire}
       - {type: titre, titre: legende, chance: 0.5, rarete: mythique}
       - {type: capsule, monnaie: flux, minutes: 120, taille: 3, chance: 0.5, rarete: mythique}
+    # Coffre Saturne (2e meilleur, clé 500 Plasma) : lots plus gros que l'Event, armure Saturne, Générateur de Plasma.
+    # Choix de Wane le 25/11/2026.
+    4:
+      - {type: capsule, monnaie: credits, minutes: 30, taille: 2, chance: 20, rarete: commun}
+      - {type: capsule, monnaie: flux, minutes: 30, taille: 2, chance: 14, rarete: commun}
+      - {type: booster, booster: credits, mult: 2.5, minutes: 45, chance: 12, rarete: rare}
+      - {type: booster, booster: xp, mult: 2.5, minutes: 45, chance: 10, rarete: rare}
+      - {type: generateur, ecart: 0, nombre: 16, chance: 9, rarete: rare}
+      - {type: booster, booster: flux, mult: 2.5, minutes: 45, chance: 8, rarete: rare}
+      - {type: cle, coffre: 3, nombre: 3, chance: 7, rarete: rare}
+      - {type: capsule, monnaie: credits, minutes: 90, taille: 3, chance: 6, rarete: epique}
+      - {type: generateur, ecart: 1, nombre: 4, chance: 5, rarete: epique}
+      - {type: armure, armure: saturne, chance: 3.5, rarete: legendaire}
+      - {type: generateur, id: plasma, nombre: 1, chance: 1.5, rarete: legendaire}
+      - {type: booster, booster: credits, mult: 4, minutes: 60, chance: 1.5, rarete: legendaire}
+      - {type: cle, coffre: 5, nombre: 1, chance: 1, rarete: legendaire}
+      - {type: titre, titre: saturnien, chance: 1, rarete: legendaire}
+      - {type: capsule, monnaie: flux, minutes: 180, taille: 3, chance: 0.5, rarete: mythique}
+    # Coffre Neptune (le meilleur, clé 1000 Plasma) : les plus gros lots, armure Neptune (1 %, mythique), Plasma. Pas d armure Saturne (choix de Wane le 25/11/2026).
+    5:
+      - {type: capsule, monnaie: credits, minutes: 60, taille: 3, chance: 15, rarete: commun}
+      - {type: capsule, monnaie: flux, minutes: 60, taille: 3, chance: 13, rarete: commun}
+      - {type: booster, booster: credits, mult: 3, minutes: 60, chance: 11, rarete: rare}
+      - {type: booster, booster: xp, mult: 3, minutes: 60, chance: 9, rarete: rare}
+      - {type: generateur, ecart: 1, nombre: 8, chance: 9, rarete: rare}
+      - {type: booster, booster: flux, mult: 3, minutes: 60, chance: 8, rarete: rare}
+      - {type: cle, coffre: 4, nombre: 2, chance: 7, rarete: rare}
+      - {type: generateur, ecart: 2, nombre: 4, chance: 5, rarete: epique}
+      - {type: capsule, monnaie: credits, minutes: 240, taille: 3, chance: 5, rarete: epique}
+      - {type: generateur, id: plasma, nombre: 1, chance: 4, rarete: epique}
+      - {type: booster, booster: credits, mult: 5, minutes: 120, chance: 2.5, rarete: legendaire}
+      - {type: generateur, id: plasma, nombre: 3, chance: 1.5, rarete: legendaire}
+      - {type: titre, titre: neptunien, chance: 1.5, rarete: legendaire}
+      - {type: capsule, monnaie: flux, minutes: 480, taille: 3, chance: 1.5, rarete: legendaire}
+      - {type: armure, armure: neptune, chance: 1, rarete: mythique}
 
 # Titres cosmétiques (Butin.java) : gagnés en plaques dans les coffres, choisis avec /titre, affichés devant
 # le pseudo dans le chat. id → texte MiniMessage. Purement cosmétique (règles Mojang).
@@ -308,6 +362,8 @@ titres:
     dompteur: "<#C77DFF>Dompteur de nébuleuses"
     seigneur: "<gradient:#E0B864:#FFF1A0>Seigneur des étoiles</gradient>"
     devoreur: "<gradient:#C77DFF:#FF9F43>Dévoreur de mondes</gradient>"
+    saturnien: "<gradient:#F2C46D:#FFF1A0>✦ Seigneur des anneaux de Saturne</gradient>"
+    neptunien: "<gradient:#3D7BFF:#62CFF4>✦ Souverain de Neptune ✦</gradient>"
   # Titres vendus au rayon Titres de la boutique (id: prix en Plasma). Les autres : coffres ou grades.
   boutique:
     pionnier: 300
@@ -328,6 +384,8 @@ titres:
     dompteur: titre_galaxie
     seigneur: titre_etoile
     devoreur: titre_trou_noir
+    saturnien: titre_etoile
+    neptunien: titre_galaxie
 
 # Équipements de farm (Equipements.java) : 1 set de 4 pièces par outil (Cratère = pioche, Sylvanova = hache,
 # Moisson Solaire = houe, Marée Lunaire = canne, Supernova = épée). Pièce PORTÉE + outil du set en main :
@@ -340,6 +398,9 @@ equipements:
   premium:
     nebuleuse: {bonus-piece: 5.0, bonus-set: 25.0, prix-piece: 1200, prix-set: 4200}
     zenith: {bonus-piece: 10.0, bonus-set: 50.0, prix-piece: 3000, prix-set: 10500}
+    # Armures de coffre (pas en boutique) : Saturne (coffre 4) et Neptune (coffre 5, 1 % : très dure à avoir).
+    saturne: {bonus-piece: 15.0, bonus-set: 70.0}
+    neptune: {bonus-piece: 25.0, bonus-set: 120.0}
 
 # Pets (Pets.java) : 20 espèces (4 par outil : Fortune, XP, Money, Proc) × 4 raretés = 80 pets.
 # Obtenus dans le coffre Ménagerie (6e coffre) ; collection et équipement (3 max) : Navigateur → Pets.
@@ -524,6 +585,9 @@ generateurs:
   pile-max: 64
   emplacements: [8, 10, 12, 14, 16, 18, 20, 22, 25, 28, 31, 34, 37, 40, 44, 48, 52, 56, 60, 65]   # blocs générateurs par île, selon le niveau du Noyau
   max-au-sol: 512          # au-delà, le générateur attend qu'on ramasse (anti-lag)
+  # Générateur de Plasma (coffres Saturne et Neptune seulement, hors /gen) : verse du Plasma au membre présent sur l.île.
+  # par-heure = Plasma moyen par heure pour UN générateur ; pile-max = empilement ; max-par-ile = blocs posés par île.
+  plasma: {bloc: CRYING_OBSIDIAN, par-heure: 1.0, pile-max: 16, max-par-ile: 1}
   liste:
     - {id: ble, nom: "Blé", bloc: HAY_BLOCK, objet: WHEAT, prix: 680, vente: 0.63}
     - {id: carotte, nom: "Carotte", bloc: ORANGE_TERRACOTTA, objet: CARROT, prix: 750, vente: 0.68}
@@ -615,10 +679,10 @@ magasin-blocs:
   exclus: []            # blocs retirés en plus, ex. [ENDER_CHEST]
 
 # Grades du Tycoon (Grades.java), achetés en Plasma à la boutique. bonus = % de Crédits, Flux, XP d'outil et production des générateurs.
-# Groupe LuckPerms du même nom, donné avec le contexte server=tycoon. Monter de grade = payer la différence.
+# Groupe LuckPerms du même nom, donné avec le contexte server=tycoon. Grades achetés dans l ordre (Pilote, Commandant, Amiral, Astral), chacun au prix plein.
 # offres-hdv = offres en plus à l'hôtel des ventes (s'ajoute à hdv.max-offres).
 grades:
-  pilote: {prix: 1500, bonus: 5.0, offres-hdv: 5}
-  commandant: {prix: 3500, bonus: 10.0, offres-hdv: 10}
-  amiral: {prix: 7500, bonus: 15.0, offres-hdv: 20}
-  astral: {prix: 15000, bonus: 25.0, offres-hdv: 30}
+  pilote: {prix: 1000, bonus: 5.0, offres-hdv: 5}
+  commandant: {prix: 1500, bonus: 10.0, offres-hdv: 10}
+  amiral: {prix: 2000, bonus: 15.0, offres-hdv: 20}
+  astral: {prix: 4500, bonus: 25.0, offres-hdv: 30}

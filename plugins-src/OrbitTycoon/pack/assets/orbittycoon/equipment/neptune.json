@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [{"texture": "orbittycoon:neptune"}],
+    "humanoid_leggings": [{"texture": "orbittycoon:neptune"}]
+  }
+}

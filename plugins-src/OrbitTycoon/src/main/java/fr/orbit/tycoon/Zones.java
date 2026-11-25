@@ -82,18 +82,18 @@ final class Zones implements Listener {
                 Ageable jeune = (Ageable) a.clone();
                 jeune.setAge(0);
                 recolter(e, t, 1);
-                repousse(b, origine, jeune, plugin.getConfig().getInt("repousse.agriculture", 15));
+                repousse(b, origine, jeune, repousseAgri(p));
                 return;
             }
             if (t == Material.MELON || t == Material.PUMPKIN) {
                 recolter(e, t, 1);
-                repousse(b, origine, null, plugin.getConfig().getInt("repousse.agriculture", 15));
+                repousse(b, origine, null, repousseAgri(p));
                 return;
             }
             if (t == Material.SUGAR_CANE) {
                 // On garde la base : seuls les morceaux du dessus se récoltent, et toute la tige repousse.
                 if (b.getRelative(0, -1, 0).getType() != Material.SUGAR_CANE) { e.setCancelled(true); return; }
-                int sec = plugin.getConfig().getInt("repousse.agriculture", 15);
+                int sec = repousseAgri(p);
                 int morceaux = 0;
                 for (Block h = b; h.getType() == Material.SUGAR_CANE; h = h.getRelative(0, 1, 0)) {
                     if (enAttente.containsKey(h)) continue;
@@ -116,6 +116,12 @@ final class Zones implements Listener {
         e.setCancelled(true);
     }
 
+    /** Repousse des cultures, raccourcie par l'enchantement Engrais de la houe. */
+    private int repousseAgri(Player p) {
+        int base = plugin.getConfig().getInt("repousse.agriculture", 15);
+        return plugin.enchantements() == null ? base : plugin.enchantements().repousse(p, base);
+    }
+
     /** La ressource disparaît (aucun objet, aucune XP) et rapporte Flux stellaire + Crédits orbitaux. */
     private void recolter(BlockBreakEvent e, Material t, int quantite) {
         e.setDropItems(false);
@@ -124,6 +130,8 @@ final class Zones implements Listener {
         // Ce que le joueur voit : ressource débloquée de cette part de l'île, ou roche si le minerai est verrouillé.
         Ressources.Recolte r = plugin.ressources().recolte(e.getPlayer(), z, e.getBlock(), t);
         plugin.monnaies().recompenser(e.getPlayer(), outilDe(z), r.cle(), quantite, r.palier());
+        // Explosion, Foreuse, Abattage, Moisson : blocs voisins cassés par le joueur (même chemin que ce bloc-ci).
+        if (plugin.enchantements() != null) plugin.enchantements().apresCasse(e.getPlayer(), outilDe(z), e.getBlock());
     }
 
     /** Outil qui gagne l'XP d'un bloc cassé, selon la zone. */

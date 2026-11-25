@@ -47,6 +47,8 @@ $sets = [ordered]@{
     supernova = @{ p = C '#FF4D4D'; l = C '#FFA0A0'; d = C '#9E1F2A'; f = C '#24080A'; a = C '#FF9A3B'; b = C '#FFE27A'; n = 5 }
     nebuleuse = @{ p = C '#9B5DE5'; l = C '#D7B8FF'; d = C '#5A2A8C'; f = C '#1A0E2E'; a = C '#FF8FE0'; b = C '#F4E6FF'; n = 6 }   # premium
     zenith    = @{ p = C '#E0B864'; l = C '#FFF1A0'; d = C '#A8792A'; f = C '#0B1A2E'; a = C '#62CFF4'; b = C '#D8F6FF'; n = 7 }   # premium
+    saturne   = @{ p = C '#F2C46D'; l = C '#FFF4D0'; d = C '#9C7A3A'; f = C '#1E1608'; a = C '#FF9F43'; b = C '#FFFFFF'; n = 8 }   # coffre Saturne
+    neptune   = @{ p = C '#3D7BFF'; l = C '#9FD0FF'; d = C '#1B3A8C'; f = C '#060E2A'; a = C '#62F4E8'; b = C '#E0B864'; n = 9 }   # coffre Neptune
 }
 
 # Emblème 4x4 de la poitrine (a = accent, A = accent clair, x = fond sombre, d = sombre du set).
@@ -58,6 +60,8 @@ $emblemes = @{
     supernova = @('axxa', 'xAAx', 'xAAx', 'axxa')   # étoile qui explose
     nebuleuse = @('Aaxx', 'xaAa', 'aAax', 'xxaA')   # galaxie en spirale
     zenith    = @('xAAx', 'AAAA', 'xaax', 'axxa')   # astre au zenith
+    saturne   = @('xaax', 'AAAA', 'xaax', 'xxxx')   # planète et son anneau
+    neptune   = @('xAxA', 'xAAA', 'xxAx', 'xxAx')   # trident doré
 }
 
 # Couleur d'une lettre du dessin. Les plaques (p, l, d) reçoivent le motif du métier.
@@ -103,6 +107,14 @@ function Couleur([string]$k, $s, [string]$nom, [int]$x, [int]$y) {
         'zenith' {       # premium : rayons dorés en diagonale + éclats bleu glacé
             if ((Bruit $x $y 16) -lt 0.035) { return $s.a }
             if (((($x - $y) % 5) + 5) % 5 -eq 0) { $c = Mix $c $s.l 0.5 }
+        }
+        'saturne' {      # coffre : anneaux horizontaux dorés + poussière de glace
+            if ((Bruit $x $y 17) -lt 0.04) { return $s.b }
+            if ((($y % 6) + 6) % 6 -eq 2) { $c = Mix $c $s.l 0.55 } elseif ((($y % 6) + 6) % 6 -eq 3) { $c = Mix $c $s.a 0.3 }
+        }
+        'neptune' {      # coffre : tempête (spirales) bleu glacé + éclairs turquoise
+            if ((Bruit $x $y 18) -lt 0.045) { return $s.a }
+            if ((([int]($x + 2 * [Math]::Sin($y * 0.9)) + $y) % 5 + 5) % 5 -eq 0) { $c = Mix $c $s.l 0.45 }
         }
     }
     return $c

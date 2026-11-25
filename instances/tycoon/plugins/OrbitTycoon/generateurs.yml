@@ -1,5 +1,6 @@
 debloque:
   '1': 1
+  '2': 1
   '5': 2
 poses:
   1001_101_-2:
@@ -18,3 +19,11 @@ poses:
     type: carotte
     pile: 5
     ile: 5
+  '2008_101_0':
+    type: ble
+    pile: 1
+    ile: 2
+  2008_101_-3:
+    type: ble
+    pile: 1
+    ile: 2

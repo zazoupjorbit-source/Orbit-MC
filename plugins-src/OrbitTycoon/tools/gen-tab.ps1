@@ -16,6 +16,7 @@ $grades = @(
     @('modo',        'MODO',         '1FBF6A', '5EE89A'),
     @('helpeur',     'HELPEUR',      '22C1D6', '7FE7F2'),
     @('builder',     'BUILDER',      'F5B400', 'FFE066'),
+    @('partenaire',  'PARTENAIRE',   'FF6FD8', 'FFB3EC'),
     @('orbit',       'ORBIT',        '62CFF4', 'E0B864'),
     @('astral',      'ASTRAL',       'C77DFF', '62CFF4'),
     @('amiral',      'AMIRAL',       'E0B864', 'FFF1A0'),

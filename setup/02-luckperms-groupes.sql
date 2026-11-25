@@ -23,14 +23,19 @@ CREATE TABLE `luckperms_groups` (
 
 set autocommit=0;
 INSERT INTO `luckperms_groups` VALUES ('admin');
+INSERT INTO `luckperms_groups` VALUES ('amiral');
+INSERT INTO `luckperms_groups` VALUES ('astral');
 INSERT INTO `luckperms_groups` VALUES ('builder');
 INSERT INTO `luckperms_groups` VALUES ('cofondateur');
+INSERT INTO `luckperms_groups` VALUES ('commandant');
 INSERT INTO `luckperms_groups` VALUES ('default');
 INSERT INTO `luckperms_groups` VALUES ('dev');
 INSERT INTO `luckperms_groups` VALUES ('fondateur');
 INSERT INTO `luckperms_groups` VALUES ('helpeur');
 INSERT INTO `luckperms_groups` VALUES ('modo');
 INSERT INTO `luckperms_groups` VALUES ('orbit');
+INSERT INTO `luckperms_groups` VALUES ('partenaire');
+INSERT INTO `luckperms_groups` VALUES ('pilote');
 INSERT INTO `luckperms_groups` VALUES ('vip');
 INSERT INTO `luckperms_groups` VALUES ('vipplus');
 commit;
@@ -48,7 +53,7 @@ CREATE TABLE `luckperms_group_permissions` (
   `contexts` varchar(200) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `luckperms_group_permissions_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 set autocommit=0;
@@ -115,6 +120,18 @@ INSERT INTO `luckperms_group_permissions` VALUES (84,'orbit','meta.namecolor.#B5
 INSERT INTO `luckperms_group_permissions` VALUES (85,'vip','prefix.10.ᴠɪᴘ ',1,'global','global',0,'{}');
 INSERT INTO `luckperms_group_permissions` VALUES (86,'vipplus','prefix.20.ᴠɪᴘ+ ',1,'global','global',0,'{}');
 INSERT INTO `luckperms_group_permissions` VALUES (87,'orbit','prefix.30.ᴏʀʙɪᴛ ',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (88,'pilote','weight.110',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (89,'pilote','displayname.Pilote',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (90,'commandant','weight.120',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (91,'commandant','displayname.Commandant',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (92,'amiral','weight.130',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (93,'amiral','displayname.Amiral',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (94,'astral','weight.140',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (95,'astral','displayname.Astral',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (96,'pilote','orbit.file.bypass',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (97,'commandant','orbit.file.bypass',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (98,'amiral','orbit.file.bypass',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (99,'astral','orbit.file.bypass',1,'global','global',0,'{}');
 commit;
 DROP TABLE IF EXISTS `luckperms_tracks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

@@ -226,20 +226,39 @@ final class Equipements implements Listener {
 
     /**
      * Armures premium vendues en Plasma à la boutique : bonus de Crédits, Flux et XP avec TOUS les outils
-     * (réglages equipements.premium.&lt;id&gt; : bonus-piece, bonus-set, prix-piece, prix-set). Ne tombent pas des coffres.
+     * (réglages equipements.premium.&lt;id&gt; : bonus-piece, bonus-set, prix-piece, prix-set).
+     * Nébuleuse et Zénith : boutique. Saturne et Neptune : seulement dans leur coffre (coffre = n° du coffre, 0 = boutique).
      */
     enum Premium {
-        NEBULEUSE("nebuleuse", "Nébuleuse", "Combinaison", "#C77DFF", "Tissée dans le cœur d'une nébuleuse", 5, 25, 1200, 4200),
-        ZENITH("zenith", "Zénith", "Armure", "#E0B864", "Forgée au sommet du ciel, là où brille l'or", 10, 50, 3000, 10500);
+        NEBULEUSE("nebuleuse", "Nébuleuse", "Combinaison", "#C77DFF", "Tissée dans le cœur d'une nébuleuse", 5, 25, 1200, 4200, 0),
+        ZENITH("zenith", "Zénith", "Armure", "#E0B864", "Forgée au sommet du ciel, là où brille l'or", 10, 50, 3000, 10500, 0),
+        SATURNE("saturne", "Saturne", "Armure", "#F2C46D", "Taillée dans la glace des anneaux de Saturne", 15, 70, 0, 0, 4),
+        NEPTUNE("neptune", "Neptune", "Armure", "#3D7BFF", "Née dans les tempêtes du géant bleu", 25, 120, 0, 0, 5);
 
         final String id, nom, type, couleur, devise;
         final double bonusPiece, bonusSet;
         final long prixPiece, prixSet;
+        /** Coffre (1 à 6) qui donne cette armure ; 0 = vendue à la boutique. */
+        final int coffre;
 
-        Premium(String id, String nom, String type, String couleur, String devise, double bp, double bs, long pp, long ps) {
+        Premium(String id, String nom, String type, String couleur, String devise, double bp, double bs, long pp, long ps, int coffre) {
             this.id = id; this.nom = nom; this.type = type; this.couleur = couleur; this.devise = devise;
-            this.bonusPiece = bp; this.bonusSet = bs; this.prixPiece = pp; this.prixSet = ps;
+            this.bonusPiece = bp; this.bonusSet = bs; this.prixPiece = pp; this.prixSet = ps; this.coffre = coffre;
         }
+
+        boolean boutique() { return coffre == 0; }
+
+        static Premium parse(String s) {
+            for (Premium a : values()) if (a.id.equalsIgnoreCase(s)) return a;
+            return null;
+        }
+    }
+
+    /** Armures vendues à la boutique (Nébuleuse, Zénith). */
+    static List<Premium> premiumsBoutique() {
+        List<Premium> l = new ArrayList<>();
+        for (Premium a : Premium.values()) if (a.boutique()) l.add(a);
+        return l;
     }
 
     double bonusPiece(Premium a) { return plugin.getConfig().getDouble("equipements.premium." + a.id + ".bonus-piece", a.bonusPiece); }
@@ -268,7 +287,8 @@ final class Equipements implements Listener {
     List<String> lorePremium(Premium a, boolean boutique) {
         String b = pct(bonusPiece(a)), set = pct(bonusSet(a));
         List<String> l = new ArrayList<>();
-        l.add("<#C77DFF>✦ Armure premium <dark_gray>· <gray>tous les outils");
+        l.add(a.boutique() ? "<#C77DFF>✦ Armure premium <dark_gray>· <gray>tous les outils"
+                : "<" + a.couleur + ">✦ Armure de coffre <dark_gray>· <gray>tous les outils");
         l.add("<dark_gray><italic>" + a.devise);
         l.add("");
         l.add("<#62CFF4><bold>Chaque pièce portée :</bold>");
@@ -280,9 +300,12 @@ final class Equipements implements Listener {
             l.add("");
             l.add("<gray>Pièce : <#C77DFF>" + Monnaies.Monnaie.PLASMA.format(prixPiece(a)));
             l.add("<gray>Set complet : <#C77DFF>" + Monnaies.Monnaie.PLASMA.format(prixSet(a)));
-        } else {
+        } else if (a.boutique()) {
             l.add("");
             l.add("<dark_gray>Vendue à la boutique (Plasma).");
+        } else {
+            l.add("");
+            l.add("<dark_gray>Trouvée seulement dans le coffre " + a.nom + " (très rare).");
         }
         return l;
     }
@@ -309,6 +332,12 @@ final class Equipements implements Listener {
             if (k > 0) total += k >= 4 ? bonusSet(a) : k * bonusPiece(a);
         }
         return total;
+    }
+
+    /** Une pièce au hasard de l'armure a (coffres Saturne et Neptune), ou la pièce demandée (casque, plastron…). */
+    ItemStack tirerPremium(Premium a, String piece) {
+        for (Piece p : Piece.values()) if (idPiece(p).equalsIgnoreCase(piece)) return premium(a, p);
+        return premium(a, Piece.values()[ThreadLocalRandom.current().nextInt(Piece.values().length)]);
     }
 
     // ------------------------------------------------------------------ staff

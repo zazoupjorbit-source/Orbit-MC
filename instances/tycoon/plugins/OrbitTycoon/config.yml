@@ -1,6 +1,30 @@
 # Orbit Tycoon — réglages.
 # Après une modification : /tycoon reload (jamais /reload du serveur).
 
+enchants-outils:
+  erudition:
+    effet: 1.0
+    prix: 1000
+    prestige: 0
+  croissance: 1.07
+  saut: 2.0
+  palier: 25
+  abondance:
+    effet: 1.0
+    prix: 800
+    prestige: 0
+  avidite:
+    effet: 1.5
+    prix: 1000
+    prestige: 0
+  marchand:
+    effet: 1.0
+    prix: 1500
+    prestige: 3
+  cles:
+    effet: 0.05
+    prix: 3000
+    prestige: 10
 equipements:
   bonus-piece: 2.5 # par pièce portée
   bonus-set: 15.0 # set complet (4/4), remplace 4 × bonus-piece
@@ -17,6 +41,12 @@ equipements:
       bonus-set: 50.0
       prix-piece: 3000
       prix-set: 10500
+    saturne:
+      bonus-piece: 15.0
+      bonus-set: 70.0
+    neptune:
+      bonus-piece: 25.0
+      bonus-set: 120.0
 tab:
   actif: true
 pets:
@@ -288,6 +318,11 @@ generateurs:
   - 60
   - 65
   max-au-sol: 512
+  plasma:
+    bloc: CRYING_OBSIDIAN
+    par-heure: 1.0
+    pile-max: 16
+    max-par-ile: 1
   liste:
   - id: ble
     nom: Blé
@@ -1139,6 +1174,173 @@ coffres:
       taille: 3
       chance: 0.5
       rarete: mythique
+    # Coffre Saturne (2e meilleur, clé 500 Plasma) : lots plus gros que l'Event, armure Saturne, Générateur de Plasma.
+    # Choix de Wane le 25/11/2026.
+    '4':
+    - type: capsule
+      monnaie: credits
+      minutes: 30
+      taille: 2
+      chance: 20
+      rarete: commun
+    - type: capsule
+      monnaie: flux
+      minutes: 30
+      taille: 2
+      chance: 14
+      rarete: commun
+    - type: booster
+      booster: credits
+      mult: 2.5
+      minutes: 45
+      chance: 12
+      rarete: rare
+    - type: booster
+      booster: xp
+      mult: 2.5
+      minutes: 45
+      chance: 10
+      rarete: rare
+    - type: generateur
+      ecart: 0
+      nombre: 16
+      chance: 9
+      rarete: rare
+    - type: booster
+      booster: flux
+      mult: 2.5
+      minutes: 45
+      chance: 8
+      rarete: rare
+    - type: cle
+      coffre: 3
+      nombre: 3
+      chance: 7
+      rarete: rare
+    - type: capsule
+      monnaie: credits
+      minutes: 90
+      taille: 3
+      chance: 6
+      rarete: epique
+    - type: generateur
+      ecart: 1
+      nombre: 4
+      chance: 5
+      rarete: epique
+    - type: armure
+      armure: saturne
+      chance: 3.5
+      rarete: legendaire
+    - type: generateur
+      id: plasma
+      nombre: 1
+      chance: 1.5
+      rarete: legendaire
+    - type: booster
+      booster: credits
+      mult: 4
+      minutes: 60
+      chance: 1.5
+      rarete: legendaire
+    - type: cle
+      coffre: 5
+      nombre: 1
+      chance: 1
+      rarete: legendaire
+    - type: titre
+      titre: saturnien
+      chance: 1
+      rarete: legendaire
+    - type: capsule
+      monnaie: flux
+      minutes: 180
+      taille: 3
+      chance: 0.5
+      rarete: mythique
+    # Coffre Neptune (le meilleur, clé 1000 Plasma) : les plus gros lots, armure Saturne, Plasma (armure Neptune retirée le 25/11/2026).
+    '5':
+    - type: capsule
+      monnaie: credits
+      minutes: 60
+      taille: 3
+      chance: 15
+      rarete: commun
+    - type: capsule
+      monnaie: flux
+      minutes: 60
+      taille: 3
+      chance: 13
+      rarete: commun
+    - type: booster
+      booster: credits
+      mult: 3
+      minutes: 60
+      chance: 11
+      rarete: rare
+    - type: booster
+      booster: xp
+      mult: 3
+      minutes: 60
+      chance: 9
+      rarete: rare
+    - type: generateur
+      ecart: 1
+      nombre: 8
+      chance: 9
+      rarete: rare
+    - type: booster
+      booster: flux
+      mult: 3
+      minutes: 60
+      chance: 8
+      rarete: rare
+    - type: cle
+      coffre: 4
+      nombre: 2
+      chance: 7
+      rarete: rare
+    - type: armure
+      armure: neptune
+      chance: 1
+      rarete: mythique
+    - type: generateur
+      ecart: 2
+      nombre: 4
+      chance: 5
+      rarete: epique
+    - type: capsule
+      monnaie: credits
+      minutes: 240
+      taille: 3
+      chance: 5
+      rarete: epique
+    - type: generateur
+      id: plasma
+      nombre: 1
+      chance: 4
+      rarete: epique
+    - type: booster
+      booster: credits
+      mult: 5
+      minutes: 120
+      chance: 2.5
+      rarete: legendaire
+    - type: generateur
+      id: plasma
+      nombre: 3
+      chance: 1.5
+      rarete: legendaire
+    - type: titre
+      titre: neptunien
+      chance: 1.5
+      rarete: legendaire
+    - type: capsule
+      monnaie: flux
+      minutes: 480
+      taille: 3
+      chance: 1.5
+      rarete: legendaire
 
 # Titres cosmétiques (Butin.java) : gagnés en plaques dans les coffres, choisis avec /titre, affichés devant
 # le pseudo dans le chat. id → texte MiniMessage. Purement cosmétique (règles Mojang).
@@ -1158,6 +1360,8 @@ titres:
     dompteur: <#C77DFF>Dompteur de nébuleuses
     seigneur: <gradient:#E0B864:#FFF1A0>Seigneur des étoiles</gradient>
     devoreur: <gradient:#C77DFF:#FF9F43>Dévoreur de mondes</gradient>
+    saturnien: <gradient:#F2C46D:#FFF1A0>✦ Seigneur des anneaux de Saturne</gradient>
+    neptunien: <gradient:#3D7BFF:#62CFF4>✦ Souverain de Neptune ✦</gradient>
   # Titres vendus au rayon Titres de la boutique (id: prix en Plasma). Les autres : coffres ou grades.
   boutique:
     pionnier: 300
@@ -1178,6 +1382,8 @@ titres:
     dompteur: titre_galaxie
     seigneur: titre_etoile
     devoreur: titre_trou_noir
+    saturnien: titre_etoile
+    neptunien: titre_galaxie
   noms:
   - Vote
   - Farm
@@ -1253,6 +1459,7 @@ hud:
     modo: <b><gradient:#1FBF6A:#5EE89A>ᴍᴏᴅᴏ</gradient></b>
     helpeur: <b><gradient:#22C1D6:#7FE7F2>ʜᴇʟᴘᴇᴜʀ</gradient></b>
     builder: <b><gradient:#F5B400:#FFE066>ʙᴜɪʟᴅᴇʀ</gradient></b>
+    partenaire: <b><gradient:#FF6FD8:#FFB3EC>ᴘᴀʀᴛᴇɴᴀɪʀᴇ</gradient></b>
     orbit: <b><gradient:#62CFF4:#E0B864>ᴏʀʙɪᴛ</gradient></b>
     astral: <b><gradient:#C77DFF:#62CFF4>ᴀꜱᴛʀᴀʟ</gradient></b>
     amiral: <b><gradient:#E0B864:#FFF1A0>ᴀᴍɪʀᴀʟ</gradient></b>
@@ -1417,22 +1624,22 @@ magasin-blocs:
   exclus: []
 
 # Grades du Tycoon (Grades.java), achetés en Plasma à la boutique : confort + cosmétique, AUCUN multiplicateur de gains.
-# Groupe LuckPerms du même nom, donné avec le contexte server=tycoon. Monter de grade = payer la différence.
+# Groupe LuckPerms du même nom, donné avec le contexte server=tycoon. Grades achetés dans l ordre (Pilote, Commandant, Amiral, Astral), chacun au prix plein.
 # offres-hdv = offres en plus à l'hôtel des ventes (s'ajoute à hdv.max-offres).
 grades:
   pilote:
-    prix: 1500
+    prix: 1000
     bonus: 5.0
     offres-hdv: 5
   commandant:
-    prix: 3500
+    prix: 1500
     bonus: 10.0
     offres-hdv: 10
   amiral:
-    prix: 7500
+    prix: 2000
     bonus: 15.0
     offres-hdv: 20
   astral:
-    prix: 15000
+    prix: 4500
     bonus: 25.0
     offres-hdv: 30

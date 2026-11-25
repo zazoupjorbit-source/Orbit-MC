@@ -159,6 +159,8 @@ runtime.json
 # Votes : cles RSA + jeton (secrets) et cles en attente (donnees de jeu)
 /instances/*/plugins/OrbitTycoon/votes/
 /instances/*/plugins/OrbitTycoon/votes-attente.yml
+# Sauvegardes des fiches joueurs (donnees de jeu)
+**/plugins/*/joueurs-*/
 
 # Survie : marque de génération de l'île (liée au monde), aperçu et sauvegardes de config
 /instances/*/plugins/OrbitSurvie/ile-generee

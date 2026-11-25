@@ -77,7 +77,7 @@ final class Outil implements Listener {
     }
 
     /** Emplacements du menu (3 lignes) : fiche en haut, les 5 outils au milieu, améliorations en bas. */
-    private static final int SLOT_FICHE = 4, SLOT_AMELIORATIONS = 22, SLOT_RESSOURCES = 23;
+    private static final int SLOT_FICHE = 4, SLOT_ENCHANTS = 21, SLOT_AMELIORATIONS = 22, SLOT_RESSOURCES = 23;
     private static final int[] SLOTS_OUTILS = {11, 12, 13, 14, 15};
 
     private final OrbitTycoon plugin;
@@ -100,7 +100,10 @@ final class Outil implements Listener {
         catch (Exception e) { return Mode.PIOCHE; }
     }
 
-    ItemStack creer(Mode m) {
+    ItemStack creer(Mode m) { return creer(m, null); }
+
+    /** Outil orbital au mode m ; avec le joueur, ses enchantements d'outil apparaissent dans la description. */
+    ItemStack creer(Mode m, UUID proprio) {
         ItemStack item = new ItemStack(m.type);
         ItemMeta meta = item.getItemMeta();
         meta.displayName(texte("<gradient:#62CFF4:#E0B864><bold>Outil orbital</bold></gradient> <dark_gray>· <" + m.couleur + "><bold>" + m.nom));
@@ -110,6 +113,14 @@ final class Outil implements Listener {
         for (Mode x : Mode.values())
             lore.add(texte((x == m ? "<" + x.couleur + ">▶ <bold>" : "<dark_gray>  ") + x.nom + (x == m ? "</bold>" : "") + " <dark_gray>(" + x.zone + ")"));
         lore.add(Component.empty());
+        Enchantements ench = proprio == null ? null : plugin.enchantements();
+        List<String> enchants = ench == null ? List.of() : ench.lore(proprio, m);
+        if (!enchants.isEmpty()) {
+            lore.add(texte("<gray>Enchantements :"));
+            for (String l : enchants) lore.add(texte("  " + l));
+            lore.add(Component.empty());
+            meta.setEnchantmentGlintOverride(true);
+        }
         lore.add(texte("<#E0B864>Shift + clic droit <gray>: interface de l'outil"));
         lore.add(texte("<#E0B864>Shift + F <gray>: outil suivant"));
         lore.add(texte("<#E0B864>✦ Lié à toi : impossible à jeter ou échanger."));
@@ -136,7 +147,7 @@ final class Outil implements Listener {
             inv.setItem(slot, null);
             for (ItemStack reste : inv.addItem(occupant).values()) p.getWorld().dropItemNaturally(p.getLocation(), reste);
         }
-        inv.setItem(slot, creer(m));
+        inv.setItem(slot, creer(m, p.getUniqueId()));
     }
 
     /** Mode de l'Outil orbital du joueur (où qu'il soit dans l'inventaire), null s'il n'en a pas. */
@@ -148,7 +159,7 @@ final class Outil implements Listener {
     /** Passe l'Outil orbital du joueur sur le mode m, à son emplacement actuel. */
     void equiper(Player p, Mode m) {
         PlayerInventory inv = p.getInventory();
-        for (int i = 0; i < inv.getSize(); i++) if (est(inv.getItem(i))) { inv.setItem(i, creer(m)); break; }
+        for (int i = 0; i < inv.getSize(); i++) if (est(inv.getItem(i))) { inv.setItem(i, creer(m, p.getUniqueId())); break; }
         plugin.tuto().fait(p, Tuto.Etape.OUTIL);
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 0.6f, 1.4f + m.ordinal() * 0.1f);
         p.sendActionBar(texte("<gray>Outil orbital <dark_gray>» <" + m.couleur + "><bold>" + m.nom + "</bold> <dark_gray>(" + m.zone + ")"));
@@ -198,6 +209,7 @@ final class Outil implements Listener {
         inv.setItem(SLOT_FICHE, fiche(p, actuel));
         Mode[] modes = Mode.values();
         for (int i = 0; i < modes.length; i++) inv.setItem(SLOTS_OUTILS[i], iconeOutil(p, modes[i], modes[i] == actuel));
+        inv.setItem(SLOT_ENCHANTS, iconeEnchants(actuel));
         inv.setItem(SLOT_AMELIORATIONS, iconeAmeliorations());
         inv.setItem(SLOT_RESSOURCES, iconeRessources(p, actuel));
         p.openInventory(inv);
@@ -231,8 +243,9 @@ final class Outil implements Listener {
         lore.add(texte("<gray>Prestige de l'outil : <#E0B864>✪ " + mon.prestige(id, m)));
         lore.add(texte("<gray>Prestige total : <#E0B864>✪ " + mon.prestige(id)));
         lore.add(Component.empty());
-        for (Monnaies.Monnaie x : new Monnaies.Monnaie[]{Monnaies.Monnaie.CREDIT, Monnaies.Monnaie.FLUX})
-            lore.add(texte("<" + x.couleur + ">" + x.symbole + " " + nombre(mon.solde(id, x)) + " <gray>" + x.pluriel));
+        Monnaies.Monnaie c = Monnaies.Monnaie.CREDIT;
+        lore.add(texte("<" + c.couleur + ">" + c.symbole + " " + nombre(mon.solde(id, c)) + " <gray>" + c.pluriel));
+        lore.add(texte("<" + m.couleur + ">" + m.symbole + " " + nombre(mon.flux(id, m)) + " <gray>" + m.ressource));
         meta.lore(lore);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.setEnchantmentGlintOverride(true);
@@ -257,6 +270,27 @@ final class Outil implements Listener {
         if (enMain) meta.setEnchantmentGlintOverride(true);
         it.setItemMeta(meta);
         return it;
+    }
+
+    private ItemStack iconeEnchants(Mode m) {
+        ItemStack it = new ItemStack(Material.ENCHANTED_BOOK);
+        ItemMeta meta = it.getItemMeta();
+        meta.displayName(texte("<#C77DFF><bold>Enchantements de l'outil"));
+        meta.lore(List.of(
+                texte("<gray>Enchantements propres à : <" + m.couleur + ">" + m.nom),
+                texte("<gray>100 niveaux chacun, payés en <" + m.couleur + ">" + m.ressource + "<gray>."),
+                texte("<gray>Certains se débloquent au prestige."),
+                Component.empty(),
+                texte("<#E0B864>➜ Clic pour ouvrir")));
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        it.setItemMeta(meta);
+        return it;
+    }
+
+    /** Refait l'Outil orbital du joueur (même mode, même emplacement) : lore des enchantements à jour. */
+    void actualiser(Player p) {
+        PlayerInventory inv = p.getInventory();
+        for (int i = 0; i < inv.getSize(); i++) if (est(inv.getItem(i))) { inv.setItem(i, creer(mode(inv.getItem(i)), p.getUniqueId())); break; }
     }
 
     private ItemStack iconeAmeliorations() {
@@ -324,6 +358,7 @@ final class Outil implements Listener {
             Mode enMain = modeActuel(p);
             if (slot == SLOT_AMELIORATIONS && enMain != null) plugin.progression().ouvrir(p, enMain);
             if (slot == SLOT_RESSOURCES && enMain != null) plugin.ressources().ouvrir(p, enMain);
+            if (slot == SLOT_ENCHANTS && enMain != null && plugin.enchantements() != null) plugin.enchantements().ouvrir(p, enMain);
             return;
         }
         if (e.isRightClick()) { plugin.progression().ouvrir(p, choisi); return; }

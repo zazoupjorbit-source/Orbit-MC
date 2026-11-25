@@ -7,14 +7,15 @@
     {"type": "bitmap", "file": "orbittycoon:font/tab_modo.png", "height": 8, "ascent": 7, "chars": ["\uE904"]},
     {"type": "bitmap", "file": "orbittycoon:font/tab_helpeur.png", "height": 8, "ascent": 7, "chars": ["\uE905"]},
     {"type": "bitmap", "file": "orbittycoon:font/tab_builder.png", "height": 8, "ascent": 7, "chars": ["\uE906"]},
-    {"type": "bitmap", "file": "orbittycoon:font/tab_orbit.png", "height": 8, "ascent": 7, "chars": ["\uE907"]},
-    {"type": "bitmap", "file": "orbittycoon:font/tab_astral.png", "height": 8, "ascent": 7, "chars": ["\uE908"]},
-    {"type": "bitmap", "file": "orbittycoon:font/tab_amiral.png", "height": 8, "ascent": 7, "chars": ["\uE909"]},
-    {"type": "bitmap", "file": "orbittycoon:font/tab_commandant.png", "height": 8, "ascent": 7, "chars": ["\uE90A"]},
-    {"type": "bitmap", "file": "orbittycoon:font/tab_pilote.png", "height": 8, "ascent": 7, "chars": ["\uE90B"]},
-    {"type": "bitmap", "file": "orbittycoon:font/tab_vipplus.png", "height": 8, "ascent": 7, "chars": ["\uE90C"]},
-    {"type": "bitmap", "file": "orbittycoon:font/tab_vip.png", "height": 8, "ascent": 7, "chars": ["\uE90D"]},
-    {"type": "bitmap", "file": "orbittycoon:font/tab_joueur.png", "height": 8, "ascent": 7, "chars": ["\uE90E"]},
-    {"type": "bitmap", "file": "orbittycoon:font/tab_prestige.png", "height": 8, "ascent": 7, "chars": ["\uE90F"]}
+    {"type": "bitmap", "file": "orbittycoon:font/tab_partenaire.png", "height": 8, "ascent": 7, "chars": ["\uE907"]},
+    {"type": "bitmap", "file": "orbittycoon:font/tab_orbit.png", "height": 8, "ascent": 7, "chars": ["\uE908"]},
+    {"type": "bitmap", "file": "orbittycoon:font/tab_astral.png", "height": 8, "ascent": 7, "chars": ["\uE909"]},
+    {"type": "bitmap", "file": "orbittycoon:font/tab_amiral.png", "height": 8, "ascent": 7, "chars": ["\uE90A"]},
+    {"type": "bitmap", "file": "orbittycoon:font/tab_commandant.png", "height": 8, "ascent": 7, "chars": ["\uE90B"]},
+    {"type": "bitmap", "file": "orbittycoon:font/tab_pilote.png", "height": 8, "ascent": 7, "chars": ["\uE90C"]},
+    {"type": "bitmap", "file": "orbittycoon:font/tab_vipplus.png", "height": 8, "ascent": 7, "chars": ["\uE90D"]},
+    {"type": "bitmap", "file": "orbittycoon:font/tab_vip.png", "height": 8, "ascent": 7, "chars": ["\uE90E"]},
+    {"type": "bitmap", "file": "orbittycoon:font/tab_joueur.png", "height": 8, "ascent": 7, "chars": ["\uE90F"]},
+    {"type": "bitmap", "file": "orbittycoon:font/tab_prestige.png", "height": 8, "ascent": 7, "chars": ["\uE910"]}
   ]
 }

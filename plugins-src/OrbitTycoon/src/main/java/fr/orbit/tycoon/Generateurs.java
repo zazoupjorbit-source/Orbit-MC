@@ -73,7 +73,7 @@ final class Generateurs implements Listener {
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
     private static final String TAG = "orbit_generateur";
-    private static final int SLOT_INFO = 45, SLOT_COFFRE = 46, SLOT_COLLECTEUR = 47, SLOT_VENDRE = 49, SLOT_FERMER = 53;
+    private static final int SLOT_INFO = 45, SLOT_VENDRE = 49, SLOT_FERMER = 53;
 
     /** Un type de générateur (une ligne de generateurs.liste). */
     record Type(int rang, String id, String nom, Material bloc, Material objet, long prix, double vente) { }
@@ -109,7 +109,32 @@ final class Generateurs implements Listener {
     /** Vrai si ce bloc est celui d'un générateur (exclu du Magasin de blocs). */
     boolean blocGenerateur(Material m) {
         for (Type t : types) if (t.bloc() == m) return true;
-        return false;
+        return plasma != null && plasma.bloc() == m;
+    }
+
+    // ------------------------------------------------------------------ générateur de Plasma (coffres Saturne / Neptune)
+
+    /**
+     * Générateur de Plasma : hors de la liste /gen (ni achat, ni amélioration, ni déblocage), obtenu seulement dans
+     * les coffres. Ne fait rien tomber : à chaque cycle, chaque générateur de la pile a une petite chance de verser
+     * du Plasma au membre de l'île présent dessus. Réglages : generateurs.plasma.
+     */
+    static final String ID_PLASMA = "plasma";
+    private Type plasma;
+
+    boolean estPlasma(Type t) { return t != null && t.rang() < 0; }
+
+    /** Plasma moyen par heure pour UN générateur de Plasma posé. */
+    private double plasmaParHeure() { return Math.max(0, plugin.getConfig().getDouble("generateurs.plasma.par-heure", 1.0)); }
+
+    private int pileMax(Type t) {
+        return estPlasma(t) ? Math.max(1, Math.min(64, plugin.getConfig().getInt("generateurs.plasma.pile-max", 16))) : pileMax();
+    }
+
+    private int plasmaParIle(int ile) {
+        int n = 0;
+        for (Pose g : poses.values()) if (g.ile == ile && ID_PLASMA.equals(g.type)) n++;
+        return n;
     }
 
     // ------------------------------------------------------------------ cycle de vie
@@ -148,6 +173,10 @@ final class Generateurs implements Listener {
                 plugin.getLogger().warning("Générateur ignoré (ligne mal écrite) : " + m + " (" + e.getMessage() + ")");
             }
         }
+        Material blocPlasma = Material.matchMaterial(plugin.getConfig().getString("generateurs.plasma.bloc", "CRYING_OBSIDIAN"));
+        if (blocPlasma == null || !blocPlasma.isBlock()) blocPlasma = Material.CRYING_OBSIDIAN;
+        plasma = parId.containsKey(ID_PLASMA) ? null : new Type(-1, ID_PLASMA, "Plasma", blocPlasma, Material.AMETHYST_SHARD, 0, 0);
+        if (plasma != null) parId.put(ID_PLASMA, plasma);
         if (production != null) relancer();
         for (String k : new ArrayList<>(titres.keySet())) titre(k);
     }
@@ -233,6 +262,7 @@ final class Generateurs implements Listener {
     }
 
     private String gain(Type t, int pile) {
+        if (estPlasma(t)) return "≈ " + vente(Math.round(plasmaParHeure() * pile * 10) / 10.0) + " ◆ Plasma/h";
         double parHeure = t.vente() * pile * parCycle() * 3600.0 / intervalle();
         return Hud.nombre(Math.round(parHeure)) + " ⛃/h";
     }
@@ -240,6 +270,22 @@ final class Generateurs implements Listener {
     /** Objet générateur (s'empile par 64 : tous les exemplaires ont exactement les mêmes données). */
     ItemStack generateur(Type t, int nombre) {
         ItemStack it = new ItemStack(t.bloc(), Math.max(1, Math.min(64, nombre)));
+        if (estPlasma(t)) {
+            it.editMeta(m -> {
+                m.displayName(texte("<gradient:#C77DFF:#62CFF4><bold>Générateur de Plasma</bold></gradient>"));
+                m.lore(List.of(
+                        texte("<#C77DFF>✦ Générateur rare <dark_gray>· <gray>coffres Saturne et Neptune"),
+                        texte("<gray>Verse du <#C77DFF>◆ Plasma</#C77DFF><gray> directement sur ton solde,"),
+                        texte("<gray>quand tu es sur ton île : <#C77DFF>" + gain(t, 1) + " <gray>en moyenne."),
+                        texte(""),
+                        texte("<#62CFF4>➜ Pose-le sur ton île /is <dark_gray>(" + plugin.getConfig().getInt("generateurs.plasma.max-par-ile", 1) + " bloc max par île)"),
+                        texte("<#62CFF4>➜ Clic droit sur un autre : l'empiler <dark_gray>(x" + pileMax(t) + " max)"),
+                        texte("<dark_gray>Ne s'achète pas et ne s'améliore pas.")));
+                m.setEnchantmentGlintOverride(true);
+                m.getPersistentDataContainer().set(cleGen, PersistentDataType.STRING, t.id());
+            });
+            return it;
+        }
         it.editMeta(m -> {
             m.displayName(texte("<gradient:#62CFF4:#E0B864><bold>Générateur de " + t.nom() + "</bold></gradient>"));
             m.lore(List.of(
@@ -358,10 +404,13 @@ final class Generateurs implements Listener {
         Set<Integer> actives = new HashSet<>();
         // Bonus de production de l'île : le meilleur grade (Grades.java) parmi les membres présents dessus.
         java.util.Map<Integer, Double> bonusGrade = new java.util.HashMap<>();
+        // Membres présents sur leur île (le Plasma va à l'un d'eux, au hasard).
+        java.util.Map<Integer, List<Player>> presents = new java.util.HashMap<>();
         for (Player p : w.getPlayers()) {
             IlesJoueurs.Ile ici = iles().ileA(p.getLocation().getX(), p.getLocation().getZ());
             if (ici != null && ici == iles().ileDe(p.getUniqueId())) {
                 actives.add(ici.index);
+                presents.computeIfAbsent(ici.index, x -> new ArrayList<>()).add(p);
                 if (plugin.grades() != null) bonusGrade.merge(ici.index, plugin.grades().bonus(p), Math::max);
             }
         }
@@ -374,6 +423,7 @@ final class Generateurs implements Listener {
             if (t == null) continue;
             int[] c = coords(e.getKey());
             if (!w.isChunkLoaded(c[0] >> 4, c[2] >> 4)) continue;
+            if (estPlasma(t)) { produirePlasma(w, c, g, presents.get(g.ile)); continue; }
             // Un collecteur dans le chunk : la production est vendue (Collecteur orbital) ou rangée (Coffre collecteur),
             // sans objet au sol ; seul ce qui ne rentre pas dans un coffre plein tombe au sol.
             int quantite = Equipements.appliquer(g.pile * parCycle(), bonusGrade.getOrDefault(g.ile, 0.0));
@@ -408,6 +458,22 @@ final class Generateurs implements Listener {
                 aDonner -= n;
             }
         }
+    }
+
+    /** Un cycle d'un Générateur de Plasma : chaque générateur de la pile a (par-heure × intervalle / 3600) chance de donner 1 Plasma. */
+    private void produirePlasma(World w, int[] c, Pose g, List<Player> la) {
+        if (la == null || la.isEmpty()) return;
+        double chance = plasmaParHeure() * intervalle() / 3600.0;
+        java.util.concurrent.ThreadLocalRandom r = java.util.concurrent.ThreadLocalRandom.current();
+        int gagne = 0;
+        for (int i = 0; i < g.pile; i++) if (r.nextDouble() < chance) gagne++;
+        if (gagne <= 0) return;
+        Player p = la.get(r.nextInt(la.size()));
+        plugin.monnaies().ajouter(p.getUniqueId(), Monnaies.Monnaie.PLASMA, gagne);
+        Location l = new Location(w, c[0] + 0.5, c[1] + 1.2, c[2] + 0.5);
+        w.spawnParticle(Particle.WITCH, l, 25, 0.3, 0.4, 0.3, 0.05);
+        w.playSound(l, Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 0.9f, 1.4f);
+        p.sendActionBar(texte("<#C77DFF><bold>+" + gagne + " ◆ Plasma</bold> <dark_gray>· <gray>Générateur de Plasma"));
     }
 
     // ------------------------------------------------------------------ titres au-dessus des générateurs
@@ -460,6 +526,12 @@ final class Generateurs implements Listener {
             OrbitTycoon.msg(p, "<#FF4D4D>Ton île a déjà " + emplacementsMax(ile) + " générateurs posés.</#FF4D4D> <gray>Empile-les (clic droit dessus) ou agrandis l'île avec <#E0B864>/is upgrade<gray>.");
             return;
         }
+        int maxPlasma = Math.max(1, plugin.getConfig().getInt("generateurs.plasma.max-par-ile", 1));
+        if (estPlasma(t) && plasmaParIle(ile.index) >= maxPlasma) {
+            e.setCancelled(true);
+            OrbitTycoon.msg(p, "<#FF4D4D>Ton île a déjà " + maxPlasma + " Générateur(s) de Plasma posé(s).</#FF4D4D> <gray>Empile-les dessus (clic droit, <#C77DFF>x" + pileMax(t) + "<gray> max).");
+            return;
+        }
         String k = cle(b);
         poses.put(k, new Pose(t.id(), 1, ile.index));
         int avant = debloque.getOrDefault(ile.index, 0);
@@ -505,8 +577,8 @@ final class Generateurs implements Listener {
         }
         if (!membre(p, ile) && !Zones.constructeur(p)) { OrbitTycoon.msg(p, "<#FF4D4D>Ce générateur n'est pas à ton île."); return; }
         if (t == null || !enMain.id().equals(t.id())) { OrbitTycoon.msg(p, "Il faut un <#E0B864>Générateur de " + (t == null ? g.type : t.nom()) + "<gray> pour l'empiler ici."); return; }
-        int place = pileMax() - g.pile;
-        if (place <= 0) { OrbitTycoon.msg(p, "Ce générateur est déjà au maximum (<#E0B864>x" + pileMax() + "<gray>)."); return; }
+        int place = pileMax(t) - g.pile;
+        if (place <= 0) { OrbitTycoon.msg(p, "Ce générateur est déjà au maximum (<#E0B864>x" + pileMax(t) + "<gray>)."); return; }
         int n = Math.min(place, p.isSneaking() ? main.getAmount() : 1);
         main.setAmount(main.getAmount() - n);
         g.pile += n;
@@ -563,7 +635,7 @@ final class Generateurs implements Listener {
 
     /** Type suivant de la liste (null si c'est déjà le dernier). */
     private Type suivant(Type t) {
-        return t == null || t.rang() + 1 >= types.size() ? null : types.get(t.rang() + 1);
+        return t == null || estPlasma(t) || t.rang() + 1 >= types.size() ? null : types.get(t.rang() + 1);
     }
 
     void ouvrirAmelioration(Player p, String k) {
@@ -810,8 +882,6 @@ final class Generateurs implements Listener {
         inv.setItem(SLOT_VENDRE, objet(Material.EMERALD, "<#E0B864><bold>Tout vendre", false,
                 "<gray>Vend toutes les ressources de", "<gray>générateur de ton inventaire.", "", "<dark_gray>(ou /vendre tout)"));
         inv.setItem(SLOT_FERMER, objet(Material.BARRIER, "<#FF4D4D>Fermer", false));
-        inv.setItem(SLOT_COFFRE, plugin.collecteurs().vitrineCoffre());
-        inv.setItem(SLOT_COLLECTEUR, plugin.collecteurs().vitrine());
         Habillage.fond(plugin, p, inv);
         p.openInventory(inv);
     }
@@ -824,8 +894,6 @@ final class Generateurs implements Listener {
         int slot = e.getSlot();
         if (slot == SLOT_FERMER) { p.closeInventory(); return; }
         if (slot == SLOT_VENDRE) { vendreTout(p); ouvrir(p); return; }
-        if (slot == SLOT_COLLECTEUR) { plugin.collecteurs().acheter(p); return; }
-        if (slot == SLOT_COFFRE) { plugin.collecteurs().acheterCoffre(p); return; }
         if (slot >= types.size() || slot >= 45 || slot > rangDebloque(p.getUniqueId())) return;
         Type t = types.get(slot);
         int n = e.isShiftClick() ? 64 : e.isRightClick() ? 8 : 1;

@@ -143,7 +143,7 @@ final class Quetes implements Listener {
         lore.add("<gray>au <#E0B864>prestige ✪ " + palier + "<gray>.");
         lore.add("");
         lore.add("<#E0B864>Récompense :");
-        lore.addAll(description(recompense(m, palier)));
+        lore.addAll(description(m, recompense(m, palier)));
         String ressource = plugin.ressources().debloquePar(m, palier);
         if (ressource != null) lore.add("<dark_gray> • <#7CFC9A>Nouvelle ressource : <white>" + ressource);
         lore.add("");
@@ -172,10 +172,10 @@ final class Quetes implements Listener {
         return new Recompense(palier * cfg().getLong("quetes.credit-par-palier", 500), 0, List.of(), null);
     }
 
-    private static List<String> description(Recompense r) {
+    private static List<String> description(Outil.Mode m, Recompense r) {
         List<String> l = new ArrayList<>();
         if (r.credit() > 0) l.add("<dark_gray> • <#E0B864>" + Hud.nombre(r.credit()) + " ⛃ Crédits orbitaux");
-        if (r.flux() > 0) l.add("<dark_gray> • <#62CFF4>" + Hud.nombre(r.flux()) + " ✦ Flux stellaire");
+        if (r.flux() > 0) l.add("<dark_gray> • <" + m.couleur + ">" + Hud.nombre(r.flux()) + " " + m.symbole + " " + m.ressource);
         if (r.texte() != null && !r.texte().isBlank()) l.add("<dark_gray> • <white>" + r.texte());
         if (l.isEmpty()) l.add("<dark_gray> • À définir");
         return l;
@@ -193,11 +193,11 @@ final class Quetes implements Listener {
         mon.marquerQuete(id, m, palier);
         Recompense r = recompense(m, palier);
         if (r.credit() > 0) mon.ajouter(id, Monnaies.Monnaie.CREDIT, r.credit());
-        if (r.flux() > 0) mon.ajouter(id, Monnaies.Monnaie.FLUX, r.flux());
+        if (r.flux() > 0) mon.ajouterFlux(id, m, r.flux()); // Flux de l'outil de la quête
         for (String c : r.commandes())
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c.replace("%joueur%", p.getName()).replace("%uuid%", id.toString()));
         OrbitTycoon.msg(p, "Quête <#E0B864>" + m.nom + " · Prestige " + palier + "</#E0B864> récupérée !");
-        for (String l : description(r)) p.sendMessage(Navigateur.texte("  " + l));
+        for (String l : description(m, r)) p.sendMessage(Navigateur.texte("  " + l));
         String ressource = plugin.ressources().debloquePar(m, palier);
         if (ressource != null) p.sendMessage(Navigateur.texte("  <dark_gray> • <#7CFC9A>Nouvelle ressource débloquée : <white>" + ressource
                 + " <gray>(<#E0B864>/ressources</#E0B864>)"));

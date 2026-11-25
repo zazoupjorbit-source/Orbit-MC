@@ -60,6 +60,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
     private Generateurs generateurs;
     private Collecteurs collecteurs;
     private Noyau noyau;
+    private Enchantements enchantements;
     private Pets pets;
     private Equipements equipements;
     private Grades grades;
@@ -107,6 +108,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         generateurs = new Generateurs(this);
         collecteurs = new Collecteurs(this);
         noyau = new Noyau(this);
+        enchantements = new Enchantements(this);
         pets = new Pets(this);
         equipements = new Equipements(this);
         grades = new Grades(this);
@@ -151,6 +153,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         pm.registerEvents(pnjs, this);
         pm.registerEvents(tuto, this);
         pm.registerEvents(progression, this);
+        pm.registerEvents(enchantements, this);
         pm.registerEvents(confirmer, this);
         pm.registerEvents(quetes, this);
         pm.registerEvents(equipements, this);
@@ -180,10 +183,19 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         tab.demarrer();
         ilesJoueurs.demarrer();
         noyau.demarrer();
+        enchantements.demarrer();
         pets.demarrer();
         classement.demarrer();
         coffres.demarrer();
         boutique.demarrer();
+        // OrbitDevCore (chargé avant) déclare aussi /boutique et /shop : sur ce serveur, ils ouvrent la boutique du Tycoon.
+        Bukkit.getScheduler().runTask(this, () -> {
+            org.bukkit.command.PluginCommand c = getCommand("boutique");
+            if (c == null) return;
+            var connues = Bukkit.getCommandMap().getKnownCommands();
+            for (String l : new String[]{"boutique", "shop"}) connues.put(l, c);
+            Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
+        });
         grades.demarrer();
         pnjs.demarrer();
         tuto.demarrer();
@@ -223,6 +235,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         if (collecteurs != null) collecteurs.arreter();
         if (generateurs != null) generateurs.arreter();
         if (noyau != null) noyau.arreter();
+        if (enchantements != null) enchantements.arreter();
         if (pets != null) pets.arreter();
         if (boosters != null) boosters.arreter();
         if (ilesJoueurs != null) ilesJoueurs.arreter();
@@ -235,6 +248,8 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
 
     IlesJoueurs ilesJoueurs() { return ilesJoueurs; }
     Noyau noyau() { return noyau; }
+
+    Enchantements enchantements() { return enchantements; }
     Pets pets() { return pets; }
     Boosters boosters() { return boosters; }
     Butin butin() { return butin; }
@@ -487,7 +502,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
             }
             case "equipement" -> {
                 Player cible = args.length > 3 ? Bukkit.getPlayerExact(args[3]) : (s instanceof Player p ? p : null);
-                if (args.length < 3 || !args[1].equalsIgnoreCase("donner") || cible == null) { msg(s, "Usage : /tycoon equipement donner <pioche|hache|houe|canne|epee|tout> [joueur]"); return true; }
+                if (args.length < 3 || !args[1].equalsIgnoreCase("donner") || cible == null) { msg(s, "Usage : /tycoon equipement donner <pioche|hache|houe|canne|epee|tout|nebuleuse|zenith|saturne|neptune> [joueur]"); return true; }
                 msg(s, equipements.donner(cible, args[2]) ? "Équipement donné à " + cible.getName() + "." : "Outil inconnu : " + args[2]);
             }
             case "vote" -> {
@@ -787,7 +802,7 @@ public final class OrbitTycoon extends JavaPlugin implements Listener {
         else if (args[0].equalsIgnoreCase("nettoyage") && args.length == 2) res.add("maintenant");
         else if (args[0].equalsIgnoreCase("pet") && args.length == 2) res.addAll(List.of("donner", "niveau"));
         else if (args[0].equalsIgnoreCase("equipement") && args.length == 2) res.add("donner");
-        else if (args[0].equalsIgnoreCase("equipement") && args.length == 3) res.addAll(List.of("pioche", "hache", "houe", "canne", "epee", "tout"));
+        else if (args[0].equalsIgnoreCase("equipement") && args.length == 3) res.addAll(List.of("pioche", "hache", "houe", "canne", "epee", "tout", "nebuleuse", "zenith", "saturne", "neptune"));
         else if (args[0].equalsIgnoreCase("pet") && args.length == 3) res.addAll(args[1].equalsIgnoreCase("niveau") ? List.of("0", "50", "100") : Pets.ids());
         else if (args[0].equalsIgnoreCase("voteparty") && args.length == 2) res.addAll(List.of("ajouter", "definir"));
         else if (args[0].equalsIgnoreCase("vote") && args.length == 2) return null;

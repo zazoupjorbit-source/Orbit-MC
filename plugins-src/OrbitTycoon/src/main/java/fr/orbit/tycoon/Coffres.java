@@ -288,7 +288,7 @@ final class Coffres implements Listener {
         return cfg.getBoolean("equipements.coffre-farm", true) && n == cfg.getInt("coffres.cle-farm.coffre", 2) - 1;
     }
 
-    private static final java.util.Set<String> TYPES = java.util.Set.of("objet", "capsule", "booster", "cle", "generateur", "titre", "equipement");
+    private static final java.util.Set<String> TYPES = java.util.Set.of("objet", "capsule", "booster", "cle", "generateur", "titre", "equipement", "armure");
 
     /** Loots du coffre n lus dans coffres.loots.<n+1> ; les lignes invalides sont ignorées. */
     private List<Loot> loots(int n) {
@@ -326,7 +326,13 @@ final class Coffres implements Listener {
                 yield plugin.boosters().objet(s == null ? Boosters.Sorte.CREDITS : s, l.reel("mult", 1.5), l.entier("minutes", 15), l.nombre());
             }
             case "cle" -> cle(Math.max(0, Math.min(NB - 1, l.entier("coffre", 1) - 1)), l.nombre());
-            case "generateur" -> plugin.generateurs().generateurRelatif(p.getUniqueId(), l.entier("ecart", 0), l.nombre());
+            case "generateur" -> l.d().get("id") instanceof String id && plugin.generateurs().type(id) != null
+                    ? plugin.generateurs().generateur(plugin.generateurs().type(id), l.nombre())
+                    : plugin.generateurs().generateurRelatif(p.getUniqueId(), l.entier("ecart", 0), l.nombre());
+            case "armure" -> {
+                Equipements.Premium a = Equipements.Premium.parse(l.texte("armure", "saturne"));
+                yield plugin.equipements().tirerPremium(a == null ? Equipements.Premium.SATURNE : a, l.texte("piece", "hasard"));
+            }
             case "titre" -> plugin.butin().plaque(l.texte("titre", "?"));
             case "equipement" -> plugin.equipements().tirer();
             default -> new ItemStack(l.objet(), Math.min(l.nombre(), l.objet().getMaxStackSize()));
@@ -402,6 +408,11 @@ final class Coffres implements Listener {
                     List<Component> lore = new ArrayList<>();
                     lore.add(MM.deserialize("<!italic>" + r.etiquette()));
                     if (l.type().equals("equipement")) lore.add(MM.deserialize("<!italic><gray>Une des 20 pièces de farm (5 sets × 4)"));
+                    else if (l.type().equals("generateur") && l.d().get("id") instanceof String) { if (m.lore() != null) for (Component c : m.lore()) if (!c.equals(Component.empty())) lore.add(c); }
+                    else if (l.type().equals("armure") && !l.texte("piece", "hasard").matches("(?i)casque|plastron|jambieres|bottes")) {
+                        lore.add(MM.deserialize("<!italic><gray>Une des 4 pièces de l'armure, au hasard"));
+                        if (m.lore() != null) for (Component c : m.lore()) if (!c.equals(Component.empty())) lore.add(c);
+                    }
                     else if (l.type().equals("generateur")) lore.add(MM.deserialize("<!italic><gray>" + (l.entier("ecart", 0) == 0
                             ? "Ton meilleur générateur débloqué" : l.entier("ecart", 0) > 0 ? l.entier("ecart", 0) + " palier(s) au-dessus de ton meilleur"
                             : (-l.entier("ecart", 0)) + " palier(s) sous ton meilleur")));

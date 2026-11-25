@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Les trois monnaies du Tycoon, gardées en mémoire et sauvées dans plugins/OrbitTycoon/joueurs/<uuid>.yml.
  * - Crédit orbital : la monnaie principale.
- * - Flux stellaire : gagné en cassant les ressources des zones (les blocs ne lâchent plus rien).
+ * - Flux stellaire : gagné en cassant les ressources des zones, propre à chaque outil (Minerai stellaire, Bois sidéral…).
  * - Plasma : monnaie payante de la boutique (cosmétiques seulement, aucun pay-to-win).
  */
 final class Monnaies implements Listener {
@@ -60,6 +60,8 @@ final class Monnaies implements Listener {
     private final Map<UUID, EnumMap<Outil.Mode, long[]>> niveaux = new ConcurrentHashMap<>();
     /** Ressources récoltées avec chaque outil (blocs, poissons, monstres) : affichées par le HUD. */
     private final Map<UUID, EnumMap<Outil.Mode, Long>> recoltes = new ConcurrentHashMap<>();
+    /** Flux propre à chaque outil (Minerai stellaire, Bois sidéral…) : le Flux stellaire n'est plus une monnaie commune. */
+    private final Map<UUID, EnumMap<Outil.Mode, Long>> flux = new ConcurrentHashMap<>();
     /** Générateurs de l'île : {déjà posés, maximum posable}. */
     private final Map<UUID, int[]> generateurs = new ConcurrentHashMap<>();
     /** Quêtes de prestige récupérées, par outil (paliers 10, 20…). */
@@ -86,25 +88,67 @@ final class Monnaies implements Listener {
 
     // ------------------------------------------------------------------ API
 
+    /** Solde ; pour FLUX = total de tous les outils (affichage seulement, chaque outil a son propre Flux). */
     long solde(UUID id, Monnaie m) {
+        if (m == Monnaie.FLUX) {
+            long total = 0;
+            for (Outil.Mode o : Outil.Mode.values()) total += flux(id, o);
+            return total;
+        }
         return soldes.computeIfAbsent(id, this::lire).getOrDefault(m, 0L);
     }
 
+    /** FLUX : va à l'outil cible du joueur (voir {@link #outilCible}). */
     void ajouter(UUID id, Monnaie m, long montant) {
+        if (m == Monnaie.FLUX) { ajouterFlux(id, outilCible(id), montant); return; }
         definir(id, m, solde(id, m) + montant);
     }
 
-    /** Retire si le joueur a assez ; renvoie false sinon (rien n'est retiré). */
+    /** Retire si le joueur a assez ; renvoie false sinon (rien n'est retiré). FLUX : sur l'outil cible. */
     boolean retirer(UUID id, Monnaie m, long montant) {
-        long s = solde(id, m);
+        long s = m == Monnaie.FLUX ? flux(id, outilCible(id)) : solde(id, m);
         if (montant < 0 || s < montant) return false;
         definir(id, m, s - montant);
         return true;
     }
 
+    /** FLUX : fixe le Flux de l'outil cible. */
     void definir(UUID id, Monnaie m, long montant) {
+        if (m == Monnaie.FLUX) { definirFlux(id, outilCible(id), montant); return; }
         soldes.computeIfAbsent(id, this::lire).put(m, Math.max(0, montant));
         modifies.put(id, true);
+    }
+
+    // ------------------------------------------------------------------ Flux par outil
+
+    /** Flux de cet outil (sa ressource : Minerai stellaire, Bois sidéral…). */
+    long flux(UUID id, Outil.Mode outil) {
+        soldes.computeIfAbsent(id, this::lire);
+        EnumMap<Outil.Mode, Long> m = flux.get(id);
+        return m == null ? 0 : m.getOrDefault(outil, 0L);
+    }
+
+    void ajouterFlux(UUID id, Outil.Mode outil, long montant) {
+        definirFlux(id, outil, flux(id, outil) + montant);
+    }
+
+    void definirFlux(UUID id, Outil.Mode outil, long montant) {
+        soldes.computeIfAbsent(id, this::lire);
+        flux.computeIfAbsent(id, k -> new EnumMap<>(Outil.Mode.class)).put(outil, Math.max(0, montant));
+        modifies.put(id, true);
+    }
+
+    /**
+     * Outil qui reçoit le Flux sans outil précis (cellules de Flux, /don, /tycoon monnaie) :
+     * celui en main, sinon celui de l'inventaire, sinon la Pioche (joueur hors ligne ou sans outil).
+     */
+    Outil.Mode outilCible(UUID id) {
+        Player p = Bukkit.getPlayer(id);
+        Outil o = plugin.outil();
+        if (p == null || o == null || !Bukkit.isPrimaryThread()) return Outil.Mode.PIOCHE;
+        var main = p.getInventory().getItemInMainHand();
+        Outil.Mode m = o.est(main) ? o.mode(main) : o.modeActuel(p);
+        return m == null ? Outil.Mode.PIOCHE : m;
     }
 
     int prestige(UUID id) {
@@ -303,11 +347,21 @@ final class Monnaies implements Listener {
             EnumMap<Outil.Mode, long[]> nv = new EnumMap<>(Outil.Mode.class);
             EnumMap<Outil.Mode, java.util.Set<Integer>> qu = new EnumMap<>(Outil.Mode.class);
             EnumMap<Outil.Mode, Long> rc = new EnumMap<>(Outil.Mode.class);
+            EnumMap<Outil.Mode, Long> fx = new EnumMap<>(Outil.Mode.class);
             for (Outil.Mode o : Outil.Mode.values()) {
                 nv.put(o, new long[]{Math.max(1, y.getInt("outils." + o.id + ".niveau", 1)), Math.max(0, y.getLong("outils." + o.id + ".xp", 0))});
                 rc.put(o, Math.max(0, y.getLong("outils." + o.id + ".recoltes", 0)));
+                fx.put(o, Math.max(0, y.getLong("outils." + o.id + ".flux", 0)));
                 qu.put(o, new java.util.TreeSet<>(y.getIntegerList("quetes." + o.id)));
             }
+            // Ancien Flux stellaire commun (avant le 24/11/2026) : versé une fois à la Pioche.
+            long ancien = map.getOrDefault(Monnaie.FLUX, 0L);
+            if (ancien > 0) {
+                fx.merge(Outil.Mode.PIOCHE, ancien, Long::sum);
+                modifies.put(id, true);
+            }
+            map.put(Monnaie.FLUX, 0L);
+            flux.put(id, fx);
             EnumMap<Outil.Mode, Integer> rs = new EnumMap<>(Outil.Mode.class);
             for (Outil.Mode o : Outil.Mode.values()) rs.put(o, Math.max(0, y.getInt("ressources." + o.id, 0)));
             ressources.put(id, rs);
@@ -339,11 +393,13 @@ final class Monnaies implements Listener {
         EnumMap<Outil.Mode, long[]> nv = niveaux.get(id);
         EnumMap<Outil.Mode, java.util.Set<Integer>> qu = quetes.get(id);
         EnumMap<Outil.Mode, Long> rc = recoltes.get(id);
+        EnumMap<Outil.Mode, Long> fx = flux.get(id);
         for (Outil.Mode o : Outil.Mode.values()) {
             long[] v = nv == null ? null : nv.get(o);
             y.set("outils." + o.id + ".niveau", v == null ? 1 : v[0]);
             y.set("outils." + o.id + ".xp", v == null ? 0 : v[1]);
             y.set("outils." + o.id + ".recoltes", rc == null ? 0L : rc.getOrDefault(o, 0L));
+            y.set("outils." + o.id + ".flux", fx == null ? 0L : fx.getOrDefault(o, 0L));
             java.util.Set<Integer> s = qu == null ? null : qu.get(o);
             y.set("quetes." + o.id, s == null ? java.util.List.of() : new java.util.ArrayList<>(s));
             EnumMap<Outil.Mode, Integer> rs = ressources.get(id);
@@ -376,7 +432,7 @@ final class Monnaies implements Listener {
         UUID id = e.getPlayer().getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             sauver(id);
-            if (Bukkit.getPlayer(id) == null) { soldes.remove(id); prestiges.remove(id); prestigesOutils.remove(id); iles.remove(id); niveaux.remove(id); quetes.remove(id); ressources.remove(id); recoltes.remove(id); generateurs.remove(id); }
+            if (Bukkit.getPlayer(id) == null) { soldes.remove(id); prestiges.remove(id); prestigesOutils.remove(id); iles.remove(id); niveaux.remove(id); quetes.remove(id); ressources.remove(id); recoltes.remove(id); flux.remove(id); generateurs.remove(id); }
         });
     }
 
@@ -384,8 +440,13 @@ final class Monnaies implements Listener {
 
     void afficherSolde(org.bukkit.command.CommandSender s, UUID id, String nom) {
         OrbitTycoon.msg(s, "Porte-monnaie" + (nom != null ? " de <#E0B864>" + nom + "</#E0B864>" : "") + " :");
-        for (Monnaie m : Monnaie.values())
+        for (Monnaie m : Monnaie.values()) {
+            if (m == Monnaie.FLUX) continue;
             s.sendMessage(MiniMessage.miniMessage().deserialize("  <dark_gray>•</dark_gray> " + m.format(solde(id, m))));
+        }
+        for (Outil.Mode o : Outil.Mode.values())
+            s.sendMessage(MiniMessage.miniMessage().deserialize("  <dark_gray>•</dark_gray> <" + o.couleur + ">" + Hud.nombre(flux(id, o))
+                    + " " + o.symbole + " " + o.ressource + " <dark_gray>(" + o.nom + ")"));
     }
 
     /**
@@ -413,6 +474,11 @@ final class Monnaies implements Listener {
         double petMoney = pets == null ? 0 : pets.bonus(uid, outil, Pets.Stat.MONEY);
         double petProc = pets == null ? 0 : pets.bonus(uid, outil, Pets.Stat.PROC);
         if (pets != null && outil != null) quantite = pets.fortune(uid, outil, quantite);
+        // Enchantements propres à l'outil (Enchantements.java) : Abondance, Double prise, Marchand, Avidité, jackpots ×5.
+        Enchantements.Gains ench = outil == null || plugin.enchantements() == null ? Enchantements.Gains.AUCUN
+                : plugin.enchantements().gains(p, outil);
+        quantite = Equipements.appliquer(quantite, ench.quantitePct());
+        quantite *= ench.multQuantite();
         // Équipements de farm portés (Equipements.java) : même % sur ressources, monnaie et XP.
         double equip = plugin.equipements() == null ? 0 : plugin.equipements().bonus(p, outil);
         quantite = Equipements.appliquer(quantite, equip);
@@ -431,17 +497,25 @@ final class Monnaies implements Listener {
         if (bonus.rafale()) { quantite *= 2; extra = "<#62CFF4>✦ Rafale ×2"; }
         boolean meteore = bonus.meteore();
         if (meteore) extra = "<#E0B864><bold>☄ Météore ×" + bonus.multMeteore() + "</bold>";
+        if (ench.extra() != null) extra = extra == null ? ench.extra() : extra + "   " + ench.extra();
         for (Monnaie m : new Monnaie[]{Monnaie.FLUX, Monnaie.CREDIT}) {
             String section = m == Monnaie.FLUX ? "flux-stellaire" : "credit-orbital";
             long gain = choisie != null ? (m == Monnaie.FLUX ? choisie.flux() : choisie.credit()) * quantite
                     : (long) cfg.getInt(section + ".ressources." + cle, cfg.getInt(section + ".defaut", 1)) * quantite;
             if (gain <= 0) continue;
             if (m == Monnaie.CREDIT) {
-                gain = Math.round(gain * bonus.multCredit() * (1 + petMoney / 100.0) * multEquip * bCredit);
+                gain = Math.round(gain * bonus.multCredit() * (1 + petMoney / 100.0) * multEquip * bCredit * ench.multCredit());
                 if (meteore) gain *= bonus.multMeteore();
-            } else gain = Math.round(gain * bonus.multFlux() * multEquip * bFlux);
-            ajouter(p.getUniqueId(), m, gain);
+            } else gain = Math.round(gain * bonus.multFlux() * multEquip * bFlux * ench.multFlux());
             if (texte.length() > debut) texte.append("   ");
+            if (m == Monnaie.FLUX && outil != null) {
+                // Le Flux de la récolte va à l'outil utilisé, sous le nom de sa ressource.
+                ajouterFlux(uid, outil, gain);
+                texte.append("<").append(outil.couleur).append(">+").append(gain).append(" ").append(outil.symbole).append(" ")
+                        .append(outil.ressource).append("</").append(outil.couleur).append(">");
+                continue;
+            }
+            ajouter(uid, m, gain);
             texte.append("<").append(m.couleur).append(">+").append(gain).append(" ").append(m.symbole).append(" ")
                     .append(gain > 1 ? m.pluriel : m.nom).append("</").append(m.couleur).append(">");
         }
@@ -450,7 +524,7 @@ final class Monnaies implements Listener {
             if (pets != null) pets.gagnerXp(p, quantite);
             long xpBase = choisie != null ? choisie.xp() * quantite
                     : (long) cfg.getInt("progression.xp.ressources." + cle, cfg.getInt("progression.xp.defaut", 1)) * quantite;
-            String xp = plugin.progression().gagner(p, outil, Math.round(xpBase * bonus.multXp() * (1 + petXp / 100.0) * multEquip * bXp));
+            String xp = plugin.progression().gagner(p, outil, Math.round(xpBase * bonus.multXp() * (1 + petXp / 100.0) * multEquip * bXp * ench.multXp()));
             if (xp != null) {
                 if (texte.length() > debut) texte.append("   ");
                 texte.append(xp);
@@ -471,6 +545,7 @@ final class Monnaies implements Listener {
         if (outil == null || plugin.coffres() == null || plugin.outil() == null) return;
         if (!plugin.outil().est(p.getInventory().getItemInMainHand())) return;
         double chance = plugin.getConfig().getDouble("coffres.cle-farm.chance", 2.0);
+        if (plugin.enchantements() != null) chance += plugin.enchantements().chanceCle(p.getUniqueId(), outil);
         if (chance <= 0 || java.util.concurrent.ThreadLocalRandom.current().nextDouble(100) >= chance) return;
         int n = Math.max(0, Math.min(Coffres.NB - 1, plugin.getConfig().getInt("coffres.cle-farm.coffre", 2) - 1));
         for (var reste : p.getInventory().addItem(plugin.coffres().cle(n, 1)).values())
