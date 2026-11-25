@@ -1,0 +1,19 @@
+{
+  "textures": {
+    "particle": "orbitvol:item/d_metal",
+    "d_metal": "orbitvol:item/d_metal",
+    "d_or": "orbitvol:item/d_or",
+    "d_lentille": "orbitvol:item/d_lentille"
+  },
+  "elements": [
+    {"from": [3, 4, 3], "to": [13, 12, 13], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}}},
+    {"from": [4, 12, 4], "to": [12, 13, 12], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_or"}}},
+    {"from": [1, 5, 5], "to": [3, 11, 11], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_or"}}},
+    {"from": [13, 5, 5], "to": [15, 11, 11], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_or"}}},
+    {"from": [5, 7, 12.9], "to": [11, 9, 13.2], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_lentille"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_lentille"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_lentille"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_lentille"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_lentille"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_lentille"}}},
+    {"from": [6.5, 6.5, 13], "to": [9.5, 9.5, 24], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_metal"}}},
+    {"from": [6, 6, 19], "to": [10, 10, 21], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_or"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_or"}}},
+    {"from": [7, 7, 24], "to": [9, 9, 25], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_lentille"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_lentille"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_lentille"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_lentille"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_lentille"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_lentille"}}}
+  ],
+  "display": {"gui": {"rotation": [30, 225, 0], "scale": [0.6, 0.6, 0.6]}}
+}

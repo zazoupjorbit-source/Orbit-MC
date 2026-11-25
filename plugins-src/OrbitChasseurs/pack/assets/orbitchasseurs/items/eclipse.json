@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "orbitchasseurs:item/eclipse",
+    "tints": [
+      {
+        "type": "minecraft:dye",
+        "default": 3833855
+      }
+    ]
+  }
+}

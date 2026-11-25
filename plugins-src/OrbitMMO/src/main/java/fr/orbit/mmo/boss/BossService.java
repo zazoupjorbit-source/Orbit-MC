@@ -128,7 +128,7 @@ public final class BossService {
             plugin.progression().addXp(p, d, xp);
             Text.msg(p, "<#D7DCE2>Boss vaincu : <#7FD4FF>+" + Text.num(xp) + " XP</#7FD4FF>  <#FFD66E>+" + Text.num(gold) + " or");
             // Butin personnel : un objet Rare ou mieux pour chaque participant, parfois une rune.
-            fr.orbit.mmo.item.Loot.rollBossLoot(plugin, p, d, ms.level);
+            fr.orbit.mmo.item.Loot.rollBossLoot(plugin, p, d, ms.level, def.id());
         }
 
         // Butin : au dernier coup, sinon au plus gros contributeur.
@@ -148,7 +148,8 @@ public final class BossService {
             PlayerData ld = plugin.players().get(lab);
             fr.orbit.mmo.classes.ClassDef lc = plugin.progression().cls(ld);
             ItemStack item = fr.orbit.mmo.item.Loot.bossLab(def, fr.orbit.mmo.clazz.WeaponType.of(plugin.bar().weapon(lab, ld)),
-                    ms.level, lc == null ? null : fr.orbit.mmo.util.Fx.color(lc.hex));
+                    fr.orbit.mmo.item.ArmorType.of(lc), ms.level, lc == null ? null : fr.orbit.mmo.util.Fx.color(lc.hex));
+            fr.orbit.mmo.item.Binding.onLoot(item, lab); // lié quand ramassé
             Items.give(lab, item);
             Bukkit.broadcast(Text.mm(Text.PREFIX + "<#FFD66E>✦ " + Text.esc(lab.getName())
                     + " remporte le butin du boss : </#FFD66E>" + "<gradient:#FFD66E:#FF8A3B>" + Text.esc(def.labName()) + "</gradient>"));

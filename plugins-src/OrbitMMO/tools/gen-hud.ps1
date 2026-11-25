@@ -575,9 +575,9 @@ New-MenuBg 3 @{ 4 = 'FFD66E'; 10 = '7FB2FF'; 11 = 'FFD66E'; 12 = '5EE89A'; 13 = 
     21 = 'FFD66E'; 22 = 'D7DCE2'; 23 = '6FE3C1'; 24 = '7FB2FF'; 25 = 'C9A26B'; 26 = 'FFD66E' } @(@(0, 12, 74), @(0, 101, 164), @(2, 12, 56)) "$fontDir/menu_main.png"
 # Fiche [Maj + F] (6 rangees) : portrait, 7 caracteristiques, 27 sorts, rangee d'actions.
 $prof = @{ 4 = 'FFD66E'; 10 = 'FF8A3B'; 11 = 'D7DCE2'; 12 = 'B36BFF'; 13 = '5EE89A'; 14 = '4FA3FF'; 15 = 'FF5C5C'; 16 = 'B8C0CA';
-    45 = 'B8C0CA'; 46 = '5EE89A'; 47 = 'FFB347'; 48 = 'D7DCE2'; 49 = '7FB2FF'; 50 = 'C9A26B'; 53 = 'FFD66E' }
+    45 = 'B8C0CA'; 46 = '5EE89A'; 47 = 'FFB347'; 48 = 'D7DCE2'; 49 = '7FB2FF'; 50 = 'C9A26B'; 51 = 'FFD66E'; 52 = 'B9A6FF'; 53 = 'FFD66E' }
 for ($s = 18; $s -le 44; $s++) { $prof[$s] = '3D5A8F' }
-New-MenuBg 6 $prof @(@(0, 12, 74), @(0, 101, 164), @(5, 101, 146)) "$fontDir/menu_profile.png"
+New-MenuBg 6 $prof @(@(0, 12, 74), @(0, 101, 164)) "$fontDir/menu_profile.png"
 # Fonds generiques (3 a 6 rangees) pour tous les autres menus : les cases des boutons sont posees par MenuSkin.
 foreach ($r in 3..6) { New-MenuBg $r @{} @() "$fontDir/menu_r$r.png" }
 # Case de bouton en deux glyphes de 18 x 18 : le socle (non teinte), puis les coins blancs teintes par la couleur
@@ -761,7 +761,7 @@ Write-Host "HUD : $hidden sprites vanilla masques."
 # Cadre pose par le titre du tableau lateral (hud/QuestPanel.java) : contenu $QW px, image $QW + 8 (6 px a gauche
 # du contenu, 2 px a droite) ; haut 12 px au-dessus de la premiere ligne (titre sur y 3 a 10, trait d'or en y 11),
 # 9 px par ligne, 3 px sous la derniere. Une image par nombre de lignes (1 a 14).
-$QW = 140
+$QW = 118
 function New-QuestPanel([int]$n, [string]$rel) {
     $w = $QW + 8; $h = 9 * $n + 14
     $b = New-Canvas $w $h

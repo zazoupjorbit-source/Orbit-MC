@@ -23,7 +23,7 @@ import java.util.Locale;
 public final class AdminCommand implements TabExecutor {
 
     private static final List<String> SUBS = List.of("niveau", "or", "spe", "ressource", "reset", "etage", "ouvrir",
-            "boss", "construction", "spawn", "reload", "classes");
+            "boss", "construction", "spawn", "reload", "classes", "sets", "set");
     private final OrbitMMO plugin;
 
     public AdminCommand(OrbitMMO plugin) {
@@ -138,6 +138,7 @@ public final class AdminCommand implements TabExecutor {
                     plugin.reloadConfig();
                     plugin.registry().load();
                     plugin.classes().load();
+                    plugin.sets().load();
                     for (Player o : Bukkit.getOnlinePlayers()) {
                         PlayerData d = plugin.players().loaded(o.getUniqueId());
                         if (d != null && plugin.progression().valid(d)) {
@@ -145,7 +146,41 @@ public final class AdminCommand implements TabExecutor {
                             plugin.bar().sync(o, d);
                         }
                     }
-                    Text.msg(sender, "Configuration rechargée (monstres, boss, étages, classes).");
+                    Text.msg(sender, "Configuration rechargée (monstres, boss, étages, classes, sets).");
+                }
+                case "sets" -> {
+                    if (args.length > 1 && args[1].equalsIgnoreCase("exporter")) {
+                        Text.msg(sender, plugin.sets().export() ? "sets.yml écrit dans plugins/OrbitMMO (modifiez-le puis /mmoadmin reload)."
+                                : "<#FF8A3B>plugins/OrbitMMO/sets.yml existe déjà (pas écrasé).");
+                    } else {
+                        Text.msg(sender, "<#FFD66E><b>Sets</b> <#5A6270>(/mmoadmin set <id> [pièce|tout] [joueur] · /mmoadmin sets exporter)");
+                        for (fr.orbit.mmo.item.GearSet s : plugin.sets().all()) {
+                            Text.msg(sender, "<#D7DCE2>" + s.id + " <#8C96A3>· " + Text.esc(s.name) + " · " + s.type.label + " · "
+                                    + fr.orbit.mmo.item.Loot.TIER_LABELS[s.tier] + " · " + s.rarity.tag() + " <#8C96A3>· " + s.originLabel()
+                                    + " · " + String.join(", ", s.pieces.keySet()));
+                        }
+                    }
+                }
+                case "set" -> {
+                    fr.orbit.mmo.item.GearSet s = plugin.sets().get(args[1]);
+                    if (s == null) {
+                        throw new IllegalStateException("Set inconnu. Disponibles : /mmoadmin sets");
+                    }
+                    String piece = args.length > 2 ? args[2].toLowerCase(Locale.ROOT) : "tout";
+                    Player t = args.length > 3 ? target(sender, args, 3) : self(sender);
+                    PlayerData td = plugin.players().get(t);
+                    org.bukkit.Color dye = plugin.progression().cls(td) == null ? null
+                            : fr.orbit.mmo.util.Fx.color(plugin.progression().cls(td).hex);
+                    List<String> keys = piece.equals("tout") ? new ArrayList<>(s.pieces.keySet()) : List.of(piece);
+                    for (String k : keys) {
+                        if (!s.pieces.containsKey(k)) {
+                            throw new IllegalStateException("Pièce inconnue pour ce set : " + String.join(", ", s.pieces.keySet()));
+                        }
+                        org.bukkit.inventory.ItemStack it = plugin.sets().create(s, k, dye, java.util.concurrent.ThreadLocalRandom.current());
+                        fr.orbit.mmo.item.Binding.onLoot(it, t);
+                        fr.orbit.mmo.item.Items.give(t, it);
+                    }
+                    Text.msg(sender, keys.size() + " pièce(s) du set " + Text.esc(s.name) + " donnée(s) à " + Text.esc(t.getName()) + ".");
                 }
                 case "classes" -> {
                     if (args.length > 1 && args[1].equalsIgnoreCase("exporter")) {
@@ -195,7 +230,8 @@ public final class AdminCommand implements TabExecutor {
                 "ressource <#8C96A3>(remplit votre ressource)", "reset <joueur>",
                 "etage <n> <#8C96A3>(téléportation)", "ouvrir <n> <#8C96A3>(ouvre les étages à tous jusqu'à n)",
                 "boss <#8C96A3>(boss de l'étage disponible)", "construction <#8C96A3>(mode créatif, bâtir sur les étages)",
-                "spawn <monstre> [niveau]", "reload", "classes exporter"};
+                "spawn <monstre> [niveau]", "reload", "classes exporter", "sets [exporter] <#8C96A3>(liste des sets)",
+                "set <id> [pièce|tout] [joueur] <#8C96A3>(donne des pièces de set)"};
         for (String l : lines) {
             s.sendMessage(Text.mm("  <#D7DCE2>/mmoadmin " + l));
         }
@@ -213,6 +249,16 @@ public final class AdminCommand implements TabExecutor {
             }
             if (sub.equals("spawn")) {
                 return Completions.filter(args[1], plugin.registry().mobs().keySet());
+            }
+            if (sub.equals("set")) {
+                List<String> ids = new ArrayList<>();
+                for (fr.orbit.mmo.item.GearSet s : plugin.sets().all()) {
+                    ids.add(s.id);
+                }
+                return Completions.filter(args[1], ids);
+            }
+            if (sub.equals("sets")) {
+                return Completions.filter(args[1], List.of("exporter"));
             }
             if (sub.equals("classes")) {
                 return Completions.filter(args[1], List.of("exporter"));

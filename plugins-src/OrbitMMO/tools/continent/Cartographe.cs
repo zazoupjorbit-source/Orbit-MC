@@ -46,7 +46,7 @@ namespace OrbitMmo
         public List<double[]> Bridges = new List<double[]>();
     }
 
-    public class Place { public string Kind, Name, Faction, Side; public double X, Z, Safe; }
+    public class Place { public string Kind, Name, Faction, Side, Region = ""; public double X, Z, Safe; }
 
     public class Blob { public bool Add; public double X, Z, Rx, Rz; }
 
@@ -147,6 +147,10 @@ namespace OrbitMmo
         List<Lake> lakes = new List<Lake>();
         List<Road> roads = new List<Road>();
         List<Place> places = new List<Place>();
+        // Reperes : lieux ajoutes en jeu apres le dessin (hameaux, crateres, camps, ruines, lieux-dits).
+        // Ils ne servent qu'aux cartes : jamais ecrits dans continent.dat, sans effet sur le terrain.
+        List<Place> marks = new List<Place>();
+        string marksDate = "";
         bool hasVolcano; double vx, vz, vR = 620, vC = 125, vTop = 236;
 
         public float[] H, Land, Wat, RivD, Sh, LavL;
@@ -233,6 +237,17 @@ namespace OrbitMmo
                             places.Add(p);
                         }
                         break;
+                    case "repere":
+                        {
+                            Place p = new Place(); p.Kind = f[1]; p.Name = f[2]; p.Faction = f[3];
+                            double[] c = P2(f[4]); p.X = c[0]; p.Z = c[1];
+                            p.Safe = f.Length > 5 && f[5].Length > 0 ? D(f[5]) : 0;
+                            p.Side = f.Length > 6 && f[6].Length > 0 ? f[6] : "d";
+                            if (f.Length > 7) p.Region = f[7];
+                            marks.Add(p);
+                        }
+                        break;
+                    case "maj": marksDate = f[1]; break;
                     default: throw new Exception("Ligne inconnue dans le dessin : " + line);
                 }
             }
@@ -763,6 +778,43 @@ namespace OrbitMmo
                 Log.AppendLine(string.Format(CultureInfo.InvariantCulture, "  {0,-8} {1,-32} ({2,5:0}, {3,5:0})  {4,-20} Y {5,3:0}  mer a {6}{7}",
                     pl.Kind, pl.Name, pl.X, pl.Z, regions[Reg[p]].Name, Math.Max(H[p], SEA), cd > 1e8 ? "plus de 1500" : ((int)cd).ToString(), warn));
             }
+            if (marks.Count > 0)
+            {
+                Log.AppendLine();
+                Log.AppendLine("Reperes des cartes (ajoutes en jeu, absents de continent.dat)" + (marksDate.Length > 0 ? ", a jour au " + marksDate : "") + " :");
+                foreach (Place pl in marks)
+                {
+                    if (!Named(pl)) continue;
+                    int p = Idx(pl.X, pl.Z);
+                    Log.AppendLine(string.Format(CultureInfo.InvariantCulture, "  {0,-8} {1,-32} ({2,5:0}, {3,5:0})  {4,-20} Y {5,3:0}",
+                        pl.Kind, pl.Name, pl.X, pl.Z, regions[Reg[p]].Name, Math.Max(H[p], SEA)));
+                }
+                Log.AppendLine("  Par region (camps de monstres, ruines, lieux-dits) :");
+                foreach (Region r in regions)
+                {
+                    int[] n = MarkCount(r.Index);
+                    Log.AppendLine(string.Format(CultureInfo.InvariantCulture, "    {0} {1,-20} {2,2} camps, {3,2} ruines, {4,3} lieux-dits", r.Id, r.Name, n[0], n[1], n[2]));
+                }
+                int[] all = MarkCount(-1);
+                Log.AppendLine(string.Format(CultureInfo.InvariantCulture, "    Total                  {0,2} camps, {1,2} ruines, {2,3} lieux-dits", all[0], all[1], all[2]));
+            }
+        }
+
+        static bool Named(Place m) { return m.Kind == "hameau" || m.Kind == "cratere"; }
+
+        /** Camps, ruines et lieux-dits d'une region (-1 : toute la carte). */
+        int[] MarkCount(int region)
+        {
+            int[] n = new int[3];
+            foreach (Place m in marks)
+            {
+                int k = m.Kind == "camp" ? 0 : (m.Kind == "ruine" ? 1 : (m.Kind == "decor" ? 2 : -1));
+                if (k < 0) continue;
+                // La region d'un site est celle de son identifiant en jeu ; a defaut, celle du terrain sous lui.
+                if (region >= 0 && (m.Region.Length > 0 ? m.Region != regions[region].Id : Reg[Idx(m.X, m.Z)] != region)) continue;
+                n[k]++;
+            }
+            return n;
         }
 
         void Generate()
@@ -993,6 +1045,43 @@ namespace OrbitMmo
                     float r = 4.6f * U;
                     g.FillEllipse(fill, x - r, y - r, 2 * r, 2 * r); g.DrawEllipse(ink, x - r, y - r, 2 * r, 2 * r);
                 }
+                else if (kind == "hameau")
+                {
+                    float r = 3.3f * U;
+                    g.FillEllipse(fill, x - r, y - r, 2 * r, 2 * r);
+                    using (Pen thin = new Pen(Col(C_INK), 1.2f * U)) g.DrawEllipse(thin, x - r, y - r, 2 * r, 2 * r);
+                }
+                else if (kind == "cratere")
+                {
+                    // Eclat tombe du ciel : etoile sombre a huit branches, coeur de la couleur de la faction.
+                    PointF[] star = new PointF[16];
+                    for (int i = 0; i < 16; i++)
+                    {
+                        double a = -Math.PI / 2 + i * Math.PI / 8; float rr = (i % 2 == 0 ? 7.4f : 3.2f) * U;
+                        star[i] = new PointF(x + (float)Math.Cos(a) * rr, y + (float)Math.Sin(a) * rr);
+                    }
+                    g.FillPolygon(dark, star);
+                    float c = 2.7f * U;
+                    g.FillEllipse(fill, x - c, y - c, 2 * c, 2 * c);
+                }
+                else if (kind == "camp")
+                {
+                    float r = 4.2f * U;
+                    PointF[] t = { new PointF(x, y - r), new PointF(x + r * 0.92f, y + r * 0.72f), new PointF(x - r * 0.92f, y + r * 0.72f) };
+                    using (SolidBrush red = new SolidBrush(Col(0xd2452f))) g.FillPolygon(red, t);
+                    using (Pen thin = new Pen(Col(C_INK), 1f * U)) g.DrawPolygon(thin, t);
+                }
+                else if (kind == "ruine")
+                {
+                    float r = 3f * U;
+                    using (SolidBrush grey = new SolidBrush(Col(0x9aa0aa))) g.FillRectangle(grey, x - r, y - r, 2 * r, 2 * r);
+                    using (Pen thin = new Pen(Col(C_INK), 1f * U)) g.DrawRectangle(thin, x - r, y - r, 2 * r, 2 * r);
+                }
+                else if (kind == "decor")
+                {
+                    float r = 1.7f * U;
+                    using (SolidBrush brown = new SolidBrush(Col(0x5a3d22, 215))) g.FillEllipse(brown, x - r, y - r, 2 * r, 2 * r);
+                }
                 else
                 {
                     float r = 5.6f * U;
@@ -1014,24 +1103,47 @@ namespace OrbitMmo
                     using (SolidBrush b = new SolidBrush(Col(0x3ecf6e, 120))) g.FillEllipse(b, x - r, y - r, 2 * r, 2 * r);
                     using (Pen pn = new Pen(Col(0x127a36), 2f * U)) g.DrawEllipse(pn, x - r, y - r, 2 * r, 2 * r);
                 }
+                foreach (Place m in marks)
+                {
+                    if (m.Safe <= 0) continue;
+                    float r = (float)(m.Safe / Cell), x = SX(m.X), y = SX(m.Z);
+                    using (SolidBrush b = new SolidBrush(Col(0x3ecf6e, 120))) g.FillEllipse(b, x - r, y - r, 2 * r, 2 * r);
+                    using (Pen pn = new Pen(Col(0x127a36), 2f * U)) g.DrawEllipse(pn, x - r, y - r, 2 * r, 2 * r);
+                }
             }
             foreach (Place pl in places) if (pl.Kind == "donjon") Icon(g, pl.Kind, pl.Faction, SX(pl.X), SX(pl.Z));
+            foreach (Place m in marks)
+            {
+                if (!Named(m)) continue;
+                Icon(g, m.Kind, m.Faction, SX(m.X), SX(m.Z));
+                if (names) PlaceLabel(g, m, 11.5f, (m.Kind == "cratere" ? 9 : 6) * U, FontStyle.Italic);
+            }
             foreach (Place pl in places)
             {
                 if (pl.Kind == "donjon") continue;
-                float x = SX(pl.X), y = SX(pl.Z);
-                Icon(g, pl.Kind, pl.Faction, x, y);
+                Icon(g, pl.Kind, pl.Faction, SX(pl.X), SX(pl.Z));
                 if (!names) continue;
                 bool cap = pl.Kind == "capitale", town = pl.Kind == "ville";
-                float size = cap ? 22 : (town ? 16 : 13), gap = (cap ? 17 : (town ? 12 : 8)) * U;
-                FontStyle fs = cap || town ? FontStyle.Bold : FontStyle.Italic;
-                float lx = x, lyy = y; StringAlignment al = StringAlignment.Center;
-                if (pl.Side == "d") { lx = x + gap; al = StringAlignment.Near; }
-                else if (pl.Side == "g") { lx = x - gap; al = StringAlignment.Far; }
-                else if (pl.Side == "h") lyy = y - gap - size * U * 0.55f;
-                else lyy = y + gap + size * U * 0.55f;
-                Label(g, pl.Name, lx, lyy, size, fs, Col(C_INK), Col(0xfff8e6, 235), al);
+                PlaceLabel(g, pl, cap ? 22 : (town ? 16 : 13), (cap ? 17 : (town ? 12 : 8)) * U, cap || town ? FontStyle.Bold : FontStyle.Italic);
             }
+        }
+
+        void PlaceLabel(Graphics g, Place pl, float size, float gap, FontStyle fs)
+        {
+            float x = SX(pl.X), y = SX(pl.Z), lx = x, lyy = y; StringAlignment al = StringAlignment.Center;
+            if (pl.Side == "d") { lx = x + gap; al = StringAlignment.Near; }
+            else if (pl.Side == "g") { lx = x - gap; al = StringAlignment.Far; }
+            else if (pl.Side == "h") lyy = y - gap - size * U * 0.55f;
+            else lyy = y + gap + size * U * 0.55f;
+            Label(g, pl.Name, lx, lyy, size, fs, Col(C_INK), Col(0xfff8e6, 235), al);
+        }
+
+        /** Camps de monstres, ruines et lieux-dits : seulement sur la carte des sites. */
+        void DrawMarks(Graphics g)
+        {
+            foreach (Place m in marks) if (m.Kind == "decor") Icon(g, m.Kind, m.Faction, SX(m.X), SX(m.Z));
+            foreach (Place m in marks) if (m.Kind == "ruine") Icon(g, m.Kind, m.Faction, SX(m.X), SX(m.Z));
+            foreach (Place m in marks) if (m.Kind == "camp") Icon(g, m.Kind, m.Faction, SX(m.X), SX(m.Z));
         }
 
         void DrawRegionLabels(Graphics g, int mode)
@@ -1059,6 +1171,12 @@ namespace OrbitMmo
                 busy.Add(new double[] { pl.X, pl.Z });
                 double ox = pl.Side == "d" ? 230 : (pl.Side == "g" ? -230 : 0), oz = pl.Side == "h" ? -110 : (pl.Side == "b" ? 110 : 0);
                 busy.Add(new double[] { pl.X + ox, pl.Z + oz });
+            }
+            foreach (Place m in marks)
+            {
+                if (!Named(m)) continue;
+                busy.Add(new double[] { m.X, m.Z });
+                busy.Add(new double[] { m.X + (m.Side == "d" ? 230 : (m.Side == "g" ? -230 : 0)), m.Z });
             }
             foreach (Lake l in lakes)
             {
@@ -1107,6 +1225,11 @@ namespace OrbitMmo
                 ly += 40 * U;
                 using (Font f = F(15, FontStyle.Italic)) g.DrawString(Title, f, ink, x, ly);
                 ly += 28 * U;
+                if (marksDate.Length > 0)
+                {
+                    using (Font f = F(13, FontStyle.Italic)) g.DrawString("Lieux à jour au " + marksDate, f, ink, x, ly - 6 * U);
+                    ly += 18 * U;
+                }
                 using (Font f = F(21, FontStyle.Bold)) g.DrawString(mapName, f, gold, x, ly);
                 ly += 36 * U;
             }
@@ -1166,6 +1289,10 @@ namespace OrbitMmo
             LegIcon(g, "capitale", "ombre", "Capitale de l'Ombre");
             LegIcon(g, "ville", "neutre", "Ville neutre");
             LegIcon(g, "village", "neutre", "Village ou relais (couleur = faction)");
+            bool hamlet = false, crater = false;
+            foreach (Place m in marks) { if (m.Kind == "hameau") hamlet = true; else if (m.Kind == "cratere") crater = true; }
+            if (hamlet) LegIcon(g, "hameau", "neutre", "Hameau de départ (couleur = faction)");
+            if (crater) LegIcon(g, "cratere", "neutre", "Champ de cratères : réveil des Marqués");
             LegIcon(g, "donjon", "neutre", "Donjon (anciens étages et nouveaux)");
             LegLine(g, 0, "Voie Royale, d'une capitale à l'autre");
             LegLine(g, 1, "Chemin");
@@ -1376,6 +1503,7 @@ namespace OrbitMmo
                 LegHead(g, "À savoir");
                 LegText(g, "Chaque tranche correspond à un palier d'équipement du jeu. Chaque faction a ses trois premières zones (1 à 26) de son côté ; à partir du niveau 26 tout le monde se retrouve dans les zones du centre, du sud et du nord.", 0);
                 LegText(g, "Le chemin d'un joueur : capitale, forêt, puis collines ou marais, La Marche, le désert, les cimes, les terres de cendre et enfin le volcan.", 0);
+                LegText(g, "Niveaux 80 à 90 : pas de nouvelle région. Des Brèches s'ouvrent dans les zones contestées (La Marche, le désert, les cimes, les cendres, le volcan).", 0);
                 LegSymbols(g);
                 LegEnd(g);
             }
@@ -1411,9 +1539,43 @@ namespace OrbitMmo
                 LegSwatch(g, Col(0x8fe3a8), "Zone sûre (cercle vert) : aucun combat entre joueurs", false);
                 LegHead(g, "Règle du PvP");
                 LegText(g, "Le PvP entre Lumière et Ombre est actif partout hors des zones sûres, y compris sur les terres d'une faction : un raid chez l'ennemi est possible, mais ses gardes et ses villages sont contre toi.", 0);
-                LegText(g, "Zones sûres proposées : 280 blocs autour de chaque capitale, 120 autour des Quatre-Vents (ville neutre, trêve), 70 autour des villages et relais.", 0);
-                LegText(g, "Un village de faction n'est sûr que pour sa faction ; les relais neutres (blancs) le sont pour tous.", 0);
+                LegText(g, "Zones sûres : 280 blocs autour de chaque capitale, 120 autour des Quatre-Vents (ville neutre, trêve), 70 autour des villages et relais, 60 autour des hameaux de départ.", 0);
+                LegText(g, "En jeu aujourd'hui, toute zone sûre vaut pour les deux factions. Proposé, pas encore décidé : un village de faction ne serait sûr que pour sa faction.", 0);
                 LegSymbols(g);
+                LegEnd(g);
+            }
+            Save(bmp, path);
+        }
+
+        /** Carte des sites : tout ce qui a ete construit entre les villes (camps, ruines, lieux-dits). */
+        void RenderSites(string path)
+        {
+            int[] buf = NewCanvas();
+            Parallel.For(0, N, pz => { for (int px = 0; px < N; px++) { int p = pz * N + px; buf[pz * W + px] = Flat(p, RegCol[Reg[p] % RegCol.Length]); } });
+            Borders(buf, 0.45);
+            Bitmap bmp = ToBitmap(buf, W, N);
+            using (Graphics g = Begin(bmp))
+            {
+                DrawStreams(g, 0x2f78c0, 0.8f);
+                DrawRoads(g);
+                DrawMarks(g);
+                DrawPlaces(g, false, true);
+                LegBegin(g, "6 · Camps, ruines, lieux-dits");
+                LegHead(g, "Par région : camps, ruines, lieux-dits");
+                foreach (Region r in regions)
+                {
+                    int[] n = MarkCount(r.Index);
+                    LegSwatch(g, Col(RegCol[r.Index % RegCol.Length]), r.Name + " (niv. " + r.LvMin + "–" + r.LvMax + ") : " + n[0] + ", " + n[1] + ", " + n[2], false);
+                }
+                int[] all = MarkCount(-1);
+                LegHead(g, "Sites");
+                LegIcon(g, "camp", "neutre", "Camp de monstres (" + all[0] + ") : des gardiens, un thème par région");
+                LegIcon(g, "ruine", "neutre", "Ruine hantée (" + all[1] + ")");
+                LegIcon(g, "decor", "neutre", "Lieu-dit sans monstre (" + all[2] + ") : tour de guet, moulin, ferme, statue, puits…");
+                LegSymbols(g);
+                LegHead(g, "À savoir");
+                LegText(g, "Le niveau des monstres monte avec la distance au lieu sûr le plus proche. Rien n'apparaît dans les zones sûres ni sur les routes.", 0);
+                LegText(g, "Le paysage posé ensuite (petits lieux, lacs, arbres) n'est pas sur cette carte : il est calculé par le plugin.", 0);
                 LegEnd(g);
             }
             Save(bmp, path);
@@ -1437,6 +1599,7 @@ namespace OrbitMmo
             RenderRegions(Path.Combine(dir, "3-regions.png"));
             RenderNiveaux(Path.Combine(dir, "4-niveaux.png"));
             RenderFactions(Path.Combine(dir, "5-factions.png"));
+            if (marks.Count > 0) RenderSites(Path.Combine(dir, "6-sites.png"));
         }
 
         /** Cartes PNG + bilan dans outDir ; si dataPath est donne, ecrit aussi les donnees du generateur a la finesse dataPixels. */

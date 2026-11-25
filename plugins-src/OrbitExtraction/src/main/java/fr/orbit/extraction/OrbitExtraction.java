@@ -331,4 +331,14 @@ public final class OrbitExtraction extends JavaPlugin {
     public fr.orbit.extraction.hud.Hud hud() {
         return hud;
     }
+
+    /** OrbitStaff : objets de l'Extraction pour le catalogue du staff (appel par réflexion). */
+    public java.util.Map<String, java.util.List<org.bukkit.inventory.ItemStack>> orbitCatalogue() {
+        return StaffPont.catalogue(this);
+    }
+
+    /** OrbitStaff : lignes de stats du joueur pour le livre du staff (appel par réflexion). */
+    public java.util.List<String> orbitStatsJoueur(org.bukkit.entity.Player p) {
+        return StaffPont.stats(this, p);
+    }
 }

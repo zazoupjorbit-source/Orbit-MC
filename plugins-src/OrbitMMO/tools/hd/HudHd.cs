@@ -718,7 +718,13 @@ public static class HudHd
         Canvas c = New(196, MY + imgH + 4);
         Graphics g = c.G;
         float x0 = MX - 4, y0 = MY - 4, w = 184, h = imgH + 8;
-        // Panneau : ombre portee, corps en degrade, voile astral, liseres, etoiles.
+        PanelBody(g, x0, y0, w, h, (uint)(20261122 + rows));
+        MenuBgRest(c, g, rows, imgH, slots, colors, ornaments, rel);
+    }
+
+    /** Panneau des menus : corps en degrade, voile astral, etoiles, liseres bleu et or, rivets aux coins. */
+    static void PanelBody(Graphics g, float x0, float y0, float w, float h, uint seed0)
+    {
         using (GraphicsPath o = RR(x0, y0, w, h, 3.5f))
         {
             FillV(g, o, new RectangleF(x0, y0, w, h), H("1A2748"), H("0A1123"));
@@ -727,7 +733,7 @@ public static class HudHd
                 glow.AddEllipse(x0 + w * 0.15f, y0 - h * 0.15f, w * 0.7f, h * 0.55f);
                 using (PathGradientBrush b = new PathGradientBrush(glow)) { b.CenterColor = Color.FromArgb(40, 90, 140, 255); b.SurroundColors = new Color[] { Color.FromArgb(0, 90, 140, 255) }; g.FillPath(b, glow); }
             }
-            uint seed = (uint)(20261122 + rows);
+            uint seed = seed0;
             for (int i = 0; i < 90; i++)
             {
                 seed = seed * 1103515245 + 12345; float sx = x0 + 5 + (seed >> 8) % (int)(w - 10);
@@ -747,7 +753,10 @@ public static class HudHd
         using (GraphicsPath l2 = RR(x0 + 3f, y0 + 3f, w - 6f, h - 6f, 1.8f)) Stroke(g, l2, Color.FromArgb(150, GOLD_D), 0.4f);
         using (GraphicsPath l3 = RR(x0 + 3.5f, y0 + 3.5f, w - 7f, h - 7f, 1.5f)) Stroke(g, l3, Color.FromArgb(60, GOLD_L), 0.25f);
         Stud(g, x0 + 6, y0 + 6); Stud(g, x0 + w - 6, y0 + 6); Stud(g, x0 + 6, y0 + h - 6); Stud(g, x0 + w - 6, y0 + h - 6);
+    }
 
+    static void MenuBgRest(Canvas c, Graphics g, int rows, int imgH, int[] slots, string[] colors, int[] ornaments, string rel)
+    {
         // Cartouche du titre (x 16 a 179, y 2 a 21) et gemmes de part et d'autre.
         using (GraphicsPath sh = RR(16.5f, 3f, 164, 20, 2.5f)) using (SolidBrush b = new SolidBrush(Color.FromArgb(120, 0, 0, 0))) g.FillPath(b, sh);
         using (GraphicsPath f = RR(16, 2, 164, 20, 2.5f))
@@ -794,6 +803,97 @@ public static class HudHd
         GoldLine(g, 7 + MX, 169 + MX, invY + 55 + MY + 0.1f, 0.5f, 170);
         for (int col = 0; col < 9; col++) MenuSocket(g, 7 + 18 * col + MX, invY + 57 + MY, Color.Empty);
         Save(c, rel, true);
+    }
+
+    // ------------------------------------------------------------------ Inventaire du joueur (touche E)
+    /**
+     * Fond de l'inventaire du joueur (gui/container/inventory.png) : le jeu en lit 176 x 166 px d'interface dans une
+     * texture declaree 256 x 256 ; on la dessine 4 fois plus fine (1024 x 1024), le jeu la remet a l'echelle.
+     * Cases aux places du jeu : armure (8, 8 + 18 i), seconde main (77, 62), artisanat (98 + 18 c, 18 + 18 r),
+     * resultat (154, 28), sac (8 + 18 c, 84 + 18 r), barre (8 + 18 c, 142). Mot « Artisanat » ecrit par le jeu en
+     * gris fonce a (97, 8) : plaque claire dessous. Livre des recettes pose par le jeu en (104, 61).
+     */
+    static void InventoryBg()
+    {
+        Canvas c = New(256, 256);
+        Graphics g = c.G;
+        PanelBody(g, 0, 0, 176, 166, 20261124u);
+
+        // Fenetre du personnage : creux sombre, lueur astrale au pied du joueur, cadre d'or et equerres.
+        float px = 25, py = 7, pw = 52, ph = 72;
+        using (GraphicsPath o = RR(px, py, pw, ph, 2f))
+        {
+            using (SolidBrush b = new SolidBrush(H("03070F"))) g.FillPath(b, o);
+        }
+        using (GraphicsPath inner = RR(px + 1, py + 1, pw - 2, ph - 2, 1.4f))
+        {
+            FillV(g, inner, new RectangleF(px, py + 1, pw, ph - 2), H("0B1530"), H("060B18"));
+            using (GraphicsPath glow = new GraphicsPath())
+            {
+                glow.AddEllipse(px + 4, py + ph - 26, pw - 8, 30);
+                using (PathGradientBrush b = new PathGradientBrush(glow)) { b.CenterColor = Color.FromArgb(70, 120, 170, 255); b.SurroundColors = new Color[] { Color.FromArgb(0, 120, 170, 255) }; g.FillPath(b, glow); }
+            }
+            // Socle lumineux sous les pieds.
+            using (GraphicsPath disc = new GraphicsPath())
+            {
+                disc.AddEllipse(px + 12, py + ph - 9, pw - 24, 5);
+                using (PathGradientBrush b = new PathGradientBrush(disc)) { b.CenterColor = Color.FromArgb(150, 255, 224, 138); b.SurroundColors = new Color[] { Color.FromArgb(0, 201, 162, 74) }; g.FillPath(b, disc); }
+            }
+            FillRectV(g, px + 1, py + 1, pw - 2, 3f, Color.FromArgb(150, 0, 0, 0), Color.FromArgb(0, 0, 0, 0));
+        }
+        using (GraphicsPath f = RR(px + 0.3f, py + 0.3f, pw - 0.6f, ph - 0.6f, 1.9f)) Stroke(g, f, Color.FromArgb(200, GOLD_D), 0.5f);
+        using (GraphicsPath f = RR(px + 0.9f, py + 0.9f, pw - 1.8f, ph - 1.8f, 1.5f)) Stroke(g, f, H("3A5590", 110), 0.25f);
+        BracketsRect(g, px - 0.5f, py - 0.5f, pw + 1, ph + 1, GOLD_L, 0.8f);
+
+        // Armure (liseres bleus) et seconde main (liseres or).
+        for (int i = 0; i < 4; i++) MenuSocket(g, 7, 7 + 18 * i, H("7FB2FF", 210));
+        MenuSocket(g, 76, 61, H("FFD66E", 230));
+
+        // Plaque claire sous le mot « Artisanat ».
+        using (GraphicsPath pl = RR(94, 5, 76, 11, 2f))
+        {
+            FillV(g, pl, new RectangleF(94, 5, 76, 11), H("D3DAE4"), H("8A94A3"));
+            Stroke(g, pl, H("2A3550"), 0.6f);
+            using (GraphicsPath hl = RR(95, 5.7f, 74, 3.3f, 1.4f)) using (SolidBrush b = new SolidBrush(Color.FromArgb(90, 255, 255, 255))) g.FillPath(b, hl);
+        }
+
+        // Grille d'artisanat 2 x 2, fleche d'or, resultat dans un ecrin.
+        for (int r = 0; r < 2; r++) for (int col = 0; col < 2; col++) MenuSocket(g, 97 + 18 * col, 17 + 18 * r, Color.Empty);
+        using (GraphicsPath a = new GraphicsPath())
+        {
+            a.AddPolygon(new PointF[] { new PointF(136, 33), new PointF(144, 33), new PointF(144, 29.5f), new PointF(150.5f, 36), new PointF(144, 42.5f), new PointF(144, 39), new PointF(136, 39) });
+            using (LinearGradientBrush b = new LinearGradientBrush(new RectangleF(136, 29, 15, 14), GOLD_L, GOLD_D, 90f)) g.FillPath(b, a);
+            Stroke(g, a, OUT, 0.4f);
+        }
+        using (GraphicsPath o = RR(150, 24, 24, 24, 2f))
+        {
+            using (LinearGradientBrush b = new LinearGradientBrush(new RectangleF(150, 24, 24, 24), GOLD_L, GOLD_D, 60f)) g.FillPath(b, o);
+            Stroke(g, o, OUT, 0.4f);
+        }
+        using (GraphicsPath o = RR(151.2f, 25.2f, 21.6f, 21.6f, 1.5f)) using (SolidBrush b = new SolidBrush(OUT)) g.FillPath(b, o);
+        MenuSocket(g, 153, 27, Color.Empty);
+        Stud(g, 152.4f, 26.4f); Stud(g, 171.6f, 26.4f); Stud(g, 152.4f, 45.6f); Stud(g, 171.6f, 45.6f);
+
+        // Filet d'or, sac (3 rangees), filet, barre d'action.
+        GoldLine(g, 7, 170, 80.2f, 0.7f, 255);
+        Diamond(g, 88.5f, 80.55f, 2.3f, GOLD, H("3A2A0A"));
+        Diamond(g, 88.5f, 80.55f, 1.0f, GOLD_W, Color.Empty);
+        for (int r = 0; r < 3; r++) for (int col = 0; col < 9; col++) MenuSocket(g, 7 + 18 * col, 83 + 18 * r, Color.Empty);
+        GoldLine(g, 7, 169, 138.6f, 0.5f, 170);
+        for (int col = 0; col < 9; col++) MenuSocket(g, 7 + 18 * col, 141, H("C9A24A", 150));
+        Save(c, "assets/minecraft/textures/gui/container/inventory.png", false);
+    }
+
+    /** Equerres aux quatre coins d'un rectangle. */
+    static void BracketsRect(Graphics g, float x, float y, float w, float h, Color c, float thick)
+    {
+        float hh = thick / 2f, l = 5f;
+        using (Pen p = new Pen(c, thick))
+        {
+            p.StartCap = LineCap.Square; p.EndCap = LineCap.Square;
+            float[][] cs = { new float[] { x + hh, y + hh, 1, 1 }, new float[] { x + w - hh, y + hh, -1, 1 }, new float[] { x + hh, y + h - hh, 1, -1 }, new float[] { x + w - hh, y + h - hh, -1, -1 } };
+            foreach (float[] k in cs) { g.DrawLine(p, k[0], k[1], k[0] + (l - thick) * k[2], k[1]); g.DrawLine(p, k[0], k[1], k[0], k[1] + (l - thick) * k[3]); }
+        }
     }
 
     /** Case de bouton en deux glyphes de 18 x 18 : socle, puis equerres blanches (teintees par le jeu). */
@@ -1043,6 +1143,7 @@ public static class HudHd
         QuestPanel(questWidth);
         MenuSocketGlyph();
         Dialogs();
+        InventoryBg();
         Tiny(7, fontDir + "/hud_tiny.png");
         Tiny(17, fontDir + "/hud_tiny_cast.png");
         Tiny(30, fontDir + "/hud_tiny_title.png");

@@ -21,6 +21,7 @@ public final class OrbitCasino extends JavaPlugin implements TabCompleter {
     private Wallet wallet;
     private Shop shop;
     private Casino casino;
+    private fr.orbit.casino.arcade.Arcade arcade;
 
     public Db db() {
         return db;
@@ -60,7 +61,7 @@ public final class OrbitCasino extends JavaPlugin implements TabCompleter {
         getServer().getPluginManager().registerEvents(new Menu.Clicks(this), this);
         wallet.loadOnline();
         wallet.startPlaytime();
-        for (String c : new String[]{"orbitcoins", "table", "casino"}) {
+        for (String c : new String[]{"orbitcoins", "table", "casino", "arcade", "cj"}) {
             var cmd = getCommand(c);
             if (cmd != null) {
                 cmd.setExecutor(this);
@@ -95,6 +96,13 @@ public final class OrbitCasino extends JavaPlugin implements TabCompleter {
             casino = new Casino(this);
             getServer().getPluginManager().registerEvents(casino, this);
             casino.start();
+            if (casino.world() != null) {
+                arcade = new fr.orbit.casino.arcade.Arcade(this, casino.world());
+                getServer().getPluginManager().registerEvents(arcade, this);
+                getServer().getPluginManager().registerEvents(arcade.runner(), this);
+                arcade.start();
+                getLogger().info("Arcade cachée ouverte (ORBIT RUSH, Vole mon Orbito, casino).");
+            }
             getLogger().info(String.format(Locale.ROOT, "Casino ouvert. Machines à sous : %.1f %% redistribués (hors gros lot).",
                     casino.slots().rtp() * 100));
         });
@@ -102,6 +110,9 @@ public final class OrbitCasino extends JavaPlugin implements TabCompleter {
 
     @Override
     public void onDisable() {
+        if (arcade != null) {
+            arcade.stop();
+        }
         if (screens != null) {
             screens.shutdown();
         }
@@ -131,6 +142,25 @@ public final class OrbitCasino extends JavaPlugin implements TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         String name = command.getName();
+        if (name.equals("cj")) {
+            if (!(sender instanceof Player p)) {
+                return true;
+            }
+            if (casino == null || casino.jeux() == null) {
+                Txt.send(p, "<#E0484A>Il n'y a pas de casino sur ce serveur.");
+            } else {
+                casino.jeux().command(p, args);
+            }
+            return true;
+        }
+        if (name.equals("arcade")) {
+            if (arcade == null) {
+                Txt.send(sender, "<#E0484A>Il n'y a pas d'arcade sur ce serveur.");
+            } else {
+                arcade.command(sender, args);
+            }
+            return true;
+        }
         if (name.equals("orbitcoins")) {
             if (!(sender instanceof Player p)) {
                 Txt.send(sender, "Commande réservée aux joueurs.");
@@ -147,6 +177,10 @@ public final class OrbitCasino extends JavaPlugin implements TabCompleter {
                 }
                 case "titres", "titre" -> shop.openTitles(p);
                 case "top", "classement" -> showTop(p);
+                case "regles", "règles", "regle", "guide", "aide" -> {
+                    String what = args.length < 2 ? "" : args[1].toLowerCase(Locale.ROOT);
+                    Guide.open(this, p, Guide.chapter(what));
+                }
                 default -> {
                     long b = wallet.balance(p);
                     Txt.send(p, "Solde : " + (b < 0 ? "<#E0484A>indisponible (base injoignable)" : Txt.oc(b))
@@ -208,7 +242,13 @@ public final class OrbitCasino extends JavaPlugin implements TabCompleter {
                     return true;
                 }
                 switch (sub) {
-                    case "generer" -> Txt.send(sender, "Salle reconstruite : " + Txt.n(casino.rebuild()) + " blocs, tables et PNJ remis.");
+                    case "generer" -> {
+                        Txt.send(sender, "Salle reconstruite : " + Txt.n(casino.rebuild()) + " blocs, tables et PNJ remis.");
+                        if (arcade != null) {
+                            arcade.placeButtons(); // le bouton de l'arcade est dans le mur du casino
+                            arcade.spawnAll();
+                        }
+                    }
                     case "tp" -> {
                         if (sender instanceof Player p) {
                             casino.enter(p);
@@ -232,8 +272,16 @@ public final class OrbitCasino extends JavaPlugin implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (command.getName().equals("arcade")) {
+            return arcade == null ? List.of() : arcade.tab(sender, args);
+        }
         List<String> options = switch (command.getName()) {
-            case "orbitcoins" -> args.length == 1 ? List.of("boutique", "titres", "top") : List.of();
+            case "orbitcoins" -> args.length == 1 ? List.of("boutique", "titres", "top", "regles")
+                    : args.length == 2 && args[0].equalsIgnoreCase("regles") ? List.of("blackjack", "poker", "mains", "roulette",
+                    "crash", "mines", "plinko", "roue", "billard", "jukebox") : List.of();
+            case "cj" -> args.length == 1 ? List.of("crash", "mines", "roue", "jukebox", "billard")
+                    : args.length == 2 && args[0].equalsIgnoreCase("billard") ? List.of("rejoindre", "quitter")
+                    : args.length == 2 && args[0].equalsIgnoreCase("crash") ? List.of("miser", "encaisser", "plus", "auto") : List.of();
             case "table" -> args.length == 1 ? List.of("miser", "tirer", "rester", "doubler", "separer", "parole", "suivre",
                     "relancer", "tapis", "coucher", "quitter", "ecran") : List.of();
             default -> args.length == 1 ? List.of("generer", "tp", "bouton", "donner", "retirer", "solde", "recharger")

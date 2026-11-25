@@ -1,0 +1,118 @@
+hud E000 201
+tuile hud E000 E400,F801,E401,F801,E402,F801,E403
+hud E010 9
+hud E011 9
+hud E012 9
+hud E013 9
+hud E014 9
+hud E015 9
+hud E016 9
+hud E017 9
+hud E020 161
+tuile hud E020 E404,F801,E405,F801,E406
+hud E021 161
+tuile hud E021 E407,F801,E408,F801,E409
+hud E022 161
+tuile hud E022 E40A,F801,E40B,F801,E40C
+hud E023 161
+tuile hud E023 E40D,F801,E40E,F801,E40F
+hud E024 161
+tuile hud E024 E410,F801,E411,F801,E412
+hud E025 161
+tuile hud E025 E413,F801,E414,F801,E415
+hud E026 161
+tuile hud E026 E416,F801,E417,F801,E418
+hud E027 161
+tuile hud E027 E419,F801,E41A,F801,E41B
+hud E028 161
+tuile hud E028 E41C,F801,E41D,F801,E41E
+hud E029 161
+tuile hud E029 E41F,F801,E420,F801,E421
+hud E02A 161
+tuile hud E02A E422,F801,E423,F801,E424
+c_haut 0030 9
+c_haut 0031 9
+c_haut 0032 9
+c_haut 0033 9
+c_haut 0034 9
+c_haut 0035 9
+c_haut 0036 9
+c_haut 0037 9
+c_haut 0038 9
+c_haut 0039 9
+c_haut 002C 5
+c_haut 002E 5
+c_haut 002B 9
+c_haut 002D 9
+c_haut 002F 7
+c_haut 0020 5
+c_haut 006B 8
+c_haut 004D 10
+c_haut 0064 8
+c_haut 0054 10
+c_haut 0073 8
+c_haut 2726 10
+c_haut 0025 10
+c_haut 00D7 9
+c_revenu 0030 6
+c_revenu 0031 6
+c_revenu 0032 6
+c_revenu 0033 6
+c_revenu 0034 6
+c_revenu 0035 6
+c_revenu 0036 6
+c_revenu 0037 6
+c_revenu 0038 6
+c_revenu 0039 6
+c_revenu 002C 3
+c_revenu 002E 3
+c_revenu 002B 6
+c_revenu 002D 6
+c_revenu 002F 5
+c_revenu 0020 3
+c_revenu 006B 6
+c_revenu 004D 7
+c_revenu 0064 6
+c_revenu 0054 7
+c_revenu 0073 6
+c_revenu 2726 7
+c_revenu 0025 7
+c_revenu 00D7 6
+c_vol 0030 5
+c_vol 0031 5
+c_vol 0032 5
+c_vol 0033 5
+c_vol 0034 5
+c_vol 0035 5
+c_vol 0036 5
+c_vol 0037 5
+c_vol 0038 5
+c_vol 0039 5
+c_vol 002C 3
+c_vol 002E 3
+c_vol 002B 5
+c_vol 002D 5
+c_vol 002F 4
+c_vol 0020 3
+c_vol 006B 5
+c_vol 004D 6
+c_vol 0064 5
+c_vol 0054 6
+c_vol 0073 5
+c_vol 2726 6
+c_vol 0025 6
+c_vol 00D7 5
+titre E100 57
+tuile titre E100 E425,F801,E426,F801,E427,F801,E428
+titre E101 57
+tuile titre E101 E429,F801,E42A,F801,E42B,F801,E42C
+titre E102 57
+tuile titre E102 E42D,F801,E42E,F801,E42F,F801,E430
+titre E103 57
+tuile titre E103 E431,F801,E432,F801,E433,F801,E434
+titre E104 57
+tuile titre E104 E435,F801,E436,F801,E437,F801,E438
+titre E105 57
+tuile titre E105 E439,F801,E43A,F801,E43B,F801,E43C
+titre E106 57
+tuile titre E106 E43D,F801,E43E,F801,E43F,F801,E440

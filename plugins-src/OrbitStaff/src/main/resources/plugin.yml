@@ -1,0 +1,153 @@
+name: OrbitStaff
+version: '1.0.0'
+main: fr.orbit.staff.OrbitStaff
+api-version: '1.21'
+description: Outils du staff ORBIT (mode staff, panel joueur, catalogue d'objets du mode, livre de stats, sanctions réseau en MariaDB).
+authors: [ORBIT]
+# Les plugins de mode exposent leurs objets et leurs stats (méthodes orbitCatalogue / orbitStatsJoueur).
+softdepend: [LuckPerms, OrbitDevCore, OrbitMMO, OrbitExtraction, OrbitSurvie, OrbitPractice, OrbitTycoon, OrbitVol, OrbitCasino]
+
+commands:
+  staff:
+    description: Active ou coupe le mode staff.
+    aliases: [mod, staffmode]
+    permission: orbitstaff.mode
+  panel:
+    description: Ouvre le panel d'un joueur.
+    usage: /panel <joueur>
+    aliases: [pj]
+    permission: orbitstaff.panel
+  stats:
+    description: Ouvre le livre de stats d'un joueur.
+    usage: /stats <joueur>
+    aliases: [livre, pinfo, playerinfo, inspect]
+    permission: orbitstaff.stats
+  catalogue:
+    description: Objets du mode de jeu (et vanilla) à se donner.
+    aliases: [cata, items]
+    permission: orbitstaff.catalogue
+  freeze:
+    description: Gèle ou dégèle un joueur.
+    usage: /freeze <joueur> [motif]
+    aliases: [unfreeze, ss]
+    permission: orbitstaff.freeze
+  invsee:
+    description: Ouvre l'inventaire d'un joueur.
+    usage: /invsee <joueur>
+    permission: orbitstaff.inspect
+  endersee:
+    description: Ouvre le coffre de l'End d'un joueur.
+    usage: /endersee <joueur>
+    aliases: [ecsee]
+    permission: orbitstaff.inspect
+  vanish:
+    description: Devenir invisible pour les joueurs.
+    aliases: [v]
+    permission: orbitstaff.vanish
+  warn:
+    description: Avertir un joueur.
+    usage: /warn <joueur> <motif>
+    permission: orbitstaff.warn
+  mute:
+    description: Rendre muet un joueur (durée ou perm).
+    usage: /mute <joueur> <durée|perm> <motif>
+    aliases: [tempmute]
+    permission: orbitstaff.mute
+  unmute:
+    description: Rendre la parole à un joueur.
+    usage: /unmute <joueur> [motif]
+    permission: orbitstaff.mute
+  kick:
+    description: Expulser un joueur.
+    usage: /kick <joueur> <motif>
+    permission: orbitstaff.kick
+  tempban:
+    description: Bannir un joueur pour une durée.
+    usage: /tempban <joueur> <durée> <motif>
+    permission: orbitstaff.tempban
+  ban:
+    description: Bannir un joueur définitivement.
+    usage: /ban <joueur> <motif>
+    permission: orbitstaff.ban
+  unban:
+    description: Lever le bannissement d'un joueur.
+    usage: /unban <joueur> [motif]
+    aliases: [pardon]
+    permission: orbitstaff.unban
+  sanction:
+    description: Menu des sanctions prédéfinies pour un joueur.
+    usage: /sanction <joueur>
+    aliases: [sanctionner, punish]
+    permission: orbitstaff.sanction
+  historique:
+    description: Historique de modération d'un joueur.
+    usage: /historique <joueur>
+    aliases: [history, hist]
+    permission: orbitstaff.stats
+  note:
+    description: Ajouter une note staff sur un joueur.
+    usage: /note <joueur> <texte>
+    permission: orbitstaff.notes
+  report:
+    description: Signaler un joueur au staff.
+    usage: /report <joueur> <motif>
+    aliases: [signaler]
+    permission: orbitstaff.report
+  reports:
+    description: Signalements en attente.
+    permission: orbitstaff.reports
+  sc:
+    description: Chat staff (tous les serveurs). Sans texte, bascule le chat sur le staff.
+    usage: /sc [message]
+    aliases: [staffchat]
+    permission: orbitstaff.chat
+  alertes:
+    description: Coupe ou remet les alertes (triche, signalements) pour soi.
+    aliases: [alerts]
+    permission: orbitstaff.alertes
+  orbitstaff:
+    description: Administration d'OrbitStaff.
+    usage: /orbitstaff <reload|statut>
+    permission: orbitstaff.admin
+
+permissions:
+  orbitstaff.report:
+    default: true
+  orbitstaff.immunite:
+    description: Ne peut être ni sanctionné ni gelé par le staff (sauf depuis la console). À donner à la main.
+    default: false
+  orbitstaff.helper:
+    description: Assistant (mode staff, panel, freeze, inspection, livre, chat staff, alertes, warn, mute, kick).
+    default: op
+    children:
+      orbitstaff.mode: true
+      orbitstaff.panel: true
+      orbitstaff.stats: true
+      orbitstaff.freeze: true
+      orbitstaff.inspect: true
+      orbitstaff.vanish: true
+      orbitstaff.chat: true
+      orbitstaff.alertes: true
+      orbitstaff.reports: true
+      orbitstaff.notes: true
+      orbitstaff.sanction: true
+      orbitstaff.warn: true
+      orbitstaff.mute: true
+      orbitstaff.kick: true
+  orbitstaff.moderateur:
+    description: Modérateur (assistant + tempban, ban, unban, ramener un joueur à soi).
+    default: op
+    children:
+      orbitstaff.helper: true
+      orbitstaff.tempban: true
+      orbitstaff.ban: true
+      orbitstaff.unban: true
+      orbitstaff.tp.ramener: true
+  orbitstaff.admin:
+    description: Administrateur (tout, dont le catalogue d'objets et la modification des inventaires).
+    default: op
+    children:
+      orbitstaff.moderateur: true
+      orbitstaff.catalogue: true
+      orbitstaff.inspect.modifier: true
+      orbitstaff.soins: true

@@ -52,6 +52,19 @@ public final class Keys {
     public static NamespacedKey INN;
     /** Groupe de recharge du cristal de téléportation (affiché sur l'icône). */
     public static NamespacedKey TP_CRYSTAL_COOLDOWN;
+    /** Armure : type (tissu, cuir, mailles, plaques ; voir item/ArmorType). */
+    public static NamespacedKey ARMOR_TYPE;
+    /** Armure : apparence affichée « plaques_3 » (lue par le paquet outfit) et apparence d'origine (garde-robe). */
+    public static NamespacedKey OUTFIT;
+    public static NamespacedKey OUTFIT_BASE;
+    /** Équipement : id du set (sets.yml). */
+    public static NamespacedKey SET;
+    /** Équipement : liaison « ramasse » (lié quand ramassé) ou « equipe » (lié quand équipé) ; lié = OWNER posé. */
+    public static NamespacedKey BIND;
+    /** Équipement lié : pseudo du propriétaire au moment de la liaison (affichage). */
+    public static NamespacedKey BOUND_NAME;
+    /** Équipement : bonus de niveau d'objet (butin de boss, sets). */
+    public static NamespacedKey ILVL_BONUS;
 
     private Keys() {
     }
@@ -84,6 +97,13 @@ public final class Keys {
         OWNER = new NamespacedKey(plugin, "owner");
         INN = new NamespacedKey(plugin, "inn");
         TP_CRYSTAL_COOLDOWN = new NamespacedKey(plugin, "tp_crystal");
+        ARMOR_TYPE = new NamespacedKey(plugin, "armor_type");
+        OUTFIT = new NamespacedKey(plugin, "outfit");
+        OUTFIT_BASE = new NamespacedKey(plugin, "outfit_base");
+        SET = new NamespacedKey(plugin, "set");
+        BIND = new NamespacedKey(plugin, "bind");
+        BOUND_NAME = new NamespacedKey(plugin, "bound_name");
+        ILVL_BONUS = new NamespacedKey(plugin, "ilvl_bonus");
     }
 
     /** Groupe de recharge (affiché sur l'icône de la barre) d'un sort. */

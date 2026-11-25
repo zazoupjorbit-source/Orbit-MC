@@ -1,0 +1,3201 @@
+# ------------------------------------------------------------------
+#  Acte VIII — Le Dernier Souffle (niv. 80 à 90). Hubs : le Guet de la Fournaise, puis le Seuil, au bord du cratère.
+#  Principales Lumière (a8_l_*) et Ombre (a8_o_*), annexes neutres (a8_n_*), contrats des Brèches (a8_rep_*, répétables).
+#  Grand choix « morvain » (a8_*_le_choix_de_morvain) : laisser Morvain porter le souffle, ou le porter soi-même.
+#  Raid niveau 90 : le Souffle froid, au-dessus du cratère (a8_*_la_dechirure). Pas de mécanique de raid dédiée : boss partagé en groupe.
+#  FICHIER GÉNÉRÉ par tools\quetes\gen-quetes.js depuis tools\quetes\zones\acte8-souffle.js : modifier la source, pas ce fichier.
+# ------------------------------------------------------------------
+
+pnj:
+  a8_aldren:
+    nom: "Chevalier Aldren"
+    nom-en: "Sir Aldren"
+    titre: "Ce qui reste de l'Aube"
+    titre-en: "What remains of the Dawn"
+    couleur: "#F7E7A1"
+    type: MANNEQUIN
+    visage: steve
+    point: a8_aldren
+    main: GOLDEN_SWORD
+    repliques:
+      - "Le Bastion se tait. Pour la première fois de ma vie, personne ne me dit quoi faire."
+    repliques-en:
+      - "The Bastion is silent. For the first time in my life, nobody tells me what to do."
+  a8_vesper:
+    nom: "Dame Vesper"
+    nom-en: "Lady Vesper"
+    titre: "Ce qui reste de la Citadelle"
+    titre-en: "What remains of the Citadel"
+    couleur: "#B48CFF"
+    type: MANNEQUIN
+    visage: noor
+    point: a8_vesper
+    main: NETHERITE_SWORD
+    repliques:
+      - "La Citadelle avait un maître. Elle a maintenant une question."
+    repliques-en:
+      - "The Citadel had a master. Now it has a question."
+  a8_mareuil:
+    nom: "Capitaine Mareuil"
+    nom-en: "Captain Mareuil"
+    titre: "Garde du Guet"
+    titre-en: "Captain of the Watch"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    visage: makena
+    point: a8_mareuil
+    main: IRON_SWORD
+    repliques:
+      - "Mes hommes ont vu le ciel se fendre trois fois cette semaine. Ils ne dorment plus."
+    repliques-en:
+      - "My men have seen the sky split three times this week. They no longer sleep."
+  a8_morvain:
+    nom: "Morvain"
+    titre: "Le Premier Marqué"
+    titre-en: "The First Marked"
+    couleur: "#B36BFF"
+    type: MANNEQUIN
+    visage: zuri
+    point: a8_morvain
+    main: NETHERITE_SWORD
+    repliques:
+      - "Mille ans à porter ce que j'ai forgé. Je commence à en sentir le poids."
+    repliques-en:
+      - "A thousand years carrying what I forged. I am beginning to feel its weight."
+  a8_ilvar:
+    nom: "Maître Ilvar"
+    nom-en: "Master Ilvar"
+    titre: "Astromancien"
+    titre-en: "Astromancer"
+    couleur: "#9FD8FF"
+    type: MANNEQUIN
+    visage: ari
+    point: a8_ilvar
+    main: SPYGLASS
+    repliques:
+      - "Je lis les deux côtés du ciel. Cette nuit, ils écrivent la même chose."
+    repliques-en:
+      - "I read both sides of the sky. Tonight they write the same thing."
+  a8_hulde:
+    nom: "Hulde"
+    titre: "Intendante du Seuil"
+    titre-en: "Quartermaster of the Threshold"
+    couleur: "#E8C9A0"
+    type: MANNEQUIN
+    visage: sunny
+    point: a8_hulde
+    main: BARREL
+    repliques:
+      - "Ici, on mange debout et on dort dans ses bottes. Le cratère ne prévient pas."
+    repliques-en:
+      - "Here you eat standing and sleep in your boots. The crater gives no warning."
+  a8_naia:
+    nom: "Naïa"
+    titre: "Veilleuse astréenne"
+    titre-en: "Astrean Watcher"
+    couleur: "#FFB86B"
+    type: MANNEQUIN
+    visage: kai
+    point: a8_naia
+    repliques:
+      - "Mes ancêtres accueillaient l'Astre. Ils ne lui ont jamais demandé de rester."
+    repliques-en:
+      - "My ancestors welcomed the Star. They never asked it to stay."
+  a8_ravel:
+    nom: "Ravel"
+    titre: "Contrats des Brèches"
+    titre-en: "Breach contracts"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: efe
+    point: a8_ravel
+    main: PAPER
+    repliques:
+      - "Les Brèches se rouvrent chaque jour. Mon tableau ne sera jamais vide."
+    repliques-en:
+      - "The Breaches open again every day. My board will never be empty."
+  a8_nell:
+    nom: "Nell"
+    titre: "Cartographe"
+    titre-en: "Cartographer"
+    couleur: "#A8E6A1"
+    type: MANNEQUIN
+    visage: ari
+    point: a8_nell
+    main: MAP
+    repliques:
+      - "La Marche change chaque nuit. Maintenant, elle saigne."
+    repliques-en:
+      - "The March changes every night. Now it bleeds."
+  a8_refugie:
+    nom: "Tomas"
+    titre: "Réfugié de la Marche"
+    titre-en: "Refugee of the March"
+    couleur: "#C9D6A3"
+    type: MANNEQUIN
+    visage: alex
+    point: a8_refugie
+    repliques:
+      - "La terre s'est ouverte sous ma grange. Il en est sorti quelque chose de froid."
+    repliques-en:
+      - "The earth opened under my barn. Something cold came out of it."
+  a8_kesra:
+    nom: "Kesra"
+    titre: "Caravanière astréenne"
+    titre-en: "Astrean Caravaneer"
+    couleur: "#FFB86B"
+    type: MANNEQUIN
+    visage: makena
+    point: a8_kesra
+    repliques:
+      - "Le sable gèle, la nuit, autour de la Brèche. Le désert n'a jamais connu le froid."
+    repliques-en:
+      - "The sand freezes at night around the Breach. The desert has never known cold."
+  a8_caravanier:
+    nom: "Oumar"
+    titre: "Caravanier"
+    titre-en: "Caravaneer"
+    couleur: "#E8D7A0"
+    type: MANNEQUIN
+    visage: efe
+    point: a8_caravanier
+    repliques:
+      - "Mes bêtes refusent d'avancer. Elles sentent ce qui respire sous le sable."
+    repliques-en:
+      - "My beasts refuse to move. They smell what breathes under the sand."
+  a8_ivo:
+    nom: "Ivo"
+    titre: "Garde-neige de Fort Blanc"
+    titre-en: "Snow-warden of Fort Blanc"
+    couleur: "#D7E6F5"
+    type: MANNEQUIN
+    visage: steve
+    point: a8_ivo
+    main: BOW
+    repliques:
+      - "Les gelés de la Chute s'étaient réveillés. Maintenant, ils regardent la Brèche."
+    repliques-en:
+      - "The frozen ones of the Fall had woken. Now they stare at the Breach."
+  a8_dagna:
+    nom: "Dagna"
+    titre: "Contremaîtresse des mineurs"
+    titre-en: "Mine forewoman"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    visage: noor
+    point: a8_dagna
+    main: IRON_PICKAXE
+    repliques:
+      - "Une galerie sur trois s'ouvre sur le vide. On creuse quand même. Il faut bien manger."
+    repliques-en:
+      - "One gallery in three opens onto the void. We dig anyway. We have to eat."
+  a8_seraphine:
+    nom: "Séraphine"
+    titre: "Haute-Prélate déchue"
+    titre-en: "Fallen High Prelate"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: noor
+    point: a8_seraphine
+    repliques:
+      - "Vous avez libéré l'Astre. Regardez ce que votre liberté a ouvert."
+    repliques-en:
+      - "You freed the Star. Look at what your freedom has opened."
+  a8_vharos:
+    nom: "Vharos"
+    titre: "Nécromancien déchu"
+    titre-en: "Fallen Necromancer"
+    couleur: "#9B7BFF"
+    type: MANNEQUIN
+    visage: steve
+    point: a8_vharos
+    repliques:
+      - "Le Néant a faim. Je serai la bouche qui le nourrit, ou la main qui le tient."
+    repliques-en:
+      - "The Void is hungry. I will be the mouth that feeds it, or the hand that holds it."
+  a8_lise:
+    nom: "Lise"
+    titre: "Marquée sauvée"
+    titre-en: "Rescued Marked"
+    couleur: "#C9B6E8"
+    type: MANNEQUIN
+    visage: sunny
+    point: a8_lise
+    repliques:
+      - "Ils chantaient. Je sentais ma lumière monter dans ma gorge."
+    repliques-en:
+      - "They were singing. I felt my light rising in my throat."
+
+monstres:
+  a8_affame:
+    nom: "Affamé des Brèches"
+    type: ENDERMITE
+    taille: 2.6
+    pv: 1.6
+    degats: 1.3
+    vitesse: 1.05
+  a8_rodeur:
+    nom: "Rôdeur de Brèche"
+    type: STRAY
+    taille: 1.1
+    pv: 1.4
+    degats: 1.2
+    vitesse: 1
+  a8_gele:
+    nom: "Gelé de la Chute"
+    type: ZOMBIE
+    taille: 1.1
+    pv: 1.8
+    degats: 1.2
+    vitesse: 0.85
+    arme: ICE
+  a8_creux_vharos:
+    nom: "Creux de Vharos"
+    type: ZOMBIE
+    pv: 1.6
+    degats: 1.25
+    vitesse: 0.95
+  a8_sentinelle:
+    nom: "Sentinelle du Néant"
+    type: WITHER_SKELETON
+    taille: 1.2
+    pv: 1.8
+    degats: 1.4
+    vitesse: 0.9
+    arme: AMETHYST_SHARD
+  a8_chantre:
+    nom: "Chantre du Dernier Serment"
+    type: VINDICATOR
+    pv: 1.5
+    degats: 1.3
+    vitesse: 1
+    arme: GOLDEN_AXE
+  a8_paladin:
+    nom: "Paladin du Dernier Serment"
+    type: VINDICATOR
+    taille: 1.3
+    pv: 3.5
+    degats: 1.5
+    xp: 3
+    or: 3
+    arme: GOLDEN_SWORD
+  a8_calcine:
+    nom: "Calciné du froid"
+    type: HUSK
+    taille: 1.15
+    pv: 1.7
+    degats: 1.3
+    vitesse: 0.95
+  a8_noye:
+    nom: "Noyé de l'eau noire"
+    type: DROWNED
+    pv: 1.6
+    degats: 1.25
+    vitesse: 1
+  a8_maillon:
+    nom: "Maillon vivant"
+    type: IRON_GOLEM
+    taille: 0.7
+    pv: 2.5
+    degats: 1.4
+    vitesse: 0.8
+    xp: 2
+    or: 2
+  a8_echo:
+    nom: "Écho du Souffle"
+    type: STRAY
+    taille: 0.9
+    pv: 1.3
+    degats: 1.3
+    vitesse: 1.15
+  a8_ombre_souffle:
+    nom: "Ombre du Souffle"
+    type: STRAY
+    taille: 2
+    pv: 14
+    degats: 1.6
+    vitesse: 0.95
+    xp: 12
+    or: 10
+    arme: BOW
+  a8_souffle_froid:
+    nom: "Le Souffle froid"
+    type: STRAY
+    taille: 3.6
+    pv: 60
+    degats: 1.9
+    vitesse: 0.9
+    xp: 40
+    or: 30
+    arme: BOW
+
+apparitions:
+  a8_aff_marche:
+    point: a8_breche_marche
+    monstre: a8_affame
+    niveau: [80, 83]
+    nombre: 6
+    rayon: 10
+  a8_aff_oasis:
+    point: a8_breche_oasis
+    monstre: a8_affame
+    niveau: [82, 85]
+    nombre: 6
+    rayon: 10
+  a8_aff_cimes:
+    point: a8_breche_cimes
+    monstre: a8_affame
+    niveau: [84, 87]
+    nombre: 6
+    rayon: 10
+  a8_aff_cendres:
+    point: a8_breche_cendres
+    monstre: a8_affame
+    niveau: [85, 88]
+    nombre: 6
+    rayon: 10
+  a8_aff_fournaise:
+    point: a8_breche_fournaise
+    monstre: a8_affame
+    niveau: [87, 90]
+    nombre: 6
+    rayon: 10
+  a8_rodeurs_marche:
+    point: a8_ruine_marche
+    monstre: a8_rodeur
+    niveau: [82, 84]
+    nombre: 5
+    rayon: 9
+  a8_rodeurs_cratere:
+    point: a8_cratere_sud
+    monstre: a8_rodeur
+    niveau: [84, 86]
+    nombre: 6
+    rayon: 10
+  a8_geles_cimes:
+    point: a8_breche_cimes
+    monstre: a8_gele
+    niveau: [84, 86]
+    nombre: 6
+    rayon: 10
+  a8_creux_desert:
+    point: a8_cercle_desert
+    monstre: a8_creux_vharos
+    niveau: [82, 84]
+    nombre: 6
+    rayon: 9
+  a8_sentinelles_cimes:
+    point: a8_garde_cimes
+    monstre: a8_sentinelle
+    niveau: [84, 86]
+    nombre: 4
+    rayon: 6
+  a8_sentinelles_tour:
+    point: a8_tour_neige
+    monstre: a8_sentinelle
+    niveau: [85, 87]
+    nombre: 4
+    rayon: 6
+  a8_chantres_tour:
+    point: a8_camp_serment
+    monstre: a8_chantre
+    niveau: [82, 84]
+    nombre: 4
+    rayon: 8
+  a8_paladins_tour:
+    point: a8_tour_serment
+    monstre: a8_paladin
+    niveau: [83, 85]
+    nombre: 2
+    rayon: 6
+  a8_chantres:
+    point: a8_bord_ouest
+    monstre: a8_chantre
+    niveau: [85, 87]
+    nombre: 6
+    rayon: 8
+  a8_paladins:
+    point: a8_bord_ouest
+    monstre: a8_paladin
+    niveau: 86
+    nombre: 2
+    rayon: 6
+  a8_calcines:
+    point: a8_coulee
+    monstre: a8_calcine
+    niveau: [85, 87]
+    nombre: 6
+    rayon: 10
+  a8_noyes_oasis:
+    point: a8_breche_oasis
+    monstre: a8_noye
+    niveau: [84, 86]
+    nombre: 5
+    rayon: 9
+  a8_maillons:
+    point: a8_chaine
+    monstre: a8_maillon
+    niveau: [86, 88]
+    nombre: 4
+    rayon: 7
+  a8_echos:
+    point: a8_dechirure
+    monstre: a8_echo
+    niveau: [88, 90]
+    nombre: 6
+    rayon: 10
+  a8_ombre:
+    point: a8_breche_fournaise_b
+    monstre: a8_ombre_souffle
+    niveau: 89
+    nombre: 1
+    rayon: 4
+  a8_souffle:
+    point: a8_dechirure
+    monstre: a8_souffle_froid
+    niveau: 90
+    nombre: 1
+    rayon: 5
+
+quetes:
+
+  # ================================================================ ACTE VIII — LUMIÈRE, QUÊTES PRINCIPALES
+
+  a8_l_le_ciel_a_moitie:
+    nom: "Le ciel à moitié"
+    nom-en: "Half a Sky"
+    faction: lumiere
+    niveau: 80
+    requiert: [a7_l_fin]
+    resume:
+      - "L'Astre est libre, mais il ne brille qu'à moitié."
+      - "Aldren vous attend au Guet de la Fournaise."
+    resume-en:
+      - "The Star is free, but it only half shines."
+      - "Aldren is waiting for you at the Furnace Watch."
+    intro:
+      - "Trois nuits ont passé depuis les chaînes brisées. L'Astre est resté. Mais une moitié du ciel est pâle, et l'autre a froid."
+    intro-en:
+      - "Three nights have passed since the chains broke. The Star stayed. But half the sky is pale, and the other half is cold."
+    etapes:
+      - type: PARLER
+        texte: "Rejoindre Aldren au Guet de la Fournaise"
+        texte-en: "Join Aldren at the Furnace Watch"
+        pnj: a8_aldren
+        dialogue:
+          - "a8_aldren: Vous voilà. Le Bastion n'envoie plus d'ordres. La Haute-Prélate a disparu la nuit du raid, avec ses derniers fidèles."
+          - "a8_aldren: Et le ciel… regardez-le. Il lui manque quelque chose. Morvain dit savoir quoi. Il campe au bord du cratère."
+        dialogue-en:
+          - "a8_aldren: There you are. The Bastion sends no more orders. The High Prelate vanished the night of the raid, with her last faithful."
+          - "a8_aldren: And the sky… look at it. Something is missing. Morvain says he knows what. He is camped on the crater rim."
+      - type: ATTEINDRE
+        texte: "Monter au Seuil, au bord du cratère"
+        texte-en: "Climb to the Threshold, on the crater rim"
+        point: a8_seuil
+        rayon: 8
+        apres:
+          - "Un camp de toile noircie, accroché à la pente. Des Marqués de deux couleurs y partagent le même feu."
+        apres-en:
+          - "A camp of blackened canvas clinging to the slope. Marked of both colours share the same fire."
+      - type: PARLER
+        texte: "Parler à Morvain"
+        texte-en: "Talk to Morvain"
+        pnj: a8_morvain
+        dialogue:
+          - "a8_morvain: Il lui manque son dernier souffle. Le Néant. Ce que vos prêtres appelaient le vide, c'est ce qu'il a laissé dans le ciel en se brisant."
+          - "a8_morvain: Sans cages ni Creux pour le nourrir, ce souffle a faim. Il descend. Bientôt, il ouvrira la terre."
+        dialogue-en:
+          - "a8_morvain: It is missing its last breath. The Void. What your priests called emptiness is what it left in the sky when it broke."
+          - "a8_morvain: With no cages and no Hollows to feed it, that breath is hungry. It is coming down. Soon it will open the earth."
+    recompenses:
+      xp: 16800
+      or: 1680
+
+  a8_l_la_premiere_breche:
+    nom: "La première Brèche"
+    nom-en: "The First Breach"
+    faction: lumiere
+    niveau: 80
+    requiert: [a8_l_le_ciel_a_moitie]
+    donneur: a8_morvain
+    resume:
+      - "Le sol s'ouvre devant la porte du Guet."
+      - "Tenir la porte."
+    resume-en:
+      - "The ground opens before the gate of the Watch."
+      - "Hold the gate."
+    offre:
+      - "a8_morvain: Vous l'entendez ? La pente craque, sous le Guet. Descendez. Si la porte tombe, le Guet tombe."
+    offre-en:
+      - "a8_morvain: Do you hear it? The slope is cracking, below the Watch. Go down. If the gate falls, the Watch falls."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre la porte du Guet"
+        texte-en: "Defend the gate of the Watch"
+        point: a8_porte_guet
+        monstres: [a8_affame, a8_rodeur]
+        nombre: 4
+        vagues: 4
+        apparition: a8_guet_dehors
+        pv: 400
+        degats: 9
+        niveau: 80
+        cible: "La porte du Guet"
+        cible-en: "The gate of the Watch"
+        apres:
+          - "La dernière créature se dissout en givre. Derrière vous, la terre se referme à moitié, comme une plaie mal cousue."
+        apres-en:
+          - "The last creature dissolves into frost. Behind you the earth half closes, like a badly stitched wound."
+      - type: PARLER
+        texte: "Rendre compte au capitaine Mareuil"
+        texte-en: "Report to Captain Mareuil"
+        pnj: a8_mareuil
+        dialogue:
+          - "a8_mareuil: Une Brèche. On en signale d'autres : la Marche, le désert, les cimes. Partout où on s'est battu."
+        dialogue-en:
+          - "a8_mareuil: A Breach. Others are reported: the March, the desert, the peaks. Everywhere we fought."
+    recompenses:
+      xp: 16800
+      or: 1680
+
+  a8_l_ce_qui_ouvre_les_breches:
+    nom: "Ce qui ouvre les Brèches"
+    nom-en: "What Opens the Breaches"
+    faction: lumiere
+    niveau: 81
+    requiert: [a8_l_la_premiere_breche]
+    donneur: a8_ilvar
+    resume:
+      - "Pourquoi la terre s'ouvre-t-elle là, et pas ailleurs ?"
+      - "Trois indices près de la Brèche des Cendres."
+    resume-en:
+      - "Why does the earth open there, and not elsewhere?"
+      - "Three clues near the Breach of Ashes."
+    offre:
+      - "a8_ilvar: Les Brèches ne s'ouvrent pas au hasard. Allez voir celle des Cendres, au sud du Camp. Regardez ce qu'il y a autour. Pas dedans : autour."
+    offre-en:
+      - "a8_ilvar: The Breaches do not open at random. Go and see the one in the Ashes, south of the Camp. Look at what is around it. Not inside: around."
+    etapes:
+      - type: ENQUETE
+        texte: "Examiner les abords de la Brèche"
+        texte-en: "Examine the edges of the Breach"
+        indices:
+          - point: a8_ind_l1
+            texte: "Une chaîne de fiole brisée"
+            texte-en: "A broken vial chain"
+            apres:
+              - "Une chaînette d'or, comme celles des fioles du Cloître. Le verre a fondu."
+            apres-en:
+              - "A golden chain, like those of the Cloister vials. The glass has melted."
+          - point: a8_ind_l2
+            texte: "Des traces de chariot"
+            texte-en: "Cart tracks"
+            apres:
+              - "Des ornières anciennes. Un convoi passait ici, souvent, chargé de quelque chose de lourd et de lumineux."
+            apres-en:
+              - "Old ruts. A convoy passed here, often, loaded with something heavy and bright."
+          - point: a8_ind_l3
+            texte: "Une borne au sceau de l'Aube"
+            texte-en: "A milestone with the Dawn's seal"
+            apres:
+              - "« Relais des fioles, troisième étape. » Le sceau du Bastion, et sous lui, gratté, un V."
+            apres-en:
+              - "« Vial relay, third stage. » The Bastion's seal, and under it, scratched, a V."
+        dialogue:
+          - "joueur: Un relais des fioles. On y faisait passer la lumière des Marqués."
+        dialogue-en:
+          - "joueur: A vial relay. The light of the Marked passed through here."
+      - type: PARLER
+        texte: "Rapporter vos conclusions à Ilvar"
+        texte-en: "Bring your conclusions to Ilvar"
+        pnj: a8_ilvar
+        dialogue:
+          - "a8_ilvar: C'est ce que je craignais. Les Brèches s'ouvrent là où l'on a vidé des Marqués. Là où leur lumière a coulé."
+          - "a8_ilvar: Le souffle a faim de cette lumière. Il la cherche dans la terre, là où elle a été perdue."
+        dialogue-en:
+          - "a8_ilvar: It is what I feared. The Breaches open where Marked were emptied. Where their light was spilled."
+          - "a8_ilvar: The breath hungers for that light. It looks for it in the earth, where it was lost."
+    recompenses:
+      xp: 17000
+      or: 1700
+
+  a8_l_le_tabard_blanc:
+    nom: "Le tabard blanc"
+    nom-en: "The White Tabard"
+    faction: lumiere
+    niveau: 82
+    requiert: [a8_l_ce_qui_ouvre_les_breches]
+    donneur: a8_aldren
+    resume:
+      - "Séraphine rassemble les derniers Marqués à l'est du cratère."
+      - "Entrer dans son camp, déguisé."
+    resume-en:
+      - "Séraphine is gathering the last Marked east of the crater."
+      - "Enter her camp in disguise."
+    offre:
+      - "a8_aldren: Un de mes éclaireurs l'a vue. La Haute-Prélate tient une vieille tour, à l'est. Elle y fait monter des Marqués enchaînés."
+      - "a8_aldren: Ses gardes portent encore le tabard blanc. Prenez celui-ci. Ne levez pas l'épée là-dedans."
+    offre-en:
+      - "a8_aldren: One of my scouts saw her. The High Prelate holds an old tower, to the east. She is bringing chained Marked there."
+      - "a8_aldren: Her guards still wear the white tabard. Take this one. Do not raise your sword in there."
+    etapes:
+      - type: DEGUISEMENT
+        texte: "Entrer dans le camp de Séraphine sans être reconnu"
+        texte-en: "Enter Séraphine's camp unrecognised"
+        point: a8_camp_serment
+        monstres: [a8_chantre, a8_paladin]
+        materiau: LEATHER_CHESTPLATE
+        couleur: "#F2EEDC"
+        objet: "Tabard du Dernier Serment"
+        objet-en: "Tabard of the Last Oath"
+        apres:
+          - "Au pied de la tour, une liste clouée à un pieu. Des noms, et en face de chacun : « au bord ». Le dernier est celui d'une certaine Lise."
+        apres-en:
+          - "At the foot of the tower, a list nailed to a stake. Names, and beside each one: « to the edge ». The last is that of one Lise."
+      - type: INTERAGIR
+        texte: "Libérer Lise"
+        texte-en: "Free Lise"
+        point: a8_lise
+        rayon: 3
+        apres:
+          - "a8_lise: Vous n'êtes pas l'un d'eux. Je le vois à vos yeux. Sortez-moi d'ici."
+        apres-en:
+          - "a8_lise: You are not one of them. I see it in your eyes. Get me out of here."
+    recompenses:
+      xp: 17200
+      or: 1720
+
+  a8_l_ceux_de_la_liste:
+    nom: "Ceux de la liste"
+    nom-en: "Those on the List"
+    faction: lumiere
+    niveau: 83
+    requiert: [a8_l_le_tabard_blanc]
+    donneur: a8_lise
+    resume:
+      - "Conduire Lise jusqu'au relais de Hulde."
+      - "Les chantres la poursuivent."
+    resume-en:
+      - "Lead Lise to Hulde's relay."
+      - "The chanters are chasing her."
+    offre:
+      - "a8_lise: Hulde a un chariot au relais, plus bas. Si j'y arrive, d'autres pourront suivre. Ils vont nous poursuivre."
+    offre-en:
+      - "a8_lise: Hulde has a wagon at the relay, further down. If I reach it, others can follow. They will come after us."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter Lise jusqu'au relais"
+        texte-en: "Escort Lise to the relay"
+        pnj: a8_lise
+        chemin: [a8_esc_1, a8_esc_2, a8_relais_est]
+        depart: a8_lise
+        monstres: [a8_chantre, a8_paladin]
+        nombre: 3
+        vagues: 3
+        pv: 450
+        degats: 10
+        niveau: 83
+        apres:
+          - "a8_lise: Le chariot. Je… je n'y croyais pas. Les autres sont encore là-haut. Douze. Elle les garde pour la dernière nuit."
+        apres-en:
+          - "a8_lise: The wagon. I… I did not believe it. The others are still up there. Twelve. She is keeping them for the last night."
+      - type: PARLER
+        texte: "Prévenir Hulde au Seuil"
+        texte-en: "Warn Hulde at the Threshold"
+        pnj: a8_hulde
+        dialogue:
+          - "a8_hulde: Douze. On fera de la place. On en fait toujours."
+        dialogue-en:
+          - "a8_hulde: Twelve. We will make room. We always do."
+    recompenses:
+      xp: 17400
+      or: 1740
+
+  a8_l_le_souffle_a_dos:
+    nom: "Le souffle à dos de monture"
+    nom-en: "The Breath on Horseback"
+    faction: lumiere
+    niveau: 84
+    requiert: [a8_l_ceux_de_la_liste]
+    donneur: a8_morvain
+    resume:
+      - "Rapporter un fragment du souffle au Seuil."
+      - "Un seul coup, et il retombe."
+    resume-en:
+      - "Bring a fragment of the breath back to the Threshold."
+      - "A single blow, and it falls."
+    offre:
+      - "a8_morvain: Quand une Brèche se referme, elle laisse un éclat de froid. Un morceau du souffle. Il faut en rapporter ici, et sans le brusquer."
+      - "a8_morvain: Montez. À pied, vous n'irez pas assez vite pour qu'il ne s'échappe pas."
+    offre-en:
+      - "a8_morvain: When a Breach closes, it leaves a shard of cold. A piece of the breath. We must bring some here, without jostling it."
+      - "a8_morvain: Ride. On foot you will not be fast enough to keep it from escaping."
+    etapes:
+      - type: TRANSPORT
+        texte: "Rapporter le fragment au Seuil, à dos de monture"
+        texte-en: "Bring the fragment to the Threshold, on a mount"
+        point: a8_seuil
+        depart: a8_breche_fournaise
+        materiau: BLUE_ICE
+        rayon: 6
+        objet: "Fragment du souffle"
+        objet-en: "Fragment of the breath"
+        apres:
+          - "a8_morvain: Il est froid comme une nuit sans étoile. Et pourtant, écoutez : il murmure le même nom que l'Astre."
+        apres-en:
+          - "a8_morvain: It is as cold as a starless night. And yet, listen: it whispers the same name as the Star."
+    recompenses:
+      xp: 17600
+      or: 1760
+
+  a8_l_le_choeur_a_l_envers:
+    nom: "Le chœur à l'envers"
+    nom-en: "The Reversed Choir"
+    faction: lumiere
+    niveau: 85
+    requiert: [a8_l_le_souffle_a_dos]
+    donneur: a8_aldren
+    resume:
+      - "Les chantres de Séraphine chantent au bord du cratère."
+      - "Les faire taire."
+    resume-en:
+      - "Séraphine's chanters sing on the crater rim."
+      - "Silence them."
+    offre:
+      - "a8_aldren: Ils chantent à l'ouest du Seuil, au bord du vide. Le chant du Cloître, mais à l'envers : ils ne tirent plus la lumière, ils la jettent."
+    offre-en:
+      - "a8_aldren: They are singing west of the Threshold, on the edge of the void. The Cloister chant, but reversed: they no longer draw the light out, they cast it down."
+    etapes:
+      - type: TUER
+        texte: "Faire taire les chantres"
+        texte-en: "Silence the chanters"
+        monstres: [a8_chantre]
+        nombre: 10
+        point: a8_bord_ouest
+      - type: TUER
+        texte: "Abattre les paladins du Dernier Serment"
+        texte-en: "Strike down the paladins of the Last Oath"
+        monstres: [a8_paladin]
+        nombre: 2
+        point: a8_bord_ouest
+        apres:
+          - "Le chant cesse. Au-dessus du cratère, la moitié froide du ciel recule d'un pas."
+        apres-en:
+          - "The chant stops. Above the crater, the cold half of the sky draws back a step."
+      - type: PARLER
+        texte: "Revenir auprès d'Aldren"
+        texte-en: "Return to Aldren"
+        pnj: a8_aldren
+        dialogue:
+          - "a8_aldren: J'ai chanté ce chant, enfant, à la chapelle du Bastion. Je ne savais pas ce qu'il faisait."
+        dialogue-en:
+          - "a8_aldren: I sang that chant as a child, in the Bastion chapel. I did not know what it did."
+    recompenses:
+      xp: 17900
+      or: 1790
+
+  a8_l_la_derniere_prelate:
+    nom: "La dernière Prélate"
+    nom-en: "The Last Prelate"
+    faction: lumiere
+    niveau: 86
+    requiert: [a8_l_le_choeur_a_l_envers]
+    donneur: a8_aldren
+    resume:
+      - "Monter à la tour de Séraphine."
+      - "Survivre à son dernier rite, puis décider."
+    resume-en:
+      - "Climb to Séraphine's tower."
+      - "Survive her last rite, then decide."
+    offre:
+      - "a8_aldren: Elle est seule, maintenant. Seule avec douze Marqués et sa foi. Allez-y. Je ne pourrais pas lever l'épée contre elle. Vous, peut-être."
+    offre-en:
+      - "a8_aldren: She is alone now. Alone with twelve Marked and her faith. Go. I could not raise my sword against her. You, perhaps."
+    etapes:
+      - type: SURVIE
+        texte: "Survivre au rite de lumière"
+        texte-en: "Survive the rite of light"
+        point: a8_tour_serment
+        rayon: 14
+        duree: 45
+        mode: brule
+        degats: 10
+        monstres: [a8_paladin]
+        nombre: 1
+        intervalle: 15
+        niveau: 86
+        apres:
+          - "a8_seraphine: Vous tenez debout dans ma lumière. Alors c'est vous qui avez brisé les chaînes."
+        apres-en:
+          - "a8_seraphine: You stand in my light. So it was you who broke the chains."
+      - type: CHOIX
+        texte: "Décider du sort de Séraphine"
+        texte-en: "Decide Séraphine's fate"
+        pnj: a8_seraphine
+        choix: seraphine
+        question: "Que faites-vous de Séraphine ?"
+        question-en: "What do you do with Séraphine?"
+        reponses:
+          - id: epargner
+            texte: "La laisser partir, et lui demander les fioles qu'elle garde"
+            texte-en: "Let her go, and ask for the vials she keeps"
+            reponse:
+              - "a8_seraphine: Les dernières fioles. Rendez-les à qui vous voudrez. Moi, je vais marcher jusqu'à ce que je comprenne ce que j'ai servi."
+            reponse-en:
+              - "a8_seraphine: The last vials. Give them back to whomever you wish. As for me, I will walk until I understand what I served."
+            or: 400
+          - id: juger
+            texte: "La livrer à Aldren, pour qu'elle soit jugée"
+            texte-en: "Hand her to Aldren, to be judged"
+            reponse:
+              - "a8_seraphine: Jugée. Par qui ? Par ceux que j'ai bénis ? …Soit. Qu'on juge aussi le ciel, pendant qu'on y est."
+            reponse-en:
+              - "a8_seraphine: Judged. By whom? By those I blessed? …So be it. Let the sky be judged too, while we are at it."
+            xp: 3000
+        dialogue:
+          - "a8_seraphine: Jetez-les dans la Déchirure et elle se referme. Douze vies contre le ciel. Aurélien en a payé davantage."
+          - "joueur: Aurélien était un Hôte qui ne supportait pas de voir l'Astre partir. Vous faites la même chose."
+          - "a8_seraphine: …Peut-être. Mais je suis la dernière à savoir comment on garde un ciel."
+        dialogue-en:
+          - "a8_seraphine: Throw them into the Tear and it closes. Twelve lives against the sky. Aurélien paid more."
+          - "joueur: Aurélien was a Host who could not bear to see the Star leave. You are doing the same."
+          - "a8_seraphine: …Perhaps. But I am the last who knows how to keep a sky."
+      - type: PARLER
+        texte: "Libérer les douze Marqués de la tour"
+        texte-en: "Free the twelve Marked of the tower"
+        pnj: a8_lise
+        dialogue:
+          - "a8_lise: Ils descendent. Tous les douze. Certains ne se souviennent plus de leur nom. Moi non plus, je crois. Ça ne fait rien."
+        dialogue-en:
+          - "a8_lise: They are coming down. All twelve. Some no longer remember their names. Nor do I, I think. It does not matter."
+    recompenses:
+      xp: 18100
+      or: 1810
+
+  a8_l_les_traces_froides:
+    nom: "Les traces froides"
+    nom-en: "The Cold Tracks"
+    faction: lumiere
+    niveau: 87
+    requiert: [a8_l_la_derniere_prelate]
+    donneur: a8_ilvar
+    resume:
+      - "Le souffle prend forme."
+      - "Suivre ses traces de givre autour du cratère."
+    resume-en:
+      - "The breath is taking shape."
+      - "Follow its frost tracks around the crater."
+    offre:
+      - "a8_ilvar: Cette nuit, quelque chose a marché autour du Seuil. Sans pieds. Le givre en garde la trace. Suivez-la avant le jour."
+    offre-en:
+      - "a8_ilvar: Tonight something walked around the Threshold. Without feet. The frost keeps its trail. Follow it before daylight."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les traces de givre"
+        texte-en: "Follow the frost tracks"
+        traces: [a8_trace_s1, a8_trace_s2, a8_trace_s3, a8_trace_s4, a8_dechirure]
+        apres:
+          - "Les traces s'arrêtent au bord du ciel. Là, l'air a une forme : un corps de brume, immense, recroquevillé sur lui-même comme un enfant qui a froid."
+        apres-en:
+          - "The tracks stop at the edge of the sky. There, the air has a shape: a body of mist, immense, curled up like a child who is cold."
+      - type: TUER
+        texte: "Disperser les échos qui le gardent"
+        texte-en: "Scatter the echoes guarding it"
+        monstres: [a8_echo]
+        nombre: 8
+        point: a8_dechirure
+      - type: PARLER
+        texte: "Décrire à Ilvar ce que vous avez vu"
+        texte-en: "Describe to Ilvar what you saw"
+        pnj: a8_ilvar
+        dialogue:
+          - "a8_ilvar: Le Souffle froid. Le Néant qui se rassemble en un seul corps. Il ne veut pas nous détruire : il veut rentrer. Mais il ne sait plus comment."
+        dialogue-en:
+          - "a8_ilvar: The Cold Breath. The Void gathering into a single body. It does not want to destroy us: it wants to go home. But it no longer knows how."
+    recompenses:
+      xp: 18300
+      or: 1830
+
+  a8_l_le_choix_de_morvain:
+    nom: "Le choix de Morvain"
+    nom-en: "Morvain's Choice"
+    faction: lumiere
+    niveau: 88
+    requiert: [a8_l_les_traces_froides]
+    donneur: a8_morvain
+    resume:
+      - "Quelqu'un doit porter le souffle jusqu'à l'Astre."
+      - "Morvain se propose."
+    resume-en:
+      - "Someone must carry the breath to the Star."
+      - "Morvain offers himself."
+    offre:
+      - "a8_morvain: Venez. Il est temps de parler de la fin."
+    offre-en:
+      - "a8_morvain: Come. It is time to talk about the end."
+    etapes:
+      - type: CHOIX
+        texte: "Écouter Morvain, et décider"
+        texte-en: "Listen to Morvain, and decide"
+        pnj: a8_morvain
+        choix: morvain
+        question: "Qui portera le souffle ?"
+        question-en: "Who will carry the breath?"
+        reponses:
+          - id: morvain
+            texte: "Laisser Morvain le porter"
+            texte-en: "Let Morvain carry it"
+            reponse:
+              - "a8_morvain: Merci. Vous me rendez la seule chose qu'on m'ait prise : une fin."
+            reponse-en:
+              - "a8_morvain: Thank you. You give me back the only thing that was taken from me: an end."
+            xp: 2000
+          - id: moi
+            texte: "Le porter vous-même"
+            texte-en: "Carry it yourself"
+            reponse:
+              - "a8_morvain: Vous êtes sûr ? …Alors je marcherai à côté de vous. Jusqu'au bord. C'est encore quelque chose que je sais faire."
+            reponse-en:
+              - "a8_morvain: Are you sure? …Then I will walk beside you. To the edge. That is still something I know how to do."
+            xp: 2000
+        dialogue:
+          - "a8_morvain: J'ai forgé les chaînes. Mille ans que je ne vieillis pas, parce que l'Éclat qui m'a touché attendait que je répare. Le souffle, je peux le porter. Je suis le premier Marqué : il me reconnaîtra."
+          - "a8_morvain: Mais celui qui le porte se donne avec lui. Ce serait ma fin. Et je l'ai attendue assez longtemps."
+          - "a8_morvain: Vous aussi, vous pourriez le porter. Votre Marque est jeune, elle a moins à perdre. Elle perdrait quand même tout ce que l'Astre y a laissé."
+        dialogue-en:
+          - "a8_morvain: I forged the chains. A thousand years without ageing, because the Shard that touched me was waiting for me to make amends. The breath, I can carry it. I am the first Marked: it will know me."
+          - "a8_morvain: But whoever carries it gives himself with it. It would be my end. And I have waited for it long enough."
+          - "a8_morvain: You could carry it too. Your Mark is young, it has less to lose. It would still lose everything the Star left in it."
+      - type: PARLER
+        texte: "Annoncer votre décision à Aldren"
+        texte-en: "Tell Aldren your decision"
+        pnj: a8_aldren
+        dialogue:
+          - "a8_aldren: Morvain va s'éteindre. Le Chevalier noir qu'on nous apprenait à craindre. Je crois que je le pleurerai."
+        dialogue-en:
+          - "a8_aldren: Morvain will go out. The Black Knight we were taught to fear. I think I will mourn him."
+        si: "morvain=morvain"
+      - type: PARLER
+        texte: "Annoncer votre décision à Aldren"
+        texte-en: "Tell Aldren your decision"
+        pnj: a8_aldren
+        dialogue:
+          - "a8_aldren: Vous ? Alors l'Aube aura au moins fait ceci de bien : vous mener jusque-là. Revenez. C'est un ordre, le dernier que je donnerai."
+        dialogue-en:
+          - "a8_aldren: You? Then the Dawn will at least have done this much good: bring you this far. Come back. That is an order, the last I will give."
+        si: "morvain=moi"
+    recompenses:
+      xp: 18500
+      or: 1850
+
+  a8_l_la_dechirure:
+    nom: "La Déchirure"
+    nom-en: "The Tear"
+    faction: lumiere
+    niveau: 90
+    requiert: [a8_l_le_choix_de_morvain]
+    donneur: a8_morvain
+    resume:
+      - "RAID (groupe conseillé) : le Souffle froid."
+      - "Le ramener à l'Astre."
+    resume-en:
+      - "RAID (group advised): the Cold Breath."
+      - "Bring it back to the Star."
+    offre:
+      - "a8_morvain: Rassemblez qui vous voulez, des deux couleurs. Le Souffle froid ne fait pas la différence. Nous non plus, ce soir."
+    offre-en:
+      - "a8_morvain: Gather whoever you want, of both colours. The Cold Breath does not tell the difference. Nor do we, tonight."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Monter au bord de la Déchirure"
+        texte-en: "Climb to the edge of the Tear"
+        point: a8_dechirure
+        rayon: 10
+        apres:
+          - "Le ciel est fendu au-dessus du cratère. D'un côté, l'Astre, doré et blessé. De l'autre, le noir. Entre les deux, une forme qui grelotte."
+        apres-en:
+          - "The sky is split above the crater. On one side the Star, golden and wounded. On the other, the dark. Between them, a shape that shivers."
+      - type: TUER
+        texte: "Vaincre le Souffle froid"
+        texte-en: "Defeat the Cold Breath"
+        monstres: [a8_souffle_froid]
+        point: a8_dechirure
+        apres:
+          - "Le Souffle froid s'effondre sur lui-même. Il ne meurt pas : il se tait, enfin, comme quelqu'un qu'on a entendu."
+        apres-en:
+          - "The Cold Breath collapses on itself. It does not die: it falls silent at last, like someone who has been heard."
+      - type: SURVIE
+        texte: "Tenir pendant que la Déchirure se referme"
+        texte-en: "Hold on while the Tear closes"
+        point: a8_dechirure
+        rayon: 16
+        duree: 40
+        mode: resserre
+        rayon-fin: 5
+        degats: 12
+        apres:
+          - "Le souffle remonte. Le noir se replie dans l'or. Pour la première fois depuis mille ans, l'Astre brille entier."
+        apres-en:
+          - "The breath rises. The dark folds into the gold. For the first time in a thousand years, the Star shines whole."
+    recompenses:
+      xp: 37800
+      or: 3780
+      objets:
+        - materiau: NETHER_STAR
+          nom: "Lueur de l'Astre entier"
+          nom-en: "Glow of the Whole Star"
+          description:
+            - "Ramassée au bord du cratère, la nuit où le ciel s'est refermé."
+          description-en:
+            - "Picked up on the crater rim, the night the sky closed."
+
+  # ================================================================ ACTE VIII — LUMIÈRE, DERNIER CHAPITRE (selon le choix « morvain »)
+
+  a8_l_la_fin_de_l_ecuyer:
+    nom: "La fin de l'écuyer"
+    nom-en: "The Squire's End"
+    faction: lumiere
+    niveau: 90
+    requiert: [a8_l_la_dechirure, "choix:morvain=morvain"]
+    donneur: a8_naia
+    resume:
+      - "Morvain a porté le souffle."
+      - "Il reste son épée, au bord du ciel."
+    resume-en:
+      - "Morvain carried the breath."
+      - "His sword remains, on the edge of the sky."
+    offre:
+      - "a8_naia: Il est parti avec le souffle. Il a laissé son épée plantée au bord. Chez nous, on dit qu'un invité qui part laisse toujours quelque chose."
+    offre-en:
+      - "a8_naia: He left with the breath. He left his sword planted on the edge. Among us, we say a guest who leaves always leaves something behind."
+    etapes:
+      - type: INTERAGIR
+        texte: "Retirer l'épée de Morvain"
+        texte-en: "Pull out Morvain's sword"
+        point: a8_dechirure
+        rayon: 5
+        apres:
+          - "La lame est tiède. Pour la première fois, elle a l'air vieille. Gravé près de la garde, d'une écriture maladroite : « Pardonne-moi. »"
+        apres-en:
+          - "The blade is warm. For the first time it looks old. Engraved near the guard, in a clumsy hand: « Forgive me. »"
+      - type: PARLER
+        texte: "Porter la nouvelle à Aldren"
+        texte-en: "Bring the news to Aldren"
+        pnj: a8_aldren
+        dialogue:
+          - "a8_aldren: Le premier Marqué. L'écuyer d'Aurélien. Il a fini ce que son maître avait commencé de travers. Gardez son épée. Elle est mieux chez vous."
+        dialogue-en:
+          - "a8_aldren: The first Marked. Aurélien's squire. He finished what his master began the wrong way. Keep his sword. It is better with you."
+    recompenses:
+      xp: 28400
+      or: 2840
+      objets:
+        - materiau: NETHERITE_SWORD
+          nom: "Lame de l'écuyer"
+          nom-en: "Squire's Blade"
+          description:
+            - "L'épée de Morvain, premier Marqué."
+            - "« Pardonne-moi. »"
+          description-en:
+            - "The sword of Morvain, the first Marked."
+            - "« Forgive me. »"
+
+  a8_l_le_porteur:
+    nom: "Le porteur"
+    nom-en: "The Bearer"
+    faction: lumiere
+    niveau: 90
+    requiert: [a8_l_la_dechirure, "choix:morvain=moi"]
+    donneur: a8_morvain
+    resume:
+      - "Vous avez porté le souffle."
+      - "Il vous a pris ce qui ne vous appartenait pas."
+    resume-en:
+      - "You carried the breath."
+      - "It took from you what did not belong to you."
+    offre:
+      - "a8_morvain: Vous êtes revenu. Moi, je vieillis. Une ride, ce matin. Je l'ai regardée une heure."
+      - "a8_morvain: Et vous ? Qu'est-ce qu'il vous reste ?"
+    offre-en:
+      - "a8_morvain: You came back. And I am ageing. A wrinkle, this morning. I looked at it for an hour."
+      - "a8_morvain: And you? What do you have left?"
+    etapes:
+      - type: ATTEINDRE
+        texte: "Retourner au bord du ciel"
+        texte-en: "Return to the edge of the sky"
+        point: a8_dechirure
+        rayon: 6
+        apres:
+          - "Les souvenirs de l'Astre sont partis avec le souffle : le désert vu d'en haut, la main tendue, les chaînes. Il ne reste qu'un son. Une petite cloche de cuivre."
+        apres-en:
+          - "The Star's memories left with the breath: the desert seen from above, the outstretched hand, the chains. Only one sound remains. A small copper bell."
+      - type: PARLER
+        texte: "Le dire à Morvain"
+        texte-en: "Tell Morvain"
+        pnj: a8_morvain
+        dialogue:
+          - "a8_morvain: Une cloche. Alors c'était le vôtre, celui-là. Le seul. Gardez-le bien : c'est tout ce qu'un homme a besoin d'avoir."
+        dialogue-en:
+          - "a8_morvain: A bell. Then that one was yours. The only one. Keep it well: it is all a man needs to have."
+    recompenses:
+      xp: 28400
+      or: 2840
+      objets:
+        - materiau: BELL
+          nom: "Cloche de cuivre"
+          nom-en: "Copper bell"
+          description:
+            - "Le seul souvenir qui était à vous."
+          description-en:
+            - "The only memory that was yours."
+
+  # ================================================================ ACTE VIII — OMBRE, QUÊTES PRINCIPALES
+
+  a8_o_le_ciel_a_moitie:
+    nom: "Le ciel à moitié"
+    nom-en: "Half a Sky"
+    faction: ombre
+    niveau: 80
+    requiert: [a7_o_fin]
+    resume:
+      - "L'Astre est libre, et le Néant a faim."
+      - "Vesper vous attend au Guet de la Fournaise."
+    resume-en:
+      - "The Star is free, and the Void is hungry."
+      - "Vesper is waiting for you at the Furnace Watch."
+    intro:
+      - "Le murmure a changé. Ce n'est plus « Rendez-moi ». C'est « J'ai faim ». Et il vient d'en haut."
+    intro-en:
+      - "The whisper has changed. It is no longer « Give me back ». It is « I am hungry ». And it comes from above."
+    etapes:
+      - type: PARLER
+        texte: "Rejoindre Vesper au Guet de la Fournaise"
+        texte-en: "Join Vesper at the Furnace Watch"
+        pnj: a8_vesper
+        dialogue:
+          - "a8_vesper: Vharos n'est pas rentré à la Citadelle. Il a laissé une lettre : « Je vais là où personne n'a osé aller. » J'ai peur de comprendre."
+          - "a8_vesper: Morvain campe au bord du cratère. Il dit que le Néant descend. Allez l'entendre. Moi, je cherche mon maître."
+        dialogue-en:
+          - "a8_vesper: Vharos did not return to the Citadel. He left a letter: « I go where nobody has dared to go. » I fear I understand."
+          - "a8_vesper: Morvain is camped on the crater rim. He says the Void is coming down. Go and hear him. I am looking for my master."
+      - type: ATTEINDRE
+        texte: "Monter au Seuil, au bord du cratère"
+        texte-en: "Climb to the Threshold, on the crater rim"
+        point: a8_seuil
+        rayon: 8
+        apres:
+          - "Un camp de toile noircie, accroché à la pente. Des Marqués de deux couleurs y partagent le même feu."
+        apres-en:
+          - "A camp of blackened canvas clinging to the slope. Marked of both colours share the same fire."
+      - type: PARLER
+        texte: "Parler à Morvain"
+        texte-en: "Talk to Morvain"
+        pnj: a8_morvain
+        dialogue:
+          - "a8_morvain: Le Néant que vous avez servi, c'est l'Astre. Son dernier souffle, resté dans le ciel quand il s'est brisé. Vous l'entendez depuis votre réveil : il a froid."
+          - "a8_morvain: Sans Creux pour le nourrir, il descend chercher sa lumière lui-même. Bientôt, il ouvrira la terre."
+        dialogue-en:
+          - "a8_morvain: The Void you served is the Star. Its last breath, left in the sky when it broke. You have heard it since you woke: it is cold."
+          - "a8_morvain: With no Hollows to feed it, it is coming down to find its light itself. Soon it will open the earth."
+    recompenses:
+      xp: 16800
+      or: 1680
+
+  a8_o_le_sceau_de_vesper:
+    nom: "Le sceau de Vesper"
+    nom-en: "Vesper's Seal"
+    faction: ombre
+    niveau: 80
+    requiert: [a8_o_le_ciel_a_moitie]
+    donneur: a8_vesper
+    resume:
+      - "Une Brèche s'est ouverte à l'est du Guet."
+      - "Tenir pendant que Vesper la scelle."
+    resume-en:
+      - "A Breach has opened east of the Watch."
+      - "Hold while Vesper seals it."
+    offre:
+      - "a8_vesper: Une Brèche, à l'est. La Citadelle sait sceller une porte vers le Néant : elle en a ouvert assez. Gardez-moi le temps de tracer le sceau."
+    offre-en:
+      - "a8_vesper: A Breach, to the east. The Citadel knows how to seal a door to the Void: it opened enough of them. Buy me the time to draw the seal."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre le sceau de Vesper"
+        texte-en: "Defend Vesper's seal"
+        point: a8_breche_fournaise
+        monstres: [a8_rodeur, a8_calcine]
+        duree: 90
+        intervalle: 15
+        apparition: a8_breche_fournaise_b
+        pv: 400
+        degats: 9
+        niveau: 80
+        cible: "Le sceau de Vesper"
+        cible-en: "Vesper's seal"
+        apres:
+          - "Le sceau s'allume, violet. La Brèche se referme à moitié, comme une bouche qui se tait sans avoir fini."
+        apres-en:
+          - "The seal lights up, violet. The Breach half closes, like a mouth falling silent before it has finished."
+      - type: PARLER
+        texte: "Revenir auprès de Vesper"
+        texte-en: "Return to Vesper"
+        pnj: a8_vesper
+        dialogue:
+          - "a8_vesper: À moitié. Toujours à moitié. Le sceau retient, il ne guérit pas. Il faudra autre chose."
+        dialogue-en:
+          - "a8_vesper: Half. Always half. The seal holds, it does not heal. Something else will be needed."
+    recompenses:
+      xp: 16800
+      or: 1680
+
+  a8_o_le_cercle_de_vharos:
+    nom: "Le cercle de Vharos"
+    nom-en: "Vharos's Circle"
+    faction: ombre
+    niveau: 81
+    requiert: [a8_o_le_sceau_de_vesper]
+    donneur: a8_vesper
+    resume:
+      - "Vharos a laissé un cercle de rituel dans les Cendres."
+      - "Comprendre ce qu'il prépare."
+    resume-en:
+      - "Vharos left a ritual circle in the Ashes."
+      - "Understand what he is preparing."
+    offre:
+      - "a8_vesper: Ses disciples parlent d'un cercle de pierres, dans les Terres de Cendre, à l'ouest. Il y a passé ses dernières nuits. Lisez ce qu'il a laissé."
+    offre-en:
+      - "a8_vesper: His disciples speak of a stone circle in the Ash Lands, to the west. He spent his last nights there. Read what he left."
+    etapes:
+      - type: ENQUETE
+        texte: "Examiner le cercle"
+        texte-en: "Examine the circle"
+        indices:
+          - point: a8_ind_v1
+            texte: "Un cercle de sang séché"
+            texte-en: "A circle of dried blood"
+            apres:
+              - "Le sang de Vharos lui-même. Il ne sacrifie plus personne : il se prépare."
+            apres-en:
+              - "Vharos's own blood. He sacrifices no one any more: he is preparing himself."
+          - point: a8_ind_v2
+            texte: "Des pages déchirées"
+            texte-en: "Torn pages"
+            apres:
+              - "« Le Néant n'a pas de maître parce que personne n'est jamais entré dedans vivant. »"
+            apres-en:
+              - "« The Void has no master because nobody has ever entered it alive. »"
+          - point: a8_ind_v3
+            texte: "Une carte des Brèches"
+            texte-en: "A map of the Breaches"
+            apres:
+              - "Toutes les Brèches, marquées d'une croix. Un trait les relie, du désert jusqu'au cratère."
+            apres-en:
+              - "Every Breach, marked with a cross. A line joins them, from the desert to the crater."
+        dialogue:
+          - "joueur: Il veut entrer dans le Néant. Vivant. Et passer par les Brèches pour y arriver."
+        dialogue-en:
+          - "joueur: He wants to enter the Void. Alive. And go through the Breaches to get there."
+      - type: PARLER
+        texte: "Rapporter à Vesper"
+        texte-en: "Report to Vesper"
+        pnj: a8_vesper
+        dialogue:
+          - "a8_vesper: Devenir son maître de l'intérieur. C'est bien lui. Il commencera par le désert : c'est là que tout a commencé pour les Hôtes."
+        dialogue-en:
+          - "a8_vesper: Become its master from within. That is him all over. He will start with the desert: that is where everything began for the Hosts."
+    recompenses:
+      xp: 17000
+      or: 1700
+
+  a8_o_dans_le_sable:
+    nom: "Dans le sable"
+    nom-en: "In the Sand"
+    faction: ombre
+    niveau: 82
+    requiert: [a8_o_le_cercle_de_vharos]
+    donneur: a8_kesra
+    resume:
+      - "Vharos est passé par la Brèche de l'Oasis."
+      - "Suivre ses traces."
+    resume-en:
+      - "Vharos went through the Breach of the Oasis."
+      - "Follow his tracks."
+    offre:
+      - "a8_kesra: Un homme en noir est sorti de la Brèche il y a deux nuits. Il marchait vers le sud, et le sable gelait sous ses pas."
+    offre-en:
+      - "a8_kesra: A man in black came out of the Breach two nights ago. He was walking south, and the sand froze under his steps."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les pas gelés de Vharos"
+        texte-en: "Follow Vharos's frozen footsteps"
+        traces: [a8_trace_v1, a8_trace_v2, a8_trace_v3, a8_trace_v4, a8_cercle_desert]
+        apres:
+          - "Un cercle de pierres levées, à moitié enfoui. Au centre, la marque de deux genoux dans le givre. Il a prié ici. Ou il a écouté."
+        apres-en:
+          - "A ring of standing stones, half buried. In the centre, the mark of two knees in the frost. He prayed here. Or he listened."
+      - type: PARLER
+        texte: "Revenir auprès de Kesra"
+        texte-en: "Return to Kesra"
+        pnj: a8_kesra
+        dialogue:
+          - "a8_kesra: Ce cercle, c'est là que nos ancêtres attendaient l'Astre. Votre maître est venu y apprendre à l'accueillir. Il a mal compris la leçon."
+        dialogue-en:
+          - "a8_kesra: That circle is where our ancestors waited for the Star. Your master came there to learn to welcome it. He misunderstood the lesson."
+    recompenses:
+      xp: 17200
+      or: 1720
+
+  a8_o_les_creux_de_vharos:
+    nom: "Les Creux de Vharos"
+    nom-en: "Vharos's Hollows"
+    faction: ombre
+    niveau: 83
+    requiert: [a8_o_dans_le_sable]
+    donneur: a8_kesra
+    resume:
+      - "Vharos a laissé ses derniers Creux garder le cercle."
+      - "Les libérer, et retrouver son journal."
+    resume-en:
+      - "Vharos left his last Hollows guarding the circle."
+      - "Free them, and recover his journal."
+    offre:
+      - "a8_kesra: Des Creux tournent autour du cercle depuis son départ. Ils l'attendent. Ils portent des pages : il les leur a confiées comme à des chiens."
+    offre-en:
+      - "a8_kesra: Hollows have been circling the stones since he left. They are waiting for him. They carry pages: he entrusted them to them like dogs."
+    etapes:
+      - type: TUER
+        texte: "Libérer les Creux de Vharos"
+        texte-en: "Free Vharos's Hollows"
+        monstres: [a8_creux_vharos]
+        nombre: 10
+        point: a8_cercle_desert
+      - type: RAMASSER
+        texte: "Récupérer les pages du journal"
+        texte-en: "Recover the journal pages"
+        monstres: [a8_creux_vharos]
+        nombre: 4
+        chance: 0.5
+        point: a8_cercle_desert
+        objet: "Page du journal de Vharos"
+        objet-en: "Page of Vharos's journal"
+      - type: PARLER
+        texte: "Porter le journal à Vesper"
+        texte-en: "Bring the journal to Vesper"
+        pnj: a8_vesper
+        dialogue:
+          - "a8_vesper: « Si je me trompe, il me mangera, et j'aurai au moins nourri ce que j'ai servi. » …Il le sait. Il y va quand même."
+        dialogue-en:
+          - "a8_vesper: « If I am wrong, it will devour me, and I will at least have fed what I served. » …He knows. He is going anyway."
+    recompenses:
+      xp: 17400
+      or: 1740
+
+  a8_o_la_breche_des_cimes:
+    nom: "La Brèche des Cimes"
+    nom-en: "The Breach of the Peaks"
+    faction: ombre
+    niveau: 84
+    requiert: [a8_o_les_creux_de_vharos]
+    donneur: a8_ivo
+    resume:
+      - "Vharos a traversé la Brèche des Cimes."
+      - "Y entrer sans que les sentinelles vous voient."
+    resume-en:
+      - "Vharos crossed the Breach of the Peaks."
+      - "Get in without the sentinels seeing you."
+    offre:
+      - "a8_ivo: Votre homme en noir est passé hier. Les sentinelles du Néant l'ont laissé passer. Vous, elles vous verront. Restez bas, et passez derrière elles."
+    offre-en:
+      - "a8_ivo: Your man in black came through yesterday. The Void sentinels let him through. You, they will see. Stay low, and go behind them."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre le bord de la Brèche des Cimes"
+        texte-en: "Reach the edge of the Breach of the Peaks"
+        point: a8_breche_cimes
+        rayon: 6
+      - type: INFILTRER
+        texte: "Traverser la Brèche sans être vu"
+        texte-en: "Cross the Breach unseen"
+        point: a8_coeur_cimes
+        depart: a8_breche_cimes
+        monstres: [a8_sentinelle]
+        vue: 12
+        rayon: 4
+        apres:
+          - "Au fond de la Brèche, sur la glace noire, un manteau. Celui de Vharos. Il l'a laissé ici, comme on pose son nom à l'entrée d'un temple."
+        apres-en:
+          - "At the bottom of the Breach, on the black ice, a cloak. Vharos's. He left it here, as one leaves one's name at the door of a temple."
+      - type: PARLER
+        texte: "Revenir auprès d'Ivo"
+        texte-en: "Return to Ivo"
+        pnj: a8_ivo
+        dialogue:
+          - "a8_ivo: Il n'a plus besoin de manteau. Là où il va, il n'aura plus jamais chaud."
+        dialogue-en:
+          - "a8_ivo: He no longer needs a cloak. Where he is going, he will never be warm again."
+    recompenses:
+      xp: 17600
+      or: 1760
+
+  a8_o_le_souffle_captif:
+    nom: "Le souffle captif"
+    nom-en: "The Captive Breath"
+    faction: ombre
+    niveau: 85
+    requiert: [a8_o_la_breche_des_cimes]
+    donneur: a8_morvain
+    resume:
+      - "Vharos a enfermé du souffle dans des jarres."
+      - "Les rapporter au Seuil, à dos de monture."
+    resume-en:
+      - "Vharos sealed breath in jars."
+      - "Bring them to the Threshold, on a mount."
+    offre:
+      - "a8_morvain: Votre maître a emporté du souffle en jarres, à l'ouest du Seuil, pour s'en nourrir en chemin. Il en reste une. Rapportez-la. Montez, et ne prenez pas de coup."
+    offre-en:
+      - "a8_morvain: Your master carried breath in jars, west of the Threshold, to feed on it along the way. One remains. Bring it back. Ride, and take no blow."
+    etapes:
+      - type: TRANSPORT
+        texte: "Rapporter la jarre au Seuil, à dos de monture"
+        texte-en: "Bring the jar to the Threshold, on a mount"
+        point: a8_seuil
+        depart: a8_bord_ouest
+        materiau: DECORATED_POT
+        rayon: 6
+        objet: "Jarre de souffle"
+        objet-en: "Jar of breath"
+        apres:
+          - "a8_morvain: Il buvait le Néant pour devenir plus froid que lui. C'est l'inverse qu'il faudrait : le réchauffer."
+        apres-en:
+          - "a8_morvain: He drank the Void to become colder than it. The opposite is needed: to warm it."
+    recompenses:
+      xp: 17900
+      or: 1790
+
+  a8_o_le_maitre_du_neant:
+    nom: "Le maître du Néant"
+    nom-en: "Master of the Void"
+    faction: ombre
+    niveau: 86
+    requiert: [a8_o_le_souffle_captif]
+    donneur: a8_vesper
+    resume:
+      - "Vharos est au bord de la Déchirure."
+      - "Lui parler avant qu'il ne saute."
+    resume-en:
+      - "Vharos is on the edge of the Tear."
+      - "Talk to him before he jumps."
+    offre:
+      - "a8_vesper: Il est là-haut. Au bord. Il attend que le ciel s'ouvre assez pour y entrer. Allez-y, vous. Moi, il ne m'écoutera pas : je suis son œuvre."
+    offre-en:
+      - "a8_vesper: He is up there. On the edge. He is waiting for the sky to open enough to step in. You go. Me, he will not listen to: I am his work."
+    etapes:
+      - type: TUER
+        texte: "Écarter les échos qui l'entourent"
+        texte-en: "Drive off the echoes around him"
+        monstres: [a8_echo]
+        nombre: 6
+        point: a8_dechirure
+      - type: CHOIX
+        texte: "Parler à Vharos"
+        texte-en: "Talk to Vharos"
+        pnj: a8_vharos
+        choix: vharos
+        question: "Que faites-vous ?"
+        question-en: "What do you do?"
+        reponses:
+          - id: retenir
+            texte: "Lui tendre la main"
+            texte-en: "Hold out your hand"
+            reponse:
+              - "a8_vharos: …Ta main est chaude. J'avais oublié. Soit. Je redescends. Mais ne me demande pas de te remercier."
+            reponse-en:
+              - "a8_vharos: …Your hand is warm. I had forgotten. So be it. I am coming down. But do not ask me to thank you."
+            xp: 3000
+          - id: laisser
+            texte: "Le laisser sauter"
+            texte-en: "Let him jump"
+            reponse:
+              - "a8_vharos: Enfin quelqu'un qui ne me retient pas."
+              - "Il tombe dans le noir sans un cri. Le ciel frissonne. Quelque part, le Néant a une voix de plus."
+            reponse-en:
+              - "a8_vharos: At last, someone who does not hold me back."
+              - "He falls into the dark without a cry. The sky shivers. Somewhere, the Void has one more voice."
+            or: 400
+        dialogue:
+          - "a8_vharos: Le Marqué qui a brisé les chaînes. Tu as rendu sa liberté à l'Astre. Moi, je vais lui rendre un maître."
+          - "joueur: Ce n'est pas un trône. C'est un souffle qui a froid. Il te mangera."
+          - "a8_vharos: Alors il aura mangé quelqu'un qui le comprenait. C'est plus que ce qu'il a eu en mille ans."
+        dialogue-en:
+          - "a8_vharos: The Marked who broke the chains. You gave the Star back its freedom. I am going to give it back a master."
+          - "joueur: It is not a throne. It is a breath that is cold. It will devour you."
+          - "a8_vharos: Then it will have devoured someone who understood it. That is more than it had in a thousand years."
+      - type: SURVIE
+        texte: "Tenir pendant que le bord se dérobe"
+        texte-en: "Hold on while the edge gives way"
+        point: a8_dechirure
+        rayon: 14
+        duree: 40
+        mode: resserre
+        rayon-fin: 5
+        degats: 10
+        monstres: [a8_echo]
+        nombre: 2
+        intervalle: 15
+        niveau: 86
+        apres:
+          - "Le sol se stabilise. Le vent retombe. Derrière vous, le Seuil attend des nouvelles."
+        apres-en:
+          - "The ground steadies. The wind drops. Behind you, the Threshold is waiting for news."
+      - type: PARLER
+        texte: "Revenir auprès de Vesper"
+        texte-en: "Return to Vesper"
+        pnj: a8_vesper
+        dialogue:
+          - "a8_vesper: Il est redescendu. Il ne dit rien. Il regarde ses mains. Je crois que c'est la première fois que je le vois avoir peur."
+        dialogue-en:
+          - "a8_vesper: He came down. He says nothing. He looks at his hands. I think it is the first time I have seen him afraid."
+        si: "vharos=retenir"
+      - type: PARLER
+        texte: "Revenir auprès de Vesper"
+        texte-en: "Return to Vesper"
+        pnj: a8_vesper
+        dialogue:
+          - "a8_vesper: Il a choisi. Comme toujours. Je ne le pleurerai pas ce soir. Peut-être demain."
+        dialogue-en:
+          - "a8_vesper: He chose. As always. I will not mourn him tonight. Perhaps tomorrow."
+        si: "vharos=laisser"
+    recompenses:
+      xp: 18100
+      or: 1810
+
+  a8_o_le_linceul_des_creux:
+    nom: "Le linceul des Creux"
+    nom-en: "The Shroud of the Hollows"
+    faction: ombre
+    niveau: 87
+    requiert: [a8_o_le_maitre_du_neant]
+    donneur: a8_ilvar
+    resume:
+      - "Le souffle prend forme au bord du cratère."
+      - "Marcher parmi ses échos sans être reconnu."
+    resume-en:
+      - "The breath is taking shape on the crater rim."
+      - "Walk among its echoes unrecognised."
+    offre:
+      - "a8_ilvar: Le souffle se rassemble. Ses échos rôdent autour, et ils frappent tout ce qui a chaud. Un linceul de Creux vous rendra froid à leurs yeux. Allez voir ce qu'il devient."
+    offre-en:
+      - "a8_ilvar: The breath is gathering. Its echoes prowl around it, and they strike anything warm. A Hollow's shroud will make you cold to their eyes. Go and see what it is becoming."
+    etapes:
+      - type: DEGUISEMENT
+        texte: "Approcher du Souffle sans être reconnu"
+        texte-en: "Approach the Breath unrecognised"
+        point: a8_dechirure
+        monstres: [a8_echo]
+        materiau: LEATHER_CHESTPLATE
+        couleur: "#3B3346"
+        objet: "Linceul de Creux"
+        objet-en: "Hollow's shroud"
+        apres:
+          - "Au bord du ciel, une forme de brume immense, recroquevillée comme un enfant qui a froid. Elle répète un seul mot. Le même que votre Marque, depuis le premier jour."
+        apres-en:
+          - "On the edge of the sky, an immense shape of mist, curled up like a child who is cold. It repeats a single word. The same as your Mark, since the first day."
+      - type: PARLER
+        texte: "Décrire à Ilvar ce que vous avez vu"
+        texte-en: "Describe to Ilvar what you saw"
+        pnj: a8_ilvar
+        dialogue:
+          - "a8_ilvar: Le Souffle froid. Le Néant rassemblé en un seul corps. Il ne veut pas nous détruire : il veut rentrer. Mais il ne sait plus comment."
+        dialogue-en:
+          - "a8_ilvar: The Cold Breath. The Void gathered into a single body. It does not want to destroy us: it wants to go home. But it no longer knows how."
+    recompenses:
+      xp: 18300
+      or: 1830
+
+  a8_o_le_choix_de_morvain:
+    nom: "Le choix de Morvain"
+    nom-en: "Morvain's Choice"
+    faction: ombre
+    niveau: 88
+    requiert: [a8_o_le_linceul_des_creux]
+    donneur: a8_morvain
+    resume:
+      - "Quelqu'un doit porter le souffle jusqu'à l'Astre."
+      - "Morvain se propose."
+    resume-en:
+      - "Someone must carry the breath to the Star."
+      - "Morvain offers himself."
+    offre:
+      - "a8_morvain: Venez. Il est temps de parler de la fin."
+    offre-en:
+      - "a8_morvain: Come. It is time to talk about the end."
+    etapes:
+      - type: CHOIX
+        texte: "Écouter Morvain, et décider"
+        texte-en: "Listen to Morvain, and decide"
+        pnj: a8_morvain
+        choix: morvain
+        question: "Qui portera le souffle ?"
+        question-en: "Who will carry the breath?"
+        reponses:
+          - id: morvain
+            texte: "Laisser Morvain le porter"
+            texte-en: "Let Morvain carry it"
+            reponse:
+              - "a8_morvain: Merci. Vous me rendez la seule chose qu'on m'ait prise : une fin."
+            reponse-en:
+              - "a8_morvain: Thank you. You give me back the only thing that was taken from me: an end."
+            xp: 2000
+          - id: moi
+            texte: "Le porter vous-même"
+            texte-en: "Carry it yourself"
+            reponse:
+              - "a8_morvain: Vous êtes sûr ? …Alors je marcherai à côté de vous. Jusqu'au bord. C'est encore quelque chose que je sais faire."
+            reponse-en:
+              - "a8_morvain: Are you sure? …Then I will walk beside you. To the edge. That is still something I know how to do."
+            xp: 2000
+        dialogue:
+          - "a8_morvain: J'ai forgé les chaînes. Mille ans que je ne vieillis pas, parce que l'Éclat qui m'a touché attendait que je répare. Le souffle, je peux le porter. Je suis le premier Marqué : il me reconnaîtra."
+          - "a8_morvain: Mais celui qui le porte se donne avec lui. Ce serait ma fin. Et je l'ai attendue assez longtemps."
+          - "a8_morvain: Vous aussi, vous pourriez le porter. Vous l'entendez depuis votre réveil ; il vous connaît. Mais il emporterait tout ce que l'Astre a laissé en vous."
+        dialogue-en:
+          - "a8_morvain: I forged the chains. A thousand years without ageing, because the Shard that touched me was waiting for me to make amends. The breath, I can carry it. I am the first Marked: it will know me."
+          - "a8_morvain: But whoever carries it gives himself with it. It would be my end. And I have waited for it long enough."
+          - "a8_morvain: You could carry it too. You have heard it since you woke; it knows you. But it would take away everything the Star left in you."
+      - type: PARLER
+        texte: "Annoncer votre décision à Vesper"
+        texte-en: "Tell Vesper your decision"
+        pnj: a8_vesper
+        dialogue:
+          - "a8_vesper: Le Chevalier noir va enfin se reposer. La Citadelle lui doit son nom, vous savez. Il était noir bien avant nous."
+        dialogue-en:
+          - "a8_vesper: The Black Knight will rest at last. The Citadel owes him its name, you know. He was black long before us."
+        si: "morvain=morvain"
+      - type: PARLER
+        texte: "Annoncer votre décision à Vesper"
+        texte-en: "Tell Vesper your decision"
+        pnj: a8_vesper
+        dialogue:
+          - "a8_vesper: Vous. Bien sûr. Le Néant vous a toujours parlé plus fort qu'à nous. Revenez, Marqué. La Citadelle n'a plus assez de gens qui reviennent."
+        dialogue-en:
+          - "a8_vesper: You. Of course. The Void always spoke louder to you than to us. Come back, Marked. The Citadel no longer has enough people who come back."
+        si: "morvain=moi"
+    recompenses:
+      xp: 18500
+      or: 1850
+
+  a8_o_la_dechirure:
+    nom: "La Déchirure"
+    nom-en: "The Tear"
+    faction: ombre
+    niveau: 90
+    requiert: [a8_o_le_choix_de_morvain]
+    donneur: a8_morvain
+    resume:
+      - "RAID (groupe conseillé) : le Souffle froid."
+      - "Le ramener à l'Astre."
+    resume-en:
+      - "RAID (group advised): the Cold Breath."
+      - "Bring it back to the Star."
+    offre:
+      - "a8_morvain: Rassemblez qui vous voulez, des deux couleurs. Le Souffle froid ne fait pas la différence. Nous non plus, ce soir."
+    offre-en:
+      - "a8_morvain: Gather whoever you want, of both colours. The Cold Breath does not tell the difference. Nor do we, tonight."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Monter au bord de la Déchirure"
+        texte-en: "Climb to the edge of the Tear"
+        point: a8_dechirure
+        rayon: 10
+        apres:
+          - "Le ciel est fendu au-dessus du cratère. D'un côté, l'Astre, doré et blessé. De l'autre, le noir que vous avez servi. Entre les deux, une forme qui grelotte."
+        apres-en:
+          - "The sky is split above the crater. On one side the Star, golden and wounded. On the other, the dark you served. Between them, a shape that shivers."
+      - type: TUER
+        texte: "Vaincre le Souffle froid"
+        texte-en: "Defeat the Cold Breath"
+        monstres: [a8_souffle_froid]
+        point: a8_dechirure
+        apres:
+          - "Le Souffle froid s'effondre sur lui-même. Il ne meurt pas : il se tait, enfin, comme quelqu'un qu'on a entendu."
+        apres-en:
+          - "The Cold Breath collapses on itself. It does not die: it falls silent at last, like someone who has been heard."
+      - type: SURVIE
+        texte: "Tenir pendant que la Déchirure se referme"
+        texte-en: "Hold on while the Tear closes"
+        point: a8_dechirure
+        rayon: 16
+        duree: 40
+        mode: resserre
+        rayon-fin: 5
+        degats: 12
+        apres:
+          - "Le souffle remonte. Le noir se replie dans l'or. Pour la première fois depuis mille ans, l'Astre brille entier. Le murmure se tait. Il n'a plus froid."
+        apres-en:
+          - "The breath rises. The dark folds into the gold. For the first time in a thousand years, the Star shines whole. The whisper falls silent. It is no longer cold."
+    recompenses:
+      xp: 37800
+      or: 3780
+      objets:
+        - materiau: NETHER_STAR
+          nom: "Lueur de l'Astre entier"
+          nom-en: "Glow of the Whole Star"
+          description:
+            - "Ramassée au bord du cratère, la nuit où le ciel s'est refermé."
+          description-en:
+            - "Picked up on the crater rim, the night the sky closed."
+
+  # ================================================================ ACTE VIII — OMBRE, DERNIER CHAPITRE (selon le choix « morvain »)
+
+  a8_o_la_fin_de_l_ecuyer:
+    nom: "La fin de l'écuyer"
+    nom-en: "The Squire's End"
+    faction: ombre
+    niveau: 90
+    requiert: [a8_o_la_dechirure, "choix:morvain=morvain"]
+    donneur: a8_naia
+    resume:
+      - "Morvain a porté le souffle."
+      - "Il reste son épée, au bord du ciel."
+    resume-en:
+      - "Morvain carried the breath."
+      - "His sword remains, on the edge of the sky."
+    offre:
+      - "a8_naia: Il est parti avec le souffle. Il a laissé son épée plantée au bord. Chez nous, on dit qu'un invité qui part laisse toujours quelque chose."
+    offre-en:
+      - "a8_naia: He left with the breath. He left his sword planted on the edge. Among us, we say a guest who leaves always leaves something behind."
+    etapes:
+      - type: INTERAGIR
+        texte: "Retirer l'épée de Morvain"
+        texte-en: "Pull out Morvain's sword"
+        point: a8_dechirure
+        rayon: 5
+        apres:
+          - "La lame est tiède. Pour la première fois, elle a l'air vieille. Gravé près de la garde, d'une écriture maladroite : « Pardonne-moi. »"
+        apres-en:
+          - "The blade is warm. For the first time it looks old. Engraved near the guard, in a clumsy hand: « Forgive me. »"
+      - type: PARLER
+        texte: "Porter la nouvelle à Vesper"
+        texte-en: "Bring the news to Vesper"
+        pnj: a8_vesper
+        dialogue:
+          - "a8_vesper: Le premier Marqué s'est éteint pour rallumer le ciel. La Citadelle se croyait l'héritière du Néant. Elle était seulement en retard d'un chevalier."
+        dialogue-en:
+          - "a8_vesper: The first Marked went out to light the sky again. The Citadel thought itself the heir of the Void. It was merely one knight behind."
+    recompenses:
+      xp: 28400
+      or: 2840
+      objets:
+        - materiau: NETHERITE_SWORD
+          nom: "Lame de l'écuyer"
+          nom-en: "Squire's Blade"
+          description:
+            - "L'épée de Morvain, premier Marqué."
+            - "« Pardonne-moi. »"
+          description-en:
+            - "The sword of Morvain, the first Marked."
+            - "« Forgive me. »"
+
+  a8_o_le_porteur:
+    nom: "Le porteur"
+    nom-en: "The Bearer"
+    faction: ombre
+    niveau: 90
+    requiert: [a8_o_la_dechirure, "choix:morvain=moi"]
+    donneur: a8_morvain
+    resume:
+      - "Vous avez porté le souffle."
+      - "Il vous a pris ce qui ne vous appartenait pas."
+    resume-en:
+      - "You carried the breath."
+      - "It took from you what did not belong to you."
+    offre:
+      - "a8_morvain: Vous êtes revenu. Moi, je vieillis. Une ride, ce matin. Je l'ai regardée une heure."
+      - "a8_morvain: Et vous ? Le murmure s'est tu. Qu'est-ce qu'il vous reste ?"
+    offre-en:
+      - "a8_morvain: You came back. And I am ageing. A wrinkle, this morning. I looked at it for an hour."
+      - "a8_morvain: And you? The whisper has stopped. What do you have left?"
+    etapes:
+      - type: ATTEINDRE
+        texte: "Retourner au bord du ciel"
+        texte-en: "Return to the edge of the sky"
+        point: a8_dechirure
+        rayon: 6
+        apres:
+          - "Le murmure est parti avec le souffle, et avec lui les souvenirs de l'Astre : le désert vu d'en haut, la main tendue, les chaînes. Il ne reste qu'un son. Une petite cloche de cuivre."
+        apres-en:
+          - "The whisper left with the breath, and with it the Star's memories: the desert seen from above, the outstretched hand, the chains. Only one sound remains. A small copper bell."
+      - type: PARLER
+        texte: "Le dire à Morvain"
+        texte-en: "Tell Morvain"
+        pnj: a8_morvain
+        dialogue:
+          - "a8_morvain: Une cloche. Alors c'était le vôtre, celui-là. Le seul. Gardez-le bien : c'est tout ce qu'un homme a besoin d'avoir."
+        dialogue-en:
+          - "a8_morvain: A bell. Then that one was yours. The only one. Keep it well: it is all a man needs to have."
+    recompenses:
+      xp: 28400
+      or: 2840
+      objets:
+        - materiau: BELL
+          nom: "Cloche de cuivre"
+          nom-en: "Copper bell"
+          description:
+            - "Le seul souvenir qui était à vous."
+          description-en:
+            - "The only memory that was yours."
+
+  # ================================================================ ACTE VIII — ANNEXES DU GUET ET DU SEUIL
+
+  a8_n_les_vivres_du_seuil:
+    nom: "Les vivres du Seuil"
+    nom-en: "Supplies for the Threshold"
+    niveau: 80
+    donneur: a8_hulde
+    resume:
+      - "Porter la liste des vivres au capitaine Mareuil."
+    resume-en:
+      - "Take the supply list to Captain Mareuil."
+    offre:
+      - "a8_hulde: On a plus de bouches que de pain. Portez ma liste au Guet, à Mareuil. Il grognera, puis il donnera."
+    offre-en:
+      - "a8_hulde: We have more mouths than bread. Take my list to the Watch, to Mareuil. He will grumble, then he will give."
+    etapes:
+      - type: LIVRER
+        texte: "Remettre la liste à Mareuil"
+        texte-en: "Give the list to Mareuil"
+        pnj: a8_mareuil
+        materiau: PAPER
+        objet: "Liste des vivres de Hulde"
+        objet-en: "Hulde's supply list"
+        dialogue:
+          - "a8_mareuil: Quarante rations. Elle croit que je les cache dans mes bottes ? …Dites-lui qu'elle les aura demain."
+        dialogue-en:
+          - "a8_mareuil: Forty rations. Does she think I hide them in my boots? …Tell her she will have them tomorrow."
+    recompenses:
+      xp: 13400
+      or: 1340
+
+  a8_n_le_cercle_de_garde:
+    nom: "Le cercle de garde"
+    nom-en: "The Guard Circle"
+    niveau: 81
+    donneur: a8_hulde
+    resume:
+      - "Les Affamés montent vers le Seuil."
+      - "Garder le feu du camp."
+    resume-en:
+      - "The Starved are climbing toward the Threshold."
+      - "Guard the camp fire."
+    offre:
+      - "a8_hulde: Ils viennent au feu, comme des papillons. Si le feu s'éteint, la nuit entre. Tenez-le."
+    offre-en:
+      - "a8_hulde: They come to the fire, like moths. If the fire goes out, the night comes in. Hold it."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre le feu du Seuil"
+        texte-en: "Defend the fire of the Threshold"
+        point: a8_seuil
+        monstres: [a8_affame]
+        nombre: 5
+        vagues: 3
+        apparition: a8_seuil_dehors
+        pv: 450
+        degats: 9
+        niveau: 81
+        cible: "Le feu du Seuil"
+        cible-en: "The fire of the Threshold"
+        apres:
+          - "a8_hulde: Le feu tient. On mangera chaud ce soir."
+        apres-en:
+          - "a8_hulde: The fire holds. We will eat hot tonight."
+    recompenses:
+      xp: 13600
+      or: 1360
+
+  a8_n_les_yeux_d_ilvar:
+    nom: "Les yeux d'Ilvar"
+    nom-en: "Ilvar's Eyes"
+    niveau: 82
+    donneur: a8_ilvar
+    resume:
+      - "Poser trois astrolabes au bord du cratère."
+    resume-en:
+      - "Set three astrolabes on the crater rim."
+    offre:
+      - "a8_ilvar: Trois astrolabes, sur le bord, à trois endroits que j'ai marqués. Je veux voir le ciel s'ouvrir avant qu'il ne s'ouvre."
+    offre-en:
+      - "a8_ilvar: Three astrolabes, on the rim, at three places I have marked. I want to see the sky open before it opens."
+    etapes:
+      - type: INTERAGIR
+        texte: "Poser le premier astrolabe"
+        texte-en: "Set the first astrolabe"
+        point: a8_astro_1
+        rayon: 3
+      - type: INTERAGIR
+        texte: "Poser le deuxième astrolabe"
+        texte-en: "Set the second astrolabe"
+        point: a8_astro_2
+        rayon: 3
+      - type: INTERAGIR
+        texte: "Poser le troisième astrolabe"
+        texte-en: "Set the third astrolabe"
+        point: a8_astro_3
+        rayon: 3
+        apres:
+          - "Les trois cercles de cuivre tournent seuls, lentement, et pointent tous vers le même endroit du ciel."
+        apres-en:
+          - "The three copper rings turn on their own, slowly, and all point to the same place in the sky."
+      - type: PARLER
+        texte: "Revenir auprès d'Ilvar"
+        texte-en: "Return to Ilvar"
+        pnj: a8_ilvar
+        dialogue:
+          - "a8_ilvar: Ils pointent le noir. Pas l'Astre : le noir. Il nous regarde aussi."
+        dialogue-en:
+          - "a8_ilvar: They point at the dark. Not the Star: the dark. It is watching us too."
+    recompenses:
+      xp: 13800
+      or: 1380
+
+  a8_n_le_chant_des_hotes:
+    nom: "Le chant des Hôtes"
+    nom-en: "The Song of the Hosts"
+    niveau: 83
+    donneur: a8_naia
+    resume:
+      - "Naïa connaît le chant qui accueillait l'Astre."
+    resume-en:
+      - "Naïa knows the song that welcomed the Star."
+    offre:
+      - "a8_naia: Mes ancêtres chantaient quand l'Astre descendait. Pas pour le retenir : pour lui dire qu'il était attendu. Voulez-vous l'apprendre ?"
+    offre-en:
+      - "a8_naia: My ancestors sang when the Star came down. Not to hold it: to tell it that it was awaited. Will you learn it?"
+    etapes:
+      - type: CHOIX
+        texte: "Répondre à Naïa"
+        texte-en: "Answer Naïa"
+        pnj: a8_naia
+        choix: chant-hotes
+        question: "Apprendre le chant ?"
+        question-en: "Learn the song?"
+        reponses:
+          - id: chanter
+            texte: "Chanter avec elle"
+            texte-en: "Sing with her"
+            reponse:
+              - "a8_naia: Vous l'aviez déjà. Je l'entends : ce n'est pas votre gorge qui chante, c'est la Marque. Elle se souvient d'avoir été accueillie."
+            reponse-en:
+              - "a8_naia: You already had it. I hear it: it is not your throat singing, it is the Mark. It remembers being welcomed."
+            xp: 1500
+          - id: ecouter
+            texte: "Seulement écouter"
+            texte-en: "Only listen"
+            reponse:
+              - "a8_naia: Écouter, c'est déjà accueillir. Mes ancêtres le disaient aussi."
+            reponse-en:
+              - "a8_naia: To listen is already to welcome. My ancestors said that too."
+            or: 200
+        dialogue:
+          - "a8_naia: On ne le chante pas fort. On le chante comme on parle à quelqu'un qui dort."
+        dialogue-en:
+          - "a8_naia: It is not sung loud. It is sung the way you speak to someone sleeping."
+    recompenses:
+      xp: 13900
+      or: 1390
+
+  a8_n_les_affames_du_cratere:
+    nom: "Les rôdeurs du cratère"
+    nom-en: "The Crater Prowlers"
+    niveau: 84
+    donneur: a8_mareuil
+    resume:
+      - "Des rôdeurs de Brèche guettent la route du Seuil."
+    resume-en:
+      - "Breach prowlers lie in wait on the road to the Threshold."
+    offre:
+      - "a8_mareuil: Mes convois vers le Seuil se font tirer dessus. Des choses pâles, avec des arcs, sur la pente sud du cratère. Nettoyez-moi ça."
+    offre-en:
+      - "a8_mareuil: My convoys to the Threshold are being shot at. Pale things, with bows, on the south slope of the crater. Clean that up for me."
+    etapes:
+      - type: TUER
+        texte: "Abattre les rôdeurs de la pente sud"
+        texte-en: "Shoot down the prowlers of the south slope"
+        monstres: [a8_rodeur]
+        nombre: 12
+        point: a8_cratere_sud
+      - type: PARLER
+        texte: "Revenir auprès de Mareuil"
+        texte-en: "Return to Mareuil"
+        pnj: a8_mareuil
+        dialogue:
+          - "a8_mareuil: Ils reviendront. Mais ce soir, les chariots passeront."
+        dialogue-en:
+          - "a8_mareuil: They will come back. But tonight the wagons will pass."
+    recompenses:
+      xp: 14100
+      or: 1410
+
+  a8_n_cendre_froide:
+    nom: "Cendre froide"
+    nom-en: "Cold Ash"
+    niveau: 85
+    donneur: a8_ilvar
+    resume:
+      - "Les Calcinés de la coulée sont devenus froids."
+      - "Rapporter de leur cendre."
+    resume-en:
+      - "The Burnt of the lava flow have turned cold."
+      - "Bring back some of their ash."
+    offre:
+      - "a8_ilvar: Les Calcinés brûlaient. Ceux de la coulée, à l'est, sont froids comme de la neige. Rapportez-moi leur cendre : je veux savoir ce qui les a éteints."
+    offre-en:
+      - "a8_ilvar: The Burnt used to burn. Those of the flow, to the east, are as cold as snow. Bring me their ash: I want to know what put them out."
+    etapes:
+      - type: RAMASSER
+        texte: "Ramasser de la cendre froide"
+        texte-en: "Gather cold ash"
+        monstres: [a8_calcine]
+        nombre: 6
+        chance: 0.5
+        point: a8_coulee
+        objet: "Cendre froide"
+        objet-en: "Cold ash"
+      - type: PARLER
+        texte: "Porter la cendre à Ilvar"
+        texte-en: "Bring the ash to Ilvar"
+        pnj: a8_ilvar
+        dialogue:
+          - "a8_ilvar: Pas de feu dedans. Pas de lumière. Le souffle les a bus. Il boit tout ce qui brûle, à présent."
+        dialogue-en:
+          - "a8_ilvar: No fire in it. No light. The breath drank them. It drinks everything that burns, now."
+    recompenses:
+      xp: 14300
+      or: 1430
+
+  a8_n_le_messager_du_guet:
+    nom: "Le messager du Guet"
+    nom-en: "The Messenger of the Watch"
+    niveau: 86
+    donneur: a8_morvain
+    resume:
+      - "Une Brèche menace de s'ouvrir sous le Guet."
+      - "Prévenir Mareuil à temps."
+    resume-en:
+      - "A Breach threatens to open under the Watch."
+      - "Warn Mareuil in time."
+    offre:
+      - "a8_morvain: Les astrolabes d'Ilvar tournent vers le Guet. Courez prévenir Mareuil. Vous avez une minute, pas plus."
+    offre-en:
+      - "a8_morvain: Ilvar's astrolabes are turning toward the Watch. Run and warn Mareuil. You have one minute, no more."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre Mareuil avant une minute"
+        texte-en: "Reach Mareuil within a minute"
+        point: a8_mareuil
+        rayon: 4
+        apres:
+          - "a8_mareuil: Une Brèche ? Sous nous ? …Évacuez la tour. Tout le monde dehors !"
+        apres-en:
+          - "a8_mareuil: A Breach? Under us? …Clear the tower. Everyone out!"
+        chrono: 60
+        echec:
+          - "a8_morvain: Trop tard. Recommencez : la pente est encore là, et nous aussi."
+        echec-en:
+          - "a8_morvain: Too late. Again: the slope is still there, and so are we."
+      - type: PARLER
+        texte: "Attendre avec Mareuil"
+        texte-en: "Wait with Mareuil"
+        pnj: a8_mareuil
+        dialogue:
+          - "a8_mareuil: La terre a tremblé, et s'est tue. Rien ne s'est ouvert. Cette fois. Merci d'avoir couru."
+        dialogue-en:
+          - "a8_mareuil: The earth shook, then went quiet. Nothing opened. This time. Thank you for running."
+    recompenses:
+      xp: 14400
+      or: 1440
+
+  a8_n_la_forge_de_l_ecuyer:
+    nom: "Les marques de l'écuyer"
+    nom-en: "The Squire's Marks"
+    niveau: 87
+    donneur: a8_morvain
+    resume:
+      - "Morvain a laissé des marques autour du Seuil, il y a mille ans."
+    resume-en:
+      - "Morvain left marks around the Threshold, a thousand years ago."
+    offre:
+      - "a8_morvain: J'ai déjà campé ici. Il y a mille ans, le lendemain de la Chute. J'avais gravé des choses dans la roche. Je ne me rappelle plus quoi. Allez voir."
+    offre-en:
+      - "a8_morvain: I camped here once before. A thousand years ago, the day after the Fall. I carved things into the rock. I no longer remember what. Go and see."
+    etapes:
+      - type: ENQUETE
+        texte: "Retrouver les marques de Morvain"
+        texte-en: "Find Morvain's marks"
+        pnj: a8_morvain
+        indices:
+          - point: a8_marque_1
+            texte: "Un nom gratté"
+            texte-en: "A scratched name"
+            apres:
+              - "« Aurélien. » Gratté, puis regravé, puis gratté encore."
+            apres-en:
+              - "« Aurélien. » Scratched out, carved again, then scratched out again."
+          - point: a8_marque_2
+            texte: "Un compte de traits"
+            texte-en: "A tally of strokes"
+            apres:
+              - "Des centaines de traits, par paquets de cinq. Des jours. Il les a comptés longtemps, puis il a arrêté."
+            apres-en:
+              - "Hundreds of strokes, in groups of five. Days. He counted them for a long time, then he stopped."
+          - point: a8_marque_3
+            texte: "Un maillon dessiné"
+            texte-en: "A drawn link"
+            apres:
+              - "Un maillon de chaîne, et dessous : « Plus jamais. » La pierre est usée à cet endroit, comme si on l'avait touchée souvent."
+            apres-en:
+              - "A chain link, and below it: « Never again. » The stone is worn there, as if it had often been touched."
+        dialogue:
+          - "joueur: Un nom, des jours, et une promesse."
+          - "a8_morvain: Plus jamais. J'avais vingt ans. Je l'ai tenue mille. Encore un peu, et ce sera fini."
+        dialogue-en:
+          - "joueur: A name, days, and a promise."
+          - "a8_morvain: Never again. I was twenty. I kept it for a thousand. A little longer, and it will be over."
+    recompenses:
+      xp: 14600
+      or: 1460
+
+  a8_n_les_noms_des_tombes:
+    nom: "Les noms des tombés"
+    nom-en: "The Names of the Fallen"
+    niveau: 88
+    donneur: a8_mareuil
+    resume:
+      - "Mareuil tient la liste des Marqués tombés aux Brèches."
+      - "La porter à Naïa."
+    resume-en:
+      - "Mareuil keeps the list of the Marked fallen at the Breaches."
+      - "Bring it to Naïa."
+    offre:
+      - "a8_mareuil: Les Astréens chantent les noms des morts pour que l'Astre les reconnaisse. Portez ma liste à Naïa. Je n'ai pas la voix pour ça."
+    offre-en:
+      - "a8_mareuil: The Astreans sing the names of the dead so that the Star will know them. Take my list to Naïa. I do not have the voice for it."
+    etapes:
+      - type: LIVRER
+        texte: "Porter la liste à Naïa"
+        texte-en: "Bring the list to Naïa"
+        pnj: a8_naia
+        materiau: WRITABLE_BOOK
+        objet: "Liste des tombés des Brèches"
+        objet-en: "List of the fallen of the Breaches"
+        dialogue:
+          - "a8_naia: Trente-deux noms. Des deux couleurs. Ce soir, je les chanterai tous, sans dire qui portait quoi. L'Astre ne demande pas."
+        dialogue-en:
+          - "a8_naia: Thirty-two names. Of both colours. Tonight I will sing them all, without saying who wore what. The Star does not ask."
+    recompenses:
+      xp: 14800
+      or: 1480
+
+  a8_n_la_cloche_du_guet:
+    nom: "La cloche du Guet"
+    nom-en: "The Bell of the Watch"
+    niveau: 88
+    donneur: a8_mareuil
+    resume:
+      - "La cloche de la tour du Guet sonne seule la nuit."
+    resume-en:
+      - "The bell of the Watch tower rings by itself at night."
+    offre:
+      - "a8_mareuil: La cloche de la tour sonne seule, toutes les nuits, à la même heure. Mes hommes disent que c'est un mort. Moi, je dis que c'est un Éclat. Allez voir."
+    offre-en:
+      - "a8_mareuil: The tower bell rings on its own, every night, at the same hour. My men say it is a ghost. I say it is a Shard. Go and see."
+    etapes:
+      - type: INTERAGIR
+        texte: "Examiner la cloche de la tour"
+        texte-en: "Examine the tower bell"
+        point: a8_tour_guet
+        rayon: 4
+        apres:
+          - "Pas d'Éclat. Du givre, dans le battant. Et quand vous le touchez, la cloche sonne une note que vous connaissez. Plus aiguë. Plus petite. En cuivre."
+        apres-en:
+          - "No Shard. Frost, in the clapper. And when you touch it, the bell rings a note you know. Higher. Smaller. Copper."
+      - type: PARLER
+        texte: "Rassurer Mareuil"
+        texte-en: "Reassure Mareuil"
+        pnj: a8_mareuil
+        dialogue:
+          - "a8_mareuil: Le froid fait sonner les cloches, maintenant ? …Vous avez une drôle de tête. Ce son vous dit quelque chose ?"
+        dialogue-en:
+          - "a8_mareuil: The cold rings bells now? …You look strange. Does that sound mean something to you?"
+    recompenses:
+      xp: 14800
+      or: 1480
+
+  a8_n_l_ombre_du_souffle:
+    nom: "L'ombre du Souffle"
+    nom-en: "The Breath's Shadow"
+    niveau: 89
+    donneur: a8_mareuil
+    resume:
+      - "PRIME : une Ombre du Souffle rôde à l'est du Guet."
+    resume-en:
+      - "BOUNTY: a Shadow of the Breath prowls east of the Watch."
+    offre:
+      - "a8_mareuil: Une chose haute comme deux hommes, à l'est, près de la Brèche. Elle a gelé trois de mes gardes sur place. Prime de la garnison pour sa tête."
+    offre-en:
+      - "a8_mareuil: A thing as tall as two men, to the east, near the Breach. It froze three of my guards where they stood. Garrison bounty for its head."
+    etapes:
+      - type: TUER
+        texte: "Abattre l'Ombre du Souffle"
+        texte-en: "Slay the Shadow of the Breath"
+        monstres: [a8_ombre_souffle]
+        point: a8_breche_fournaise_b
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: a8_mareuil
+        dialogue:
+          - "a8_mareuil: Mes trois gardes ont dégelé ce matin. Ils ne se souviennent de rien. Votre prime."
+        dialogue-en:
+          - "a8_mareuil: My three guards thawed this morning. They remember nothing. Your bounty."
+    recompenses:
+      xp: 18700
+      or: 1870
+
+  a8_n_le_dernier_ecuyer:
+    nom: "Le dernier écuyer"
+    nom-en: "The Last Squire"
+    niveau: 89
+    donneur: a8_morvain
+    resume:
+      - "Morvain veut vous parler d'Aurélien."
+    resume-en:
+      - "Morvain wants to talk to you about Aurélien."
+    offre:
+      - "a8_morvain: Asseyez-vous. Personne ne m'a jamais demandé comment il était. Aurélien. Avant."
+    offre-en:
+      - "a8_morvain: Sit down. Nobody ever asked me what he was like. Aurélien. Before."
+    etapes:
+      - type: CHOIX
+        texte: "Écouter Morvain"
+        texte-en: "Listen to Morvain"
+        pnj: a8_morvain
+        choix: aurelien
+        question: "Que répondez-vous ?"
+        question-en: "What do you answer?"
+        reponses:
+          - id: pardon
+            texte: "Un écuyer. Et ça se pardonne."
+            texte-en: "A squire. And that can be forgiven."
+            reponse:
+              - "a8_morvain: Vous êtes le premier à le dire. Je ne sais pas si je le crois. Mais je l'ai entendu."
+            reponse-en:
+              - "a8_morvain: You are the first to say it. I do not know if I believe it. But I heard it."
+            xp: 1500
+          - id: reparation
+            texte: "Quelqu'un qui répare. C'est ce qui compte."
+            texte-en: "Someone who makes amends. That is what matters."
+            reponse:
+              - "a8_morvain: Réparer. Oui. Mille ans à réparer une nuit. Ce n'est pas cher payé, finalement."
+            reponse-en:
+              - "a8_morvain: Make amends. Yes. A thousand years to mend one night. It is not too high a price, in the end."
+            or: 200
+        dialogue:
+          - "a8_morvain: Il riait fort. Il pleurait chaque fois que l'Astre repartait. Il disait que l'aimer, c'était le garder."
+          - "a8_morvain: J'ai forgé ses chaînes parce que je l'aimais, lui. Qu'est-ce que ça fait de moi ?"
+        dialogue-en:
+          - "a8_morvain: He laughed loudly. He wept every time the Star left. He said that to love it was to keep it."
+          - "a8_morvain: I forged his chains because I loved him. What does that make me?"
+    recompenses:
+      xp: 15000
+      or: 1500
+
+  # ================================================================ ACTE VIII — ANNEXES DES BRÈCHES (MARCHE, DÉSERT, CIMES, CENDRES)
+
+  a8_n_la_breche_du_lac:
+    nom: "La Brèche de la Marche"
+    nom-en: "The Breach of the March"
+    niveau: 80
+    donneur: a8_nell
+    resume:
+      - "Une Brèche s'est ouverte au nord des Quatre-Vents."
+      - "La tenir pendant que les fermes évacuent."
+    resume-en:
+      - "A Breach has opened north of the Four Winds."
+      - "Hold it while the farms evacuate."
+    offre:
+      - "a8_nell: La terre s'est ouverte à côté de la route. Les fermiers évacuent vers les Quatre-Vents. Gardez la Brèche le temps qu'ils passent."
+    offre-en:
+      - "a8_nell: The earth opened beside the road. The farmers are evacuating to the Four Winds. Guard the Breach while they pass."
+    etapes:
+      - type: DEFENSE
+        texte: "Tenir la Brèche de la Marche"
+        texte-en: "Hold the Breach of the March"
+        point: a8_breche_marche
+        monstres: [a8_affame]
+        duree: 90
+        intervalle: 15
+        apparition: a8_breche_marche_b
+        pv: 400
+        degats: 8
+        niveau: 80
+        cible: "La route des fermiers"
+        cible-en: "The farmers' road"
+        apres:
+          - "a8_nell: Ils sont passés. Tous. Je redessine la carte : un trou de plus dans la Marche."
+        apres-en:
+          - "a8_nell: They got through. All of them. I am redrawing the map: one more hole in the March."
+    recompenses:
+      xp: 13400
+      or: 1340
+
+  a8_n_les_refugies_de_la_marche:
+    nom: "Les réfugiés de la Marche"
+    nom-en: "The Refugees of the March"
+    niveau: 81
+    requiert: [a8_n_la_breche_du_lac]
+    donneur: a8_nell
+    resume:
+      - "Tomas est resté près de la Brèche."
+      - "L'escorter jusqu'aux Quatre-Vents."
+    resume-en:
+      - "Tomas stayed near the Breach."
+      - "Escort him to the Four Winds."
+    offre:
+      - "a8_nell: Tomas n'a pas voulu quitter sa grange. Maintenant qu'elle est tombée dans la Brèche, il veut bien. Ramenez-le aux Quatre-Vents."
+    offre-en:
+      - "a8_nell: Tomas would not leave his barn. Now that it has fallen into the Breach, he will. Bring him back to the Four Winds."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter Tomas vers les Quatre-Vents"
+        texte-en: "Escort Tomas to the Four Winds"
+        pnj: a8_refugie
+        chemin: [a8_ref_1, a8_ref_2, a8_ref_3]
+        monstres: [a8_affame, a8_rodeur]
+        nombre: 3
+        vagues: 2
+        pv: 400
+        degats: 8
+        niveau: 81
+        apres:
+          - "a8_refugie: Les murs des Quatre-Vents. Je ne les ai jamais trouvés si beaux. Merci, Marqué."
+        apres-en:
+          - "a8_refugie: The walls of the Four Winds. I never found them so beautiful. Thank you, Marked."
+    recompenses:
+      xp: 13600
+      or: 1360
+
+  a8_n_la_carte_qui_saigne:
+    nom: "La carte qui saigne"
+    nom-en: "The Bleeding Map"
+    niveau: 82
+    donneur: a8_nell
+    resume:
+      - "Des traces de givre partent de la Brèche vers le Lac Miroir."
+    resume-en:
+      - "Frost tracks lead from the Breach toward the Mirror Lake."
+    offre:
+      - "a8_nell: Sur ma carte, une ligne de givre part de la Brèche, vers le sud du Lac Miroir. Une ligne que je n'ai pas tracée. Suivez-la pour moi."
+    offre-en:
+      - "a8_nell: On my map, a line of frost runs from the Breach toward the south of the Mirror Lake. A line I did not draw. Follow it for me."
+    etapes:
+      - type: PISTER
+        texte: "Suivre la ligne de givre"
+        texte-en: "Follow the line of frost"
+        traces: [a8_trace_m1, a8_trace_m2, a8_trace_m3, a8_trace_m4]
+        apres:
+          - "La ligne s'arrête au bord de l'eau. Le lac a gelé sur un pas de large, en forme de main ouverte."
+        apres-en:
+          - "The line stops at the water's edge. The lake has frozen a pace wide, in the shape of an open hand."
+      - type: PARLER
+        texte: "Revenir auprès de Nell"
+        texte-en: "Return to Nell"
+        pnj: a8_nell
+        dialogue:
+          - "a8_nell: Une main. Le souffle cherche quelque chose, dans la Marche. Quelqu'un qui l'aurait tenu, peut-être. Je le note."
+        dialogue-en:
+          - "a8_nell: A hand. The breath is looking for something in the March. Someone who held it, perhaps. I will note it down."
+    recompenses:
+      xp: 13800
+      or: 1380
+
+  a8_n_la_ruine_qui_respire:
+    nom: "La ruine qui respire"
+    nom-en: "The Breathing Ruin"
+    niveau: 83
+    donneur: a8_nell
+    resume:
+      - "La ruine près des Ruines de la Marche respire du froid."
+    resume-en:
+      - "The ruin near the Ruins of the March breathes out cold."
+    offre:
+      - "a8_nell: Le cercle de pierres, près des Ruines de la Marche. Il fume du froid. Les rôdeurs y montent la garde. Videz-le."
+    offre-en:
+      - "a8_nell: The stone circle near the Ruins of the March. It smokes with cold. The prowlers stand guard there. Clear it."
+    etapes:
+      - type: TUER
+        texte: "Chasser les rôdeurs du cercle"
+        texte-en: "Drive the prowlers from the circle"
+        monstres: [a8_rodeur]
+        nombre: 10
+        point: a8_ruine_marche
+      - type: INTERAGIR
+        texte: "Examiner la pierre centrale"
+        texte-en: "Examine the central stone"
+        point: a8_ruine_marche
+        rayon: 5
+        apres:
+          - "La pierre est fendue. Dans la fente, du givre, et un morceau de verre de fiole. On a vidé un Marqué ici, il y a longtemps."
+        apres-en:
+          - "The stone is split. In the crack, frost, and a piece of vial glass. A Marked was emptied here, long ago."
+      - type: PARLER
+        texte: "Revenir auprès de Nell"
+        texte-en: "Return to Nell"
+        pnj: a8_nell
+        dialogue:
+          - "a8_nell: Encore un relais du Cloître. Ilvar avait raison : le souffle revient chercher sa lumière là où on l'a volée."
+        dialogue-en:
+          - "a8_nell: Another Cloister relay. Ilvar was right: the breath comes back for its light where it was stolen."
+    recompenses:
+      xp: 13900
+      or: 1390
+
+  a8_n_le_sable_qui_gele:
+    nom: "Le sable qui gèle"
+    nom-en: "The Freezing Sand"
+    niveau: 82
+    donneur: a8_kesra
+    resume:
+      - "La Brèche de l'Oasis se referme, et elle aspire tout."
+      - "Y tenir jusqu'au bout."
+    resume-en:
+      - "The Breach of the Oasis is closing, and it draws everything in."
+      - "Hold on to the end."
+    offre:
+      - "a8_kesra: La Brèche se referme. Quand elle le fait, elle aspire tout ce qui reste près d'elle. Un de nos enfants y est tombé. Allez le chercher, et tenez bon."
+    offre-en:
+      - "a8_kesra: The Breach is closing. When it does, it draws in everything near it. One of our children fell in. Go and get him, and hold on."
+    etapes:
+      - type: INTERAGIR
+        texte: "Trouver l'enfant au bord de la Brèche"
+        texte-en: "Find the child at the edge of the Breach"
+        point: a8_breche_oasis
+        rayon: 5
+        apres:
+          - "Un garçon, recroquevillé contre une pierre, les lèvres bleues. Il est vivant. Le sol se met à glisser."
+        apres-en:
+          - "A boy, curled up against a stone, his lips blue. He is alive. The ground begins to slide."
+      - type: SURVIE
+        texte: "Tenir pendant que la Brèche se referme"
+        texte-en: "Hold on while the Breach closes"
+        point: a8_breche_oasis
+        rayon: 15
+        duree: 40
+        mode: resserre
+        rayon-fin: 5
+        degats: 9
+        apres:
+          - "La Brèche se ferme dans un claquement de glace. Le garçon ouvre les yeux."
+        apres-en:
+          - "The Breach shuts with a crack of ice. The boy opens his eyes."
+      - type: PARLER
+        texte: "Ramener l'enfant à Kesra"
+        texte-en: "Bring the child back to Kesra"
+        pnj: a8_kesra
+        dialogue:
+          - "a8_kesra: Il dit qu'il a vu une grande lumière triste, au fond. Qu'elle lui a demandé de chanter. Les enfants entendent mieux que nous."
+        dialogue-en:
+          - "a8_kesra: He says he saw a great sad light, at the bottom. That it asked him to sing. Children hear better than we do."
+    recompenses:
+      xp: 13800
+      or: 1380
+
+  a8_n_la_caravane_d_oumar:
+    nom: "La caravane d'Oumar"
+    nom-en: "Oumar's Caravan"
+    niveau: 83
+    donneur: a8_kesra
+    resume:
+      - "La caravane d'Oumar est bloquée près de la Brèche."
+      - "L'escorter jusqu'à l'Oasis."
+    resume-en:
+      - "Oumar's caravan is stuck near the Breach."
+      - "Escort it to the Oasis."
+    offre:
+      - "a8_kesra: Oumar et ses bêtes sont bloqués à la Brèche. Il apporte de l'eau du nord. Ramenez-les à l'Oasis, vivants si possible."
+    offre-en:
+      - "a8_kesra: Oumar and his beasts are stuck at the Breach. He is bringing water from the north. Bring them back to the Oasis, alive if possible."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter Oumar jusqu'à l'Oasis"
+        texte-en: "Escort Oumar to the Oasis"
+        pnj: a8_caravanier
+        chemin: [a8_car_1, a8_car_2, a8_car_3]
+        monstres: [a8_affame, a8_noye]
+        nombre: 3
+        vagues: 3
+        pv: 420
+        vitesse: 2.2
+        degats: 9
+        niveau: 83
+        apres:
+          - "a8_caravanier: L'Oasis. Mes bêtes boivent, enfin. L'eau du nord est arrivée, et moi avec."
+        apres-en:
+          - "a8_caravanier: The Oasis. My beasts are drinking, at last. The northern water has arrived, and I with it."
+    recompenses:
+      xp: 13900
+      or: 1390
+
+  a8_n_l_eau_noire:
+    nom: "L'eau noire"
+    nom-en: "The Black Water"
+    niveau: 84
+    donneur: a8_kesra
+    resume:
+      - "Des noyés sortent de la Brèche, couverts d'eau noire."
+    resume-en:
+      - "Drowned ones come out of the Breach, covered in black water."
+    offre:
+      - "a8_kesra: Dans le désert, il n'y a pas de noyés. Pourtant, il en sort de la Brèche. Rapportez-moi de cette eau noire : nos anciens sauront la lire."
+    offre-en:
+      - "a8_kesra: In the desert there are no drowned. Yet some come out of the Breach. Bring me some of that black water: our elders will know how to read it."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer de l'eau noire"
+        texte-en: "Collect black water"
+        monstres: [a8_noye]
+        nombre: 5
+        chance: 0.5
+        point: a8_breche_oasis
+        objet: "Fiole d'eau noire"
+        objet-en: "Vial of black water"
+      - type: PARLER
+        texte: "Porter l'eau à Kesra"
+        texte-en: "Bring the water to Kesra"
+        pnj: a8_kesra
+        dialogue:
+          - "a8_kesra: Elle est salée. Comme des larmes. Nos anciens disent que l'Astre pleurait, la nuit de la Chute. Ils disaient que c'était une image."
+        dialogue-en:
+          - "a8_kesra: It is salty. Like tears. Our elders say the Star wept, the night of the Fall. They said it was a figure of speech."
+    recompenses:
+      xp: 14100
+      or: 1410
+
+  a8_n_le_tombeau_ecoute:
+    nom: "Le Tombeau écoute"
+    nom-en: "The Tomb Listens"
+    niveau: 85
+    donneur: a8_kesra
+    resume:
+      - "Le Tombeau du Premier Hôte s'est remis à chanter."
+      - "Trouver d'où vient le chant."
+    resume-en:
+      - "The Tomb of the First Host has begun to sing again."
+      - "Find where the song comes from."
+    offre:
+      - "a8_kesra: Depuis que l'Astre est entier à moitié, le Tombeau chante. Trois endroits, autour de l'entrée. Écoutez, puis revenez me dire."
+    offre-en:
+      - "a8_kesra: Since the Star became half whole, the Tomb has been singing. Three places, around the entrance. Listen, then come back and tell me."
+    etapes:
+      - type: ENQUETE
+        texte: "Écouter le Tombeau"
+        texte-en: "Listen to the Tomb"
+        pnj: a8_kesra
+        indices:
+          - point: a8_tomb_1
+            texte: "Une colonne fêlée"
+            texte-en: "A cracked column"
+            apres:
+              - "Le vent passe dans la fêlure et fait une note grave. Elle ressemble au chant de Naïa."
+            apres-en:
+              - "The wind passes through the crack and makes a low note. It sounds like Naïa's song."
+          - point: a8_tomb_2
+            texte: "Une fresque effacée"
+            texte-en: "A faded fresco"
+            apres:
+              - "Des Hôtes, les bras ouverts. Au-dessus d'eux, l'Astre, et à côté de l'Astre, une ombre plus petite qui le suit. Son souffle."
+            apres-en:
+              - "Hosts, arms open. Above them, the Star, and beside the Star a smaller shadow following it. Its breath."
+          - point: a8_tomb_3
+            texte: "Un autel couvert de givre"
+            texte-en: "A frost-covered altar"
+            apres:
+              - "Le givre dessine un mot dans la langue des étoiles. Kesra vous l'a appris : « Bienvenue »."
+            apres-en:
+              - "The frost draws a word in the star tongue. Kesra taught it to you: « Welcome »."
+        dialogue:
+          - "joueur: Le Tombeau chante pour le souffle, pas pour l'Astre. Il lui dit bienvenue."
+          - "a8_kesra: Alors mes ancêtres accueillaient les deux. L'Astre, et ce qui le suivait. Personne ne nous l'avait dit."
+        dialogue-en:
+          - "joueur: The Tomb sings for the breath, not for the Star. It tells it welcome."
+          - "a8_kesra: Then my ancestors welcomed both. The Star, and what followed it. Nobody had told us."
+    recompenses:
+      xp: 14300
+      or: 1430
+
+  a8_n_les_geles_regardent:
+    nom: "Les gelés regardent"
+    nom-en: "The Frozen Ones Stare"
+    niveau: 84
+    donneur: a8_ivo
+    resume:
+      - "Des gelés de la Chute marchent vers la Brèche des Cimes."
+    resume-en:
+      - "Frozen ones of the Fall are walking toward the Breach of the Peaks."
+    offre:
+      - "a8_ivo: Ceux de la Chute qu'on n'a pas pu dégeler se sont levés. Ils marchent vers la Brèche, comme s'ils rentraient chez eux. Arrêtez-les avant qu'elle ne les boive."
+    offre-en:
+      - "a8_ivo: Those of the Fall we could not thaw have risen. They are walking toward the Breach, as if going home. Stop them before it drinks them."
+    etapes:
+      - type: TUER
+        texte: "Arrêter les gelés de la Chute"
+        texte-en: "Stop the frozen ones of the Fall"
+        monstres: [a8_gele]
+        nombre: 10
+        point: a8_breche_cimes
+      - type: PARLER
+        texte: "Revenir auprès d'Ivo"
+        texte-en: "Return to Ivo"
+        pnj: a8_ivo
+        dialogue:
+          - "a8_ivo: Ils voulaient rentrer. Moi aussi, je voudrais. Mais il n'y a plus de chez nous, là-dedans."
+        dialogue-en:
+          - "a8_ivo: They wanted to go home. I would too. But there is no home in there any more."
+    recompenses:
+      xp: 14100
+      or: 1410
+
+  a8_n_la_tour_de_neige:
+    nom: "La tour de neige"
+    nom-en: "The Snow Tower"
+    niveau: 85
+    donneur: a8_ivo
+    resume:
+      - "Les sentinelles du Néant tiennent la vieille tour des Cimes."
+      - "Y entrer sans être vu."
+    resume-en:
+      - "The Void sentinels hold the old tower of the Peaks."
+      - "Get in unseen."
+    offre:
+      - "a8_ivo: La vieille tour, au nord-ouest de Fort Blanc. Nos signaux y étaient. Les sentinelles l'ont prise. Allez-y en douce et ramenez le livre des signaux."
+    offre-en:
+      - "a8_ivo: The old tower, north-west of Fort Blanc. Our signals were kept there. The sentinels took it. Go in quietly and bring back the signal book."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre le pied de la tour"
+        texte-en: "Reach the foot of the tower"
+        point: a8_tour_neige_dep
+        rayon: 5
+      - type: INFILTRER
+        texte: "Entrer dans la tour sans être vu"
+        texte-en: "Enter the tower unseen"
+        point: a8_tour_neige
+        depart: a8_tour_neige_dep
+        monstres: [a8_sentinelle]
+        vue: 12
+        rayon: 4
+        apres:
+          - "Le livre des signaux est là, sous la neige. Les sentinelles n'y ont pas touché. Elles ne lisent pas : elles attendent."
+        apres-en:
+          - "The signal book is there, under the snow. The sentinels have not touched it. They do not read: they wait."
+      - type: PARLER
+        texte: "Rapporter le livre à Ivo"
+        texte-en: "Bring the book to Ivo"
+        pnj: a8_ivo
+        dialogue:
+          - "a8_ivo: Le livre ! Fort Blanc pourra de nouveau parler aux cimes. Merci."
+        dialogue-en:
+          - "a8_ivo: The book! Fort Blanc will be able to speak to the peaks again. Thank you."
+    recompenses:
+      xp: 14300
+      or: 1430
+
+  a8_n_le_signal_de_fort_blanc:
+    nom: "Le signal de Fort Blanc"
+    nom-en: "The Signal of Fort Blanc"
+    niveau: 86
+    requiert: [a8_n_la_tour_de_neige]
+    donneur: a8_ivo
+    resume:
+      - "Allumer le signal avant que la tempête ne l'empêche."
+    resume-en:
+      - "Light the signal before the storm prevents it."
+    offre:
+      - "a8_ivo: Avec le livre, on peut rallumer le signal du col, au nord. Mais la tempête arrive. Une minute et demie, pas plus."
+    offre-en:
+      - "a8_ivo: With the book, we can relight the pass signal, to the north. But the storm is coming. A minute and a half, no more."
+    etapes:
+      - type: INTERAGIR
+        texte: "Allumer le signal du col à temps"
+        texte-en: "Light the pass signal in time"
+        point: a8_signal_cimes
+        rayon: 4
+        apres:
+          - "Le feu prend. Loin au sud, sur une autre crête, un feu répond. Les cimes parlent de nouveau."
+        apres-en:
+          - "The fire catches. Far to the south, on another ridge, a fire answers. The peaks speak again."
+        chrono: 90
+        echec:
+          - "a8_ivo: La tempête l'a soufflé. Remontez, on recommence."
+        echec-en:
+          - "a8_ivo: The storm blew it out. Climb back up, we start again."
+      - type: PARLER
+        texte: "Revenir auprès d'Ivo"
+        texte-en: "Return to Ivo"
+        pnj: a8_ivo
+        dialogue:
+          - "a8_ivo: Ils répondent ! Fort Blanc n'est plus seul. Tenez, pour vos jambes."
+        dialogue-en:
+          - "a8_ivo: They answer! Fort Blanc is no longer alone. Here, for your legs."
+    recompenses:
+      xp: 14400
+      or: 1440
+
+  a8_n_les_mots_du_colosse:
+    nom: "Les mots du Colosse"
+    nom-en: "The Words of the Colossus"
+    niveau: 86
+    donneur: a8_ivo
+    resume:
+      - "Des glyphes sont apparus devant l'Antre du Colosse."
+    resume-en:
+      - "Glyphs have appeared before the Lair of the Colossus."
+    offre:
+      - "a8_ivo: Devant l'Antre du Colosse, la glace s'est couverte de glyphes. Le gardien des Hôtes laisse un message. Allez le lire."
+    offre-en:
+      - "a8_ivo: Before the Lair of the Colossus, the ice has covered itself in glyphs. The guardian of the Hosts is leaving a message. Go and read it."
+    etapes:
+      - type: INTERAGIR
+        texte: "Lire les glyphes"
+        texte-en: "Read the glyphs"
+        point: a8_antre_colosse
+        rayon: 6
+        apres:
+          - "« Ce qui a froid n'est pas l'ennemi. Ce qui a froid est l'invité qu'on a oublié de faire entrer. »"
+        apres-en:
+          - "« What is cold is not the enemy. What is cold is the guest someone forgot to let in. »"
+      - type: CHOIX
+        texte: "Rapporter les mots à Ivo"
+        texte-en: "Bring the words back to Ivo"
+        pnj: a8_ivo
+        choix: colosse
+        question: "Que dites-vous à Ivo ?"
+        question-en: "What do you tell Ivo?"
+        reponses:
+          - id: inviter
+            texte: "Qu'il faut le faire entrer"
+            texte-en: "That it must be let in"
+            reponse:
+              - "a8_ivo: Le faire entrer. Dans l'Astre. Ça a l'air simple, dit comme ça. Rien n'est simple, là-haut."
+            reponse-en:
+              - "a8_ivo: Let it in. Into the Star. It sounds simple, put like that. Nothing is simple up there."
+            xp: 1500
+          - id: craindre
+            texte: "Qu'il faut quand même s'en garder"
+            texte-en: "That we must still beware of it"
+            reponse:
+              - "a8_ivo: C'est ce que je pense aussi. Un invité qui a faim reste dangereux, même quand on l'aime."
+            reponse-en:
+              - "a8_ivo: That is what I think too. A hungry guest is still dangerous, even when you love it."
+            or: 200
+        dialogue:
+          - "a8_ivo: Un invité qu'on a oublié… Vous en pensez quoi, vous qui l'entendez ?"
+        dialogue-en:
+          - "a8_ivo: A guest someone forgot… What do you think, you who hear it?"
+    recompenses:
+      xp: 14400
+      or: 1440
+
+  a8_n_les_galeries_ouvertes:
+    nom: "Les galeries ouvertes"
+    nom-en: "The Open Galleries"
+    niveau: 85
+    donneur: a8_dagna
+    resume:
+      - "Une galerie de mine s'est ouverte sur le vide."
+      - "Tenir le treuil pendant que les mineurs remontent."
+    resume-en:
+      - "A mine gallery has opened onto the void."
+      - "Hold the winch while the miners climb out."
+    offre:
+      - "a8_dagna: La galerie de l'est a percé dans une Brèche. J'ai six gars au fond. Tenez le treuil le temps qu'on les remonte."
+    offre-en:
+      - "a8_dagna: The east gallery broke into a Breach. I have six lads at the bottom. Hold the winch while we bring them up."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre le treuil de la galerie"
+        texte-en: "Defend the gallery winch"
+        point: a8_galerie
+        monstres: [a8_affame, a8_calcine]
+        nombre: 4
+        vagues: 4
+        apparition: a8_galerie_b
+        pv: 450
+        degats: 9
+        niveau: 85
+        cible: "Le treuil"
+        cible-en: "The winch"
+        apres:
+          - "a8_dagna: Six. Ils sont six. Tout le monde est remonté. On condamne la galerie."
+        apres-en:
+          - "a8_dagna: Six. All six. Everyone is up. We are sealing the gallery."
+    recompenses:
+      xp: 14300
+      or: 1430
+
+  a8_n_le_minerai_qui_pleure:
+    nom: "Le minerai qui pleure"
+    nom-en: "The Weeping Ore"
+    niveau: 86
+    requiert: [a8_n_les_galeries_ouvertes]
+    donneur: a8_dagna
+    resume:
+      - "Un bloc de minerai pleure de la lumière."
+      - "Le rapporter à dos de monture."
+    resume-en:
+      - "A block of ore weeps light."
+      - "Bring it back on a mount."
+    offre:
+      - "a8_dagna: Au fond de la galerie condamnée, un bloc de minerai pleure de la lumière. Si on le laisse là, la Brèche le boira. Chargez-le sur une monture et ramenez-le-moi."
+    offre-en:
+      - "a8_dagna: At the bottom of the sealed gallery, a block of ore weeps light. If we leave it there, the Breach will drink it. Load it on a mount and bring it to me."
+    etapes:
+      - type: TRANSPORT
+        texte: "Ramener le minerai à Dagna, à dos de monture"
+        texte-en: "Bring the ore to Dagna, on a mount"
+        point: a8_dagna
+        depart: a8_galerie
+        materiau: RAW_GOLD_BLOCK
+        rayon: 5
+        objet: "Minerai qui pleure"
+        objet-en: "Weeping ore"
+        apres:
+          - "a8_dagna: Il pleure toujours. De la lumière de Marqué, prise dans la roche. Il y en a partout sous nos pieds. On n'avait jamais remarqué."
+        apres-en:
+          - "a8_dagna: It is still weeping. Marked light, caught in the rock. There is some everywhere under our feet. We had never noticed."
+    recompenses:
+      xp: 14400
+      or: 1440
+
+  a8_n_l_ancienne_chaine:
+    nom: "L'ancienne chaîne"
+    nom-en: "The Old Chain"
+    niveau: 87
+    donneur: a8_dagna
+    resume:
+      - "Des maillons vivants rampent hors de la Forge éteinte."
+    resume-en:
+      - "Living links are crawling out of the Extinguished Forge."
+    offre:
+      - "a8_dagna: Près de la Forge éteinte, des maillons de chaîne rampent tout seuls. Des restes de la Dernière Chaîne, je parie. Brisez-les avant qu'ils ne se retrouvent."
+    offre-en:
+      - "a8_dagna: Near the Extinguished Forge, chain links are crawling by themselves. Remnants of the Last Chain, I bet. Break them before they find each other."
+    etapes:
+      - type: TUER
+        texte: "Briser les maillons vivants"
+        texte-en: "Break the living links"
+        monstres: [a8_maillon]
+        nombre: 8
+        point: a8_chaine
+      - type: INTERAGIR
+        texte: "Examiner le dernier maillon"
+        texte-en: "Examine the last link"
+        point: a8_chaine
+        rayon: 5
+        apres:
+          - "Sur le métal, un poinçon : un M. Celui de l'écuyer qui l'a forgé, mille ans plus tôt."
+        apres-en:
+          - "On the metal, a hallmark: an M. That of the squire who forged it, a thousand years earlier."
+      - type: PARLER
+        texte: "Revenir auprès de Dagna"
+        texte-en: "Return to Dagna"
+        pnj: a8_dagna
+        dialogue:
+          - "a8_dagna: Un M ? Gardez ça pour vous. Ou portez-le à celui qui saura quoi en faire."
+        dialogue-en:
+          - "a8_dagna: An M? Keep that to yourself. Or take it to the one who will know what to do with it."
+    recompenses:
+      xp: 14600
+      or: 1460
+
+  a8_n_la_marche_des_calcines:
+    nom: "La marche des Calcinés"
+    nom-en: "The March of the Burnt"
+    niveau: 87
+    donneur: a8_dagna
+    resume:
+      - "Les Calcinés se rassemblent dans leur camp, à l'ouest."
+      - "Y entrer couvert de cendre."
+    resume-en:
+      - "The Burnt are gathering in their camp, to the west."
+      - "Enter covered in ash."
+    offre:
+      - "a8_dagna: Les Calcinés de l'ouest ne nous attaquent plus. Ils regardent tous vers le cratère. Couvrez-vous de cendre et allez voir ce qu'ils attendent."
+    offre-en:
+      - "a8_dagna: The Burnt to the west no longer attack us. They all stare toward the crater. Cover yourself in ash and go and see what they are waiting for."
+    etapes:
+      - type: DEGUISEMENT
+        texte: "Entrer dans le camp des Calcinés sans être reconnu"
+        texte-en: "Enter the camp of the Burnt unrecognised"
+        point: a8_camp_calcine
+        monstres: [cendreux, brute_calcinee]
+        materiau: LEATHER_CHESTPLATE
+        couleur: "#4A4A4A"
+        objet: "Manteau de cendre"
+        objet-en: "Cloak of ash"
+        apres:
+          - "Au centre du camp, les Calcinés ont dressé un cercle de pierres noires, tourné vers le volcan. Ils ne brûlent plus. Ils attendent que quelque chose les rallume."
+        apres-en:
+          - "At the centre of the camp, the Burnt have raised a circle of black stones, facing the volcano. They no longer burn. They are waiting for something to light them again."
+      - type: PARLER
+        texte: "Rendre compte à Dagna"
+        texte-en: "Report to Dagna"
+        pnj: a8_dagna
+        dialogue:
+          - "a8_dagna: Ils attendent l'Astre, comme nous. Même eux. C'est presque touchant."
+        dialogue-en:
+          - "a8_dagna: They are waiting for the Star, like us. Even them. It is almost touching."
+    recompenses:
+      xp: 14600
+      or: 1460
+
+  # ================================================================ ACTE VIII — ANNEXES : CONTRATS DES BRÈCHES (répétables)
+
+  a8_rep_breche_marche:
+    nom: "Contrat : Brèche de la Marche"
+    nom-en: "Contract: Breach of the March"
+    repetable: 20
+    niveau: 80
+    donneur: a8_ravel
+    resume:
+      - "La Brèche de la Marche s'est rouverte."
+      - "La tenir jusqu'à ce qu'elle se calme."
+    resume-en:
+      - "The Breach of the March has reopened."
+      - "Hold it until it calms."
+    offre:
+      - "a8_ravel: La Marche, au nord des Quatre-Vents. Elle s'est rouverte cette nuit. Tenez-la une minute et demie."
+    offre-en:
+      - "a8_ravel: The March, north of the Four Winds. It reopened last night. Hold it for a minute and a half."
+    etapes:
+      - type: DEFENSE
+        texte: "Tenir la Brèche de la Marche"
+        texte-en: "Hold the Breach of the March"
+        point: a8_breche_marche
+        monstres: [a8_affame, a8_rodeur]
+        duree: 90
+        intervalle: 15
+        apparition: a8_breche_marche_b
+        pv: 400
+        degats: 8
+        niveau: 82
+        cible: "Le sceau de la Brèche"
+        cible-en: "The Breach seal"
+        apres:
+          - "La Brèche se calme. Jusqu'à demain."
+        apres-en:
+          - "The Breach calms. Until tomorrow."
+    recompenses:
+      xp: 8600
+      or: 860
+
+  a8_rep_breche_oasis:
+    nom: "Contrat : Brèche de l'Oasis"
+    nom-en: "Contract: Breach of the Oasis"
+    repetable: 20
+    niveau: 82
+    donneur: a8_ravel
+    resume:
+      - "Des Affamés sortent de la Brèche de l'Oasis."
+    resume-en:
+      - "Starved ones are coming out of the Breach of the Oasis."
+    offre:
+      - "a8_ravel: Les Astréens demandent de l'aide : la Brèche de l'Oasis vomit des Affamés. Douze, et ils vous paieront."
+    offre-en:
+      - "a8_ravel: The Astreans ask for help: the Breach of the Oasis is spewing Starved ones. Twelve, and they will pay you."
+    etapes:
+      - type: TUER
+        texte: "Abattre les Affamés de l'Oasis"
+        texte-en: "Slay the Starved of the Oasis"
+        monstres: [a8_affame]
+        nombre: 12
+        point: a8_breche_oasis
+    recompenses:
+      xp: 8800
+      or: 880
+
+  a8_rep_breche_cimes:
+    nom: "Contrat : Brèche des Cimes"
+    nom-en: "Contract: Breach of the Peaks"
+    repetable: 20
+    niveau: 84
+    donneur: a8_ravel
+    resume:
+      - "La Brèche des Cimes se referme en aspirant tout."
+      - "Y tenir jusqu'au bout."
+    resume-en:
+      - "The Breach of the Peaks closes, drawing everything in."
+      - "Hold on to the end."
+    offre:
+      - "a8_ravel: Fort Blanc veut quelqu'un dans la Brèche quand elle se referme, pour rapporter ce qu'elle laisse. Ne vous faites pas avaler."
+    offre-en:
+      - "a8_ravel: Fort Blanc wants someone in the Breach when it closes, to bring back what it leaves. Do not get swallowed."
+    etapes:
+      - type: SURVIE
+        texte: "Tenir dans la Brèche qui se referme"
+        texte-en: "Hold on in the closing Breach"
+        point: a8_breche_cimes
+        rayon: 15
+        duree: 45
+        mode: resserre
+        rayon-fin: 5
+        degats: 10
+        monstres: [a8_gele]
+        nombre: 2
+        intervalle: 15
+        niveau: 86
+        apres:
+          - "La Brèche se ferme. Il reste, sur la glace, un éclat de froid que vous ramassez."
+        apres-en:
+          - "The Breach shuts. On the ice remains a shard of cold, which you pick up."
+    recompenses:
+      xp: 9000
+      or: 900
+
+  a8_rep_breche_cendres:
+    nom: "Contrat : Brèche des Cendres"
+    nom-en: "Contract: Breach of the Ashes"
+    repetable: 20
+    niveau: 85
+    donneur: a8_ravel
+    resume:
+      - "La Brèche des Cendres menace le Camp."
+      - "Tenir trois vagues."
+    resume-en:
+      - "The Breach of the Ashes threatens the Camp."
+      - "Hold three waves."
+    offre:
+      - "a8_ravel: Le Camp des Cendres paie bien quand la Brèche du sud s'agite. Elle s'agite. Trois vagues."
+    offre-en:
+      - "a8_ravel: The Camp of Ashes pays well when the southern Breach stirs. It is stirring. Three waves."
+    etapes:
+      - type: DEFENSE
+        texte: "Tenir la Brèche des Cendres"
+        texte-en: "Hold the Breach of the Ashes"
+        point: a8_breche_cendres
+        monstres: [a8_affame, a8_calcine]
+        nombre: 5
+        vagues: 3
+        apparition: a8_breche_cendres_b
+        pv: 450
+        degats: 9
+        niveau: 87
+        cible: "Le sceau de la Brèche"
+        cible-en: "The Breach seal"
+        apres:
+          - "La dernière vague se brise sur le sceau."
+        apres-en:
+          - "The last wave breaks on the seal."
+    recompenses:
+      xp: 9100
+      or: 910
+
+  a8_rep_ombre_du_souffle:
+    nom: "Prime : l'Ombre du Souffle"
+    nom-en: "Bounty: the Shadow of the Breath"
+    repetable: 20
+    niveau: 89
+    donneur: a8_ravel
+    resume:
+      - "PRIME DU JOUR : une Ombre du Souffle à l'est du Guet."
+    resume-en:
+      - "BOUNTY OF THE DAY: a Shadow of the Breath east of the Watch."
+    offre:
+      - "a8_ravel: Une Ombre s'est reformée près de la Brèche de la Fournaise. Elles reviennent toujours. Moi, je paie toujours."
+    offre-en:
+      - "a8_ravel: A Shadow has formed again near the Breach of the Furnace. They always come back. I always pay."
+    etapes:
+      - type: TUER
+        texte: "Abattre l'Ombre du Souffle"
+        texte-en: "Slay the Shadow of the Breath"
+        monstres: [a8_ombre_souffle]
+        point: a8_breche_fournaise_b
+    recompenses:
+      xp: 11200
+      or: 1120
+
+  a8_rep_souffle_fige:
+    nom: "Contrat : souffle figé"
+    nom-en: "Contract: frozen breath"
+    repetable: 20
+    niveau: 87
+    donneur: a8_ravel
+    resume:
+      - "Ilvar veut du souffle figé de la Brèche de la Fournaise."
+    resume-en:
+      - "Ilvar wants frozen breath from the Breach of the Furnace."
+    offre:
+      - "a8_ravel: Ilvar en use chaque jour pour ses astrolabes. Six fragments, pris sur les Affamés de la Fournaise."
+    offre-en:
+      - "a8_ravel: Ilvar uses some every day for his astrolabes. Six fragments, taken from the Starved of the Furnace."
+    etapes:
+      - type: RAMASSER
+        texte: "Ramasser du souffle figé"
+        texte-en: "Gather frozen breath"
+        monstres: [a8_affame]
+        nombre: 6
+        chance: 0.5
+        point: a8_breche_fournaise
+        objet: "Souffle figé"
+        objet-en: "Frozen breath"
+      - type: PARLER
+        texte: "Livrer le souffle figé à Ilvar"
+        texte-en: "Deliver the frozen breath to Ilvar"
+        pnj: a8_ilvar
+        dialogue:
+          - "a8_ilvar: Parfait. Ils sont encore tièdes. Le ciel s'est vraiment refermé, alors."
+        dialogue-en:
+          - "a8_ilvar: Perfect. They are still warm. The sky really has closed, then."
+    recompenses:
+      xp: 9200
+      or: 920
+
+  a8_rep_les_fragments:
+    nom: "Contrat de la semaine : les fragments"
+    nom-en: "Weekly contract: the fragments"
+    repetable: 160
+    niveau: 88
+    donneur: a8_ravel
+    resume:
+      - "CONTRAT DE LA SEMAINE."
+      - "Rapporter un grand fragment du souffle, à dos de monture."
+    resume-en:
+      - "WEEKLY CONTRACT."
+      - "Bring back a great fragment of the breath, on a mount."
+    offre:
+      - "a8_ravel: Une fois par semaine, la Brèche de la Fournaise crache un grand fragment. Naïa le rend au ciel. Montez, et ramenez-le sans prendre un seul coup."
+    offre-en:
+      - "a8_ravel: Once a week, the Breach of the Furnace spits out a great fragment. Naïa gives it back to the sky. Ride, and bring it back without taking a single blow."
+    etapes:
+      - type: TUER
+        texte: "Dégager la Brèche de la Fournaise"
+        texte-en: "Clear the Breach of the Furnace"
+        monstres: [a8_affame]
+        nombre: 8
+        point: a8_breche_fournaise
+      - type: TRANSPORT
+        texte: "Rapporter le fragment au Seuil, à dos de monture"
+        texte-en: "Bring the fragment to the Threshold, on a mount"
+        point: a8_seuil
+        depart: a8_breche_fournaise
+        materiau: PACKED_ICE
+        rayon: 6
+        objet: "Grand fragment du souffle"
+        objet-en: "Great fragment of the breath"
+        apres:
+          - "a8_naia: Je le rendrai ce soir. Il remontera comme une étoile filante, mais à l'envers."
+        apres-en:
+          - "a8_naia: I will give it back tonight. It will rise like a shooting star, but backwards."
+    recompenses:
+      xp: 27700
+      or: 2770

@@ -207,6 +207,7 @@ public final class Progression {
             }
             // Équipement changé (arme, armure, bouclier) : bonus recalculés.
             if (valid(d) && fr.orbit.mmo.item.Loot.signature(p, plugin.bar().weapon(p, d)) != d.gearSig) {
+                plugin.binding().checkWorn(p, d); // type d'armure, liaison, garde-robe
                 recompute(p, d);
                 d.hp = Math.min(d.hp, Stats.maxHp(d));
                 plugin.combat().sync(p, d);

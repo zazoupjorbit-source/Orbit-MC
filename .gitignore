@@ -40,6 +40,8 @@
 
 # --- Lore, maquettes, base ---
 !/lore/
+!/docs/
+!/site/
 !/maquettes/
 !/setup/
 /setup/*.properties
@@ -174,3 +176,10 @@ runtime.json
 /marketing/discord/*
 !/marketing/discord/logo-orbitmc-discord.png
 !/marketing/discord/logo-orbitmc.html
+
+# Données de jeu (écrites par les plugins en jeu) : jamais dans git
+/instances/*/plugins/OrbitExtraction/chargeurs.yml
+/instances/*/plugins/OrbitTycoon/pets.yml
+/instances/*/plugins/OrbitTycoon/pets.yml.*
+/instances/*/plugins/OrbitTycoon/generateurs.yml
+/instances/*/plugins/OrbitTycoon/coffres-ailes.ok

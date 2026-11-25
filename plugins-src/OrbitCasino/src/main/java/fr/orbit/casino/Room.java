@@ -53,6 +53,11 @@ public final class Room {
         return new Location(w, 25.5, Y, 18.5, 180f, 0f);
     }
 
+    /** Hôtesse des règles, juste à droite de l'arrivée, tournée vers le joueur qui entre. */
+    public static Location guide(World w) {
+        return new Location(w, 3.5, Y, 15.5, 90f, 0f);
+    }
+
     public static Location barman(World w) {
         return new Location(w, -25.5, Y, 18.5, 180f, 0f);
     }

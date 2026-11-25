@@ -1,0 +1,2252 @@
+# ------------------------------------------------------------------
+#  Contrats répétables des hubs des niveaux 1 à 34 (Auréval, Morneval, villages, Quatre-Vents).
+#  rep 20 : contrat du jour (de nouveau proposé 20 h après) ; rep 160 : prime de la semaine (monstre élite nommé).
+#  FICHIER GÉNÉRÉ par tools\quetes\gen-quetes.js depuis tools\quetes\zones\contrats.js : modifier la source, pas ce fichier.
+# ------------------------------------------------------------------
+
+pnj:
+  ct_veillemont:
+    nom: "Sergente Brisse"
+    nom-en: "Sergeant Brisse"
+    titre: "Contrats de Veillemont"
+    titre-en: "Veillemont contracts"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: makena
+    point: ct_veillemont
+    main: PAPER
+    repliques:
+      - "Petit hameau, petits contrats. Mais ils paient."
+    repliques-en:
+      - "Small hamlet, small contracts. But they pay."
+  ct_bourg:
+    nom: "Maître Anselin"
+    nom-en: "Master Anselin"
+    titre: "Contrats du Bourg"
+    titre-en: "Bourg contracts"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: alex
+    point: ct_bourg
+    main: PAPER
+    repliques:
+      - "Les bergers paient en laine, les marchands en or. Moi, je préfère l'or."
+    repliques-en:
+      - "Shepherds pay in wool, merchants in gold. I prefer gold."
+  ct_aureval:
+    nom: "Héraut Corentin"
+    nom-en: "Herald Corentin"
+    titre: "Contrats de l'Aube"
+    titre-en: "Dawn contracts"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: steve
+    point: ct_aureval
+    main: PAPER
+    repliques:
+      - "Au nom du Bastion : il y a toujours du travail pour un Marqué."
+    repliques-en:
+      - "In the name of the Bastion: there is always work for a Marked."
+  ct_sylvestre:
+    nom: "Garde-forêt Ysa"
+    nom-en: "Forest-warden Ysa"
+    titre: "Contrats du Village Sylvestre"
+    titre-en: "Sylvan Village contracts"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: kai
+    point: ct_sylvestre
+    main: BOW
+    repliques:
+      - "Le bois donne, le bois prend. Moi, je tiens les comptes."
+    repliques-en:
+      - "The wood gives, the wood takes. I keep the accounts."
+  ct_ponant:
+    nom: "Lieutenant Bertrand"
+    titre: "Contrats du Guet du Ponant"
+    titre-en: "Ponant Watch contracts"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: efe
+    point: ct_ponant
+    main: IRON_SWORD
+    repliques:
+      - "Les collines ne se gardent pas toutes seules. Il paraît."
+    repliques-en:
+      - "The hills do not guard themselves. Apparently."
+  ct_nidnoir:
+    nom: "Corbelle"
+    titre: "Contrats de Nidnoir"
+    titre-en: "Nidnoir contracts"
+    couleur: "#B36BFF"
+    type: MANNEQUIN
+    visage: zuri
+    point: ct_nidnoir
+    main: PAPER
+    repliques:
+      - "Grisolde paie ce qui doit être fait. Je dis ce qui doit être fait."
+    repliques-en:
+      - "Grisolde pays for what must be done. I say what must be done."
+  ct_gris:
+    nom: "Fossoyeuse Maëve"
+    nom-en: "Gravedigger Maëve"
+    titre: "Contrats de Gris-Hameau"
+    titre-en: "Gris-Hameau contracts"
+    couleur: "#B36BFF"
+    type: MANNEQUIN
+    visage: noor
+    point: ct_gris
+    main: IRON_SHOVEL
+    repliques:
+      - "Tout passe par Gris-Hameau. Les contrats aussi."
+    repliques-en:
+      - "Everything goes through Gris-Hameau. Contracts too."
+  ct_morneval:
+    nom: "Greffier Sorn"
+    nom-en: "Clerk Sorn"
+    titre: "Contrats de la Citadelle"
+    titre-en: "Citadel contracts"
+    couleur: "#B36BFF"
+    type: MANNEQUIN
+    visage: ari
+    point: ct_morneval
+    main: PAPER
+    repliques:
+      - "La Citadelle ne demande pas. Elle inscrit, et elle paie."
+    repliques-en:
+      - "The Citadel does not ask. It records, and it pays."
+  ct_sombrebois:
+    nom: "Veneuse Ilke"
+    nom-en: "Huntress Ilke"
+    titre: "Contrats de Sombrebois"
+    titre-en: "Sombrebois contracts"
+    couleur: "#B36BFF"
+    type: MANNEQUIN
+    visage: sunny
+    point: ct_sombrebois
+    main: BOW
+    repliques:
+      - "Dans la Sylve, on chasse ou on est chassé. Choisissez."
+    repliques-en:
+      - "In the Sylve, you hunt or you are hunted. Choose."
+  ct_pilotis:
+    nom: "Batelier Hob"
+    nom-en: "Boatman Hob"
+    titre: "Contrats des Pilotis"
+    titre-en: "Pilotis contracts"
+    couleur: "#B36BFF"
+    type: MANNEQUIN
+    visage: alex
+    point: ct_pilotis
+    main: OAK_BOAT
+    repliques:
+      - "Le marais rend ses morts, et quelqu'un doit les recoucher."
+    repliques-en:
+      - "The marsh gives back its dead, and someone has to lay them down again."
+  ct_quatre_vents:
+    nom: "Dame Albe"
+    nom-en: "Lady Albe"
+    titre: "Contrats des Quatre-Vents"
+    titre-en: "Four Winds contracts"
+    couleur: "#D7DCE2"
+    type: MANNEQUIN
+    visage: makena
+    point: ct_quatre_vents
+    main: PAPER
+    repliques:
+      - "Ici, l'or n'a pas de couleur. Les contrats non plus."
+    repliques-en:
+      - "Here, gold has no colour. Neither do contracts."
+  ct_colin:
+    nom: "Colin"
+    titre: "Berger"
+    titre-en: "Shepherd"
+    couleur: "#C9D6A3"
+    type: MANNEQUIN
+    visage: sunny
+    point: ct_colin
+    repliques:
+      - "Mes bêtes ont peur des loups. Moi aussi, un peu."
+    repliques-en:
+      - "My flock is afraid of wolves. So am I, a little."
+  ct_prospecteur:
+    nom: "Odon"
+    titre: "Prospecteur"
+    titre-en: "Prospector"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    visage: efe
+    point: ct_prospecteur
+    main: IRON_PICKAXE
+    repliques:
+      - "Il y a de l'argent dans ces collines. Et des brigands dessus."
+    repliques-en:
+      - "There is silver in those hills. And bandits on top of it."
+  ct_porteur:
+    nom: "Vieux Gaut"
+    nom-en: "Old Gaut"
+    titre: "Porteur de morts"
+    titre-en: "Corpse-bearer"
+    couleur: "#B8B0A0"
+    type: MANNEQUIN
+    visage: steve
+    point: ct_porteur
+    repliques:
+      - "Je porte les morts jusqu'au cimetière. Ils ne se plaignent jamais."
+    repliques-en:
+      - "I carry the dead to the cemetery. They never complain."
+  ct_marchand:
+    nom: "Ezio"
+    titre: "Marchand ambulant"
+    titre-en: "Travelling merchant"
+    couleur: "#E8D7A0"
+    type: MANNEQUIN
+    visage: ari
+    point: ct_marchand
+    main: CHEST
+    repliques:
+      - "Je vends aux deux camps. Les pillards, eux, ne font pas la différence."
+    repliques-en:
+      - "I sell to both sides. The raiders do not tell the difference either."
+
+monstres:
+  ct_roi_loups:
+    nom: "Le Roi des loups"
+    type: WOLF
+    taille: 1.7
+    pv: 9
+    degats: 1.4
+    vitesse: 1.1
+    xp: 8
+    or: 8
+  ct_veuve:
+    nom: "La Veuve de Sombrebois"
+    type: SPIDER
+    taille: 2.2
+    pv: 10
+    degats: 1.4
+    vitesse: 1
+    xp: 9
+    or: 9
+  ct_tueur_des_cols:
+    nom: "Le Tueur des cols"
+    type: VINDICATOR
+    taille: 1.4
+    pv: 10
+    degats: 1.4
+    vitesse: 1
+    xp: 10
+    or: 10
+    arme: IRON_AXE
+  ct_noye_roi:
+    nom: "Le Noyé-Roi"
+    type: DROWNED
+    taille: 1.8
+    pv: 10
+    degats: 1.4
+    vitesse: 0.95
+    xp: 10
+    or: 10
+    arme: TRIDENT
+  ct_capitaine_pillard:
+    nom: "Capitaine Rouge-Sable"
+    type: PILLAGER
+    taille: 1.5
+    pv: 11
+    degats: 1.45
+    vitesse: 1
+    xp: 12
+    or: 12
+    arme: CROSSBOW
+  ct_purificateur_noir:
+    nom: "Le Purificateur sans visage"
+    type: VINDICATOR
+    taille: 1.5
+    pv: 9
+    degats: 1.4
+    vitesse: 1
+    xp: 8
+    or: 8
+    arme: GOLDEN_AXE
+
+apparitions:
+  ct_app_roi_loups:
+    point: ct_bois_aureval
+    monstre: ct_roi_loups
+    niveau: 10
+    nombre: 1
+    rayon: 4
+  ct_app_veuve:
+    point: ct_camp_e1
+    monstre: ct_veuve
+    niveau: 16
+    nombre: 1
+    rayon: 4
+  ct_app_tueur:
+    point: ct_camp_c4
+    monstre: ct_tueur_des_cols
+    niveau: 25
+    nombre: 1
+    rayon: 4
+  ct_app_noye_roi:
+    point: ct_camp_f4
+    monstre: ct_noye_roi
+    niveau: 25
+    nombre: 1
+    rayon: 4
+  ct_app_capitaine:
+    point: ct_camp_g5
+    monstre: ct_capitaine_pillard
+    niveau: 34
+    nombre: 1
+    rayon: 4
+  ct_app_purif_noir:
+    point: ct_camp_d7
+    monstre: ct_purificateur_noir
+    niveau: 10
+    nombre: 1
+    rayon: 4
+
+quetes:
+
+  # ================================================================ CONTRATS — LUMIÈRE (ANNEXES)
+
+  ct_v_sangliers:
+    nom: "Contrat : sangliers des prés"
+    nom-en: "Contract: meadow boars"
+    faction: lumiere
+    repetable: 20
+    niveau: 2
+    donneur: ct_veillemont
+    resume:
+      - "Les sangliers retournent les champs de Veillemont."
+    resume-en:
+      - "Boars are tearing up the fields of Veillemont."
+    offre:
+      - "ct_veillemont: Six sangliers, dans les prés à l'est. Ils retournent nos semis toutes les nuits."
+    offre-en:
+      - "ct_veillemont: Six boars, in the meadows to the east. They dig up our seedlings every night."
+    etapes:
+      - type: TUER
+        texte: "Chasser les sangliers des prés"
+        texte-en: "Hunt the meadow boars"
+        monstres: [sanglier]
+        nombre: 6
+        point: ct_pres_veillemont
+      - type: PARLER
+        texte: "Revenir auprès de Brisse"
+        texte-en: "Return to Brisse"
+        pnj: ct_veillemont
+        dialogue:
+          - "ct_veillemont: Les semis respireront cette nuit. Revenez demain : ils reviennent toujours."
+        dialogue-en:
+          - "ct_veillemont: The seedlings will breathe tonight. Come back tomorrow: they always come back."
+    recompenses:
+      xp: 250
+      or: 25
+
+  ct_v_pain_du_bourg:
+    nom: "Contrat : le pain du Bourg"
+    nom-en: "Contract: bread for the Bourg"
+    faction: lumiere
+    repetable: 20
+    niveau: 3
+    donneur: ct_veillemont
+    resume:
+      - "Porter une miche de pain au Bourg des Pâtres."
+    resume-en:
+      - "Carry a loaf of bread to the Bourg des Pâtres."
+    offre:
+      - "ct_veillemont: Notre four a cuit pour deux villages. Portez cette miche à Maître Anselin, au Bourg, au sud."
+    offre-en:
+      - "ct_veillemont: Our oven baked for two villages. Take this loaf to Master Anselin, at the Bourg, to the south."
+    etapes:
+      - type: LIVRER
+        texte: "Porter le pain à Maître Anselin"
+        texte-en: "Bring the bread to Master Anselin"
+        pnj: ct_bourg
+        materiau: BREAD
+        objet: "Miche de Veillemont"
+        objet-en: "Veillemont loaf"
+        dialogue:
+          - "ct_bourg: Encore chaud, presque. Brisse tient parole. Dites-lui merci de ma part."
+        dialogue-en:
+          - "ct_bourg: Still almost warm. Brisse keeps her word. Thank her for me."
+    recompenses:
+      xp: 380
+      or: 40
+
+  ct_v_la_cloture:
+    nom: "Contrat : la clôture des champs"
+    nom-en: "Contract: the field fence"
+    faction: lumiere
+    repetable: 20
+    niveau: 4
+    donneur: ct_veillemont
+    resume:
+      - "Des loups rôdent autour de la clôture des champs."
+      - "La tenir trois vagues."
+    resume-en:
+      - "Wolves are prowling around the field fence."
+      - "Hold it for three waves."
+    offre:
+      - "ct_veillemont: Les loups viennent à la tombée du jour, toujours par le même trou dans la clôture. Tenez-la."
+    offre-en:
+      - "ct_veillemont: The wolves come at nightfall, always through the same hole in the fence. Hold it."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre la clôture des champs"
+        texte-en: "Defend the field fence"
+        point: ct_champs_veillemont
+        monstres: [loup]
+        nombre: 3
+        vagues: 3
+        apparition: ct_champs_veillemont_b
+        pv: 120
+        degats: 3
+        cible: "La clôture"
+        cible-en: "The fence"
+        apres:
+          - "Le dernier loup détale. La clôture tient."
+        apres-en:
+          - "The last wolf bolts. The fence holds."
+    recompenses:
+      xp: 500
+      or: 50
+
+  ct_b_gardes_kobolds:
+    nom: "Prime : les gardes kobolds"
+    nom-en: "Bounty: the kobold guards"
+    faction: lumiere
+    repetable: 20
+    niveau: 5
+    donneur: ct_bourg
+    resume:
+      - "Les gardes kobolds du sud volent nos brebis."
+    resume-en:
+      - "The kobold guards to the south are stealing our ewes."
+    offre:
+      - "ct_bourg: Le camp kobold, au sud-ouest. Ce sont leurs gardes qui viennent voler. Trois têtes, et je paie."
+    offre-en:
+      - "ct_bourg: The kobold camp, to the south-west. Their guards are the ones who come stealing. Three heads, and I pay."
+    etapes:
+      - type: TUER
+        texte: "Abattre les gardes kobolds"
+        texte-en: "Slay the kobold guards"
+        monstres: [kobold_garde]
+        nombre: 3
+        point: ct_camp_a7
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_bourg
+        dialogue:
+          - "ct_bourg: Les brebis dormiront. Votre prime."
+        dialogue-en:
+          - "ct_bourg: The ewes will sleep. Your bounty."
+    recompenses:
+      xp: 630
+      or: 65
+
+  ct_b_laine_volee:
+    nom: "Contrat : la laine volée"
+    nom-en: "Contract: the stolen wool"
+    faction: lumiere
+    repetable: 20
+    niveau: 6
+    donneur: ct_bourg
+    resume:
+      - "Des brigands ont volé la laine du Bourg."
+    resume-en:
+      - "Brigands stole the Bourg's wool."
+    offre:
+      - "ct_bourg: Les brigands du sud ont pris nos ballots de laine. Reprenez-en quatre : c'est ce qu'il faut pour l'hiver."
+    offre-en:
+      - "ct_bourg: The southern brigands took our wool bales. Take back four: that is what we need for the winter."
+    etapes:
+      - type: RAMASSER
+        texte: "Reprendre la laine aux brigands"
+        texte-en: "Take the wool back from the brigands"
+        monstres: [bandit, braconnier]
+        nombre: 4
+        chance: 0.5
+        point: ct_camp_a2
+        objet: "Ballot de laine"
+        objet-en: "Bale of wool"
+      - type: PARLER
+        texte: "Rapporter la laine"
+        texte-en: "Bring back the wool"
+        pnj: ct_bourg
+        dialogue:
+          - "ct_bourg: Quatre ballots. L'hiver sera moins froid."
+        dialogue-en:
+          - "ct_bourg: Four bales. The winter will be less cold."
+    recompenses:
+      xp: 750
+      or: 80
+
+  ct_b_le_berger:
+    nom: "Contrat : le berger"
+    nom-en: "Contract: the shepherd"
+    faction: lumiere
+    repetable: 20
+    niveau: 7
+    donneur: ct_bourg
+    resume:
+      - "Colin doit mener son troupeau aux pâtures."
+      - "L'escorter."
+    resume-en:
+      - "Colin must lead his flock to the pastures."
+      - "Escort him."
+    offre:
+      - "ct_bourg: Colin mène ses bêtes aux pâtures du sud. Les loups le suivent depuis trois jours. Accompagnez-le."
+    offre-en:
+      - "ct_bourg: Colin is taking his flock to the southern pastures. Wolves have been following him for three days. Go with him."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter Colin aux pâtures"
+        texte-en: "Escort Colin to the pastures"
+        pnj: ct_colin
+        chemin: [ct_paturage_1, ct_paturage_2]
+        monstres: [loup]
+        nombre: 2
+        vagues: 2
+        pv: 120
+        degats: 3
+        apres:
+          - "ct_colin: Les pâtures ! Les bêtes vont manger. Et moi, je vais respirer."
+        apres-en:
+          - "ct_colin: The pastures! The flock will eat. And I will breathe."
+    recompenses:
+      xp: 880
+      or: 90
+
+  ct_a_glaneurs:
+    nom: "Prime : les guetteurs glaneurs"
+    nom-en: "Bounty: the gleaner lookouts"
+    faction: lumiere
+    repetable: 20
+    niveau: 8
+    donneur: ct_aureval
+    resume:
+      - "Des guetteurs glaneurs épient les routes au nord."
+    resume-en:
+      - "Gleaner lookouts are spying on the roads to the north."
+    offre:
+      - "ct_aureval: Le Bastion veut les yeux des Glaneurs fermés. Leur camp, au nord des Prés. Trois guetteurs."
+    offre-en:
+      - "ct_aureval: The Bastion wants the Gleaners' eyes closed. Their camp, north of the Meadows. Three lookouts."
+    etapes:
+      - type: TUER
+        texte: "Abattre les guetteurs glaneurs"
+        texte-en: "Slay the gleaner lookouts"
+        monstres: [glaneur_guetteur]
+        nombre: 3
+        point: ct_camp_a3
+      - type: PARLER
+        texte: "Rendre compte au héraut"
+        texte-en: "Report to the herald"
+        pnj: ct_aureval
+        dialogue:
+          - "ct_aureval: Le Bastion vous remercie. Il le fait par ma bouche, et en or."
+        dialogue-en:
+          - "ct_aureval: The Bastion thanks you. It does so through my mouth, and in gold."
+    recompenses:
+      xp: 1000
+      or: 105
+
+  ct_a_loups:
+    nom: "Contrat : les loups de la route"
+    nom-en: "Contract: the road wolves"
+    faction: lumiere
+    repetable: 20
+    niveau: 6
+    donneur: ct_aureval
+    resume:
+      - "Des loups attaquent les voyageurs près d'Auréval."
+    resume-en:
+      - "Wolves are attacking travellers near Auréval."
+    offre:
+      - "ct_aureval: Huit loups, au nord des murs. Les pèlerins n'osent plus venir prier."
+    offre-en:
+      - "ct_aureval: Eight wolves, north of the walls. Pilgrims no longer dare come to pray."
+    etapes:
+      - type: TUER
+        texte: "Chasser les loups au nord d'Auréval"
+        texte-en: "Hunt the wolves north of Auréval"
+        monstres: [loup]
+        nombre: 8
+        point: ct_bois_aureval
+      - type: PARLER
+        texte: "Revenir auprès du héraut"
+        texte-en: "Return to the herald"
+        pnj: ct_aureval
+        dialogue:
+          - "ct_aureval: Les pèlerins reviendront demain. Les loups aussi, sans doute."
+        dialogue-en:
+          - "ct_aureval: The pilgrims will come back tomorrow. So will the wolves, no doubt."
+    recompenses:
+      xp: 750
+      or: 80
+
+  ct_a_ordres_du_bastion:
+    nom: "Contrat : les ordres du Bastion"
+    nom-en: "Contract: orders from the Bastion"
+    faction: lumiere
+    repetable: 20
+    niveau: 7
+    donneur: ct_aureval
+    resume:
+      - "Porter les ordres du jour à Veillemont."
+    resume-en:
+      - "Carry the orders of the day to Veillemont."
+    offre:
+      - "ct_aureval: Les ordres du jour pour la sergente Brisse, à Veillemont. Scellés. Ne les ouvrez pas."
+    offre-en:
+      - "ct_aureval: The orders of the day for Sergeant Brisse, at Veillemont. Sealed. Do not open them."
+    etapes:
+      - type: LIVRER
+        texte: "Porter les ordres à Brisse"
+        texte-en: "Bring the orders to Brisse"
+        pnj: ct_veillemont
+        materiau: PAPER
+        objet: "Ordres scellés du Bastion"
+        objet-en: "Sealed orders from the Bastion"
+        dialogue:
+          - "ct_veillemont: « Rien à signaler. » Comme hier. Le Bastion aime qu'on le lui dise tous les jours."
+        dialogue-en:
+          - "ct_veillemont: « Nothing to report. » Like yesterday. The Bastion likes to be told every day."
+    recompenses:
+      xp: 880
+      or: 90
+
+  ct_a_convoi_de_grain:
+    nom: "Contrat : le convoi de grain"
+    nom-en: "Contract: the grain convoy"
+    faction: lumiere
+    repetable: 20
+    niveau: 9
+    donneur: ct_aureval
+    resume:
+      - "Un convoi de grain est arrêté sur la Route du Sud."
+      - "Le défendre."
+    resume-en:
+      - "A grain convoy is stopped on the South Road."
+      - "Defend it."
+    offre:
+      - "ct_aureval: Le convoi de grain du Bourg s'est arrêté sur la Route du Sud : une roue cassée, et des brigands qui l'ont vu. Tenez jusqu'à la réparation."
+    offre-en:
+      - "ct_aureval: The Bourg grain convoy has stopped on the South Road: a broken wheel, and brigands who saw it. Hold until it is repaired."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre le convoi de grain"
+        texte-en: "Defend the grain convoy"
+        point: ct_route_sud
+        monstres: [bandit, braconnier]
+        nombre: 3
+        vagues: 3
+        apparition: ct_route_sud_b
+        pv: 160
+        degats: 4
+        cible: "Le convoi"
+        cible-en: "The convoy"
+        apres:
+          - "La roue est changée. Le convoi repart vers Auréval."
+        apres-en:
+          - "The wheel is changed. The convoy sets off for Auréval."
+    recompenses:
+      xp: 1130
+      or: 115
+
+  ct_a_courrier:
+    nom: "Contrat : courrier pressé"
+    nom-en: "Contract: urgent courier"
+    faction: lumiere
+    repetable: 20
+    niveau: 8
+    donneur: ct_aureval
+    resume:
+      - "Un pli urgent pour le Bourg des Pâtres."
+      - "Trois minutes."
+    resume-en:
+      - "An urgent letter for the Bourg des Pâtres."
+      - "Three minutes."
+    offre:
+      - "ct_aureval: Un pli urgent pour le Bourg des Pâtres. Trois minutes. Courez, ou montez."
+    offre-en:
+      - "ct_aureval: An urgent letter for the Bourg des Pâtres. Three minutes. Run, or ride."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Porter le pli au Bourg en trois minutes"
+        texte-en: "Carry the letter to the Bourg in three minutes"
+        point: ct_bourg
+        rayon: 4
+        apres:
+          - "ct_bourg: Déjà ? Le héraut sera content. Moi aussi."
+        apres-en:
+          - "ct_bourg: Already? The herald will be pleased. So am I."
+        chrono: 180
+        echec:
+          - "ct_aureval: Trop tard. Revenez prendre un autre pli."
+        echec-en:
+          - "ct_aureval: Too late. Come back for another letter."
+    recompenses:
+      xp: 1000
+      or: 105
+
+  ct_a_roi_des_loups:
+    nom: "Prime de la semaine : le Roi des loups"
+    nom-en: "Weekly bounty: the Wolf King"
+    faction: lumiere
+    repetable: 160
+    niveau: 10
+    donneur: ct_aureval
+    resume:
+      - "PRIME DE LA SEMAINE : le Roi des loups."
+      - "Un loup énorme mène les meutes au nord d'Auréval."
+    resume-en:
+      - "WEEKLY BOUNTY: the Wolf King."
+      - "A huge wolf leads the packs north of Auréval."
+    offre:
+      - "ct_aureval: Une bête grande comme un poney mène les meutes. Les bergers l'appellent le Roi. Le Bastion offre une prime pour sa peau."
+    offre-en:
+      - "ct_aureval: A beast as big as a pony leads the packs. The shepherds call it the King. The Bastion offers a bounty for its hide."
+    etapes:
+      - type: TUER
+        texte: "Abattre le Roi des loups"
+        texte-en: "Slay the Wolf King"
+        monstres: [ct_roi_loups]
+        point: ct_bois_aureval
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_aureval
+        dialogue:
+          - "ct_aureval: Le Roi est mort. Un autre prendra sa place, la semaine prochaine. C'est ainsi que vont les rois."
+        dialogue-en:
+          - "ct_aureval: The King is dead. Another will take his place next week. That is how kings go."
+    recompenses:
+      xp: 3750
+      or: 390
+
+  ct_s_la_tisseuse:
+    nom: "Prime : les araignées géantes"
+    nom-en: "Bounty: the giant spiders"
+    faction: lumiere
+    repetable: 20
+    niveau: 12
+    donneur: ct_sylvestre
+    resume:
+      - "Deux araignées géantes tissent à l'ouest du village."
+    resume-en:
+      - "Two giant spiders are weaving west of the village."
+    offre:
+      - "ct_sylvestre: Deux géantes, dans le nid de l'ouest. Elles ont pris un bûcheron la semaine dernière."
+    offre-en:
+      - "ct_sylvestre: Two giants, in the western nest. They took a woodcutter last week."
+    etapes:
+      - type: TUER
+        texte: "Abattre les araignées géantes"
+        texte-en: "Slay the giant spiders"
+        monstres: [araignee_geante]
+        nombre: 2
+        point: ct_camp_b4
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_sylvestre
+        dialogue:
+          - "ct_sylvestre: Le bûcheron ne reviendra pas. Les autres, si. Merci."
+        dialogue-en:
+          - "ct_sylvestre: The woodcutter will not come back. The others will. Thank you."
+    recompenses:
+      xp: 1500
+      or: 155
+
+  ct_s_crochets:
+    nom: "Contrat : crochets d'araignée"
+    nom-en: "Contract: spider fangs"
+    faction: lumiere
+    repetable: 20
+    niveau: 11
+    donneur: ct_sylvestre
+    resume:
+      - "L'alchimiste a besoin de crochets d'araignée."
+    resume-en:
+      - "The alchemist needs spider fangs."
+    offre:
+      - "ct_sylvestre: Mirelle fait des contrepoisons avec. Cinq crochets, du nid du nord-ouest."
+    offre-en:
+      - "ct_sylvestre: Mirelle makes antidotes with them. Five fangs, from the north-western nest."
+    etapes:
+      - type: RAMASSER
+        texte: "Récolter des crochets d'araignée"
+        texte-en: "Harvest spider fangs"
+        monstres: [araignee]
+        nombre: 5
+        chance: 0.5
+        point: ct_camp_b1
+        objet: "Crochet d'araignée"
+        objet-en: "Spider fang"
+      - type: PARLER
+        texte: "Rapporter les crochets"
+        texte-en: "Bring back the fangs"
+        pnj: ct_sylvestre
+        dialogue:
+          - "ct_sylvestre: Cinq. Ça fera vingt fioles. Vingt bûcherons qui ne mourront pas."
+        dialogue-en:
+          - "ct_sylvestre: Five. That makes twenty vials. Twenty woodcutters who will not die."
+    recompenses:
+      xp: 1380
+      or: 145
+
+  ct_s_glaneurs:
+    nom: "Contrat : les Glaneurs du bois"
+    nom-en: "Contract: the wood Gleaners"
+    faction: lumiere
+    repetable: 20
+    niveau: 13
+    donneur: ct_sylvestre
+    resume:
+      - "Des Glaneurs fouillent la forêt au sud du village."
+    resume-en:
+      - "Gleaners are searching the forest south of the village."
+    offre:
+      - "ct_sylvestre: Les Glaneurs ramassent les éclats tombés dans notre bois. Huit d'entre eux campent au sud. Chassez-les."
+    offre-en:
+      - "ct_sylvestre: The Gleaners are picking up the shards fallen in our wood. Eight of them camp to the south. Drive them off."
+    etapes:
+      - type: TUER
+        texte: "Chasser les Glaneurs"
+        texte-en: "Drive off the Gleaners"
+        monstres: [glaneur, glaneur_guetteur]
+        nombre: 8
+        point: ct_camp_b2
+      - type: PARLER
+        texte: "Revenir auprès d'Ysa"
+        texte-en: "Return to Ysa"
+        pnj: ct_sylvestre
+        dialogue:
+          - "ct_sylvestre: Le bois est à nous, pour aujourd'hui."
+        dialogue-en:
+          - "ct_sylvestre: The wood is ours, for today."
+    recompenses:
+      xp: 1630
+      or: 170
+
+  ct_s_la_scierie:
+    nom: "Contrat : la scierie"
+    nom-en: "Contract: the sawmill"
+    faction: lumiere
+    repetable: 20
+    niveau: 14
+    donneur: ct_sylvestre
+    resume:
+      - "Des brigands veulent piller la scierie."
+      - "La défendre."
+    resume-en:
+      - "Brigands want to plunder the sawmill."
+      - "Defend it."
+    offre:
+      - "ct_sylvestre: La scierie, à l'est du village. Des brigands l'ont repérée. Tenez trois vagues."
+    offre-en:
+      - "ct_sylvestre: The sawmill, east of the village. Brigands have spotted it. Hold three waves."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre la scierie"
+        texte-en: "Defend the sawmill"
+        point: ct_scierie
+        monstres: [bandit, braconnier]
+        nombre: 3
+        vagues: 3
+        apparition: ct_scierie_b
+        pv: 200
+        degats: 5
+        cible: "La scierie"
+        cible-en: "The sawmill"
+        apres:
+          - "Les brigands repartent les mains vides. La scie reprend son chant."
+        apres-en:
+          - "The brigands leave empty-handed. The saw takes up its song again."
+    recompenses:
+      xp: 1750
+      or: 180
+
+  ct_s_resine:
+    nom: "Contrat : le tonneau de résine"
+    nom-en: "Contract: the resin barrel"
+    faction: lumiere
+    repetable: 20
+    niveau: 15
+    donneur: ct_sylvestre
+    resume:
+      - "Un tonneau de résine attend en forêt."
+      - "Le ramener à dos de monture."
+    resume-en:
+      - "A barrel of resin is waiting in the forest."
+      - "Bring it back on a mount."
+    offre:
+      - "ct_sylvestre: Les résiniers ont laissé un tonneau plein au nord du village. Ramenez-le à dos de monture, sans le renverser."
+    offre-en:
+      - "ct_sylvestre: The resin-tappers left a full barrel north of the village. Bring it back on a mount, without spilling it."
+    etapes:
+      - type: TRANSPORT
+        texte: "Ramener le tonneau à Ysa, à dos de monture"
+        texte-en: "Bring the barrel to Ysa, on a mount"
+        point: ct_sylvestre
+        depart: ct_resine
+        materiau: BARREL
+        rayon: 5
+        objet: "Tonneau de résine"
+        objet-en: "Barrel of resin"
+        apres:
+          - "ct_sylvestre: Pas une goutte perdue. Les arcs du Guet seront bien collés."
+        apres-en:
+          - "ct_sylvestre: Not a drop lost. The bows of the Watch will be well glued."
+    recompenses:
+      xp: 1880
+      or: 195
+
+  ct_p_revenants:
+    nom: "Prime : les revenants du col"
+    nom-en: "Bounty: the pass revenants"
+    faction: lumiere
+    repetable: 20
+    niveau: 20
+    donneur: ct_ponant
+    resume:
+      - "Des revenants hantent le cimetière à l'est du Guet."
+    resume-en:
+      - "Revenants haunt the cemetery east of the Watch."
+    offre:
+      - "ct_ponant: Le cimetière oublié, à l'est. Quatre revenants s'y relèvent toutes les nuits. Recouchez-les."
+    offre-en:
+      - "ct_ponant: The forgotten cemetery, to the east. Four revenants rise there every night. Lay them down again."
+    etapes:
+      - type: TUER
+        texte: "Recoucher les revenants"
+        texte-en: "Lay the revenants to rest"
+        monstres: [revenant]
+        nombre: 4
+        point: ct_camp_c3
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_ponant
+        dialogue:
+          - "ct_ponant: Ils dormiront jusqu'à demain soir. Comme nous."
+        dialogue-en:
+          - "ct_ponant: They will sleep until tomorrow night. Like us."
+    recompenses:
+      xp: 2500
+      or: 260
+
+  ct_p_brigands_du_col:
+    nom: "Contrat : les brigands du col"
+    nom-en: "Contract: the pass brigands"
+    faction: lumiere
+    repetable: 20
+    niveau: 18
+    donneur: ct_ponant
+    resume:
+      - "Des brigands tiennent le col au sud du Guet."
+    resume-en:
+      - "Brigands hold the pass south of the Watch."
+    offre:
+      - "ct_ponant: Dix brigands au camp du sud. Ils rançonnent nos patrouilles. Montrez-leur qui garde le col."
+    offre-en:
+      - "ct_ponant: Ten brigands at the southern camp. They ransom our patrols. Show them who guards the pass."
+    etapes:
+      - type: TUER
+        texte: "Briser les brigands du col"
+        texte-en: "Break the pass brigands"
+        monstres: [bandit, braconnier]
+        nombre: 10
+        point: ct_camp_c1
+      - type: PARLER
+        texte: "Revenir auprès de Bertrand"
+        texte-en: "Return to Bertrand"
+        pnj: ct_ponant
+        dialogue:
+          - "ct_ponant: Le col est libre. Pour aujourd'hui."
+        dialogue-en:
+          - "ct_ponant: The pass is clear. For today."
+    recompenses:
+      xp: 2250
+      or: 235
+
+  ct_p_pierres_de_mine:
+    nom: "Contrat : les pierres de mine"
+    nom-en: "Contract: the mine stones"
+    faction: lumiere
+    repetable: 20
+    niveau: 19
+    donneur: ct_ponant
+    resume:
+      - "Les kobolds volent le minerai de la Mine du Ponant."
+    resume-en:
+      - "The kobolds steal ore from the Ponant Mine."
+    offre:
+      - "ct_ponant: Les kobolds de l'est volent notre minerai. Reprenez-en cinq pierres : la forge du Guet en a besoin."
+    offre-en:
+      - "ct_ponant: The kobolds to the east steal our ore. Take back five stones: the Watch's forge needs them."
+    etapes:
+      - type: RAMASSER
+        texte: "Reprendre le minerai aux kobolds"
+        texte-en: "Take the ore back from the kobolds"
+        monstres: [kobold, kobold_garde]
+        nombre: 5
+        chance: 0.5
+        point: ct_camp_c2
+        objet: "Pierre de minerai"
+        objet-en: "Ore stone"
+      - type: PARLER
+        texte: "Rapporter le minerai"
+        texte-en: "Bring back the ore"
+        pnj: ct_ponant
+        dialogue:
+          - "ct_ponant: Torvald sera content. Il ne le dira pas, mais il le sera."
+        dialogue-en:
+          - "ct_ponant: Torvald will be pleased. He will not say so, but he will be."
+    recompenses:
+      xp: 2380
+      or: 245
+
+  ct_p_le_prospecteur:
+    nom: "Contrat : le prospecteur"
+    nom-en: "Contract: the prospector"
+    faction: lumiere
+    repetable: 20
+    niveau: 22
+    donneur: ct_ponant
+    resume:
+      - "Odon veut prospecter dans les collines."
+      - "L'escorter."
+    resume-en:
+      - "Odon wants to prospect in the hills."
+      - "Escort him."
+    offre:
+      - "ct_ponant: Odon a trouvé un filon d'argent à l'ouest. Il veut y retourner. Il y retourne tous les jours. Accompagnez-le."
+    offre-en:
+      - "ct_ponant: Odon found a silver vein to the west. He wants to go back. He goes back every day. Go with him."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter Odon jusqu'au filon"
+        texte-en: "Escort Odon to the vein"
+        pnj: ct_prospecteur
+        chemin: [ct_filon_1, ct_filon_2]
+        monstres: [bandit, braconnier]
+        nombre: 2
+        vagues: 2
+        pv: 220
+        degats: 5
+        apres:
+          - "ct_prospecteur: Le filon ! Toujours là. Demain, j'en sortirai une pépite. Peut-être."
+        apres-en:
+          - "ct_prospecteur: The vein! Still there. Tomorrow I will dig out a nugget. Perhaps."
+    recompenses:
+      xp: 2750
+      or: 285
+
+  ct_p_le_camp_ouest:
+    nom: "Contrat : le camp des brigands"
+    nom-en: "Contract: the brigand camp"
+    faction: lumiere
+    repetable: 20
+    niveau: 24
+    donneur: ct_ponant
+    resume:
+      - "Traverser le camp des brigands sans être vu."
+      - "Y lire leurs plans."
+    resume-en:
+      - "Cross the brigand camp unseen."
+      - "Read their plans there."
+    offre:
+      - "ct_ponant: Le camp des brigands au nord-est prépare quelque chose. Passez-y sans vous faire voir et lisez ce qu'ils ont épinglé sur leur table."
+    offre-en:
+      - "ct_ponant: The brigand camp to the north-east is preparing something. Get in without being seen and read what they have pinned on their table."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre l'abord du camp"
+        texte-en: "Reach the edge of the camp"
+        point: ct_camp_c4_dep
+        rayon: 5
+      - type: INFILTRER
+        texte: "Traverser le camp sans être vu"
+        texte-en: "Cross the camp unseen"
+        point: ct_camp_c4
+        depart: ct_camp_c4_dep
+        monstres: [bandit, braconnier]
+        vue: 10
+        rayon: 4
+        apres:
+          - "Une carte. Les patrouilles du Guet, avec leurs heures. Quelqu'un les leur vend."
+        apres-en:
+          - "A map. The Watch's patrols, with their hours. Someone is selling them."
+      - type: PARLER
+        texte: "Rendre compte à Bertrand"
+        texte-en: "Report to Bertrand"
+        pnj: ct_ponant
+        dialogue:
+          - "ct_ponant: On change les heures dès ce soir. Et je chercherai qui parle trop."
+        dialogue-en:
+          - "ct_ponant: We change the hours tonight. And I will look for whoever talks too much."
+    recompenses:
+      xp: 3000
+      or: 310
+
+  ct_p_tueur_des_cols:
+    nom: "Prime de la semaine : le Tueur des cols"
+    nom-en: "Weekly bounty: the Pass Killer"
+    faction: lumiere
+    repetable: 160
+    niveau: 25
+    donneur: ct_ponant
+    resume:
+      - "PRIME DE LA SEMAINE : le Tueur des cols."
+      - "Un chef brigand à la hache, au camp du nord-est."
+    resume-en:
+      - "WEEKLY BOUNTY: the Pass Killer."
+      - "A brigand chief with an axe, at the north-eastern camp."
+    offre:
+      - "ct_ponant: Le Tueur des cols. Une hache, pas de pitié, et trois de mes hommes cette semaine. Le Guet offre une prime."
+    offre-en:
+      - "ct_ponant: The Pass Killer. An axe, no mercy, and three of my men this week. The Watch offers a bounty."
+    etapes:
+      - type: TUER
+        texte: "Abattre le Tueur des cols"
+        texte-en: "Slay the Pass Killer"
+        monstres: [ct_tueur_des_cols]
+        point: ct_camp_c4
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_ponant
+        dialogue:
+          - "ct_ponant: Un autre ramassera sa hache. Mais pas cette semaine."
+        dialogue-en:
+          - "ct_ponant: Another will pick up his axe. But not this week."
+    recompenses:
+      xp: 9380
+      or: 975
+
+  # ================================================================ CONTRATS — OMBRE (ANNEXES)
+
+  ct_n_loups_ombre:
+    nom: "Contrat : loups de la lande"
+    nom-en: "Contract: moor wolves"
+    faction: ombre
+    repetable: 20
+    niveau: 2
+    donneur: ct_nidnoir
+    resume:
+      - "Les loups de la lande rôdent autour de Nidnoir."
+    resume-en:
+      - "The moor wolves prowl around Nidnoir."
+    offre:
+      - "ct_nidnoir: Six loups d'ombre, à l'ouest. Grisolde ne veut plus les entendre la nuit."
+    offre-en:
+      - "ct_nidnoir: Six shadow wolves, to the west. Grisolde no longer wants to hear them at night."
+    etapes:
+      - type: TUER
+        texte: "Chasser les loups de la lande"
+        texte-en: "Hunt the moor wolves"
+        monstres: [loup_ombre]
+        nombre: 6
+        point: ct_lande_nidnoir
+      - type: PARLER
+        texte: "Revenir auprès de Corbelle"
+        texte-en: "Return to Corbelle"
+        pnj: ct_nidnoir
+        dialogue:
+          - "ct_nidnoir: Grisolde dormira. Elle ne vous remerciera pas, mais elle dormira."
+        dialogue-en:
+          - "ct_nidnoir: Grisolde will sleep. She will not thank you, but she will sleep."
+    recompenses:
+      xp: 250
+      or: 25
+
+  ct_n_lettre_gris:
+    nom: "Contrat : la lettre de Grisolde"
+    nom-en: "Contract: Grisolde's letter"
+    faction: ombre
+    repetable: 20
+    niveau: 3
+    donneur: ct_nidnoir
+    resume:
+      - "Porter une lettre à Gris-Hameau."
+    resume-en:
+      - "Carry a letter to Gris-Hameau."
+    offre:
+      - "ct_nidnoir: Grisolde écrit à Gris-Hameau tous les jours. Ce qu'elle écrit ne vous regarde pas. Portez."
+    offre-en:
+      - "ct_nidnoir: Grisolde writes to Gris-Hameau every day. What she writes is none of your business. Carry it."
+    etapes:
+      - type: LIVRER
+        texte: "Porter la lettre à Maëve"
+        texte-en: "Bring the letter to Maëve"
+        pnj: ct_gris
+        materiau: PAPER
+        objet: "Lettre de Grisolde"
+        objet-en: "Grisolde's letter"
+        dialogue:
+          - "ct_gris: Grisolde. Toujours trois lignes. Toujours les mêmes : « Tenez bon. »"
+        dialogue-en:
+          - "ct_gris: Grisolde. Always three lines. Always the same: « Hold on. »"
+    recompenses:
+      xp: 380
+      or: 40
+
+  ct_n_les_tombes:
+    nom: "Contrat : les tombes"
+    nom-en: "Contract: the graves"
+    faction: ombre
+    repetable: 20
+    niveau: 4
+    donneur: ct_nidnoir
+    resume:
+      - "Des squelettes sortent des vieilles tombes de Nidnoir."
+      - "Garder les tombes."
+    resume-en:
+      - "Skeletons are coming out of the old graves of Nidnoir."
+      - "Guard the graves."
+    offre:
+      - "ct_nidnoir: Nos morts ne restent pas couchés. Gardez les tombes, au nord, jusqu'à ce qu'ils se fatiguent."
+    offre-en:
+      - "ct_nidnoir: Our dead do not stay down. Guard the graves, to the north, until they tire."
+    etapes:
+      - type: DEFENSE
+        texte: "Garder les tombes de Nidnoir"
+        texte-en: "Guard the graves of Nidnoir"
+        point: ct_tombes_nidnoir
+        monstres: [squelette]
+        nombre: 3
+        vagues: 3
+        apparition: ct_tombes_nidnoir_b
+        pv: 120
+        degats: 3
+        cible: "Les tombes"
+        cible-en: "The graves"
+        apres:
+          - "Les morts se recouchent. Pour cette nuit."
+        apres-en:
+          - "The dead lie down again. For tonight."
+    recompenses:
+      xp: 500
+      or: 50
+
+  ct_g_purificateurs:
+    nom: "Prime : les Purificateurs"
+    nom-en: "Bounty: the Purifiers"
+    faction: ombre
+    repetable: 20
+    niveau: 6
+    donneur: ct_gris
+    resume:
+      - "Des Purificateurs campent à l'ouest de Gris-Hameau."
+    resume-en:
+      - "Purifiers are camped west of Gris-Hameau."
+    offre:
+      - "ct_gris: Le bivouac de l'Aube, à l'ouest. Trois Purificateurs. Ils emmènent nos Marqués au Cloître. Plus maintenant."
+    offre-en:
+      - "ct_gris: The Dawn bivouac, to the west. Three Purifiers. They take our Marked to the Cloister. Not any more."
+    etapes:
+      - type: TUER
+        texte: "Abattre les Purificateurs"
+        texte-en: "Slay the Purifiers"
+        monstres: [purificateur]
+        nombre: 3
+        point: ct_camp_d1
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_gris
+        dialogue:
+          - "ct_gris: Trois de moins. Il en reviendra. Il en revient toujours."
+        dialogue-en:
+          - "ct_gris: Three fewer. More will come. They always do."
+    recompenses:
+      xp: 750
+      or: 80
+
+  ct_g_soie:
+    nom: "Contrat : la soie noire"
+    nom-en: "Contract: the black silk"
+    faction: ombre
+    repetable: 20
+    niveau: 5
+    donneur: ct_gris
+    resume:
+      - "Les linceuls de Gris-Hameau se tissent en soie d'araignée."
+    resume-en:
+      - "Gris-Hameau's shrouds are woven from spider silk."
+    offre:
+      - "ct_gris: On ensevelit nos morts dans de la soie noire. Les araignées du sud-ouest en ont. Quatre pelotes."
+    offre-en:
+      - "ct_gris: We bury our dead in black silk. The spiders to the south-west have some. Four skeins."
+    etapes:
+      - type: RAMASSER
+        texte: "Récolter de la soie noire"
+        texte-en: "Harvest black silk"
+        monstres: [araignee]
+        nombre: 4
+        chance: 0.5
+        point: ct_camp_d3
+        objet: "Pelote de soie noire"
+        objet-en: "Skein of black silk"
+      - type: PARLER
+        texte: "Rapporter la soie"
+        texte-en: "Bring back the silk"
+        pnj: ct_gris
+        dialogue:
+          - "ct_gris: Quatre linceuls. Nos morts partiront dignement."
+        dialogue-en:
+          - "ct_gris: Four shrouds. Our dead will leave with dignity."
+    recompenses:
+      xp: 630
+      or: 65
+
+  ct_g_le_porteur:
+    nom: "Contrat : le porteur de morts"
+    nom-en: "Contract: the corpse-bearer"
+    faction: ombre
+    repetable: 20
+    niveau: 7
+    donneur: ct_gris
+    resume:
+      - "Le vieux Gaut porte un mort au cimetière."
+      - "L'escorter."
+    resume-en:
+      - "Old Gaut is carrying a body to the cemetery."
+      - "Escort him."
+    offre:
+      - "ct_gris: Gaut porte un mort jusqu'au vieux cimetière. Les limiers de l'Aube le suivent : ils sentent les Marqués, même morts."
+    offre-en:
+      - "ct_gris: Gaut is carrying a body to the old cemetery. The Dawn hounds follow him: they smell the Marked, even dead."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter Gaut jusqu'au cimetière"
+        texte-en: "Escort Gaut to the cemetery"
+        pnj: ct_porteur
+        chemin: [ct_porteur_1, ct_porteur_2]
+        monstres: [limier_aube]
+        nombre: 2
+        vagues: 2
+        pv: 130
+        degats: 3
+        apres:
+          - "ct_porteur: Le voilà couché. Il ne dira pas merci. Moi, je le dis pour lui."
+        apres-en:
+          - "ct_porteur: There, he is laid down. He will not say thank you. I say it for him."
+    recompenses:
+      xp: 880
+      or: 90
+
+  ct_m_limiers:
+    nom: "Prime : les limiers de l'Aube"
+    nom-en: "Bounty: the Dawn hounds"
+    faction: ombre
+    repetable: 20
+    niveau: 9
+    donneur: ct_morneval
+    resume:
+      - "Des limiers de l'Aube flairent autour de Morneval."
+    resume-en:
+      - "Dawn hounds are sniffing around Morneval."
+    offre:
+      - "ct_morneval: Le bivouac de l'Aube, au bord de la mer, à l'est. Quatre limiers. La Citadelle paie à la tête."
+    offre-en:
+      - "ct_morneval: The Dawn bivouac, by the sea, to the east. Four hounds. The Citadel pays per head."
+    etapes:
+      - type: TUER
+        texte: "Abattre les limiers de l'Aube"
+        texte-en: "Slay the Dawn hounds"
+        monstres: [limier_aube]
+        nombre: 4
+        point: ct_camp_d4
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_morneval
+        dialogue:
+          - "ct_morneval: Inscrit. Payé. Au suivant."
+        dialogue-en:
+          - "ct_morneval: Recorded. Paid. Next."
+    recompenses:
+      xp: 1130
+      or: 115
+
+  ct_m_cimetiere:
+    nom: "Contrat : le cimetière de l'ouest"
+    nom-en: "Contract: the western cemetery"
+    faction: ombre
+    repetable: 20
+    niveau: 7
+    donneur: ct_morneval
+    resume:
+      - "Les morts du cimetière de l'ouest ne servent personne."
+    resume-en:
+      - "The dead of the western cemetery serve no one."
+    offre:
+      - "ct_morneval: Des morts qui ne servent pas la Citadelle sont des morts en trop. Huit, au cimetière de l'ouest."
+    offre-en:
+      - "ct_morneval: Dead who do not serve the Citadel are dead too many. Eight, at the western cemetery."
+    etapes:
+      - type: TUER
+        texte: "Recoucher les morts de l'ouest"
+        texte-en: "Lay the western dead to rest"
+        monstres: [squelette, revenant]
+        nombre: 8
+        point: ct_camp_d5
+      - type: PARLER
+        texte: "Revenir auprès de Sorn"
+        texte-en: "Return to Sorn"
+        pnj: ct_morneval
+        dialogue:
+          - "ct_morneval: Inscrit. La Citadelle n'oublie jamais un service."
+        dialogue-en:
+          - "ct_morneval: Recorded. The Citadel never forgets a service."
+    recompenses:
+      xp: 880
+      or: 90
+
+  ct_m_registre:
+    nom: "Contrat : le registre"
+    nom-en: "Contract: the register"
+    faction: ombre
+    repetable: 20
+    niveau: 8
+    donneur: ct_morneval
+    resume:
+      - "Porter le registre du jour à Nidnoir."
+    resume-en:
+      - "Carry the day's register to Nidnoir."
+    offre:
+      - "ct_morneval: Le registre des Marqués du jour, pour Corbelle, à Nidnoir. La Citadelle compte tout."
+    offre-en:
+      - "ct_morneval: The day's register of Marked, for Corbelle, at Nidnoir. The Citadel counts everything."
+    etapes:
+      - type: LIVRER
+        texte: "Porter le registre à Corbelle"
+        texte-en: "Bring the register to Corbelle"
+        pnj: ct_nidnoir
+        materiau: BOOK
+        objet: "Registre de la Citadelle"
+        objet-en: "Citadel register"
+        dialogue:
+          - "ct_nidnoir: Trois nouveaux Marqués, deux Creux, un disparu. Comme toujours. Merci."
+        dialogue-en:
+          - "ct_nidnoir: Three new Marked, two Hollows, one missing. As always. Thank you."
+    recompenses:
+      xp: 1000
+      or: 105
+
+  ct_m_le_pont:
+    nom: "Contrat : la Chaussée"
+    nom-en: "Contract: the Causeway"
+    faction: ombre
+    repetable: 20
+    niveau: 10
+    donneur: ct_morneval
+    resume:
+      - "Des Purificateurs attaquent la Chaussée des Marais."
+      - "La tenir."
+    resume-en:
+      - "Purifiers are attacking the Marsh Causeway."
+      - "Hold it."
+    offre:
+      - "ct_morneval: Un raid de l'Aube sur la Chaussée, au sud de la porte. Tenez la route trois vagues."
+    offre-en:
+      - "ct_morneval: A Dawn raid on the Causeway, south of the gate. Hold the road for three waves."
+    etapes:
+      - type: DEFENSE
+        texte: "Tenir la Chaussée des Marais"
+        texte-en: "Hold the Marsh Causeway"
+        point: ct_chaussee
+        monstres: [purificateur, limier_aube]
+        nombre: 3
+        vagues: 3
+        apparition: ct_chaussee_b
+        pv: 170
+        degats: 4
+        cible: "La Chaussée"
+        cible-en: "The Causeway"
+        apres:
+          - "Les Purificateurs refluent vers les landes."
+        apres-en:
+          - "The Purifiers fall back toward the moors."
+    recompenses:
+      xp: 1250
+      or: 130
+
+  ct_m_courrier:
+    nom: "Contrat : courrier de la Citadelle"
+    nom-en: "Contract: Citadel courier"
+    faction: ombre
+    repetable: 20
+    niveau: 8
+    donneur: ct_morneval
+    resume:
+      - "Un pli de la Citadelle pour Gris-Hameau."
+      - "Trois minutes."
+    resume-en:
+      - "A Citadel letter for Gris-Hameau."
+      - "Three minutes."
+    offre:
+      - "ct_morneval: Un pli pour Gris-Hameau. Trois minutes. La Citadelle n'attend pas."
+    offre-en:
+      - "ct_morneval: A letter for Gris-Hameau. Three minutes. The Citadel does not wait."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Porter le pli à Gris-Hameau en trois minutes"
+        texte-en: "Carry the letter to Gris-Hameau in three minutes"
+        point: ct_gris
+        rayon: 4
+        apres:
+          - "ct_gris: Déjà ? Sorn sera content. Il ne sourit jamais, mais il sera content."
+        apres-en:
+          - "ct_gris: Already? Sorn will be pleased. He never smiles, but he will be pleased."
+        chrono: 180
+        echec:
+          - "ct_morneval: Trop tard. Inscrit. Revenez prendre un autre pli."
+        echec-en:
+          - "ct_morneval: Too late. Recorded. Come back for another letter."
+    recompenses:
+      xp: 1000
+      or: 105
+
+  ct_m_sans_visage:
+    nom: "Prime de la semaine : le Purificateur sans visage"
+    nom-en: "Weekly bounty: the Faceless Purifier"
+    faction: ombre
+    repetable: 160
+    niveau: 10
+    donneur: ct_morneval
+    resume:
+      - "PRIME DE LA SEMAINE : le Purificateur sans visage."
+      - "Il chasse les Marqués au nord-est."
+    resume-en:
+      - "WEEKLY BOUNTY: the Faceless Purifier."
+      - "He hunts the Marked to the north-east."
+    offre:
+      - "ct_morneval: Un Purificateur au visage couvert. Il emmène nos Marqués sans un mot. Le bivouac du nord-est. La Citadelle triple la prime."
+    offre-en:
+      - "ct_morneval: A Purifier with a covered face. He takes our Marked without a word. The north-eastern bivouac. The Citadel triples the bounty."
+    etapes:
+      - type: TUER
+        texte: "Abattre le Purificateur sans visage"
+        texte-en: "Slay the Faceless Purifier"
+        monstres: [ct_purificateur_noir]
+        point: ct_camp_d7
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_morneval
+        dialogue:
+          - "ct_morneval: Sous le masque ? Un Purifié. Un des nôtres, vidé. Inscrit. Payé."
+        dialogue-en:
+          - "ct_morneval: Under the mask? A Purified. One of ours, emptied. Recorded. Paid."
+    recompenses:
+      xp: 3750
+      or: 390
+
+  ct_sb_nid_sud:
+    nom: "Prime : les araignées géantes"
+    nom-en: "Bounty: the giant spiders"
+    faction: ombre
+    repetable: 20
+    niveau: 12
+    donneur: ct_sombrebois
+    resume:
+      - "Des araignées géantes nichent au sud-ouest de Sombrebois."
+    resume-en:
+      - "Giant spiders nest south-west of Sombrebois."
+    offre:
+      - "ct_sombrebois: Le nid du sud-ouest. Deux géantes. Les chasseurs n'y vont plus."
+    offre-en:
+      - "ct_sombrebois: The south-western nest. Two giants. The hunters no longer go there."
+    etapes:
+      - type: TUER
+        texte: "Abattre les araignées géantes"
+        texte-en: "Slay the giant spiders"
+        monstres: [araignee_geante]
+        nombre: 2
+        point: ct_camp_e1
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_sombrebois
+        dialogue:
+          - "ct_sombrebois: Les chasseurs y retourneront demain. Ils ont une dette envers vous."
+        dialogue-en:
+          - "ct_sombrebois: The hunters will go back tomorrow. They owe you."
+    recompenses:
+      xp: 1500
+      or: 155
+
+  ct_sb_bivouac:
+    nom: "Contrat : le bivouac de l'Aube"
+    nom-en: "Contract: the Dawn bivouac"
+    faction: ombre
+    repetable: 20
+    niveau: 14
+    donneur: ct_sombrebois
+    resume:
+      - "Un bivouac de l'Aube s'est installé près de Sombrebois."
+    resume-en:
+      - "A Dawn bivouac has set up near Sombrebois."
+    offre:
+      - "ct_sombrebois: L'Aube campe à notre porte, au sud-est. Huit d'entre eux. Faites-les reculer."
+    offre-en:
+      - "ct_sombrebois: The Dawn is camped at our door, to the south-east. Eight of them. Make them pull back."
+    etapes:
+      - type: TUER
+        texte: "Briser le bivouac de l'Aube"
+        texte-en: "Break the Dawn bivouac"
+        monstres: [purificateur, limier_aube]
+        nombre: 8
+        point: ct_camp_e8
+      - type: PARLER
+        texte: "Revenir auprès d'Ilke"
+        texte-en: "Return to Ilke"
+        pnj: ct_sombrebois
+        dialogue:
+          - "ct_sombrebois: Ils reculent. Ils reviendront. Nous aussi."
+        dialogue-en:
+          - "ct_sombrebois: They pull back. They will return. So will we."
+    recompenses:
+      xp: 1750
+      or: 180
+
+  ct_sb_ossements:
+    nom: "Contrat : les ossements du cercle"
+    nom-en: "Contract: the circle bones"
+    faction: ombre
+    repetable: 20
+    niveau: 13
+    donneur: ct_sombrebois
+    resume:
+      - "Les morts du cercle de pierres gardent des ossements utiles."
+    resume-en:
+      - "The dead of the stone circle keep useful bones."
+    offre:
+      - "ct_sombrebois: Les nécromanciens de Morneval paient bien les vieux ossements. Le cercle de pierres, au sud-est, en est plein. Quatre."
+    offre-en:
+      - "ct_sombrebois: The necromancers of Morneval pay well for old bones. The stone circle, to the south-east, is full of them. Four."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer de vieux ossements"
+        texte-en: "Recover old bones"
+        monstres: [squelette, revenant]
+        nombre: 4
+        chance: 0.5
+        point: ct_ruine_e2
+        objet: "Ossement ancien"
+        objet-en: "Ancient bone"
+      - type: PARLER
+        texte: "Rapporter les ossements"
+        texte-en: "Bring back the bones"
+        pnj: ct_sombrebois
+        dialogue:
+          - "ct_sombrebois: Morneval en fera des serviteurs. Nous, on en fera de l'or."
+        dialogue-en:
+          - "ct_sombrebois: Morneval will make servants of them. We will make gold of them."
+    recompenses:
+      xp: 1630
+      or: 170
+
+  ct_sb_la_lisiere:
+    nom: "Contrat : la lisière"
+    nom-en: "Contract: the forest edge"
+    faction: ombre
+    repetable: 20
+    niveau: 15
+    donneur: ct_sombrebois
+    resume:
+      - "Une meute de loups d'ombre attaque la lisière."
+      - "La tenir."
+    resume-en:
+      - "A pack of shadow wolves is attacking the forest edge."
+      - "Hold it."
+    offre:
+      - "ct_sombrebois: La meute attaque la lisière, au nord. Tenez le passage, le temps que les charbonniers rentrent."
+    offre-en:
+      - "ct_sombrebois: The pack is attacking the forest edge, to the north. Hold the passage while the charcoal-burners come back."
+    etapes:
+      - type: DEFENSE
+        texte: "Tenir la lisière"
+        texte-en: "Hold the forest edge"
+        point: ct_lisiere
+        monstres: [loup_ombre]
+        nombre: 4
+        vagues: 3
+        apparition: ct_lisiere_b
+        pv: 200
+        degats: 5
+        cible: "Le passage"
+        cible-en: "The passage"
+        apres:
+          - "Les charbonniers passent derrière vous, un par un. La meute se disperse."
+        apres-en:
+          - "The charcoal-burners pass behind you, one by one. The pack scatters."
+    recompenses:
+      xp: 1880
+      or: 195
+
+  ct_sb_le_voleur:
+    nom: "Contrat : le voleur de la Sylve"
+    nom-en: "Contract: the Sylve thief"
+    faction: ombre
+    repetable: 20
+    niveau: 16
+    donneur: ct_sombrebois
+    resume:
+      - "Un elfe sombre a volé les flèches de Sombrebois."
+      - "Suivre sa trace."
+    resume-en:
+      - "A dark elf stole the arrows of Sombrebois."
+      - "Follow his trail."
+    offre:
+      - "ct_sombrebois: Un elfe sombre a pris un carquois cette nuit. Ses traces partent vers l'ouest. Suivez-les, et ramenez ce qu'il reste."
+    offre-en:
+      - "ct_sombrebois: A dark elf took a quiver last night. His tracks lead west. Follow them, and bring back what is left."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les traces du voleur"
+        texte-en: "Follow the thief's tracks"
+        traces: [ct_trace_sb1, ct_trace_sb2, ct_trace_sb3, ct_trace_sb4]
+        apres:
+          - "Le carquois, abandonné au pied d'un arbre. Vide. Le voleur rôde encore dans les parages."
+        apres-en:
+          - "The quiver, abandoned at the foot of a tree. Empty. The thief is still prowling nearby."
+      - type: TUER
+        texte: "Chasser les elfes sombres des parages"
+        texte-en: "Drive off the dark elves nearby"
+        monstres: [elfe_sombre]
+        nombre: 2
+        point: ct_trace_sb4
+      - type: PARLER
+        texte: "Rapporter le carquois"
+        texte-en: "Bring back the quiver"
+        pnj: ct_sombrebois
+        dialogue:
+          - "ct_sombrebois: Vide, mais à nous. Les flèches, on en refera."
+        dialogue-en:
+          - "ct_sombrebois: Empty, but ours. We will make more arrows."
+    recompenses:
+      xp: 2000
+      or: 210
+
+  ct_sb_la_veuve:
+    nom: "Prime de la semaine : la Veuve"
+    nom-en: "Weekly bounty: the Widow"
+    faction: ombre
+    repetable: 160
+    niveau: 16
+    donneur: ct_sombrebois
+    resume:
+      - "PRIME DE LA SEMAINE : la Veuve de Sombrebois."
+      - "Une araignée énorme, au nid du sud-ouest."
+    resume-en:
+      - "WEEKLY BOUNTY: the Widow of Sombrebois."
+      - "An enormous spider, at the south-western nest."
+    offre:
+      - "ct_sombrebois: La Veuve est sortie de son trou. Elle est grosse comme une charrette. Prime de la semaine pour qui lui coupe les pattes."
+    offre-en:
+      - "ct_sombrebois: The Widow has come out of her hole. She is as big as a cart. Weekly bounty for whoever cuts off her legs."
+    etapes:
+      - type: TUER
+        texte: "Abattre la Veuve"
+        texte-en: "Slay the Widow"
+        monstres: [ct_veuve]
+        point: ct_camp_e1
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_sombrebois
+        dialogue:
+          - "ct_sombrebois: Ses petits vont grandir. Revenez dans une semaine."
+        dialogue-en:
+          - "ct_sombrebois: Her young will grow. Come back in a week."
+    recompenses:
+      xp: 6000
+      or: 625
+
+  ct_pi_archers:
+    nom: "Prime : les archers de la tourbe"
+    nom-en: "Bounty: the peat archers"
+    faction: ombre
+    repetable: 20
+    niveau: 19
+    donneur: ct_pilotis
+    resume:
+      - "Des archers de la tourbe tirent sur les barques."
+    resume-en:
+      - "Peat archers are shooting at the boats."
+    offre:
+      - "ct_pilotis: Le camp des Noyés, au nord-est. Quatre archers de la tourbe. Ils tirent sur tout ce qui flotte."
+    offre-en:
+      - "ct_pilotis: The camp of the Drowned, to the north-east. Four peat archers. They shoot at anything that floats."
+    etapes:
+      - type: TUER
+        texte: "Abattre les archers de la tourbe"
+        texte-en: "Slay the peat archers"
+        monstres: [archer_tourbe]
+        nombre: 4
+        point: ct_camp_f7
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_pilotis
+        dialogue:
+          - "ct_pilotis: Les barques passeront. Pour un jour."
+        dialogue-en:
+          - "ct_pilotis: The boats will pass. For a day."
+    recompenses:
+      xp: 2380
+      or: 245
+
+  ct_pi_noyes:
+    nom: "Contrat : les noyés du sud"
+    nom-en: "Contract: the southern drowned"
+    faction: ombre
+    repetable: 20
+    niveau: 21
+    donneur: ct_pilotis
+    resume:
+      - "Les noyés du camp du sud remontent la Chaussée."
+    resume-en:
+      - "The drowned of the southern camp are coming up the Causeway."
+    offre:
+      - "ct_pilotis: Dix noyés, au camp du sud. Recouchez-les dans la vase."
+    offre-en:
+      - "ct_pilotis: Ten drowned, at the southern camp. Lay them back down in the mud."
+    etapes:
+      - type: TUER
+        texte: "Recoucher les noyés"
+        texte-en: "Lay the drowned to rest"
+        monstres: [noye, archer_tourbe]
+        nombre: 10
+        point: ct_camp_f4
+      - type: PARLER
+        texte: "Revenir auprès de Hob"
+        texte-en: "Return to Hob"
+        pnj: ct_pilotis
+        dialogue:
+          - "ct_pilotis: La vase les garde, pour cette nuit."
+        dialogue-en:
+          - "ct_pilotis: The mud keeps them, for tonight."
+    recompenses:
+      xp: 2630
+      or: 275
+
+  ct_pi_herbe_des_morts:
+    nom: "Contrat : l'herbe-des-morts"
+    nom-en: "Contract: deadwort"
+    faction: ombre
+    repetable: 20
+    niveau: 20
+    donneur: ct_pilotis
+    resume:
+      - "L'herbe-des-morts ne pousse que sur les revenants."
+    resume-en:
+      - "Deadwort only grows on revenants."
+    offre:
+      - "ct_pilotis: L'alchimiste veut de l'herbe-des-morts. Elle pousse sur les revenants du cimetière de l'ouest. Cinq brins."
+    offre-en:
+      - "ct_pilotis: The alchemist wants deadwort. It grows on the revenants of the western cemetery. Five sprigs."
+    etapes:
+      - type: RAMASSER
+        texte: "Cueillir de l'herbe-des-morts"
+        texte-en: "Pick deadwort"
+        monstres: [revenant, squelette]
+        nombre: 5
+        chance: 0.5
+        point: ct_camp_f8
+        objet: "Brin d'herbe-des-morts"
+        objet-en: "Sprig of deadwort"
+      - type: PARLER
+        texte: "Rapporter l'herbe"
+        texte-en: "Bring back the herb"
+        pnj: ct_pilotis
+        dialogue:
+          - "ct_pilotis: Ça sent la tombe. C'est bon signe, paraît-il."
+        dialogue-en:
+          - "ct_pilotis: It smells of the grave. A good sign, apparently."
+    recompenses:
+      xp: 2500
+      or: 260
+
+  ct_pi_tourbe:
+    nom: "Contrat : la barrique de tourbe"
+    nom-en: "Contract: the peat cask"
+    faction: ombre
+    repetable: 20
+    niveau: 23
+    donneur: ct_pilotis
+    resume:
+      - "Une barrique de tourbe attend dans la tourbière."
+      - "La ramener à dos de monture."
+    resume-en:
+      - "A cask of peat is waiting in the bog."
+      - "Bring it back on a mount."
+    offre:
+      - "ct_pilotis: La tourbière, au sud-ouest. Une barrique pleine pour nos feux. Ramenez-la à dos de monture, sans la noyer."
+    offre-en:
+      - "ct_pilotis: The bog, to the south-west. A full cask for our fires. Bring it back on a mount, without drowning it."
+    etapes:
+      - type: TRANSPORT
+        texte: "Ramener la barrique à Hob, à dos de monture"
+        texte-en: "Bring the cask to Hob, on a mount"
+        point: ct_pilotis
+        depart: ct_tourbiere
+        materiau: BARREL
+        rayon: 5
+        objet: "Barrique de tourbe"
+        objet-en: "Cask of peat"
+        apres:
+          - "ct_pilotis: Sèche ! Les Pilotis auront chaud cette nuit."
+        apres-en:
+          - "ct_pilotis: Dry! The Pilotis will be warm tonight."
+    recompenses:
+      xp: 2880
+      or: 300
+
+  ct_pi_linceul:
+    nom: "Contrat : le linceul de noyé"
+    nom-en: "Contract: the drowned man's shroud"
+    faction: ombre
+    repetable: 20
+    niveau: 24
+    donneur: ct_pilotis
+    resume:
+      - "Entrer dans le camp des Noyés, déguisé en noyé."
+    resume-en:
+      - "Enter the camp of the Drowned, disguised as one of them."
+    offre:
+      - "ct_pilotis: Les Noyés de l'est gardent un coffre de barques coulées. Portez ce linceul : ils vous prendront pour l'un d'eux. Ne frappez personne."
+    offre-en:
+      - "ct_pilotis: The Drowned to the east guard a chest from sunken boats. Wear this shroud: they will take you for one of them. Strike no one."
+    etapes:
+      - type: DEGUISEMENT
+        texte: "Entrer dans le camp des Noyés sans être reconnu"
+        texte-en: "Enter the camp of the Drowned unrecognised"
+        point: ct_camp_f1
+        monstres: [noye, archer_tourbe]
+        materiau: LEATHER_CHESTPLATE
+        couleur: "#3F5A46"
+        objet: "Linceul de noyé"
+        objet-en: "Drowned man's shroud"
+        apres:
+          - "Le coffre est là, couvert de vase. Dedans, des rames, une lanterne, et un collier de Marqué."
+        apres-en:
+          - "The chest is there, covered in mud. Inside, oars, a lantern, and a Marked necklace."
+      - type: PARLER
+        texte: "Rapporter ce que vous avez trouvé"
+        texte-en: "Report what you found"
+        pnj: ct_pilotis
+        dialogue:
+          - "ct_pilotis: Un collier de Marqué. Encore un que le marais a pris. Je l'accrocherai avec les autres."
+        dialogue-en:
+          - "ct_pilotis: A Marked necklace. Another one the marsh took. I will hang it with the others."
+    recompenses:
+      xp: 3000
+      or: 310
+
+  ct_pi_noye_roi:
+    nom: "Prime de la semaine : le Noyé-Roi"
+    nom-en: "Weekly bounty: the Drowned King"
+    faction: ombre
+    repetable: 160
+    niveau: 25
+    donneur: ct_pilotis
+    resume:
+      - "PRIME DE LA SEMAINE : le Noyé-Roi."
+      - "Il règne sur le camp du sud."
+    resume-en:
+      - "WEEKLY BOUNTY: the Drowned King."
+      - "He reigns over the southern camp."
+    offre:
+      - "ct_pilotis: Le Noyé-Roi. Un trident, une couronne de vase. Il a coulé deux barques cette semaine. Prime pour sa couronne."
+    offre-en:
+      - "ct_pilotis: The Drowned King. A trident, a crown of mud. He sank two boats this week. Bounty for his crown."
+    etapes:
+      - type: TUER
+        texte: "Abattre le Noyé-Roi"
+        texte-en: "Slay the Drowned King"
+        monstres: [ct_noye_roi]
+        point: ct_camp_f4
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_pilotis
+        dialogue:
+          - "ct_pilotis: Sa couronne. Le marais en fera un autre. Il en fait toujours."
+        dialogue-en:
+          - "ct_pilotis: His crown. The marsh will make another. It always does."
+    recompenses:
+      xp: 9380
+      or: 975
+
+  # ================================================================ CONTRATS — LES QUATRE-VENTS, NEUTRES (ANNEXES)
+
+  ct_q_archers_pillards:
+    nom: "Prime : les archers pillards"
+    nom-en: "Bounty: the raider archers"
+    repetable: 20
+    niveau: 28
+    donneur: ct_quatre_vents
+    resume:
+      - "Des archers pillards rançonnent la Voie Royale."
+    resume-en:
+      - "Raider archers are ransoming the Royal Way."
+    offre:
+      - "ct_quatre_vents: Le camp des pillards, au sud-est. Quatre archers. Les deux camps paient la prime : pour une fois, ils sont d'accord."
+    offre-en:
+      - "ct_quatre_vents: The raider camp, to the south-east. Four archers. Both sides pay the bounty: for once, they agree."
+    etapes:
+      - type: TUER
+        texte: "Abattre les archers pillards"
+        texte-en: "Slay the raider archers"
+        monstres: [pillard_archer]
+        nombre: 4
+        point: ct_camp_g2
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_quatre_vents
+        dialogue:
+          - "ct_quatre_vents: L'or de l'Aube et l'or de la Citadelle. Ils brillent pareil."
+        dialogue-en:
+          - "ct_quatre_vents: The Dawn's gold and the Citadel's gold. They shine the same."
+    recompenses:
+      xp: 3500
+      or: 365
+
+  ct_q_brigands_nord:
+    nom: "Contrat : les brigands du nord"
+    nom-en: "Contract: the northern brigands"
+    repetable: 20
+    niveau: 27
+    donneur: ct_quatre_vents
+    resume:
+      - "Des brigands bloquent la route du Lac Miroir."
+    resume-en:
+      - "Brigands are blocking the road to the Mirror Lake."
+    offre:
+      - "ct_quatre_vents: Douze brigands, au camp du nord. Ils bloquent la route du Lac Miroir. Les marchands ne passent plus."
+    offre-en:
+      - "ct_quatre_vents: Twelve brigands, at the northern camp. They block the road to the Mirror Lake. The merchants no longer get through."
+    etapes:
+      - type: TUER
+        texte: "Briser les brigands du nord"
+        texte-en: "Break the northern brigands"
+        monstres: [bandit, braconnier]
+        nombre: 12
+        point: ct_camp_g10
+      - type: PARLER
+        texte: "Revenir auprès de Dame Albe"
+        texte-en: "Return to Lady Albe"
+        pnj: ct_quatre_vents
+        dialogue:
+          - "ct_quatre_vents: Les marchands passeront. Et ils paieront leurs taxes, ce qui me plaît encore plus."
+        dialogue-en:
+          - "ct_quatre_vents: The merchants will get through. And they will pay their taxes, which pleases me even more."
+    recompenses:
+      xp: 3380
+      or: 350
+
+  ct_q_la_palissade:
+    nom: "Contrat : la porte de la Vive"
+    nom-en: "Contract: the Vive gate"
+    repetable: 20
+    niveau: 30
+    donneur: ct_quatre_vents
+    resume:
+      - "Les pillards attaquent la porte sud des Quatre-Vents."
+      - "La tenir."
+    resume-en:
+      - "Raiders are attacking the southern gate of the Four Winds."
+      - "Hold it."
+    offre:
+      - "ct_quatre_vents: On ne tire pas l'épée sous nos toits. Dehors, c'est autre chose. Tenez la porte de la Vive, au sud."
+    offre-en:
+      - "ct_quatre_vents: No sword is drawn under our roofs. Outside is another matter. Hold the Vive gate, to the south."
+    etapes:
+      - type: DEFENSE
+        texte: "Tenir la porte de la Vive"
+        texte-en: "Hold the Vive gate"
+        point: ct_porte_vive
+        monstres: [pillard, pillard_archer]
+        nombre: 4
+        vagues: 3
+        apparition: ct_porte_vive_b
+        pv: 260
+        degats: 6
+        cible: "La porte de la Vive"
+        cible-en: "The Vive gate"
+        apres:
+          - "Les pillards se dispersent dans la plaine."
+        apres-en:
+          - "The raiders scatter into the plain."
+    recompenses:
+      xp: 3750
+      or: 390
+
+  ct_q_le_marchand:
+    nom: "Contrat : le marchand ambulant"
+    nom-en: "Contract: the travelling merchant"
+    repetable: 20
+    niveau: 31
+    donneur: ct_quatre_vents
+    resume:
+      - "Ezio part vendre vers l'est."
+      - "L'escorter."
+    resume-en:
+      - "Ezio is leaving to sell to the east."
+      - "Escort him."
+    offre:
+      - "ct_quatre_vents: Ezio vend aux deux camps, et les pillards le savent. Escortez-le sur la Voie Royale, vers l'est."
+    offre-en:
+      - "ct_quatre_vents: Ezio sells to both sides, and the raiders know it. Escort him along the Royal Way, to the east."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter Ezio sur la Voie Royale"
+        texte-en: "Escort Ezio along the Royal Way"
+        pnj: ct_marchand
+        chemin: [ct_voie_1, ct_voie_2]
+        monstres: [pillard, bandit]
+        nombre: 3
+        vagues: 2
+        pv: 260
+        degats: 6
+        apres:
+          - "ct_marchand: Arrivé, et ma marchandise aussi. Prenez ceci : c'est le prix de l'amitié. Ou presque."
+        apres-en:
+          - "ct_marchand: Arrived, and my goods too. Take this: it is the price of friendship. Or nearly."
+    recompenses:
+      xp: 3880
+      or: 405
+
+  ct_q_le_vol:
+    nom: "Contrat : le vol au comptoir"
+    nom-en: "Contract: the counter theft"
+    repetable: 20
+    niveau: 32
+    donneur: ct_quatre_vents
+    resume:
+      - "Une caisse a disparu du comptoir des Quatre-Vents."
+      - "Trouver trois indices."
+    resume-en:
+      - "A crate has vanished from the Four Winds counter."
+      - "Find three clues."
+    offre:
+      - "ct_quatre_vents: Une caisse a disparu cette nuit. Personne n'a rien vu, comme toujours. Il y a des traces dehors, à l'est. Trouvez qui."
+    offre-en:
+      - "ct_quatre_vents: A crate vanished last night. Nobody saw anything, as always. There are traces outside, to the east. Find out who."
+    etapes:
+      - type: ENQUETE
+        texte: "Examiner les traces"
+        texte-en: "Examine the traces"
+        pnj: ct_quatre_vents
+        indices:
+          - point: ct_indice_q1
+            texte: "Des traces de roues"
+            texte-en: "Wheel tracks"
+            apres:
+              - "Une charrette légère, chargée. Elle allait vers l'est."
+            apres-en:
+              - "A light cart, loaded. It was going east."
+          - point: ct_indice_q2
+            texte: "Un clou de fer à cheval"
+            texte-en: "A horseshoe nail"
+            apres:
+              - "Un clou de fer forgé à la mode des pillards : tête carrée."
+            apres-en:
+              - "An iron nail forged in the raiders' fashion: square head."
+          - point: ct_indice_q3
+            texte: "Un sceau de cire brisé"
+            texte-en: "A broken wax seal"
+            apres:
+              - "Le sceau du comptoir, brisé. Et une empreinte de pouce, en sable rouge."
+            apres-en:
+              - "The counter's seal, broken. And a thumbprint, in red sand."
+        dialogue:
+          - "joueur: Des pillards. Du sable rouge : ils viennent du sud."
+          - "ct_quatre_vents: Rouge-Sable. Encore lui. Un jour, quelqu'un touchera sa prime."
+        dialogue-en:
+          - "joueur: Raiders. Red sand: they come from the south."
+          - "ct_quatre_vents: Red-Sand. Him again. One day, someone will collect his bounty."
+    recompenses:
+      xp: 4000
+      or: 415
+
+  ct_q_cornes:
+    nom: "Contrat : les cornes de taureau"
+    nom-en: "Contract: bull horns"
+    repetable: 20
+    niveau: 29
+    donneur: ct_quatre_vents
+    resume:
+      - "Les artisans des Quatre-Vents veulent des cornes de taureau."
+    resume-en:
+      - "The artisans of the Four Winds want bull horns."
+    offre:
+      - "ct_quatre_vents: On fait des cors avec. Cinq cornes, des taureaux de la plaine, à l'ouest."
+    offre-en:
+      - "ct_quatre_vents: We make horns from them. Five horns, from the bulls of the plain, to the west."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer des cornes de taureau"
+        texte-en: "Collect bull horns"
+        monstres: [taureau]
+        nombre: 5
+        chance: 0.5
+        point: ct_plaine_qv
+        objet: "Corne de taureau"
+        objet-en: "Bull horn"
+      - type: PARLER
+        texte: "Rapporter les cornes"
+        texte-en: "Bring back the horns"
+        pnj: ct_quatre_vents
+        dialogue:
+          - "ct_quatre_vents: Cinq cors. On les entendra jusqu'à la Marche."
+        dialogue-en:
+          - "ct_quatre_vents: Five horns. They will be heard as far as the March."
+    recompenses:
+      xp: 3630
+      or: 375
+
+  ct_q_rouge_sable:
+    nom: "Prime de la semaine : Capitaine Rouge-Sable"
+    nom-en: "Weekly bounty: Captain Red-Sand"
+    repetable: 160
+    niveau: 34
+    donneur: ct_quatre_vents
+    resume:
+      - "PRIME DE LA SEMAINE : Capitaine Rouge-Sable."
+      - "Le chef des pillards, au camp du sud."
+    resume-en:
+      - "WEEKLY BOUNTY: Captain Red-Sand."
+      - "The raider chief, at the southern camp."
+    offre:
+      - "ct_quatre_vents: Rouge-Sable. Arbalète, sable rouge, et une dette envers chaque marchand de la Marche. Son camp est au sud. Prime des deux camps."
+    offre-en:
+      - "ct_quatre_vents: Red-Sand. Crossbow, red sand, and a debt to every merchant in the March. His camp is to the south. Bounty from both sides."
+    etapes:
+      - type: TUER
+        texte: "Abattre le capitaine Rouge-Sable"
+        texte-en: "Slay Captain Red-Sand"
+        monstres: [ct_capitaine_pillard]
+        point: ct_camp_g5
+      - type: PARLER
+        texte: "Toucher la prime"
+        texte-en: "Collect the bounty"
+        pnj: ct_quatre_vents
+        dialogue:
+          - "ct_quatre_vents: Rouge-Sable est tombé. Un autre prendra son nom, la semaine prochaine. Ce nom-là ne meurt jamais."
+        dialogue-en:
+          - "ct_quatre_vents: Red-Sand has fallen. Another will take his name next week. That name never dies."
+    recompenses:
+      xp: 12750
+      or: 1325

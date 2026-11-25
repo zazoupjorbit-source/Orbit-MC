@@ -59,6 +59,16 @@ specialisations:
       chatiment_sauvage: { nom: "Châtiment sauvage", icone: IRON_AXE, palier: 8, colonne: 0, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
       esprit_de_l_ours_ancien: { nom: "Esprit de l'Ours ancien", icone: TOTEM_OF_UNDYING, palier: 8, colonne: 1, rangs: 1, sort: esprit_de_l_ours_ancien, requiert: cuir_de_pierre, description: "Apprend Esprit de l'Ours ancien : bouclier de 15 % des PV et −15 % de dégâts subis pour vous et votre groupe." }
       fourrure_ensanglantee: { nom: "Fourrure ensanglantée", icone: REDSTONE_BLOCK, palier: 8, colonne: 2, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      griffes_de_fer: { nom: "Griffes de fer", icone: IRON_NUGGET, palier: 9, colonne: 0, rangs: 3, effets: { degats.mutilation: 8 }, description: "Mutilation inflige {degats.mutilation} % de dégâts en plus." }
+      ours_ancestral: { nom: "Ours ancestral", icone: CLOCK, palier: 9, colonne: 1, rangs: 3, requiert: esprit_de_l_ours_ancien, effets: { recharge.esprit_de_l_ours_ancien: 10 }, description: "Recharge d'Esprit de l'Ours ancien réduite de {recharge.esprit_de_l_ours_ancien} s." }
+      fourrure_d_hiver: { nom: "Fourrure d'hiver", icone: BROWN_WOOL, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      cuir_ancestral: { nom: "Cuir ancestral", icone: LEATHER, palier: 10, colonne: 0, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      instincts_aiguises: { nom: "Instincts aiguisés", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.instincts_de_survie: 15 }, description: "Recharge d'Instincts de survie réduite de {recharge.instincts_de_survie} s." }
+      reflexes_d_ours: { nom: "Réflexes d'ours", icone: RABBIT_FOOT, palier: 10, colonne: 2, rangs: 3, effets: { esquive: 1 }, description: "+{esquive} % de chances d'esquiver un coup de mêlée." }
+      ronces_du_gardien: { nom: "Ronces du gardien", icone: SWEET_BERRIES, palier: 11, colonne: 0, rangs: 3, effets: { epines: 4 }, description: "Renvoie {epines} % des dégâts de mêlée subis à l'attaquant, en plus." }
+      coeur_de_la_foret: { nom: "Cœur de la forêt", icone: OAK_SAPLING, palier: 11, colonne: 1, rangs: 1, effets: { pv: 8, armure: 3 }, description: "Talent de maître : +{pv} % de points de vie et dégâts subis réduits de {armure} %." }
+      taillade_ancestrale: { nom: "Taillade ancestrale", icone: BONE, palier: 11, colonne: 2, rangs: 3, effets: { degats.taillade: 6 }, description: "Taillade inflige {degats.taillade} % de dégâts en plus." }
 
   croc:
     nom: Croc
@@ -100,6 +110,16 @@ specialisations:
       chasse_primordiale: { nom: "Chasse primordiale", icone: NETHERITE_SWORD, palier: 8, colonne: 0, rangs: 1, sort: chasse_primordiale, requiert: loup_alpha, description: "Apprend Chasse primordiale : cinq morsures d'affilée sur la cible." }
       predateur_supreme: { nom: "Prédateur suprême", icone: NETHER_STAR, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
       festin: { nom: "Festin", icone: GLISTERING_MELON_SLICE, palier: 8, colonne: 2, rangs: 3, requiert: saveur_du_sang, effets: { soin-sur-kill: 3 }, description: "Tuer un ennemi rend {soin-sur-kill} % de vos PV." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      gorge_ouverte: { nom: "Gorge ouverte", icone: REDSTONE, palier: 9, colonne: 0, rangs: 3, requiert: egorger, effets: { degats.egorger: 8 }, description: "Égorger inflige {degats.egorger} % de dégâts en plus." }
+      traque_ancestrale: { nom: "Traque ancestrale", icone: WOLF_ARMOR, palier: 9, colonne: 1, rangs: 3, requiert: chasse_primordiale, effets: { degats.chasse_primordiale: 10 }, description: "Chasse primordiale inflige {degats.chasse_primordiale} % de dégâts en plus." }
+      muscles_noues: { nom: "Muscles noués", icone: COOKED_BEEF, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      crocs_luisants: { nom: "Crocs luisants", icone: FLINT, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      fureur_hative: { nom: "Fureur hâtive", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.fureur_sauvage: 10 }, description: "Recharge de Fureur sauvage réduite de {recharge.fureur_sauvage} s." }
+      foulee_du_loup: { nom: "Foulée du loup", icone: RABBIT_FOOT, palier: 10, colonne: 2, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      morsure_ancestrale: { nom: "Morsure ancestrale", icone: BONE, palier: 11, colonne: 0, rangs: 3, effets: { degats.morsure_feroce: 5 }, description: "Morsure féroce inflige {degats.morsure_feroce} % de dégâts en plus." }
+      alpha: { nom: "Alpha", icone: WOLF_ARMOR, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, crit: 3 }, description: "Talent de maître : +{degats} % de dégâts et +{crit} % de chances de coup critique." }
+      griffes_sanglantes: { nom: "Griffes sanglantes", icone: REDSTONE_BLOCK, palier: 11, colonne: 2, rangs: 3, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
 
   sylvestre:
     nom: Sylvestre
@@ -140,6 +160,16 @@ specialisations:
       eveil_de_l_arbre_coeur: { nom: "Éveil de l'Arbre-cœur", icone: BIG_DRIPLEAF, palier: 8, colonne: 0, rangs: 1, sort: eveil_de_l_arbre_coeur, requiert: ecorce_de_la_sylve, description: "Apprend Éveil de l'Arbre-cœur : rend 30 % des PV au groupe et le protège." }
       croissance_debordante: { nom: "Croissance débordante", icone: BONE_MEAL, palier: 8, colonne: 1, rangs: 3, effets: { soins.croissance_rapide: 10 }, description: "Croissance rapide soigne {soins.croissance_rapide} % de plus." }
       gardien_de_la_sylve: { nom: "Gardien de la sylve", icone: MANGROVE_PROPAGULE, palier: 8, colonne: 2, rangs: 3, effets: { soins: 2 }, description: "+{soins} % de soins." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      petales_de_vie: { nom: "Pétales de vie", icone: PINK_PETALS, palier: 9, colonne: 0, rangs: 3, requiert: fleur_de_vie, effets: { soins.fleur_de_vie: 8 }, description: "Fleur de vie soigne {soins.fleur_de_vie} % de plus." }
+      eveil_hatif: { nom: "Éveil hâtif", icone: CLOCK, palier: 9, colonne: 1, rangs: 3, requiert: eveil_de_l_arbre_coeur, effets: { recharge.eveil_de_l_arbre_coeur: 10 }, description: "Recharge d'Éveil de l'Arbre-cœur réduite de {recharge.eveil_de_l_arbre_coeur} s." }
+      seve_epaisse: { nom: "Sève épaisse", icone: HONEY_BOTTLE, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      rameau_ancien: { nom: "Rameau ancien", icone: OAK_SAPLING, palier: 10, colonne: 0, rangs: 3, effets: { soins.rameau_guerisseur: 6 }, description: "Rameau guérisseur soigne {soins.rameau_guerisseur} % de plus." }
+      tranquillite_hative: { nom: "Tranquillité hâtive", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.tranquillite: 15 }, description: "Recharge de Tranquillité réduite de {recharge.tranquillite} s." }
+      rosee_eternelle: { nom: "Rosée éternelle", icone: LILY_PAD, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de mana régénéré." }
+      croissance_eternelle: { nom: "Croissance éternelle", icone: SPORE_BLOSSOM, palier: 11, colonne: 0, rangs: 3, effets: { soins.croissance_rapide: 6 }, description: "Croissance rapide soigne {soins.croissance_rapide} % de plus." }
+      voix_de_la_sylve: { nom: "Voix de la sylve", icone: FLOWERING_AZALEA, palier: 11, colonne: 1, rangs: 1, effets: { soins: 8, ressource: 5 }, description: "Talent de maître : +{soins} % de soins prodigués et +{ressource} % de mana régénéré." }
+      ecorce_ancienne: { nom: "Écorce ancienne", icone: OAK_LOG, palier: 11, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
 
 sorts:
   # ---------------- Toute la classe ----------------

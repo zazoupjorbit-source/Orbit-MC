@@ -133,4 +133,19 @@ public final class OrbitPractice extends JavaPlugin {
     public QueueManager queue() { return queue; }
     /** Le mode HCF, ou null s'il n'est pas installé. */
     public HcfMode hcf() { return hcf; }
+
+    /** OrbitStaff : Elo par mode classé pour le livre du staff (appel par réflexion). */
+    public List<String> orbitStatsJoueur(org.bukkit.entity.Player p) {
+        List<String> l = new java.util.ArrayList<>();
+        if (elo == null) {
+            return l;
+        }
+        for (Ladder ladder : Ladder.values()) {
+            EloStore.Entry e = elo.get(p.getUniqueId(), ladder);
+            if (e.wins + e.losses > 0 || ladder.ordinal() < 3) {
+                l.add("<dark_gray>" + ladder.label + " : <black>" + e.elo + " <dark_gray>(" + e.wins + "V/" + e.losses + "D)");
+            }
+        }
+        return l;
+    }
 }

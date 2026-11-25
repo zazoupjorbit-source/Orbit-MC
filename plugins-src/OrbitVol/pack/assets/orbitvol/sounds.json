@@ -1,0 +1,11 @@
+{
+  "musique": { "category": "music", "sounds": [
+    { "name": "minecraft:music/game/creative/aria_math", "stream": true },
+    { "name": "minecraft:music/game/creative/biome_fest", "stream": true },
+    { "name": "minecraft:music/game/creative/blind_spots", "stream": true },
+    { "name": "minecraft:music/game/creative/dreiton", "stream": true },
+    { "name": "minecraft:music/game/creative/taswell", "stream": true },
+    { "name": "minecraft:music/game/mice_on_venus", "stream": true },
+    { "name": "minecraft:music/game/floating_dream", "stream": true }
+  ] }
+}

@@ -1,0 +1,5 @@
+{
+  "textures": {"t": "orbitcasino:item/pool_13", "particle": "orbitcasino:item/pool_13"},
+  "elements": [{"from": [0, 0, 8], "to": [16, 16, 8], "shade": false,
+    "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#t"}}}]
+}

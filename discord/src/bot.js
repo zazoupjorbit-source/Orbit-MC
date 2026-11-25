@@ -1,4 +1,4 @@
-// npm start : bot ORBIT MC — boutons (règlement, rôles), tickets et statut des serveurs.
+// npm start : bot ORBIT MC — boutons (règlement, rôles), tickets, statut des serveurs et guide du staff.
 const {
   Client, Events, GatewayIntentBits, ChannelType, PermissionFlagsBits: P, MessageFlags,
   EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ActivityType,
@@ -6,6 +6,7 @@ const {
 const { loadConfig, loadState, requireEnv } = require('./common');
 const { ping } = require('./mcping');
 const { BLUE } = require('./messages');
+const { setupGuide } = require('./guide');
 
 const { token, guildId } = requireEnv();
 const cfg = loadConfig();
@@ -185,6 +186,8 @@ client.once(Events.ClientReady, async () => {
     tick();
     setInterval(tick, every);
   }
+  // Guide du staff (salon 📖・guide, /guide) : voir src/guide.js et le dossier guide/.
+  await setupGuide(client, { guild, botState: state, cfg }).catch((e) => console.error('✖ Guide :', e.message));
 });
 
 client.login(token);

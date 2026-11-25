@@ -1,0 +1,323 @@
+// « Le Marqué sans nom » — le fil personnel du joueur (lore/GRANDE-TRAME.md § 4), du niveau 10 au niveau 90.
+// Une quête tous les 5 niveaux (17 par joueur). Elles démarrent seules (pas de donneur) : un souvenir se déclenche.
+// Niveaux 10 à 25 : une version par camp (msn_l_* dans les terres de la Lumière, msn_o_* dans celles de l'Ombre),
+// parce que les deux camps ne sont pas au même endroit. À partir du niveau 30 : une seule version, ouverte à tous.
+// Les souvenirs sont ambigus exprès : presque tous sont ceux de l'Astre. Un seul est au joueur : la cloche de cuivre.
+// La dernière quête demande son nom au joueur (choix « nom ») : le moteur ne sait pas encore saisir un nom libre.
+// Points : coordonnées réelles relevées sur continent.dat le 24/11/2026 (bloc « points » rempli par script).
+
+const R = (lv, k = 1) => ({ xp: Math.round(lv * 210 * k / 100) * 100, or: Math.round(lv * 21 * k / 10) * 10 });
+
+module.exports = {
+  fichier: 'marque-sans-nom',
+  faction: null,
+  entete: ["Le Marqué sans nom — le fil personnel du joueur, une quête tous les 5 niveaux, du niveau 10 au niveau 90.",
+    "Quêtes automatiques (un souvenir se déclenche). Niveaux 10 à 25 : msn_l_* (Lumière) et msn_o_* (Ombre) ; ensuite msn_* pour tous.",
+    "Dernière quête : choix « nom ». Le moteur ne sait pas encore saisir un nom libre : à programmer."],
+
+  pnj: {
+    msn_ama: { n: ['Vieille Ama', 'Old Ama'], t: ['Bûcheronne du Bois de l\'Aube', 'Woodcutter of the Dawn Wood'], c: '#E8C9A0', v: 'makena',
+      r: [["Tous les jours, je regarde la route. Un jour, quelqu'un reviendra.", 'Every day I watch the road. One day, someone will come back.']] },
+    msn_tarn: { n: ['Le vieux Tarn', 'Old Tarn'], t: ['Charbonnier de la Sylve', 'Charcoal-burner of the Sylve'], c: '#B8B0A0', v: 'alex',
+      r: [["La Sylve rend toujours ce qu'elle prend. Elle y met le temps.", 'The Sylve always gives back what it takes. It takes its time.']] },
+    msn_garin: { n: 'Garin', t: ["Soldat de l'Aube", 'Soldier of the Dawn'], c: '#F7E7A1', v: 'steve', m: 'IRON_SWORD',
+      r: [["Je connais ton visage. Je ne sais plus d'où.", 'I know your face. I no longer know from where.']] },
+    msn_mirta: { n: 'Mirta', t: ['Passeuse du Marais', 'Ferrywoman of the Marsh'], c: '#9FB89A', v: 'noor',
+      r: [["Je passe les vivants et les morts. Toi, je ne sais pas encore.", 'I ferry the living and the dead. You, I do not know yet.']] },
+    msn_aieule: { n: ['Aïeule Sabra', 'Elder Sabra'], t: ['Mémoire des Astréens', 'Memory of the Astreans'], c: '#FFB86B', v: 'kai',
+      r: [["Les Astréens ne gardent rien, sauf les chansons.", 'The Astreans keep nothing, except songs.']] },
+    msn_gele: { n: ['Le gelé', 'The frozen one'], t: ['Marqué de la Chute', 'Marked of the Fall'], c: '#D7E6F5', v: 'efe',
+      r: [["…froid… si longtemps…", '…cold… so long…']] },
+    msn_ansgar: { n: 'Ansgar', t: ['Scribe des Marqués', 'Scribe of the Marked'], c: '#C9B6E8', v: 'ari', m: 'WRITABLE_BOOK',
+      r: [["Chaque Marqué me raconte ses souvenirs. Je les recopie. Ils se ressemblent tous, ou presque.", 'Every Marked tells me their memories. I copy them down. They are all alike, or almost.']] },
+  },
+
+  monstres: {
+    msn_reflet: { nom: 'Reflet sans visage', type: 'DROWNED', pv: 1.3, degats: 0.9, vitesse: 0.9, xp: 2, or: 2 },
+  },
+
+  apparitions: {
+    msn_reflet_lac: ['msn_l20', 'msn_reflet', [20, 21], 3, 6],
+    msn_reflet_etang: ['msn_o20', 'msn_reflet', [20, 21], 3, 6],
+  },
+
+  points: {
+    msn_l10: [-1599.5, 73.0, -649.5, 0],
+    msn_o10: [1450.5, 73.0, -749.5, 0],
+    msn_ama: [-1779.5, 76.0, -979.5, 90],
+    msn_tarn: [1400.5, 74.0, -1149.5, -90],
+    msn_l20: [-2295.5, 96.0, -1631.5, 0],
+    msn_o20: [1648.5, 63.0, 1948.5, 0],
+    msn_garin: [-2399.5, 97.0, -1649.5, 0],
+    msn_l25_1: [-2437.5, 96.0, -1683.5, 0],
+    msn_l25_2: [-2479.5, 97.0, -1721.5, 0],
+    msn_l25_fin: [-2509.5, 103.0, -1737.5, 0],
+    msn_mirta: [1762.5, 63.0, 1796.5, 0],
+    msn_o25_1: [1800.5, 63.0, 1740.5, 0],
+    msn_o25_2: [1840.5, 63.0, 1705.5, 0],
+    msn_o25_fin: [1868.5, 63.0, 1682.5, 0],
+    msn_30_t1: [300.5, 69.0, 0.5, 0],
+    msn_30_t2: [330.5, 69.0, -59.5, 0],
+    msn_30_t3: [360.5, 67.0, -119.5, 0],
+    msn_30_t4: [385.5, 67.0, -179.5, 0],
+    msn_30_fin: [405.5, 68.0, -239.5, 0],
+    msn_aieule: [-599.5, 71.0, 2350.5, 90],
+    msn_40: [-1299.5, 90.0, 2600.5, 0],
+    msn_45_i1: [-449.5, 73.0, 2900.5, 0],
+    msn_45_i2: [-427.5, 72.0, 2930.5, 0],
+    msn_45_i3: [-469.5, 74.0, 2945.5, 0],
+    msn_gele: [100.5, 135.0, -1649.5, 0],
+    msn_50_b: [128.5, 142.0, -1649.5, 0],
+    msn_55: [-699.5, 144.0, -1649.5, 0],
+    msn_60: [1650.5, 86.0, -2601.5, 0],
+    msn_65_t1: [890.5, 96.0, -2652.5, 0],
+    msn_65_t2: [870.5, 90.0, -2699.5, 0],
+    msn_65_t3: [840.5, 92.0, -2739.5, 0],
+    msn_65_cloche: [810.5, 100.0, -2779.5, 0],
+    msn_ansgar: [1220.5, 95.0, -2499.5, 90],
+    msn_75_dep: [250.5, 144.0, -2999.5, 0],
+    msn_75_but: [180.5, 179.0, -3149.5, 0],
+    msn_bord: [-24.5, 186.0, -3004.5, 0],
+  }, // POINTS — relevés sur le relief réel le 24/11/2026 (scratchpad plan.js)
+
+  quetes: [
+    { titre: 'LE MARQUÉ SANS NOM — QUÊTES PRINCIPALES, NIVEAUX 10 À 25 (UNE VERSION PAR CAMP)' },
+
+    // -------------------------------------------------------------------------------- niveau 10
+    { id: 'msn_l_le_premier_souvenir', n: ['Le premier souvenir', 'The First Memory'], f: 'lumiere', lv: 10,
+      res: [['Une odeur de pain chaud, venue de nulle part.', 'A smell of warm bread, from nowhere.'], ['Votre Marque vous appelle dans le Bois de l\'Aube.', 'Your Mark is calling you into the Dawn Wood.']],
+      intro: [['-', "Une odeur de pain chaud, d'un coup, au milieu de rien. Ta Marque s'allume. Elle tire vers l'est, comme une main sur ta manche.", 'A smell of warm bread, suddenly, in the middle of nowhere. Your Mark lights up. It pulls eastward, like a hand on your sleeve.']],
+      s: [['A', 'msn_l10', 6, ['Suivre l\'appel de la Marque', 'Follow the call of the Mark']],
+        ['I', 'msn_l10', 4, ['Toucher la pierre moussue', 'Touch the mossy stone'],
+          [['-', "Tu vois une ville. Minuscule. Ses toits, ses rues, ses fumées, vus de très haut, comme un oiseau ne monte jamais. Et une cloche qui sonne, en bas.", 'You see a town. Tiny. Its roofs, its streets, its smoke, seen from very high, higher than any bird climbs. And a bell ringing, down below.'],
+           ['-', "Puis plus rien. La pierre est froide. Tu ne sais pas si ce souvenir est le tien.", 'Then nothing. The stone is cold. You do not know if that memory is yours.']]]],
+      ...R(10) },
+
+    { id: 'msn_o_le_premier_souvenir', n: ['Le premier souvenir', 'The First Memory'], f: 'ombre', lv: 10,
+      res: [['Une odeur de pain chaud, venue de nulle part.', 'A smell of warm bread, from nowhere.'], ['Votre Marque vous appelle dans la Sylve Noire.', 'Your Mark is calling you into the Black Sylve.']],
+      intro: [['-', "Une odeur de pain chaud, d'un coup, au milieu de rien. Le murmure se tait, pour une fois. Ta Marque tire vers une clairière, comme une main sur ta manche.", 'A smell of warm bread, suddenly, in the middle of nowhere. The whisper falls silent, for once. Your Mark pulls toward a clearing, like a hand on your sleeve.']],
+      s: [['A', 'msn_o10', 6, ['Suivre l\'appel de la Marque', 'Follow the call of the Mark']],
+        ['I', 'msn_o10', 4, ['Toucher la souche noire', 'Touch the black stump'],
+          [['-', "Tu vois une ville. Minuscule. Ses toits, ses rues, ses fumées, vus de très haut, comme un oiseau ne monte jamais. Et une cloche qui sonne, en bas.", 'You see a town. Tiny. Its roofs, its streets, its smoke, seen from very high, higher than any bird climbs. And a bell ringing, down below.'],
+           ['-', "Puis plus rien. Le murmure revient. Tu ne sais pas si ce souvenir est le tien.", 'Then nothing. The whisper returns. You do not know if that memory is yours.']]]],
+      ...R(10) },
+
+    // -------------------------------------------------------------------------------- niveau 15
+    { id: 'msn_l_celle_qui_attend', n: ['Celle qui attend', 'The One Who Waits'], f: 'lumiere', lv: 15, req: ['msn_l_le_premier_souvenir'],
+      res: [['Une vieille femme vous a reconnu sur la route.', 'An old woman recognised you on the road.']],
+      intro: [['-', "Sur la route, une voix casse le silence : « C'est toi ! » Une vieille femme, au bord du bois, te fait signe.", 'On the road, a voice breaks the silence: « It is you! » An old woman, at the edge of the wood, waves to you.']],
+      s: [['Q', 'msn_ama', 'ama', ['Parler à la vieille Ama', 'Talk to old Ama'],
+        [['msn_ama', "C'est toi. Tu es revenu de la guerre. Je savais que tu reviendrais. Tu as les mêmes yeux, et cette lumière-là, au cou.", 'It is you. You came back from the war. I knew you would come back. You have the same eyes, and that light there, on your neck.'],
+         ['msn_ama', "Dis-moi que c'est toi.", 'Tell me it is you.']],
+        ['Que lui répondez-vous ?', 'What do you answer?'],
+        [['oui', ["Oui. C'est moi.", 'Yes. It is me.'],
+          [['msn_ama', "Je le savais. Reste un peu. Juste un peu.", 'I knew it. Stay a while. Just a while.'], ['-', "Elle te serre les mains. Les siennes sont chaudes. Tu ne sais pas si tu as menti.", 'She squeezes your hands. Hers are warm. You do not know if you lied.']], { or: 30 }],
+         ['verite', ['Je ne sais pas qui je suis.', 'I do not know who I am.'],
+          [['msn_ama', "…Alors tu es peut-être lui, et tu ne le sais pas. Ou tu ne l'es pas, et c'est pareil. Reviens me voir, quand même.", '…Then perhaps you are him and do not know it. Or you are not, and it is the same. Come and see me anyway.']], { xp: 300 }]]]],
+      ...R(15) },
+
+    { id: 'msn_o_celui_qui_attend', n: ['Celui qui attend', 'The One Who Waits'], f: 'ombre', lv: 15, req: ['msn_o_le_premier_souvenir'],
+      res: [['Un vieil homme vous a reconnu dans la Sylve.', 'An old man recognised you in the Sylve.']],
+      intro: [['-', "Dans la Sylve, une voix casse le silence : « C'est toi ! » Un vieux charbonnier, près de sa meule, te fait signe.", 'In the Sylve, a voice breaks the silence: « It is you! » An old charcoal-burner, by his kiln, waves to you.']],
+      s: [['Q', 'msn_tarn', 'tarn', ['Parler au vieux Tarn', 'Talk to old Tarn'],
+        [['msn_tarn', "C'est toi. La Sylve t'a pris il y a dix hivers, et elle te rend. Elle rend toujours. Tu as la même démarche, et cette lumière-là, sous la peau.", 'It is you. The Sylve took you ten winters ago, and it gives you back. It always gives back. You have the same walk, and that light there, under the skin.'],
+         ['msn_tarn', "Dis-moi que c'est toi.", 'Tell me it is you.']],
+        ['Que lui répondez-vous ?', 'What do you answer?'],
+        [['oui', ["Oui. C'est moi.", 'Yes. It is me.'],
+          [['msn_tarn', "La Sylve rend toujours. Assieds-toi au feu. Juste un peu.", 'The Sylve always gives back. Sit by the fire. Just a while.'], ['-', "Il te tend un morceau de pain noir. Tu ne sais pas si tu as menti.", 'He hands you a piece of black bread. You do not know if you lied.']], { or: 30 }],
+         ['verite', ['Je ne sais pas qui je suis.', 'I do not know who I am.'],
+          [['msn_tarn', "…Alors tu es peut-être lui, et tu ne le sais pas. La Sylve aussi oublie ce qu'elle rend. Reviens quand même.", '…Then perhaps you are him and do not know it. The Sylve also forgets what it gives back. Come back anyway.']], { xp: 300 }]]]],
+      ...R(15) },
+
+    // -------------------------------------------------------------------------------- niveau 20
+    { id: 'msn_l_le_reflet', n: ['Le reflet', 'The Reflection'], f: 'lumiere', lv: 20, req: ['msn_l_celle_qui_attend'],
+      res: [['Au bord du Lac du Ponant, l\'eau vous montre un autre visage.', 'At the edge of the Ponant Lake, the water shows you another face.']],
+      intro: [['-', "Ta Marque chauffe quand tu passes près du lac. Une envie soudaine de te regarder dans l'eau.", 'Your Mark grows warm when you pass near the lake. A sudden urge to look at yourself in the water.']],
+      s: [['A', 'msn_l20', 6, ['Descendre au bord du Lac du Ponant', 'Go down to the edge of the Ponant Lake']],
+        ['I', 'msn_l20', 4, ["Se pencher sur l'eau", 'Lean over the water'],
+          [['-', "Ce n'est pas ton visage. Une peau brunie par un autre soleil, des yeux d'or, une femme qui sourit en levant les bras vers toi. Vers le ciel.", 'It is not your face. Skin browned by another sun, golden eyes, a woman smiling as she raises her arms to you. To the sky.'],
+           ['-', "L'eau se trouble. Des formes sans visage en sortent.", 'The water clouds over. Faceless shapes rise from it.']]],
+        ['K', ['msn_reflet'], 3, 'msn_l20', ['Repousser les reflets sans visage', 'Drive back the faceless reflections'],
+          [['-', "Le lac se calme. Ton reflet est revenu. C'est bien le tien. Tu n'en es pas soulagé.", 'The lake calms. Your reflection has returned. It is indeed yours. You are not relieved.']]]],
+      ...R(20) },
+
+    { id: 'msn_o_le_reflet', n: ['Le reflet', 'The Reflection'], f: 'ombre', lv: 20, req: ['msn_o_celui_qui_attend'],
+      res: [["Au bord de l'étang des Murmures, l'eau vous montre un autre visage.", 'At the edge of the Pond of Whispers, the water shows you another face.']],
+      intro: [['-', "Le murmure devient insistant près de l'étang des Murmures. « Regarde. » Une envie soudaine de te pencher sur l'eau.", 'The whisper grows insistent near the Pond of Whispers. « Look. » A sudden urge to lean over the water.']],
+      s: [['A', 'msn_o20', 6, ["Descendre au bord de l'étang des Murmures", 'Go down to the edge of the Pond of Whispers']],
+        ['I', 'msn_o20', 4, ["Se pencher sur l'eau", 'Lean over the water'],
+          [['-', "Ce n'est pas ton visage. Une peau brunie par un autre soleil, des yeux d'or, une femme qui sourit en levant les bras vers toi. Vers le ciel.", 'It is not your face. Skin browned by another sun, golden eyes, a woman smiling as she raises her arms to you. To the sky.'],
+           ['-', "L'eau noire se trouble. Des formes sans visage en sortent.", 'The black water clouds over. Faceless shapes rise from it.']]],
+        ['K', ['msn_reflet'], 3, 'msn_o20', ['Repousser les reflets sans visage', 'Drive back the faceless reflections'],
+          [['-', "L'étang se calme. Ton reflet est revenu. C'est bien le tien. Tu n'en es pas soulagé.", 'The pond calms. Your reflection has returned. It is indeed yours. You are not relieved.']]]],
+      ...R(20) },
+
+    // -------------------------------------------------------------------------------- niveau 25
+    { id: 'msn_l_le_frere_d_armes', n: ["Le frère d'armes", 'The Brother in Arms'], f: 'lumiere', lv: 25, req: ['msn_l_le_reflet'],
+      res: [['Un soldat blessé croit avoir combattu à vos côtés.', 'A wounded soldier believes he fought at your side.'], ['L\'escorter jusqu\'au Guet du Ponant.', 'Escort him to the Ponant Watch.']],
+      intro: [['-', "Sur la route du Guet, un soldat blessé t'appelle par un nom que tu ne connais pas.", 'On the road to the Watch, a wounded soldier calls you by a name you do not know.']],
+      s: [['P', 'msn_garin', ['Parler à Garin', 'Talk to Garin'],
+          [['msn_garin', "On a tenu le pont ensemble, toi et moi. Avant la Nuit des Étoiles. Tu ne te souviens pas ? …Aide-moi à rentrer au Guet. On parlera en marchant.", 'We held the bridge together, you and I. Before the Night of Falling Stars. You do not remember? …Help me get back to the Watch. We will talk as we walk.']]],
+        ['E', 'msn_garin', ['msn_l25_1', 'msn_l25_2', 'msn_l25_fin'], ['Escorter Garin jusqu\'au Guet du Ponant', 'Escort Garin to the Ponant Watch'],
+          { monstres: ['bandit', 'braconnier'], nombre: 2, vagues: 2, pv: 160, degats: 4 },
+          [['msn_garin', "Le Guet. Merci. …Je vais te dire la vérité : je ne me souviens pas de ton visage. Je me souviens de tes yeux. Ceux de quelqu'un d'autre. Quelqu'un qui brillait.", 'The Watch. Thank you. …I will tell you the truth: I do not remember your face. I remember your eyes. Someone else\'s. Someone who shone.']]]],
+      ...R(25) },
+
+    { id: 'msn_o_la_passeuse', n: ['La passeuse', 'The Ferrywoman'], f: 'ombre', lv: 25, req: ['msn_o_le_reflet'],
+      res: [['Une passeuse croit vous avoir déjà fait traverser.', 'A ferrywoman believes she has ferried you across before.'], ['L\'escorter jusqu\'aux Pilotis.', 'Escort her to the Pilotis.']],
+      intro: [['-', "Au bord du marais, une passeuse te regarde comme on regarde un revenant.", 'At the edge of the marsh, a ferrywoman looks at you the way one looks at a ghost.']],
+      s: [['P', 'msn_mirta', ['Parler à Mirta', 'Talk to Mirta'],
+          [['msn_mirta', "Je t'ai déjà fait passer. Une nuit, dans l'autre sens. Tu partais, et tu brillais si fort que les noyés se cachaient. …Raccompagne-moi aux Pilotis. Le marais a faim, ce soir.", 'I have ferried you before. One night, the other way. You were leaving, and you shone so bright the drowned hid. …Walk me back to the Pilotis. The marsh is hungry tonight.']]],
+        ['E', 'msn_mirta', ['msn_o25_1', 'msn_o25_2', 'msn_o25_fin'], ['Escorter Mirta jusqu\'aux Pilotis', 'Escort Mirta to the Pilotis'],
+          { monstres: ['noye', 'archer_tourbe'], nombre: 2, vagues: 2, pv: 160, degats: 4 },
+          [['msn_mirta', "Les Pilotis. Merci. …Ce n'était pas toi, cette nuit-là. Celui-là partait vers le ciel. Mais il avait ta lumière.", 'The Pilotis. Thank you. …It was not you, that night. That one was leaving for the sky. But he had your light.']]]],
+      ...R(25) },
+
+    { titre: 'LE MARQUÉ SANS NOM — QUÊTES PRINCIPALES, NIVEAUX 30 À 90 (TOUS)' },
+
+    // -------------------------------------------------------------------------------- niveau 30 (Marche)
+    { id: 'msn_les_pas_de_la_nuit', n: ['Les pas de la nuit', 'Footsteps of the Night'], lv: 30, // pas de « requiert » : le moteur ne sait pas dire « l'une OU l'autre » (msn_l_le_frere_d_armes / msn_o_la_passeuse)
+      res: [['Des empreintes brillent dans l\'herbe de la Marche.', 'Footprints glow in the grass of the March.'], ['Ce sont les vôtres.', 'They are yours.']],
+      intro: [['-', "Dans l'herbe de la Marche, des empreintes luisent faiblement. Ta pointure. Ta démarche. Mais tu n'es jamais passé par ici.", 'In the grass of the March, footprints glow faintly. Your size. Your stride. But you have never been this way.']],
+      s: [['T', ['msn_30_t1', 'msn_30_t2', 'msn_30_t3', 'msn_30_t4', 'msn_30_fin'], ['Suivre vos propres empreintes', 'Follow your own footprints'],
+          [['-', "Les empreintes s'arrêtent dans un creux d'herbe brûlée, ancien, presque effacé. Quelque chose est tombé ici. Pas cette année. Il y a mille ans.", 'The footprints stop in a hollow of burnt grass, old, almost erased. Something fell here. Not this year. A thousand years ago.']]],
+        ['I', 'msn_30_fin', 4, ['Toucher le sol brûlé', 'Touch the burnt ground'],
+          [['-', "Une douleur qui n'est pas la tienne : tomber, se briser, et voir ses morceaux partir dans toutes les directions. Puis le silence.", 'A pain that is not yours: falling, breaking, and watching your pieces fly off in every direction. Then silence.']]]],
+      ...R(30) },
+
+    // -------------------------------------------------------------------------------- niveau 35 (Désert)
+    { id: 'msn_une_chanson_etrangere', n: ['Une chanson étrangère', 'A Foreign Song'], lv: 35, req: ['msn_les_pas_de_la_nuit'],
+      res: [['Vous fredonnez une chanson que vous n\'avez jamais apprise.', 'You hum a song you never learned.'], ['Une aïeule astréenne l\'a entendue.', 'An Astrean elder heard it.']],
+      intro: [['-', "Tu fredonnes sans y penser. Une chanson lente, dans une langue que tu ne parles pas. Une vieille Astréenne s'est arrêtée pour t'écouter.", 'You are humming without thinking. A slow song, in a language you do not speak. An old Astrean woman has stopped to listen to you.']],
+      s: [['Q', 'msn_aieule', 'aieule', ["Parler à l'aïeule Sabra", 'Talk to Elder Sabra'],
+        [['msn_aieule', "Où as-tu appris ça ? C'est le chant d'accueil. On le chantait quand l'Astre descendait se poser chez nous. Plus personne ne le connaît en entier. Toi, si.", 'Where did you learn that? It is the welcoming song. We sang it when the Star came down to rest among us. Nobody knows it whole any more. You do.']],
+        ['Que faites-vous ?', 'What do you do?'],
+        [['chanter', ['Le chanter en entier pour elle', 'Sing it whole for her'],
+          [['msn_aieule', "…C'est bien lui. Mot pour mot. Celui qui te l'a appris ne l'a pas appris d'un homme. Il l'a entendu d'en haut.", '…It is the very one. Word for word. Whoever taught you did not learn it from a man. They heard it from above.']], { xp: 800 }],
+         ['taire', ['Se taire, troublé', 'Fall silent, troubled'],
+          [['msn_aieule', "Tu as peur de ce qui sort de ta bouche. Tu as raison. Ce chant n'est pas à toi. Mais il t'a choisi pour passer.", 'You are afraid of what comes out of your mouth. You are right. That song is not yours. But it chose you to pass through.']], { or: 90 }]]]],
+      ...R(35) },
+
+    // -------------------------------------------------------------------------------- niveau 40 (Désert)
+    { id: 'msn_la_ville_vue_d_en_haut', n: ['La ville vue d\'en haut', 'The Town Seen from Above'], lv: 40, req: ['msn_une_chanson_etrangere'],
+      res: [['Une roche gravée montre l\'Oasis vue du ciel.', 'An engraved rock shows the Oasis seen from the sky.']],
+      intro: [['-', "Le premier souvenir revient : la ville minuscule, vue de très haut. Mais cette fois, tu sais où chercher. Ta Marque tire vers une roche du désert.", 'The first memory returns: the tiny town, seen from very high. But this time you know where to look. Your Mark pulls toward a rock in the desert.']],
+      s: [['A', 'msn_40', 6, ['Rejoindre la roche gravée', 'Reach the engraved rock']],
+        ['I', 'msn_40', 4, ['Examiner la gravure', 'Examine the carving'],
+          [['-', "Une gravure très ancienne : l'Oasis, ses palmes, ses toits, vue d'au-dessus. Exactement comme dans ton souvenir. Personne ne l'a jamais vue ainsi. Sauf ce qui venait du ciel.", 'A very old carving: the Oasis, its palms, its roofs, seen from above. Exactly as in your memory. Nobody has ever seen it like that. Except what came from the sky.'],
+           ['-', "Ce n'était pas ta ville. Ce n'était pas ton souvenir.", 'It was not your town. It was not your memory.']]]],
+      ...R(40) },
+
+    // -------------------------------------------------------------------------------- niveau 45 (Désert)
+    { id: 'msn_trois_choses_dans_le_sable', n: ['Trois choses dans le sable', 'Three Things in the Sand'], lv: 45, req: ['msn_la_ville_vue_d_en_haut'],
+      res: [['Trois objets enfouis vous appellent.', 'Three buried objects are calling you.'], ['Les trouver, puis montrer à Sabra.', 'Find them, then show Sabra.']],
+      intro: [['-', "Trois points chauds sous le sable, que ta Marque sent comme des braises. Tu sais, sans savoir pourquoi, ce que tu vas y trouver.", 'Three warm spots under the sand, which your Mark feels like embers. You know, without knowing why, what you will find there.']],
+      s: [['X', [
+          ['msn_45_i1', ['Un bracelet de perles bleues', 'A bracelet of blue beads'], [['-', "Tu le reconnais. Tu l'as vu au poignet de quelqu'un qui levait les bras vers toi.", 'You recognise it. You saw it on the wrist of someone raising their arms to you.']]],
+          ['msn_45_i2', ['Une sandale d\'enfant', "A child's sandal"], [['-', "Tu te souviens de l'enfant. Il riait en te regardant descendre. Il est mort depuis mille ans.", 'You remember the child. He laughed as he watched you come down. He has been dead a thousand years.']]],
+          ['msn_45_i3', ['Une corde dorée, rompue', 'A golden cord, broken'], [['-', "Celle-là, tu la reconnais aussi. Elle a été la première. Avant les chaînes, une corde. Tu t'en souviens comme d'une brûlure.", 'This one you recognise too. It was the first. Before the chains, a cord. You remember it like a burn.']]]],
+        'msn_aieule', ['Retrouver les trois objets', 'Find the three objects'],
+        [['j', "Je me souviens de ces objets. De gens morts depuis mille ans.", 'I remember these objects. Of people dead for a thousand years.'],
+         ['msn_aieule', "Ce ne sont pas tes souvenirs, enfant. Ce sont ceux de l'Astre. Il en a semé un dans chaque Marqué, comme on laisse des lettres chez des amis avant un long voyage.", 'These are not your memories, child. They are the Star\'s. It sowed one in every Marked, the way one leaves letters with friends before a long journey.']]]],
+      ...R(45) },
+
+    // -------------------------------------------------------------------------------- niveau 50 (Cimes)
+    { id: 'msn_celui_qui_t_appelle_petit', n: ["Celui qui t'appelle « petit »", 'The One Who Calls You « Little One »'], lv: 50, req: ['msn_trois_choses_dans_le_sable'],
+      res: [['Un gelé de la Chute dégèle et vous appelle.', 'A frozen one of the Fall thaws and calls you.'], ['Le protéger pendant qu\'il dégèle.', 'Protect him while he thaws.']],
+      intro: [['-', "Dans les Cimes, une voix sort de la glace : « Petit… c'est toi… ? » Un Marqué de la Chute, pris debout dans un bloc qui fond.", 'In the Peaks, a voice comes out of the ice: « Little one… is that you…? » A Marked of the Fall, caught standing in a melting block.']],
+      s: [['D', 'msn_gele', ['Protéger le gelé pendant qu\'il dégèle', 'Protect the frozen one while he thaws'],
+          { cible: ['Le gelé', 'The frozen one'], monstres: ['loup_givre', 'errant'], nombre: 3, vagues: 3, apparition: 'msn_50_b', pv: 260, degats: 6 },
+          [['-', "La glace cède. L'homme tombe à genoux, respire, et te regarde.", 'The ice gives way. The man falls to his knees, breathes, and looks at you.']]],
+        ['P', 'msn_gele', ['Parler au Marqué dégelé', 'Talk to the thawed Marked'],
+          [['msn_gele', "Petit… non. Pardon. Je t'ai pris pour l'écuyer. Il avait la même lumière que toi, la nuit où je suis tombé. Il pleurait en forgeant.", 'Little one… no. Forgive me. I took you for the squire. He had the same light as you, the night I fell. He was weeping as he forged.'],
+           ['msn_gele', "Tu n'es pas lui. Mais ta Marque se souvient de lui. Comme la mienne.", 'You are not him. But your Mark remembers him. As mine does.']]]],
+      ...R(50) },
+
+    // -------------------------------------------------------------------------------- niveau 55 (Cimes)
+    { id: 'msn_le_froid_qui_n_est_pas_a_toi', n: ["Le froid qui n'est pas à toi", 'The Cold That Is Not Yours'], lv: 55, req: ['msn_celui_qui_t_appelle_petit'],
+      res: [['Un froid qui vient de l\'intérieur.', 'A cold that comes from within.'], ['Y survivre.', 'Survive it.']],
+      intro: [['-', "Un froid te prend, d'un coup, au milieu des Cimes. Pas celui de la neige : un froid de dedans, celui d'une chose qui a perdu sa lumière.", 'A cold seizes you, suddenly, in the middle of the Peaks. Not the cold of the snow: a cold from within, that of a thing that has lost its light.']],
+      s: [['A', 'msn_55', 6, ['Chercher un abri entre les rochers', 'Look for shelter among the rocks']],
+        ['V', 'msn_55', 14, 40, ['Tenir pendant que le froid se resserre', 'Hold on while the cold closes in'], { mode: 'resserre', rayonFin: 4, degats: 6, monstres: ['loup_givre'], nombre: 1, intervalle: 15 },
+          [['-', "Le froid recule. Tu as compris une chose, en le traversant : il n'était pas à toi non plus. Quelqu'un, là-haut, a froid depuis mille ans, et tu l'as senti.", 'The cold recedes. You understood one thing, crossing it: it was not yours either. Someone, up there, has been cold for a thousand years, and you felt it.']]]],
+      ...R(55) },
+
+    // -------------------------------------------------------------------------------- niveau 60 (Cendres)
+    { id: 'msn_le_bruit_des_chaines', n: ['Le bruit des chaînes', 'The Sound of Chains'], lv: 60, req: ['msn_le_froid_qui_n_est_pas_a_toi'],
+      res: [['Un bruit de chaînes résonne dans les Cendres.', 'A sound of chains echoes in the Ashes.']],
+      intro: [['-', "Un bruit de chaînes, dans ta tête. Pas autour de toi : dedans. Il vient de l'est, du côté de la Forge éteinte.", 'A sound of chains, in your head. Not around you: inside. It comes from the east, toward the Extinguished Forge.']],
+      s: [['A', 'msn_60', 6, ['Suivre le bruit des chaînes', 'Follow the sound of chains']],
+        ['I', 'msn_60', 4, ['Poser la main sur la roche', 'Lay your hand on the rock'],
+          [['-', "Des mains qui t'attachent. Des chaînes de lumière qui serrent. Et une voix, tendre, terrible : « Reste. Je t'aime. Reste. »", 'Hands binding you. Chains of light tightening. And a voice, tender, terrible: « Stay. I love you. Stay. »'],
+           ['-', "Tu ouvres les yeux. Tu n'as jamais été enchaîné. Lui, si.", 'You open your eyes. You have never been chained. It has.']]]],
+      ...R(60) },
+
+    // -------------------------------------------------------------------------------- niveau 65 (Cendres)
+    { id: 'msn_ce_qui_est_a_moi', n: ['Ce qui est à moi', 'What Is Mine'], lv: 65, req: ['msn_le_bruit_des_chaines'],
+      res: [['Une petite cloche sonne quelque part.', 'A small bell is ringing somewhere.'], ['Personne d\'autre ne l\'entend.', 'Nobody else hears it.']],
+      intro: [['-', "Une petite cloche. Le son est clair, aigu, tout proche. Tu te retournes : personne. Personne d'autre ne l'entend.", 'A small bell. The sound is clear, high, very near. You turn around: nobody. Nobody else hears it.']],
+      s: [['T', ['msn_65_t1', 'msn_65_t2', 'msn_65_t3', 'msn_65_cloche'], ['Suivre le son de la cloche', 'Follow the sound of the bell'],
+          [['-', "Le son s'arrête là. Rien que de la cendre.", 'The sound stops there. Nothing but ash.']]],
+        ['I', 'msn_65_cloche', 4, ['Fouiller la cendre', 'Search the ash'],
+          [['-', "Une cloche d'enfant, en cuivre. Pas mille ans : quelques années. Quand tu la secoues, tu vois une rue, une porte bleue, une main qui te tient. Une main ordinaire. Pas de lumière. Pas de ciel.", "A child's copper bell. Not a thousand years old: a few years. When you shake it, you see a street, a blue door, a hand holding yours. An ordinary hand. No light. No sky."],
+           ['-', "Celui-là est à toi. Le seul.", 'That one is yours. The only one.']]]],
+      ...R(65), items: [{ m: 'BELL', n: ['Cloche de cuivre', 'Copper bell'], d: [["Une rue, une porte bleue, une main.", 'A street, a blue door, a hand.'], ["Le seul souvenir qui est à vous.", 'The only memory that is yours.']] }] },
+
+    // -------------------------------------------------------------------------------- niveau 70 (Cendres)
+    { id: 'msn_le_carnet', n: ['Le carnet', 'The Notebook'], lv: 70, req: ['msn_ce_qui_est_a_moi'],
+      res: [['Ansgar, le scribe des Marqués, recopie leurs souvenirs.', 'Ansgar, the scribe of the Marked, copies down their memories.'], ['Lui porter les vôtres.', 'Bring him yours.']],
+      intro: [['-', "On t'a parlé d'un scribe, près du Camp des Cendres, qui recopie les souvenirs des Marqués. Tu as noté les tiens, un par un, dans un carnet.", 'You were told of a scribe near the Camp of Ashes who copies down the memories of the Marked. You have noted yours, one by one, in a notebook.']],
+      s: [['L', 'msn_ansgar', ['Carnet de vos souvenirs', 'Notebook of your memories'], 'WRITABLE_BOOK', ['Porter votre carnet à Ansgar', 'Bring your notebook to Ansgar'],
+        [['msn_ansgar', "Voyons. La ville vue d'en haut. Les bras levés. La corde, puis les chaînes. Le froid. …Je les ai tous lus, chez cent Marqués. Les mêmes, dans le désordre.", 'Let us see. The town seen from above. The raised arms. The cord, then the chains. The cold. …I have read them all, in a hundred Marked. The same ones, in a different order.'],
+         ['msn_ansgar', "Mais celui-ci. Une cloche de cuivre, une porte bleue. Celui-là, je ne l'ai jamais lu. Personne d'autre ne l'a. Gardez-le loin de tout le reste.", 'But this one. A copper bell, a blue door. That one I have never read. Nobody else has it. Keep it apart from all the rest.']]]],
+      ...R(70) },
+
+    // -------------------------------------------------------------------------------- niveau 75 (Fournaise)
+    { id: 'msn_la_chute', n: ['La Chute', 'The Fall'], lv: 75, req: ['msn_le_carnet'],
+      res: [['Le souvenir de la Chute remonte, et il s\'efface déjà.', 'The memory of the Fall rises, and it is already fading.'], ['Rejoindre le lieu avant qu\'il ne disparaisse.', 'Reach the place before it vanishes.']],
+      intro: [['-', "Sur les pentes du volcan, le souvenir le plus vieux de tous remonte d'un coup. Il s'efface aussi vite. Ta Marque te montre le chemin. Vite.", 'On the slopes of the volcano, the oldest memory of all rises at once. It fades just as fast. Your Mark shows you the way. Quickly.']],
+      s: [['A', 'msn_75_dep', 6, ['Rejoindre le départ du souvenir', 'Reach the start of the memory']],
+        ['C', 75, ['A', 'msn_75_but', 5, ['Atteindre le lieu avant que le souvenir ne s\'efface', 'Reach the place before the memory fades'],
+            [['-', "Le ciel, déchiré. Une lumière qui se jette contre les chaînes et se brise exprès, pour s'enfuir. Et en bas, un écuyer qui crie un nom.", 'The sky, torn. A light hurling itself against the chains and breaking on purpose, to escape. And below, a squire shouting a name.'],
+             ['-', "L'Astre ne s'est pas brisé. Il a choisi. Tu le sais, maintenant, comme tu sais ton propre souffle.", 'The Star did not break. It chose. You know it now, as you know your own breath.']]],
+          [['-', "Le souvenir s'est effacé. Il reviendra : retourne au départ.", 'The memory has faded. It will return: go back to the start.']], 1]],
+      ...R(75) },
+
+    // -------------------------------------------------------------------------------- niveau 80 (Seuil)
+    { id: 'msn_ce_qu_on_rend', n: ["Ce qu'on rend", 'What Is Given Back'], lv: 80, req: ['msn_la_chute'],
+      res: [['Vos souvenirs commencent à partir.', 'Your memories are starting to leave.'], ['Morvain sait pourquoi.', 'Morvain knows why.']],
+      intro: [['-', "Ce matin, tu as cherché la ville vue d'en haut, et elle n'était plus là. Juste un vide, propre, comme une place laissée libre.", 'This morning you looked for the town seen from above, and it was no longer there. Just a gap, clean, like a seat left empty.']],
+      s: [['P', 'a8_morvain', ['Parler à Morvain, au Seuil', 'Talk to Morvain, at the Threshold'],
+          [['a8_morvain', "Ils partent. Les souvenirs de l'Astre. À mesure que son souffle revient vers lui, il reprend ce qu'il avait laissé chez nous. Moi aussi, je perds les miens. Mille ans de souvenirs qui n'étaient pas à moi.", 'They are leaving. The Star\'s memories. As its breath returns to it, it takes back what it left with us. I am losing mine too. A thousand years of memories that were not mine.'],
+           ['a8_morvain', "Allez au bord. Regardez-les partir. Ça fait moins peur quand on les regarde.", 'Go to the edge. Watch them leave. It is less frightening when you watch them.']]],
+        ['I', 'msn_bord', 4, ['Regarder vos souvenirs partir', 'Watch your memories leave'],
+          [['-', "Les bras levés, l'enfant qui rit, la corde dorée. Un par un, ils montent comme des étincelles et rejoignent le ciel. Ils ne font pas mal. Ils rentrent chez eux.", 'The raised arms, the laughing child, the golden cord. One by one they rise like sparks and join the sky. They do not hurt. They are going home.']]]],
+      ...R(80) },
+
+    // -------------------------------------------------------------------------------- niveau 85 (Seuil)
+    { id: 'msn_la_cloche_au_bord_du_ciel', n: ['La cloche au bord du ciel', 'The Bell at the Edge of the Sky'], lv: 85, req: ['msn_ce_qu_on_rend'],
+      res: [['Il ne vous reste presque plus rien.', 'You have almost nothing left.'], ['Sauf la cloche.', 'Except the bell.']],
+      intro: [['-', "Il ne te reste presque plus rien de l'Astre. Le chant d'accueil s'est tu. La ville vue d'en haut est partie. Mais la cloche est toujours là.", 'You have almost nothing of the Star left. The welcoming song has fallen silent. The town seen from above is gone. But the bell is still there.']],
+      s: [['I', 'msn_bord', 4, ['Faire sonner la cloche au bord du ciel', 'Ring the bell at the edge of the sky'],
+          [['-', "Le son part dans le vide. Et, très loin, très bas, de l'autre côté du monde, une autre cloche répond. Pareille. Quelqu'un, quelque part, a gardé l'autre.", 'The sound goes out into the void. And, very far, very low, on the other side of the world, another bell answers. The same. Someone, somewhere, kept the other one.']]],
+        ['P', 'a8_naia', ['Raconter à Naïa ce que vous avez entendu', 'Tell Naïa what you heard'],
+          [['a8_naia', "Une cloche qui répond. Alors quelqu'un t'attend. Pas l'Astre : quelqu'un d'ici, avec une porte et une rue. C'est rare, tu sais. La plupart des Marqués n'ont plus personne.", 'A bell that answers. Then someone is waiting for you. Not the Star: someone from here, with a door and a street. It is rare, you know. Most of the Marked have nobody left.']]]],
+      ...R(85) },
+
+    // -------------------------------------------------------------------------------- niveau 90 (Seuil)
+    { id: 'msn_un_nom', n: ['Un nom', 'A Name'], lv: 90, req: ['msn_la_cloche_au_bord_du_ciel'],
+      res: [['Vous n\'avez jamais su votre nom.', 'You never knew your name.'], ['Il est temps d\'en avoir un.', 'It is time to have one.']],
+      intro: [['-', "Les souvenirs de l'Astre sont partis. Il reste la cloche, une rue, une porte bleue. Et une question que personne ne t'a posée depuis ton réveil.", 'The Star\'s memories are gone. What remains is the bell, a street, a blue door. And a question nobody has asked you since you woke.']],
+      s: [['Q', 'a8_naia', 'nom', ['Répondre à Naïa', 'Answer Naïa'],
+        [['a8_naia', "Chez nous, quand un invité reste, on lui demande son nom. Pas celui qu'il avait en arrivant : celui qu'il veut garder.", 'Among us, when a guest stays, we ask their name. Not the one they had on arrival: the one they want to keep.'],
+         ['a8_naia', "Tu es resté. Alors, comment t'appelles-tu ?", 'You stayed. So, what is your name?']],
+        ['Quel nom gardez-vous ?', 'What name do you keep?'],
+        [['cloche', ['Le nom que la cloche appelait', 'The name the bell was calling'],
+          [['a8_naia', "Celui de la porte bleue. Tu ne t'en souviens pas encore, mais tu le retrouveras en suivant la cloche. Il est à toi.", 'The one from the blue door. You do not remember it yet, but you will find it by following the bell. It is yours.']], { xp: 5000 }],
+         ['marque', ["Marqué. Ça me suffit.", 'Marked. That is enough for me.'],
+          [['a8_naia', "Marqué. Comme des centaines d'autres, et comme personne d'autre. C'est un beau nom, quand on l'a choisi.", 'Marked. Like hundreds of others, and like nobody else. It is a fine name, when you have chosen it.']], { xp: 5000 }],
+         ['astre', ["Celui que l'Astre m'aurait donné", 'The one the Star would have given me'],
+          [['a8_naia', "Alors lève les yeux, ce soir. Il brille entier. S'il t'appelle, tu l'entendras sans souvenir pour te le souffler.", 'Then look up tonight. It shines whole. If it calls you, you will hear it without any memory to whisper it to you.']], { xp: 5000 }]]]],
+      ...R(90, 1.5), items: [{ m: 'NAME_TAG', n: ['Votre nom', 'Your name'], d: [["Choisi au bord du ciel, au Seuil.", 'Chosen at the edge of the sky, at the Threshold.']] }] },
+  ],
+};

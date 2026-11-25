@@ -66,6 +66,7 @@ final class SiteDesign extends CapitalDesign {
             case "camp" -> d.camp();
             case "ruine" -> d.ruin();
             case "crateres" -> d.craters();
+            case "decor" -> d.decor();
             default -> throw new IllegalArgumentException("type de site inconnu : " + site.kind());
         };
     }
@@ -1069,6 +1070,573 @@ final class SiteDesign extends CapitalDesign {
         point("spawn", 0.5, top(0, 8) + 1, 8.5, 180);
         plan.notes.add(what);
         return plan;
+    }
+
+    // ------------------------------------------------------------------ Décor (lieux-dits sans monstres)
+    /** Rayon d'emprise de chaque décor (SiteCatalog s'en sert pour les placer). */
+    static int decorRadius(String theme) {
+        return switch (theme) {
+            case "ferme" -> 13;
+            case "verger" -> 11;
+            case "moulin", "menhirs", "arche", "monument", "statue" -> 10;
+            default -> 8;
+        };
+    }
+
+    /** Nom de base d'un décor. */
+    static String decorName(String theme) {
+        return switch (theme) {
+            case "tour" -> "Tour de guet";
+            case "moulin" -> "Moulin";
+            case "ferme" -> "Ferme";
+            case "verger" -> "Verger";
+            case "monument" -> "Obélisque";
+            case "statue" -> "Statue du Gardien";
+            case "menhirs" -> "Pierres levées";
+            case "sanctuaire" -> "Sanctuaire";
+            case "cabane" -> "Cabane de bûcheron";
+            case "puits" -> "Vieux puits";
+            case "campement" -> "Campement abandonné";
+            case "arche" -> "Arche de pierre";
+            default -> "Lieu-dit";
+        };
+    }
+
+    private CapitalPlan decor() {
+        natural(4, 26);
+        clearVegetation(Rw + 2);
+        int b = top(0, 0);
+        switch (site.theme()) {
+            case "tour" -> decorTower(b);
+            case "moulin" -> decorMill(b);
+            case "ferme" -> decorFarm();
+            case "verger" -> decorOrchard();
+            case "monument" -> decorObelisk(b);
+            case "statue" -> decorStatue(b);
+            case "menhirs" -> decorStones();
+            case "sanctuaire" -> decorShrine(b);
+            case "cabane" -> decorCabin(b);
+            case "puits" -> decorWell(b);
+            case "campement" -> decorCamp();
+            case "arche" -> decorArch(b);
+            default -> throw new IllegalArgumentException("décor inconnu : " + site.theme());
+        }
+        point("centre", 0.5, top(0, 0) + 1, 0.5, 180);
+        point("spawn", 0.5, top(0, Rw - 1) + 1, Rw - 0.5, 180);
+        plan.notes.add(decorName(site.theme()).toLowerCase(java.util.Locale.ROOT));
+        return plan;
+    }
+
+    /** Sol mis à la hauteur b sur un rectangle : comble les creux, rabote les bosses (ne touche pas l'eau). */
+    private void level(int x0, int z0, int x1, int z1, int b, String fill) {
+        for (int dz = z0; dz <= z1; dz++) {
+            for (int dx = x0; dx <= x1; dx++) {
+                if (!inGrid(dx, dz) || wetAt(dx, dz)) {
+                    continue;
+                }
+                int t = top(dx, dz);
+                for (int y = t + 1; y <= b; y++) {
+                    put(dx, y, dz, fill);
+                }
+                for (int y = b + 1; y <= t; y++) {
+                    air(dx, y, dz);
+                }
+                put(dx, b, dz, fill);
+                tops[ci(dx, dz)] = b;
+            }
+        }
+    }
+
+    private String stoneMix(int dx, int dz, int y) {
+        return mix(ruinMix(), dx, dz, 300 + y);
+    }
+
+    private String woodStairs() {
+        return st.planks.replace("_planks", "_stairs");
+    }
+
+    private String woodSlab() {
+        return st.planks.replace("_planks", "_slab");
+    }
+
+    /** Bloc lumineux qui couronne monuments et sanctuaires. */
+    private String glow() {
+        return switch (site.style()) {
+            case "ombre", "marais" -> "crying_obsidian";
+            case "cendre" -> "magma_block";
+            case "givre" -> "blue_ice";
+            default -> "gold_block";
+        };
+    }
+
+    private void decorTower(int b) {
+        level(-3, -3, 3, 3, b, st.stoneBase);
+        int top = b + 13;
+        for (int dz = -2; dz <= 2; dz++) {
+            for (int dx = -2; dx <= 2; dx++) {
+                boolean wall = Math.abs(dx) == 2 || Math.abs(dz) == 2, corner = Math.abs(dx) == 2 && Math.abs(dz) == 2;
+                for (int y = b + 1; y <= top; y++) {
+                    if (wall) {
+                        put(dx, y, dz, corner ? log(st.pillar, "y") : stoneMix(dx, dz, y));
+                    } else {
+                        air(dx, y, dz);
+                    }
+                }
+            }
+        }
+        // Porte au sud, meurtrières, échelle contre le mur nord.
+        air(0, b + 1, 2);
+        air(0, b + 2, 2);
+        for (int y : new int[]{b + 5, b + 9}) {
+            air(2, y, 0);
+            air(-2, y, 0);
+        }
+        put(1, b + 1, 1, st.lantern + "[hanging=false]");
+        // Plateforme, garde-corps, toit sur quatre poteaux, bannière.
+        for (int dz = -3; dz <= 3; dz++) {
+            for (int dx = -3; dx <= 3; dx++) {
+                put(dx, top + 1, dz, st.planks);
+                boolean edge = Math.abs(dx) == 3 || Math.abs(dz) == 3, corner = Math.abs(dx) == 3 && Math.abs(dz) == 3;
+                if (corner) {
+                    for (int y = top + 2; y <= top + 4; y++) {
+                        put(dx, y, dz, log(st.log, "y"));
+                    }
+                } else if (edge) {
+                    put(dx, top + 2, dz, st.fence);
+                }
+                put(dx, top + 5, dz, Math.abs(dx) <= 2 && Math.abs(dz) <= 2 ? st.planks : woodSlab() + "[type=bottom]");
+            }
+        }
+        for (int y = b + 1; y <= top + 1; y++) {
+            put(0, y, -1, "ladder[facing=south]");
+        }
+        put(0, top + 4, 0, st.lantern + "[hanging=true]");
+        put(0, top + 6, 0, st.fence);
+        put(0, top + 7, 0, st.fence);
+        put(0, top + 8, 0, st.banner + "_banner[rotation=8]");
+    }
+
+    private void decorMill(int b) {
+        level(-3, -3, 3, 3, b, st.stoneBase);
+        for (int dz = -2; dz <= 2; dz++) {
+            for (int dx = -2; dx <= 2; dx++) {
+                boolean wall = Math.abs(dx) == 2 || Math.abs(dz) == 2, corner = Math.abs(dx) == 2 && Math.abs(dz) == 2;
+                for (int y = b + 1; y <= b + 11; y++) {
+                    if (wall) {
+                        put(dx, y, dz, y <= b + 5 ? stoneMix(dx, dz, y) : (corner ? log(st.log, "y") : st.planks));
+                    } else if (y == b + 6) {
+                        put(dx, y, dz, st.planks);
+                    } else {
+                        air(dx, y, dz);
+                    }
+                }
+            }
+        }
+        air(0, b + 1, -2);
+        air(0, b + 2, -2);
+        put(-2, b + 8, 0, "glass_pane");
+        put(2, b + 8, 0, "glass_pane");
+        // Toit en pyramide.
+        for (int k = 0; k <= 3; k++) {
+            int r = 3 - k, y = b + 12 + k;
+            for (int dz = -r; dz <= r; dz++) {
+                for (int dx = -r; dx <= r; dx++) {
+                    if (r > 0 && Math.abs(dx) != r && Math.abs(dz) != r) {
+                        continue;
+                    }
+                    String face = Math.abs(dz) == r ? (dz < 0 ? "south" : "north") : (dx < 0 ? "east" : "west");
+                    put(dx, y, dz, r == 0 ? st.planks : woodStairs() + "[facing=" + face + ",half=bottom]");
+                }
+            }
+        }
+        // Ailes sur la face sud : moyeu, quatre bras et leurs toiles.
+        int hy = b + 9;
+        put(0, hy, 3, log(st.log, "z"));
+        for (int k = 1; k <= 6; k++) {
+            put(0, hy + k, 4, st.fence);
+            put(0, hy - k, 4, st.fence);
+            put(k, hy, 4, st.fence);
+            put(-k, hy, 4, st.fence);
+            if (k >= 2) {
+                put(1, hy + k, 4, "white_wool");
+                put(-1, hy - k, 4, "white_wool");
+                put(k, hy - 1, 4, "white_wool");
+                put(-k, hy + 1, 4, "white_wool");
+            }
+        }
+        put(0, hy, 4, log(st.log, "z"));
+        stack(3, -4, "hay_block[axis=y]");
+        stack(4, -4, "hay_block[axis=x]");
+        stack(-3, -4, "barrel[facing=up]");
+        stack(-4, -4, "composter[level=0]");
+    }
+
+    private void decorFarm() {
+        String[] crops = {"wheat[age=7]", "carrots[age=7]", "potatoes[age=7]", "beetroots[age=3]"};
+        int shift = (int) (rnd(0, 0, 310) * 4);
+        // Champ en planches : terre labourée, une rigole d'eau toutes les cinq rangées, allée au milieu.
+        for (int dz = -7; dz <= 7; dz++) {
+            for (int dx = -10; dx <= 10; dx++) {
+                if (!inGrid(dx, dz) || wetAt(dx, dz)) {
+                    continue;
+                }
+                int t = top(dx, dz);
+                if (Math.abs(dx) == 10 || Math.abs(dz) == 7) {
+                    boolean gate = dz == 7 && dx == 0;
+                    put(dx, t + 1, dz, gate ? st.fence + "_gate[facing=south]" : st.fence);
+                    continue;
+                }
+                if (dx == 0) {
+                    put(dx, t, dz, "dirt_path");
+                    continue;
+                }
+                if (Math.floorMod(dz + 7, 5) == 2) {
+                    put(dx, t, dz, "water");
+                    continue;
+                }
+                put(dx, t, dz, "farmland[moisture=7]");
+                int bed = Math.floorDiv(dz + 7, 5) * 2 + (dx > 0 ? 1 : 0);
+                put(dx, t + 1, dz, crops[Math.floorMod(bed + shift, 4)]);
+            }
+        }
+        // Épouvantail.
+        int sx = 5, sz = -1, t = top(sx, sz);
+        put(sx, t, sz, "coarse_dirt");
+        put(sx, t + 1, sz, st.fence);
+        put(sx, t + 2, sz, "hay_block[axis=y]");
+        put(sx, t + 3, sz, "carved_pumpkin[facing=south]");
+        put(sx - 1, t + 2, sz, st.fence);
+        put(sx + 1, t + 2, sz, st.fence);
+        // Grange au nord du champ.
+        int gb = top(0, -10);
+        level(-4, -12, 4, -9, gb, st.stoneBase);
+        for (int dz = -12; dz <= -9; dz++) {
+            for (int dx = -3; dx <= 3; dx++) {
+                boolean wall = Math.abs(dx) == 3 || dz == -12 || dz == -9, corner = Math.abs(dx) == 3 && (dz == -12 || dz == -9);
+                for (int y = gb + 1; y <= gb + 4; y++) {
+                    if (wall) {
+                        put(dx, y, dz, corner ? log(st.log, "y") : st.planks);
+                    } else {
+                        air(dx, y, dz);
+                    }
+                }
+                put(dx, gb + 5, dz, woodSlab() + "[type=bottom]");
+            }
+        }
+        for (int y = gb + 1; y <= gb + 3; y++) {
+            air(0, y, -9);
+            air(1, y, -9);
+        }
+        put(-2, gb + 1, -11, "hay_block[axis=y]");
+        put(-2, gb + 2, -11, "hay_block[axis=y]");
+        put(-1, gb + 1, -11, "hay_block[axis=x]");
+        put(2, gb + 1, -11, "barrel[facing=up]");
+        put(0, gb + 4, -11, st.lantern + "[hanging=true]");
+        stack(-11, 9, "hay_block[axis=x]");
+        stack(-11, 10, "hay_block[axis=x]", "hay_block[axis=z]");
+        stack(11, 9, "composter[level=0]");
+    }
+
+    private void decorOrchard() {
+        String leaves = st.leaves + "[persistent=true]";
+        int trees = 0;
+        for (int gz = -6; gz <= 6; gz += 6) {
+            for (int gx = -6; gx <= 6; gx += 6) {
+                if (wetAt(gx, gz)) {
+                    continue;
+                }
+                int t = top(gx, gz), h = 3 + (rnd(gx, gz, 320) < 0.5 ? 1 : 0);
+                for (int y = t + 1; y <= t + h; y++) {
+                    put(gx, y, gz, log(st.log, "y"));
+                }
+                for (int dy = 0; dy <= 2; dy++) {
+                    int r = dy == 2 ? 1 : 2;
+                    for (int dz = -r; dz <= r; dz++) {
+                        for (int dx = -r; dx <= r; dx++) {
+                            if ((Math.abs(dx) == 2 && Math.abs(dz) == 2) || (dx == 0 && dz == 0 && dy < 2)) {
+                                continue;
+                            }
+                            put(gx + dx, t + h + dy - 1, gz + dz, leaves);
+                        }
+                    }
+                }
+                if (gx == 6 && gz == -6) {
+                    put(gx, t + 2, gz + 1, "beehive[facing=south,honey_level=0]");
+                }
+                trees++;
+            }
+        }
+        for (int dz = -10; dz <= 10; dz++) {
+            for (int dx = -10; dx <= 10; dx++) {
+                boolean edge = Math.abs(dx) == 10 || Math.abs(dz) == 10;
+                if (edge && !wetAt(dx, dz) && !(dz == 10 && Math.abs(dx) <= 1) && rnd(dx >> 2, dz >> 2, 321) < 0.8) {
+                    stack(dx, dz, st.fence);
+                }
+            }
+        }
+        stack(3, 3, "barrel[facing=up]");
+        stack(4, 3, "barrel[facing=up]");
+        stack(-3, 3, woodSlab() + "[type=bottom]");
+        plan.notes.add(trees + " arbres fruitiers");
+    }
+
+    private void decorObelisk(int b) {
+        level(-4, -4, 4, 4, b, st.stoneBase);
+        for (int dz = -3; dz <= 3; dz++) {
+            for (int dx = -3; dx <= 3; dx++) {
+                boolean edge = Math.abs(dx) == 3 || Math.abs(dz) == 3;
+                String face = Math.abs(dz) == 3 ? (dz < 0 ? "south" : "north") : (dx < 0 ? "east" : "west");
+                put(dx, b + 1, dz, edge ? st.stairs + "[facing=" + face + ",half=bottom]" : st.stone);
+                if (Math.abs(dx) <= 2 && Math.abs(dz) <= 2) {
+                    put(dx, b + 2, dz, Math.abs(dx) == 2 || Math.abs(dz) == 2 ? st.slab + "[type=bottom]" : st.rim);
+                }
+            }
+        }
+        for (int y = b + 3; y <= b + 13; y++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                for (int dx = -1; dx <= 1; dx++) {
+                    if (y > b + 10 && (dx != 0 || dz != 0)) {
+                        continue;
+                    }
+                    put(dx, y, dz, y == b + 3 ? st.rim : stoneMix(dx, dz, y));
+                }
+            }
+        }
+        put(0, b + 14, 0, glow());
+        put(0, b + 15, 0, st.slab + "[type=bottom]");
+        String fire = st.lantern.equals("soul_lantern") ? "soul_campfire[lit=true]" : "campfire[lit=true]";
+        for (int[] c : new int[][]{{-2, -2}, {2, -2}, {-2, 2}, {2, 2}}) {
+            put(c[0], b + 2, c[1], st.stone);
+            put(c[0], b + 3, c[1], fire);
+        }
+    }
+
+    private void decorStatue(int b) {
+        level(-4, -4, 4, 4, b, st.stoneBase);
+        for (int dz = -3; dz <= 3; dz++) {
+            for (int dx = -3; dx <= 3; dx++) {
+                put(dx, b + 1, dz, Math.abs(dx) == 3 || Math.abs(dz) == 3 ? st.slab + "[type=bottom]" : st.stone);
+                if (Math.abs(dx) <= 2 && Math.abs(dz) <= 2) {
+                    put(dx, b + 2, dz, st.rim);
+                }
+            }
+        }
+        String body = st.dark ? "polished_blackstone" : "polished_andesite", trim = st.dark ? "polished_blackstone_bricks" : "smooth_quartz";
+        int y0 = b + 3;
+        // Jambes, robe, buste, épaules, bras croisés sur le pommeau, tête encapuchonnée.
+        for (int y = y0; y <= y0 + 3; y++) {
+            put(-1, y, 0, body);
+            put(1, y, 0, body);
+            put(0, y, 0, y >= y0 + 2 ? body : trim);
+        }
+        for (int y = y0 + 4; y <= y0 + 7; y++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                put(dx, y, 0, body);
+                put(dx, y, -1, body);
+            }
+        }
+        put(-2, y0 + 7, 0, trim);
+        put(2, y0 + 7, 0, trim);
+        put(-2, y0 + 6, 1, body);
+        put(2, y0 + 6, 1, body);
+        put(-1, y0 + 5, 1, body);
+        put(1, y0 + 5, 1, body);
+        for (int y = y0 + 8; y <= y0 + 9; y++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                put(dx, y, 0, trim);
+                put(dx, y, -1, trim);
+            }
+        }
+        put(0, y0 + 10, 0, trim);
+        put(0, y0 + 10, -1, trim);
+        put(0, y0 + 8, 1, glow());
+        // Épée plantée devant : lame en chaîne, garde, pommeau.
+        for (int y = y0; y <= y0 + 3; y++) {
+            put(0, y, 2, "iron_chain[axis=y]");
+        }
+        put(-1, y0 + 4, 2, trim);
+        put(0, y0 + 4, 2, glow());
+        put(1, y0 + 4, 2, trim);
+        put(0, y0 + 5, 2, body);
+    }
+
+    private void decorStones() {
+        Object[] m = ruinMix();
+        double a = rnd(0, 0, 330) * Math.PI;
+        int stones = 0;
+        for (int k = -3; k <= 3; k++) {
+            int dx = (int) Math.round(Math.cos(a) * k * 2.6), dz = (int) Math.round(Math.sin(a) * k * 2.6);
+            if (wetAt(dx, dz)) {
+                continue;
+            }
+            int h = 2 + (int) (rnd(dx, dz, 331) * 3) + (k == 0 ? 2 : 0);
+            String[] col = new String[h];
+            for (int i = 0; i < h; i++) {
+                col[i] = i == h - 1 && rnd(dx, dz, 332) < 0.4 ? "mossy_cobblestone" : mix(m, dx, dz, 333 + i);
+            }
+            stack(dx, dz, col);
+            stones++;
+        }
+        // Dolmen à côté de l'alignement.
+        int px = (int) Math.round(-Math.sin(a) * 6), pz = (int) Math.round(Math.cos(a) * 6);
+        if (!wetAt(px - 2, pz) && !wetAt(px + 2, pz)) {
+            int t = top(px, pz);
+            level(px - 2, pz, px + 2, pz, t, mix(m, px, pz, 339));
+            for (int y = t + 1; y <= t + 2; y++) {
+                put(px - 1, y, pz, mix(m, px, pz, 340 + y));
+                put(px + 1, y, pz, mix(m, px, pz, 342 + y));
+            }
+            for (int dx = -2; dx <= 2; dx++) {
+                put(px + dx, t + 3, pz, mix(m, px + dx, pz, 345));
+            }
+            put(px, t + 1, pz, "candle[candles=2,lit=true]");
+        }
+        plan.notes.add(stones + " pierres");
+    }
+
+    private void decorShrine(int b) {
+        level(-3, -3, 3, 3, b, st.stoneBase);
+        for (int dz = -2; dz <= 2; dz++) {
+            for (int dx = -2; dx <= 2; dx++) {
+                put(dx, b + 1, dz, Math.abs(dx) == 2 || Math.abs(dz) == 2 ? st.slab + "[type=bottom]" : st.stone);
+            }
+        }
+        for (int[] c : new int[][]{{-2, -2}, {2, -2}, {-2, 2}, {2, 2}}) {
+            for (int y = b + 2; y <= b + 5; y++) {
+                put(c[0], y, c[1], log(st.pillar, "y"));
+            }
+        }
+        for (int dz = -3; dz <= 3; dz++) {
+            for (int dx = -3; dx <= 3; dx++) {
+                boolean edge = Math.abs(dx) == 3 || Math.abs(dz) == 3;
+                put(dx, b + 6, dz, edge ? st.slab + "[type=bottom]" : st.stone);
+            }
+        }
+        put(0, b + 7, 0, st.rim);
+        put(0, b + 8, 0, glow());
+        put(0, b + 2, 0, st.rim);
+        put(0, b + 3, 0, "candle[candles=3,lit=true]");
+        put(0, b + 5, 0, st.lantern + "[hanging=true]");
+        put(-1, b + 2, 1, st.dark ? "potted_wither_rose" : "potted_poppy");
+        put(1, b + 2, 1, st.dark ? "potted_wither_rose" : "potted_cornflower");
+        put(0, b + 2, -1, "lectern[facing=south]");
+    }
+
+    private void decorCabin(int b) {
+        level(-3, -3, 3, 3, b, "coarse_dirt");
+        for (int dz = -2; dz <= 2; dz++) {
+            for (int dx = -2; dx <= 2; dx++) {
+                boolean wall = Math.abs(dx) == 2 || Math.abs(dz) == 2, corner = Math.abs(dx) == 2 && Math.abs(dz) == 2;
+                put(dx, b, dz, wall ? "cobblestone" : st.planks);
+                for (int y = b + 1; y <= b + 3; y++) {
+                    if (wall) {
+                        put(dx, y, dz, corner ? log(st.log, "y") : log(st.log, Math.abs(dx) == 2 ? "z" : "x"));
+                    } else {
+                        air(dx, y, dz);
+                    }
+                }
+            }
+        }
+        // Toit à deux pans et pignons.
+        for (int dx = -3; dx <= 3; dx++) {
+            for (int k = 0; k <= 2; k++) {
+                put(dx, b + 4 + k, -3 + k, woodStairs() + "[facing=south,half=bottom]");
+                put(dx, b + 4 + k, 3 - k, woodStairs() + "[facing=north,half=bottom]");
+            }
+            put(dx, b + 7, 0, woodSlab() + "[type=bottom]");
+        }
+        for (int k = 0; k <= 2; k++) {
+            for (int dz = -2 + k + 1; dz <= 2 - k - 1; dz++) {
+                put(-2, b + 4 + k, dz, st.planks);
+                put(2, b + 4 + k, dz, st.planks);
+            }
+        }
+        put(0, b + 1, 2, st.door + "[facing=north,half=lower,hinge=left,open=false]");
+        put(0, b + 2, 2, st.door + "[facing=north,half=upper,hinge=left,open=false]");
+        put(-2, b + 2, 0, "glass_pane");
+        put(2, b + 2, 0, "glass_pane");
+        put(1, b + 1, -1, "furnace[facing=south]");
+        put(-1, b + 1, -1, "crafting_table");
+        for (int y = b + 1; y <= b + 8; y++) {
+            put(1, y, -3, "cobblestone");
+        }
+        // Tas de bûches, souches, billot.
+        for (int dz = -2; dz <= 0; dz++) {
+            stack(-4, dz, log(st.log, "z"), log(st.log, "z"));
+            stack(-5, dz, log(st.log, "z"));
+        }
+        stack(4, 3, log(st.log, "y"));
+        stack(5, -2, log(st.log, "y"));
+        stack(3, 5, log(st.log, "y"));
+        stack(-3, 5, log(st.log, "x"));
+    }
+
+    private void decorWell(int b) {
+        level(-3, -3, 3, 3, b, "cobblestone");
+        for (int dz = -1; dz <= 1; dz++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                if (dx == 0 && dz == 0) {
+                    for (int y = b - 3; y <= b; y++) {
+                        put(0, y, 0, "water");
+                    }
+                    continue;
+                }
+                put(dx, b + 1, dz, "cobblestone_wall");
+            }
+        }
+        for (int y = b + 2; y <= b + 4; y++) {
+            put(-1, y, 0, st.fence);
+            put(1, y, 0, st.fence);
+        }
+        for (int dz = -1; dz <= 1; dz++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                put(dx, b + 5, dz, woodSlab() + "[type=bottom]");
+            }
+        }
+        put(0, b + 4, 0, "iron_chain[axis=y]");
+        put(0, b + 3, 0, "iron_chain[axis=y]");
+        put(-3, b + 1, 2, woodStairs() + "[facing=east,half=bottom]");
+        put(-3, b + 1, 1, woodStairs() + "[facing=east,half=bottom]");
+        put(3, b + 1, -3, st.fence);
+        put(3, b + 2, -3, st.fence);
+        put(3, b + 3, -3, st.lantern + "[hanging=false]");
+    }
+
+    private void decorCamp() {
+        stack(0, 0, "campfire[lit=false]");
+        stack(2, 0, log(st.log, "z"));
+        stack(-2, 1, log(st.log, "z"));
+        stack(0, -2, log(st.log, "x"));
+        tent(0, 6, true, -1, "brown_wool", "white_carpet");
+        stack(-4, -3, "white_carpet");
+        stack(-4, -2, "red_carpet");
+        stack(3, -3, "barrel[facing=up]");
+        stack(4, -3, "barrel[facing=up]", st.lantern + "[hanging=false]");
+        stack(3, 3, st.fence, st.fence, st.banner + "_banner[rotation=4]");
+    }
+
+    private void decorArch(int b) {
+        Object[] m = ruinMix();
+        // Deux piles qui se rejoignent en arc.
+        for (int dx = -6; dx <= 6; dx++) {
+            double t = dx / 6.0;
+            int arc = (int) Math.round(9 * Math.sqrt(Math.max(0, 1 - t * t)));
+            for (int dz = -1; dz <= 1; dz++) {
+                if (wetAt(dx, dz)) {
+                    continue;
+                }
+                boolean leg = Math.abs(dx) >= 5;
+                if (Math.abs(dz) == 1 && !leg && rnd(dx, dz, 360) < 0.35) {
+                    continue;
+                }
+                int from = leg ? top(dx, dz) + 1 : b + arc - 1, to = b + Math.max(arc, 1) + (Math.abs(dx) <= 1 ? 2 : 1);
+                for (int y = from; y <= to; y++) {
+                    put(dx, y, dz, mix(m, dx, dz, 361 + y));
+                }
+            }
+        }
+        stack(0, 3, mix(m, 0, 3, 370));
+        stack(-2, -3, mix(m, -2, -3, 371));
     }
 
     // ------------------------------------------------------------------ Champ de cratères

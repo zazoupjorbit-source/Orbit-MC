@@ -370,7 +370,16 @@ $icon.Dispose()
 # Montures (modeles 3D orbitmmo:mount/*).
 & (Join-Path $PSScriptRoot 'gen-mounts.ps1')
 
+# Icones HD des armures tissu / cuir / mailles / plaques (refonte objets du 24/11, tools/hd/ArmorIcons.cs).
+& (Join-Path $PSScriptRoot 'gen-items.ps1')
+
+# Tenues 3D : casque 3D, epaulieres, cape, couche du corps HD (paquet Java outfit, tools/hd/OutfitHd.cs).
+& (Join-Path $PSScriptRoot 'gen-outfits.ps1')
+
 # Console du HUD (police orbitmmo:hud, barre d'action redessinee, HUD du jeu masque).
 & (Join-Path $PSScriptRoot 'gen-hud.ps1')
+
+# Bandeau d'entree de zone (polices orbitmmo:zone*, cadre HD : tools/hd/ZoneBanner.cs, hud/ZoneBanner.java).
+& (Join-Path $PSScriptRoot 'gen-zone.ps1')
 
 Write-Host "Pack genere dans $out"

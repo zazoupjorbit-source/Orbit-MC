@@ -78,6 +78,12 @@ public final class Poker implements Seated {
     }
 
     /** Places : 0-2 au nord (gauche → droite vu du croupier), 3-5 au sud. Ordre du jeu : sens des aiguilles. */
+    /** Place où le joueur est tenu tant qu'il est assis (null s'il n'est pas à cette table). */
+    public Location heldAt(UUID uuid) {
+        int i = seatOf(uuid);
+        return i < 0 || seats[i].gone || seats[i].pending ? null : seatPos(i);
+    }
+
     private Location seatPos(int i) {
         int[] dx = {-2, 0, 2, 2, 0, -2};
         boolean north = i < 3;
@@ -209,6 +215,8 @@ public final class Poker implements Seated {
             Location to = seatPos(seat);
             p.teleport(to);
             Txt.send(p, "Tu t'assois à la <b>" + name + "</b> avec " + Txt.oc(cave) + ". <#9AA4B2>/table quitter pour partir avec ton tapis.");
+            p.sendMessage(Txt.mm("  ").append(Txt.button("📖 Règles", "#C79BFF", "/oc regles poker", "Comment jouer au poker"))
+                    .append(Txt.mm(" ")).append(Txt.button("Les mains", "#C79BFF", "/oc regles mains", "Quelle main bat quelle main")));
             Txt.sound(p, Sound.BLOCK_CHAIN_PLACE, 1.2f);
             say(p.getName() + " s'assoit à la table.", p.getUniqueId());
             if (state == State.WAITING && ready() >= 2) {
@@ -280,6 +288,7 @@ public final class Poker implements Seated {
             render();
             return;
         }
+        handNo++;
         deck = new Cards.Shoe(1);
         board.clear();
         result = "";
@@ -476,8 +485,21 @@ public final class Poker implements Seated {
         if (i < 0) {
             return;
         }
-        if (action.equals("quitter")) {
-            leave(p, "");
+        if (action.equals("quitter") || action.equals("quitter-ok")) {
+            Seat me = seats[i];
+            boolean inPlay = state == State.BETTING && me.inHand && !me.folded;
+            if (inPlay && action.equals("quitter")) {
+                // se lever en pleine main = abandonner : on le fait confirmer
+                if (plugin.screens() != null) {
+                    plugin.screens().close(p);
+                }
+                Txt.send(p, "<#E0484A>Tu es dans une main.</#E0484A> Te lever, c'est <b>te coucher</b> : tu perds les "
+                        + Txt.oc(me.committed) + " déjà misés et tu repars avec ton tapis (" + Txt.oc(me.stack) + ").");
+                p.sendMessage(Txt.mm("  ").append(Txt.button("Abandonner et partir", "#E0484A", "/table quitter-ok", "Te coucher et quitter la table"))
+                        .append(Txt.mm(" ")).append(Txt.button("Rester", "#7BD88F", "/table ecran", "Reprendre la partie")));
+                return;
+            }
+            leave(p, inPlay ? "abandon" : "");
             return;
         }
         if (action.equals("ecran")) {
@@ -714,8 +736,14 @@ public final class Poker implements Seated {
                 continue;
             }
             Player p = Bukkit.getPlayer(s.uuid);
-            if (p != null && (!p.getWorld().equals(world) || p.getLocation().distanceSquared(seatPos(i)) > 100)) {
-                leave(p, "tu t'es éloigné");
+            if (p != null && !p.getWorld().equals(world)) {
+                leave(p, "tu as quitté la salle");
+            } else if (p != null && p.getLocation().distanceSquared(seatPos(i)) > 1) {
+                // assis = on ne bouge plus (téléporté, poussé…) : retour à sa place
+                Location back = seatPos(i);
+                back.setYaw(p.getLocation().getYaw());
+                back.setPitch(p.getLocation().getPitch());
+                p.teleport(back);
             }
         }
         switch (state) {
@@ -849,13 +877,30 @@ public final class Poker implements Seated {
     private static final int[] HEAD_SLOTS = {9, 18, 27, 17, 26, 35};
     private final java.util.Map<UUID, Long> raiseTarget = new java.util.HashMap<>();
 
+    private int handNo;
+    /** Dernier moment où l'écran a été rouvert d'office, par joueur : une fois par main, puis une fois à chacun de ses tours. */
+    private final java.util.Map<UUID, String> autoOpened = new java.util.HashMap<>();
+
     private void screens() {
         for (int i = 0; i < 6; i++) {
             Seat s = seats[i];
             if (s != null && !s.gone && !s.pending) {
                 Player p = Bukkit.getPlayer(s.uuid);
                 if (p != null) {
-                    screen(p, i, false);
+                    boolean open = false;
+                    if (state == State.BETTING && s.inHand && !s.folded) {
+                        String prev = autoOpened.get(s.uuid);
+                        boolean newHand = prev == null || !prev.startsWith(handNo + "|");
+                        if (turn == i) {
+                            String key = handNo + "|" + street + "/" + currentBet;
+                            open = !key.equals(prev);
+                            autoOpened.put(s.uuid, key);
+                        } else if (newHand) {
+                            open = true;
+                            autoOpened.put(s.uuid, handNo + "|");
+                        }
+                    }
+                    screen(p, i, open);
                 }
             }
         }

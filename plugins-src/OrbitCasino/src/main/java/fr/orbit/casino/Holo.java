@@ -80,6 +80,13 @@ public final class Holo {
         return v;
     }
 
+    /** Marque une entité posée ailleurs (billes, roue…) : retirée par {@link #clear} comme le reste. */
+    public static <T extends Entity> T tag(T e) {
+        e.setPersistent(false);
+        e.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
+        return e; // pas dans SPAWNED (billes éphémères) : clear() les retrouve par la marque
+    }
+
     public static boolean isOurs(Entity e) {
         return key != null && e.getPersistentDataContainer().has(key, PersistentDataType.BYTE);
     }

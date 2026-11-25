@@ -134,6 +134,7 @@ public final class Blackjack implements Seated {
         to.setYaw(0f);
         p.teleport(to);
         Txt.send(p, "Bienvenue à la table de <b>blackjack " + number + "</b>. Le croupier tire jusqu'à 17, le blackjack paie 3 pour 2.");
+        p.sendMessage(Txt.mm("  ").append(Txt.button("📖 Règles", "#E0B864", "/oc regles blackjack", "Comment jouer au blackjack")));
         Txt.sound(p, Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1f);
         prompt(p);
         render();

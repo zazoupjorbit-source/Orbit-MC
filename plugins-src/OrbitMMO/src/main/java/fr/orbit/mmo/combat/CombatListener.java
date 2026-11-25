@@ -26,6 +26,8 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 public final class CombatListener implements Listener {
 
     private final OrbitMMO plugin;
+    /** Dernier coup de mêlée d'un monstre reçu par chaque joueur (ms) : les monstres frappent chacun leur tour. */
+    private final java.util.Map<java.util.UUID, Long> lastMobHit = new java.util.HashMap<>();
 
     public CombatListener(OrbitMMO plugin) {
         this.plugin = plugin;
@@ -136,9 +138,25 @@ public final class CombatListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            double dmg = attacker.damage() * (damager instanceof Projectile ? 0.8 : 1.0)
-                    * plugin.combat().mobDamageMult(attacker.entity);
             boolean melee = !(damager instanceof Projectile);
+            // Dehors (continent), hors boss : coups plus lents, jamais deux monstres dans la même fenêtre, dégâts adoucis.
+            double outdoor = 1.0;
+            if (attacker.boss == null && plugin.continent() != null && v.getWorld().equals(plugin.continent().world())) {
+                if (melee) {
+                    long mobGap = Math.round(plugin.getConfig().getDouble("monstres-dehors.delai-attaque", 1.8) * 1000);
+                    long anyGap = Math.round(plugin.getConfig().getDouble("monstres-dehors.ecart-entre-monstres", 0.6) * 1000);
+                    Long last = lastMobHit.get(v.getUniqueId());
+                    if (now - attacker.lastMeleeAt < mobGap || (last != null && now - last < anyGap)) {
+                        e.setCancelled(true);
+                        return;
+                    }
+                    attacker.lastMeleeAt = now;
+                    lastMobHit.put(v.getUniqueId(), now);
+                }
+                outdoor = plugin.getConfig().getDouble("monstres-dehors.degats", 0.8);
+            }
+            double dmg = attacker.damage() * (damager instanceof Projectile ? 0.8 : 1.0)
+                    * plugin.combat().mobDamageMult(attacker.entity) * outdoor;
             finish(e, plugin.combat().applyToPlayer(v, dmg, null, false, melee, (LivingEntity) attacker.entity));
             return;
         }

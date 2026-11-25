@@ -1,0 +1,10 @@
+{
+  "textures": {
+    "particle": "orbitvol:item/d_socle",
+    "d_socle": "orbitvol:item/d_socle"
+  },
+  "elements": [
+    {"from": [0, 7.9, 0], "to": [16, 8.1, 16], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_socle"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_socle"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_socle"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_socle"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_socle"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_socle"}}}
+  ],
+  "display": {"gui": {"rotation": [30, 225, 0], "scale": [0.6, 0.6, 0.6]}}
+}

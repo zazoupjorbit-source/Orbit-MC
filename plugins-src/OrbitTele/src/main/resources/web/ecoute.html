@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#060a14">
+<title>ORBIT TV · Écoute</title>
+<link rel="stylesheet" href="/orbit.css">
+<style>
+  .scene { display: grid; justify-items: center; gap: 14px; padding: 8px 0 4px; text-align: center; }
+  .ondes { display: flex; align-items: flex-end; justify-content: center; gap: 5px; width: 100%; max-width: 360px; height: 96px; padding: 12px 14px; }
+  .ondes i { flex: 1; min-height: 4px; height: 4px; background: linear-gradient(180deg, var(--or-clair), var(--glace) 55%, var(--bleu)); border-radius: 1px; opacity: .28; transition: height .09s linear, opacity .2s; }
+  .ondes.direct i { opacity: 1; box-shadow: 0 0 10px rgba(98, 207, 244, .35); }
+  .quoi { margin: 0; font: 500 22px/1.25 var(--titre); letter-spacing: .04em; }
+  .detail { margin: 0; color: var(--gris); min-height: 1.55em; }
+  .detail b { color: var(--or); font-weight: 600; }
+  #bouton { min-width: 240px; padding: 16px 26px; font-size: 17px; }
+  .volumes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 20px; }
+  .jauge { height: 12px; margin-top: 12px; overflow: hidden; }
+  .jauge i { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--bleu), var(--glace)); transition: width .35s; }
+</style>
+</head>
+<body>
+<main class="etroit">
+  <header class="tete">
+    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+      <defs><clipPath id="haut"><rect width="64" height="32"/></clipPath></defs>
+      <circle cx="32" cy="32" r="24" fill="#3A7FFF" opacity=".18"/>
+      <circle cx="32" cy="32" r="16" fill="#3A7FFF"/>
+      <ellipse cx="32" cy="32" rx="29" ry="7.5" fill="none" stroke="#E0B864" stroke-width="2.6" transform="rotate(-22 32 32)"/>
+      <circle cx="32" cy="32" r="16" fill="#3A7FFF" clip-path="url(#haut)"/>
+      <ellipse cx="27" cy="25" rx="7" ry="4.6" fill="#62CFF4" opacity=".5"/>
+    </svg>
+    <div class="marque">
+      <h1>ORBIT <span class="metal">TV</span></h1>
+      <p>Le son des télés</p>
+    </div>
+    <span class="etat" id="etat">Son coupé</span>
+  </header>
+
+  <section class="cadre-hd">
+    <div class="scene">
+      <div class="ondes creux" id="ondes" aria-hidden="true"></div>
+      <p class="quoi" id="quoi" role="status">Prêt à écouter</p>
+      <p class="detail" id="detail">Clique sur le bouton, puis retourne en jeu.</p>
+      <button class="principal" id="bouton">♪ Activer le son</button>
+    </div>
+    <div class="volumes">
+      <div><label for="volume">Mon volume : <span id="volumeTexte">80 %</span></label><input id="volume" type="range" min="0" max="100" value="80"></div>
+      <div><span class="etiquette">Volume selon la distance : <span id="procheTexte">—</span></span><div class="jauge creux" role="img" aria-label="Volume selon la distance"><i id="proche"></i></div></div>
+    </div>
+    <p class="aide">Garde cette page <b>ouverte</b> pendant que tu joues. Tu entends la télé en direct dont tu es proche : le son monte en t'approchant et se coupe quand tu t'éloignes. Ce lien est personnel, ne le donne à personne.</p>
+  </section>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const jeton = location.hash.slice(1);
+const DEPART = 0.12;
+let ctx = null, entree = null, gain = null, mesure = null, decodeur = null, marche = false, tour = 0;
+let flux = 0, suite = -1, prochain = 0, avance = DEPART, trous = 0, volumeJeu = 0, niveaux = null;
+
+$('ondes').innerHTML = '<i></i>'.repeat(28);
+const ondes = [...$('ondes').children];
+const sauve = +(localStorage.getItem('orbit-tv-volume') ?? 80);
+$('volume').value = Number.isFinite(sauve) ? sauve : 80;
+$('volumeTexte').textContent = $('volume').value + ' %';
+
+function afficher(etat, quoi, detail, direct) {
+  $('etat').textContent = etat;
+  $('etat').className = 'etat' + (direct ? ' direct' : '');
+  $('quoi').textContent = quoi;
+  $('detail').innerHTML = detail;
+  $('ondes').classList.toggle('direct', !!direct);
+}
+function propre(t) { return t.replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';'); }
+function regler() {
+  if (gain) gain.gain.setTargetAtTime(volumeJeu * $('volume').value / 100, ctx.currentTime, 0.12);
+  $('proche').style.width = Math.round(volumeJeu * 100) + '%';
+  $('procheTexte').textContent = flux ? Math.round(volumeJeu * 100) + ' %' : '—';
+}
+
+function nouveauDecodeur() {
+  if (decodeur && decodeur.state !== 'closed') decodeur.close();
+  decodeur = new AudioDecoder({ output: jouer, error: () => { flux = 0; suite = -1; } });
+  decodeur.configure({ codec: 'opus', sampleRate: 48000, numberOfChannels: 2 });
+  prochain = 0;
+}
+
+// Chaque tranche décodée est posée à la suite de la précédente, avec un peu d'avance pour absorber les à-coups du réseau.
+function jouer(a) {
+  const n = a.numberOfFrames, voies = a.numberOfChannels;
+  const tampon = ctx.createBuffer(2, n, a.sampleRate);
+  for (let c = 0; c < 2; c++) a.copyTo(tampon.getChannelData(c), { planeIndex: Math.min(c, voies - 1), format: 'f32-planar' });
+  a.close();
+  const t = ctx.currentTime;
+  if (prochain < t + 0.02) {
+    // démarrage, ou trou dans l'arrivée du son : on reprend, avec plus de marge si ça se répète
+    if (prochain > 0 && ++trous % 3 === 0) avance = Math.min(0.5, avance + 0.06);
+    prochain = t + avance;
+  }
+  if (prochain > t + avance + 0.45) return;   // trop d'avance accumulée : on saute cette tranche pour rester près du direct
+  const s = ctx.createBufferSource();
+  s.buffer = tampon;
+  s.connect(entree);
+  s.start(prochain);
+  prochain += tampon.duration;
+}
+
+function lire(v) {
+  let o = 1;
+  const f = v.getUint32(o); o += 4;
+  const premier = v.getUint32(o); o += 4;
+  const volume = v.getUint8(o++);
+  const mot = () => { const n = v.getUint8(o++); const t = new TextDecoder().decode(new Uint8Array(v.buffer, v.byteOffset + o, n)); o += n; return t; };
+  const nom = mot(), par = mot();
+  if (f === 0) {
+    flux = 0; suite = -1; volumeJeu = 0; regler();
+    if (volume === 0) afficher('En attente', "Tu n'es pas en jeu", 'Connecte-toi au serveur : le son reviendra tout seul.');
+    else afficher('En attente', 'Aucune télé avec du son ici', "Approche-toi d'une télé en direct.");
+    return;
+  }
+  if (f !== flux) { flux = f; nouveauDecodeur(); }
+  volumeJeu = volume / 255;
+  regler();
+  afficher('En direct', 'Télé « ' + nom + ' »', 'Diffusé par <b>' + propre(par) + '</b>', true);
+  let n = premier;
+  while (o + 2 <= v.byteLength) {
+    const l = v.getUint16(o); o += 2;
+    if (!l || o + l > v.byteLength) break;
+    decodeur.decode(new EncodedAudioChunk({ type: 'key', timestamp: n * 20000, duration: 20000, data: new Uint8Array(v.buffer, v.byteOffset + o, l) }));
+    o += l; n++;
+  }
+  suite = n;
+}
+
+// La requête attend sur le serveur le paquet de son suivant : pas de minuterie ici, donc rien ne ralentit quand la page est cachée.
+async function boucle() {
+  const moi = ++tour;   // couper puis réactiver ne doit pas laisser deux boucles tourner
+  while (marche && moi === tour) {
+    let r;
+    try {
+      r = await fetch('/ecoute/son?flux=' + flux + '&suite=' + suite, { headers: { 'X-Jeton': jeton }, cache: 'no-store' });
+    } catch (e) {
+      afficher('Coupé', 'Serveur injoignable', 'Nouvel essai dans un instant…');
+      await new Promise(f => setTimeout(f, 2000));
+      continue;
+    }
+    if (r.status === 401) { couper(); afficher('Lien expiré', "Ce lien n'est plus valable", 'En jeu, refais <b>/tele son</b> pour en avoir un nouveau.'); return; }
+    if (!r.ok) { await new Promise(f => setTimeout(f, 1000)); continue; }
+    const corps = new DataView(await r.arrayBuffer());
+    if (marche && moi === tour && corps.byteLength >= 12) lire(corps);
+  }
+}
+
+function dessiner() {
+  if (!marche) { ondes.forEach(b => b.style.height = '4px'); return; }
+  // une barre par bande, des graves (90 Hz) aux aigus (12 kHz), du son reçu : le réglage du volume ne les change pas
+  mesure.getByteFrequencyData(niveaux);
+  ondes.forEach((b, i) => {
+    const de = Math.round(Math.pow(128, i / ondes.length)), a = Math.max(de + 1, Math.round(Math.pow(128, (i + 1) / ondes.length)));
+    let m = 0;
+    for (let k = de; k < a; k++) if (niveaux[k] > m) m = niveaux[k];
+    b.style.height = Math.max(4, m / 255 * 70) + 'px';
+  });
+  requestAnimationFrame(dessiner);
+}
+
+async function activer() {
+  if (!jeton) return afficher('Lien manquant', 'Ouvre le lien donné en jeu', 'En jeu, tape <b>/tele son</b> et clique sur le lien.');
+  if (!window.AudioDecoder || !window.AudioContext) {
+    return afficher('Indisponible', 'Navigateur trop ancien', isSecureContext ? 'Ouvre ce lien avec Chrome, Edge ou Firefox à jour.' : 'Ouvre le lien exact donné en jeu par <b>/tele son</b>.');
+  }
+  if (!ctx) {
+    ctx = new AudioContext({ sampleRate: 48000, latencyHint: 'interactive' });
+    entree = ctx.createGain();
+    gain = ctx.createGain();
+    gain.gain.value = 0;
+    mesure = ctx.createAnalyser();
+    mesure.fftSize = 512;
+    mesure.smoothingTimeConstant = 0.6;
+    niveaux = new Uint8Array(mesure.frequencyBinCount);
+    entree.connect(mesure);
+    entree.connect(gain).connect(ctx.destination);
+  }
+  await ctx.resume();
+  marche = true;
+  flux = 0; suite = -1; avance = DEPART; trous = 0;
+  $('bouton').textContent = 'Couper le son';
+  $('bouton').className = '';
+  afficher('En attente', 'Recherche d\'une télé…', '');
+  if ('mediaSession' in navigator) navigator.mediaSession.metadata = new MediaMetadata({ title: 'ORBIT TV', artist: 'Le son des télés du serveur' });
+  boucle();
+  requestAnimationFrame(dessiner);
+}
+
+function couper() {
+  marche = false;
+  flux = 0; suite = -1; volumeJeu = 0;
+  regler();
+  if (ctx) ctx.suspend();
+  $('bouton').textContent = '♪ Activer le son';
+  $('bouton').className = 'principal';
+  afficher('Son coupé', 'Prêt à écouter', 'Clique sur le bouton, puis retourne en jeu.');
+}
+
+$('bouton').onclick = () => (marche ? couper() : activer());
+$('volume').oninput = () => {
+  $('volumeTexte').textContent = $('volume').value + ' %';
+  localStorage.setItem('orbit-tv-volume', $('volume').value);
+  regler();
+};
+if (!jeton) afficher('Lien manquant', 'Ouvre le lien donné en jeu', 'En jeu, tape <b>/tele son</b> et clique sur le lien.');
+</script>
+</body>
+</html>

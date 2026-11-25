@@ -107,16 +107,25 @@ regions:
   K: { style: cendre, camps: 8, ruines: 4, themes: [cendres, morts], faune: [cendreux, chien_cendre], hantes: [cendreux, revenant] }
   L: { style: cendre, camps: 6, ruines: 3, themes: [cendres], faune: [chien_cendre, brute_calcinee, cendreux], hantes: [brute_calcinee] }
 
+# Lieux-dits sans monstres semés sur le continent (tours de guet, moulins, fermes, vergers, obélisques, statues,
+# pierres levées, sanctuaires, cabanes, puits, campements abandonnés, arches). Une case de « cellule » blocs en reçoit
+# au plus un, à « ecart » blocs au moins d'un autre. Liste par région possible : regions.<id>.decors: [ferme, moulin].
+# Emplacements figés dans sites-places.yml au premier calcul.
+decor:
+  actif: true
+  cellule: 200
+  ecart: 110
+
 # Faune du continent : densité et niveaux.
 faune:
   # Monstres sauvages autour de chaque joueur, et plafond pour tout le continent.
-  par-joueur: 5
+  par-joueur: 3
   plafond: 160
   # Monstres gardant un camp (ou hantant une ruine) quand un joueur approche.
-  par-camp: 5
+  par-camp: 4
   par-ruine: 3
   # Secondes avant qu'un gardien tué soit remplacé (un camp vidé reste calme ce temps-là).
-  retour-gardien: 30
+  retour-gardien: 60
   # Le niveau monte du minimum au maximum de la région sur cette distance au lieu sûr le plus proche.
   distance-niveau: 700
 

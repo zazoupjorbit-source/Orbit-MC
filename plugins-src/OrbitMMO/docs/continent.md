@@ -34,6 +34,8 @@ Tous les noms (capitales, régions, fleuves, villages, donjons) sont provisoires
 | `docs\continent\3-regions.png` | Régions, fleuves et lacs nommés, routes. |
 | `docs\continent\4-niveaux.png` | Zones par tranche de niveau. |
 | `docs\continent\5-factions.png` | Territoires, zones contestées, zones sûres. |
+| `docs\continent\6-sites.png` | Camps de monstres, ruines et lieux-dits, avec leur nombre par région. |
+| `tools\continent\reperes.txt` | Les lieux ajoutés en jeu après le dessin : hameaux, champs de cratères, camps, ruines, lieux-dits. Ils ne servent qu'aux cartes et ne vont jamais dans `continent.dat`. Fichier écrit par `-MajReperes`, à ne pas retoucher à la main. |
 | `docs\continent\hauteurs.png` | Carte de hauteurs brute : la valeur du gris est la hauteur Y du sol. 1 pixel = 5 blocs. |
 | `docs\continent\bilan.txt` | Surfaces, altitudes, longueurs, profil des routes et alertes (lieu dans l'eau, route en mer). |
 | `docs\continent\monde\` | Aperçus du monde réellement généré sur `reborn` (vue d'ensemble et vues obliques), faits avec `/continent apercu`. |
@@ -43,6 +45,8 @@ Pour régénérer après une retouche du dessin :
 ```powershell
 powershell -ExecutionPolicy Bypass -File tools\gen-continent.ps1
 ```
+
+`-MajReperes` relit d'abord `sites.yml` et `sites-places.yml` de l'instance `reborn` (autre dossier avec `-Instance`) et refait `reperes.txt` : à lancer quand des sites ont été ajoutés ou déplacés en jeu. Les cartes portent alors la date du relevé (« Lieux à jour au… »). Dernier relevé : 25/11/2026 (2 hameaux, 2 champs de cratères, 81 camps, 40 ruines, 877 lieux-dits). Le paysage (petits lieux, lacs, arbres) n'est sur aucune carte : il est calculé par le plugin.
 
 `-Pixels 3200` double la finesse des cartes (1 pixel = 2,5 blocs). `-Donnees` écrit aussi `continent.dat` pour le plugin : après une retouche du dessin, il faut alors recompiler et refaire le monde (voir « Le monde en jeu »).
 
@@ -229,6 +233,7 @@ Les gardiens sont des PNJ du plan des capitales (`tower`, `tower_ombre`), sans a
 | `/continent capitale …` | Plan, contrôle des écarts et construction des capitales (voir « Les capitales ») |
 | `/continent site …` | Les autres sites : liste, plan, écarts, construction (voir « Villages, donjons, camps et ruines ») |
 | `/continent quetes [poser \| retirer]` | Les points de quête dessinés par les sites, et leur inscription dans `quest-points.yml` |
+| `/continent paysage …` | La vie entre les lieux : petites constructions, lacs, arbres, herbes (voir « Le paysage entre les lieux ») |
 
 Les aperçus servent à contrôler le monde sans entrer en jeu. `docs\continent\monde\` en garde quelques-uns, dont la vue d'ensemble du monde généré.
 
@@ -302,6 +307,7 @@ Dessinés par code comme les capitales : `SiteDesign` reprend leurs maisons, leu
 | `donjon` | 11 | Une terrasse pavée de 13 blocs de rayon et une porte monumentale adossée à la pente, tournée vers le bas. 5 portails ouverts (étages 1 à 5) et 6 scellés par une maçonnerie. |
 | `camp` | 81 | Tentes, feu, pieux et bannière pour les kobolds, les brigands, les Glaneurs, les Purificateurs, les pillards, les Errants, les Calcinés et les Noyés ; nids d'araignées ; cimetières oubliés. |
 | `ruine` | 40 | Tours effondrées, cercles de pierres, chapelles en ruine. |
+| `decor` | 877 | Lieux-dits sans monstres (24/11/2026) : tours de guet, moulins, fermes avec cultures, vergers, obélisques, statues du Gardien, pierres levées, sanctuaires, cabanes de bûcheron, puits, campements abandonnés, arches de pierre. Tirés selon le style de la région (pas de ferme au désert ni aux cendres), réglages sous `decor` et `regions.<id>.decors` dans `sites.yml`, emplacements figés dans `sites-places.yml`. Le joueur voit leur nom en sous-titre en entrant. Construits le 24/11 à 03:16 (530 701 blocs), « aucun écart » au contrôle ; sauvegarde du monde avant : `backupseborn_continent_avant-lieux-dits_2026-11-24`. |
 | `crateres` | 2 | **Champs Vitrifiés** (−2253, 934, à 130 blocs de Veillemont) et **Cratère des Murmures** (2535, 615, près de Nidnoir) : un grand cratère au fond vitrifié, cinq plus petits, un Éclat planté à côté. |
 
 Les styles (`lumiere`, `ombre`, `neutre`, `desert`, `givre`, `cendre`, `marais`, `englouti`) changent les matériaux ; par défaut un site prend celui de sa région.
@@ -349,6 +355,33 @@ Nidnoir est à 122 blocs de Gris-Hameau, sur la même chaussée : son `raccord` 
 
 **Pas encore vu ni essayé en jeu** (aucun joueur n'était sur le continent) : l'allure à hauteur d'homme des villages, des donjons et des camps ; l'apparition, le niveau et le comportement des monstres ; les portails de donjon et le retour par l'arche ; le PvP, la mort et la réapparition sur le continent ; l'ouverture des menus des PNJ dans les villages ; la chaîne de quêtes `lumiere-depart` jouée sur le continent.
 
+### Le paysage entre les lieux
+
+Ajouté le 24/11/2026 : en dehors des villes, la carte était vide (plaines nues, environ un arbre tous les trois chunks, un lieu-dit tous les 200 à 280 blocs). Le paysage est une couche posée par-dessus le terrain déjà généré (`continent\Landscape.java`). Tout dépend de la position seule : la même carte donne toujours le même paysage, et le reposer ne refait que ce qui manque.
+
+- **Petits lieux**, un essai tous les 56 blocs selon le biome (environ un tous les 85 blocs en plaine) : maisons abandonnées (lit, tonneau, cheminée, toiles d'araignée), maisons en ruine, tours de guet, tours effondrées, champs clôturés avec épouvantail et rigole, étangs, meules de foin, enclos, feux de camp avec tente, tombes, vieux murs, charrettes, cairns, ossements, cabanes sur pilotis (sur l'eau, dans les marais), orgues de basalte (terres de cendre).
+- **Lacs**, un essai tous les 320 blocs : 11 à 20 blocs de rayon, fond de sable, d'argile, de gravier ou de boue, herbes d'eau, nénuphars, roseaux, parfois une île et un ponton ; gelés dans le givre.
+- **Nature** : bosquets et arbres seuls selon la région (cerisiers côté Lumière, chênes noirs et arbres pâles côté Ombre, sapins, palmiers, arbres morts ou calcinés…), buissons, rochers moussus, troncs couchés, herbes et fleurs (couleurs selon le côté).
+- Le style des constructions suit la région : Lumière (toits de brique rouge), Ombre, marais, désert, givre, cendre, neutre.
+
+Ce que le paysage ne touche jamais : l'emprise des 1 024 sites et des deux capitales (les constructions restent à 14 blocs de plus, 26 autour des villages ; arbres et herbes vont jusqu'à 3 blocs du bord), les zones sûres, les points de quête, les routes et les bords de la carte. Les contrôles `ecarts` des sites et des capitales ne changent donc pas.
+
+| Commande | Effet |
+|---|---|
+| `/continent paysage` | État de la carte et aide |
+| `/continent paysage compter [lieu \| x z] [rayon]` | Petits lieux et lacs prévus autour d'un point, sans rien poser |
+| `/continent paysage essai [lieu \| x z] [rayon]` | Pose le paysage autour d'un point (160 blocs par défaut) |
+| `/continent paysage lancer` | Pose sur toute la carte, ou reprend là où la passe s'était arrêtée ; `refaire` repasse partout |
+| `/continent paysage stop` | Arrête la passe (reprise au même endroit) |
+
+L'état est gardé dans `continent-etat.yml` (clés `paysage.*`). Repasser après une retouche du dessin ajoute les nouveautés mais n'enlève pas les anciens objets : pour repartir propre, remettre la sauvegarde.
+
+**Posé le 24/11/2026 sur `reborn`** : 250 000 chunks en 4 minutes, 13 466 299 blocs. 4 899 petits lieux (668 ruines, 465 tours effondrées, 446 cairns, 443 étangs, 388 tours de guet, 348 maisons abandonnées, 338 vieux murs, 309 charrettes, 292 tombes, 245 champs, 243 feux de camp, 160 cabanes sur pilotis, 155 meules, 151 enclos, 147 ossements, 101 orgues de basalte), 35 lacs, 72 820 arbres, 7 525 rochers. Aucun état de bloc refusé, aucune erreur. Le jar a été mis à jour en ne recompilant que `Landscape`, `ContinentService` et `ContinentCommand`, parce que la compilation complète échouait sur le travail en cours sur les objets.
+
+Sauvegarde d'avant le paysage : `MinecraftDev\backups\reborn_continent_avant-paysage_2026-11-24` (dossier `orbit_continent` et `continent-etat.yml`) et `MinecraftDev\backups\OrbitMMO-avant-paysage_2026-11-24\OrbitMMO.jar`. Pour revenir en arrière : arrêter `reborn`, remettre ces deux éléments à leur place. Tout ce qui a été changé sur le continent depuis le 24/11 vers 10 h 45 serait perdu aussi.
+
+**Pas encore vu en jeu** : contrôlé seulement par les aperçus PNG et la console. L'allure à hauteur d'homme, la densité des arbres et des petits lieux sont à juger en survolant la carte.
+
 ### Refaire le monde après une retouche du dessin
 
 1. `powershell -ExecutionPolicy Bypass -File tools\gen-continent.ps1 -Donnees`, puis `.\build.ps1 -NoDeploy` et copie du jar dans `instances\reborn\plugins`.
@@ -356,6 +389,7 @@ Nidnoir est à 122 blocs de Gris-Hameau, sur la même chaussée : son `raccord` 
 3. Supprimer le dossier `instances\reborn\world\dimensions\minecraft\orbit_continent` (seulement lui : les étages sont dans les dossiers voisins) et les fichiers `continent-etat.yml`, `capitales-etat.yml` et `sites-etat.yml` de `instances\reborn\plugins\OrbitMMO`. `sites-places.yml` peut rester si le relief n'a pas changé ; le supprimer fait retirer les emplacements des camps et des ruines.
 4. Redémarrer, puis `/continent pregen`, puis `/continent capitale <nom> generer` pour chaque capitale, puis `/continent site tout generer`.
 5. Si les points de quête étaient posés sur le continent : `/continent quetes poser confirmer` pour les remettre aux nouveaux emplacements.
+6. `/continent paysage lancer`, après les points de quête pour que le paysage les évite (redémarrer d'abord si les points viennent d'être posés : le paysage les lit une seule fois).
 
 Si le dessin change sans que le monde soit refait, le plugin l'écrit en avertissement au démarrage : les chunks déjà générés gardent l'ancien relief. Refaire le monde efface tout ce qui a été retouché à la main : les capitales et les sites se reconstruisent par commande, mais pas les retouches. Une fois le travail à la main commencé, mieux vaut retoucher le terrain par zones que tout régénérer.
 

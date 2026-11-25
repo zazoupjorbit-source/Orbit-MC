@@ -1,0 +1,434 @@
+# ------------------------------------------------------------------
+#  Lancier — combattant à la lance, en mailles. Allonge, percées et bonds, ou mur de lances derrière un bouclier.
+#  Ressource : Énergie (pleine au départ, revient vite : on choisit ses coups plutôt qu'on ne les accumule).
+#  Format des sorts et des talents : voir guerrier.yml.
+# ------------------------------------------------------------------
+
+nom: Lancier
+couleur: "#D9A441"
+icone: IRON_SPEAR
+jouable: true
+ressource: ENERGIE
+armure: MAILLES
+pv: 1.05
+arme: SPEAR
+description:
+  - "Frappe de plus loin que tout autre,"
+  - "perce les rangs ou tient la ligne."
+
+specialisations:
+  percee:
+    nom: Percée
+    role: DEGATS
+    icone: DIAMOND_SPEAR
+    couleur: "#F2C14E"
+    arme: SPEAR
+    description:
+      - "Dégâts au corps à corps : estocs en série,"
+      - "saignements et chute du ciel."
+    passifs: { degats: 8, crit: 5 }
+    talents:
+      pointe_affutee: { nom: "Pointe affûtée", icone: FLINT, palier: 0, colonne: 0, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      allonge: { nom: "Allonge", icone: IRON_SPEAR, palier: 0, colonne: 1, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      souffle_long: { nom: "Souffle long", icone: FEATHER, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % d'énergie régénérée." }
+      estoc_appuye: { nom: "Estoc appuyé", icone: DIAMOND_SPEAR, palier: 1, colonne: 0, rangs: 3, effets: { degats.transpercer: 6 }, description: "Transpercer inflige {degats.transpercer} % de dégâts en plus." }
+      pointes_rapides: { nom: "Pointes rapides", icone: IRON_SPEAR, palier: 1, colonne: 1, rangs: 3, effets: { degats.triple_estoc: 8 }, description: "Triple estoc inflige {degats.triple_estoc} % de dégâts en plus." }
+      jeu_de_jambes: { nom: "Jeu de jambes", icone: LEATHER_BOOTS, palier: 1, colonne: 2, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      percee_fulgurante: { nom: "Percée fulgurante", icone: SPECTRAL_ARROW, palier: 2, colonne: 0, rangs: 1, sort: percee_fulgurante, description: "Apprend Percée fulgurante : l'élan de la lance déchire le sol droit devant vous sur 10 m." }
+      plaie_ouverte: { nom: "Plaie ouverte", icone: REDSTONE, palier: 2, colonne: 1, rangs: 3, effets: { degats.empalement: 10 }, description: "Empalement et son saignement infligent {degats.empalement} % de dégâts en plus." }
+      ruee_prompte: { nom: "Ruée prompte", icone: CLOCK, palier: 2, colonne: 2, rangs: 2, effets: { recharge.ruee_du_lancier: 2 }, description: "Recharge de Ruée du lancier réduite de {recharge.ruee_du_lancier} s." }
+      gout_du_combat: { nom: "Goût du combat", icone: BEETROOT, palier: 3, colonne: 0, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent." }
+      mailles_ajustees: { nom: "Mailles ajustées", icone: CHAINMAIL_CHESTPLATE, palier: 3, colonne: 1, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      garde_basse: { nom: "Garde basse", icone: RABBIT_FOOT, palier: 3, colonne: 2, rangs: 3, effets: { esquive: 1 }, description: "+{esquive} % de chances d'esquiver un coup de mêlée." }
+      fer_cruel: { nom: "Fer cruel", icone: SKELETON_SKULL, palier: 4, colonne: 0, rangs: 3, effets: { critdeg: 8 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      mise_a_mort: { nom: "Mise à mort", icone: WITHER_SKELETON_SKULL, palier: 4, colonne: 1, rangs: 3, effets: { degats.coup_de_grace: 10 }, description: "Coup de grâce inflige {degats.coup_de_grace} % de dégâts en plus." }
+      sillon: { nom: "Sillon", icone: SPECTRAL_ARROW, palier: 4, colonne: 2, rangs: 3, requiert: percee_fulgurante, effets: { degats.percee_fulgurante: 10 }, description: "Percée fulgurante inflige {degats.percee_fulgurante} % de dégâts en plus." }
+      moulinet: { nom: "Moulinet", icone: WIND_CHARGE, palier: 5, colonne: 0, rangs: 1, sort: moulinet, description: "Apprend Moulinet : trois tours de lance, frappe trois fois tous les ennemis autour de vous." }
+      estoc_precis: { nom: "Estoc précis", icone: SPYGLASS, palier: 5, colonne: 1, rangs: 3, effets: { crit.transpercer: 4 }, description: "Transpercer : +{crit.transpercer} % de critique." }
+      vigueur_du_lancier: { nom: "Vigueur du lancier", icone: COOKED_BEEF, palier: 5, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      oeil_du_lancier: { nom: "Œil du lancier", icone: ENDER_EYE, palier: 6, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      plaie_profonde: { nom: "Plaie profonde", icone: REDSTONE_BLOCK, palier: 6, colonne: 1, rangs: 3, requiert: plaie_ouverte, effets: { duree.empalement: 2 }, description: "Le saignement d'Empalement dure {duree.empalement} s de plus." }
+      geste_sur: { nom: "Geste sûr", icone: STRING, palier: 6, colonne: 2, rangs: 3, effets: { cout.transpercer: 3 }, description: "Transpercer coûte {cout.transpercer} points d'énergie de moins." }
+      danse_prolongee: { nom: "Danse prolongée", icone: BLAZE_POWDER, palier: 7, colonne: 0, rangs: 2, effets: { duree.danse_de_la_lance: 2 }, description: "Danse de la lance dure {duree.danse_de_la_lance} s de plus." }
+      moulinet_d_acier: { nom: "Moulinet d'acier", icone: WIND_CHARGE, palier: 7, colonne: 1, rangs: 3, requiert: moulinet, effets: { degats.moulinet: 10 }, description: "Moulinet inflige {degats.moulinet} % de dégâts en plus." }
+      pas_de_cote: { nom: "Pas de côté", icone: PHANTOM_MEMBRANE, palier: 7, colonne: 2, rangs: 3, effets: { esquive: 1 }, description: "+{esquive} % de chances d'esquiver un coup de mêlée." }
+      chute_du_dragon: { nom: "Chute du dragon", icone: DRAGON_HEAD, palier: 8, colonne: 0, rangs: 1, sort: chute_du_dragon, requiert: moulinet, description: "Apprend Chute du dragon : saute très haut et retombe lance en avant, gros dégâts de zone et étourdissement de 1,5 s." }
+      maitre_lancier: { nom: "Maître lancier", icone: NETHERITE_SPEAR, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      fer_de_lance: { nom: "Fer de lance", icone: GOLDEN_SPEAR, palier: 8, colonne: 2, rangs: 3, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      percee_repetee: { nom: "Percée répétée", icone: SPECTRAL_ARROW, palier: 9, colonne: 0, rangs: 3, requiert: percee_fulgurante, effets: { recharge.percee_fulgurante: 2 }, description: "Recharge de Percée fulgurante réduite de {recharge.percee_fulgurante} s." }
+      dragon_plongeant: { nom: "Dragon plongeant", icone: DRAGON_HEAD, palier: 9, colonne: 1, rangs: 3, requiert: chute_du_dragon, effets: { degats.chute_du_dragon: 10 }, description: "Chute du dragon inflige {degats.chute_du_dragon} % de dégâts en plus." }
+      souffle_de_fer: { nom: "Souffle de fer", icone: IRON_INGOT, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      pointe_mortelle: { nom: "Pointe mortelle", icone: FLINT, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      danse_reprise: { nom: "Danse reprise", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.danse_de_la_lance: 10 }, description: "Recharge de Danse de la lance réduite de {recharge.danse_de_la_lance} s." }
+      poumons_d_acier: { nom: "Poumons d'acier", icone: FEATHER, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % d'énergie régénérée." }
+      triple_maitrise: { nom: "Triple maîtrise", icone: IRON_SPEAR, palier: 11, colonne: 0, rangs: 3, effets: { degats.triple_estoc: 6 }, description: "Triple estoc inflige {degats.triple_estoc} % de dégâts en plus." }
+      lance_legendaire: { nom: "Lance légendaire", icone: NETHERITE_SPEAR, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, crit: 3 }, description: "Talent de maître : +{degats} % de dégâts et +{crit} % de chances de coup critique." }
+      hampe_sanglante: { nom: "Hampe sanglante", icone: SWEET_BERRIES, palier: 11, colonne: 2, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+
+  phalange:
+    nom: Phalange
+    role: TANK
+    icone: SHIELD
+    couleur: "#B58A3A"
+    arme: SPEAR
+    bouclier: true
+    description:
+      - "Tank : lance et bouclier, provoque,"
+      - "bloque et protège le groupe."
+    passifs: { pv: 20, armure: 8, blocage: 8 }
+    talents:
+      constitution: { nom: "Constitution", icone: GOLDEN_APPLE, palier: 0, colonne: 0, rangs: 5, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      mailles_renforcees: { nom: "Mailles renforcées", icone: CHAINMAIL_CHESTPLATE, palier: 0, colonne: 1, rangs: 5, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      souffle_du_veteran: { nom: "Souffle du vétéran", icone: FEATHER, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % d'énergie régénérée." }
+      bouclier_lourd: { nom: "Bouclier lourd", icone: SHIELD, palier: 1, colonne: 0, rangs: 3, effets: { degats.coup_de_bouclier: 8 }, description: "Coup de bouclier inflige {degats.coup_de_bouclier} % de dégâts en plus." }
+      fauchage_ample: { nom: "Fauchage ample", icone: IRON_SPEAR, palier: 1, colonne: 1, rangs: 3, effets: { degats.fauchage: 8 }, description: "Fauchage inflige {degats.fauchage} % de dégâts en plus." }
+      garde_haute: { nom: "Garde haute", icone: IRON_BARS, palier: 1, colonne: 2, rangs: 3, effets: { blocage: 1 }, description: "+{blocage} % de chances de bloquer." }
+      tenir_la_ligne: { nom: "Tenir la ligne", icone: GOLDEN_APPLE, palier: 2, colonne: 0, rangs: 1, sort: tenir_la_ligne, description: "Apprend Tenir la ligne : rend 30 % de vos PV d'un coup." }
+      pointes_dressees: { nom: "Pointes dressées", icone: POINTED_DRIPSTONE, palier: 2, colonne: 1, rangs: 3, effets: { epines: 5 }, description: "Renvoie {epines} % des dégâts de mêlée subis à l'attaquant." }
+      pas_cadence: { nom: "Pas cadencé", icone: LEATHER_BOOTS, palier: 2, colonne: 2, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      mur_solide: { nom: "Mur solide", icone: IRON_BARS, palier: 3, colonne: 0, rangs: 3, effets: { recharge.mur_de_lances: 1 }, description: "Recharge de Mur de lances réduite de {recharge.mur_de_lances} s." }
+      fer_et_cuir: { nom: "Fer et cuir", icone: IRON_CHESTPLATE, palier: 3, colonne: 1, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      parade: { nom: "Parade", icone: RABBIT_FOOT, palier: 3, colonne: 2, rangs: 3, effets: { esquive: 1 }, description: "+{esquive} % de chances d'esquiver un coup de mêlée." }
+      sang_froid_du_piquier: { nom: "Sang-froid du piquier", icone: SNOWBALL, palier: 4, colonne: 0, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      defi_rapide: { nom: "Défi rapide", icone: CLOCK, palier: 4, colonne: 1, rangs: 2, effets: { recharge.defi_du_lancier: 1 }, description: "Recharge de Défi du lancier réduite de {recharge.defi_du_lancier} s." }
+      ligne_inebranlable: { nom: "Ligne inébranlable", icone: GOLDEN_APPLE, palier: 4, colonne: 2, rangs: 3, requiert: tenir_la_ligne, effets: { recharge.tenir_la_ligne: 10 }, description: "Recharge de Tenir la ligne réduite de {recharge.tenir_la_ligne} s." }
+      herse: { nom: "Herse", icone: IRON_BARS, palier: 5, colonne: 0, rangs: 1, sort: herse, description: "Apprend Herse : crochète tous les ennemis proches, les tire contre vous, les provoque et les ralentit." }
+      riposte: { nom: "Riposte", icone: IRON_SWORD, palier: 5, colonne: 1, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      bouclier_dresse: { nom: "Bouclier dressé", icone: SHIELD, palier: 5, colonne: 2, rangs: 3, effets: { blocage: 1 }, description: "+{blocage} % de chances de bloquer." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      veteran: { nom: "Vétéran", icone: COOKED_BEEF, palier: 6, colonne: 0, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      herse_rapide: { nom: "Herse rapide", icone: CLOCK, palier: 6, colonne: 1, rangs: 3, requiert: herse, effets: { recharge.herse: 3 }, description: "Recharge de Herse réduite de {recharge.herse} s." }
+      fauchage_econome: { nom: "Fauchage économe", icone: STRING, palier: 6, colonne: 2, rangs: 3, effets: { cout.fauchage: 3 }, description: "Fauchage coûte {cout.fauchage} points d'énergie de moins." }
+      formation_tenace: { nom: "Formation tenace", icone: IRON_DOOR, palier: 7, colonne: 0, rangs: 2, effets: { duree.formation_serree: 1 }, description: "Formation serrée dure {duree.formation_serree} s de plus." }
+      pointes_barbelees: { nom: "Pointes barbelées", icone: CACTUS, palier: 7, colonne: 1, rangs: 3, requiert: pointes_dressees, effets: { epines: 5 }, description: "Renvoie {epines} % des dégâts de mêlée subis en plus." }
+      mailles_doublees: { nom: "Mailles doublées", icone: CHAINMAIL_LEGGINGS, palier: 7, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      rempart_de_lances: { nom: "Rempart de lances", icone: SHIELD, palier: 8, colonne: 0, rangs: 1, sort: rempart_de_lances, requiert: herse, description: "Apprend Rempart de lances : vous et votre groupe, bouclier de 20 % des PV et dégâts subis réduits de 20 % pendant 10 s." }
+      colonne_vivante: { nom: "Colonne vivante", icone: ENCHANTED_GOLDEN_APPLE, palier: 8, colonne: 1, rangs: 3, effets: { pv: 3 }, description: "+{pv} % de points de vie." }
+      garde_parfaite: { nom: "Garde parfaite", icone: SHIELD, palier: 8, colonne: 2, rangs: 3, effets: { blocage: 2 }, description: "+{blocage} % de chances de bloquer." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      ligne_de_fer: { nom: "Ligne de fer", icone: IRON_BLOCK, palier: 9, colonne: 0, rangs: 3, requiert: rempart_de_lances, effets: { recharge.rempart_de_lances: 10 }, description: "Recharge de Rempart de lances réduite de {recharge.rempart_de_lances} s." }
+      mur_prolonge: { nom: "Mur prolongé", icone: IRON_BARS, palier: 9, colonne: 1, rangs: 3, effets: { duree.mur_de_lances: 0.5 }, description: "Mur de lances dure {duree.mur_de_lances} s de plus." }
+      corps_endurci: { nom: "Corps endurci", icone: IRON_INGOT, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      mailles_de_maitre: { nom: "Mailles de maître", icone: CHAINMAIL_HELMET, palier: 10, colonne: 0, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      formation_reprise: { nom: "Formation reprise", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.formation_serree: 15 }, description: "Recharge de Formation serrée réduite de {recharge.formation_serree} s." }
+      souffle_inepuisable: { nom: "Souffle inépuisable", icone: FEATHER, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % d'énergie régénérée." }
+      herisson: { nom: "Hérisson", icone: SWEET_BERRIES, palier: 11, colonne: 0, rangs: 3, effets: { epines: 4 }, description: "Renvoie {epines} % des dégâts de mêlée subis en plus." }
+      pilier_de_la_phalange: { nom: "Pilier de la phalange", icone: NETHERITE_SPEAR, palier: 11, colonne: 1, rangs: 1, effets: { pv: 8, armure: 3 }, description: "Talent de maître : +{pv} % de points de vie et dégâts subis réduits de {armure} %." }
+      bouclier_infranchissable: { nom: "Bouclier infranchissable", icone: SHIELD, palier: 11, colonne: 2, rangs: 3, effets: { blocage: 1 }, description: "+{blocage} % de chances de bloquer." }
+
+sorts:
+  # ---------------- Toute la classe ----------------
+  estoc:
+    nom: Estoc
+    type: FRAPPE
+    icone: IRON_SPEAR
+    couleur: "#F2C14E"
+    niveau: 1
+    cout: 25
+    portee: 4.5
+    arc: 40
+    puissance: 1.5
+    description: "Un coup de pointe sur la cible devant vous, de plus loin qu'une épée."
+  balayage_de_hampe:
+    nom: Balayage de hampe
+    type: TOURBILLON
+    icone: STICK
+    couleur: "#D9A441"
+    niveau: 3
+    cout: 35
+    recharge: 6
+    portee: 4.5
+    puissance: 1.0
+    description: "Fait tourner la lance : frappe tous les ennemis autour de vous."
+  ruee_du_lancier:
+    nom: Ruée du lancier
+    type: CHARGE
+    icone: GOLDEN_SPEAR
+    couleur: "#F2C14E"
+    niveau: 4
+    recharge: 15
+    portee: 15
+    portee-min: 3
+    puissance: 0.8
+    effets: { ralentir: 2 }
+    description: "Fonce lance en avant sur l'ennemi visé et le ralentit."
+  cri_de_la_phalange:
+    nom: Cri de la phalange
+    type: CRI
+    icone: GOAT_HORN
+    couleur: "#D9A441"
+    niveau: 6
+    recharge: 60
+    gcd: false
+    zone: 15
+    duree: 30
+    effets: { bonus-crit: 5 }
+    description: "Vous et votre groupe gagnez 5 % de critique pendant 30 s."
+  croc_en_jambe:
+    nom: Croc-en-jambe
+    type: FRAPPE
+    icone: TRIPWIRE_HOOK
+    couleur: "#B58A3A"
+    niveau: 8
+    cout: 20
+    recharge: 20
+    portee: 4.5
+    arc: 60
+    puissance: 0.6
+    effets: { etourdir: 2 }
+    description: "Fauche les jambes de la cible avec la hampe : étourdie pendant 2 s."
+  second_souffle:
+    nom: Second souffle
+    type: BUFF
+    icone: COOKED_BEEF
+    couleur: "#5EE89A"
+    niveau: 12
+    recharge: 60
+    gcd: false
+    duree: 8
+    effets: { soin-par-sec: 2.5 }
+    description: "Reprend son souffle : rend 2,5 % de vos PV par seconde pendant 8 s."
+  saut_de_l_hirondelle:
+    nom: Saut de l'hirondelle
+    type: BOND
+    icone: FEATHER
+    couleur: "#F2C14E"
+    niveau: 16
+    recharge: 25
+    portee: 12
+    zone: 3
+    puissance: 0.8
+    description: "Bondit vers le point visé et frappe à l'atterrissage."
+  javelot:
+    nom: Javelot
+    type: PROJECTILE
+    icone: TRIDENT
+    couleur: "#D9A441"
+    niveau: 20
+    cout: 30
+    recharge: 12
+    portee: 25
+    puissance: 1.6
+    effets: { ralentir: 3 }
+    description: "Lance un javelot sur la cible visée et la ralentit pendant 3 s."
+
+  # ---------------- Percée ----------------
+  transpercer:
+    nom: Transpercer
+    type: FRAPPE
+    icone: DIAMOND_SPEAR
+    couleur: "#F2C14E"
+    spe: [percee]
+    niveau: 2
+    cout: 35
+    portee: 4.5
+    arc: 40
+    puissance: 2.1
+    arme: [SPEAR]
+    description: "Un estoc appuyé qui traverse la garde de la cible."
+  triple_estoc:
+    nom: Triple estoc
+    type: FRAPPE
+    icone: IRON_SPEAR
+    couleur: "#F2C14E"
+    spe: [percee]
+    niveau: 5
+    cout: 40
+    recharge: 6
+    portee: 4.5
+    arc: 40
+    coups: 3
+    intervalle: 4
+    puissance: 0.9
+    arme: [SPEAR]
+    description: "Trois coups de pointe rapides sur la cible."
+  empalement:
+    nom: Empalement
+    type: FRAPPE
+    icone: REDSTONE
+    couleur: "#E0533D"
+    spe: [percee]
+    niveau: 9
+    cout: 30
+    recharge: 10
+    portee: 4.5
+    arc: 40
+    puissance: 1.4
+    effets: { saignement: 8, dot: 0.25 }
+    arme: [SPEAR]
+    description: "Plante la lance dans la cible, qui saigne pendant 8 s."
+  coup_de_grace:
+    nom: Coup de grâce
+    type: FRAPPE
+    icone: WITHER_SKELETON_SKULL
+    couleur: "#F2C14E"
+    spe: [percee]
+    niveau: 14
+    cout: 30
+    portee: 4.5
+    arc: 40
+    puissance: 3.2
+    condition: cible-pv<20
+    arme: [SPEAR]
+    description: "Achève un ennemi à moins de 20 % de vie."
+  danse_de_la_lance:
+    nom: Danse de la lance
+    type: BUFF
+    icone: BLAZE_POWDER
+    couleur: "#F2C14E"
+    spe: [percee]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    duree: 12
+    effets: { bonus-degats: 20, bonus-crit: 10 }
+    description: "+20 % de dégâts et +10 % de critique pendant 12 s."
+  percee_fulgurante:
+    nom: Percée fulgurante
+    type: VAGUE
+    icone: SPECTRAL_ARROW
+    couleur: "#FFE08A"
+    spe: [percee]
+    talent: true
+    cout: 35
+    recharge: 18
+    portee: 10
+    zone: 1.5
+    puissance: 2.2
+    description: "L'élan de la lance déchire le sol droit devant vous sur 10 m."
+  moulinet:
+    nom: Moulinet
+    type: TOURBILLON
+    icone: WIND_CHARGE
+    couleur: "#F2C14E"
+    spe: [percee]
+    talent: true
+    cout: 40
+    recharge: 25
+    portee: 5
+    coups: 3
+    intervalle: 5
+    puissance: 0.8
+    arme: [SPEAR]
+    description: "Trois tours de lance : frappe trois fois tous les ennemis autour de vous."
+  chute_du_dragon:
+    nom: Chute du dragon
+    type: BOND
+    icone: DRAGON_HEAD
+    couleur: "#FFE08A"
+    spe: [percee]
+    talent: true
+    categorie: attaque
+    recharge: 60
+    portee: 14
+    zone: 5
+    puissance: 3.5
+    effets: { etourdir: 1.5 }
+    description: "Saute très haut et retombe lance en avant : gros dégâts de zone et étourdissement de 1,5 s."
+
+  # ---------------- Phalange ----------------
+  coup_de_bouclier:
+    nom: Coup de bouclier
+    type: FRAPPE
+    icone: SHIELD
+    couleur: "#B58A3A"
+    spe: [phalange]
+    niveau: 2
+    gain: 15
+    recharge: 8
+    portee: 3.5
+    arc: 50
+    puissance: 1.8
+    bouclier: true
+    effets: { provocation: 1 }
+    description: "Frappe au bouclier qui rend de l'énergie et attire la cible sur vous."
+  fauchage:
+    nom: Fauchage
+    type: TOURBILLON
+    icone: IRON_SPEAR
+    couleur: "#D9A441"
+    spe: [phalange]
+    niveau: 5
+    cout: 25
+    recharge: 5
+    portee: 4.5
+    puissance: 1.2
+    description: "Balaye tous les ennemis autour de vous."
+  defi_du_lancier:
+    nom: Défi du lancier
+    type: CRI
+    icone: GOAT_HORN
+    couleur: "#B58A3A"
+    spe: [phalange]
+    niveau: 9
+    recharge: 8
+    gcd: false
+    zone: 10
+    puissance: 0
+    effets: { provocation: 1 }
+    description: "Force les ennemis proches à vous attaquer."
+  mur_de_lances:
+    nom: Mur de lances
+    type: BUFF
+    icone: IRON_BARS
+    couleur: "#B58A3A"
+    spe: [phalange]
+    niveau: 14
+    cout: 30
+    recharge: 15
+    gcd: false
+    duree: 6
+    bouclier: true
+    effets: { reduction: 40 }
+    description: "Se retranche derrière lance et bouclier : dégâts subis réduits de 40 % pendant 6 s."
+  formation_serree:
+    nom: Formation serrée
+    type: BUFF
+    icone: IRON_DOOR
+    couleur: "#B58A3A"
+    spe: [phalange]
+    niveau: 30
+    recharge: 180
+    gcd: false
+    duree: 8
+    effets: { reduction: 50, bouclier: 15 }
+    description: "Dégâts subis réduits de 50 % et bouclier de 15 % des PV pendant 8 s."
+  tenir_la_ligne:
+    nom: Tenir la ligne
+    type: BUFF
+    icone: GOLDEN_APPLE
+    couleur: "#5EE89A"
+    spe: [phalange]
+    talent: true
+    recharge: 120
+    gcd: false
+    effets: { soin: 30 }
+    description: "Rend 30 % de vos PV d'un coup."
+  herse:
+    nom: Herse
+    type: CRI
+    icone: IRON_BARS
+    couleur: "#B58A3A"
+    spe: [phalange]
+    talent: true
+    cout: 20
+    recharge: 40
+    zone: 10
+    puissance: 0.4
+    effets: { attirer: 1, provocation: 1, ralentir: 2 }
+    description: "Crochète tous les ennemis proches, les tire contre vous, les provoque et les ralentit."
+  rempart_de_lances:
+    nom: Rempart de lances
+    type: CRI
+    icone: SHIELD
+    couleur: "#FFE08A"
+    spe: [phalange]
+    talent: true
+    recharge: 120
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { bouclier: 20, reduction: 20 }
+    description: "Vous et votre groupe : bouclier de 20 % des PV et dégâts subis réduits de 20 % pendant 10 s."

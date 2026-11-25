@@ -63,6 +63,16 @@ specialisations:
       chatiment_du_gardien: { nom: "Châtiment du gardien", icone: GOLDEN_AXE, palier: 8, colonne: 0, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
       aube_eternelle: { nom: "Aube éternelle", icone: END_CRYSTAL, palier: 8, colonne: 1, rangs: 1, sort: aube_eternelle, requiert: bastion_de_lumiere, description: "Apprend Aube éternelle : bouclier de 20 % des PV et −15 % de dégâts subis pour vous et votre groupe." }
       main_providentielle: { nom: "Main providentielle", icone: ENCHANTED_GOLDEN_APPLE, palier: 8, colonne: 2, rangs: 3, requiert: main_guerisseuse, effets: { recharge.main_de_l_aube: 2 }, description: "Recharge de Main de l'Aube réduite de {recharge.main_de_l_aube} s." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      eclat_aveuglant: { nom: "Éclat aveuglant", icone: GLOWSTONE, palier: 9, colonne: 0, rangs: 3, requiert: eclat_du_bouclier, effets: { degats.eclat_du_bouclier: 10 }, description: "Éclat du bouclier inflige {degats.eclat_du_bouclier} % de dégâts en plus." }
+      aube_hative: { nom: "Aube hâtive", icone: CLOCK, palier: 9, colonne: 1, rangs: 3, requiert: aube_eternelle, effets: { recharge.aube_eternelle: 10 }, description: "Recharge d'Aube éternelle réduite de {recharge.aube_eternelle} s." }
+      stature_benie: { nom: "Stature bénie", icone: GOLDEN_APPLE, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      plaques_consacrees: { nom: "Plaques consacrées", icone: GOLDEN_CHESTPLATE, palier: 10, colonne: 0, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      defenseur_hatif: { nom: "Défenseur hâtif", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.ardent_defenseur: 15 }, description: "Recharge d'Ardent défenseur réduite de {recharge.ardent_defenseur} s." }
+      pavois_de_l_aube: { nom: "Pavois de l'Aube", icone: SHIELD, palier: 10, colonne: 2, rangs: 3, effets: { blocage: 1 }, description: "+{blocage} % de chances de bloquer." }
+      sol_sanctifie: { nom: "Sol sanctifié", icone: GOLD_BLOCK, palier: 11, colonne: 0, rangs: 3, effets: { degats.sol_beni: 8 }, description: "Sol béni inflige {degats.sol_beni} % de dégâts en plus." }
+      gardien_de_l_aube: { nom: "Gardien de l'Aube", icone: BEACON, palier: 11, colonne: 1, rangs: 1, effets: { pv: 8, armure: 3 }, description: "Talent de maître : +{pv} % de points de vie et dégâts subis réduits de {armure} %." }
+      marteau_ancestral: { nom: "Marteau ancestral", icone: MACE, palier: 11, colonne: 2, rangs: 3, effets: { degats.marteau_du_vertueux: 6 }, description: "Marteau du vertueux inflige {degats.marteau_du_vertueux} % de dégâts en plus." }
 
   vindicte:
     nom: Vindicte
@@ -104,6 +114,16 @@ specialisations:
       condamnation_divine: { nom: "Condamnation divine", icone: SKELETON_SKULL, palier: 8, colonne: 0, rangs: 2, requiert: condamnation_rapide, effets: { crit.condamnation: 10 }, description: "Condamnation : +{crit.condamnation} % de critique." }
       descente_de_l_aube: { nom: "Descente de l'Aube", icone: END_CRYSTAL, palier: 8, colonne: 1, rangs: 1, sort: descente_de_l_aube, requiert: vertu, description: "Apprend Descente de l'Aube : vous tombez sur vos ennemis comme une étoile filante." }
       champion_de_l_astre: { nom: "Champion de l'Astre", icone: GOLDEN_SWORD, palier: 8, colonne: 2, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      sentence: { nom: "Sentence", icone: GOLDEN_AXE, palier: 9, colonne: 0, rangs: 3, requiert: jugement_final, effets: { degats.jugement_final: 10 }, description: "Jugement final inflige {degats.jugement_final} % de dégâts en plus." }
+      chute_de_l_aube: { nom: "Chute de l'Aube", icone: FEATHER, palier: 9, colonne: 1, rangs: 3, requiert: descente_de_l_aube, effets: { degats.descente_de_l_aube: 10 }, description: "Descente de l'Aube inflige {degats.descente_de_l_aube} % de dégâts en plus." }
+      corps_du_croise: { nom: "Corps du croisé", icone: COOKED_BEEF, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      zele: { nom: "Zèle", icone: BLAZE_POWDER, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      ailes_hatives: { nom: "Ailes hâtives", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.ailes_de_l_aube: 10 }, description: "Recharge d'Ailes de l'Aube réduite de {recharge.ailes_de_l_aube} s." }
+      ferveur_ardente: { nom: "Ferveur ardente", icone: GLOWSTONE_DUST, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de ferveur générée." }
+      verdict_ancestral: { nom: "Verdict ancestral", icone: GOLDEN_SWORD, palier: 11, colonne: 0, rangs: 3, effets: { degats.verdict: 5 }, description: "Verdict inflige {degats.verdict} % de dégâts en plus." }
+      main_de_la_justice: { nom: "Main de la justice", icone: TOTEM_OF_UNDYING, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, crit: 3 }, description: "Talent de maître : +{degats} % de dégâts et +{crit} % de chances de coup critique." }
+      lame_implacable: { nom: "Lame implacable", icone: NETHERITE_SWORD, palier: 11, colonne: 2, rangs: 3, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
 
   sang:
     nom: Sang
@@ -145,6 +165,16 @@ specialisations:
       seigneur_du_sang: { nom: "Seigneur du sang", icone: NETHERITE_AXE, palier: 8, colonne: 0, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
       pacte_des_sangs_lies: { nom: "Pacte des Sangs-Liés", icone: END_CRYSTAL, palier: 8, colonne: 1, rangs: 1, sort: pacte_des_sangs_lies, requiert: chair_morte_s, description: "Apprend Pacte des Sangs-Liés : bouclier de 15 % des PV et −15 % de dégâts subis pour vous et votre groupe." }
       immortel: { nom: "Presque immortel", icone: TOTEM_OF_UNDYING, palier: 8, colonne: 2, rangs: 3, requiert: sang_vorace, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      hemorragie: { nom: "Hémorragie", icone: REDSTONE_BLOCK, palier: 9, colonne: 0, rangs: 3, requiert: effusion, effets: { degats.effusion: 10 }, description: "Effusion inflige {degats.effusion} % de dégâts en plus." }
+      sangs_meles: { nom: "Sangs mêlés", icone: CLOCK, palier: 9, colonne: 1, rangs: 3, requiert: pacte_des_sangs_lies, effets: { recharge.pacte_des_sangs_lies: 10 }, description: "Recharge de Pacte des Sangs-Liés réduite de {recharge.pacte_des_sangs_lies} s." }
+      sang_lourd: { nom: "Sang lourd", icone: BEETROOT_SOUP, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      plaques_ecarlates: { nom: "Plaques écarlates", icone: NETHERITE_CHESTPLATE, palier: 10, colonne: 0, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      pacte_hatif: { nom: "Pacte hâtif", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.pacte_vampirique: 15 }, description: "Recharge de Pacte vampirique réduite de {recharge.pacte_vampirique} s." }
+      soif_ancienne: { nom: "Soif ancienne", icone: SWEET_BERRIES, palier: 10, colonne: 2, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+      ebullition_ancestrale: { nom: "Ébullition ancestrale", icone: MAGMA_CREAM, palier: 11, colonne: 0, rangs: 3, effets: { degats.ebullition_sanguine: 6 }, description: "Ébullition sanguine inflige {degats.ebullition_sanguine} % de dégâts en plus." }
+      prince_du_sang: { nom: "Prince du sang", icone: WITHER_ROSE, palier: 11, colonne: 1, rangs: 1, effets: { pv: 8, vol-de-vie: 2 }, description: "Talent de maître : +{pv} % de points de vie et {vol-de-vie} % des dégâts infligés vous soignent." }
+      coeur_d_obsidienne: { nom: "Cœur d'obsidienne", icone: OBSIDIAN, palier: 11, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
 
   effroi:
     nom: Effroi
@@ -186,6 +216,16 @@ specialisations:
       condamnation_noire: { nom: "Condamnation noire", icone: SKELETON_SKULL, palier: 8, colonne: 0, rangs: 2, requiert: condamnation_rapide_e, effets: { crit.condamnation: 10 }, description: "Condamnation : +{crit.condamnation} % de critique." }
       faucheuse: { nom: "Faucheuse", icone: WITHER_SKELETON_SKULL, palier: 8, colonne: 1, rangs: 1, sort: faucheuse, requiert: hiver_eternel, description: "Apprend Faucheuse : un grand coup de faux autour de vous qui terrifie les survivants." }
       champion_du_neant: { nom: "Champion du Néant", icone: NETHERITE_SWORD, palier: 8, colonne: 2, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      hiver_sans_fin: { nom: "Hiver sans fin", icone: BLUE_ICE, palier: 9, colonne: 0, rangs: 3, requiert: blizzard_du_neant, effets: { degats.blizzard_du_neant: 10 }, description: "Blizzard du Néant inflige {degats.blizzard_du_neant} % de dégâts en plus." }
+      grande_faucheuse: { nom: "Grande faucheuse", icone: NETHERITE_HOE, palier: 9, colonne: 1, rangs: 3, requiert: faucheuse, effets: { degats.faucheuse: 10 }, description: "Faucheuse inflige {degats.faucheuse} % de dégâts en plus." }
+      chair_gelee: { nom: "Chair gelée", icone: PACKED_ICE, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      givre_percant: { nom: "Givre perçant", icone: SNOWBALL, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      runes_hatives: { nom: "Runes hâtives", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.runes_du_neant: 10 }, description: "Recharge de Runes du Néant réduite de {recharge.runes_du_neant} s." }
+      ferveur_hivernale: { nom: "Ferveur hivernale", icone: ICE, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de ferveur générée." }
+      rune_ancestrale: { nom: "Rune ancestrale", icone: CRYING_OBSIDIAN, palier: 11, colonne: 0, rangs: 3, effets: { degats.frappe_runique: 6 }, description: "Frappe runique inflige {degats.frappe_runique} % de dégâts en plus." }
+      heraut_du_neant: { nom: "Héraut du Néant", icone: WITHER_SKELETON_SKULL, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, crit: 3 }, description: "Talent de maître : +{degats} % de dégâts et +{crit} % de chances de coup critique." }
+      tranchant_du_vide: { nom: "Tranchant du vide", icone: NETHERITE_SWORD, palier: 11, colonne: 2, rangs: 3, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
 
 sorts:
   # ---------------- Toute la classe (les deux formes) ----------------

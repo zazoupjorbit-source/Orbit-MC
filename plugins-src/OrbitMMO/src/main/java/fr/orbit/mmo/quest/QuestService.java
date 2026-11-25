@@ -354,8 +354,15 @@ public final class QuestService implements Listener {
 
     /** La quête peut être commencée par ce personnage (hors question des points posés). */
     public boolean available(PlayerData d, QuestProgress pr, QuestDef q) {
-        if (pr.done.contains(q.id()) || pr.active.containsKey(q.id())) {
+        if (pr.active.containsKey(q.id())) {
             return false;
+        }
+        if (pr.done.contains(q.id())) {
+            // Contrat répétable : de nouveau proposé une fois son délai passé.
+            Long at = pr.doneAt.get(q.id());
+            if (q.repeatHours() <= 0 || (at != null && System.currentTimeMillis() < at + (long) (q.repeatHours() * 3_600_000L))) {
+                return false;
+            }
         }
         if (q.faction() != null && q.faction() != d.faction) {
             return false;
@@ -510,7 +517,10 @@ public final class QuestService implements Listener {
     /** Démarre une quête (téléportation de départ, introduction, premier objectif). */
     public void start(Player p, QuestDef q) {
         QuestProgress pr = store.get(p.getUniqueId());
-        pr.done.remove(q.id());
+        if (q.repeatHours() <= 0) {
+            // Une répétable reste « terminée » pendant qu'on la refait : les quêtes qui la demandent restent ouvertes.
+            pr.done.remove(q.id());
+        }
         Active first = new Active(0, 0);
         pr.active.put(q.id(), first);
         // La dernière quête prise est celle que la traînée de guidage suit (le journal permet d'en changer).
@@ -579,6 +589,9 @@ public final class QuestService implements Listener {
             return;
         }
         pr.done.add(q.id());
+        if (q.repeatHours() > 0) {
+            pr.doneAt.put(q.id(), System.currentTimeMillis());
+        }
         pr.dirty = true;
         store.save(pr);
         trials.removeQuestItems(p, q.id());
@@ -656,6 +669,7 @@ public final class QuestService implements Listener {
         } else {
             pr.active.remove(q.id());
             pr.done.remove(q.id());
+            pr.doneAt.remove(q.id());
             pr.dirty = true;
         }
         store.save(pr);

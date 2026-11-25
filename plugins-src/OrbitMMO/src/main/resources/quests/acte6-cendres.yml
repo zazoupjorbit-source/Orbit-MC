@@ -1,0 +1,3731 @@
+# ------------------------------------------------------------------
+#  Acte VI — Les Terres de Cendre : « La forge éteinte » (niv. 60 à 72). Hub neutre : le Camp des Cendres.
+#  Lumière fidèle (a6_l_*), Ombre fidèle (a6_o_*), Sans-Bannière (a6_s_*), annexes (a6_n_*) et contrats répétables (a6_c_*).
+#  FICHIER GÉNÉRÉ par tools\quetes\gen-quetes.js depuis tools\quetes\zones\acte6-cendres.js : modifier la source, pas ce fichier.
+# ------------------------------------------------------------------
+
+pnj:
+  a6_helis:
+    nom: "Capitaine Hélis"
+    nom-en: "Captain Hélis"
+    titre: "Expédition de l'Aube"
+    titre-en: "Dawn Expedition"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: garde_lumiere_1
+    point: a6_helis
+    main: GOLDEN_SWORD
+    repliques:
+      - "La Haute-Prélate veut que la forge brûle. Elle brûlera."
+    repliques-en:
+      - "The High Prelate wants the forge to burn. It will burn."
+  a6_sarn:
+    nom: "Sarn"
+    titre: "Lame de la Citadelle"
+    titre-en: "Blade of the Citadel"
+    couleur: "#B36BFF"
+    type: MANNEQUIN
+    visage: garde_ombre_1
+    point: a6_sarn
+    main: NETHERITE_SWORD
+    repliques:
+      - "Vharos ne demande pas. Il attend."
+    repliques-en:
+      - "Vharos does not ask. He waits."
+  a6_morvain:
+    nom: "Morvain"
+    titre: "Le premier Marqué"
+    titre-en: "The first Marked"
+    couleur: "#B36BFF"
+    type: MANNEQUIN
+    visage: morvain
+    point: a6_morvain
+    main: NETHERITE_SWORD
+    repliques:
+      - "J'ai frappé l'enclou de cette forge pendant sept ans. Je reconnais encore son odeur."
+    repliques-en:
+      - "I struck the anvil of that forge for seven years. I still know its smell."
+  a6_hulda:
+    nom: "Hulda"
+    titre: "Maîtresse des mineurs"
+    titre-en: "Mine-mistress"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    visage: villageois_neutre_2
+    point: a6_hulda
+    main: IRON_PICKAXE
+    repliques:
+      - "Ici, on creuse pour vivre. Pas pour l'Aube, pas pour l'Ombre."
+    repliques-en:
+      - "Here we dig to live. Not for the Dawn, not for the Shadow."
+  a6_ottilie:
+    nom: "Ottilie"
+    titre: "Arpenteuse des failles"
+    titre-en: "Rift-surveyor"
+    couleur: "#A8E6A1"
+    type: MANNEQUIN
+    visage: voyageur_2
+    point: a6_ottilie
+    main: SPYGLASS
+    repliques:
+      - "Les failles s'ouvrent toutes dans le même sens. Ça ne me plaît pas."
+    repliques-en:
+      - "The rifts all open in the same direction. I do not like it."
+  a6_tobbe:
+    nom: "Tobbe"
+    titre: "Cuisinier du camp"
+    titre-en: "Camp cook"
+    couleur: "#E0B27A"
+    type: MANNEQUIN
+    visage: villageois_neutre_1
+    point: a6_tobbe
+    repliques:
+      - "Le ragoût de cendre, ça se mange chaud. Froid, ça se mange quand même."
+    repliques-en:
+      - "Ash stew is eaten hot. Cold, it gets eaten anyway."
+  a6_mirza:
+    nom: "Mirza"
+    titre: "Tableau des contrats"
+    titre-en: "Contract board"
+    couleur: "#9FD8FF"
+    type: MANNEQUIN
+    visage: villageois_neutre_4
+    point: a6_mirza
+    repliques:
+      - "Un contrat par jour, payé le soir. Le camp tient comme ça."
+    repliques-en:
+      - "One contract a day, paid at dusk. That is how the camp holds."
+  a6_prisca:
+    nom: "Sœur Prisca"
+    titre: "Chanteuse du Cloître"
+    titre-en: "Singer of the Cloister"
+    couleur: "#F7E7A1"
+    type: MANNEQUIN
+    visage: zuri
+    point: a6_prisca
+    repliques:
+      - "Je chantais la lumière hors des Marqués. Maintenant je l'écoute."
+    repliques-en:
+      - "I used to sing the light out of the Marked. Now I listen to it."
+  a6_prisca_refuge:
+    nom: "Sœur Prisca"
+    titre: "Sans-Bannière"
+    titre-en: "Bannerless"
+    couleur: "#D7DCE2"
+    type: MANNEQUIN
+    visage: zuri
+    point: a6_prisca_refuge
+    repliques:
+      - "Ici, personne ne porte de couleur. On porte un nom."
+    repliques-en:
+      - "Here no one wears a colour. We wear a name."
+  a6_kael:
+    nom: "Kael"
+    titre: "Forgeron des Sans-Bannière"
+    titre-en: "Smith of the Bannerless"
+    couleur: "#8C96A3"
+    type: MANNEQUIN
+    visage: efe
+    point: a6_kael
+    main: IRON_AXE
+    repliques:
+      - "Mes mains se souviennent mieux que ma tête. Elles se souviennent de la forge."
+    repliques-en:
+      - "My hands remember better than my head. They remember the forge."
+  a6_ezren:
+    nom: "Ezren"
+    titre: "Gardien des cages"
+    titre-en: "Keeper of the cages"
+    couleur: "#9B7BFF"
+    type: MANNEQUIN
+    visage: garde_ombre_2
+    point: a6_ezren
+    repliques:
+      - "Chaque cage a un nom gravé. Je ne les lis plus."
+    repliques-en:
+      - "Every cage has a name carved on it. I no longer read them."
+  a6_anseau:
+    nom: "Frère Anseau"
+    titre: "Déserteur de l'Aube"
+    titre-en: "Deserter of the Dawn"
+    couleur: "#F2E6C0"
+    type: MANNEQUIN
+    visage: villageois_lumiere_3
+    point: a6_anseau
+    repliques:
+      - "Je n'ai plus de prière. Il me reste mes jambes."
+    repliques-en:
+      - "I have no prayer left. I still have my legs."
+  a6_ysra:
+    nom: "Ysra"
+    titre: "Déserteuse de la Citadelle"
+    titre-en: "Deserter of the Citadel"
+    couleur: "#B48CFF"
+    type: MANNEQUIN
+    visage: villageois_ombre_3
+    point: a6_ysra
+    repliques:
+      - "Vharos m'a appris à tenir une cage. Pas à la refermer sur un enfant."
+    repliques-en:
+      - "Vharos taught me to hold a cage. Not to close it on a child."
+  a6_convoyeur_aube:
+    nom: "Convoyeur de l'Aube"
+    titre: "Maillons pour la forge"
+    titre-en: "Links for the forge"
+    couleur: "#FFD66E"
+    type: MANNEQUIN
+    visage: garde_lumiere_2
+    point: a6_convoyeur_aube
+    repliques:
+      - "Ces caisses pèsent plus lourd qu'elles ne devraient."
+    repliques-en:
+      - "These crates weigh more than they should."
+  a6_joran:
+    nom: "Joran"
+    titre: "Purifié"
+    titre-en: "Purified"
+    couleur: "#C9D6A3"
+    type: MANNEQUIN
+    visage: villageois_lumiere_5
+    point: a6_joran
+    repliques:
+      - "…"
+    repliques-en:
+      - "…"
+  a6_colporteur:
+    nom: "Ambroise"
+    titre: "Colporteur"
+    titre-en: "Peddler"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    visage: voyageur_1
+    point: a6_colporteur
+    repliques:
+      - "Du sel, des clous, des nouvelles. Tout se vend aux Cendres."
+    repliques-en:
+      - "Salt, nails, news. Everything sells in the Ashlands."
+  a6_mineur:
+    nom: "Gaudry"
+    titre: "Mineur du poste"
+    titre-en: "Outpost miner"
+    couleur: "#C8A27A"
+    type: MANNEQUIN
+    visage: fermier_neutre_1
+    point: a6_mineur
+    main: IRON_PICKAXE
+    repliques:
+      - "La galerie est à l'ouest. Si personne ne m'accompagne, j'y vais quand même."
+    repliques-en:
+      - "The tunnel is to the west. If no one comes with me, I go anyway."
+
+monstres:
+  a6_affame:
+    nom: "Affamé des failles"
+    type: ENDERMITE
+    taille: 3.2
+    pv: 1.2
+    degats: 1.2
+    vitesse: 1.1
+  a6_affame_grand:
+    nom: "Grand Affamé"
+    type: ENDERMITE
+    taille: 5.5
+    pv: 3.5
+    degats: 1.4
+    vitesse: 1
+    xp: 3
+    or: 3
+  a6_garde_aube:
+    nom: "Garde de l'Aube"
+    type: VINDICATOR
+    pv: 1.3
+    degats: 1.1
+    vitesse: 0.95
+    arme: GOLDEN_SWORD
+  a6_garde_ombre:
+    nom: "Lame de la Citadelle"
+    type: WITHER_SKELETON
+    pv: 1.3
+    degats: 1.1
+    vitesse: 0.95
+    arme: NETHERITE_SWORD
+  a6_espion_aube:
+    nom: "Espion de l'Aube"
+    type: PILLAGER
+    pv: 1.1
+    degats: 1
+    vitesse: 1
+  a6_chasseur_aube:
+    nom: "Chasseur de Marqués de l'Aube"
+    type: VINDICATOR
+    taille: 1.05
+    pv: 1.4
+    degats: 1.15
+    vitesse: 1
+    arme: GOLDEN_AXE
+  a6_chasseur_ombre:
+    nom: "Chasseur de Marqués de la Citadelle"
+    type: WITHER_SKELETON
+    pv: 1.4
+    degats: 1.15
+    vitesse: 1
+    arme: NETHERITE_AXE
+  a6_braise:
+    nom: "Braise de la forge"
+    type: BLAZE
+    pv: 1.1
+    degats: 1.1
+    vitesse: 1
+  a6_derniere_chaine:
+    nom: "La Dernière Chaîne"
+    type: WITHER_SKELETON
+    taille: 2.6
+    pv: 18
+    degats: 1.5
+    vitesse: 0.85
+    xp: 20
+    or: 15
+    arme: MACE
+  a6_chien_alpha:
+    nom: "Gueule-de-Braise"
+    type: WOLF
+    taille: 1.8
+    pv: 6
+    degats: 1.4
+    vitesse: 1.1
+    xp: 6
+    or: 6
+  a6_roi_calcine:
+    nom: "Le Brasier-Roi"
+    type: WITHER_SKELETON
+    taille: 1.9
+    pv: 9
+    degats: 1.35
+    vitesse: 0.95
+    xp: 8
+    or: 8
+    arme: NETHERITE_AXE
+  a6_dormeur:
+    nom: "Calciné endormi"
+    type: HUSK
+    pv: 1.3
+    degats: 1.2
+    vitesse: 0.9
+  a6_pillard_cendre:
+    nom: "Pilleur de cendres"
+    type: HUSK
+    pv: 1
+    degats: 1
+    vitesse: 1.05
+
+apparitions:
+  a6_affames_poste:
+    point: a6_avant_poste_ombre
+    monstre: a6_affame
+    niveau: [62, 63]
+    nombre: 6
+    rayon: 10
+  a6_affames_faille:
+    point: a6_faille_2
+    monstre: a6_affame
+    niveau: [61, 62]
+    nombre: 5
+    rayon: 9
+  a6_affames_grande:
+    point: a6_grande_faille
+    monstre: a6_affame
+    niveau: [67, 69]
+    nombre: 6
+    rayon: 10
+  a6_gardes_ombre:
+    point: a6_avant_poste_ombre
+    monstre: a6_garde_ombre
+    niveau: 67
+    nombre: 5
+    rayon: 12
+  a6_gardes_aube:
+    point: a6_bivouac_aube
+    monstre: a6_garde_aube
+    niveau: [64, 68]
+    nombre: 5
+    rayon: 14
+  a6_gardes_fioles:
+    point: a6_convoi_fioles
+    monstre: a6_garde_aube
+    niveau: 66
+    nombre: 4
+    rayon: 8
+  a6_espions:
+    point: a6_planque_espions
+    monstre: a6_espion_aube
+    niveau: 66
+    nombre: 3
+    rayon: 6
+  a6_braises_forge:
+    point: a6_forge_parvis
+    monstre: a6_braise
+    niveau: [69, 70]
+    nombre: 5
+    rayon: 10
+  a6_chaine:
+    point: a6_forge_parvis
+    monstre: a6_derniere_chaine
+    niveau: 71
+    nombre: 1
+    rayon: 4
+  a6_alpha:
+    point: a6_nid_chiens
+    monstre: a6_chien_alpha
+    niveau: 64
+    nombre: 1
+    rayon: 4
+  a6_brasier:
+    point: a6_brasier_roi
+    monstre: a6_roi_calcine
+    niveau: 70
+    nombre: 1
+    rayon: 4
+  a6_dormeurs:
+    point: a6_galerie
+    monstre: a6_dormeur
+    niveau: 71
+    nombre: 5
+    rayon: 12
+
+quetes:
+
+  # ================================================================ PRINCIPALES — LUMIÈRE : LA FORGE ÉTEINTE
+
+  a6_l_le_camp_des_cendres:
+    nom: "Le Camp des Cendres"
+    nom-en: "The Ash Camp"
+    faction: lumiere
+    niveau: 60
+    requiert: [a5_l_la_derniere_chaine]
+    donneur: a6_helis
+    resume:
+      - "Le Capitaine Hélis vous attend"
+      - "au Camp des Cendres."
+    resume-en:
+      - "Captain Hélis is waiting for you"
+      - "at the Ash Camp."
+    offre:
+      - "a6_helis: Vous avez vu la Chute dans la glace. Moi, j'ai vu les ordres de la Haute-Prélate. Les deux mènent ici."
+    offre-en:
+      - "a6_helis: You saw the Fall in the ice. I saw the High Prelate's orders. Both lead here."
+    etapes:
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage du Camp des Cendres"
+        texte-en: "Touch the Ash Camp's anchoring Shard"
+        point: a6_ancre_cendres
+        rayon: 4
+      - type: PARLER
+        texte: "Écouter le Capitaine Hélis"
+        texte-en: "Listen to Captain Hélis"
+        pnj: a6_helis
+        dialogue:
+          - "a6_helis: La Forge éteinte est à l'est. C'est là que les chaînes de lumière ont été forgées. La Haute-Prélate veut qu'elle brûle de nouveau."
+          - "a6_helis: L'Ombre veut la même chose. Leur Lame, Sarn, boit à dix pas d'ici. Le camp est neutre : pas d'épée tirée sous la palissade."
+        dialogue-en:
+          - "a6_helis: The Extinguished Forge lies to the east. That is where the chains of light were forged. The High Prelate wants it to burn again."
+          - "a6_helis: The Shadow wants the same thing. Their Blade, Sarn, drinks ten paces from here. The camp is neutral: no sword drawn inside the palisade."
+      - type: PARLER
+        texte: "Retrouver Morvain"
+        texte-en: "Find Morvain"
+        pnj: a6_morvain
+        dialogue:
+          - "a6_morvain: Vous m'avez pardonné, là-haut, dans la glace. Ne le faites pas trop vite. La forge vous dira ce que j'ai fait."
+        dialogue-en:
+          - "a6_morvain: You forgave me, up there, in the ice. Do not do it too quickly. The forge will tell you what I did."
+        si: "a5-morvain=pardonner"
+      - type: PARLER
+        texte: "Retrouver Morvain"
+        texte-en: "Find Morvain"
+        pnj: a6_morvain
+        dialogue:
+          - "a6_morvain: Vous m'avez jugé, là-haut, dans la glace. Vous aviez raison. Venez voir la forge, et jugez encore."
+        dialogue-en:
+          - "a6_morvain: You judged me, up there, in the ice. You were right. Come and see the forge, and judge again."
+        si: "!a5-morvain=pardonner"
+    recompenses:
+      xp: 17500
+      or: 1750
+
+  a6_l_les_failles:
+    nom: "Les failles"
+    nom-en: "The Rifts"
+    faction: lumiere
+    niveau: 61
+    requiert: [a6_l_le_camp_des_cendres]
+    donneur: a6_helis
+    resume:
+      - "Des failles s'ouvrent autour du camp."
+      - "Hélis veut savoir d'où sortent les Affamés."
+    resume-en:
+      - "Rifts are opening around the camp."
+      - "Hélis wants to know where the Starved come from."
+    offre:
+      - "a6_helis: Les Affamés sortent de la cendre comme l'eau d'une source. Trois failles autour du camp. Examinez-les, puis voyez l'arpenteuse, Ottilie."
+    offre-en:
+      - "a6_helis: The Starved rise out of the ash like water from a spring. Three rifts around the camp. Examine them, then see the surveyor, Ottilie."
+    etapes:
+      - type: ENQUETE
+        texte: "Examiner les trois failles"
+        texte-en: "Examine the three rifts"
+        pnj: a6_ottilie
+        indices:
+          - point: a6_faille_1
+            texte: "Une faille qui fume froid"
+            texte-en: "A rift that smokes cold"
+            apres:
+              - "La cendre gèle sur les bords. Au fond, rien. Un rien qui respire."
+            apres-en:
+              - "The ash freezes at the edges. At the bottom, nothing. A nothing that breathes."
+          - point: a6_faille_2
+            texte: "Des griffures autour de la faille"
+            texte-en: "Claw marks around the rift"
+            apres:
+              - "Des traces d'Affamés, par dizaines, en rangs serrés. Ils ne rôdent plus : ils marchent."
+            apres-en:
+              - "Tracks of the Starved, by the dozen, in tight rows. They no longer prowl: they march."
+          - point: a6_faille_3
+            texte: "Un piquet planté dans la faille"
+            texte-en: "A stake driven into the rift"
+            apres:
+              - "Un piquet au sceau du soleil. Un fil d'or en part, tendu vers l'est, vers la forge. Quelqu'un mesure."
+            apres-en:
+              - "A stake with the sun seal. A golden thread runs from it, stretched east, towards the forge. Someone is measuring."
+        dialogue:
+          - "a6_ottilie: Toutes les failles s'ouvrent vers la forge. Comme si quelque chose là-bas tirait le Néant à lui."
+          - "a6_ottilie: Et ces piquets d'or sont là depuis des semaines. Votre Ordre savait."
+        dialogue-en:
+          - "a6_ottilie: Every rift opens towards the forge. As if something over there were drawing the Void to it."
+          - "a6_ottilie: And those golden stakes have been there for weeks. Your Order knew."
+      - type: PARLER
+        texte: "Revenir voir Hélis"
+        texte-en: "Return to Hélis"
+        pnj: a6_helis
+        dialogue:
+          - "a6_helis: Bien sûr que nous savions. Mesurer, c'est préparer. La forge rallumée refermera les failles."
+          - "joueur: Ou les ouvrira toutes."
+        dialogue-en:
+          - "a6_helis: Of course we knew. To measure is to prepare. The rekindled forge will close the rifts."
+          - "joueur: Or open them all."
+    recompenses:
+      xp: 18000
+      or: 1800
+
+  a6_l_le_convoi_des_maillons:
+    nom: "Le convoi des maillons"
+    nom-en: "The Convoy of Links"
+    faction: lumiere
+    niveau: 62
+    requiert: [a6_l_les_failles]
+    donneur: a6_helis
+    resume:
+      - "Un convoi de l'Aube doit rejoindre la forge."
+    resume-en:
+      - "A Dawn convoy must reach the forge."
+    offre:
+      - "a6_helis: Mon convoyeur attend à l'est du camp. Ses caisses doivent arriver à la forge. Les Affamés les sentent : escortez-le."
+    offre-en:
+      - "a6_helis: My convoy-driver waits east of the camp. His crates must reach the forge. The Starved can smell them: escort him."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter le convoyeur jusqu'à la forge"
+        texte-en: "Escort the convoy-driver to the forge"
+        pnj: a6_convoyeur_aube
+        chemin: [a6_convoi_1, a6_convoi_2, a6_convoi_fin]
+        monstres: [a6_affame]
+        nombre: 3
+        vagues: 3
+        pv: 140
+        degats: 6
+        apres:
+          - "a6_convoyeur_aube: Arrivés. Vous voulez savoir ce qu'il y a dedans ? Des maillons d'or. Tièdes. Ils sont tièdes depuis Auréval."
+        apres-en:
+          - "a6_convoyeur_aube: Here. You want to know what is inside? Golden links. Warm. They have been warm since Auréval."
+      - type: PARLER
+        texte: "Rendre compte à Hélis"
+        texte-en: "Report to Hélis"
+        pnj: a6_helis
+        dialogue:
+          - "a6_helis: Les maillons sont arrivés. La moitié d'une chaîne, déjà."
+          - "joueur: La moitié de quoi ?"
+          - "a6_helis: Vous le saurez quand la forge brûlera."
+        dialogue-en:
+          - "a6_helis: The links have arrived. Half a chain, already."
+          - "joueur: Half of what?"
+          - "a6_helis: You will know when the forge burns."
+    recompenses:
+      xp: 18500
+      or: 1850
+
+  a6_l_les_braises_du_bivouac:
+    nom: "Les braises du bivouac"
+    nom-en: "The Embers of the Bivouac"
+    faction: lumiere
+    niveau: 63
+    requiert: [a6_l_le_convoi_des_maillons]
+    donneur: a6_helis
+    resume:
+      - "Une fiole scellée de la Haute-Prélate"
+      - "doit rejoindre le bivouac de l'Aube."
+    resume-en:
+      - "A sealed vial from the High Prelate"
+      - "must reach the Dawn bivouac."
+    offre:
+      - "a6_helis: Ceci vient du Bastion. Portez-le à Sœur Prisca, au bivouac près de la forge. Ne l'ouvrez pas."
+    offre-en:
+      - "a6_helis: This comes from the Bastion. Take it to Sister Prisca, at the bivouac near the forge. Do not open it."
+    etapes:
+      - type: LIVRER
+        texte: "Porter la fiole à Sœur Prisca"
+        texte-en: "Carry the vial to Sister Prisca"
+        pnj: a6_prisca
+        materiau: HONEY_BOTTLE
+        objet: "Fiole scellée du Bastion"
+        objet-en: "Sealed vial from the Bastion"
+        dialogue:
+          - "a6_prisca: Une fiole pour le foyer. Vous savez ce qu'il y a dedans ? Quelqu'un. Écoutez."
+          - "Contre la paroi de verre, une voix minuscule : « Laissez-moi partir. »"
+        dialogue-en:
+          - "a6_prisca: A vial for the hearth. Do you know what is inside? Someone. Listen."
+          - "Against the glass, a tiny voice: « Let me go. »"
+      - type: INTERAGIR
+        texte: "Regarder derrière le bivouac"
+        texte-en: "Look behind the bivouac"
+        point: a6_enclos_aube
+        rayon: 5
+        apres:
+          - "Un enclos. Des Purifiés enchaînés à des soufflets de forge, le regard vide. Ils pompent sans fin, et chaque coup de soufflet fait luire les maillons."
+        apres-en:
+          - "A pen. Purified chained to forge bellows, their eyes empty. They pump without end, and every stroke of the bellows makes the links glow."
+      - type: PARLER
+        texte: "Revenir voir Sœur Prisca"
+        texte-en: "Return to Sister Prisca"
+        pnj: a6_prisca
+        dialogue:
+          - "a6_prisca: La forge ne brûle pas au charbon. Elle brûle à la lumière des Marqués. C'est pour ça qu'on les amène."
+        dialogue-en:
+          - "a6_prisca: The forge does not burn on coal. It burns on the light of the Marked. That is why they are brought here."
+    recompenses:
+      xp: 18900
+      or: 1890
+
+  a6_l_le_registre_du_bivouac:
+    nom: "Le registre du bivouac"
+    nom-en: "The Bivouac Ledger"
+    faction: lumiere
+    niveau: 64
+    requiert: [a6_l_les_braises_du_bivouac]
+    donneur: a6_prisca
+    resume:
+      - "Sœur Prisca veut que vous lisiez"
+      - "ce que le bivouac cache."
+    resume-en:
+      - "Sister Prisca wants you to read"
+      - "what the bivouac hides."
+    offre:
+      - "a6_prisca: La nuit, les gardes dorment. Le registre est dans le coffre du chef, les ordres sous sa tente. Lisez. Puis allez dire à Morvain ce que vous avez lu."
+    offre-en:
+      - "a6_prisca: At night the guards sleep. The ledger is in the chief's chest, the orders under his tent. Read. Then go and tell Morvain what you read."
+    etapes:
+      - type: ENQUETE
+        texte: "Fouiller le bivouac"
+        texte-en: "Search the bivouac"
+        pnj: a6_morvain
+        indices:
+          - point: a6_coffre_aube
+            texte: "Le registre du combustible"
+            texte-en: "The fuel ledger"
+            apres:
+              - "« Combustible reçu : quarante Marqués instables. Restants : douze. » Les noms sont rayés un par un."
+            apres-en:
+              - "« Fuel received: forty unstable Marked. Remaining: twelve. » The names are struck out one by one."
+          - point: a6_bivouac_aube
+            texte: "Les ordres de la Haute-Prélate"
+            texte-en: "The High Prelate's orders"
+            apres:
+              - "« La forge rallumée forgera la cage. L'Astre rassemblé n'en sortira plus. — S. »"
+            apres-en:
+              - "« The rekindled forge shall forge the cage. The Star, once gathered, shall never leave it. — S. »"
+          - point: a6_enclos_aube
+            texte: "Une étiquette sur une caisse"
+            texte-en: "A label on a crate"
+            apres:
+              - "Une caisse de maillons, au soleil de l'Aube. L'étiquette : « Pour V. — la moitié des chaînes. »"
+            apres-en:
+              - "A crate of links, bearing the Dawn sun. The label: « For V. — half of the chains. »"
+        dialogue:
+          - "joueur: « Pour V. ». Encore. Le Pacte est mort, pourtant."
+          - "a6_morvain: Un pacte ne meurt pas parce que deux armées se battent. Il meurt quand ceux qui l'ont signé n'ont plus besoin l'un de l'autre."
+          - "a6_morvain: Et une cage, ça se ferme mieux à deux."
+        dialogue-en:
+          - "joueur: « For V. ». Again. The Pact is dead, though."
+          - "a6_morvain: A pact does not die because two armies fight. It dies when those who signed it no longer need each other."
+          - "a6_morvain: And a cage closes better with two."
+    recompenses:
+      xp: 19400
+      or: 1940
+
+  a6_l_la_forge_se_souvient:
+    nom: "La forge se souvient"
+    nom-en: "The Forge Remembers"
+    faction: lumiere
+    niveau: 64
+    requiert: [a6_l_le_registre_du_bivouac]
+    donneur: a6_morvain
+    resume:
+      - "Morvain vous emmène devant la Forge éteinte."
+    resume-en:
+      - "Morvain takes you before the Extinguished Forge."
+    offre:
+      - "a6_morvain: Venez au parvis de la forge. Elle est éteinte, mais pas froide. Elle se souvient de moi, et elle n'aime pas ça."
+    offre-en:
+      - "a6_morvain: Come to the forecourt of the forge. It is extinguished, but not cold. It remembers me, and it does not like it."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre le parvis de la Forge éteinte"
+        texte-en: "Reach the forecourt of the Extinguished Forge"
+        point: a6_forge_parvis
+        rayon: 8
+      - type: SURVIE
+        texte: "Tenir pendant que la forge se réveille"
+        texte-en: "Hold on while the forge awakens"
+        point: a6_forge_parvis
+        rayon: 12
+        duree: 45
+        mode: brule
+        degats: 5
+        monstres: [a6_braise]
+        nombre: 1
+        intervalle: 15
+        apres:
+          - "Les foyers retombent. Dans la fumée, une forge d'il y a mille ans : un garçon frappe le métal, et le métal chante."
+          - "a6_morvain: C'était moi. Chaque maillon prenait la lumière d'un Marqué. On me disait que c'était pour protéger l'Astre."
+        apres-en:
+          - "The fires die down. In the smoke, a forge from a thousand years ago: a boy strikes the metal, and the metal sings."
+          - "a6_morvain: That was me. Every link took the light of a Marked. They told me it was to protect the Star."
+      - type: PARLER
+        texte: "Parler à Morvain"
+        texte-en: "Talk to Morvain"
+        pnj: a6_morvain
+        dialogue:
+          - "a6_morvain: Votre Haute-Prélate veut refaire ce que j'ai fait. Avec les mêmes mains : celles des Marqués."
+          - "a6_morvain: Je ne vous dirai pas quoi faire. On me l'a trop dit, à moi."
+        dialogue-en:
+          - "a6_morvain: Your High Prelate wants to do again what I did. With the same hands: those of the Marked."
+          - "a6_morvain: I will not tell you what to do. I was told too often myself."
+    recompenses:
+      xp: 19400
+      or: 1940
+
+  a6_l_le_chant_de_prisca:
+    nom: "Le chant de Prisca"
+    nom-en: "Prisca's Song"
+    faction: lumiere
+    niveau: 65
+    requiert: [a6_l_la_forge_se_souvient]
+    donneur: a6_prisca
+    resume:
+      - "Sœur Prisca a une question pour vous."
+      - "Votre réponse changera la suite."
+    resume-en:
+      - "Sister Prisca has a question for you."
+      - "Your answer will change what follows."
+    offre:
+      - "a6_prisca: Venez. Ce que j'ai à dire ne se dit qu'une fois."
+    offre-en:
+      - "a6_prisca: Come. What I have to say can only be said once."
+    etapes:
+      - type: CHOIX
+        texte: "Répondre à Sœur Prisca"
+        texte-en: "Answer Sister Prisca"
+        pnj: a6_prisca
+        choix: a6-allegeance
+        question: "Que répondez-vous à Prisca ?"
+        question-en: "What do you answer Prisca?"
+        reponses:
+          - id: sans_banniere
+            texte: "Je viens. En secret."
+            texte-en: "I am coming. In secret."
+            reponse:
+              - "a6_prisca: Alors garde ton soleil sur la poitrine, et ton nom en dessous. Rejoins Kael au refuge."
+            reponse-en:
+              - "a6_prisca: Then keep your sun on your chest, and your name beneath it. Join Kael at the refuge."
+            xp: 2000
+          - id: fidele
+            texte: "Je reste fidèle à l'Aube."
+            texte-en: "I remain loyal to the Dawn."
+            reponse:
+              - "a6_prisca: Je comprends. Je t'ai connu sous la Marque, pas sous la bannière. Adieu."
+            reponse-en:
+              - "a6_prisca: I understand. I knew you under the Mark, not under the banner. Farewell."
+            or: 300
+        dialogue:
+          - "a6_prisca: Je pars cette nuit. Il y a des Marqués qui ne servent ni l'Aube ni la Citadelle. On les appelle les Sans-Bannière."
+          - "a6_prisca: Ils ont un refuge au nord-ouest, au bord de la mer, et un forgeron, Kael. Un ancien Creux. Il dit que les Creux ont un nom."
+          - "a6_prisca: Vous pouvez venir, et garder votre bannière en façade. Personne ne le saura. Ou rester fidèle, et me dénoncer. Les deux sont honnêtes."
+        dialogue-en:
+          - "a6_prisca: I leave tonight. There are Marked who serve neither the Dawn nor the Citadel. They are called the Bannerless."
+          - "a6_prisca: They have a refuge to the north-west, by the sea, and a smith, Kael. A former Hollow. He says the Hollow have names."
+          - "a6_prisca: You can come, and keep your banner on the outside. No one will know. Or stay loyal, and report me. Both are honest."
+      - type: PARLER
+        texte: "Annoncer la désertion de Prisca à Hélis"
+        texte-en: "Report Prisca's desertion to Hélis"
+        pnj: a6_helis
+        dialogue:
+          - "a6_helis: Prisca ? Elle chantait mieux que toutes les autres. Le Cloître la retrouvera. Vous avez bien fait."
+        dialogue-en:
+          - "a6_helis: Prisca? She sang better than all the others. The Cloister will find her. You did well."
+        si: "a6-allegeance=fidele"
+      - type: PARLER
+        texte: "Revenir voir Hélis comme si de rien n'était"
+        texte-en: "Return to Hélis as if nothing happened"
+        pnj: a6_helis
+        dialogue:
+          - "a6_helis: Prisca a disparu cette nuit. Vous l'avez vue ?"
+          - "joueur: Non, capitaine."
+          - "a6_helis: Dommage. Elle chantait mieux que toutes les autres."
+        dialogue-en:
+          - "a6_helis: Prisca vanished tonight. Did you see her?"
+          - "joueur: No, captain."
+          - "a6_helis: A pity. She sang better than all the others."
+        si: "a6-allegeance=sans_banniere"
+    recompenses:
+      xp: 19900
+      or: 1990
+
+  a6_l_les_deserteurs:
+    nom: "Les déserteurs"
+    nom-en: "The Deserters"
+    faction: lumiere
+    niveau: 66
+    requiert: [a6_l_le_chant_de_prisca, "choix:a6-allegeance=fidele"]
+    donneur: a6_helis
+    resume:
+      - "Des frères de l'Aube ont fui le bivouac."
+      - "Hélis veut qu'on les retrouve."
+    resume-en:
+      - "Brothers of the Dawn have fled the bivouac."
+      - "Hélis wants them found."
+    offre:
+      - "a6_helis: Après Prisca, d'autres. Trois frères du bivouac. Leurs traces partent vers le nord-ouest. Retrouvez-les."
+    offre-en:
+      - "a6_helis: After Prisca, others. Three brothers from the bivouac. Their tracks lead north-west. Find them."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les traces des déserteurs"
+        texte-en: "Follow the deserters' tracks"
+        traces: [a6_trace_d1, a6_trace_d2, a6_trace_d3, a6_cache_deserteurs]
+        apres:
+          - "Un abri de fortune sous un surplomb de basalte. Un homme en robe de l'Aube s'y tient, seul. Les deux autres sont partis plus loin."
+        apres-en:
+          - "A makeshift shelter under a basalt overhang. A man in Dawn robes stands there, alone. The other two went further on."
+      - type: CHOIX
+        texte: "Parler au déserteur"
+        texte-en: "Talk to the deserter"
+        pnj: a6_anseau
+        choix: a6-l-deserteurs
+        question: "Que faites-vous d'Anseau ?"
+        question-en: "What do you do with Anseau?"
+        reponses:
+          - id: livrer
+            texte: "Je te ramène au bivouac."
+            texte-en: "I am taking you back to the bivouac."
+            reponse:
+              - "a6_anseau: Alors je reprendrai le soufflet. C'est peut-être ce que je mérite."
+            reponse-en:
+              - "a6_anseau: Then I will take up the bellows again. Perhaps that is what I deserve."
+            or: 400
+          - id: laisser
+            texte: "Va. Je n'ai rien vu."
+            texte-en: "Go. I saw nothing."
+            reponse:
+              - "a6_anseau: Que l'Astre te le rende. Je dirai à ceux du refuge qu'un fidèle m'a laissé passer."
+            reponse-en:
+              - "a6_anseau: May the Star repay you. I will tell those at the refuge that a loyal one let me pass."
+            xp: 2000
+        dialogue:
+          - "a6_anseau: Je suis Frère Anseau. Je chantais avec Prisca. J'ai vu ce qu'on fait aux Purifiés, au soufflet."
+          - "a6_anseau: Ramène-moi si tu veux. Je ne me battrai pas contre un Marqué."
+        dialogue-en:
+          - "a6_anseau: I am Brother Anseau. I sang with Prisca. I saw what is done to the Purified, at the bellows."
+          - "a6_anseau: Take me back if you want. I will not fight a Marked."
+      - type: PARLER
+        texte: "Rendre compte à Hélis"
+        texte-en: "Report to Hélis"
+        pnj: a6_helis
+        dialogue:
+          - "a6_helis: Un de repris. Le soufflet a besoin de bras."
+        dialogue-en:
+          - "a6_helis: One taken back. The bellows need arms."
+        si: "a6-l-deserteurs=livrer"
+      - type: PARLER
+        texte: "Rendre compte à Hélis"
+        texte-en: "Report to Hélis"
+        pnj: a6_helis
+        dialogue:
+          - "joueur: Les traces se perdaient dans le basalte."
+          - "a6_helis: Tant pis. La cendre les mangera."
+        dialogue-en:
+          - "joueur: The tracks were lost in the basalt."
+          - "a6_helis: Too bad. The ash will eat them."
+        si: "a6-l-deserteurs=laisser"
+    recompenses:
+      xp: 20400
+      or: 2040
+
+  a6_l_le_charbon_d_eclat:
+    nom: "Le charbon d'Éclat"
+    nom-en: "Shard Coal"
+    faction: lumiere
+    niveau: 66
+    requiert: [a6_l_les_deserteurs]
+    donneur: a6_helis
+    resume:
+      - "La forge a besoin de charbon d'Éclat,"
+      - "extrait d'un puits tenu par les Calcinés."
+    resume-en:
+      - "The forge needs Shard coal,"
+      - "mined from a pit held by the Charred."
+    offre:
+      - "a6_helis: À l'ouest du camp, un vieux puits plein de charbon d'Éclat. Les Calcinés l'ont pris. Reprenez-le, et ramenez une charge à la cour de la forge. À dos de monture : elle est lourde."
+    offre-en:
+      - "a6_helis: West of the camp, an old pit full of Shard coal. The Charred have taken it. Take it back, and bring a load to the forge yard. On a mount: it is heavy."
+    etapes:
+      - type: TUER
+        texte: "Reprendre le puits aux Calcinés"
+        texte-en: "Take the pit back from the Charred"
+        monstres: [cendreux, brute_calcinee]
+        nombre: 8
+        point: a6_camp_k5
+      - type: TRANSPORT
+        texte: "Porter le charbon à la cour de la forge, à dos de monture"
+        texte-en: "Carry the coal to the forge yard, on a mount"
+        point: a6_forge_cour
+        depart: a6_charbon
+        materiau: COAL_BLOCK
+        rayon: 5
+        objet: "Charge de charbon d'Éclat"
+        objet-en: "Load of Shard coal"
+        apres:
+          - "Le charbon arrive. Il luit faiblement, violet au cœur : un Éclat noir écrasé. Le charbon de l'Aube vient de la Citadelle."
+        apres-en:
+          - "The coal arrives. It glows faintly, violet at the core: a crushed black Shard. The Dawn's coal comes from the Citadel."
+      - type: PARLER
+        texte: "Revenir voir Hélis"
+        texte-en: "Return to Hélis"
+        pnj: a6_helis
+        dialogue:
+          - "a6_helis: Le charbon vient d'où il vient. La Haute-Prélate a ses raisons."
+        dialogue-en:
+          - "a6_helis: The coal comes from where it comes. The High Prelate has her reasons."
+    recompenses:
+      xp: 20400
+      or: 2040
+
+  a6_l_la_clef_de_basalte:
+    nom: "La clef de basalte"
+    nom-en: "The Basalt Key"
+    faction: lumiere
+    niveau: 67
+    requiert: [a6_l_le_charbon_d_eclat]
+    donneur: a6_helis
+    resume:
+      - "L'Ombre a une clef de la forge."
+      - "Hélis la veut."
+    resume-en:
+      - "The Shadow has a key to the forge."
+      - "Hélis wants it."
+    offre:
+      - "a6_helis: La Citadelle a dressé un avant-poste à l'est de la forge. Ils ont une clef de basalte qui ouvre le foyer. Entrez sans être vu et prenez-la."
+    offre-en:
+      - "a6_helis: The Citadel has raised an outpost east of the forge. They have a basalt key that opens the hearth. Get in unseen and take it."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre la lisière de l'avant-poste"
+        texte-en: "Reach the edge of the outpost"
+        point: a6_lisiere_ombre
+        rayon: 4
+      - type: INFILTRER
+        texte: "Traverser l'avant-poste sans être vu"
+        texte-en: "Cross the outpost unseen"
+        point: a6_coffre_ombre
+        depart: a6_lisiere_ombre
+        monstres: [a6_garde_ombre]
+        vue: 10
+        rayon: 3
+        apres:
+          - "Le coffre du chef. Personne ne vous a vu."
+        apres-en:
+          - "The chief's chest. No one saw you."
+      - type: INTERAGIR
+        texte: "Fouiller le coffre"
+        texte-en: "Search the chest"
+        point: a6_coffre_ombre
+        rayon: 4
+        apres:
+          - "Une clef de basalte, et une lettre : « La forge rallumée, la chaîne d'ombre sera pour moi seul. Ni Citadelle, ni Archonte. — V. »"
+        apres-en:
+          - "A basalt key, and a letter: « Once the forge is rekindled, the chain of shadow shall be mine alone. Neither Citadel nor Archon. — V. »"
+      - type: PARLER
+        texte: "Rapporter la clef à Hélis"
+        texte-en: "Bring the key to Hélis"
+        pnj: a6_helis
+        dialogue:
+          - "a6_helis: Vharos veut le Néant pour lui seul. Et nous, nous voulons l'Astre pour qui ?"
+          - "a6_helis: … Oubliez ce que je viens de dire."
+        dialogue-en:
+          - "a6_helis: Vharos wants the Void for himself alone. And we want the Star for whom?"
+          - "a6_helis: … Forget what I just said."
+    recompenses:
+      xp: 20900
+      or: 2090
+
+  a6_l_la_cour_de_la_forge:
+    nom: "La cour de la forge"
+    nom-en: "The Forge Yard"
+    faction: lumiere
+    niveau: 68
+    requiert: [a6_l_la_clef_de_basalte]
+    donneur: a6_helis
+    resume:
+      - "Les forgerons de l'Aube travaillent dans la cour."
+      - "Les Affamés montent à l'assaut."
+    resume-en:
+      - "The Dawn smiths are working in the yard."
+      - "The Starved are attacking."
+    offre:
+      - "a6_helis: Nos forgerons préparent le foyer. Les Affamés le sentent et montent en armée. Tenez la cour le temps qu'il faudra."
+    offre-en:
+      - "a6_helis: Our smiths are preparing the hearth. The Starved sense it and come as an army. Hold the yard as long as it takes."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre les forgerons dans la cour de la forge"
+        texte-en: "Defend the smiths in the forge yard"
+        point: a6_forge_cour
+        monstres: [a6_affame, a6_affame_grand]
+        nombre: 4
+        duree: 90
+        intervalle: 18
+        apparition: a6_forge_sud
+        pv: 320
+        degats: 6
+        cible: "Les forgerons de l'Aube"
+        cible-en: "The Dawn smiths"
+        apres:
+          - "La dernière vague se brise contre les enclumes. Dans la forge, le foyer gronde déjà."
+        apres-en:
+          - "The last wave breaks against the anvils. Inside the forge, the hearth is already rumbling."
+      - type: PARLER
+        texte: "Revenir voir Hélis"
+        texte-en: "Return to Hélis"
+        pnj: a6_helis
+        dialogue:
+          - "a6_helis: Il ne reste qu'à rallumer. Allez-y vous-même : la Haute-Prélate veut que ce soit un Marqué."
+        dialogue-en:
+          - "a6_helis: All that remains is to rekindle it. Go yourself: the High Prelate wants it to be a Marked."
+    recompenses:
+      xp: 21400
+      or: 2140
+
+  a6_l_le_foyer:
+    nom: "Le foyer"
+    nom-en: "The Hearth"
+    faction: lumiere
+    niveau: 69
+    requiert: [a6_l_la_cour_de_la_forge]
+    donneur: a6_helis
+    resume:
+      - "Le foyer de la Forge éteinte"
+      - "attend sa première braise."
+    resume-en:
+      - "The hearth of the Extinguished Forge"
+      - "awaits its first ember."
+    offre:
+      - "a6_helis: Les braises de la forge se sont levées toutes seules. Abattez-les, puis ravivez le foyer avant qu'il ne retombe."
+    offre-en:
+      - "a6_helis: The forge embers have risen on their own. Strike them down, then revive the hearth before it falls cold."
+    etapes:
+      - type: TUER
+        texte: "Abattre les braises de la forge"
+        texte-en: "Strike down the forge embers"
+        monstres: [a6_braise]
+        nombre: 8
+        point: a6_forge_parvis
+      - type: INTERAGIR
+        texte: "Raviver le foyer avant que la braise retombe"
+        texte-en: "Revive the hearth before the ember falls cold"
+        point: a6_forge_foyer
+        rayon: 4
+        apres:
+          - "Le foyer prend. Une flamme blanche, puis dorée. Au fond de la forge, quelque chose bouge : une chaîne, longue comme une rivière, se soulève d'elle-même."
+        apres-en:
+          - "The hearth catches. A white flame, then golden. Deep in the forge, something moves: a chain, long as a river, rises by itself."
+        chrono: 120
+        echec:
+          - "La braise retombe. Le foyer redevient noir. Il faut recommencer."
+        echec-en:
+          - "The ember falls. The hearth turns black again. You must start over."
+      - type: PARLER
+        texte: "Prévenir Hélis"
+        texte-en: "Warn Hélis"
+        pnj: a6_helis
+        dialogue:
+          - "a6_helis: La Dernière Chaîne. Celle qui n'a jamais servi. Elle garde la forge depuis mille ans. Il faudra la briser."
+        dialogue-en:
+          - "a6_helis: The Last Chain. The one that was never used. It has guarded the forge for a thousand years. It will have to be broken."
+    recompenses:
+      xp: 21900
+      or: 2190
+
+  a6_l_la_chaine_vivante:
+    nom: "La chaîne vivante"
+    nom-en: "The Living Chain"
+    faction: lumiere
+    niveau: 71
+    requiert: [a6_l_le_foyer]
+    donneur: a6_helis
+    resume:
+      - "La Dernière Chaîne s'est réveillée"
+      - "dans la Forge éteinte."
+    resume-en:
+      - "The Last Chain has awakened"
+      - "in the Extinguished Forge."
+    offre:
+      - "a6_helis: Brisez-la. Rapportez-moi son cœur : la Haute-Prélate en fera le premier maillon de la cage."
+    offre-en:
+      - "a6_helis: Break it. Bring me its heart: the High Prelate will make it the first link of the cage."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Retourner à la Forge éteinte"
+        texte-en: "Return to the Extinguished Forge"
+        point: a6_forge_parvis
+        rayon: 10
+      - type: TUER
+        texte: "Vaincre la Dernière Chaîne"
+        texte-en: "Defeat the Last Chain"
+        monstres: [a6_derniere_chaine]
+        point: a6_forge_parvis
+      - type: INTERAGIR
+        texte: "Ramasser le cœur de la chaîne sur l'enclume"
+        texte-en: "Pick up the heart of the chain from the anvil"
+        point: a6_forge_enclume
+        rayon: 4
+        apres:
+          - "Un maillon plus gros que les autres, chaud comme une main. À l'intérieur, une voix : « Morvain… frère… tu as fini ta chaîne ? »"
+          - "La chaîne a été forgée avec la lumière d'un ami de Morvain. Elle l'attend depuis mille ans."
+        apres-en:
+          - "A link larger than the others, warm as a hand. Inside, a voice: « Morvain… brother… have you finished your chain? »"
+          - "The chain was forged with the light of a friend of Morvain. It has waited for him for a thousand years."
+      - type: CHOIX
+        texte: "Rapporter le cœur de la chaîne à Hélis"
+        texte-en: "Bring the heart of the chain to Hélis"
+        pnj: a6_helis
+        choix: a6-coeur-chaine
+        question: "Que faites-vous du cœur de la chaîne ?"
+        question-en: "What do you do with the heart of the chain?"
+        reponses:
+          - id: remettre
+            texte: "Je vous le remets, capitaine."
+            texte-en: "I hand it over, captain."
+            reponse:
+              - "a6_helis: La Haute-Prélate saura que vous avez obéi."
+            reponse-en:
+              - "a6_helis: The High Prelate will know that you obeyed."
+            or: 800
+          - id: garder
+            texte: "Il s'est brisé dans le combat."
+            texte-en: "It shattered in the fight."
+            reponse:
+              - "a6_helis: Brisé ? … Tant pis. Il y en a d'autres."
+              - "Le maillon bat contre votre hanche, caché sous la cape."
+            reponse-en:
+              - "a6_helis: Shattered? … Too bad. There are others."
+              - "The link beats against your hip, hidden under your cloak."
+            xp: 3000
+        dialogue:
+          - "a6_helis: Le cœur de la chaîne. Donnez-le-moi. Il part ce soir pour la Fournaise, avec le Reliquaire."
+        dialogue-en:
+          - "a6_helis: The heart of the chain. Give it to me. It leaves tonight for the Furnace, with the Reliquary."
+    recompenses:
+      xp: 36700
+      or: 3670
+      objets:
+        - materiau: IRON_CHAIN
+          nom: "Maillon de la Dernière Chaîne"
+          nom-en: "Link of the Last Chain"
+          description:
+            - "Forgé il y a mille ans par l'écuyer d'Aurélien."
+          description-en:
+            - "Forged a thousand years ago by Aurélien's squire."
+
+  a6_l_vers_la_fournaise:
+    nom: "Vers la Fournaise"
+    nom-en: "Towards the Furnace"
+    faction: lumiere
+    niveau: 72
+    requiert: [a6_l_la_chaine_vivante]
+    donneur: a6_helis
+    resume:
+      - "La forge brûle. Les chaînes partent"
+      - "vers la Fournaise, et vous avec."
+    resume-en:
+      - "The forge burns. The chains leave"
+      - "for the Furnace, and you with them."
+    offre:
+      - "a6_helis: Les ordres sont arrivés. Lisez-les avec moi."
+    offre-en:
+      - "a6_helis: The orders have arrived. Read them with me."
+    etapes:
+      - type: PARLER
+        texte: "Lire les ordres avec Hélis"
+        texte-en: "Read the orders with Hélis"
+        pnj: a6_helis
+        dialogue:
+          - "Un parchemin, deux sceaux de cire côte à côte : le soleil du Bastion et la griffe de la Citadelle."
+          - "a6_helis: « Que les chaînes d'or et d'ombre gagnent le Guet de la Fournaise. Que les Marqués suivent. — S. et V. »"
+          - "a6_helis: La guerre continue, et nos chefs signent ensemble. Je suis soldat. Je ne comprends pas. J'obéis."
+        dialogue-en:
+          - "A parchment, two wax seals side by side: the Bastion sun and the Citadel claw."
+          - "a6_helis: « Let the chains of gold and shadow reach the Furnace Watch. Let the Marked follow. — S. and V. »"
+          - "a6_helis: The war goes on, and our leaders sign together. I am a soldier. I do not understand. I obey."
+      - type: ATTEINDRE
+        texte: "Rejoindre le Guet de la Fournaise"
+        texte-en: "Reach the Furnace Watch"
+        point: a7_ancre_guet
+        rayon: 8
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage du Guet"
+        texte-en: "Touch the Watch's anchoring Shard"
+        point: a7_ancre_guet
+        rayon: 4
+        apres:
+          - "Au-dessus du Guet, le volcan fume. Plus haut encore, le ciel est fendu. À suivre."
+        apres-en:
+          - "Above the Watch, the volcano smokes. Higher still, the sky is split. To be continued."
+    recompenses:
+      xp: 23400
+      or: 2340
+
+  # ================================================================ PRINCIPALES — OMBRE : LA FORGE ÉTEINTE
+
+  a6_o_le_camp_des_cendres:
+    nom: "Le Camp des Cendres"
+    nom-en: "The Ash Camp"
+    faction: ombre
+    niveau: 60
+    requiert: [a5_o_la_derniere_chaine]
+    donneur: a6_sarn
+    resume:
+      - "Sarn, la Lame de la Citadelle, vous attend"
+      - "au Camp des Cendres."
+    resume-en:
+      - "Sarn, Blade of the Citadel, is waiting for you"
+      - "at the Ash Camp."
+    offre:
+      - "a6_sarn: Tu as vu la Chute dans la glace. Vharos, lui, a vu ce qu'on pouvait en faire. Viens."
+    offre-en:
+      - "a6_sarn: You saw the Fall in the ice. Vharos saw what could be made of it. Come."
+    etapes:
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage du Camp des Cendres"
+        texte-en: "Touch the Ash Camp's anchoring Shard"
+        point: a6_ancre_cendres
+        rayon: 4
+      - type: PARLER
+        texte: "Écouter Sarn"
+        texte-en: "Listen to Sarn"
+        pnj: a6_sarn
+        dialogue:
+          - "a6_sarn: La Forge éteinte, à l'est. Là où l'écuyer d'Aurélien a forgé les chaînes. Vharos veut qu'elle brûle de nouveau, et qu'elle forge pour nous."
+          - "a6_sarn: L'Aube veut la même forge. Leur capitaine, Hélis, est sous la même palissade que nous. Ici, on ne tire pas. Dehors, on verra."
+        dialogue-en:
+          - "a6_sarn: The Extinguished Forge, to the east. Where Aurélien's squire forged the chains. Vharos wants it to burn again, and to forge for us."
+          - "a6_sarn: The Dawn wants the same forge. Their captain, Hélis, is under the same palisade as us. Here, we do not draw. Outside, we shall see."
+      - type: PARLER
+        texte: "Retrouver Morvain"
+        texte-en: "Find Morvain"
+        pnj: a6_morvain
+        dialogue:
+          - "a6_morvain: Tu m'as pardonné, dans la glace. Ne le fais pas trop vite. La forge te dira ce que j'ai fait."
+        dialogue-en:
+          - "a6_morvain: You forgave me, in the ice. Do not do it too quickly. The forge will tell you what I did."
+        si: "a5-morvain=pardonner"
+      - type: PARLER
+        texte: "Retrouver Morvain"
+        texte-en: "Find Morvain"
+        pnj: a6_morvain
+        dialogue:
+          - "a6_morvain: Tu m'as jugé, dans la glace. Tu avais raison. Viens voir la forge, et juge encore."
+        dialogue-en:
+          - "a6_morvain: You judged me, in the ice. You were right. Come and see the forge, and judge again."
+        si: "!a5-morvain=pardonner"
+    recompenses:
+      xp: 17500
+      or: 1750
+
+  a6_o_la_faille_qui_a_faim:
+    nom: "La faille qui a faim"
+    nom-en: "The Hungry Rift"
+    faction: ombre
+    niveau: 61
+    requiert: [a6_o_le_camp_des_cendres]
+    donneur: a6_sarn
+    resume:
+      - "Une grande faille s'ouvre au sud-ouest du camp."
+    resume-en:
+      - "A great rift is opening south-west of the camp."
+    offre:
+      - "a6_sarn: Au sud-ouest, une faille grande comme une place. Le Néant y respire. Vharos veut savoir s'il obéit encore. Tiens debout au bord, et regarde."
+    offre-en:
+      - "a6_sarn: To the south-west, a rift as wide as a square. The Void breathes in it. Vharos wants to know whether it still obeys. Stand at the edge, and watch."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la grande faille"
+        texte-en: "Reach the great rift"
+        point: a6_grande_faille
+        rayon: 8
+      - type: SURVIE
+        texte: "Tenir au bord de la faille pendant qu'elle se referme"
+        texte-en: "Hold at the edge of the rift as it closes"
+        point: a6_grande_faille
+        rayon: 16
+        duree: 60
+        mode: resserre
+        rayon-fin: 5
+        degats: 5
+        monstres: [a6_affame]
+        nombre: 2
+        intervalle: 15
+        apres:
+          - "La faille se referme à moitié, puis s'arrête. De l'intérieur monte le murmure que tu connais : « Il a froid. Rendez-moi. »"
+          - "Le Néant n'obéit à personne. Il a faim, et la faim le tire vers l'est. Vers la forge."
+        apres-en:
+          - "The rift half closes, then stops. From within rises the murmur you know: « It is cold. Give me back. »"
+          - "The Void obeys no one. It is hungry, and hunger pulls it east. Towards the forge."
+      - type: PARLER
+        texte: "Rendre compte à Sarn"
+        texte-en: "Report to Sarn"
+        pnj: a6_sarn
+        dialogue:
+          - "a6_sarn: Il n'obéit pas ? Il obéira quand il sera enchaîné. C'est pour ça qu'il nous faut la forge."
+        dialogue-en:
+          - "a6_sarn: It does not obey? It will obey once it is chained. That is why we need the forge."
+    recompenses:
+      xp: 18000
+      or: 1800
+
+  a6_o_les_calcines_du_col:
+    nom: "Les Calcinés du col"
+    nom-en: "The Charred of the Pass"
+    faction: ombre
+    niveau: 62
+    requiert: [a6_o_la_faille_qui_a_faim]
+    donneur: a6_sarn
+    resume:
+      - "Des Calcinés bloquent la route de Sombrebois."
+    resume-en:
+      - "The Charred are blocking the Sombrebois road."
+    offre:
+      - "a6_sarn: Nos renforts arrivent de Sombrebois, par le col du sud. Un camp de Calcinés les attend au passage. Nettoie-le."
+    offre-en:
+      - "a6_sarn: Our reinforcements come from Sombrebois, through the southern pass. A camp of the Charred waits for them on the way. Clear it."
+    etapes:
+      - type: TUER
+        texte: "Briser le camp des Calcinés"
+        texte-en: "Break the camp of the Charred"
+        monstres: [cendreux, brute_calcinee]
+        nombre: 12
+        point: a6_camp_k3
+      - type: INTERAGIR
+        texte: "Fouiller le camp"
+        texte-en: "Search the camp"
+        point: a6_camp_k3
+        rayon: 6
+        apres:
+          - "Sous la cendre, des pioches de mineurs et un médaillon : « Puits n° 7, Camp des Cendres ». Les Calcinés étaient des mineurs, brûlés quand la faille s'est ouverte."
+        apres-en:
+          - "Under the ash, miners' picks and a medallion: « Pit no. 7, Ash Camp ». The Charred were miners, burned when the rift opened."
+      - type: PARLER
+        texte: "Revenir voir Sarn"
+        texte-en: "Return to Sarn"
+        pnj: a6_sarn
+        dialogue:
+          - "a6_sarn: Des mineurs. Ils auraient dû creuser ailleurs. La route est libre ; c'est ce qui compte."
+        dialogue-en:
+          - "a6_sarn: Miners. They should have dug elsewhere. The road is clear; that is what matters."
+    recompenses:
+      xp: 18500
+      or: 1850
+
+  a6_o_le_corbeau_de_vharos:
+    nom: "Le corbeau de Vharos"
+    nom-en: "Vharos's Raven"
+    faction: ombre
+    niveau: 63
+    requiert: [a6_o_les_calcines_du_col]
+    donneur: a6_sarn
+    resume:
+      - "Un message de Vharos doit rejoindre"
+      - "l'avant-poste de la Citadelle."
+    resume-en:
+      - "A message from Vharos must reach"
+      - "the Citadel outpost."
+    offre:
+      - "a6_sarn: Le corbeau de Vharos s'est posé sur ma tente. Ce message va à Ezren, le gardien des cages, à l'avant-poste à l'est de la forge."
+    offre-en:
+      - "a6_sarn: Vharos's raven landed on my tent. This message goes to Ezren, keeper of the cages, at the outpost east of the forge."
+    etapes:
+      - type: LIVRER
+        texte: "Porter le message à Ezren"
+        texte-en: "Carry the message to Ezren"
+        pnj: a6_ezren
+        materiau: PAPER
+        objet: "Message scellé de Vharos"
+        objet-en: "Sealed message from Vharos"
+        dialogue:
+          - "a6_ezren: « Remplissez les cages. Toutes. » Toutes ? J'ai trente cages et onze Creux."
+          - "a6_ezren: Il veut des Marqués vivants, pas des Creux. Des Marqués qui ont encore leur lumière."
+        dialogue-en:
+          - "a6_ezren: « Fill the cages. All of them. » All? I have thirty cages and eleven Hollow."
+          - "a6_ezren: He wants living Marked, not Hollow. Marked who still have their light."
+      - type: TUER
+        texte: "Repousser les Affamés qui rôdent autour des cages"
+        texte-en: "Drive off the Starved prowling around the cages"
+        monstres: [a6_affame]
+        nombre: 8
+        point: a6_avant_poste_ombre
+        apres:
+          - "a6_ezren: Ils sentent les cages. Le Néant sent tout ce qui a de la lumière."
+        apres-en:
+          - "a6_ezren: They smell the cages. The Void smells everything that has light."
+    recompenses:
+      xp: 18900
+      or: 1890
+
+  a6_o_les_cages_de_l_aube:
+    nom: "Les cages de l'Aube"
+    nom-en: "The Cages of the Dawn"
+    faction: ombre
+    niveau: 64
+    requiert: [a6_o_le_corbeau_de_vharos]
+    donneur: a6_ezren
+    resume:
+      - "L'Aube a dressé un bivouac près de la forge."
+      - "Ezren veut savoir ce qu'ils y gardent."
+    resume-en:
+      - "The Dawn has raised a bivouac near the forge."
+      - "Ezren wants to know what they keep there."
+    offre:
+      - "a6_ezren: Le bivouac de l'Aube, à l'ouest de la forge. Prends ce tabard doré. Leurs gardes ne regardent que la couleur."
+    offre-en:
+      - "a6_ezren: The Dawn bivouac, west of the forge. Take this golden tabard. Their guards only look at the colour."
+    etapes:
+      - type: DEGUISEMENT
+        texte: "Entrer dans le bivouac de l'Aube, déguisé"
+        texte-en: "Enter the Dawn bivouac in disguise"
+        point: a6_enclos_aube
+        monstres: [a6_garde_aube]
+        materiau: LEATHER_CHESTPLATE
+        couleur: "#F2E6C0"
+        objet: "Tabard de l'Aube"
+        objet-en: "Dawn tabard"
+        apres:
+          - "Un enclos. Des Purifiés enchaînés à des soufflets de forge. À chaque coup de soufflet, des maillons d'or s'allument."
+        apres-en:
+          - "A pen. Purified chained to forge bellows. With every stroke of the bellows, golden links light up."
+      - type: INTERAGIR
+        texte: "Fouiller la caisse du chef"
+        texte-en: "Search the chief's crate"
+        point: a6_coffre_aube
+        rayon: 4
+        apres:
+          - "Une caisse de maillons. Étiquette : « Pour V. — la moitié des chaînes. » Signé d'un S."
+        apres-en:
+          - "A crate of links. Label: « For V. — half of the chains. » Signed with an S."
+      - type: PARLER
+        texte: "Raconter à Morvain"
+        texte-en: "Tell Morvain"
+        pnj: a6_morvain
+        dialogue:
+          - "a6_morvain: « Pour V. ». La moitié des chaînes de l'Aube pour Vharos. Ta guerre a un drôle de goût, non ?"
+          - "a6_morvain: Les Purifiés aux soufflets, les Creux dans les cages : la forge brûle à la lumière des Marqués. Elle l'a toujours fait."
+        dialogue-en:
+          - "a6_morvain: « For V. ». Half the Dawn's chains for Vharos. Your war tastes strange, does it not?"
+          - "a6_morvain: The Purified at the bellows, the Hollow in the cages: the forge burns on the light of the Marked. It always has."
+    recompenses:
+      xp: 19400
+      or: 1940
+
+  a6_o_le_registre_noir:
+    nom: "Le registre noir"
+    nom-en: "The Black Ledger"
+    faction: ombre
+    niveau: 64
+    requiert: [a6_o_les_cages_de_l_aube]
+    donneur: a6_morvain
+    resume:
+      - "Morvain veut savoir ce que Vharos"
+      - "fera de la forge."
+    resume-en:
+      - "Morvain wants to know what Vharos"
+      - "will do with the forge."
+    offre:
+      - "a6_morvain: Tu as vu ce que l'Aube prépare. Regarde maintenant chez toi. L'avant-poste d'Ezren a un registre, des cages, et des ordres."
+    offre-en:
+      - "a6_morvain: You have seen what the Dawn is preparing. Now look at home. Ezren's outpost has a ledger, cages, and orders."
+    etapes:
+      - type: ENQUETE
+        texte: "Fouiller l'avant-poste"
+        texte-en: "Search the outpost"
+        pnj: a6_morvain
+        indices:
+          - point: a6_avant_poste_ombre
+            texte: "Le registre des cages"
+            texte-en: "The cage ledger"
+            apres:
+              - "« Marqués vivants attendus : trente. À vider dans la chaîne d'ombre. » Pas dans le Puits. Dans la chaîne."
+            apres-en:
+              - "« Living Marked expected: thirty. To be emptied into the chain of shadow. » Not into the Well. Into the chain."
+          - point: a6_lisiere_ombre
+            texte: "Les cages vides"
+            texte-en: "The empty cages"
+            apres:
+              - "Trente cages neuves. Sur chacune, un nom déjà gravé. Le tien est sur la onzième."
+            apres-en:
+              - "Thirty new cages. On each one, a name already carved. Yours is on the eleventh."
+          - point: a6_coffre_ombre
+            texte: "La lettre scellée"
+            texte-en: "The sealed letter"
+            apres:
+              - "« La forge rallumée, la chaîne d'ombre sera pour moi seul. Ni Citadelle, ni Archonte. — V. »"
+            apres-en:
+              - "« Once the forge is rekindled, the chain of shadow shall be mine alone. Neither Citadel nor Archon. — V. »"
+        dialogue:
+          - "joueur: Il ne veut pas libérer le Néant. Il veut le tenir en laisse. Pour lui."
+          - "a6_morvain: Et il lui faut des Marqués pour forger la laisse. Toi compris."
+        dialogue-en:
+          - "joueur: He does not want to free the Void. He wants it on a leash. For himself."
+          - "a6_morvain: And he needs Marked to forge the leash. You included."
+    recompenses:
+      xp: 19400
+      or: 1940
+
+  a6_o_la_voix_de_kael:
+    nom: "La voix de Kael"
+    nom-en: "Kael's Voice"
+    faction: ombre
+    niveau: 65
+    requiert: [a6_o_le_registre_noir]
+    donneur: a6_morvain
+    resume:
+      - "Quelqu'un que vous connaissez"
+      - "vous attend au bord de la mer de cendre."
+    resume-en:
+      - "Someone you know"
+      - "is waiting for you by the sea of ash."
+    offre:
+      - "a6_morvain: Au nord-ouest, au bord de la mer, il y a un refuge. Un forgeron t'y attend. Tu le connais : tu lui as rendu ses souvenirs, dans le marais."
+    offre-en:
+      - "a6_morvain: To the north-west, by the sea, there is a refuge. A smith is waiting for you there. You know him: you gave him back his memories, in the marsh."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre le refuge au bord de la mer"
+        texte-en: "Reach the refuge by the sea"
+        point: a6_refuge
+        rayon: 8
+      - type: CHOIX
+        texte: "Parler à Kael"
+        texte-en: "Talk to Kael"
+        pnj: a6_kael
+        choix: a6-allegeance
+        question: "Que répondez-vous à Kael ?"
+        question-en: "What do you answer Kael?"
+        reponses:
+          - id: sans_banniere
+            texte: "Je suis des vôtres. En secret."
+            texte-en: "I am one of you. In secret."
+            reponse:
+              - "a6_kael: Alors garde ta griffe sur l'épaule, et ton nom en dessous. Bienvenue."
+            reponse-en:
+              - "a6_kael: Then keep your claw on your shoulder, and your name beneath it. Welcome."
+            xp: 2000
+          - id: fidele
+            texte: "Je sers la Citadelle."
+            texte-en: "I serve the Citadel."
+            reponse:
+              - "a6_kael: Je comprends. Je t'ai connu sous la Marque, pas sous la bannière. Va."
+            reponse-en:
+              - "a6_kael: I understand. I knew you under the Mark, not under the banner. Go."
+            or: 300
+        dialogue:
+          - "a6_kael: Tu es venu. Les Creux ont un nom, je te l'avais dit. Ici, on les écrit sur le mur."
+          - "a6_kael: On nous appelle les Sans-Bannière. Des Marqués de l'Aube, de la Citadelle. On ne sert personne. On rend leur lumière à ceux qu'on a vidés."
+          - "a6_kael: Garde ta bannière en façade, si tu veux. Personne ne le saura. Ou rentre chez Sarn. Mais décide."
+        dialogue-en:
+          - "a6_kael: You came. The Hollow have names, I told you. Here, we write them on the wall."
+          - "a6_kael: They call us the Bannerless. Marked of the Dawn, of the Citadel. We serve no one. We give their light back to those who were emptied."
+          - "a6_kael: Keep your banner on the outside, if you like. No one will know. Or go back to Sarn. But decide."
+      - type: PARLER
+        texte: "Signaler le refuge à Sarn"
+        texte-en: "Report the refuge to Sarn"
+        pnj: a6_sarn
+        dialogue:
+          - "a6_sarn: Un refuge de déserteurs au bord de la mer ? Vharos en fera des Creux. Tu as bien fait."
+        dialogue-en:
+          - "a6_sarn: A refuge of deserters by the sea? Vharos will make Hollow of them. You did well."
+        si: "a6-allegeance=fidele"
+      - type: PARLER
+        texte: "Revenir voir Sarn comme si de rien n'était"
+        texte-en: "Return to Sarn as if nothing happened"
+        pnj: a6_sarn
+        dialogue:
+          - "a6_sarn: Tu étais où ?"
+          - "joueur: Au bord de la mer. Il n'y a rien."
+          - "a6_sarn: Il n'y a jamais rien au bord de la mer."
+        dialogue-en:
+          - "a6_sarn: Where were you?"
+          - "joueur: By the sea. There is nothing there."
+          - "a6_sarn: There is never anything by the sea."
+        si: "a6-allegeance=sans_banniere"
+    recompenses:
+      xp: 19900
+      or: 1990
+
+  a6_o_les_espions_de_l_aube:
+    nom: "Les espions de l'Aube"
+    nom-en: "The Dawn Spies"
+    faction: ombre
+    niveau: 66
+    requiert: [a6_o_la_voix_de_kael, "choix:a6-allegeance=fidele"]
+    donneur: a6_sarn
+    resume:
+      - "Des espions de l'Aube ont relevé"
+      - "les plans de l'avant-poste."
+    resume-en:
+      - "Dawn spies have mapped"
+      - "the outpost."
+    offre:
+      - "a6_sarn: Des espions de l'Aube ont rôdé autour des cages cette nuit. Leurs traces partent de la forge, vers le nord. Suis-les."
+    offre-en:
+      - "a6_sarn: Dawn spies prowled around the cages last night. Their tracks leave the forge, heading north. Follow them."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les traces des espions"
+        texte-en: "Follow the spies' tracks"
+        traces: [a6_trace_e1, a6_trace_e2, a6_trace_e3, a6_planque_espions]
+        apres:
+          - "Une planque creusée dans la cendre. Trois silhouettes en gris, des arbalètes, une carte."
+        apres-en:
+          - "A hideout dug into the ash. Three figures in grey, crossbows, a map."
+      - type: TUER
+        texte: "Abattre les espions de l'Aube"
+        texte-en: "Kill the Dawn spies"
+        monstres: [a6_espion_aube]
+        nombre: 3
+        point: a6_planque_espions
+      - type: INTERAGIR
+        texte: "Prendre la carte"
+        texte-en: "Take the map"
+        point: a6_planque_espions
+        rayon: 5
+        apres:
+          - "Le plan de l'avant-poste, chaque cage numérotée. Et une note : « À livrer à V. une fois pleines. » Les espions de l'Aube comptaient les cages pour Vharos."
+        apres-en:
+          - "The outpost plan, every cage numbered. And a note: « To be delivered to V. once full. » The Dawn spies were counting the cages for Vharos."
+      - type: PARLER
+        texte: "Rapporter la carte à Sarn"
+        texte-en: "Bring the map to Sarn"
+        pnj: a6_sarn
+        dialogue:
+          - "a6_sarn: L'Aube compte nos cages pour Vharos ? … Ce n'est pas mon affaire. Brûle cette note."
+        dialogue-en:
+          - "a6_sarn: The Dawn counts our cages for Vharos? … That is not my business. Burn that note."
+    recompenses:
+      xp: 20400
+      or: 2040
+
+  a6_o_ysra:
+    nom: "Ysra"
+    faction: ombre
+    niveau: 67
+    requiert: [a6_o_les_espions_de_l_aube]
+    donneur: a6_sarn
+    resume:
+      - "Une gardienne des cages a déserté."
+    resume-en:
+      - "A cage-keeper has deserted."
+    offre:
+      - "a6_sarn: Ysra, une gardienne d'Ezren, a ouvert trois cages et s'est enfuie vers le nord. Ramène-la, ou ne reviens pas les mains vides."
+    offre-en:
+      - "a6_sarn: Ysra, one of Ezren's keepers, opened three cages and fled north. Bring her back, or do not come back empty-handed."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Retrouver la cachette d'Ysra"
+        texte-en: "Find Ysra's hiding place"
+        point: a6_cache_ysra
+        rayon: 6
+      - type: CHOIX
+        texte: "Parler à Ysra"
+        texte-en: "Talk to Ysra"
+        pnj: a6_ysra
+        choix: a6-o-ysra
+        question: "Que faites-vous d'Ysra ?"
+        question-en: "What do you do with Ysra?"
+        reponses:
+          - id: livrer
+            texte: "Tu reviens avec moi."
+            texte-en: "You are coming back with me."
+            reponse:
+              - "a6_ysra: Alors c'est moi qui irai dans la onzième cage. Elle est vide, maintenant."
+            reponse-en:
+              - "a6_ysra: Then I will be the one in the eleventh cage. It is empty, now."
+            or: 400
+          - id: liberer
+            texte: "Va rejoindre ton enfant."
+            texte-en: "Go and join your child."
+            reponse:
+              - "a6_ysra: Ce n'est pas mon enfant. C'est un enfant. Merci."
+            reponse-en:
+              - "a6_ysra: He is not my child. He is a child. Thank you."
+            xp: 2000
+        dialogue:
+          - "a6_ysra: Dans la onzième cage, il y avait un enfant. Un Marqué de dix ans. Vharos l'avait fait venir de Morneval."
+          - "a6_ysra: Je l'ai envoyé vers la mer. Tu peux me ramener. Lui, tu ne le retrouveras pas."
+        dialogue-en:
+          - "a6_ysra: In the eleventh cage, there was a child. A ten-year-old Marked. Vharos had him brought from Morneval."
+          - "a6_ysra: I sent him towards the sea. You can take me back. Him, you will not find."
+      - type: PARLER
+        texte: "Rendre compte à Sarn"
+        texte-en: "Report to Sarn"
+        pnj: a6_sarn
+        dialogue:
+          - "a6_sarn: Ezren la mettra en cage. Elle connaissait le chemin."
+        dialogue-en:
+          - "a6_sarn: Ezren will cage her. She knew the way."
+        si: "a6-o-ysra=livrer"
+      - type: PARLER
+        texte: "Rendre compte à Sarn"
+        texte-en: "Report to Sarn"
+        pnj: a6_sarn
+        dialogue:
+          - "joueur: Elle est tombée dans une faille."
+          - "a6_sarn: … Bien. Une de moins à nourrir."
+        dialogue-en:
+          - "joueur: She fell into a rift."
+          - "a6_sarn: … Good. One less mouth to feed."
+        si: "a6-o-ysra=liberer"
+    recompenses:
+      xp: 20900
+      or: 2090
+
+  a6_o_les_cages_noires:
+    nom: "Les cages noires"
+    nom-en: "The Black Cages"
+    faction: ombre
+    niveau: 67
+    requiert: [a6_o_ysra]
+    donneur: a6_sarn
+    resume:
+      - "Une cage noire doit rejoindre la forge."
+    resume-en:
+      - "A black cage must reach the forge."
+    offre:
+      - "a6_sarn: Ezren a une cage noire prête : elle retient le souffle du Néant. Charge-la sur ta monture et porte-la à la cour de la forge. Si elle tombe, elle s'ouvre."
+    offre-en:
+      - "a6_sarn: Ezren has a black cage ready: it holds the breath of the Void. Load it on your mount and carry it to the forge yard. If it falls, it opens."
+    etapes:
+      - type: TRANSPORT
+        texte: "Porter la cage noire à la cour de la forge, à dos de monture"
+        texte-en: "Carry the black cage to the forge yard, on a mount"
+        point: a6_forge_cour
+        depart: a6_avant_poste_ombre
+        materiau: CHISELED_POLISHED_BLACKSTONE
+        rayon: 5
+        objet: "Cage noire"
+        objet-en: "Black cage"
+        apres:
+          - "La cage arrive. À l'intérieur, une brume froide se cogne aux barreaux, sans un bruit."
+        apres-en:
+          - "The cage arrives. Inside, a cold mist beats against the bars, without a sound."
+      - type: PARLER
+        texte: "Prévenir Sarn"
+        texte-en: "Tell Sarn"
+        pnj: a6_sarn
+        dialogue:
+          - "a6_sarn: Bien. Une cage pour le souffle, des chaînes pour la cage. Il ne manque que le feu."
+        dialogue-en:
+          - "a6_sarn: Good. A cage for the breath, chains for the cage. Only the fire is missing."
+    recompenses:
+      xp: 20900
+      or: 2090
+
+  a6_o_le_bivouac_de_l_aube:
+    nom: "Le bivouac de l'Aube"
+    nom-en: "The Dawn Bivouac"
+    faction: ombre
+    niveau: 68
+    requiert: [a6_o_les_cages_noires]
+    donneur: a6_sarn
+    resume:
+      - "L'Aube garde une fiole de forge"
+      - "au fond de son bivouac."
+    resume-en:
+      - "The Dawn keeps a forge vial"
+      - "at the back of its bivouac."
+    offre:
+      - "a6_sarn: Le feu, l'Aube l'a : une fiole de forge, dans le coffre de leur bivouac. Sans tabard, cette fois. Entre sans être vu."
+    offre-en:
+      - "a6_sarn: The fire, the Dawn has it: a forge vial, in the chest of their bivouac. No tabard this time. Get in unseen."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre la lisière du bivouac"
+        texte-en: "Reach the edge of the bivouac"
+        point: a6_lisiere_aube
+        rayon: 4
+      - type: INFILTRER
+        texte: "Traverser le bivouac sans être vu"
+        texte-en: "Cross the bivouac unseen"
+        point: a6_coffre_aube
+        depart: a6_lisiere_aube
+        monstres: [a6_garde_aube]
+        vue: 10
+        rayon: 3
+        apres:
+          - "Le coffre. Personne ne vous a vu."
+        apres-en:
+          - "The chest. No one saw you."
+      - type: INTERAGIR
+        texte: "Prendre la fiole de forge"
+        texte-en: "Take the forge vial"
+        point: a6_coffre_aube
+        rayon: 4
+        apres:
+          - "Une fiole d'or, lourde, chaude. Une étiquette : « Marquée Aveline, dix-neuf ans. Pour le foyer. » La lumière se tait quand tu la touches."
+        apres-en:
+          - "A golden vial, heavy, warm. A label: « Marked Aveline, nineteen. For the hearth. » The light falls silent when you touch it."
+      - type: PARLER
+        texte: "Rapporter la fiole à Sarn"
+        texte-en: "Bring the vial to Sarn"
+        pnj: a6_sarn
+        dialogue:
+          - "a6_sarn: Aveline ? Les fioles n'ont pas de nom. … Celle-ci n'en a plus."
+        dialogue-en:
+          - "a6_sarn: Aveline? Vials have no names. … This one no longer has one."
+    recompenses:
+      xp: 21400
+      or: 2140
+
+  a6_o_le_foyer_noir:
+    nom: "Le foyer noir"
+    nom-en: "The Black Hearth"
+    faction: ombre
+    niveau: 69
+    requiert: [a6_o_le_bivouac_de_l_aube]
+    donneur: a6_sarn
+    resume:
+      - "Les forgerons de la Citadelle"
+      - "rallument le foyer."
+    resume-en:
+      - "The Citadel smiths"
+      - "are rekindling the hearth."
+    offre:
+      - "a6_sarn: Nos forgerons sont dans la cour. Les Affamés arrivent en armée. Tiens-les, puis rallume le foyer avec la fiole."
+    offre-en:
+      - "a6_sarn: Our smiths are in the yard. The Starved are coming as an army. Hold them, then rekindle the hearth with the vial."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre les forgerons dans la cour de la forge"
+        texte-en: "Defend the smiths in the forge yard"
+        point: a6_forge_cour
+        monstres: [a6_affame, a6_affame_grand]
+        nombre: 4
+        vagues: 4
+        apparition: a6_forge_sud
+        pv: 320
+        degats: 6
+        cible: "Les forgerons de la Citadelle"
+        cible-en: "The Citadel smiths"
+        apres:
+          - "La dernière vague se disperse dans la cendre."
+        apres-en:
+          - "The last wave scatters into the ash."
+      - type: INTERAGIR
+        texte: "Verser la fiole dans le foyer avant que la braise retombe"
+        texte-en: "Pour the vial into the hearth before the ember falls cold"
+        point: a6_forge_foyer
+        rayon: 4
+        apres:
+          - "La fiole se vide. Le foyer prend, une flamme d'or et de violet. Au fond de la forge, une chaîne longue comme une rivière se soulève d'elle-même."
+        apres-en:
+          - "The vial empties. The hearth catches, a flame of gold and violet. Deep in the forge, a chain long as a river rises by itself."
+        chrono: 120
+        echec:
+          - "La braise retombe. Il faut recommencer."
+        echec-en:
+          - "The ember falls. You must start over."
+      - type: PARLER
+        texte: "Prévenir Sarn"
+        texte-en: "Warn Sarn"
+        pnj: a6_sarn
+        dialogue:
+          - "a6_sarn: La Dernière Chaîne. Celle que l'écuyer n'a jamais livrée. Brise-la : la forge sera à nous."
+        dialogue-en:
+          - "a6_sarn: The Last Chain. The one the squire never delivered. Break it: the forge will be ours."
+    recompenses:
+      xp: 21900
+      or: 2190
+
+  a6_o_la_chaine_vivante:
+    nom: "La chaîne vivante"
+    nom-en: "The Living Chain"
+    faction: ombre
+    niveau: 71
+    requiert: [a6_o_le_foyer_noir]
+    donneur: a6_sarn
+    resume:
+      - "La Dernière Chaîne s'est réveillée"
+      - "dans la Forge éteinte."
+    resume-en:
+      - "The Last Chain has awakened"
+      - "in the Extinguished Forge."
+    offre:
+      - "a6_sarn: Brise-la, et rapporte-moi son cœur. Vharos en fera le premier anneau de la chaîne d'ombre."
+    offre-en:
+      - "a6_sarn: Break it, and bring me its heart. Vharos will make it the first ring of the chain of shadow."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Retourner à la Forge éteinte"
+        texte-en: "Return to the Extinguished Forge"
+        point: a6_forge_parvis
+        rayon: 10
+      - type: TUER
+        texte: "Vaincre la Dernière Chaîne"
+        texte-en: "Defeat the Last Chain"
+        monstres: [a6_derniere_chaine]
+        point: a6_forge_parvis
+      - type: INTERAGIR
+        texte: "Ramasser le cœur de la chaîne sur l'enclume"
+        texte-en: "Pick up the heart of the chain from the anvil"
+        point: a6_forge_enclume
+        rayon: 4
+        apres:
+          - "Un maillon plus gros que les autres, chaud comme une main. À l'intérieur, une voix : « Morvain… frère… tu as fini ta chaîne ? »"
+          - "La chaîne a été forgée avec la lumière d'un ami de Morvain. Elle l'attend depuis mille ans."
+        apres-en:
+          - "A link larger than the others, warm as a hand. Inside, a voice: « Morvain… brother… have you finished your chain? »"
+          - "The chain was forged with the light of a friend of Morvain. It has waited for him for a thousand years."
+      - type: CHOIX
+        texte: "Rapporter le cœur de la chaîne à Sarn"
+        texte-en: "Bring the heart of the chain to Sarn"
+        pnj: a6_sarn
+        choix: a6-coeur-chaine
+        question: "Que faites-vous du cœur de la chaîne ?"
+        question-en: "What do you do with the heart of the chain?"
+        reponses:
+          - id: remettre
+            texte: "Le voici."
+            texte-en: "Here it is."
+            reponse:
+              - "a6_sarn: Vharos saura que tu as obéi."
+            reponse-en:
+              - "a6_sarn: Vharos will know that you obeyed."
+            or: 800
+          - id: garder
+            texte: "Il s'est brisé dans le combat."
+            texte-en: "It shattered in the fight."
+            reponse:
+              - "a6_sarn: Brisé ? … Il y en aura d'autres."
+              - "Le maillon bat contre ta hanche, caché sous la cape."
+            reponse-en:
+              - "a6_sarn: Shattered? … There will be others."
+              - "The link beats against your hip, hidden under your cloak."
+            xp: 3000
+        dialogue:
+          - "a6_sarn: Donne. Il part ce soir pour la Fournaise, avec la cage noire."
+        dialogue-en:
+          - "a6_sarn: Give it. It leaves tonight for the Furnace, with the black cage."
+    recompenses:
+      xp: 36700
+      or: 3670
+      objets:
+        - materiau: IRON_CHAIN
+          nom: "Maillon de la Dernière Chaîne"
+          nom-en: "Link of the Last Chain"
+          description:
+            - "Forgé il y a mille ans par l'écuyer d'Aurélien."
+          description-en:
+            - "Forged a thousand years ago by Aurélien's squire."
+
+  a6_o_vers_la_fournaise:
+    nom: "Vers la Fournaise"
+    nom-en: "Towards the Furnace"
+    faction: ombre
+    niveau: 72
+    requiert: [a6_o_la_chaine_vivante]
+    donneur: a6_sarn
+    resume:
+      - "La forge brûle. Les chaînes partent"
+      - "vers la Fournaise, et toi avec."
+    resume-en:
+      - "The forge burns. The chains leave"
+      - "for the Furnace, and you with them."
+    offre:
+      - "a6_sarn: Les ordres sont arrivés. Lis-les avec moi."
+    offre-en:
+      - "a6_sarn: The orders have arrived. Read them with me."
+    etapes:
+      - type: PARLER
+        texte: "Lire les ordres avec Sarn"
+        texte-en: "Read the orders with Sarn"
+        pnj: a6_sarn
+        dialogue:
+          - "Un parchemin, deux sceaux côte à côte : la griffe de la Citadelle et le soleil du Bastion."
+          - "a6_sarn: « Que les chaînes d'or et d'ombre gagnent le Guet de la Fournaise. Que les Marqués suivent. — V. et S. »"
+          - "a6_sarn: On se bat contre l'Aube depuis les Cimes, et Vharos signe avec elle. Je ne pose pas de questions. Toi non plus."
+        dialogue-en:
+          - "A parchment, two seals side by side: the Citadel claw and the Bastion sun."
+          - "a6_sarn: « Let the chains of gold and shadow reach the Furnace Watch. Let the Marked follow. — V. and S. »"
+          - "a6_sarn: We have fought the Dawn since the Peaks, and Vharos signs with her. I ask no questions. Neither do you."
+      - type: ATTEINDRE
+        texte: "Rejoindre le Guet de la Fournaise"
+        texte-en: "Reach the Furnace Watch"
+        point: a7_ancre_guet
+        rayon: 8
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage du Guet"
+        texte-en: "Touch the Watch's anchoring Shard"
+        point: a7_ancre_guet
+        rayon: 4
+        apres:
+          - "Au-dessus du Guet, le volcan fume. Plus haut encore, le ciel est fendu. À suivre."
+        apres-en:
+          - "Above the Watch, the volcano smokes. Higher still, the sky is split. To be continued."
+    recompenses:
+      xp: 23400
+      or: 2340
+
+  # ================================================================ PRINCIPALES — SANS-BANNIÈRE (allégeance secrète, les deux camps)
+
+  a6_s_le_refuge:
+    nom: "Le refuge"
+    nom-en: "The Refuge"
+    niveau: 65
+    requiert: ["choix:a6-allegeance=sans_banniere"]
+    donneur: a6_kael
+    resume:
+      - "Les Sans-Bannière vous attendent"
+      - "au refuge, au bord de la mer."
+    resume-en:
+      - "The Bannerless are waiting for you"
+      - "at the refuge, by the sea."
+    offre:
+      - "a6_kael: Entre. Ici, personne ne regarde ta bannière. On regarde ta Marque, et on demande ton nom."
+    offre-en:
+      - "a6_kael: Come in. Here, no one looks at your banner. We look at your Mark, and ask your name."
+    etapes:
+      - type: PARLER
+        texte: "Écouter Kael"
+        texte-en: "Listen to Kael"
+        pnj: a6_kael
+        dialogue:
+          - "a6_kael: Un Marqué de l'Ombre devait dire à ceux de l'Aube que les Creux ont un nom. Et un Marqué de l'Aube devait dire que les Purifiés aussi. Les voilà, les noms."
+          - "a6_kael: Je réapprends à forger. Pas des chaînes : ce qui les défait."
+        dialogue-en:
+          - "a6_kael: A Marked of the Shadow was to tell those of the Dawn that the Hollow have names. And a Marked of the Dawn was to say that the Purified do too. Here they are, the names."
+          - "a6_kael: I am learning to forge again. Not chains: what unmakes them."
+      - type: INTERAGIR
+        texte: "Lire le mur des noms"
+        texte-en: "Read the wall of names"
+        point: a6_mur_des_noms
+        rayon: 4
+        apres:
+          - "Des centaines de noms gravés dans le basalte, sans couleur. Certains sont rayés, puis réécrits plus bas, d'une autre main : ceux qui ont retrouvé leur lumière."
+        apres-en:
+          - "Hundreds of names carved into the basalt, without colour. Some are struck out, then written again lower down, in another hand: those who found their light again."
+      - type: PARLER
+        texte: "Parler à Sœur Prisca"
+        texte-en: "Talk to Sister Prisca"
+        pnj: a6_prisca_refuge
+        dialogue:
+          - "a6_prisca_refuge: Ici on ne chante pas la lumière hors des gens. On la leur rend. C'est plus long. C'est mieux."
+          - "a6_prisca_refuge: Retourne à ton camp. Souris à ton capitaine. Et reviens quand on t'appelle."
+        dialogue-en:
+          - "a6_prisca_refuge: Here we do not sing the light out of people. We give it back to them. It takes longer. It is better."
+          - "a6_prisca_refuge: Go back to your camp. Smile at your captain. And come back when we call you."
+    recompenses:
+      xp: 19900
+      or: 1990
+
+  a6_s_l_double_jeu:
+    nom: "Le double jeu"
+    nom-en: "The Double Game"
+    faction: lumiere
+    niveau: 66
+    requiert: [a6_s_le_refuge]
+    donneur: a6_kael
+    resume:
+      - "Hélis vous a fait appeler."
+      - "Elle se doute de quelque chose."
+    resume-en:
+      - "Hélis has sent for you."
+      - "She suspects something."
+    offre:
+      - "a6_kael: Ton capitaine a compté ses Marqués, et il en manque. Va la voir avant qu'elle ne vienne te chercher."
+    offre-en:
+      - "a6_kael: Your captain has counted her Marked, and some are missing. Go and see her before she comes looking for you."
+    etapes:
+      - type: CHOIX
+        texte: "Répondre aux questions d'Hélis"
+        texte-en: "Answer Hélis's questions"
+        pnj: a6_helis
+        choix: a6-double-jeu
+        question: "Que dites-vous à Hélis ?"
+        question-en: "What do you tell Hélis?"
+        reponses:
+          - id: mentir
+            texte: "Je les ai vus partir vers le sud, vers le désert."
+            texte-en: "I saw them leave south, towards the desert."
+            reponse:
+              - "a6_helis: Le désert ? Alors les Astréens les cacheront. Tant pis pour eux."
+            reponse-en:
+              - "a6_helis: The desert? Then the Astreans will hide them. Too bad for them."
+            or: 300
+          - id: taire
+            texte: "Je n'ai rien vu, capitaine."
+            texte-en: "I saw nothing, captain."
+            reponse:
+              - "a6_helis: Rien. Comme tout le monde. Allez."
+            reponse-en:
+              - "a6_helis: Nothing. Like everyone. Go."
+            xp: 1500
+        dialogue:
+          - "a6_helis: Prisca, Anseau, deux autres. Ils sont partis vers le nord-ouest. Vous patrouillez là-bas. Vous n'avez rien vu ?"
+        dialogue-en:
+          - "a6_helis: Prisca, Anseau, two others. They went north-west. You patrol there. You saw nothing?"
+      - type: PARLER
+        texte: "Revenir au refuge"
+        texte-en: "Return to the refuge"
+        pnj: a6_kael
+        dialogue:
+          - "a6_kael: Elle t'a cru ? Bien. Le plus dur, ce n'est pas de mentir. C'est de continuer à sourire."
+        dialogue-en:
+          - "a6_kael: She believed you? Good. The hardest part is not lying. It is to keep smiling."
+    recompenses:
+      xp: 20400
+      or: 2040
+
+  a6_s_o_double_jeu:
+    nom: "Le double jeu"
+    nom-en: "The Double Game"
+    faction: ombre
+    niveau: 66
+    requiert: [a6_s_le_refuge]
+    donneur: a6_kael
+    resume:
+      - "Sarn vous a fait appeler."
+      - "Il se doute de quelque chose."
+    resume-en:
+      - "Sarn has sent for you."
+      - "He suspects something."
+    offre:
+      - "a6_kael: Sarn a compté ses cages, et il en manque. Va le voir avant qu'il ne vienne te chercher."
+    offre-en:
+      - "a6_kael: Sarn has counted his cages, and some are missing. Go and see him before he comes looking for you."
+    etapes:
+      - type: CHOIX
+        texte: "Répondre aux questions de Sarn"
+        texte-en: "Answer Sarn's questions"
+        pnj: a6_sarn
+        choix: a6-double-jeu
+        question: "Que dites-vous à Sarn ?"
+        question-en: "What do you tell Sarn?"
+        reponses:
+          - id: mentir
+            texte: "L'Aube a payé la gardienne. Je l'ai vue partir vers leur bivouac."
+            texte-en: "The Dawn paid the keeper. I saw her leave for their bivouac."
+            reponse:
+              - "a6_sarn: L'Aube. Évidemment. Ils le paieront."
+            reponse-en:
+              - "a6_sarn: The Dawn. Of course. They will pay for it."
+            or: 300
+          - id: taire
+            texte: "Je chassais les Affamés. Je n'ai rien vu."
+            texte-en: "I was hunting the Starved. I saw nothing."
+            reponse:
+              - "a6_sarn: Personne ne voit jamais rien. Va."
+            reponse-en:
+              - "a6_sarn: No one ever sees anything. Go."
+            xp: 1500
+        dialogue:
+          - "a6_sarn: Trois cages ouvertes, une gardienne partie, et toi qui traînes au nord-ouest. Explique."
+        dialogue-en:
+          - "a6_sarn: Three cages opened, a keeper gone, and you wandering in the north-west. Explain."
+      - type: PARLER
+        texte: "Revenir au refuge"
+        texte-en: "Return to the refuge"
+        pnj: a6_kael
+        dialogue:
+          - "a6_kael: Il t'a cru ? Bien. Le plus dur, ce n'est pas de mentir. C'est de continuer à sourire."
+        dialogue-en:
+          - "a6_kael: He believed you? Good. The hardest part is not lying. It is to keep smiling."
+    recompenses:
+      xp: 20400
+      or: 2040
+
+  a6_s_les_fioles_du_convoi:
+    nom: "Les fioles du convoi"
+    nom-en: "The Convoy Vials"
+    niveau: 66
+    requiert: ["choix:a6-double-jeu"]
+    donneur: a6_prisca_refuge
+    resume:
+      - "Un convoi de fioles de l'Aube"
+      - "fait halte au sud du refuge."
+    resume-en:
+      - "A convoy of Dawn vials"
+      - "has stopped south of the refuge."
+    offre:
+      - "a6_prisca_refuge: Un convoi de fioles s'est arrêté sur la crête, au sud. Des lumières de Marqués, en route pour le foyer. Prends ce tabard : les gardes ne regardent que la couleur."
+    offre-en:
+      - "a6_prisca_refuge: A convoy of vials has stopped on the ridge, to the south. The lights of Marked, on their way to the hearth. Take this tabard: the guards only look at the colour."
+    etapes:
+      - type: DEGUISEMENT
+        texte: "Approcher du convoi, déguisé"
+        texte-en: "Approach the convoy in disguise"
+        point: a6_caisse_fioles
+        monstres: [a6_garde_aube]
+        materiau: LEATHER_CHESTPLATE
+        couleur: "#F2E6C0"
+        objet: "Tabard de l'Aube"
+        objet-en: "Dawn tabard"
+        apres:
+          - "Personne ne te regarde. Une caisse de fioles est posée à l'écart."
+        apres-en:
+          - "No one looks at you. A crate of vials stands apart."
+      - type: INTERAGIR
+        texte: "Prendre les fioles"
+        texte-en: "Take the vials"
+        point: a6_caisse_fioles
+        rayon: 4
+        apres:
+          - "Douze fioles. Chacune porte un nom à l'encre. Sur la dernière : « Joran ». Un Purifié du convoi lève la tête quand tu la prends."
+        apres-en:
+          - "Twelve vials. Each bears a name in ink. On the last: « Joran ». A Purified from the convoy raises his head as you take it."
+    recompenses:
+      xp: 20400
+      or: 2040
+
+  a6_s_rallumer_joran:
+    nom: "Rallumer Joran"
+    nom-en: "Rekindling Joran"
+    niveau: 67
+    requiert: [a6_s_les_fioles_du_convoi]
+    donneur: a6_joran
+    resume:
+      - "Joran, un Purifié du convoi,"
+      - "regarde la fiole qui porte son nom."
+    resume-en:
+      - "Joran, a Purified of the convoy,"
+      - "stares at the vial bearing his name."
+    offre:
+      - "Le Purifié ne parle pas. Il regarde la fiole marquée « Joran », dans ta main."
+    offre-en:
+      - "The Purified does not speak. He stares at the vial marked « Joran », in your hand."
+    etapes:
+      - type: PARLER
+        texte: "Rendre sa fiole à Joran"
+        texte-en: "Give Joran his vial back"
+        pnj: a6_joran
+        dialogue:
+          - "Tu débouches la fiole. La lumière hésite, puis rentre en lui par la Marque. Ses yeux se remplissent."
+          - "a6_joran: Joran. Je m'appelle Joran. J'avais une sœur. Je ne me souviens pas de son visage, mais je me souviens qu'elle chantait."
+        dialogue-en:
+          - "You unstop the vial. The light hesitates, then goes back into him through the Mark. His eyes fill."
+          - "a6_joran: Joran. My name is Joran. I had a sister. I do not remember her face, but I remember that she sang."
+      - type: ESCORTE
+        texte: "Conduire Joran au refuge"
+        texte-en: "Lead Joran to the refuge"
+        pnj: a6_joran
+        chemin: [a6_retour_1, a6_retour_2, a6_refuge]
+        monstres: [a6_affame]
+        nombre: 3
+        vagues: 3
+        pv: 130
+        degats: 6
+        apres:
+          - "a6_prisca_refuge: Joran ? … Joran ! C'est moi. C'est moi qui chantais."
+          - "Prisca serre son frère contre elle. Il ne la reconnaît pas encore. Il reconnaît sa voix."
+        apres-en:
+          - "a6_prisca_refuge: Joran? … Joran! It is me. I was the one who sang."
+          - "Prisca holds her brother close. He does not recognise her yet. He recognises her voice."
+    recompenses:
+      xp: 20900
+      or: 2090
+
+  a6_s_le_mur_des_noms:
+    nom: "Le mur des noms"
+    nom-en: "The Wall of Names"
+    niveau: 67
+    requiert: [a6_s_rallumer_joran]
+    donneur: a6_kael
+    resume:
+      - "Kael veut graver les noms"
+      - "de ceux que les deux camps ont vidés."
+    resume-en:
+      - "Kael wants to carve the names"
+      - "of those both camps have emptied."
+    offre:
+      - "a6_kael: Les cages de la Citadelle, l'enclos de l'Aube, le cimetière des mineurs : partout, des noms. Rapporte-les. Le mur doit être juste."
+    offre-en:
+      - "a6_kael: The Citadel cages, the Dawn pen, the miners' graveyard: everywhere, names. Bring them back. The wall must be fair."
+    etapes:
+      - type: ENQUETE
+        texte: "Relever les noms"
+        texte-en: "Gather the names"
+        pnj: a6_kael
+        indices:
+          - point: a6_lisiere_ombre
+            texte: "Les noms gravés sur les cages"
+            texte-en: "The names carved on the cages"
+            apres:
+              - "Trente noms, un par cage. La onzième est ouverte, et son nom a été gratté au couteau."
+            apres-en:
+              - "Thirty names, one per cage. The eleventh is open, and its name has been scratched out with a knife."
+          - point: a6_enclos_aube
+            texte: "Le registre de l'enclos"
+            texte-en: "The pen ledger"
+            apres:
+              - "Quarante noms. Vingt-huit rayés. « Combustible consommé. »"
+            apres-en:
+              - "Forty names. Twenty-eight struck out. « Fuel consumed. »"
+          - point: a6_camp_k6
+            texte: "Les tombes des mineurs"
+            texte-en: "The miners' graves"
+            apres:
+              - "Des mineurs du camp, morts quand la faille s'est ouverte. Ni Aube ni Ombre. Juste des noms sur des planches."
+            apres-en:
+              - "Miners from the camp, dead when the rift opened. Neither Dawn nor Shadow. Just names on planks."
+        dialogue:
+          - "a6_kael: Quatre-vingt-dix-huit noms. On les gravera ce soir. Tous à la même hauteur."
+        dialogue-en:
+          - "a6_kael: Ninety-eight names. We will carve them tonight. All at the same height."
+    recompenses:
+      xp: 20900
+      or: 2090
+
+  a6_s_la_rafle:
+    nom: "La rafle"
+    nom-en: "The Round-up"
+    niveau: 68
+    requiert: [a6_s_le_mur_des_noms]
+    donneur: a6_kael
+    resume:
+      - "Des chasseurs de Marqués"
+      - "marchent sur le refuge."
+    resume-en:
+      - "Hunters of the Marked"
+      - "are marching on the refuge."
+    offre:
+      - "a6_kael: Des chasseurs arrivent par la crête. Des deux camps, ensemble. Quelqu'un a parlé. Tiens le refuge avec nous."
+    offre-en:
+      - "a6_kael: Hunters are coming over the ridge. From both camps, together. Someone talked. Hold the refuge with us."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre le refuge"
+        texte-en: "Defend the refuge"
+        point: a6_refuge
+        monstres: [a6_chasseur_aube, a6_chasseur_ombre]
+        nombre: 4
+        vagues: 4
+        apparition: a6_refuge_entree
+        pv: 400
+        degats: 6
+        cible: "Le refuge des Sans-Bannière"
+        cible-en: "The Bannerless refuge"
+        apres:
+          - "Les derniers chasseurs reculent. Un soleil d'or et une griffe violette gisent côte à côte dans la cendre."
+        apres-en:
+          - "The last hunters fall back. A golden sun and a violet claw lie side by side in the ash."
+      - type: PARLER
+        texte: "Revenir voir Kael"
+        texte-en: "Return to Kael"
+        pnj: a6_kael
+        dialogue:
+          - "a6_kael: L'Aube et la Citadelle, épaule contre épaule, pour attraper des Marqués. Ils se battent le jour. La nuit, ils chassent ensemble."
+        dialogue-en:
+          - "a6_kael: The Dawn and the Citadel, shoulder to shoulder, to catch Marked. They fight by day. By night, they hunt together."
+    recompenses:
+      xp: 21400
+      or: 2140
+
+  a6_s_ce_qui_defait_une_chaine:
+    nom: "Ce qui défait une chaîne"
+    nom-en: "What Unmakes a Chain"
+    niveau: 69
+    requiert: [a6_s_la_rafle]
+    donneur: a6_kael
+    resume:
+      - "Kael cherche comment défaire"
+      - "une chaîne de lumière."
+    resume-en:
+      - "Kael is looking for how to unmake"
+      - "a chain of light."
+    offre:
+      - "a6_kael: Celui qui a forgé les chaînes sait comment on les défait. Morvain ne le dit pas. Mais il a laissé des traces : son atelier, la tombe de son maître, son enclume."
+    offre-en:
+      - "a6_kael: The one who forged the chains knows how to unmake them. Morvain will not say. But he left traces: his workshop, his master's grave, his anvil."
+    etapes:
+      - type: ENQUETE
+        texte: "Chercher les traces de Morvain"
+        texte-en: "Look for Morvain's traces"
+        pnj: a6_morvain
+        indices:
+          - point: a6_ruine_k4
+            texte: "L'atelier en ruine"
+            texte-en: "The ruined workshop"
+            apres:
+              - "Une tour effondrée. Sur une poutre, gravé au poinçon : « Ce qu'on prend, on peut le rendre. »"
+            apres-en:
+              - "A collapsed tower. On a beam, punched into the wood: « What is taken can be given back. »"
+          - point: a6_camp_k8
+            texte: "La tombe de Maître Ardric"
+            texte-en: "The grave of Master Ardric"
+            apres:
+              - "« Ardric, maître forgeron d'Aurélien. Il refusa la dernière chaîne. » Ardric a refusé. Morvain, non."
+            apres-en:
+              - "« Ardric, master smith to Aurélien. He refused the last chain. » Ardric refused. Morvain did not."
+          - point: a6_forge_enclume
+            texte: "L'enclume de la forge"
+            texte-en: "The forge anvil"
+            apres:
+              - "Sous l'enclume, une phrase griffée par une main d'enfant : « Pardon. »"
+            apres-en:
+              - "Under the anvil, a sentence scratched by a child's hand: « Forgive me. »"
+        dialogue:
+          - "a6_morvain: Tu as trouvé mon « pardon ». J'avais quatorze ans."
+          - "a6_morvain: Une chaîne de lumière se défait quand on rend la lumière à qui elle appartient. Je l'ai toujours su. Je n'avais personne à qui la rendre."
+          - "a6_morvain: Kael peut forger un marteau qui rend. Il lui faut la braise-mère de la forge."
+        dialogue-en:
+          - "a6_morvain: You found my « forgive me ». I was fourteen."
+          - "a6_morvain: A chain of light comes undone when the light is given back to whom it belongs. I always knew. I had no one to give it back to."
+          - "a6_morvain: Kael can forge a hammer that gives back. He needs the mother-ember of the forge."
+    recompenses:
+      xp: 21900
+      or: 2190
+
+  a6_s_la_braise_mere:
+    nom: "La braise-mère"
+    nom-en: "The Mother-Ember"
+    niveau: 70
+    requiert: [a6_s_ce_qui_defait_une_chaine]
+    donneur: a6_morvain
+    resume:
+      - "La braise-mère de la forge"
+      - "doit rejoindre le refuge, encore chaude."
+    resume-en:
+      - "The mother-ember of the forge"
+      - "must reach the refuge, still hot."
+    offre:
+      - "a6_morvain: Les braises gardent le foyer. Abats-les, prends la braise-mère, et porte-la au refuge à dos de monture. Elle refroidit vite : ne traîne pas."
+    offre-en:
+      - "a6_morvain: The embers guard the hearth. Strike them down, take the mother-ember, and carry it to the refuge on a mount. It cools fast: do not dawdle."
+    etapes:
+      - type: TUER
+        texte: "Abattre les braises qui gardent le foyer"
+        texte-en: "Strike down the embers guarding the hearth"
+        monstres: [a6_braise]
+        nombre: 6
+        point: a6_forge_parvis
+      - type: TRANSPORT
+        texte: "Porter la braise-mère au refuge avant qu'elle refroidisse"
+        texte-en: "Carry the mother-ember to the refuge before it cools"
+        point: a6_refuge
+        depart: a6_forge_foyer
+        materiau: MAGMA_BLOCK
+        rayon: 5
+        objet: "Braise-mère"
+        objet-en: "Mother-ember"
+        apres:
+          - "a6_kael: Elle est encore chaude. Avec elle, je forgerai le Défaiseur."
+        apres-en:
+          - "a6_kael: It is still hot. With it, I will forge the Unmaker."
+        chrono: 300
+        echec:
+          - "La braise-mère s'éteint dans tes mains. Il faut retourner en prendre une autre."
+        echec-en:
+          - "The mother-ember dies in your hands. You must go back for another."
+    recompenses:
+      xp: 22400
+      or: 2240
+
+  a6_s_la_chaine_vivante:
+    nom: "La chaîne vivante"
+    nom-en: "The Living Chain"
+    niveau: 71
+    requiert: [a6_s_la_braise_mere]
+    donneur: a6_kael
+    resume:
+      - "Les deux camps ont rallumé la forge."
+      - "La Dernière Chaîne s'est réveillée."
+    resume-en:
+      - "Both camps have rekindled the forge."
+      - "The Last Chain has awakened."
+    offre:
+      - "a6_kael: Malgré la braise volée, ils ont rallumé la forge. La Dernière Chaîne s'est levée. Elle est faite de la lumière d'un Marqué d'il y a mille ans. Brise-la, et rapporte-moi son cœur."
+    offre-en:
+      - "a6_kael: Despite the stolen ember, they have rekindled the forge. The Last Chain has risen. It is made from the light of a Marked of a thousand years ago. Break it, and bring me its heart."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Retourner à la Forge éteinte"
+        texte-en: "Return to the Extinguished Forge"
+        point: a6_forge_parvis
+        rayon: 10
+      - type: TUER
+        texte: "Vaincre la Dernière Chaîne"
+        texte-en: "Defeat the Last Chain"
+        monstres: [a6_derniere_chaine]
+        point: a6_forge_parvis
+      - type: INTERAGIR
+        texte: "Ramasser le cœur de la chaîne sur l'enclume"
+        texte-en: "Pick up the heart of the chain from the anvil"
+        point: a6_forge_enclume
+        rayon: 4
+        apres:
+          - "Un maillon chaud comme une main. À l'intérieur, une voix : « Morvain… frère… tu as fini ta chaîne ? » Puis : « Dis-lui que je ne lui en veux pas. »"
+        apres-en:
+          - "A link warm as a hand. Inside, a voice: « Morvain… brother… have you finished your chain? » Then: « Tell him I do not blame him. »"
+      - type: CHOIX
+        texte: "Rapporter le cœur de la chaîne à Kael"
+        texte-en: "Bring the heart of the chain to Kael"
+        pnj: a6_kael
+        choix: a6-coeur-chaine
+        question: "Que faites-vous du cœur de la chaîne ?"
+        question-en: "What do you do with the heart of the chain?"
+        reponses:
+          - id: rendre
+            texte: "Mets-le dans le Défaiseur."
+            texte-en: "Put it into the Unmaker."
+            reponse:
+              - "a6_kael: Alors il brisera ce qu'on l'a forcé à tenir. Je crois qu'il aimerait ça."
+            reponse-en:
+              - "a6_kael: Then it will break what it was forced to hold. I think it would like that."
+            or: 800
+          - id: liberer
+            texte: "Laisse-le partir."
+            texte-en: "Let it go."
+            reponse:
+              - "Tu ouvres la main. Le maillon fond en lumière et monte, droit, vers la fente du ciel au-dessus du volcan."
+              - "a6_kael: Mille ans. Il a bien le droit."
+            reponse-en:
+              - "You open your hand. The link melts into light and rises, straight up, towards the crack in the sky above the volcano."
+              - "a6_kael: A thousand years. He has every right."
+            xp: 3000
+        dialogue:
+          - "a6_kael: Ce cœur, c'est un Marqué. Mille ans dans un maillon. Je peux le mettre dans le Défaiseur : sa lumière brisera les autres chaînes. Ou tu peux le laisser partir."
+        dialogue-en:
+          - "a6_kael: This heart is a Marked. A thousand years in a link. I can put it into the Unmaker: its light will break the other chains. Or you can let it go."
+      - type: PARLER
+        texte: "Porter le message à Morvain"
+        texte-en: "Carry the message to Morvain"
+        pnj: a6_morvain
+        dialogue:
+          - "joueur: Il a dit qu'il ne t'en voulait pas."
+          - "a6_morvain: … Il s'appelait Ilmar. Il avait mon âge."
+        dialogue-en:
+          - "joueur: He said he did not blame you."
+          - "a6_morvain: … His name was Ilmar. He was my age."
+    recompenses:
+      xp: 36700
+      or: 3670
+      objets:
+        - materiau: IRON_CHAIN
+          nom: "Maillon défait"
+          nom-en: "Unmade link"
+          description:
+            - "Ce qui reste d'une chaîne qui a rendu sa lumière."
+          description-en:
+            - "What remains of a chain that gave back its light."
+
+  a6_s_vers_la_fournaise:
+    nom: "Vers la Fournaise"
+    nom-en: "Towards the Furnace"
+    niveau: 72
+    requiert: [a6_s_la_chaine_vivante]
+    donneur: a6_kael
+    resume:
+      - "Les chaînes partent vers la Fournaise."
+      - "Les Sans-Bannière les suivent."
+    resume-en:
+      - "The chains are leaving for the Furnace."
+      - "The Bannerless follow them."
+    offre:
+      - "a6_kael: Les chaînes d'or et d'ombre sont parties ce matin vers le volcan, sur les mêmes chariots. On les suit. Prisca et moi montons un camp près du Guet."
+    offre-en:
+      - "a6_kael: The chains of gold and shadow left this morning for the volcano, on the same carts. We follow them. Prisca and I are setting up a camp near the Watch."
+    etapes:
+      - type: PARLER
+        texte: "Écouter Kael"
+        texte-en: "Listen to Kael"
+        pnj: a6_kael
+        dialogue:
+          - "a6_kael: Les ordres portaient deux sceaux. S. et V. Ils ne se cachent même plus."
+          - "a6_kael: Retourne à ta bannière, souris, et monte au Guet. Là-haut, on aura besoin de quelqu'un qui porte leurs couleurs."
+        dialogue-en:
+          - "a6_kael: The orders bore two seals. S. and V. They no longer even hide it."
+          - "a6_kael: Go back to your banner, smile, and climb to the Watch. Up there, we will need someone who wears their colours."
+      - type: ATTEINDRE
+        texte: "Rejoindre le Guet de la Fournaise"
+        texte-en: "Reach the Furnace Watch"
+        point: a7_ancre_guet
+        rayon: 8
+      - type: ANCRAGE
+        texte: "Toucher l'Éclat d'ancrage du Guet"
+        texte-en: "Touch the Watch's anchoring Shard"
+        point: a7_ancre_guet
+        rayon: 4
+        apres:
+          - "Au-dessus du Guet, le volcan fume. Plus haut encore, le ciel est fendu. À suivre."
+        apres-en:
+          - "Above the Watch, the volcano smokes. Higher still, the sky is split. To be continued."
+    recompenses:
+      xp: 23400
+      or: 2340
+
+  # ================================================================ ANNEXES NEUTRES — LE CAMP DES CENDRES (toutes factions)
+
+  a6_n_les_puits_effondres:
+    nom: "Les puits effondrés"
+    nom-en: "The Collapsed Pits"
+    niveau: 60
+    donneur: a6_hulda
+    resume:
+      - "Les Calcinés ont pris le puits n° 3."
+    resume-en:
+      - "The Charred have taken pit no. 3."
+    offre:
+      - "a6_hulda: Le puits n° 3, à l'ouest. Les Calcinés y sont descendus. Ils étaient mineurs, avant. Maintenant ils sont cendre, et ils frappent."
+    offre-en:
+      - "a6_hulda: Pit no. 3, to the west. The Charred went down there. They were miners, before. Now they are ash, and they strike."
+    etapes:
+      - type: TUER
+        texte: "Chasser les Calcinés du puits"
+        texte-en: "Drive the Charred out of the pit"
+        monstres: [cendreux, brute_calcinee]
+        nombre: 10
+        point: a6_camp_k5
+      - type: INTERAGIR
+        texte: "Inspecter l'entrée du puits"
+        texte-en: "Inspect the pit entrance"
+        point: a6_camp_k5
+        rayon: 6
+        apres:
+          - "Des casques de mineurs, fondus. Un registre de paie, au nom de Hulda. Personne n'est venu le chercher."
+        apres-en:
+          - "Miners' helmets, melted. A pay ledger, in Hulda's name. No one came for it."
+      - type: PARLER
+        texte: "Revenir voir Hulda"
+        texte-en: "Return to Hulda"
+        pnj: a6_hulda
+        dialogue:
+          - "a6_hulda: Le registre. Je payais ces hommes-là le samedi. Merci de l'avoir rapporté."
+        dialogue-en:
+          - "a6_hulda: The ledger. I paid those men on Saturdays. Thank you for bringing it back."
+    recompenses:
+      xp: 14000
+      or: 1400
+
+  a6_n_les_mineurs_perdus:
+    nom: "Les mineurs perdus"
+    nom-en: "The Lost Miners"
+    niveau: 61
+    requiert: [a6_n_les_puits_effondres]
+    donneur: a6_hulda
+    resume:
+      - "Une équipe de mineurs n'est jamais rentrée."
+    resume-en:
+      - "A crew of miners never came back."
+    offre:
+      - "a6_hulda: Une équipe est partie au nord il y a six jours. Leurs traces doivent encore être dans la cendre. Retrouve-les. Vivants, si l'Astre veut."
+    offre-en:
+      - "a6_hulda: A crew left north six days ago. Their tracks must still be in the ash. Find them. Alive, if the Star wills it."
+    etapes:
+      - type: PISTER
+        texte: "Suivre les traces des mineurs"
+        texte-en: "Follow the miners' tracks"
+        traces: [a6_trace_m1, a6_trace_m2, a6_trace_m3, a6_camp_k6]
+        apres:
+          - "Les traces mènent à un vieux cimetière. Les mineurs sont là. Debout. Ils ne respirent plus."
+        apres-en:
+          - "The tracks lead to an old graveyard. The miners are there. Standing. They no longer breathe."
+      - type: TUER
+        texte: "Rendre les mineurs au repos"
+        texte-en: "Return the miners to rest"
+        monstres: [revenant, squelette]
+        nombre: 8
+        point: a6_camp_k6
+      - type: PARLER
+        texte: "Revenir voir Hulda"
+        texte-en: "Return to Hulda"
+        pnj: a6_hulda
+        dialogue:
+          - "a6_hulda: Morts depuis des jours, et ils marchaient. La cendre ne laisse même pas dormir les siens."
+        dialogue-en:
+          - "a6_hulda: Dead for days, and they were walking. The ash does not even let its own sleep."
+    recompenses:
+      xp: 14400
+      or: 1440
+
+  a6_n_le_grisou:
+    nom: "Le grisou"
+    nom-en: "Firedamp"
+    niveau: 62
+    requiert: [a6_n_les_mineurs_perdus]
+    donneur: a6_hulda
+    resume:
+      - "Le grisou monte dans la galerie de l'est."
+    resume-en:
+      - "Firedamp is rising in the eastern tunnel."
+    offre:
+      - "a6_hulda: Le grisou monte dans la galerie de l'est ! Mes gars y sont encore. Cours ! Une minute et demie, pas plus."
+    offre-en:
+      - "a6_hulda: Firedamp is rising in the eastern tunnel! My lads are still in there. Run! A minute and a half, no more."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la galerie avant le coup de grisou"
+        texte-en: "Reach the tunnel before the blast"
+        point: a6_galerie
+        rayon: 5
+        chrono: 90
+        echec:
+          - "a6_hulda: Trop tard… Non. Le feu n'a pas encore pris. Recommence !"
+        echec-en:
+          - "a6_hulda: Too late… No. The fire has not caught yet. Again!"
+      - type: SURVIE
+        texte: "Tenir pendant que les mineurs sortent"
+        texte-en: "Hold on while the miners get out"
+        point: a6_galerie
+        rayon: 12
+        duree: 40
+        mode: brule
+        degats: 5
+        apres:
+          - "Le dernier mineur sort en toussant. Derrière lui, la galerie s'embrase d'un coup."
+        apres-en:
+          - "The last miner comes out coughing. Behind him, the tunnel bursts into flame."
+      - type: PARLER
+        texte: "Revenir voir Hulda"
+        texte-en: "Return to Hulda"
+        pnj: a6_hulda
+        dialogue:
+          - "a6_hulda: Tous sortis. Tous ! Ce soir, Tobbe fait double ration."
+        dialogue-en:
+          - "a6_hulda: All out. All of them! Tonight, Tobbe makes a double ration."
+    recompenses:
+      xp: 14800
+      or: 1480
+
+  a6_n_la_carte_des_failles:
+    nom: "La carte des failles"
+    nom-en: "The Map of Rifts"
+    niveau: 61
+    donneur: a6_ottilie
+    resume:
+      - "Ottilie veut mesurer la lumière"
+      - "que les Affamés ont volée."
+    resume-en:
+      - "Ottilie wants to measure the light"
+      - "the Starved have stolen."
+    offre:
+      - "a6_ottilie: Les Affamés mangent la lumière. Je veux savoir combien. Va à la faille du nord-est, lance un sort sur l'un d'eux, et regarde ce qui sort."
+    offre-en:
+      - "a6_ottilie: The Starved eat light. I want to know how much. Go to the north-eastern rift, cast a spell on one of them, and see what comes out."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la faille du nord-est"
+        texte-en: "Reach the north-eastern rift"
+        point: a6_faille_2
+        rayon: 8
+      - type: SORT
+        texte: "Lancer un sort sur un Affamé"
+        texte-en: "Cast a spell on a Starved"
+        monstres: [a6_affame]
+        apres:
+          - "Sous le sort, l'Affamé se vide d'une lueur pâle. Une lueur de Marqué. Elle flotte un instant, puis retombe dans la faille."
+        apres-en:
+          - "Under the spell, the Starved spills a pale glow. The glow of a Marked. It floats for a moment, then falls back into the rift."
+      - type: TUER
+        texte: "Abattre les Affamés de la faille"
+        texte-en: "Kill the Starved of the rift"
+        monstres: [a6_affame]
+        nombre: 6
+        point: a6_faille_2
+      - type: PARLER
+        texte: "Revenir voir Ottilie"
+        texte-en: "Return to Ottilie"
+        pnj: a6_ottilie
+        dialogue:
+          - "a6_ottilie: De la lumière de Marqué, dans un Affamé. Ils ne mangent pas n'importe quoi. Ils mangent ce que les fioles laissent fuir."
+        dialogue-en:
+          - "a6_ottilie: Marked light, inside a Starved. They do not eat just anything. They eat what the vials let leak."
+    recompenses:
+      xp: 14400
+      or: 1440
+
+  a6_n_la_faille_qui_respire:
+    nom: "La faille qui respire"
+    nom-en: "The Breathing Rift"
+    niveau: 63
+    requiert: [a6_n_la_carte_des_failles]
+    donneur: a6_ottilie
+    resume:
+      - "Ottilie veut sceller une faille."
+    resume-en:
+      - "Ottilie wants to seal a rift."
+    offre:
+      - "a6_ottilie: J'ai un sceau de basalte. Il tiendra si on le protège le temps qu'il prenne. La faille du nord-ouest. Je pose, tu tiens."
+    offre-en:
+      - "a6_ottilie: I have a basalt seal. It will hold if we protect it while it sets. The north-western rift. I set it, you hold."
+    etapes:
+      - type: DEFENSE
+        texte: "Protéger le sceau d'Ottilie"
+        texte-en: "Protect Ottilie's seal"
+        point: a6_faille_1
+        monstres: [a6_affame]
+        nombre: 3
+        duree: 75
+        intervalle: 15
+        pv: 260
+        degats: 5
+        cible: "Le sceau d'Ottilie"
+        cible-en: "Ottilie's seal"
+        apres:
+          - "Le sceau prend. La faille souffle une dernière fois, puis se tait."
+        apres-en:
+          - "The seal sets. The rift exhales one last time, then falls silent."
+      - type: PARLER
+        texte: "Revenir voir Ottilie"
+        texte-en: "Return to Ottilie"
+        pnj: a6_ottilie
+        dialogue:
+          - "a6_ottilie: Une de fermée. Il en reste des centaines. Mais je sais que ça marche."
+        dialogue-en:
+          - "a6_ottilie: One closed. Hundreds remain. But I know it works."
+    recompenses:
+      xp: 15200
+      or: 1520
+
+  a6_n_le_ragout_de_tobbe:
+    nom: "Le ragoût de Tobbe"
+    nom-en: "Tobbe's Stew"
+    niveau: 60
+    donneur: a6_tobbe
+    resume:
+      - "Tobbe manque de viande."
+    resume-en:
+      - "Tobbe is short of meat."
+    offre:
+      - "a6_tobbe: Le chien de cendre, ça a un goût de charbon. Mais c'est de la viande. Ramène-m'en."
+    offre-en:
+      - "a6_tobbe: Ash hound tastes of charcoal. But it is meat. Bring me some."
+    etapes:
+      - type: RAMASSER
+        texte: "Récupérer des cuissots de chien de cendre"
+        texte-en: "Collect ash hound haunches"
+        monstres: [chien_cendre]
+        nombre: 8
+        chance: 0.5
+        objet: "Cuissot fumé"
+        objet-en: "Smoked haunch"
+      - type: PARLER
+        texte: "Rapporter la viande à Tobbe"
+        texte-en: "Bring the meat to Tobbe"
+        pnj: a6_tobbe
+        dialogue:
+          - "a6_tobbe: Parfait. Ce soir, l'Aube et l'Ombre mangeront à la même marmite, et ni l'une ni l'autre ne s'en plaindra."
+        dialogue-en:
+          - "a6_tobbe: Perfect. Tonight, the Dawn and the Shadow will eat from the same pot, and neither will complain."
+    recompenses:
+      xp: 14000
+      or: 1400
+
+  a6_n_le_tonneau_perdu:
+    nom: "Le tonneau perdu"
+    nom-en: "The Lost Barrel"
+    niveau: 62
+    requiert: [a6_n_le_ragout_de_tobbe]
+    donneur: a6_tobbe
+    resume:
+      - "Un chariot de bière s'est renversé au nord."
+    resume-en:
+      - "A beer cart has overturned to the north."
+    offre:
+      - "a6_tobbe: Mon chariot de bière noire s'est renversé au nord. Il reste un tonneau entier. À dos de monture, et sans te faire toucher : un tonneau, ça roule."
+    offre-en:
+      - "a6_tobbe: My cart of black beer overturned to the north. There is one whole barrel left. On a mount, and without getting hit: a barrel rolls."
+    etapes:
+      - type: TRANSPORT
+        texte: "Ramener le tonneau à l'auberge, à dos de monture"
+        texte-en: "Bring the barrel back to the inn, on a mount"
+        point: a6_auberge_cendres
+        depart: a6_chariot_renverse
+        materiau: BARREL
+        rayon: 5
+        objet: "Tonneau de bière noire"
+        objet-en: "Barrel of black beer"
+        apres:
+          - "a6_tobbe: Entier ! Le camp va chanter ce soir. Faux, mais fort."
+        apres-en:
+          - "a6_tobbe: Whole! The camp will sing tonight. Off-key, but loud."
+    recompenses:
+      xp: 14800
+      or: 1480
+
+  a6_n_la_meute:
+    nom: "La meute"
+    nom-en: "The Pack"
+    niveau: 64
+    requiert: [a6_n_le_ragout_de_tobbe]
+    donneur: a6_tobbe
+    resume:
+      - "Une meute de chiens de cendre"
+      - "rôde autour du camp."
+    resume-en:
+      - "A pack of ash hounds"
+      - "is prowling around the camp."
+    offre:
+      - "a6_tobbe: La meute du nord-est a pris goût à mes restes. Et à mes aides de cuisine. Leur chef, Gueule-de-Braise, est gros comme un poney."
+    offre-en:
+      - "a6_tobbe: The north-eastern pack has developed a taste for my scraps. And for my kitchen hands. Their leader, Ember-Maw, is as big as a pony."
+    etapes:
+      - type: TUER
+        texte: "Décimer la meute"
+        texte-en: "Thin out the pack"
+        monstres: [chien_cendre]
+        nombre: 10
+        point: a6_nid_chiens
+      - type: TUER
+        texte: "Abattre Gueule-de-Braise"
+        texte-en: "Kill Ember-Maw"
+        monstres: [a6_chien_alpha]
+        point: a6_nid_chiens
+      - type: PARLER
+        texte: "Revenir voir Tobbe"
+        texte-en: "Return to Tobbe"
+        pnj: a6_tobbe
+        dialogue:
+          - "a6_tobbe: Gueule-de-Braise ! Je le mettrai pas dans la marmite, celui-là. Trop de respect."
+        dialogue-en:
+          - "a6_tobbe: Ember-Maw! That one is not going in the pot. Too much respect."
+    recompenses:
+      xp: 15500
+      or: 1550
+
+  a6_n_le_cimetiere_des_forgerons:
+    nom: "Le cimetière des forgerons"
+    nom-en: "The Smiths' Graveyard"
+    niveau: 63
+    donneur: a6_morvain
+    resume:
+      - "Un cimetière de forgerons s'est réveillé"
+      - "au nord, près de la mer."
+    resume-en:
+      - "A smiths' graveyard has awoken"
+      - "to the north, near the sea."
+    offre:
+      - "a6_morvain: Au nord, près de la mer, on enterrait les forgerons d'Aurélien. Ils se sont levés quand la forge a frémi. Va leur rendre le repos. Lis les tombes, si tu veux."
+    offre-en:
+      - "a6_morvain: To the north, by the sea, Aurélien's smiths were buried. They rose when the forge stirred. Go and give them back their rest. Read the graves, if you like."
+    etapes:
+      - type: TUER
+        texte: "Rendre les forgerons au repos"
+        texte-en: "Return the smiths to rest"
+        monstres: [revenant, squelette]
+        nombre: 10
+        point: a6_camp_k8
+      - type: INTERAGIR
+        texte: "Lire les tombes"
+        texte-en: "Read the graves"
+        point: a6_camp_k8
+        rayon: 6
+        apres:
+          - "« Forgerons d'Aurélien, an I de l'Aube. » Puis une dalle à part : « Ardric, maître forgeron. Il refusa la dernière chaîne. »"
+        apres-en:
+          - "« Smiths of Aurélien, year I of the Dawn. » Then a slab apart: « Ardric, master smith. He refused the last chain. »"
+      - type: PARLER
+        texte: "Revenir voir Morvain"
+        texte-en: "Return to Morvain"
+        pnj: a6_morvain
+        dialogue:
+          - "a6_morvain: Ardric était mon maître. Il a dit non. Ils l'ont enterré là, et ils m'ont donné le marteau."
+        dialogue-en:
+          - "a6_morvain: Ardric was my master. He said no. They buried him there, and gave me the hammer."
+    recompenses:
+      xp: 15200
+      or: 1520
+
+  a6_n_le_marteau_de_morvain:
+    nom: "Le marteau de Morvain"
+    nom-en: "Morvain's Hammer"
+    niveau: 65
+    requiert: [a6_n_le_cimetiere_des_forgerons]
+    donneur: a6_morvain
+    resume:
+      - "Morvain a caché son marteau"
+      - "dans une tour, il y a mille ans."
+    resume-en:
+      - "Morvain hid his hammer"
+      - "in a tower, a thousand years ago."
+    offre:
+      - "a6_morvain: La nuit de la Chute, j'ai caché mon marteau dans une tour, à l'est de la forge. Je n'ai jamais eu le courage d'y retourner. Rapporte-le."
+    offre-en:
+      - "a6_morvain: On the night of the Fall, I hid my hammer in a tower, east of the forge. I never had the courage to go back. Bring it to me."
+    etapes:
+      - type: TUER
+        texte: "Chasser ce qui hante la tour"
+        texte-en: "Drive out what haunts the tower"
+        monstres: [cendreux, revenant]
+        nombre: 6
+        point: a6_ruine_k4
+      - type: INTERAGIR
+        texte: "Chercher le marteau sous les pierres"
+        texte-en: "Search for the hammer under the stones"
+        point: a6_ruine_k4
+        rayon: 6
+        apres:
+          - "Un marteau de forgeron, le manche pourri, la tête intacte. Gravé dessus, en lettres maladroites : « M. »"
+        apres-en:
+          - "A smith's hammer, the handle rotten, the head intact. Carved on it, in clumsy letters: « M. »"
+      - type: LIVRER
+        texte: "Rapporter le marteau à Morvain"
+        texte-en: "Bring the hammer to Morvain"
+        pnj: a6_morvain
+        materiau: IRON_AXE
+        objet: "Marteau de Morvain"
+        objet-en: "Morvain's hammer"
+        dialogue:
+          - "a6_morvain: Il est plus petit que dans mon souvenir. J'avais de petites mains."
+          - "a6_morvain: Garde l'or que je te donne. Le marteau, je le garde. Il me rappelle ce que j'ai fait, et que j'étais un enfant."
+        dialogue-en:
+          - "a6_morvain: It is smaller than I remember. I had small hands."
+          - "a6_morvain: Keep the gold I give you. The hammer, I keep. It reminds me of what I did, and that I was a child."
+    recompenses:
+      xp: 15900
+      or: 1590
+
+  a6_n_la_tour_des_hotes:
+    nom: "La tour des Hôtes"
+    nom-en: "The Tower of the Hosts"
+    niveau: 66
+    donneur: a6_ottilie
+    resume:
+      - "Une tour très ancienne se dresse"
+      - "tout à l'est des Terres de Cendre."
+    resume-en:
+      - "A very old tower stands"
+      - "far to the east of the Ashlands."
+    offre:
+      - "a6_ottilie: Tout à l'est, une tour plus vieille que la cendre. Mes cartes disent qu'il y avait des prés, avant. Va voir ce qu'elle regardait."
+    offre-en:
+      - "a6_ottilie: Far to the east, a tower older than the ash. My maps say there were meadows here, before. Go and see what it was watching."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la tour de l'est"
+        texte-en: "Reach the eastern tower"
+        point: a6_ruine_k1
+        rayon: 10
+      - type: TUER
+        texte: "Chasser ce qui hante la tour"
+        texte-en: "Drive out what haunts the tower"
+        monstres: [cendreux, revenant]
+        nombre: 6
+        point: a6_ruine_k1
+      - type: INTERAGIR
+        texte: "Examiner la fresque"
+        texte-en: "Examine the fresco"
+        point: a6_ruine_k1
+        rayon: 6
+        apres:
+          - "Une fresque d'Hôtes, les bras levés vers l'Astre qui descend. Sous leurs pieds, de l'herbe. Les Terres de Cendre étaient vertes, avant la forge."
+        apres-en:
+          - "A fresco of Hosts, arms raised towards the descending Star. Under their feet, grass. The Ashlands were green, before the forge."
+      - type: PARLER
+        texte: "Raconter à Ottilie"
+        texte-en: "Tell Ottilie"
+        pnj: a6_ottilie
+        dialogue:
+          - "a6_ottilie: Vertes. C'est la forge qui a tout brûlé. Mille ans de chaînes, et voilà la terre qu'il en reste."
+        dialogue-en:
+          - "a6_ottilie: Green. It was the forge that burned it all. A thousand years of chains, and this is the land that remains."
+    recompenses:
+      xp: 16300
+      or: 1630
+
+  a6_n_la_chapelle_d_aurelien:
+    nom: "La chapelle d'Aurélien"
+    nom-en: "Aurélien's Chapel"
+    niveau: 67
+    donneur: a6_morvain
+    resume:
+      - "Loin à l'ouest, une chapelle brûlée"
+      - "garde la dernière prière d'Aurélien."
+    resume-en:
+      - "Far to the west, a burnt chapel"
+      - "keeps Aurélien's last prayer."
+    offre:
+      - "a6_morvain: Tout à l'ouest des Cendres, Aurélien avait sa chapelle. Il y priait la nuit avant chaque chaîne. Je ne sais pas ce qu'il disait. Toi, tu peux aller le lire."
+    offre-en:
+      - "a6_morvain: Far to the west of the Ashlands, Aurélien had his chapel. He prayed there the night before every chain. I do not know what he said. You can go and read it."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la chapelle brûlée"
+        texte-en: "Reach the burnt chapel"
+        point: a6_ruine_k3
+        rayon: 10
+      - type: INTERAGIR
+        texte: "Lire l'inscription de l'autel"
+        texte-en: "Read the inscription on the altar"
+        point: a6_ruine_k3
+        rayon: 6
+        apres:
+          - "Gravé dans la pierre de l'autel : « Pour qu'il ne parte plus jamais. Pour qu'il ne me laisse plus. »"
+        apres-en:
+          - "Carved into the altar stone: « So that it never leaves again. So that it never leaves me again. »"
+      - type: PARLER
+        texte: "Revenir voir Morvain"
+        texte-en: "Return to Morvain"
+        pnj: a6_morvain
+        dialogue:
+          - "a6_morvain: « Pour qu'il ne me laisse plus. » Ce n'était pas une prière pour le monde. C'était un homme qui avait peur d'être seul."
+        dialogue-en:
+          - "a6_morvain: « So that it never leaves me again. » It was not a prayer for the world. It was a man afraid of being alone."
+    recompenses:
+      xp: 16700
+      or: 1670
+
+  a6_n_le_cercle_de_cendre:
+    nom: "Le cercle de cendre"
+    nom-en: "The Ash Circle"
+    niveau: 68
+    requiert: [a6_n_la_tour_des_hotes]
+    donneur: a6_ottilie
+    resume:
+      - "Un cercle de pierres levées, à l'ouest,"
+      - "se resserre la nuit."
+    resume-en:
+      - "A circle of standing stones, to the west,"
+      - "tightens at night."
+    offre:
+      - "a6_ottilie: À l'ouest, un cercle de pierres. La nuit, la cendre tourne dedans et se resserre comme une main. Je veux savoir pourquoi. Entre dedans."
+    offre-en:
+      - "a6_ottilie: To the west, a circle of stones. At night, the ash swirls inside and tightens like a hand. I want to know why. Go inside."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre le cercle de pierres"
+        texte-en: "Reach the stone circle"
+        point: a6_ruine_k2
+        rayon: 10
+      - type: SURVIE
+        texte: "Tenir dans le cercle qui se resserre"
+        texte-en: "Hold on in the tightening circle"
+        point: a6_ruine_k2
+        rayon: 14
+        duree: 45
+        mode: resserre
+        rayon-fin: 4
+        degats: 5
+        apres:
+          - "Au centre, la cendre retombe d'un coup. Sur la pierre du milieu, une empreinte de main, et l'ombre d'un astre gravé."
+        apres-en:
+          - "At the centre, the ash falls all at once. On the middle stone, a handprint, and the shadow of a carved star."
+      - type: PARLER
+        texte: "Raconter à Ottilie"
+        texte-en: "Tell Ottilie"
+        pnj: a6_ottilie
+        dialogue:
+          - "a6_ottilie: Une main posée là, il y a mille ans. Un Hôte attendait que l'Astre redescende. Le cercle attend encore."
+        dialogue-en:
+          - "a6_ottilie: A hand laid there, a thousand years ago. A Host waited for the Star to come down again. The circle is still waiting."
+    recompenses:
+      xp: 17100
+      or: 1710
+
+  a6_n_les_souvenirs_dans_la_cendre:
+    nom: "Les souvenirs dans la cendre"
+    nom-en: "Memories in the Ash"
+    niveau: 66
+    donneur: a6_morvain
+    resume:
+      - "Des Marqués morts dans la cendre"
+      - "ont laissé des souvenirs qui ne sont pas les leurs."
+    resume-en:
+      - "Marked who died in the ash"
+      - "left memories that are not their own."
+    offre:
+      - "a6_morvain: Des Marqués sont morts dans la cendre, autour du camp. Ce qu'ils portaient garde des souvenirs. Pas les leurs : ceux de l'Astre. Touche-les."
+    offre-en:
+      - "a6_morvain: Marked died in the ash, around the camp. What they carried keeps memories. Not theirs: the Star's. Touch them."
+    etapes:
+      - type: ENQUETE
+        texte: "Toucher les objets des Marqués morts"
+        texte-en: "Touch the belongings of the dead Marked"
+        pnj: a6_morvain
+        indices:
+          - point: a6_souvenir_1
+            texte: "Un ruban brûlé"
+            texte-en: "A burnt ribbon"
+            apres:
+              - "Tu touches le ruban. Le ciel s'ouvre en dessous de toi : tu descends, doucement, vers des mains levées. On t'attend."
+            apres-en:
+              - "You touch the ribbon. The sky opens beneath you: you are descending, gently, towards raised hands. You are expected."
+          - point: a6_souvenir_2
+            texte: "Une petite cuillère"
+            texte-en: "A small spoon"
+            apres:
+              - "Des enfants Hôtes rient autour de toi. L'un d'eux te tend un bol d'eau. Tu n'as pas soif, mais tu bois."
+            apres-en:
+              - "Host children laugh around you. One of them holds out a bowl of water. You are not thirsty, but you drink."
+          - point: a6_souvenir_3
+            texte: "Une lettre jamais envoyée"
+            texte-en: "A letter never sent"
+            apres:
+              - "Tu remontes vers le ciel. En bas, un homme pleure et tend une chaîne. Il s'appelle Aurélien. Tu ne lui en veux pas. Tu as seulement froid."
+            apres-en:
+              - "You rise towards the sky. Below, a man weeps and holds out a chain. His name is Aurélien. You do not blame him. You are only cold."
+        dialogue:
+          - "a6_morvain: Tu as vu par ses yeux. Il ne nous en veut pas. Il a froid. C'est pire."
+        dialogue-en:
+          - "a6_morvain: You saw through its eyes. It does not blame us. It is cold. That is worse."
+    recompenses:
+      xp: 16300
+      or: 1630
+
+  a6_n_le_colporteur:
+    nom: "Le colporteur"
+    nom-en: "The Peddler"
+    niveau: 64
+    donneur: a6_colporteur
+    resume:
+      - "Ambroise doit rejoindre le relais de l'ouest."
+    resume-en:
+      - "Ambroise must reach the western relay."
+    offre:
+      - "a6_colporteur: Je dois porter mes marchandises au relais de l'ouest. Les pilleurs de cendres me suivent depuis deux jours. Tu m'accompagnes ? Je paie en sel. Et en or."
+    offre-en:
+      - "a6_colporteur: I have to take my goods to the western relay. The ash-looters have followed me for two days. Will you come with me? I pay in salt. And in gold."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter Ambroise jusqu'au relais"
+        texte-en: "Escort Ambroise to the relay"
+        pnj: a6_colporteur
+        chemin: [a6_route_1, a6_route_2, a6_relais_ouest]
+        monstres: [a6_pillard_cendre]
+        nombre: 3
+        vagues: 2
+        pv: 120
+        degats: 5
+        apres:
+          - "a6_colporteur: Arrivés, et le sel est sec. Tiens. Et si un jour tu passes à Auréval ou à Morneval, dis que tu connais Ambroise. Ça n'ouvre aucune porte, mais ça fait rire."
+        apres-en:
+          - "a6_colporteur: Here, and the salt is dry. Take this. And if you ever pass through Auréval or Morneval, say you know Ambroise. It opens no doors, but it makes people laugh."
+    recompenses:
+      xp: 15500
+      or: 1550
+
+  a6_n_les_calcines_de_l_ouest:
+    nom: "Les Calcinés de l'ouest"
+    nom-en: "The Charred of the West"
+    niveau: 70
+    donneur: a6_hulda
+    resume:
+      - "Un grand camp de Calcinés"
+      - "menace les puits de l'ouest."
+    resume-en:
+      - "A large camp of the Charred"
+      - "threatens the western pits."
+    offre:
+      - "a6_hulda: Tout à l'ouest, les Calcinés ont bâti un vrai camp. Ils descendent la nuit vers mes puits. Fais-les remonter, pour de bon."
+    offre-en:
+      - "a6_hulda: Far to the west, the Charred have built a real camp. They come down to my pits at night. Send them back up, for good."
+    etapes:
+      - type: TUER
+        texte: "Détruire le camp des Calcinés de l'ouest"
+        texte-en: "Destroy the camp of the western Charred"
+        monstres: [cendreux, brute_calcinee]
+        nombre: 14
+        point: a6_camp_k7
+      - type: PARLER
+        texte: "Revenir voir Hulda"
+        texte-en: "Return to Hulda"
+        pnj: a6_hulda
+        dialogue:
+          - "a6_hulda: Les puits de l'ouest vont rouvrir. Il y aura du travail, et du pain."
+        dialogue-en:
+          - "a6_hulda: The western pits will reopen. There will be work, and bread."
+    recompenses:
+      xp: 17900
+      or: 1790
+
+  a6_n_le_brasier_roi:
+    nom: "Le Brasier-Roi"
+    nom-en: "The Ember-King"
+    niveau: 70
+    requiert: [a6_n_les_calcines_de_l_ouest]
+    donneur: a6_hulda
+    resume:
+      - "Le chef des Calcinés, le Brasier-Roi,"
+      - "s'est montré au sud."
+    resume-en:
+      - "The leader of the Charred, the Ember-King,"
+      - "has shown himself to the south."
+    offre:
+      - "a6_hulda: Celui qui mène les Calcinés, on l'appelle le Brasier-Roi. C'était mon contremaître. Il est au sud, près du col. Rends-lui la paix."
+    offre-en:
+      - "a6_hulda: The one who leads the Charred, they call him the Ember-King. He was my foreman. He is to the south, near the pass. Give him peace."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Trouver le Brasier-Roi"
+        texte-en: "Find the Ember-King"
+        point: a6_brasier_roi
+        rayon: 10
+      - type: TUER
+        texte: "Abattre le Brasier-Roi"
+        texte-en: "Kill the Ember-King"
+        monstres: [a6_roi_calcine]
+        point: a6_brasier_roi
+      - type: PARLER
+        texte: "Revenir voir Hulda"
+        texte-en: "Return to Hulda"
+        pnj: a6_hulda
+        dialogue:
+          - "a6_hulda: Il s'appelait Gonthier. Il chantait faux. Merci."
+        dialogue-en:
+          - "a6_hulda: His name was Gonthier. He sang off-key. Thank you."
+    recompenses:
+      xp: 22400
+      or: 2240
+
+  a6_n_le_puits_des_dormeurs:
+    nom: "Le puits des dormeurs"
+    nom-en: "The Sleepers' Pit"
+    niveau: 71
+    requiert: [a6_n_le_grisou]
+    donneur: a6_hulda
+    resume:
+      - "Des Calcinés dorment dans la galerie de l'est."
+      - "Hulda veut récupérer ses outils."
+    resume-en:
+      - "Charred lie sleeping in the eastern tunnel."
+      - "Hulda wants her tools back."
+    offre:
+      - "a6_hulda: Depuis le grisou, des Calcinés dorment dans la galerie. Mes outils y sont restés. Passe sans les réveiller : s'ils te voient, ils te chassent jusqu'au sentier."
+    offre-en:
+      - "a6_hulda: Since the firedamp, Charred have been sleeping in the tunnel. My tools stayed there. Get through without waking them: if they see you, they chase you back to the path."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Rejoindre le sentier de la galerie"
+        texte-en: "Reach the tunnel path"
+        point: a6_patrouille_1
+        rayon: 5
+      - type: INFILTRER
+        texte: "Atteindre la galerie sans réveiller les dormeurs"
+        texte-en: "Reach the tunnel without waking the sleepers"
+        point: a6_galerie
+        depart: a6_patrouille_1
+        monstres: [a6_dormeur]
+        vue: 9
+        rayon: 3
+        apres:
+          - "Les caisses d'outils de Hulda. Personne ne s'est réveillé."
+        apres-en:
+          - "Hulda's tool crates. No one woke up."
+      - type: PARLER
+        texte: "Revenir voir Hulda"
+        texte-en: "Return to Hulda"
+        pnj: a6_hulda
+        dialogue:
+          - "a6_hulda: Mes pioches ! Tu sais combien ça coûte, une pioche, aux Cendres ? Un bras. Parfois deux."
+        dialogue-en:
+          - "a6_hulda: My picks! Do you know what a pick costs, in the Ashlands? An arm. Sometimes two."
+    recompenses:
+      xp: 18300
+      or: 1830
+
+  # ================================================================ ANNEXES — CONTRATS RÉPÉTABLES DU CAMP DES CENDRES (Mirza)
+
+  a6_c_cendreux:
+    nom: "Contrat : cendreux"
+    nom-en: "Contract: ash-walkers"
+    repetable: 20
+    niveau: 62
+    donneur: a6_mirza
+    resume:
+      - "Contrat du jour : chasser des Cendreux."
+    resume-en:
+      - "Today's contract: hunt Ash-walkers."
+    offre:
+      - "a6_mirza: Quinze Cendreux, n'importe où dans les Cendres. Payé ce soir."
+    offre-en:
+      - "a6_mirza: Fifteen Ash-walkers, anywhere in the Ashlands. Paid tonight."
+    etapes:
+      - type: TUER
+        texte: "Abattre des Cendreux"
+        texte-en: "Kill Ash-walkers"
+        monstres: [cendreux]
+        nombre: 15
+      - type: PARLER
+        texte: "Toucher la paie chez Mirza"
+        texte-en: "Collect pay from Mirza"
+        pnj: a6_mirza
+        dialogue:
+          - "a6_mirza: Quinze. Signé, payé. Reviens demain."
+        dialogue-en:
+          - "a6_mirza: Fifteen. Signed, paid. Come back tomorrow."
+    recompenses:
+      xp: 6500
+      or: 650
+
+  a6_c_chiens:
+    nom: "Contrat : chiens de cendre"
+    nom-en: "Contract: ash hounds"
+    repetable: 20
+    niveau: 63
+    donneur: a6_mirza
+    resume:
+      - "Contrat du jour : chasser des chiens de cendre."
+    resume-en:
+      - "Today's contract: hunt ash hounds."
+    offre:
+      - "a6_mirza: Les chiens de cendre attaquent les porteurs d'eau. Douze, et la route respire."
+    offre-en:
+      - "a6_mirza: The ash hounds attack the water-carriers. Twelve, and the road breathes."
+    etapes:
+      - type: TUER
+        texte: "Abattre des chiens de cendre"
+        texte-en: "Kill ash hounds"
+        monstres: [chien_cendre]
+        nombre: 12
+      - type: PARLER
+        texte: "Toucher la paie chez Mirza"
+        texte-en: "Collect pay from Mirza"
+        pnj: a6_mirza
+        dialogue:
+          - "a6_mirza: Les porteurs d'eau te saluent. Moi, je te paie."
+        dialogue-en:
+          - "a6_mirza: The water-carriers salute you. I pay you."
+    recompenses:
+      xp: 6600
+      or: 660
+
+  a6_c_brutes:
+    nom: "Contrat : brutes calcinées"
+    nom-en: "Contract: charred brutes"
+    repetable: 20
+    niveau: 66
+    donneur: a6_mirza
+    resume:
+      - "Contrat du jour : abattre des brutes calcinées."
+    resume-en:
+      - "Today's contract: bring down charred brutes."
+    offre:
+      - "a6_mirza: Huit brutes calcinées. Elles cassent les étais des puits. Payé double si tu reviens entier."
+    offre-en:
+      - "a6_mirza: Eight charred brutes. They break the pit props. Paid double if you come back whole."
+    etapes:
+      - type: TUER
+        texte: "Abattre des brutes calcinées"
+        texte-en: "Kill charred brutes"
+        monstres: [brute_calcinee]
+        nombre: 8
+      - type: PARLER
+        texte: "Toucher la paie chez Mirza"
+        texte-en: "Collect pay from Mirza"
+        pnj: a6_mirza
+        dialogue:
+          - "a6_mirza: Entier. Bon. Payé."
+        dialogue-en:
+          - "a6_mirza: Whole. Good. Paid."
+    recompenses:
+      xp: 7100
+      or: 710
+
+  a6_c_cendre_vive:
+    nom: "Contrat : cendre vive"
+    nom-en: "Contract: live ash"
+    repetable: 20
+    niveau: 64
+    donneur: a6_mirza
+    resume:
+      - "Contrat du jour : récolter de la cendre vive."
+    resume-en:
+      - "Today's contract: gather live ash."
+    offre:
+      - "a6_mirza: La cendre vive des Cendreux chauffe les fours du camp. Dix poignées."
+    offre-en:
+      - "a6_mirza: The live ash of the Ash-walkers heats the camp ovens. Ten handfuls."
+    etapes:
+      - type: RAMASSER
+        texte: "Récolter de la cendre vive sur les Cendreux"
+        texte-en: "Gather live ash from Ash-walkers"
+        monstres: [cendreux]
+        nombre: 10
+        chance: 0.5
+        objet: "Poignée de cendre vive"
+        objet-en: "Handful of live ash"
+      - type: PARLER
+        texte: "Toucher la paie chez Mirza"
+        texte-en: "Collect pay from Mirza"
+        pnj: a6_mirza
+        dialogue:
+          - "a6_mirza: Les fours tiendront la semaine."
+        dialogue-en:
+          - "a6_mirza: The ovens will last the week."
+    recompenses:
+      xp: 6800
+      or: 680
+
+  a6_c_tenir_le_poste:
+    nom: "Contrat : tenir le poste"
+    nom-en: "Contract: hold the outpost"
+    repetable: 20
+    niveau: 65
+    donneur: a6_mirza
+    resume:
+      - "Contrat du jour : défendre le poste des mineurs."
+    resume-en:
+      - "Today's contract: defend the miners' outpost."
+    offre:
+      - "a6_mirza: Le poste des mineurs, à l'est. Les Affamés viennent à l'heure de la relève. Tiens une minute."
+    offre-en:
+      - "a6_mirza: The miners' outpost, to the east. The Starved come at the change of shift. Hold for a minute."
+    etapes:
+      - type: DEFENSE
+        texte: "Défendre le poste des mineurs"
+        texte-en: "Defend the miners' outpost"
+        point: a6_poste_mineurs
+        monstres: [a6_affame]
+        nombre: 3
+        duree: 60
+        intervalle: 15
+        apparition: a6_poste_entree
+        pv: 250
+        degats: 5
+        cible: "Le poste des mineurs"
+        cible-en: "The miners' outpost"
+      - type: PARLER
+        texte: "Toucher la paie chez Mirza"
+        texte-en: "Collect pay from Mirza"
+        pnj: a6_mirza
+        dialogue:
+          - "a6_mirza: La relève est passée. Payé."
+        dialogue-en:
+          - "a6_mirza: The shift has changed. Paid."
+    recompenses:
+      xp: 7000
+      or: 700
+
+  a6_c_ravitaillement:
+    nom: "Contrat : ravitaillement"
+    nom-en: "Contract: supplies"
+    repetable: 20
+    niveau: 64
+    donneur: a6_mirza
+    resume:
+      - "Contrat du jour : porter des vivres au poste."
+    resume-en:
+      - "Today's contract: carry supplies to the outpost."
+    offre:
+      - "a6_mirza: Une caisse de vivres pour le poste des mineurs. À dos de monture. Si elle tombe, c'est ta paie qui roule."
+    offre-en:
+      - "a6_mirza: A crate of supplies for the miners' outpost. On a mount. If it falls, it is your pay that rolls away."
+    etapes:
+      - type: TRANSPORT
+        texte: "Porter les vivres au poste des mineurs"
+        texte-en: "Carry the supplies to the miners' outpost"
+        point: a6_poste_mineurs
+        depart: a6_auberge_cendres
+        materiau: BARREL
+        rayon: 5
+        objet: "Caisse de vivres"
+        objet-en: "Supply crate"
+      - type: PARLER
+        texte: "Toucher la paie chez Mirza"
+        texte-en: "Collect pay from Mirza"
+        pnj: a6_mirza
+        dialogue:
+          - "a6_mirza: Livré. Les mineurs mangeront ce soir."
+        dialogue-en:
+          - "a6_mirza: Delivered. The miners will eat tonight."
+    recompenses:
+      xp: 6800
+      or: 680
+
+  a6_c_patrouille:
+    nom: "Contrat : patrouille"
+    nom-en: "Contract: patrol"
+    repetable: 20
+    niveau: 62
+    donneur: a6_mirza
+    resume:
+      - "Contrat du jour : faire la ronde des balises."
+    resume-en:
+      - "Today's contract: walk the beacon round."
+    offre:
+      - "a6_mirza: Trois balises autour du camp. Une ronde rapide : deux minutes et demie entre chaque. Si tu traînes, on ne compte pas."
+    offre-en:
+      - "a6_mirza: Three beacons around the camp. A quick round: two and a half minutes between each. If you dawdle, it does not count."
+    etapes:
+      - type: ATTEINDRE
+        texte: "Atteindre la balise du nord"
+        texte-en: "Reach the northern beacon"
+        point: a6_patrouille_1
+        rayon: 6
+        chrono: 150
+        echec:
+          - "a6_mirza: Trop lent. Reprends la ronde."
+        echec-en:
+          - "a6_mirza: Too slow. Start the round again."
+      - type: ATTEINDRE
+        texte: "Atteindre la balise de l'est"
+        texte-en: "Reach the eastern beacon"
+        point: a6_patrouille_2
+        rayon: 6
+        chrono: 150
+        reprise: 1
+        echec:
+          - "a6_mirza: Trop lent. Reprends la ronde."
+        echec-en:
+          - "a6_mirza: Too slow. Start the round again."
+      - type: ATTEINDRE
+        texte: "Atteindre la balise de l'ouest"
+        texte-en: "Reach the western beacon"
+        point: a6_patrouille_3
+        rayon: 6
+        chrono: 150
+        reprise: 1
+        echec:
+          - "a6_mirza: Trop lent. Reprends la ronde."
+        echec-en:
+          - "a6_mirza: Too slow. Start the round again."
+      - type: PARLER
+        texte: "Toucher la paie chez Mirza"
+        texte-en: "Collect pay from Mirza"
+        pnj: a6_mirza
+        dialogue:
+          - "a6_mirza: Ronde faite. Rien à signaler, c'est ce qu'on aime."
+        dialogue-en:
+          - "a6_mirza: Round done. Nothing to report, which is how we like it."
+    recompenses:
+      xp: 6500
+      or: 650
+
+  a6_c_affames:
+    nom: "Contrat : Affamés"
+    nom-en: "Contract: the Starved"
+    repetable: 20
+    niveau: 68
+    donneur: a6_mirza
+    resume:
+      - "Contrat du jour : repousser les Affamés de la grande faille."
+    resume-en:
+      - "Today's contract: drive back the Starved of the great rift."
+    offre:
+      - "a6_mirza: La grande faille du sud-ouest crache des Affamés toute la journée. Dix de moins, et le camp dort."
+    offre-en:
+      - "a6_mirza: The great south-western rift spits out Starved all day. Ten fewer, and the camp sleeps."
+    etapes:
+      - type: TUER
+        texte: "Abattre des Affamés à la grande faille"
+        texte-en: "Kill Starved at the great rift"
+        monstres: [a6_affame]
+        nombre: 10
+        point: a6_grande_faille
+      - type: PARLER
+        texte: "Toucher la paie chez Mirza"
+        texte-en: "Collect pay from Mirza"
+        pnj: a6_mirza
+        dialogue:
+          - "a6_mirza: Dix. Le camp dormira."
+        dialogue-en:
+          - "a6_mirza: Ten. The camp will sleep."
+    recompenses:
+      xp: 7500
+      or: 750
+
+  a6_c_escorte_du_mineur:
+    nom: "Contrat : escorter Gaudry"
+    nom-en: "Contract: escort Gaudry"
+    repetable: 20
+    niveau: 66
+    donneur: a6_mirza
+    resume:
+      - "Contrat du jour : escorter un mineur jusqu'à la galerie."
+    resume-en:
+      - "Today's contract: escort a miner to the tunnel."
+    offre:
+      - "a6_mirza: Gaudry, au poste des mineurs, descend à la galerie chaque jour. Les pilleurs de cendres le guettent. Accompagne-le."
+    offre-en:
+      - "a6_mirza: Gaudry, at the miners' outpost, goes down to the tunnel every day. The ash-looters lie in wait for him. Go with him."
+    etapes:
+      - type: ESCORTE
+        texte: "Escorter Gaudry jusqu'à la galerie"
+        texte-en: "Escort Gaudry to the tunnel"
+        pnj: a6_mineur
+        chemin: [a6_patrouille_1, a6_galerie]
+        monstres: [a6_pillard_cendre]
+        nombre: 3
+        vagues: 2
+        pv: 120
+        degats: 5
+        apres:
+          - "a6_mineur: Arrivé. À demain, même heure."
+        apres-en:
+          - "a6_mineur: Here. See you tomorrow, same time."
+      - type: PARLER
+        texte: "Toucher la paie chez Mirza"
+        texte-en: "Collect pay from Mirza"
+        pnj: a6_mirza
+        dialogue:
+          - "a6_mirza: Gaudry est à la galerie. Payé."
+        dialogue-en:
+          - "a6_mirza: Gaudry is at the tunnel. Paid."
+    recompenses:
+      xp: 7100
+      or: 710
+
+  a6_c_avis_de_recherche:
+    nom: "Avis de recherche : le Brasier-Roi"
+    nom-en: "Wanted: the Ember-King"
+    repetable: 168
+    niveau: 70
+    donneur: a6_mirza
+    resume:
+      - "Contrat de la semaine : le Brasier-Roi"
+      - "s'est relevé au sud."
+    resume-en:
+      - "This week's contract: the Ember-King"
+      - "has risen again to the south."
+    offre:
+      - "a6_mirza: La cendre l'a relevé. Le Brasier-Roi est revenu au sud. Grosse prime, une fois par semaine."
+    offre-en:
+      - "a6_mirza: The ash raised him again. The Ember-King is back to the south. Big bounty, once a week."
+    etapes:
+      - type: TUER
+        texte: "Abattre le Brasier-Roi"
+        texte-en: "Kill the Ember-King"
+        monstres: [a6_roi_calcine]
+        point: a6_brasier_roi
+      - type: PARLER
+        texte: "Toucher la prime chez Mirza"
+        texte-en: "Collect the bounty from Mirza"
+        pnj: a6_mirza
+        dialogue:
+          - "a6_mirza: La prime. Et à la semaine prochaine : il revient toujours."
+        dialogue-en:
+          - "a6_mirza: The bounty. And see you next week: he always comes back."
+    recompenses:
+      xp: 22400
+      or: 2240

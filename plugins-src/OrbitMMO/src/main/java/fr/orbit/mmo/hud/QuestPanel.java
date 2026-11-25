@@ -31,9 +31,9 @@ public final class QuestPanel {
     private static final ShadowColor SHADOW = ShadowColor.shadowColor(0x8C000000);
 
     /** Largeur du contenu (pixels d'interface). */
-    public static final int W = 140;
+    public static final int W = 118;
     /** Nombre de lignes maximum (le jeu en montre 15 au plus). */
-    public static final int MAX_ROWS = 14;
+    public static final int MAX_ROWS = 10;
     /** Largeur de l'image du cadre (6 px à gauche du contenu, 2 px à droite). */
     private static final int FRAME_W = W + 8;
     /** Marge laissée à droite du texte, avant le bord du cadre. */

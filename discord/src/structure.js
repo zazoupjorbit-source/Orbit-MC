@@ -168,6 +168,11 @@ const CATEGORIES = [
     overwrites: restrictedTo(TEAM),
     channels: [
       { key: 'staff_general', name: '🛡️・staff', topic: 'Discussion de l’équipe.' },
+      // Panneau du guide du staff, posté et tenu à jour par le bot (src/guide.js, dossier guide/).
+      { key: 'staff_guide', name: '📖・guide', topic: 'Guide du staff ORBIT MC : plugins, commandes admin, procédures. Réponses privées.',
+        overwrites: [ow('builder', [], [P.ViewChannel]), ow('scenariste', [], [P.ViewChannel]),
+          ...readOnly('admin', [], { reactions: false }), ...readOnly('dev', [], { reactions: false }),
+          ...readOnly('modo', [], { reactions: false }), ...readOnly('support', [], { reactions: false })] },
       { key: 'staff_logs', name: '📋・logs', topic: 'Journal automatique : tickets, actions du bot.',
         overwrites: [ow('builder', [], [P.ViewChannel]), ow('scenariste', [], [P.ViewChannel]),
           ...readOnly('modo'), ...readOnly('support')] },

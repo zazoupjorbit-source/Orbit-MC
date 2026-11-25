@@ -46,7 +46,8 @@ public final class AdminCommand implements CommandExecutor, TabCompleter {
             }
             // Outils de test du mini-jeu feu d'artifice : cibles d'entraînement, série forcée.
             case "feu" -> plugin.fireworkGame().command(sender, java.util.Arrays.copyOfRange(args, 1, args.length));
-            default -> plugin.messages().send(sender, "general.usage", Messages.ph("usage", "/orbitdev <reload|info|pack|feu>"));
+            case "clearlag" -> sender.sendMessage("Clear lag : " + plugin.clearLag().nettoyer() + " entité(s) retirée(s).");
+            default -> plugin.messages().send(sender, "general.usage", Messages.ph("usage", "/orbitdev <reload|info|pack|feu|clearlag>"));
         }
         return true;
     }
@@ -57,7 +58,7 @@ public final class AdminCommand implements CommandExecutor, TabCompleter {
             return List.of();
         }
         if (args.length == 1) {
-            return Completions.filter(List.of("reload", "info", "pack", "feu"), args[0]);
+            return Completions.filter(List.of("reload", "info", "pack", "feu", "clearlag"), args[0]);
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("feu")) {
             return Completions.filter(List.of("cible", "riposte", "retirer", "serie"), args[1]);

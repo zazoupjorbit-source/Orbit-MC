@@ -172,6 +172,19 @@ annonces:
       lines:
         - "<#E0B864>★</#E0B864> <#62CFF4>La boutique est disponible :</#62CFF4> <gray>cosmétiques, grades et plus avec</gray> <click:run_command:/boutique><hover:show_text:'<gray>Clique pour ouvrir la boutique'><#E0B864><u>/boutique</u></#E0B864></hover></click> <gray>!</gray>"
 
+# Clear lag : toutes les N minutes, retire les objets au sol, l'expérience et les flèches plantées (tous les mondes).
+# Épargnés : objets nommés ou posés par un plugin (vitrines, hologrammes…) et tridents. Forcer : /orbitdev clearlag.
+clear-lag:
+  enabled: true
+  interval-minutes: 10
+  items: true
+  xp-orbs: true
+  arrows: true
+  # Avertissements dans le chat, en secondes avant le nettoyage (<seconds>). Message vide = pas d'annonce.
+  warnings-seconds: [60, 10]
+  warning-message: "<#E0B864>⚠</#E0B864> <gray>Les objets au sol seront supprimés dans</gray> <#62CFF4><seconds> s</#62CFF4><gray>.</gray>"
+  done-message: "<#E0B864>⚠</#E0B864> <gray>Nettoyage :</gray> <#62CFF4><count></#62CFF4> <gray>entité(s) retirée(s).</gray>"
+
 cosmetics:
   # false : cosmétiques coupés sur ce serveur (rien d'affiché, menus et /monture refusés) ;
   # la sélection n'est pas effacée. À laisser à true sur le lobby seulement.

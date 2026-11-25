@@ -1,0 +1,10 @@
+{
+  "textures": {
+    "particle": "orbitvol:item/d_pad",
+    "d_pad": "orbitvol:item/d_pad"
+  },
+  "elements": [
+    {"from": [0, 7.75, 0], "to": [16, 8.25, 16], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_pad"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_pad"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_pad"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_pad"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_pad"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_pad"}}}
+  ],
+  "display": {"gui": {"rotation": [30, 225, 0], "scale": [0.6, 0.6, 0.6]}}
+}

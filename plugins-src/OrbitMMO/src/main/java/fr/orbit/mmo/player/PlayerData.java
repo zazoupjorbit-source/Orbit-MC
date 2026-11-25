@@ -41,6 +41,8 @@ public final class PlayerData {
     /** Montures apprises (ids de mounts.yml) et dernière montée. */
     public final java.util.Set<String> mounts = new java.util.LinkedHashSet<>();
     public String mountPick;
+    /** Garde-robe : apparences débloquées « plaques_3:chest » (voir item/Wardrobe). */
+    public final java.util.Set<String> looks = new java.util.LinkedHashSet<>();
     /** Auberge à laquelle le cristal de téléportation est lié (id du lieu : capitale ou village), null si aucune. */
     public String inn;
     /** Fin de la recharge du cristal de téléportation (ms ; passé : prêt). */
@@ -129,6 +131,7 @@ public final class PlayerData {
         introDone = y.getBoolean("intro-done");
         capitalHome = y.getBoolean("capital-home");
         mounts.addAll(y.getStringList("mounts"));
+        looks.addAll(y.getStringList("looks"));
         mountPick = y.getString("mount-pick");
         inn = y.getString("inn");
         crystalReadyAt = y.getLong("crystal-ready");
@@ -171,6 +174,7 @@ public final class PlayerData {
         y.set("intro-done", introDone);
         y.set("capital-home", capitalHome);
         y.set("mounts", mounts.isEmpty() ? null : new java.util.ArrayList<>(mounts));
+        y.set("looks", looks.isEmpty() ? null : new java.util.ArrayList<>(looks));
         y.set("mount-pick", mountPick);
         y.set("inn", inn);
         y.set("crystal-ready", crystalReadyAt > System.currentTimeMillis() ? crystalReadyAt : null);

@@ -4,6 +4,7 @@ import fr.orbit.mmo.OrbitMMO;
 import fr.orbit.mmo.classes.ClassDef;
 import fr.orbit.mmo.classes.SpecDef;
 import fr.orbit.mmo.clazz.WeaponType;
+import fr.orbit.mmo.item.ArmorType;
 import fr.orbit.mmo.item.Items;
 import fr.orbit.mmo.item.Loot;
 import fr.orbit.mmo.item.Loot.Base;
@@ -106,6 +107,7 @@ public final class ArmoryMenus {
             if (cat == Cat.BOUCLIERS) {
                 lore.add("<#D7DCE2>· Boucliers (main secondaire)");
             } else if (cat == Cat.ARMURES) {
+                lore.add("<#D7DCE2>· Tissu, cuir, mailles et plaques");
                 lore.add("<#D7DCE2>· Casques, plastrons, jambières, bottes");
                 lore.add("<#D7DCE2>· Ensembles complets (−10 %)");
             }
@@ -125,11 +127,19 @@ public final class ArmoryMenus {
     }
 
     static void category(OrbitMMO plugin, Player p, Cat cat) {
+        PlayerData pd = Menus.trader(plugin, p);
+        ArmorType mineType = pd == null ? null : ArmorType.of(plugin.progression().cls(pd));
+        category(plugin, p, cat, mineType == null ? ArmorType.PLAQUES : mineType);
+    }
+
+    /** Rayon ; pour les armures, celles du type donné (la classe ne porte que le sien). */
+    static void category(OrbitMMO plugin, Player p, Cat cat, ArmorType type) {
         PlayerData d = Menus.trader(plugin, p);
         if (d == null) {
             return;
         }
-        Runnable reopen = () -> category(plugin, p, cat);
+        Runnable reopen = () -> category(plugin, p, cat, type);
+        ArmorType classType = ArmorType.of(plugin.progression().cls(d));
         ClassDef c = plugin.progression().cls(d);
         Color dye = c == null ? null : Fx.color(c.hex);
         int content = cat == Cat.ARMURES ? 5 : cat == Cat.BOUCLIERS ? 1 : cat.bases.length;
@@ -138,34 +148,61 @@ public final class ArmoryMenus {
         List<WeaponType> mine = classWeapons(plugin, d);
 
         if (cat == Cat.ARMURES) {
+            boolean wearable = classType == null || classType == type;
             for (Slot s : Slot.values()) {
                 int row = s.ordinal();
-                m.set(row * 9, Items.icon(s.material(2), "<#FFD66E><b>" + s.label + "</b>",
-                        "<#8C96A3>Bonus propre : <#7CFF8A>" + s.implicit.label), null);
+                ItemStack head = Items.icon(s.material(type, 2), "<" + type.hex + "><b>" + type.piece(s) + "</b> <#8C96A3>(" + s.label + ")",
+                        "<#8C96A3>Armure de " + type.tag().toLowerCase(java.util.Locale.ROOT),
+                        "<#8C96A3>Bonus propre : <#7CFF8A>" + type.implicit(s).label);
+                Items.model(head, s.model(type, 2));
+                m.set(row * 9, head, null);
                 for (int t = 0; t < Loot.TIERS; t++) {
                     int tier = t;
                     long price = Loot.ARMOR_PRICE[t];
-                    m.set(row * 9 + 1 + t, Menus.priced(Loot.shopArmor(s, t, dye), price, Loot.TIER_LEVEL[t], d),
-                            click -> Menus.buy(plugin, p, d, price, Loot.TIER_LEVEL[tier], () -> Items.give(p, Loot.shopArmor(s, tier, dye)), reopen));
+                    m.set(row * 9 + 1 + t, Menus.priced(Loot.shopArmor(type, s, t, dye), price, Loot.TIER_LEVEL[t], d),
+                            click -> Menus.buy(plugin, p, d, price, Loot.TIER_LEVEL[tier], () -> Items.give(p, Loot.shopArmor(type, s, tier, dye)), reopen));
                 }
             }
             int row = 4;
             m.set(row * 9, Items.icon(Material.ARMOR_STAND, "<#FFD66E><b>Ensembles complets</b>",
-                    "<#8C96A3>Les 4 pièces, équipées à l'achat,", "<#8C96A3>10 % moins cher.", "<#5A6270>L'ancienne armure revient dans le sac."), null);
+                    wearable ? "<#8C96A3>Les 4 pièces, équipées à l'achat," : "<#FF8A3B>Votre classe ne porte pas cette armure :",
+                    wearable ? "<#8C96A3>10 % moins cher." : "<#FF8A3B>les pièces iront dans le sac.",
+                    "<#5A6270>L'ancienne armure revient dans le sac."), null);
             for (int t = 0; t < Loot.TIERS; t++) {
                 int tier = t;
                 long price = Math.round(Loot.ARMOR_PRICE[t] * 4 * 0.9);
-                ItemStack icon = Items.icon(Slot.CHEST.material(t), "<#D7DCE2>Ensemble " + Loot.TIER_NAMES[t],
-                        "<#8C96A3>Casque, plastron, jambières et bottes", "<#8C96A3>(qualité Commune).");
+                ItemStack icon = Items.icon(Slot.CHEST.material(type, t), "<#D7DCE2>Ensemble " + type.tierName(t),
+                        "<#8C96A3>4 pièces de " + type.label.toLowerCase(java.util.Locale.ROOT) + " (qualité Commune).");
+                Items.model(icon, Slot.CHEST.model(type, t));
                 m.set(row * 9 + 1 + t, Menus.priced(icon, price, Loot.TIER_LEVEL[t], d),
                         click -> Menus.buy(plugin, p, d, price, Loot.TIER_LEVEL[tier], () -> {
+                            ItemStack[] set = Loot.armorSet(type, tier, dye);
+                            if (!wearable) {
+                                for (ItemStack piece : set) {
+                                    Items.give(p, piece);
+                                }
+                                return;
+                            }
                             for (ItemStack old : p.getInventory().getArmorContents()) {
                                 if (old != null && !old.getType().isAir()) {
                                     Items.give(p, old);
                                 }
                             }
-                            Items.equip(p, Loot.armorSet(tier, dye));
+                            Items.equip(p, set);
                         }, reopen));
+            }
+            // Autres types : on peut les acheter (pour l'hôtel des ventes) mais pas les porter.
+            int col = 5;
+            for (ArmorType other : ArmorType.values()) {
+                boolean here = other == type;
+                ItemStack b = Items.icon(Slot.CHEST.material(other, 2), "<" + other.hex + "><b>Armures de " + other.label.toLowerCase(java.util.Locale.ROOT) + "</b>",
+                        other == classType ? "<#5EE89A>✔ Le type de votre classe" : "<#8C96A3>Votre classe ne le porte pas",
+                        here ? "<#7FD4FF>Affiché" : "<#5A6270>[Clic] voir ce rayon");
+                Items.model(b, Slot.CHEST.model(other, 2));
+                m.set((rows - 1) * 9 + col++, here ? Items.glow(b) : b, here ? null : t -> {
+                    Menus.click(p);
+                    category(plugin, p, cat, other);
+                });
             }
         } else if (cat == Cat.BOUCLIERS) {
             m.set(0, Items.icon(Material.SHIELD, "<#FFD66E><b>Bouclier</b>", "<#8C96A3>En main secondaire.",

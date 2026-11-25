@@ -28,70 +28,24 @@ function Get-Shade($c, [double]$f) {
     return [System.Drawing.Color]::FromArgb(255, $r[0], $r[1], $r[2])
 }
 
-# Motif d'une tuile de 16 x 16 px : fur (pelage), feather (plumes), scale (ecailles), leather (cuir cousu),
-# membrane (aile de cuir veinee), horn (corne striee), metal (dorure), eye (oeil brillant), plain (grain leger).
-function Set-Tile($bmp, [int]$ox, [int]$oy, $c, [string]$pattern, $rnd) {
-    for ($y = 0; $y -lt 16; $y++) {
-        for ($x = 0; $x -lt 16; $x++) {
-            $n = 0.92 + $rnd.NextDouble() * 0.16
-            switch ($pattern) {
-                'fur' {
-                    $strand = [Math]::Sin(($x * 2.1) + [Math]::Floor(($y + ($x % 3) * 2) / 4) * 1.7)
-                    $f = $n * (1 + 0.09 * $strand)
-                    if ((($x * 7 + [Math]::Floor($y / 3) * 5) % 11) -eq 0) { $f *= 0.8 }
-                }
-                'feather' {
-                    $row = [Math]::Floor($y / 4); $sx = ($x + ($row % 2) * 2) % 4; $sy = $y % 4
-                    $f = $n * (1.08 - 0.07 * $sy)
-                    if ($sy -eq 3 -or ($sx -eq 0 -and $sy -gt 0)) { $f *= 0.72 }
-                    if ($sy -eq 0) { $f *= 1.1 }
-                }
-                'scale' {
-                    $row = [Math]::Floor($y / 3); $sx = ($x + ($row % 2) * 2) % 4; $sy = $y % 3
-                    $f = $n * (1.12 - 0.1 * $sy)
-                    if ($sy -eq 2 -or $sx -eq 0) { $f *= 0.65 }
-                    if ($sy -eq 0 -and $sx -eq 2) { $f *= 1.25 }
-                }
-                'leather' {
-                    $f = $n * (0.97 + 0.04 * [Math]::Sin($x * 0.9 + $y * 0.4))
-                    if ($y -eq 1 -or $y -eq 14) { $f = if ($x % 3 -eq 0) { 1.45 } else { 0.8 } }
-                    if ($y -eq 0 -or $y -eq 15) { $f *= 0.7 }
-                }
-                'membrane' {
-                    $f = $n * (0.95 + 0.06 * [Math]::Sin($y * 0.6))
-                    if ((($x + [Math]::Floor($y / 2)) % 6) -eq 0) { $f *= 0.6 }
-                }
-                'horn' {
-                    $f = $n * (1 + 0.12 * [Math]::Sin($y * 1.3))
-                    if ($y % 4 -eq 0) { $f *= 0.8 }
-                }
-                'metal' {
-                    $f = 0.85 + 0.35 * (1 - [Math]::Abs($y - 5) / 11.0) + ($rnd.NextDouble() * 0.05)
-                    if (($x % 6 -eq 2) -and ($y % 6 -eq 2)) { $f = 1.5 }
-                }
-                'eye' {
-                    $d = [Math]::Sqrt(($x - 7.5) * ($x - 7.5) + ($y - 7.5) * ($y - 7.5))
-                    $f = if ($d -lt 3) { 1.35 } elseif ($d -lt 6) { 1.0 } else { 0.7 }
-                    if ($x -ge 4 -and $x -le 5 -and $y -ge 4 -and $y -le 5) { $f = 1.8 }
-                }
-                default { $f = $n }
-            }
-            $bmp.SetPixel($ox + $x, $oy + $y, (Get-Shade $c $f))
-        }
-    }
-}
+# Tuiles HD (24/11) : peintes par tools\hd\MountTiles.cs, $tile px par tuile (16 avant), meme disposition 8 x 8.
+Add-Type -Path (Join-Path $PSScriptRoot 'hd\MountTiles.cs') -ReferencedAssemblies System.Drawing
+$tile = 64
+$script:patterns = @{}
 
-# Palette (nom -> 'RRGGBB:motif') -> texture 128 x 128 (8 x 8 tuiles de 16 px) ; renvoie nom -> numero de tuile.
+# Palette (nom -> 'RRGGBB:motif') -> texture (8 x 8 tuiles de $tile px) ; renvoie nom -> numero de tuile.
 function New-Palette([string]$mount, [hashtable]$pal) {
-    $bmp = New-Object System.Drawing.Bitmap 128, 128
-    $rnd = New-Object System.Random ($mount.GetHashCode() -band 0x7fffffff)
+    $bmp = New-Object System.Drawing.Bitmap (8 * $tile), (8 * $tile)
+    $seed = 0; foreach ($ch in $mount.ToCharArray()) { $seed = ($seed * 31 + [int]$ch) % 1000003 }
     $index = @{}
     $i = 0
     foreach ($k in ($pal.Keys | Sort-Object)) {
         $parts = $pal[$k] -split ':'
         $pattern = if ($parts.Count -gt 1) { $parts[1] } else { 'plain' }
-        Set-Tile $bmp (($i % 8) * 16) ([Math]::Floor($i / 8) * 16) (Get-Col $parts[0]) $pattern $rnd
+        $c = Get-Col $parts[0]
+        [MountTiles]::Paint($bmp, ($i % 8) * $tile, [int]([Math]::Floor($i / 8) * $tile), $tile, $c[0], $c[1], $c[2], $pattern, $seed + $i * 7919)
         $index[$k] = $i
+        $script:patterns["$mount/$k"] = $pattern
         $i++
     }
     $p = Join-Path $out "assets/orbitmmo/textures/item/mount/$mount.png"
@@ -101,8 +55,40 @@ function New-Palette([string]$mount, [hashtable]$pal) {
     return $index
 }
 
+# Harnais ajoute sur chaque corps qui porte une selle (plaque de cuir horizontale) : pommeau, troussequin,
+# sangles des deux cotes, etrivieres et etriers. Couleur d'accent : gold, sinon metal, sinon celle de la selle.
+function Get-Harness([string]$name, [hashtable]$index, [string[]]$cubes) {
+    if ($name -notlike '*_corps') { return @() }
+    foreach ($line in $cubes) {
+        $t = $line.Trim() -split '\s+'
+        if ($t.Count -gt 7 -or ($t[6] -ne 'saddle' -and $t[6] -ne 'leather')) { continue }
+        $x1 = [double]$t[0]; $y1 = [double]$t[1]; $z1 = [double]$t[2]; $x2 = [double]$t[3]; $y2 = [double]$t[4]; $z2 = [double]$t[5]
+        if (($y2 - $y1) -gt 1.3 -or ($x2 - $x1) -lt 7 -or ($z2 - $z1) -lt 5) { continue }
+        $s = $t[6]
+        $a = if ($index.ContainsKey('gold')) { 'gold' } elseif ($index.ContainsKey('metal')) { 'metal' } else { $s }
+        $mx = ($x1 + $x2) / 2; $mz = ($z1 + $z2) / 2
+        $ys = [Math]::Max(-15, $y1 - 5.5)
+        return @(
+            "$(Num ($mx - 1.6)) $(Num $y2) $(Num ($z2 - 1.8)) $(Num ($mx + 1.6)) $(Num ($y2 + 1.4)) $(Num ($z2 - 0.4)) $s"
+            "$(Num ($mx - 1)) $(Num ($y2 + 1.4)) $(Num ($z2 - 1.5)) $(Num ($mx + 1)) $(Num ($y2 + 2.2)) $(Num ($z2 - 0.6)) $a"
+            "$(Num ($x1 + 1)) $(Num $y2) $(Num ($z1 + 0.3)) $(Num ($x2 - 1)) $(Num ($y2 + 1.8)) $(Num ($z1 + 1.5)) $s"
+            "$(Num ($x1 + 1.2)) $(Num ($y2 + 1.8)) $(Num ($z1 + 0.4)) $(Num ($x2 - 1.2)) $(Num ($y2 + 2.1)) $(Num ($z1 + 1.4)) $a"
+            "$(Num ($x1 - 0.3)) $(Num $ys) $(Num ($mz + 1.2)) $(Num $x1) $(Num $y1) $(Num ($mz + 2.4)) $s"
+            "$(Num $x2) $(Num $ys) $(Num ($mz + 1.2)) $(Num ($x2 + 0.3)) $(Num $y1) $(Num ($mz + 2.4)) $s"
+            "$(Num ($x1 - 0.5)) $(Num ($ys + 2)) $(Num ($mz + 1)) $(Num ($x1 - 0.2)) $(Num ($ys + 3)) $(Num ($mz + 2.6)) $a"
+            "$(Num ($x2 + 0.2)) $(Num ($ys + 2)) $(Num ($mz + 1)) $(Num ($x2 + 0.5)) $(Num ($ys + 3)) $(Num ($mz + 2.6)) $a"
+            "$(Num ($x1 - 0.35)) $(Num ($ys + 0.5)) $(Num ($mz - 0.9)) $(Num ($x1 - 0.1)) $(Num $y1) $(Num ($mz - 0.3)) $s"
+            "$(Num ($x2 + 0.1)) $(Num ($ys + 0.5)) $(Num ($mz - 0.9)) $(Num ($x2 + 0.35)) $(Num $y1) $(Num ($mz - 0.3)) $s"
+            "$(Num ($x1 - 1.6)) $(Num ($ys - 0.4)) $(Num ($mz - 1.6)) $(Num ($x1 - 0.2)) $(Num ($ys + 0.5)) $(Num ($mz + 0.4)) $a"
+            "$(Num ($x2 + 0.2)) $(Num ($ys - 0.4)) $(Num ($mz - 1.6)) $(Num ($x2 + 1.6)) $(Num ($ys + 0.5)) $(Num ($mz + 0.4)) $a"
+        )
+    }
+    return @()
+}
+
 function Write-MountModel([string]$name, [string]$mount, [hashtable]$index, [string[]]$cubes) {
     $els = @()
+    $cubes = @($cubes) + @(Get-Harness $name $index $cubes)
     foreach ($line in $cubes) {
         $t = $line.Trim() -split '\s+'
         $x1 = [double]$t[0]; $y1 = [double]$t[1]; $z1 = [double]$t[2]
@@ -114,9 +100,13 @@ function Write-MountModel([string]$name, [string]$mount, [hashtable]$index, [str
         $u = ($i % 8) * 2; $v = [Math]::Floor($i / 8) * 2
         $dx = [Math]::Abs($x2 - $x1); $dy = [Math]::Abs($y2 - $y1); $dz = [Math]::Abs($z2 - $z1)
         $dims = @{ north = @($dx, $dy); south = @($dx, $dy); east = @($dz, $dy); west = @($dz, $dy); up = @($dx, $dz); down = @($dx, $dz) }
+        # Fenetre centree dans la tuile (les bords de la tuile sont ombres) ; un oeil prend toujours la tuile entiere.
+        $isEye = $script:patterns["$mount/$col"] -eq 'eye'
         $faces = (@('north', 'south', 'east', 'west', 'up', 'down') | ForEach-Object {
             $w = [Math]::Max(0.125, [Math]::Min(1.98, $dims[$_][0] / 8)); $h = [Math]::Max(0.125, [Math]::Min(1.98, $dims[$_][1] / 8))
-            $uv = '[' + (Num ($u + 0.01)) + ', ' + (Num ($v + 0.01)) + ', ' + (Num ($u + 0.01 + $w)) + ', ' + (Num ($v + 0.01 + $h)) + ']'
+            if ($isEye) { $w = 1.98; $h = 1.98 }
+            $u0 = $u + (2 - $w) / 2; $v0 = $v + (2 - $h) / 2
+            $uv = '[' + (Num $u0) + ', ' + (Num $v0) + ', ' + (Num ($u0 + $w)) + ', ' + (Num ($v0 + $h)) + ']'
             '"' + $_ + '": {"uv": ' + $uv + ', "texture": "#0"}' }) -join ', '
         $rot = ''
         if ($t.Count -gt 7) {

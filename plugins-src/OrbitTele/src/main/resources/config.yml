@@ -1,0 +1,38 @@
+# ORBIT TV
+
+web:
+  # 127.0.0.1 = la page ne répond que sur ce PC (le tunnel ci-dessous s'y branche tout seul). À laisser tel quel.
+  adresse: 127.0.0.1
+  port: 8788
+  # Tunnel https gratuit (Cloudflare, tools\cloudflared.exe) lancé et surveillé par le plugin : il permet aux joueurs qui ne
+  # sont pas sur ce PC d'entendre le son des télés (/tele son). Il n'ouvre que la page d'écoute. Son adresse change à chaque
+  # redémarrage ; les liens donnés en jeu prennent toujours la bonne.
+  tunnel: true
+  # true = les admins peuvent aussi partager leur écran depuis un autre PC, par ce tunnel (/tele lien).
+  diffusion-a-distance: false
+  # Adresse https fixe, si la page passe par un autre moyen que le tunnel ci-dessus (laisser vide sinon).
+  url-publique: ""
+
+ecran:
+  # Taille par défaut de /tele poser, en blocs. Un bloc = 128 × 128 points.
+  largeur: 5
+  hauteur: 3
+  # Écran sur pieds : à combien de blocs devant soi il se pose.
+  distance: 6
+  # Au-delà, les joueurs ne reçoivent plus les images (ils retrouvent l'image complète en revenant).
+  rayon: 48
+  # Tramage du partage d'écran (la console et la veille n'en ont pas) : il ne joue que là où les couleurs
+  # des cartes sont loin de la vraie couleur. 0 = aucun (dégradés en marches), 22 = normal, 40 = marqué.
+  tramage: 22
+  # Image complète renvoyée à tous les spectateurs, par sécurité. 0 = jamais.
+  image-de-controle-secondes: 30
+
+son:
+  # Le son du partage d'écran s'écoute dans le navigateur (/tele son) : Minecraft ne sait pas le jouer sans mod.
+  # Au-delà de « portee » blocs de la télé on n'entend plus rien ; jusqu'à « plein » blocs le volume est au maximum.
+  portee: 32
+  plein: 6
+
+console:
+  # Hauteur du siège au-dessus du sol. À retoucher si le joueur flotte ou s'enfonce.
+  hauteur-siege: 0.45

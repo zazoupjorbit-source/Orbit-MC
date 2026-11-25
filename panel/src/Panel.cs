@@ -101,6 +101,68 @@ namespace DevPanel
         }
     }
 
+    // Bot Discord ORBIT MC (discord\src\bot.js) : lance a l'ouverture du panel, relance s'il tombe (controle chaque minute).
+    // Jamais arrete par le panel. Journal : discord\data\bot.log ; PID : discord\data\bot.pid.
+    static class DiscordBot
+    {
+        static string Dir { get { return Path.Combine(Paths.Root, "discord"); } }
+        static string PidFile { get { return Path.Combine(Dir, @"data\bot.pid"); } }
+        static string LogFile { get { return Path.Combine(Dir, @"data\bot.log"); } }
+        static readonly object sync = new object();
+        static System.Threading.Timer timer;
+
+        static string Node
+        {
+            get
+            {
+                foreach (var pf in new[] { Environment.GetEnvironmentVariable("ProgramW6432"), Environment.GetEnvironmentVariable("ProgramFiles") })
+                    if (!string.IsNullOrEmpty(pf) && File.Exists(Path.Combine(pf, @"nodejs\node.exe"))) return Path.Combine(pf, @"nodejs\node.exe");
+                return "node";
+            }
+        }
+
+        public static bool Running()
+        {
+            try
+            {
+                int pid;
+                if (!File.Exists(PidFile) || !int.TryParse(File.ReadAllText(PidFile).Trim(), out pid)) return false;
+                var p = Process.GetProcessById(pid);
+                return !p.HasExited && (p.ProcessName.Equals("cmd", StringComparison.OrdinalIgnoreCase) || p.ProcessName.Equals("node", StringComparison.OrdinalIgnoreCase));
+            }
+            catch { return false; }
+        }
+
+        public static void EnsureStarted()
+        {
+            lock (sync)
+            {
+                if (Running()) return;
+                if (!File.Exists(Path.Combine(Dir, ".env")) || !File.Exists(Path.Combine(Dir, @"src\bot.js")) || !Directory.Exists(Path.Combine(Dir, "node_modules"))) return;
+                try
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(LogFile));
+                    File.AppendAllText(LogFile, Environment.NewLine + "=== Lancement par le panel " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ===" + Environment.NewLine);
+                    // cmd /c pour rediriger la sortie dans un fichier : le bot survit a la fermeture du panel.
+                    var p = Process.Start(new ProcessStartInfo("cmd.exe", "/c \"\"" + Node + "\" src\\bot.js >> \"" + LogFile + "\" 2>&1\"")
+                    {
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        WorkingDirectory = Dir
+                    });
+                    File.WriteAllText(PidFile, p.Id.ToString());
+                }
+                catch { }
+            }
+        }
+
+        public static void StartWatch()
+        {
+            EnsureStarted();
+            timer = new System.Threading.Timer(_ => EnsureStarted(), null, 60000, 60000);
+        }
+    }
+
     class Settings
     {
         public int ramMb = 4096;
@@ -144,6 +206,7 @@ namespace DevPanel
 
             LoadSettings();
             Database.EnsureStarted(false);
+            DiscordBot.StartWatch();
             Token = NewToken();
             Mc = new ServerManager();
             DevWatcher.Apply();

@@ -6,7 +6,8 @@
   "main": "src/bot.js",
   "scripts": {
     "setup": "node src/setup.js",
-    "start": "node src/bot.js"
+    "start": "node src/bot.js",
+    "check-guide": "node scripts/check-guide.js"
   },
   "engines": {
     "node": ">=18.17"

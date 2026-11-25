@@ -1,0 +1,6 @@
+{
+  "layers": {
+    "humanoid": [{"texture": "orbitmmo:tenue_cuir_5"}],
+    "humanoid_leggings": [{"texture": "orbitmmo:tenue_cuir_5"}]
+  }
+}

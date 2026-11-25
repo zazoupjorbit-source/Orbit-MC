@@ -264,6 +264,8 @@ enchants:
     multiplicateur-apres: 1.08
     multiplicateur-credits: 10
 voteparty:
+  coffre-collecteur:
+    prix-credits: 10000
   actif: true
   objectif: 100
   recompenses:
@@ -578,6 +580,7 @@ generateurs:
     vente: 17.37
   depart: 10
 progression:
+  prestige-cout-base: 10000
   niveau-max: 100
   prestige-max: 100
   # XP pour passer du niveau N au suivant = (xp-base + xp-par-niveau × (N - 1)) × (1 + xp-bonus-prestige × prestige)

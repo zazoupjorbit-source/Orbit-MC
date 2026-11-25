@@ -10,7 +10,7 @@ couleur: "#8BC34A"
 icone: BOW
 jouable: true
 ressource: CONCENTRATION
-armure: MAILLES
+armure: CUIR   # 24/11 : chasseur en cuir (mailles : aucune classe pour l'instant)
 pv: 1.0
 arme: BOW
 description:

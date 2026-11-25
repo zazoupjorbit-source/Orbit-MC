@@ -1,0 +1,112 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {"when": "orbitmmo:armure/tissu_chest_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/tissu_chest_0"}},
+      {"when": "orbitmmo:armure/tissu_chest_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/tissu_chest_1"}},
+      {"when": "orbitmmo:armure/tissu_chest_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/tissu_chest_2"}},
+      {"when": "orbitmmo:armure/tissu_chest_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/tissu_chest_3"}},
+      {"when": "orbitmmo:armure/cuir_chest_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/cuir_chest_0"}},
+      {"when": "orbitmmo:armure/cuir_chest_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/cuir_chest_1"}},
+      {"when": "orbitmmo:armure/cuir_chest_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/cuir_chest_2"}},
+      {"when": "orbitmmo:armure/cuir_chest_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/cuir_chest_3"}},
+      {"when": "orbitmmo:armure/mailles_chest_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/mailles_chest_0"}},
+      {"when": "orbitmmo:armure/mailles_chest_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/mailles_chest_1"}},
+      {"when": "orbitmmo:armure/mailles_chest_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/mailles_chest_2"}},
+      {"when": "orbitmmo:armure/mailles_chest_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/mailles_chest_3"}},
+      {"when": "orbitmmo:armure/plaques_chest_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/plaques_chest_0"}},
+      {"when": "orbitmmo:armure/plaques_chest_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/plaques_chest_1"}},
+      {"when": "orbitmmo:armure/plaques_chest_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/plaques_chest_2"}},
+      {"when": "orbitmmo:armure/plaques_chest_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/plaques_chest_3"}}
+    ],
+    "fallback": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/copper_chestplate_quartz_trim"
+        },
+        "when": "minecraft:quartz"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/copper_chestplate_iron_trim"
+        },
+        "when": "minecraft:iron"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/copper_chestplate_netherite_trim"
+        },
+        "when": "minecraft:netherite"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/copper_chestplate_redstone_trim"
+        },
+        "when": "minecraft:redstone"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/copper_chestplate_copper_trim"
+        },
+        "when": "minecraft:copper"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/copper_chestplate_gold_trim"
+        },
+        "when": "minecraft:gold"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/copper_chestplate_emerald_trim"
+        },
+        "when": "minecraft:emerald"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/copper_chestplate_diamond_trim"
+        },
+        "when": "minecraft:diamond"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/copper_chestplate_lapis_trim"
+        },
+        "when": "minecraft:lapis"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/copper_chestplate_amethyst_trim"
+        },
+        "when": "minecraft:amethyst"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/copper_chestplate_resin_trim"
+        },
+        "when": "minecraft:resin"
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "minecraft:item/copper_chestplate"
+    },
+    "property": "minecraft:trim_material"
+  }
+  }
+}

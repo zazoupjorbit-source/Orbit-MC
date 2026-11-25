@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#060a14">
+<title>ORBIT TV · Régie de diffusion</title>
+<link rel="stylesheet" href="/orbit.css">
+<style>
+  .reglages { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-bottom: 18px; }
+  .boutons { display: flex; gap: 10px; flex-wrap: wrap; }
+  .vues { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+  .tv { display: grid; place-items: center; overflow: hidden; aspect-ratio: 5 / 3; background: #000; border: 2px solid var(--contour); border-radius: 3px; box-shadow: 0 0 0 2px #121c33, 0 0 0 4px var(--contour), 0 8px 24px rgba(0, 0, 0, .5); margin: 4px; }
+  .tv video, .tv img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .tv img { image-rendering: pixelated; }
+  .tv [hidden] { display: none; }
+  .tv span { padding: 20px; color: var(--gris); text-align: center; }
+  .son { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 6px 12px; margin-top: 14px; }
+  .son .etiquette { margin: 0; }
+  .son small { grid-column: 1 / -1; color: var(--gris); font-size: 13px; }
+  .son small.alerte { color: var(--orange); font-weight: 600; }
+  .chiffres { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .chiffre { padding: 12px 14px; }
+  .chiffre b { display: block; color: var(--or); font: 500 26px/1.1 var(--titre); font-variant-numeric: tabular-nums; }
+  .chiffre small { color: var(--gris); font-size: 12.5px; }
+</style>
+</head>
+<body>
+<main>
+  <header class="tete">
+    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+      <defs><clipPath id="haut"><rect width="64" height="32"/></clipPath></defs>
+      <circle cx="32" cy="32" r="24" fill="#3A7FFF" opacity=".18"/>
+      <circle cx="32" cy="32" r="16" fill="#3A7FFF"/>
+      <ellipse cx="32" cy="32" rx="29" ry="7.5" fill="none" stroke="#E0B864" stroke-width="2.6" transform="rotate(-22 32 32)"/>
+      <circle cx="32" cy="32" r="16" fill="#3A7FFF" clip-path="url(#haut)"/>
+      <ellipse cx="27" cy="25" rx="7" ry="4.6" fill="#62CFF4" opacity=".5"/>
+    </svg>
+    <div class="marque">
+      <h1>ORBIT <span class="metal">TV</span></h1>
+      <p>Régie de diffusion <span id="qui"></span></p>
+    </div>
+    <span class="etat" id="etat">Hors antenne</span>
+  </header>
+
+  <section class="cadre-hd">
+    <h2 class="titre-cadre metal">Réglages</h2>
+    <div class="reglages">
+      <div><label for="ecran">Écran en jeu</label><select id="ecran"></select></div>
+      <div><label for="cadrage">Cadrage</label><select id="cadrage"><option value="ajuster">Tout visible (bandes noires)</option><option value="remplir">Remplir (bords coupés)</option></select></div>
+      <div><label for="fps">Fluidité</label><select id="fps"><option value="10">10 images/s (léger)</option><option value="15" selected>15 images/s</option><option value="20">20 images/s (fluide)</option></select></div>
+      <div><label for="son">Son</label><select id="son"><option value="96000" selected>Avec le son</option><option value="160000">Avec le son, haute qualité</option><option value="0">Sans le son</option></select></div>
+      <div><label for="qualite">Qualité de l'image : <span id="qualiteTexte">80 %</span></label><input id="qualite" type="range" min="40" max="95" value="80"></div>
+    </div>
+    <div class="boutons">
+      <button class="principal" id="partager">Partager mon écran</button>
+      <button id="mire">Mire de test</button>
+      <button class="arret" id="arreter" disabled>Arrêter</button>
+    </div>
+    <div class="message" id="message" role="status"></div>
+  </section>
+
+  <section class="cadre-hd">
+    <div class="vues">
+      <div>
+        <h2 class="titre-cadre metal">Ce que tu envoies</h2>
+        <div class="tv"><video id="video" muted playsinline hidden></video><span id="videoVide">Rien pour l'instant</span></div>
+        <div class="son">
+          <span class="etiquette">Son envoyé</span>
+          <div class="vu creux" id="vu" role="img" aria-label="Niveau du son envoyé"></div>
+          <small id="sonTexte">Le son partira avec le partage d'écran.</small>
+        </div>
+      </div>
+      <div>
+        <h2 class="titre-cadre metal">Ce que voient les joueurs</h2>
+        <div class="tv"><img id="apercu" alt="Image affichée en jeu, aux couleurs des cartes" hidden><span id="apercuVide">Choisis un écran</span></div>
+        <div class="son"><small>Image réelle, ramenée aux couleurs des cartes du jeu.</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cadre-hd">
+    <div class="chiffres">
+      <div class="chiffre creux"><b id="cImages">0</b><small>images/s envoyées</small></div>
+      <div class="chiffre creux"><b id="cDebit">0</b><small>Ko/s vers le serveur</small></div>
+      <div class="chiffre creux"><b id="cJeu">0</b><small>Ko/s vers les joueurs</small></div>
+      <div class="chiffre creux"><b id="cSpect">0</b><small>spectateurs en jeu</small></div>
+      <div class="chiffre creux"><b id="cEcoute">0</b><small>pages d'écoute ouvertes</small></div>
+    </div>
+    <p class="aide">Partage plutôt <b>une fenêtre ou un onglet</b> qu'un écran entier : le texte reste bien plus lisible en jeu.
+      Pour le <b>son</b>, choisis un onglet ou l'écran entier et coche <b>« Partager aussi l'audio »</b> dans la fenêtre du navigateur (une fenêtre seule n'a pas de son).
+      Les joueurs l'entendent dans leur navigateur avec <code>/tele son</code>. Tant que cette page reste ouverte, la diffusion continue, même onglet caché.</p>
+  </section>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const jeton = location.hash.slice(1);
+const travail = new Worker('/travail.js');
+let ecrans = [], flux = null, actif = null, octetsJeu = null;
+let audio = null, sonEnvoye = false, niveauVu = 0;
+
+$('vu').innerHTML = '<i></i>'.repeat(24);
+const barres = [...$('vu').children];
+
+function dire(t) { $('message').textContent = t || ''; }
+function direSon(t, alerte) { $('sonTexte').textContent = t; $('sonTexte').className = alerte ? 'alerte' : ''; }
+function cfg() {
+  const e = ecrans.find(x => x.nom === $('ecran').value) || {};
+  return { ecran: e.nom, w: e.w, h: e.h, jeton, fps: +$('fps').value, qualite: $('qualite').value / 100, cadrage: $('cadrage').value };
+}
+async function api(chemin, options = {}) {
+  return fetch(chemin, { ...options, headers: { 'X-Jeton': jeton, ...(options.headers || {}) } });
+}
+
+async function rafraichir() {
+  try {
+    const r = await api('/ecrans');
+    if (r.status === 401) { dire("Ce lien n'est plus valable. Refais /tele lien en jeu."); $('partager').disabled = $('mire').disabled = true; return; }
+    ecrans = await r.json();
+    const choix = $('ecran').value;
+    $('ecran').innerHTML = ecrans.map(e => `<option value="${e.nom}">${e.nom} · ${e.w} × ${e.h} points</option>`).join('');
+    if (ecrans.some(e => e.nom === choix)) $('ecran').value = choix;
+    if (!ecrans.length) { dire("Aucun écran posé. En jeu : /tele poser salon 5 3"); return; }
+    const e = ecrans.find(x => x.nom === $('ecran').value);
+    document.querySelectorAll('.tv').forEach(c => c.style.aspectRatio = e.w + ' / ' + e.h);
+    $('cSpect').textContent = e.spectateurs;
+    $('cEcoute').textContent = e.auditeurs || 0;
+    if (octetsJeu !== null && octetsJeu.nom === e.nom) $('cJeu').textContent = Math.max(0, Math.round((e.octets - octetsJeu.v) / 1024 / 2));
+    octetsJeu = { nom: e.nom, v: e.octets };
+    const etat = $('etat');
+    etat.className = 'etat' + (e.mode === 'DIRECT' ? ' direct' : e.mode === 'CONSOLE' ? ' console' : '');
+    etat.textContent = e.mode === 'DIRECT' ? 'En direct · ' + e.par + (e.son ? ' · ♪' : '') : e.mode === 'CONSOLE' ? e.par + ' joue à la console' : 'Hors antenne';
+    const img = await api('/apercu.png?ecran=' + encodeURIComponent(e.nom));
+    if (img.ok) {
+      const url = URL.createObjectURL(await img.blob());
+      const vieux = $('apercu').src;
+      $('apercu').src = url; $('apercu').hidden = false; $('apercuVide').hidden = true;
+      if (vieux.startsWith('blob:')) URL.revokeObjectURL(vieux);
+    }
+  } catch (e) { dire('Serveur injoignable : le lobby est-il allumé ?'); }
+}
+
+function enCours(quoi) {
+  actif = quoi;
+  $('arreter').disabled = !quoi;
+  $('partager').disabled = $('mire').disabled = !!quoi;
+  $('ecran').disabled = $('son').disabled = !!quoi;
+}
+
+// ------------------------------------------------------------------ son
+// Le fil de travail encode le son en Opus et le dépose sur le serveur. « piste » = la piste audio du partage,
+// ou rien pour la mire (une note qui bat, fabriquée par le fil de travail, pour essayer sans rien partager).
+// Chrome et Edge lisent la piste directement ; ailleurs elle passe par un graphe audio (capture.js).
+async function sonDemarrer(piste) {
+  const debit = +$('son').value;
+  if (!debit) { direSon('Son coupé pour cette diffusion.'); return; }
+  if (!window.AudioEncoder) {
+    direSon("Ce navigateur ne sait pas envoyer le son : utilise Chrome ou Edge à jour.", true);
+    return;
+  }
+  sonEnvoye = true;
+  if (!piste) {
+    travail.postMessage({ type: 'son', source: 'mire', debit });
+    direSon('Mire sonore envoyée (une note qui bat).');
+    return;
+  }
+  if ('MediaStreamTrackProcessor' in window) {
+    try {
+      const lecture = new MediaStreamTrackProcessor({ track: piste }).readable;
+      travail.postMessage({ type: 'son', source: 'piste', flux: lecture, debit }, [lecture]);
+      direSon('Son du partage envoyé.');
+      return;
+    } catch (e) { /* ce navigateur ne lit pas une piste audio ainsi : on passe par le graphe audio */ }
+  }
+  try {
+    const ctx = new AudioContext({ sampleRate: 48000, latencyHint: 'interactive' });
+    audio = { ctx };
+    await ctx.audioWorklet.addModule('/capture.js');
+    if (audio === null || audio.ctx !== ctx) { ctx.close(); return; }
+    const noeud = new AudioWorkletNode(ctx, 'capture', { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2], channelCount: 2, channelCountMode: 'explicit', channelInterpretation: 'speakers' });
+    // sortie muette : elle ne sert qu'à garder le nœud en marche
+    const muet = ctx.createGain();
+    muet.gain.value = 0;
+    noeud.connect(muet).connect(ctx.destination);
+    const canal = new MessageChannel();
+    noeud.port.postMessage({ port: canal.port1 }, [canal.port1]);
+    travail.postMessage({ type: 'son', source: 'port', port: canal.port2, debit }, [canal.port2]);
+    ctx.createMediaStreamSource(new MediaStream([piste])).connect(noeud);
+    await ctx.resume();
+    direSon('Son du partage envoyé.');
+  } catch (e) {
+    direSon("Le son n'a pas pu démarrer : " + (e && e.message || e), true);
+    sonArreter();
+  }
+}
+
+function sonArreter() {
+  travail.postMessage({ type: 'son-stop' });
+  if (audio) { audio.ctx.close().catch(() => {}); audio = null; }
+  sonEnvoye = false;
+  niveauVu = 0;
+  dessinerVu();
+}
+
+function dessinerVu() {
+  const n = Math.round(niveauVu * barres.length);
+  barres.forEach((b, i) => { b.className = i < n ? 'on' + (i >= barres.length * 0.92 ? ' fort' : i >= barres.length * 0.72 ? ' haut' : '') : ''; });
+}
+
+async function arreter(sansAppel) {
+  travail.postMessage({ type: 'stop' });
+  sonArreter();
+  if (flux) { flux.getTracks().forEach(t => t.stop()); flux = null; }
+  $('video').hidden = true; $('video').srcObject = null; $('videoVide').hidden = false;
+  if (actif && !sansAppel) api('/stop?ecran=' + encodeURIComponent($('ecran').value), { method: 'POST' }).catch(() => {});
+  enCours(null);
+  $('cImages').textContent = $('cDebit').textContent = '0';
+  direSon($('son').value === '0' ? 'Son coupé : choisis « Avec le son » pour l\'envoyer.' : 'Le son partira avec le partage d\'écran.');
+}
+
+$('partager').onclick = async () => {
+  if (!cfg().ecran) return dire("Pose d'abord un écran en jeu : /tele poser salon 5 3");
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) return dire("Ce navigateur ne sait pas partager l'écran ici (il faut https, ou ouvrir la page sur le PC du serveur).");
+  const avecSon = $('son').value !== '0';
+  try {
+    flux = await navigator.mediaDevices.getDisplayMedia({
+      video: { frameRate: 30 },
+      // son tel quel : pas de traitement de voix sur de la musique ou une vidéo
+      audio: avecSon ? { echoCancellation: false, noiseSuppression: false, autoGainControl: false } : false,
+      ...(avecSon ? { systemAudio: 'include' } : {}),
+    });
+  } catch (e) { return dire('Partage annulé.'); }
+  const piste = flux.getVideoTracks()[0];
+  piste.onended = () => { dire('Partage arrêté.'); arreter(); };
+  $('video').srcObject = flux; $('video').hidden = false; $('videoVide').hidden = true; $('video').play().catch(() => {});
+  enCours('flux');
+  dire('');
+  if ('MediaStreamTrackProcessor' in window) {
+    const lecture = new MediaStreamTrackProcessor({ track: piste }).readable;
+    travail.postMessage({ type: 'flux', cfg: cfg(), flux: lecture }, [lecture]);
+  } else {
+    travail.postMessage({ type: 'tics', cfg: cfg() });
+  }
+  const pisteSon = flux.getAudioTracks()[0];
+  if (pisteSon) {
+    pisteSon.onended = () => { sonArreter(); direSon('Le son du partage s\'est arrêté.', true); };
+    sonDemarrer(pisteSon);
+  } else if (avecSon) {
+    direSon("Ce partage n'a pas de son. Pour l'avoir : partage un onglet ou l'écran entier et coche « Partager aussi l'audio ».", true);
+  } else {
+    direSon('Son coupé pour cette diffusion.');
+  }
+};
+$('mire').onclick = () => {
+  if (!cfg().ecran) return dire("Pose d'abord un écran en jeu : /tele poser salon 5 3");
+  enCours('mire'); dire('');
+  $('videoVide').textContent = 'Mire de test envoyée';
+  travail.postMessage({ type: 'mire', cfg: cfg() });
+  sonDemarrer(null);
+};
+$('arreter').onclick = () => { $('videoVide').textContent = "Rien pour l'instant"; arreter(); };
+['fps', 'qualite', 'cadrage'].forEach(id => $(id).oninput = () => {
+  $('qualiteTexte').textContent = $('qualite').value + ' %';
+  if (actif) travail.postMessage({ type: 'regler', cfg: cfg(), mire: actif === 'mire' });
+});
+$('son').onchange = () => { if (!actif) direSon($('son').value === '0' ? 'Son coupé : choisis « Avec le son » pour l\'envoyer.' : 'Le son partira avec le partage d\'écran.'); };
+
+travail.onmessage = async (m) => {
+  const d = m.data;
+  if (d.type === 'tic') {
+    if (flux && $('video').readyState >= 2) createImageBitmap($('video')).then(b => travail.postMessage({ type: 'image', image: b }, [b])).catch(() => {});
+  } else if (d.type === 'niveau') {
+    // de −48 dB (rien d'allumé) à 0 dB (tout allumé), avec une retombée douce
+    const cible = d.crete > 0 ? Math.max(0, Math.min(1, (20 * Math.log10(d.crete) + 48) / 48)) : 0;
+    niveauVu = Math.max(cible, niveauVu - 0.08);
+    dessinerVu();
+  } else if (d.type === 'son' && d.etat !== 'pret') {
+    sonArreter();
+    direSon(d.etat === 'absent' ? "Ce navigateur ne sait pas envoyer le son : utilise Chrome ou Edge à jour." : "Le son s'est arrêté : " + (d.detail || 'erreur du navigateur'), true);
+  } else if (d.type === 'debit') {
+    $('cImages').textContent = d.images;
+    $('cDebit').textContent = Math.round((d.octets + (d.son || 0)) / 1024);
+    if (sonEnvoye && d.avecSon) $('cEcoute').textContent = d.auditeurs;
+  } else if (d.type === 'retour' && !d.ok && actif) {
+    if (d.erreur === 'console') dire("Quelqu'un joue à la console sur cet écran : la diffusion attend qu'il ait fini (ou /tele stop en jeu).");
+    else if (d.erreur === 'occupe') dire(d.par + ' diffuse déjà sur cet écran.');
+    else if (d.statut === 401) { dire("Ce lien n'est plus valable. Refais /tele lien en jeu."); arreter(true); }
+    else if (d.statut === 404) { dire("Cet écran n'existe plus."); arreter(true); }
+    else dire('Le serveur ne répond pas, nouvel essai…');
+  } else if (d.type === 'retour' && d.ok && ($('message').textContent.includes('console') || $('message').textContent.includes('ne répond pas'))) dire('');
+};
+
+if (!jeton) {
+  dire('Ouvre cette page avec ton lien personnel : en jeu, tape /tele lien.');
+  $('partager').disabled = $('mire').disabled = true;
+} else {
+  rafraichir();
+  setInterval(rafraichir, 2000);
+}
+addEventListener('pagehide', () => { if (actif) navigator.sendBeacon && api('/stop?ecran=' + encodeURIComponent($('ecran').value), { method: 'POST', keepalive: true }).catch(() => {}); });
+</script>
+</body>
+</html>

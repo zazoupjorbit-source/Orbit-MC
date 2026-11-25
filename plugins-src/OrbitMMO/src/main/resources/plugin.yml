@@ -4,6 +4,8 @@ main: fr.orbit.mmo.OrbitMMO
 api-version: '1.21'
 description: Orbit MMO — factions Lumière et Ombre, classes à deux spécialisations, sorts, talents, boss.
 authors: [ORBIT]
+# S'allume avant OrbitDevCore : sur reborn, /monture et /lobby restent ceux du MMO (sinon OrbitDevCore les prend).
+loadbefore: [OrbitDevCore]
 
 commands:
   mmo:

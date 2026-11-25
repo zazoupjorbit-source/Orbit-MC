@@ -1,0 +1,10 @@
+{
+  "textures": {
+    "particle": "orbitvol:item/d_laser",
+    "d_laser": "orbitvol:item/d_laser"
+  },
+  "elements": [
+    {"from": [7, 7, 8], "to": [9, 9, 24], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_laser"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_laser"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_laser"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_laser"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_laser"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_laser"}}}
+  ],
+  "display": {"gui": {"rotation": [30, 225, 0], "scale": [0.6, 0.6, 0.6]}}
+}

@@ -92,6 +92,10 @@ public final class Casino implements Listener {
             int n = Room.build(world);
             plugin.getLogger().info("Salle du casino construite (" + n + " blocs).");
         }
+        // Salon des Étoiles (Crash, Mines, Plinko, roue, billard) et jukebox du bar
+        jeux = new fr.orbit.casino.jeux.Jeux(plugin, world);
+        plugin.getServer().getPluginManager().registerEvents(jeux, plugin);
+        jeux.start();
         spawnAll();
         Bukkit.getScheduler().runTaskTimer(plugin, this::tick, 20L, 20L);
     }
@@ -123,12 +127,24 @@ public final class Casino implements Listener {
         }
         cashier = Holo.npc(Room.cashier(world), "<#E0B864>Caissier · Boutique", org.bukkit.entity.Villager.Profession.LIBRARIAN);
         Holo.text(Room.cashier(world).add(0, 2.9, 0), "<#E0B864><b>CAISSE</b></#E0B864>\n<#9AA4B2>Orbit Coins · boutique · classement", 0.9f, false);
+        Holo.npc(Room.guide(world), "<#62CFF4>Hôtesse · Règles du jeu", org.bukkit.entity.Villager.Profession.CARTOGRAPHER);
+        Holo.text(Room.guide(world).add(0, 2.9, 0), "<#62CFF4><b>📖 PREMIÈRE FOIS ?</b></#62CFF4>\n<#E6EDF3>Clic droit : les règles\n<#9AA4B2>ou /oc regles", 0.9f, false);
         Holo.npc(Room.barman(world), "<#62CFF4>Barman", org.bukkit.entity.Villager.Profession.BUTCHER);
         Holo.text(Room.barman(world).add(0, 2.9, 0), "<#62CFF4><b>LE BAR</b></#62CFF4>\n<#9AA4B2>Sans alcool, c'est une station.", 0.9f, false);
         Holo.text(new Location(world, Room.EXIT_X + 0.5, Room.Y + 4.6, Room.EXIT_Z + 0.2, 180f, 0f),
                 "<#9AA4B2>↩ <b>SORTIE</b></#9AA4B2>\n<#5A6270>bouton à côté de la porte", 0.8f, false);
         Holo.text(new Location(world, Room.BJ_X + 0.5, Room.Y + 5.5, 0.5), "<#E0B864><b>BLACKJACK</b>", 2.0f, false);
         Holo.text(new Location(world, Room.POKER_X + 0.5, Room.Y + 5.5, 0.5), "<#C79BFF><b>POKER</b>", 2.0f, false);
+        if (jeux != null) {
+            jeux.spawn();
+        }
+    }
+
+    private fr.orbit.casino.jeux.Jeux jeux;
+
+    /** Jeux du Salon des Étoiles (null avant le démarrage du casino). */
+    public fr.orbit.casino.jeux.Jeux jeux() {
+        return jeux;
     }
 
     /** /casino generer : reconstruit la salle (les joueurs présents sont ramenés à l'entrée). */
@@ -138,6 +154,9 @@ public final class Casino implements Listener {
             p.teleport(Room.spawn(world));
         }
         int n = Room.build(world);
+        if (jeux != null) {
+            n += jeux.rebuild(); // après la grande salle, qui referme la porte de l'aile
+        }
         spawnAll();
         return n;
     }
@@ -153,6 +172,9 @@ public final class Casino implements Listener {
         }
         if (roulette != null) {
             roulette.shutdown();
+        }
+        if (jeux != null) {
+            jeux.shutdown();
         }
     }
 
@@ -257,6 +279,8 @@ public final class Casino implements Listener {
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 0.8f, 1.2f);
         Txt.send(p, "<#E0B864><b>Bienvenue au casino clandestin d'ORBIT.</b></#E0B864> Ici, tout se joue en Orbit Coins : ils "
                 + "s'échangent contre des cosmétiques à la caisse. Solde : " + Txt.oc(Math.max(0, plugin.wallet().balance(p))) + ".");
+        p.sendMessage(Txt.mm(Txt.PREFIX + "<#9AA4B2>Première fois ? L'<#62CFF4>hôtesse</#62CFF4> à ta droite explique les jeux. ")
+                .append(Txt.button("📖 Règles", "#62CFF4", "/oc regles", "Blackjack, poker et les mains")));
     }
 
     public void leaveRoom(Player p) {
@@ -287,6 +311,10 @@ public final class Casino implements Listener {
         }
         if (b.getX() == Room.EXIT_X && b.getY() == Room.EXIT_Y && b.getZ() == Room.EXIT_Z) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> leaveRoom(p), 4L);
+            return;
+        }
+        if (jeux != null && jeux.click(p, b)) {
+            event.setCancelled(true);
             return;
         }
         Integer machine = slots.machineAt(b);
@@ -330,6 +358,9 @@ public final class Casino implements Listener {
             return;
         }
         Player p = event.getPlayer();
+        if (jeux != null && jeux.clickEntity(p, e)) {
+            return;
+        }
         if (e.equals(cashier)) {
             plugin.shop().open(p);
             return;
@@ -340,12 +371,21 @@ public final class Casino implements Listener {
             String[] lines = {"Un jus de comète ? C'est la maison qui offre.", "Le gros lot n'est pas tombé depuis un moment…",
                     "Au poker, le casino ne prend rien. Tout ce qui se mise reste entre joueurs.",
                     "Tu cherches la sortie ? Le bouton près de la porte, au sud.",
+                    "Le jukebox sur le comptoir prend les demandes. Que des disques maison, pas de tubes.",
+                    "Par l'arche dorée à l'est : le Salon des Étoiles. Crash, Mines, Plinko, la grande roue et le billard.",
                     "Si on te demande, ce casino n'existe pas."};
             Txt.send(p, "<#62CFF4>Barman</#62CFF4> <#5A6270>»</#5A6270> " + lines[fr.orbit.casino.game.Cards.RANDOM.nextInt(lines.length)]);
         } else if (name.contains("Roulette")) {
             roulette.open(p);
-        } else {
+        } else if (name.startsWith("Hôtesse")) {
+            Guide.open(plugin, p, 1);
+            Txt.send(p, "<#62CFF4>Hôtesse</#62CFF4> <#5A6270>»</#5A6270> Tout est dans ce livre. Tu peux le rouvrir n'importe où avec <b>/oc regles</b>.");
+        } else if (name.contains("Blackjack")) {
+            Guide.open(plugin, p, Guide.BLACKJACK);
             Txt.send(p, "Clic droit sur le tapis vert pour t'asseoir. <#9AA4B2>/table quitter pour partir.");
+        } else if (name.startsWith("Croupier")) {
+            Guide.open(plugin, p, Guide.POKER);
+            Txt.send(p, "Clic droit sur la table pour choisir ta cave. <#9AA4B2>/table quitter pour partir.");
         }
     }
 
@@ -361,6 +401,10 @@ public final class Casino implements Listener {
         if (event.getBlock().getWorld().equals(world) && !(event.getPlayer().getGameMode() == GameMode.CREATIVE
                 && event.getPlayer().hasPermission("orbitcasino.admin"))) {
             event.setCancelled(true);
+        } else if (event.getBlock().getWorld().equals(world) && fr.orbit.casino.jeux.Salon.isGameBlock(event.getBlock())) {
+            // les jeux du salon ne se cassent pas, même en créatif (/casino generer pour tout refaire)
+            event.setCancelled(true);
+            Txt.bar(event.getPlayer(), "<#9AA4B2>Bloc d'un jeu du salon : protégé.");
         }
     }
 
@@ -379,11 +423,38 @@ public final class Casino implements Listener {
         }
     }
 
+    /** Au poker, une fois assis on ne se lève qu'avec « Quitter » (en pleine main = se coucher) : on peut tourner la tête, pas marcher. */
+    @EventHandler(ignoreCancelled = true)
+    public void onMove(org.bukkit.event.player.PlayerMoveEvent event) {
+        org.bukkit.Location from = event.getFrom(), to = event.getTo();
+        if (from.getX() == to.getX() && from.getY() == to.getY() && from.getZ() == to.getZ()) {
+            return;
+        }
+        Player p = event.getPlayer();
+        if (!p.getWorld().equals(world)) {
+            return;
+        }
+        for (Poker t : pokers) {
+            org.bukkit.Location seat = t.heldAt(p.getUniqueId());
+            if (seat != null) {
+                org.bukkit.Location stay = from.clone();
+                stay.setYaw(to.getYaw());
+                stay.setPitch(to.getPitch());
+                event.setTo(stay);
+                Txt.bar(p, "<#9AA4B2>Tu es assis à la table · <#E6EDF3>[Quitter]</#E6EDF3> pour te lever");
+                return;
+            }
+        }
+    }
+
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Seated t = tableOf(event.getPlayer().getUniqueId());
         if (t != null) {
             t.leave(event.getPlayer(), null);
+        }
+        if (jeux != null) {
+            jeux.quit(event.getPlayer());
         }
     }
 
@@ -394,6 +465,9 @@ public final class Casino implements Listener {
             Seated t = tableOf(p.getUniqueId());
             if (t != null) {
                 t.leave(p, "tu as quitté la salle");
+            }
+            if (jeux != null) {
+                jeux.leftWorld(p);
             }
         } else if (p.getWorld().equals(world)) {
             p.getWorld().spawnParticle(Particle.END_ROD, p.getLocation().add(0, 1, 0), 20, 0.3, 0.6, 0.3, 0.02);

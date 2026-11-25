@@ -1,113 +1,15 @@
-# =====================================================================
-#  OrbitStaff - Presets de sanctions (miroir editable cote plugin)
-#  La source de verite reste l'API (table sanction_presets). Ce fichier
-#  sert de configuration locale / de secours et documente les regles.
-#
-#  Regle stricte : le systeme PROPOSE une sanction. Aucune sanction
-#  permanente n'est appliquee automatiquement sans validation humaine.
-# =====================================================================
-config-version: 1
-
-# Bornes de validation des durees (rejet strict hors de ces regles).
-durations:
-  units-supported: ["s", "m", "h", "d", "w", "mo", "y"]
-  keywords: ["permanent", "perm"]
-
-# Confirmation obligatoire au-dela de ce niveau de gravite.
-require-confirmation-from-severity: "HIGH"
-
-presets:
-  spam:
-    type: MUTE
-    duration: "30m"
-    reason: "Spam dans le chat"
-    severity: LOW
-    evidence-required: false
-    min-role: MODERATOR
-    discord-category: SANCTIONS
-  insults:
-    type: MUTE
-    duration: "2h"
-    reason: "Insultes / propos deplaces"
-    severity: MEDIUM
-    evidence-required: false
-    min-role: MODERATOR
-    discord-category: SANCTIONS
-  advertising:
-    type: MUTE
-    duration: "1d"
-    reason: "Publicite non autorisee"
-    severity: MEDIUM
-    evidence-required: false
-    min-role: MODERATOR
-    discord-category: SANCTIONS
-  harassment:
-    type: TEMPBAN
-    duration: "3d"
-    reason: "Harcelement"
-    severity: HIGH
-    evidence-required: true
-    min-role: SENIOR_MODERATOR
-    discord-category: SANCTIONS
-  cheating:
-    type: BAN
-    duration: "permanent"
-    reason: "Triche"
-    severity: CRITICAL
-    evidence-required: true
-    min-role: ADMINISTRATOR
-    discord-category: SANCTIONS
-  bug-exploit:
-    type: TEMPBAN
-    duration: "7d"
-    reason: "Exploitation de bug"
-    severity: HIGH
-    evidence-required: true
-    min-role: SENIOR_MODERATOR
-    discord-category: SANCTIONS
-  ban-evasion:
-    type: BAN
-    duration: "permanent"
-    reason: "Contournement de sanction"
-    severity: CRITICAL
-    evidence-required: true
-    min-role: ADMINISTRATOR
-    discord-category: SANCTIONS
-  grief:
-    type: TEMPBAN
-    duration: "3d"
-    reason: "Grief"
-    severity: HIGH
-    evidence-required: true
-    min-role: SENIOR_MODERATOR
-    discord-category: SANCTIONS
-  theft:
-    type: TEMPBAN
-    duration: "2d"
-    reason: "Vol"
-    severity: MEDIUM
-    evidence-required: true
-    min-role: SENIOR_MODERATOR
-    discord-category: SANCTIONS
-  refuse-check:
-    type: TEMPBAN
-    duration: "1d"
-    reason: "Refus de verification"
-    severity: HIGH
-    evidence-required: false
-    min-role: SENIOR_MODERATOR
-    discord-category: SANCTIONS
-  forbidden-name:
-    type: KICK
-    reason: "Pseudo interdit"
-    severity: MEDIUM
-    evidence-required: false
-    min-role: MODERATOR
-    discord-category: SANCTIONS
-  forbidden-skin:
-    type: KICK
-    reason: "Skin interdit"
-    severity: MEDIUM
-    evidence-required: false
-    min-role: MODERATOR
-    discord-category: SANCTIONS
+# Sanctions prédéfinies du menu /sanction (et du bouton « Sanctionner » du panel).
+# type : WARN, MUTE, KICK, TEMPBAN, BAN. duree : 30m, 2h, 3j, 1w (semaine), 1mo, perm.
+# icone : matériau Minecraft. permission : celle du type (orbitstaff.mute, .tempban...).
+sanctions:
+  spam:        { nom: "Spam",                   type: MUTE,    duree: 30m,  motif: "Spam dans le chat",             icone: PAPER }
+  insultes:    { nom: "Insultes",               type: MUTE,    duree: 2h,   motif: "Insultes / propos déplacés",    icone: WRITABLE_BOOK }
+  pub:         { nom: "Publicité",              type: MUTE,    duree: 1j,   motif: "Publicité non autorisée",       icone: OAK_SIGN }
+  harcelement: { nom: "Harcèlement",            type: TEMPBAN, duree: 3j,   motif: "Harcèlement",                   icone: SKELETON_SKULL }
+  triche:      { nom: "Triche",                 type: BAN,     duree: perm, motif: "Triche (client modifié)",       icone: DIAMOND_SWORD }
+  bug:         { nom: "Exploitation de bug",    type: TEMPBAN, duree: 7j,   motif: "Exploitation de bug",           icone: SPIDER_EYE }
+  contournement: { nom: "Contournement",        type: BAN,     duree: perm, motif: "Contournement de sanction",     icone: ENDER_EYE }
+  grief:       { nom: "Grief",                  type: TEMPBAN, duree: 3j,   motif: "Grief",                         icone: TNT }
+  refus-verif: { nom: "Refus de vérification",  type: TEMPBAN, duree: 7j,   motif: "Refus de vérification (screenshare)", icone: BARRIER }
+  pseudo:      { nom: "Pseudo / skin interdit", type: KICK,                 motif: "Pseudo ou skin interdit",       icone: NAME_TAG }
+  avertissement: { nom: "Avertissement",        type: WARN,                 motif: "Non-respect du règlement",      icone: BELL }

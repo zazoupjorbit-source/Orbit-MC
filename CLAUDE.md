@@ -40,3 +40,5 @@ Réseau Minecraft de l'univers **ORBIT** (cofondé par Zazou et Wane). Objectif 
 - Grades LuckPerms partagés via `setup/02-luckperms-groupes.sql` (exporté par valider, importé par recuperer). Les joueurs ne sont pas partagés.
 - Mondes : hors git, `mondes.ps1 -Exporter` / `-Importer` (zip transmis à la main).
 - `mods-src/` : sources d'OrbitHCF, OrbitVersus, NarutoCore, OrbitGuns, orbitstaff (pas encore portés en 26.3 sauf orbitstaff).
+- `site/` : site Orbit MC en un seul fichier (`index.html`, à voir avec `node serve.mjs` → http://localhost:5180 ; `index-v9` et `index-v10` = anciennes versions)
+  et charte graphique en PDF (`Charte-Orbit-MC-v4.pdf` = la dernière, `Charte-Orbit-MC.pdf` = la v3).

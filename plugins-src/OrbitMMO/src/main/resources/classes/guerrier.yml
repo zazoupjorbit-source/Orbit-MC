@@ -18,8 +18,9 @@
 #    effets sur soi (et le groupe pour un CRI) : reduction, bonus-degats, bonus-crit (%), bouclier (% PV max),
 #                     soin (% PV max), soin-par-sec (% PV max/s), vitesse (niveau), soin-soi (% PV max), vol-de-vie (%)
 #
-#  Talents — palier 0 à 8, colonne 0 à 2, rangs. Paliers 0 à 5 ouverts à palier x 5 points dans l'arbre,
-#    paliers avancés 6, 7 et 8 à 35, 45 et 55 points (niveau max 80 = 71 points ; arbres de ~80 rangs).
+#  Talents — palier 0 à 11, colonne 0 à 2, rangs. Paliers 0 à 5 ouverts à palier x 5 points dans l'arbre,
+#    paliers avancés 6, 7 et 8 à 35, 45 et 55 points, paliers de maître 9, 10 et 11 à 62, 70 et 78 points
+#    (niveau max 90 = 81 points ; arbres de ~100 rangs : on ne peut pas tout prendre).
 #    effets PAR RANG (clés : pv, degats, degats.<sort>, soins, crit, crit.<sort>, critdeg, armure, esquive,
 #    blocage, epines, vol-de-vie, soin-sur-kill, vitesse, ressource, rage-par-coup, recharge.<sort>,
 #    cout.<sort>, duree.<sort>, incantation.<sort>), requiert: <talent>, sort: <sort donné>.
@@ -276,6 +277,16 @@ specialisations:
         effets: { recharge.dernier_rempart: 20 }
         requiert: dernier_rempart
         description: "Recharge de Dernier rempart réduite de {recharge.dernier_rempart} s."
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      onde_devastatrice: { nom: "Onde dévastatrice", icone: TNT, palier: 9, colonne: 0, rangs: 3, requiert: onde_de_choc, effets: { degats.onde_de_choc: 10 }, description: "Onde de choc inflige {degats.onde_de_choc} % de dégâts en plus." }
+      egide_hative: { nom: "Égide hâtive", icone: CLOCK, palier: 9, colonne: 1, rangs: 3, requiert: egide_stellaire, effets: { recharge.egide_stellaire: 10 }, description: "Recharge d'Égide stellaire réduite de {recharge.egide_stellaire} s." }
+      carrure_de_colosse: { nom: "Carrure de colosse", icone: COOKED_BEEF, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      acier_des_astres: { nom: "Acier des astres", icone: NETHERITE_INGOT, palier: 10, colonne: 0, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      mur_hatif: { nom: "Mur hâtif", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.mur_protecteur: 15 }, description: "Recharge de Mur protecteur réduite de {recharge.mur_protecteur} s." }
+      pavois: { nom: "Pavois", icone: SHIELD, palier: 10, colonne: 2, rangs: 3, effets: { blocage: 1 }, description: "+{blocage} % de chances de bloquer." }
+      pointes_du_rempart: { nom: "Pointes du rempart", icone: CACTUS, palier: 11, colonne: 0, rangs: 3, effets: { epines: 4 }, description: "Renvoie {epines} % des dégâts de mêlée subis à l'attaquant, en plus." }
+      dernier_bastion: { nom: "Dernier bastion", icone: NETHERITE_CHESTPLATE, palier: 11, colonne: 1, rangs: 1, effets: { pv: 8, armure: 3 }, description: "Talent de maître : +{pv} % de points de vie et dégâts subis réduits de {armure} %." }
+      tonnerre_roulant: { nom: "Tonnerre roulant", icone: LIGHTNING_ROD, palier: 11, colonne: 2, rangs: 3, effets: { degats.coup_de_tonnerre: 6 }, description: "Coup de tonnerre inflige {degats.coup_de_tonnerre} % de dégâts en plus." }
 
   carnage:
     nom: Carnage
@@ -512,6 +523,16 @@ specialisations:
         effets: { vol-de-vie: 1 }
         requiert: vol_de_vie
         description: "{vol-de-vie} % des dégâts infligés vous soignent en plus."
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      lames_dechainees: { nom: "Lames déchaînées", icone: NETHERITE_AXE, palier: 9, colonne: 0, rangs: 3, requiert: tempete_de_lames, effets: { degats.tempete_de_lames: 10 }, description: "Tempête de lames inflige {degats.tempete_de_lames} % de dégâts en plus." }
+      maelstrom_furieux: { nom: "Maelström furieux", icone: WIND_CHARGE, palier: 9, colonne: 1, rangs: 3, effets: { degats.maelstrom_d_acier: 10 }, description: "Maelström d'acier inflige {degats.maelstrom_d_acier} % de dégâts en plus." }
+      cuir_de_brute: { nom: "Cuir de brute", icone: COOKED_BEEF, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      soif_de_carnage: { nom: "Soif de carnage", icone: REDSTONE, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      temerite_hative: { nom: "Témérité hâtive", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.temerite: 10 }, description: "Recharge de Témérité réduite de {recharge.temerite} s." }
+      rage_bouillonnante: { nom: "Rage bouillonnante", icone: BLAZE_POWDER, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de rage générée." }
+      frappe_legendaire: { nom: "Frappe légendaire", icone: DIAMOND_AXE, palier: 11, colonne: 0, rangs: 3, effets: { degats.frappe_mortelle: 5 }, description: "Frappe mortelle inflige {degats.frappe_mortelle} % de dégâts en plus." }
+      seigneur_de_guerre: { nom: "Seigneur de guerre", icone: NETHERITE_HELMET, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, crit: 3 }, description: "Talent de maître : +{degats} % de dégâts et +{crit} % de chances de coup critique." }
+      grande_boucherie: { nom: "Grande boucherie", icone: WITHER_SKELETON_SKULL, palier: 11, colonne: 2, rangs: 3, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
 
 sorts:
   # ---------------- Toute la classe ----------------
@@ -625,7 +646,7 @@ sorts:
   brise_genou:
     nom: Brise-genou
     type: FRAPPE
-    icone: CHAIN
+    icone: IRON_CHAIN
     couleur: "#7FD48A"
     niveau: 16
     cout: 10

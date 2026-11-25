@@ -1,0 +1,431 @@
+# ------------------------------------------------------------------
+#  Scalde — poète de guerre en mailles, l'épée à la main. Ses chants sont des cris : ils portent tout le groupe.
+#  Ressource : Ferveur (monte en frappant, retombe hors combat). Le soigneur frappe pour pouvoir chanter.
+#  Format des sorts et des talents : voir guerrier.yml.
+# ------------------------------------------------------------------
+
+nom: Scalde
+couleur: "#E0803A"
+icone: GOAT_HORN
+jouable: true
+ressource: FERVEUR
+armure: MAILLES
+pv: 1.05
+arme: ONE_HANDED
+description:
+  - "Chante la saga de ses compagnons"
+  - "tout en se battant à leurs côtés."
+
+specialisations:
+  saga:
+    nom: Saga
+    role: DEGATS
+    icone: IRON_SWORD
+    couleur: "#F29B4B"
+    arme: ONE_HANDED
+    description:
+      - "Dégâts au corps à corps : coups en cadence"
+      - "et chants de guerre pour tout le groupe."
+    passifs: { degats: 8, crit: 3 }
+    talents:
+      lame_chantante: { nom: "Lame chantante", icone: IRON_SWORD, palier: 0, colonne: 0, rangs: 5, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      verve: { nom: "Verve", icone: GOAT_HORN, palier: 0, colonne: 1, rangs: 5, effets: { degats: 1 }, description: "+{degats} % de dégâts." }
+      souffle_du_conteur: { nom: "Souffle du conteur", icone: FEATHER, palier: 0, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de ferveur générée." }
+      taille_appuyee: { nom: "Taille appuyée", icone: IRON_SWORD, palier: 1, colonne: 0, rangs: 3, effets: { degats.taille_du_scalde: 6 }, description: "Taille du scalde inflige {degats.taille_du_scalde} % de dégâts en plus." }
+      refrain_enleve: { nom: "Refrain enlevé", icone: GOLDEN_SWORD, palier: 1, colonne: 1, rangs: 3, effets: { degats.refrain_tranchant: 8 }, description: "Refrain tranchant inflige {degats.refrain_tranchant} % de dégâts en plus." }
+      pas_legers: { nom: "Pas légers", icone: LEATHER_BOOTS, palier: 1, colonne: 2, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      crescendo: { nom: "Crescendo", icone: DIAMOND_SWORD, palier: 2, colonne: 0, rangs: 1, sort: crescendo, description: "Apprend Crescendo : trois coups de plus en plus appuyés sur la cible." }
+      vers_cruels: { nom: "Vers cruels", icone: REDSTONE, palier: 2, colonne: 1, rangs: 3, effets: { degats.couplet_sanglant: 10 }, description: "Couplet sanglant et son saignement infligent {degats.couplet_sanglant} % de dégâts en plus." }
+      rythme_soutenu: { nom: "Rythme soutenu", icone: CLOCK, palier: 2, colonne: 2, rangs: 2, effets: { recharge.coup_rythme: 0.5 }, description: "Recharge de Coup rythmé réduite de {recharge.coup_rythme} s." }
+      chant_galvanisant: { nom: "Chant galvanisant", icone: GOAT_HORN, palier: 3, colonne: 0, rangs: 3, effets: { duree.chant_de_guerre: 5 }, description: "Chant de guerre dure {duree.chant_de_guerre} s de plus." }
+      mailles_du_scalde: { nom: "Mailles du scalde", icone: CHAINMAIL_CHESTPLATE, palier: 3, colonne: 1, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      voix_qui_porte: { nom: "Voix qui porte", icone: ECHO_SHARD, palier: 3, colonne: 2, rangs: 3, effets: { recharge.cri_strident: 2 }, description: "Recharge de Cri strident réduite de {recharge.cri_strident} s." }
+      mots_qui_tuent: { nom: "Mots qui tuent", icone: SKELETON_SKULL, palier: 4, colonne: 0, rangs: 3, effets: { critdeg: 8 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      point_final: { nom: "Point final", icone: WITHER_SKELETON_SKULL, palier: 4, colonne: 1, rangs: 3, effets: { degats.dernier_vers: 10 }, description: "Dernier vers inflige {degats.dernier_vers} % de dégâts en plus." }
+      crescendo_furieux: { nom: "Crescendo furieux", icone: DIAMOND_SWORD, palier: 4, colonne: 2, rangs: 3, requiert: crescendo, effets: { degats.crescendo: 10 }, description: "Crescendo inflige {degats.crescendo} % de dégâts en plus." }
+      onde_sonore: { nom: "Onde sonore", icone: ECHO_SHARD, palier: 5, colonne: 0, rangs: 1, sort: onde_sonore, description: "Apprend Onde sonore : un cri qui file droit devant vous sur 12 m et repousse les ennemis." }
+      taille_precise: { nom: "Taille précise", icone: SPYGLASS, palier: 5, colonne: 1, rangs: 3, effets: { crit.taille_du_scalde: 4 }, description: "Taille du scalde : +{crit.taille_du_scalde} % de critique." }
+      coffre_puissant: { nom: "Coffre puissant", icone: COOKED_BEEF, palier: 5, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      oreille_absolue: { nom: "Oreille absolue", icone: ENDER_EYE, palier: 6, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      plaies_chantees: { nom: "Plaies chantées", icone: REDSTONE_BLOCK, palier: 6, colonne: 1, rangs: 3, requiert: vers_cruels, effets: { duree.couplet_sanglant: 2 }, description: "Le saignement de Couplet sanglant dure {duree.couplet_sanglant} s de plus." }
+      economie_de_souffle: { nom: "Économie de souffle", icone: STRING, palier: 6, colonne: 2, rangs: 3, effets: { cout.taille_du_scalde: 3 }, description: "Taille du scalde coûte {cout.taille_du_scalde} points de ferveur de moins." }
+      saga_sans_fin: { nom: "Saga sans fin", icone: TOTEM_OF_UNDYING, palier: 7, colonne: 0, rangs: 2, effets: { duree.saga_des_heros: 2 }, description: "Saga des héros dure {duree.saga_des_heros} s de plus." }
+      onde_dechirante: { nom: "Onde déchirante", icone: ECHO_SHARD, palier: 7, colonne: 1, rangs: 3, requiert: onde_sonore, effets: { degats.onde_sonore: 10 }, description: "Onde sonore inflige {degats.onde_sonore} % de dégâts en plus." }
+      esquive_du_danseur: { nom: "Esquive du danseur", icone: RABBIT_FOOT, palier: 7, colonne: 2, rangs: 3, effets: { esquive: 1 }, description: "+{esquive} % de chances d'esquiver un coup de mêlée." }
+      apotheose: { nom: "Apothéose", icone: NETHER_STAR, palier: 8, colonne: 0, rangs: 1, sort: apotheose, requiert: onde_sonore, description: "Apprend Apothéose : la dernière strophe, gros dégâts tout autour de vous et étourdissement de 1,5 s." }
+      maitre_scalde: { nom: "Maître scalde", icone: NETHERITE_SWORD, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
+      strophe_assassine: { nom: "Strophe assassine", icone: WRITABLE_BOOK, palier: 8, colonne: 2, rangs: 3, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      crescendo_repris: { nom: "Crescendo repris", icone: DIAMOND_SWORD, palier: 9, colonne: 0, rangs: 3, requiert: crescendo, effets: { recharge.crescendo: 1 }, description: "Recharge de Crescendo réduite de {recharge.crescendo} s." }
+      final_eclatant: { nom: "Final éclatant", icone: NETHER_STAR, palier: 9, colonne: 1, rangs: 3, requiert: apotheose, effets: { degats.apotheose: 10 }, description: "Apothéose inflige {degats.apotheose} % de dégâts en plus." }
+      coeur_de_heros: { nom: "Cœur de héros", icone: GOLDEN_APPLE, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      lame_inspiree: { nom: "Lame inspirée", icone: GOLDEN_SWORD, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      saga_reprise: { nom: "Saga reprise", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.saga_des_heros: 10 }, description: "Recharge de Saga des héros réduite de {recharge.saga_des_heros} s." }
+      verve_intarissable: { nom: "Verve intarissable", icone: GOAT_HORN, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de ferveur générée." }
+      refrain_legendaire: { nom: "Refrain légendaire", icone: GOLDEN_SWORD, palier: 11, colonne: 0, rangs: 3, effets: { degats.refrain_tranchant: 6 }, description: "Refrain tranchant inflige {degats.refrain_tranchant} % de dégâts en plus." }
+      voix_de_la_saga: { nom: "Voix de la saga", icone: ENCHANTED_BOOK, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, crit: 3 }, description: "Talent de maître : +{degats} % de dégâts et +{crit} % de chances de coup critique." }
+      gout_de_la_victoire: { nom: "Goût de la victoire", icone: GLISTERING_MELON_SLICE, palier: 11, colonne: 2, rangs: 3, effets: { soin-sur-kill: 2 }, description: "Tuer un ennemi rend {soin-sur-kill} % de vos PV." }
+
+  chantre:
+    nom: Chantre
+    role: SOIN
+    icone: BELL
+    couleur: "#F7C873"
+    arme: ONE_HANDED
+    description:
+      - "Soigneur : couplets et hymnes qui soignent,"
+      - "la ferveur se gagne l'épée à la main."
+    passifs: { soins: 10 }
+    talents:
+      voix_claire: { nom: "Voix claire", icone: BELL, palier: 0, colonne: 0, rangs: 5, effets: { soins: 1 }, description: "+{soins} % de soins prodigués." }
+      ferveur_du_chantre: { nom: "Ferveur du chantre", icone: GOAT_HORN, palier: 0, colonne: 1, rangs: 5, effets: { ressource: 2 }, description: "+{ressource} % de ferveur générée." }
+      lame_du_chantre: { nom: "Lame du chantre", icone: IRON_SWORD, palier: 0, colonne: 2, rangs: 3, effets: { degats: 2 }, description: "+{degats} % de dégâts." }
+      couplet_touchant: { nom: "Couplet touchant", icone: BELL, palier: 1, colonne: 0, rangs: 3, effets: { soins.couplet_apaisant: 6 }, description: "Couplet apaisant soigne {soins.couplet_apaisant} % de plus." }
+      choeur_ample: { nom: "Chœur ample", icone: NOTE_BLOCK, palier: 1, colonne: 1, rangs: 3, effets: { soins.choeur: 8 }, description: "Chœur soigne {soins.choeur} % de plus." }
+      pas_alertes: { nom: "Pas alertes", icone: LEATHER_BOOTS, palier: 1, colonne: 2, rangs: 3, effets: { vitesse: 2 }, description: "+{vitesse} % de vitesse de déplacement." }
+      ode_a_la_vie: { nom: "Ode à la vie", icone: GLISTERING_MELON_SLICE, palier: 2, colonne: 0, rangs: 1, sort: ode_a_la_vie, description: "Apprend Ode à la vie : soigne l'allié visé, puis 3 % de ses PV par seconde pendant 6 s." }
+      air_entetant: { nom: "Air entêtant", icone: MUSIC_DISC_FAR, palier: 2, colonne: 1, rangs: 3, effets: { cout.ritournelle: 2 }, description: "Ritournelle coûte {cout.ritournelle} points de ferveur de moins." }
+      chant_rapide: { nom: "Chant rapide", icone: CLOCK, palier: 2, colonne: 2, rangs: 3, effets: { incantation.hymne_reparateur: 0.2 }, description: "Incantation d'Hymne réparateur réduite de {incantation.hymne_reparateur} s." }
+      hymne_vibrant: { nom: "Hymne vibrant", icone: JUKEBOX, palier: 3, colonne: 0, rangs: 3, effets: { soins.hymne_reparateur: 6 }, description: "Hymne réparateur soigne {soins.hymne_reparateur} % de plus." }
+      mailles_du_chantre: { nom: "Mailles du chantre", icone: CHAINMAIL_CHESTPLATE, palier: 3, colonne: 1, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} %." }
+      repos_merite: { nom: "Repos mérité", icone: MUSIC_DISC_CAT, palier: 3, colonne: 2, rangs: 3, effets: { recharge.ballade_du_repos: 5 }, description: "Recharge de Ballade du repos réduite de {recharge.ballade_du_repos} s." }
+      timbre_chaleureux: { nom: "Timbre chaleureux", icone: HONEY_BOTTLE, palier: 4, colonne: 0, rangs: 3, effets: { soins: 1 }, description: "+{soins} % de soins prodigués." }
+      choeur_presse: { nom: "Chœur pressé", icone: CLOCK, palier: 4, colonne: 1, rangs: 2, effets: { recharge.choeur: 1 }, description: "Recharge de Chœur réduite de {recharge.choeur} s." }
+      ode_vibrante: { nom: "Ode vibrante", icone: GLISTERING_MELON_SLICE, palier: 4, colonne: 2, rangs: 3, requiert: ode_a_la_vie, effets: { soins.ode_a_la_vie: 8 }, description: "Ode à la vie soigne {soins.ode_a_la_vie} % de plus." }
+      contre_chant: { nom: "Contre-chant", icone: SHIELD, palier: 5, colonne: 0, rangs: 1, sort: contre_chant, description: "Apprend Contre-chant : un chant qui couvre les coups, bouclier de 15 % des PV sur le groupe pendant 10 s." }
+      couplet_econome: { nom: "Couplet économe", icone: STRING, palier: 5, colonne: 1, rangs: 3, effets: { cout.couplet_apaisant: 2 }, description: "Couplet apaisant coûte {cout.couplet_apaisant} points de ferveur de moins." }
+      poitrine_large: { nom: "Poitrine large", icone: COOKED_BEEF, palier: 5, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      # --- Paliers avancés (35, 45 et 55 points) ---
+      voix_d_or: { nom: "Voix d'or", icone: GOLD_INGOT, palier: 6, colonne: 0, rangs: 3, effets: { soins: 1 }, description: "+{soins} % de soins prodigués." }
+      air_qui_reste: { nom: "Air qui reste", icone: MUSIC_DISC_FAR, palier: 6, colonne: 1, rangs: 3, requiert: air_entetant, effets: { duree.ritournelle: 1 }, description: "Ritournelle dure {duree.ritournelle} s de plus." }
+      hymne_econome: { nom: "Hymne économe", icone: STRING, palier: 6, colonne: 2, rangs: 3, effets: { cout.hymne_reparateur: 3 }, description: "Hymne réparateur coûte {cout.hymne_reparateur} points de ferveur de moins." }
+      chant_tenu: { nom: "Chant tenu", icone: BELL, palier: 7, colonne: 0, rangs: 2, effets: { duree.grand_chant: 2 }, description: "Grand chant dure {duree.grand_chant} s de plus." }
+      contre_chant_tenu: { nom: "Contre-chant tenu", icone: SHIELD, palier: 7, colonne: 1, rangs: 3, requiert: contre_chant, effets: { duree.contre_chant: 2 }, description: "Contre-chant dure {duree.contre_chant} s de plus." }
+      cotte_resonnante: { nom: "Cotte résonnante", icone: CHAINMAIL_LEGGINGS, palier: 7, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+      requiem_des_braves: { nom: "Requiem des braves", icone: TOTEM_OF_UNDYING, palier: 8, colonne: 0, rangs: 1, sort: requiem_des_braves, requiert: contre_chant, description: "Apprend Requiem des braves : rend 35 % des PV au groupe, qui subit 15 % de dégâts en moins pendant 10 s." }
+      maitre_chantre: { nom: "Maître chantre", icone: ENCHANTED_BOOK, palier: 8, colonne: 1, rangs: 3, effets: { soins: 2 }, description: "+{soins} % de soins prodigués." }
+      ferveur_sans_fin: { nom: "Ferveur sans fin", icone: GOAT_HORN, palier: 8, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de ferveur générée." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      ode_reprise: { nom: "Ode reprise", icone: GLISTERING_MELON_SLICE, palier: 9, colonne: 0, rangs: 3, requiert: ode_a_la_vie, effets: { recharge.ode_a_la_vie: 1 }, description: "Recharge d'Ode à la vie réduite de {recharge.ode_a_la_vie} s." }
+      requiem_repris: { nom: "Requiem repris", icone: TOTEM_OF_UNDYING, palier: 9, colonne: 1, rangs: 3, requiert: requiem_des_braves, effets: { recharge.requiem_des_braves: 10 }, description: "Recharge de Requiem des braves réduite de {recharge.requiem_des_braves} s." }
+      souffle_de_vie: { nom: "Souffle de vie", icone: GOLDEN_APPLE, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      choeur_des_anciens: { nom: "Chœur des anciens", icone: NOTE_BLOCK, palier: 10, colonne: 0, rangs: 3, effets: { soins.choeur: 6 }, description: "Chœur soigne {soins.choeur} % de plus." }
+      grand_chant_repris: { nom: "Grand chant repris", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.grand_chant: 15 }, description: "Recharge de Grand chant réduite de {recharge.grand_chant} s." }
+      inspiration: { nom: "Inspiration", icone: WRITABLE_BOOK, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de ferveur générée." }
+      couplet_legendaire: { nom: "Couplet légendaire", icone: BELL, palier: 11, colonne: 0, rangs: 3, effets: { soins.couplet_apaisant: 5 }, description: "Couplet apaisant soigne {soins.couplet_apaisant} % de plus." }
+      voix_des_ancetres: { nom: "Voix des ancêtres", icone: ENCHANTED_BOOK, palier: 11, colonne: 1, rangs: 1, effets: { soins: 8, ressource: 5 }, description: "Talent de maître : +{soins} % de soins prodigués et +{ressource} % de ferveur générée." }
+      mailles_harmoniques: { nom: "Mailles harmoniques", icone: CHAINMAIL_HELMET, palier: 11, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
+
+sorts:
+  # ---------------- Toute la classe ----------------
+  coup_rythme:
+    nom: Coup rythmé
+    type: FRAPPE
+    icone: IRON_SWORD
+    couleur: "#F29B4B"
+    niveau: 1
+    gain: 12
+    recharge: 4
+    portee: 3.5
+    arc: 50
+    puissance: 1.3
+    description: "Un coup en cadence qui fait monter la ferveur."
+  note_percante:
+    nom: Note perçante
+    type: PROJECTILE
+    icone: NOTE_BLOCK
+    couleur: "#F7C873"
+    niveau: 2
+    gain: 8
+    recharge: 6
+    portee: 25
+    puissance: 0.9
+    description: "Une note qui frappe la cible visée à distance et rend de la ferveur."
+  pas_de_danse:
+    nom: Pas de danse
+    type: BOND
+    icone: RABBIT_FOOT
+    couleur: "#F7C873"
+    niveau: 4
+    recharge: 20
+    portee: 10
+    zone: 3
+    puissance: 0.3
+    effets: { ralentir: 2 }
+    description: "Bondit vers le point visé ; les ennemis à l'arrivée sont ralentis."
+  chant_de_guerre:
+    nom: Chant de guerre
+    type: CRI
+    icone: GOAT_HORN
+    couleur: "#E0803A"
+    niveau: 6
+    recharge: 60
+    gcd: false
+    zone: 20
+    duree: 30
+    effets: { bonus-degats: 8 }
+    description: "Vous et votre groupe infligez 8 % de dégâts en plus pendant 30 s."
+  cri_strident:
+    nom: Cri strident
+    type: CRI
+    icone: ECHO_SHARD
+    couleur: "#F7C873"
+    niveau: 8
+    cout: 15
+    recharge: 25
+    zone: 6
+    puissance: 0.3
+    effets: { silence: 3, ralentir: 2 }
+    description: "Un cri qui coupe les incantations des ennemis proches pendant 3 s et les ralentit."
+  ballade_du_repos:
+    nom: Ballade du repos
+    type: BUFF
+    icone: MUSIC_DISC_CAT
+    couleur: "#5EE89A"
+    niveau: 12
+    recharge: 60
+    gcd: false
+    duree: 8
+    effets: { soin-par-sec: 2.5 }
+    description: "Fredonne une ballade : rend 2,5 % de vos PV par seconde pendant 8 s."
+  marche_entrainante:
+    nom: Marche entraînante
+    type: CRI
+    icone: LEATHER_BOOTS
+    couleur: "#F7C873"
+    niveau: 16
+    recharge: 45
+    gcd: false
+    zone: 20
+    duree: 10
+    effets: { vitesse: 2 }
+    description: "Un air de marche : vous et votre groupe courez bien plus vite pendant 10 s."
+  berceuse:
+    nom: Berceuse
+    type: PROJECTILE
+    icone: MUSIC_DISC_STRAD
+    couleur: "#C9B8FF"
+    niveau: 20
+    cout: 20
+    recharge: 30
+    portee: 20
+    zone: 3
+    puissance: 0.2
+    effets: { desorienter: 4 }
+    description: "Endort les ennemis touchés pendant 4 s (le moindre dégât les réveille)."
+
+  # ---------------- Saga ----------------
+  taille_du_scalde:
+    nom: Taille du scalde
+    type: FRAPPE
+    icone: IRON_SWORD
+    couleur: "#F29B4B"
+    spe: [saga]
+    niveau: 2
+    cout: 25
+    portee: 3.5
+    arc: 50
+    puissance: 2.0
+    description: "Un coup de taille puissant sur la cible devant vous."
+  refrain_tranchant:
+    nom: Refrain tranchant
+    type: FRAPPE
+    icone: GOLDEN_SWORD
+    couleur: "#F29B4B"
+    spe: [saga]
+    niveau: 5
+    cout: 30
+    recharge: 6
+    portee: 3.5
+    arc: 50
+    coups: 2
+    intervalle: 4
+    puissance: 1.2
+    description: "Deux coups sur le même temps : frappe la cible deux fois."
+  couplet_sanglant:
+    nom: Couplet sanglant
+    type: TOURBILLON
+    icone: REDSTONE
+    couleur: "#E0533D"
+    spe: [saga]
+    niveau: 9
+    cout: 30
+    recharge: 8
+    portee: 4
+    puissance: 1.1
+    effets: { saignement: 6, dot: 0.2 }
+    description: "Frappe tout autour de vous : les ennemis saignent pendant 6 s."
+  dernier_vers:
+    nom: Dernier vers
+    type: FRAPPE
+    icone: WITHER_SKELETON_SKULL
+    couleur: "#F29B4B"
+    spe: [saga]
+    niveau: 14
+    cout: 25
+    portee: 3.5
+    arc: 50
+    puissance: 3.2
+    condition: cible-pv<20
+    description: "Achève un ennemi à moins de 20 % de vie."
+  saga_des_heros:
+    nom: Saga des héros
+    type: CRI
+    icone: TOTEM_OF_UNDYING
+    couleur: "#F29B4B"
+    spe: [saga]
+    niveau: 30
+    recharge: 120
+    gcd: false
+    zone: 20
+    duree: 12
+    effets: { bonus-degats: 15, bonus-crit: 10 }
+    description: "Vous et votre groupe : +15 % de dégâts et +10 % de critique pendant 12 s."
+  crescendo:
+    nom: Crescendo
+    type: FRAPPE
+    icone: DIAMOND_SWORD
+    couleur: "#F29B4B"
+    spe: [saga]
+    talent: true
+    cout: 35
+    recharge: 15
+    portee: 3.5
+    arc: 50
+    coups: 3
+    intervalle: 5
+    puissance: 1.0
+    description: "Trois coups de plus en plus appuyés sur la cible."
+  onde_sonore:
+    nom: Onde sonore
+    type: VAGUE
+    icone: ECHO_SHARD
+    couleur: "#F7C873"
+    spe: [saga]
+    talent: true
+    cout: 30
+    recharge: 20
+    portee: 12
+    zone: 2
+    puissance: 2.0
+    effets: { repousser: 1 }
+    description: "Un cri qui file droit devant vous sur 12 m et repousse les ennemis."
+  apotheose:
+    nom: Apothéose
+    type: TOURBILLON
+    icone: NETHER_STAR
+    couleur: "#FFD66E"
+    spe: [saga]
+    talent: true
+    cout: 40
+    recharge: 60
+    portee: 6
+    puissance: 3.2
+    effets: { etourdir: 1.5 }
+    description: "La dernière strophe : gros dégâts tout autour de vous et étourdissement de 1,5 s."
+
+  # ---------------- Chantre ----------------
+  couplet_apaisant:
+    nom: Couplet apaisant
+    type: SOIN
+    icone: BELL
+    couleur: "#F7C873"
+    spe: [chantre]
+    niveau: 2
+    cout: 15
+    portee: 25
+    puissance: 1.6
+    description: "Un soin instantané sur l'allié visé."
+  hymne_reparateur:
+    nom: Hymne réparateur
+    type: SOIN
+    icone: JUKEBOX
+    couleur: "#F7C873"
+    spe: [chantre]
+    niveau: 5
+    cout: 30
+    incantation: 2.2
+    portee: 25
+    puissance: 3.8
+    description: "Un soin très puissant, long à chanter (immobile)."
+  choeur:
+    nom: Chœur
+    type: CRI
+    icone: NOTE_BLOCK
+    couleur: "#FFE2A8"
+    spe: [chantre]
+    niveau: 9
+    cout: 30
+    recharge: 10
+    zone: 15
+    effets: { soin: 12 }
+    description: "Rend 12 % des PV à vous et à votre groupe."
+  ritournelle:
+    nom: Ritournelle
+    type: SOIN
+    icone: MUSIC_DISC_FAR
+    couleur: "#F7C873"
+    spe: [chantre]
+    niveau: 14
+    cout: 20
+    recharge: 8
+    portee: 25
+    puissance: 1.2
+    duree: 12
+    effets: { soin-par-sec: 2 }
+    description: "Petit soin, puis l'air reste en tête : 2 % des PV rendus par seconde pendant 12 s."
+  grand_chant:
+    nom: Grand chant
+    type: CRI
+    icone: BELL
+    couleur: "#FFE2A8"
+    spe: [chantre]
+    niveau: 30
+    recharge: 180
+    gcd: false
+    zone: 20
+    duree: 8
+    effets: { soin: 20, soin-par-sec: 3 }
+    description: "Rend 20 % des PV au groupe, puis 3 % par seconde pendant 8 s."
+  ode_a_la_vie:
+    nom: Ode à la vie
+    type: SOIN
+    icone: GLISTERING_MELON_SLICE
+    couleur: "#F7C873"
+    spe: [chantre]
+    talent: true
+    cout: 20
+    recharge: 15
+    portee: 25
+    puissance: 2.5
+    duree: 6
+    effets: { soin-par-sec: 3 }
+    description: "Soigne l'allié visé, puis 3 % de ses PV par seconde pendant 6 s."
+  contre_chant:
+    nom: Contre-chant
+    type: CRI
+    icone: SHIELD
+    couleur: "#FFE2A8"
+    spe: [chantre]
+    talent: true
+    cout: 20
+    recharge: 45
+    gcd: false
+    zone: 15
+    duree: 10
+    effets: { bouclier: 15 }
+    description: "Un chant qui couvre les coups : bouclier de 15 % des PV sur le groupe pendant 10 s."
+  requiem_des_braves:
+    nom: Requiem des braves
+    type: CRI
+    icone: TOTEM_OF_UNDYING
+    couleur: "#FFD66E"
+    spe: [chantre]
+    talent: true
+    recharge: 180
+    gcd: false
+    zone: 20
+    duree: 10
+    effets: { soin: 35, reduction: 15 }
+    description: "Rend 35 % des PV au groupe, qui subit 15 % de dégâts en moins pendant 10 s."

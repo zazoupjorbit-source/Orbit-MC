@@ -1,0 +1,12 @@
+{
+  "textures": {
+    "0": "orbitchasseurs:item/coque",
+    "particle": "orbitchasseurs:item/coque"
+  },
+  "elements": [
+    {"from": [7.5, 7.5, 0], "to": [8.5, 8.5, 16], "shade": false, "faces": {"north": {"uv": [13.75, 9.75, 14.25, 10.25], "texture": "#0", "tintindex": 0}, "south": {"uv": [13.75, 9.75, 14.25, 10.25], "texture": "#0", "tintindex": 0}, "east": {"uv": [12, 9.75, 16, 10.25], "texture": "#0", "tintindex": 0}, "west": {"uv": [12, 9.75, 16, 10.25], "texture": "#0", "tintindex": 0}, "up": {"uv": [13.75, 8, 14.25, 12], "texture": "#0", "tintindex": 0}, "down": {"uv": [13.75, 8, 14.25, 12], "texture": "#0", "tintindex": 0}}}
+  ],
+  "display": {
+    "gui": {"rotation": [25, 215, 0], "translation": [0, 0, 0], "scale": [0.9, 0.9, 0.9]}
+  }
+}

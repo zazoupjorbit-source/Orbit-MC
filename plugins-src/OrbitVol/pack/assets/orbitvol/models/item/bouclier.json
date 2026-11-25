@@ -1,0 +1,10 @@
+{
+  "textures": {
+    "particle": "orbitvol:item/d_bouclier",
+    "d_bouclier": "orbitvol:item/d_bouclier"
+  },
+  "elements": [
+    {"from": [0, 0, 7.75], "to": [16, 16, 8.25], "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#d_bouclier"}, "south": {"uv": [0, 0, 16, 16], "texture": "#d_bouclier"}, "east": {"uv": [0, 0, 16, 16], "texture": "#d_bouclier"}, "west": {"uv": [0, 0, 16, 16], "texture": "#d_bouclier"}, "up": {"uv": [0, 0, 16, 16], "texture": "#d_bouclier"}, "down": {"uv": [0, 0, 16, 16], "texture": "#d_bouclier"}}}
+  ],
+  "display": {"gui": {"rotation": [30, 225, 0], "scale": [0.6, 0.6, 0.6]}}
+}

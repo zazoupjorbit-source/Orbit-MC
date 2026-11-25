@@ -31,6 +31,8 @@
 //                                                    (reprise : n° d'étape où l'on revient, sinon la même)
 // Toute étape peut finir par un objet { si: 'choix=réponse', chrono, echec: [répliques], reprise } (branches, chrono).
 // Une quête peut demander une réponse : req: ['quete-avant', 'choix:pacte=accepter'] ('!choix:…' = toute autre).
+// Quête répétable (contrats) : rep: 20 → de nouveau proposée 20 h après avoir été finie.
+// Zone : admin: true → quêtes réservées à orbitmmo.admin ; pointsRelatifs: { nom: [dx, dy, dz] } → /quetes admin poser <fichier>.
 const fs = require('fs'), path = require('path');
 const ROOT = path.resolve(__dirname, '..', '..');
 const OUT = path.join(ROOT, 'src', 'main', 'resources', 'quests');
@@ -211,6 +213,7 @@ for (const f of fs.readdirSync(zonesDir).filter(n => n.endsWith('.js')).sort()) 
     const fac = Q.f !== undefined ? Q.f : z.faction;
     if (fac) out(4, 'faction: ' + fac);
     if (Q.admin || z.admin) out(4, 'admin: true');
+    if (Q.rep) out(4, 'repetable: ' + Q.rep); // contrat : de nouveau proposé Q.rep heures après avoir été fini
     out(4, 'niveau: ' + Q.lv);
     if (Q.req && Q.req.length) out(4, `requiert: [${Q.req.map(r => /^[A-Za-z0-9_\-]+$/.test(r) ? r : q(r)).join(', ')}]`);
     if (Q.g) out(4, 'donneur: ' + Q.g);

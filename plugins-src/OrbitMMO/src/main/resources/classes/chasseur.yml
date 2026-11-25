@@ -10,7 +10,7 @@ couleur: "#8BC34A"
 icone: BOW
 jouable: true
 ressource: CONCENTRATION
-armure: MAILLES
+armure: CUIR   # choix de Zazou du 24/11 : chasseur en cuir (mailles : Chaman, Lancier, Scalde)
 pv: 1.0
 arme: BOW
 description:
@@ -57,6 +57,16 @@ specialisations:
       fleche_filante: { nom: "Flèche filante", icone: FIREWORK_ROCKET, palier: 8, colonne: 0, rangs: 1, sort: fleche_filante, requiert: barrage, description: "Apprend Flèche filante : un tir chargé d'Éclat qui explose et étourdit." }
       tireur_d_elite: { nom: "Tireur d'élite", icone: CROSSBOW, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
       predateur_patient: { nom: "Prédateur patient", icone: WOLF_ARMOR, palier: 8, colonne: 2, rangs: 3, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      perforation: { nom: "Perforation", icone: SPECTRAL_ARROW, palier: 9, colonne: 0, rangs: 3, requiert: fleche_perforante, effets: { recharge.fleche_perforante: 1 }, description: "Recharge de Flèche perforante réduite de {recharge.fleche_perforante} s." }
+      comete_empennee: { nom: "Comète empennée", icone: FIREWORK_ROCKET, palier: 9, colonne: 1, rangs: 3, requiert: fleche_filante, effets: { degats.fleche_filante: 10 }, description: "Flèche filante inflige {degats.fleche_filante} % de dégâts en plus." }
+      cuir_bouilli: { nom: "Cuir bouilli", icone: LEATHER, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      visee_instinctive: { nom: "Visée instinctive", icone: ENDER_EYE, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      faucon_patient: { nom: "Faucon patient", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.oeil_de_faucon: 10 }, description: "Recharge d'Œil de faucon réduite de {recharge.oeil_de_faucon} s." }
+      carquois_sans_fond: { nom: "Carquois sans fond", icone: BUNDLE, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de concentration régénérée." }
+      tir_legendaire: { nom: "Tir légendaire", icone: BOW, palier: 11, colonne: 0, rangs: 3, effets: { degats.tir_vise: 5 }, description: "Tir visé inflige {degats.tir_vise} % de dégâts en plus." }
+      maitre_archer: { nom: "Maître archer", icone: CROSSBOW, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, crit: 3 }, description: "Talent de maître : +{degats} % de dégâts et +{crit} % de chances de coup critique." }
+      pointe_barbelee: { nom: "Pointe barbelée", icone: TIPPED_ARROW, palier: 11, colonne: 2, rangs: 3, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
 
   traqueur:
     nom: Traqueur
@@ -97,6 +107,16 @@ specialisations:
       hallali: { nom: "Hallali", icone: GOAT_HORN, palier: 8, colonne: 0, rangs: 1, sort: hallali, requiert: danse_des_crocs, description: "Apprend Hallali : la meute s'abat sur tout ce qui vous entoure." }
       maitre_traqueur: { nom: "Maître traqueur", icone: NETHERITE_SWORD, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
       sang_pour_sang: { nom: "Sang pour sang", icone: SWEET_BERRIES, palier: 8, colonne: 2, rangs: 3, requiert: gout_du_sang, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      meute_soudee: { nom: "Meute soudée", icone: LEAD, palier: 9, colonne: 0, rangs: 3, requiert: assaut_conjoint, effets: { recharge.assaut_conjoint: 2 }, description: "Recharge d'Assaut conjoint réduite de {recharge.assaut_conjoint} s." }
+      curee_generale: { nom: "Curée générale", icone: GOAT_HORN, palier: 9, colonne: 1, rangs: 3, requiert: hallali, effets: { degats.hallali: 10 }, description: "Hallali inflige {degats.hallali} % de dégâts en plus." }
+      chair_de_fauve: { nom: "Chair de fauve", icone: COOKED_BEEF, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      crocs_aiguises: { nom: "Crocs aiguisés", icone: FLINT, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      frenesie_hative: { nom: "Frénésie hâtive", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.frenesie_de_la_meute: 10 }, description: "Recharge de Frénésie de la meute réduite de {recharge.frenesie_de_la_meute} s." }
+      souffle_de_la_meute: { nom: "Souffle de la meute", icone: FEATHER, palier: 10, colonne: 2, rangs: 3, effets: { ressource: 3 }, description: "+{ressource} % de concentration régénérée." }
+      estoc_legendaire: { nom: "Estoc légendaire", icone: GOLDEN_SWORD, palier: 11, colonne: 0, rangs: 3, effets: { degats.double_estoc: 6 }, description: "Double estoc inflige {degats.double_estoc} % de dégâts en plus." }
+      chef_de_meute: { nom: "Chef de meute", icone: WOLF_ARMOR, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, crit: 3 }, description: "Talent de maître : +{degats} % de dégâts et +{crit} % de chances de coup critique." }
+      soif_inextinguible: { nom: "Soif inextinguible", icone: SWEET_BERRIES, palier: 11, colonne: 2, rangs: 3, effets: { vol-de-vie: 1 }, description: "{vol-de-vie} % des dégâts infligés vous soignent en plus." }
 
 sorts:
   # ---------------- Toute la classe ----------------

@@ -67,6 +67,7 @@ public final class ProfileMenu {
         if (spec != null) {
             id.add("<#8C96A3>Rôle : " + spec.role.tag());
         }
+        id.add("<#8C96A3>Niveau d'objet : <#FFD66E>" + fr.orbit.mmo.item.Loot.averageItemLevel(plugin, target, d));
         id.add("<#8C96A3>Étage : <white>" + d.floor);
         if (self) {
             id.add("<#8C96A3>Or : <#FFD66E>" + Text.num(d.gold));
@@ -107,7 +108,12 @@ public final class ProfileMenu {
         if (plugin.mounts() != null) {
             m.set(50, plugin.mounts().menuIcon(d, self), self ? t -> plugin.mounts().openStable(viewer) : null);
         }
+        m.set(51, gearIcon(plugin, target, d), null);
         if (self) {
+            m.set(52, Items.icon(Material.ARMOR_STAND, "<#B9A6FF><b>Garde-robe</b>",
+                    "<#8C96A3>Changer l'apparence de vos pièces",
+                    "<#8C96A3>sans changer leurs statistiques.",
+                    "<#8C96A3>Apparences débloquées : <white>" + d.looks.size()), t -> WardrobeMenus.open(plugin, viewer));
             m.set(49, Items.icon(Material.ENCHANTED_BOOK, "<#7FB2FF><b>Livre de sorts</b>", "<#8C96A3>Choisir le sort de chaque objet"),
                     t -> Menus.spellbook(plugin, viewer));
             m.set(53, Items.icon(Material.NETHER_STAR, "<#FFD66E><b>Retour au lobby</b>", "<#8C96A3>Quitter Orbit MMO pour le lobby.",
@@ -128,6 +134,47 @@ public final class ProfileMenu {
             return "Humain";
         }
         return race.substring(0, 1).toUpperCase(Locale.ROOT) + race.substring(1);
+    }
+
+    /** Équipement : niveau d'objet moyen, niveau de chaque pièce, sets portés et leurs bonus. */
+    private static ItemStack gearIcon(OrbitMMO plugin, Player target, PlayerData d) {
+        List<String> lore = new ArrayList<>();
+        ItemStack weapon = plugin.bar().weapon(target, d);
+        lore.add("<#8C96A3>Moyenne : arme + 4 pièces" + (fr.orbit.mmo.item.Loot.shieldUser(plugin, d) ? " + bouclier" : ""));
+        lore.add("<#5A6270>(un emplacement vide compte 0)");
+        lore.add("");
+        lore.add(pieceLine("Arme", "weapon".equals(Items.type(weapon)) ? weapon : null));
+        String[] labels = {"Bottes", "Jambières", "Plastron", "Casque"};
+        ItemStack[] armor = target.getInventory().getArmorContents();
+        for (int i = armor.length - 1; i >= 0; i--) {
+            lore.add(pieceLine(labels[i], armor[i]));
+        }
+        if (fr.orbit.mmo.item.Loot.shieldUser(plugin, d)) {
+            ItemStack off = target.getInventory().getItemInOffHand();
+            lore.add(pieceLine("Bouclier", "shield".equals(Items.type(off)) ? off : null));
+        }
+        java.util.Map<fr.orbit.mmo.item.GearSet, Integer> sets = fr.orbit.mmo.item.Loot.setCounts(target, d, weapon);
+        for (java.util.Map.Entry<fr.orbit.mmo.item.GearSet, Integer> e : sets.entrySet()) {
+            lore.add("");
+            lore.add("<#FFD66E>Set " + Text.esc(e.getKey().name) + " <#8C96A3>(" + e.getValue() + " / " + e.getKey().pieces.size() + ")");
+            lore.addAll(e.getKey().describe(e.getValue()));
+        }
+        int min = plugin.getConfig().getInt("niveau-objet.pilier", 0);
+        if (min > 0) {
+            lore.add("");
+            lore.add("<#8C96A3>Minimum pour le Pilier : <white>" + min);
+        }
+        return Items.icon(Material.IRON_CHESTPLATE, "<#FFD66E><b>Niveau d'objet : "
+                + fr.orbit.mmo.item.Loot.averageItemLevel(plugin, target, d) + "</b>", lore);
+    }
+
+    private static String pieceLine(String label, ItemStack it) {
+        int lvl = fr.orbit.mmo.item.Loot.itemLevel(it);
+        if (lvl <= 0) {
+            return "<#5A6270>" + label + " : —";
+        }
+        fr.orbit.mmo.item.Rarity r = fr.orbit.mmo.item.Loot.rarity(it);
+        return "<#8C96A3>" + label + " : <" + r.hex + ">" + lvl;
     }
 
     private static ItemStack classIcon(OrbitMMO plugin, PlayerData d, ClassDef c, SpecDef spec, Resource r) {

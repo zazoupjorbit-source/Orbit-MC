@@ -42,19 +42,25 @@ public final class Roulette {
     private record Outside(String key, String label, Material icon, int slot, int pays) {
     }
 
+    // Cases : les mêmes que le tapis dessiné par tools/CasinoPackGen.java (rouletteBackground).
+    // 0-35 = numéros 1 à 36, 36 = zéro, 37-48 ci-dessous, 49-53 = jetons.
     private static final List<Outside> OUTSIDE = List.of(
-            new Outside("rouge", "Rouge", Material.RED_WOOL, 37, 2),
-            new Outside("noir", "Noir", Material.BLACK_WOOL, 38, 2),
-            new Outside("pair", "Pair", Material.WHITE_WOOL, 39, 2),
-            new Outside("impair", "Impair", Material.GRAY_WOOL, 40, 2),
-            new Outside("manque", "Manque (1-18)", Material.LIGHT_BLUE_WOOL, 41, 2),
-            new Outside("passe", "Passe (19-36)", Material.BLUE_WOOL, 42, 2),
-            new Outside("d1", "1re douzaine (1-12)", Material.LIME_WOOL, 43, 3),
-            new Outside("d2", "2e douzaine (13-24)", Material.LIME_WOOL, 44, 3),
-            new Outside("d3", "3e douzaine (25-36)", Material.LIME_WOOL, 45, 3),
-            new Outside("c1", "Colonne 1 (1, 4, 7…)", Material.ORANGE_WOOL, 46, 3),
-            new Outside("c2", "Colonne 2 (2, 5, 8…)", Material.ORANGE_WOOL, 47, 3),
-            new Outside("c3", "Colonne 3 (3, 6, 9…)", Material.ORANGE_WOOL, 48, 3));
+            new Outside("d1", "1re douzaine (1-12)", Material.LIME_WOOL, 37, 3),
+            new Outside("d2", "2e douzaine (13-24)", Material.LIME_WOOL, 38, 3),
+            new Outside("d3", "3e douzaine (25-36)", Material.LIME_WOOL, 39, 3),
+            new Outside("c1", "Colonne 1 (1, 4, 7… 34)", Material.ORANGE_WOOL, 40, 3),
+            new Outside("c2", "Colonne 2 (2, 5, 8… 35)", Material.ORANGE_WOOL, 41, 3),
+            new Outside("c3", "Colonne 3 (3, 6, 9… 36)", Material.ORANGE_WOOL, 42, 3),
+            new Outside("manque", "Manque (1-18)", Material.LIGHT_BLUE_WOOL, 43, 2),
+            new Outside("passe", "Passe (19-36)", Material.BLUE_WOOL, 44, 2),
+            new Outside("rouge", "Rouge", Material.RED_WOOL, 45, 2),
+            new Outside("noir", "Noir", Material.BLACK_WOOL, 46, 2),
+            new Outside("pair", "Pair", Material.WHITE_WOOL, 47, 2),
+            new Outside("impair", "Impair", Material.GRAY_WOOL, 48, 2));
+
+    private static int numberSlot(int n) {
+        return n == 0 ? 36 : n - 1;
+    }
 
     private final OrbitCasino plugin;
     private final World world;
@@ -105,8 +111,15 @@ public final class Roulette {
 
     // ------------------------------------------------------------------ menu des mises
 
+    /** Ouvre la roulette : l'écran HD si le joueur a le pack du casino, sinon le menu coffre. */
     public void open(Player p) {
-        Menu m = new Menu(6, "<#E0B864><b>Roulette</b></#E0B864> <#5A6270>— gauche : miser · droite : retirer");
+        if (plugin.screens() != null && plugin.screens().available(p)) {
+            viewers.add(p.getUniqueId());
+            screen(p, true);
+            return;
+        }
+        Menu m = new Menu(6, "<#E0B864><b>Roulette</b></#E0B864> <#5A6270>— mises : " + Txt.n(totalOf(p.getUniqueId()))
+                + " OC · gauche : miser · droite : retirer");
         UUID u = p.getUniqueId();
         long c = chip.getOrDefault(u, chips.get(0));
         Map<String, Long> mine = bets.getOrDefault(u, Map.of());
@@ -115,11 +128,11 @@ public final class Roulette {
             Material mat = n == 0 ? Material.LIME_CONCRETE : RED.contains(n) ? Material.RED_CONCRETE : Material.BLACK_CONCRETE;
             ItemStack it = Menu.item(mat, num(n), "<#9AA4B2>Plein : payé 35 contre 1", betLine(mine.get("n" + n)));
             it.setAmount(Math.max(1, n));
-            m.set(n, it, e -> place(p, "n" + number, e.getClick()));
+            m.set(numberSlot(n), it, e -> place(p, "n" + number, e.getClick().isRightClick()));
         }
         for (Outside o : OUTSIDE) {
             m.set(o.slot(), Menu.item(o.icon(), "<#E6EDF3><b>" + o.label(), "<#9AA4B2>Payé " + (o.pays() - 1) + " contre 1",
-                    betLine(mine.get(o.key()))), e -> place(p, o.key(), e.getClick()));
+                    betLine(mine.get(o.key()))), e -> place(p, o.key(), e.getClick().isRightClick()));
         }
         for (int k = 0; k < chips.size() && k < 5; k++) {
             long v = chips.get(k);
@@ -129,28 +142,167 @@ public final class Roulette {
                 open(p);
             });
         }
-        long total = mine.values().stream().mapToLong(Long::longValue).sum();
-        m.set(36, Menu.item(Material.SUNFLOWER, "<#E0B864><b>Tes mises : " + Txt.n(total) + " OC",
-                "<#9AA4B2>Solde : " + Txt.oc(Math.max(0, plugin.wallet().balance(p))),
-                state == State.BETTING ? "<#62CFF4>La roue tourne dans " + countdown + " s" : state == State.SPINNING
-                        ? "<#E0484A>Rien ne va plus" : "<#9AA4B2>Ta première mise lance le compte à rebours"));
         m.onClose(() -> open.remove(u, m));
         open.put(u, m);
         m.open(p);
+    }
+
+    private long totalOf(UUID u) {
+        Map<String, Long> mine = bets.get(u);
+        return mine == null ? 0 : mine.values().stream().mapToLong(Long::longValue).sum();
+    }
+
+    /** Rafraîchit ce que le joueur voit (écran HD ou menu), s'il l'a encore ouvert. */
+    private void refresh(Player p) {
+        UUID u = p.getUniqueId();
+        if (viewers.contains(u)) {
+            if (plugin.screens() != null && plugin.screens().isOpen(p, "roulette")) {
+                screen(p, false);
+            } else {
+                viewers.remove(u);
+            }
+        } else if (open.containsKey(u) && p.isOnline()) {
+            open(p);
+        }
+    }
+
+    private void refreshViewers() {
+        for (UUID u : new ArrayList<>(viewers)) {
+            Player p = Bukkit.getPlayer(u);
+            if (p == null) {
+                viewers.remove(u);
+            } else {
+                refresh(p);
+            }
+        }
+    }
+
+    // ------------------------------------------------------------------ écran HD
+
+    private static final int GOLD = 0xE0B864, LIGHT = 0xE6EDF3, GREY = 0x9AA4B2, RED_TXT = 0xE0484A, GREEN = 0x7BD88F, ICE = 0x62CFF4;
+    private final Set<UUID> viewers = new java.util.HashSet<>();
+    private int ball = -1;          // numéro sous la bille (pendant et juste après le tour)
+    private int landed = -1;        // numéro sorti, affiché jusqu'au tour suivant
+    private final Map<UUID, Long> lastNet = new HashMap<>();
+
+    private static String chipModel(long amount) {
+        long[] values = {1000, 500, 250, 100, 50, 10};
+        for (long v : values) {
+            if (amount >= v) {
+                return "chip_" + v;
+            }
+        }
+        return "chip_10";
+    }
+
+    private static String describe(int n) {
+        return n == 0 ? "Zéro" : (RED.contains(n) ? "Rouge" : "Noir") + ", " + (n % 2 == 0 ? "pair" : "impair") + ", "
+                + (n <= 18 ? "manque" : "passe") + ", " + (n <= 12 ? "1re" : n <= 24 ? "2e" : "3e") + " douzaine, colonne "
+                + (n % 3 == 0 ? 3 : n % 3);
+    }
+
+    private void screen(Player p, boolean openIt) {
+        fr.orbit.casino.hud.Screens screens = plugin.screens();
+        if (screens == null || !screens.available(p)) {
+            return;
+        }
+        UUID u = p.getUniqueId();
+        long c = chip.getOrDefault(u, chips.get(0));
+        Map<String, Long> mine = bets.getOrDefault(u, Map.of());
+        long total = totalOf(u);
+        fr.orbit.casino.hud.Screens.Frame f = new fr.orbit.casino.hud.Screens.Frame("roulette");
+
+        // titre : état de la table à gauche, mises ou gain à droite
+        String left;
+        int leftColor = GOLD;
+        String right;
+        int rightColor = LIGHT;
+        if (state == State.SPINNING && landed < 0) {
+            left = "RIEN NE VA PLUS";
+            leftColor = RED_TXT;
+            right = total > 0 ? "MISE " + Txt.n(total) : "";
+        } else if (landed >= 0) {
+            left = "SORTI " + landed + " " + (landed == 0 ? "ZÉRO" : RED.contains(landed) ? "ROUGE" : "NOIR");
+            leftColor = landed == 0 ? GREEN : RED.contains(landed) ? RED_TXT : LIGHT;
+            Long net = lastNet.get(u);
+            if (net == null) {
+                right = Txt.n(Math.max(0, plugin.wallet().balance(p))) + " OC";
+            } else {
+                right = net > 0 ? "+" + Txt.n(net) + " OC" : net == 0 ? "0 OC" : Txt.n(net) + " OC";
+                rightColor = net > 0 ? GREEN : net == 0 ? GREY : RED_TXT;
+            }
+        } else if (state == State.BETTING) {
+            left = "ROULETTE · " + countdown + " S";
+            leftColor = countdown <= 5 ? RED_TXT : ICE;
+            right = total > 0 ? "MISE " + Txt.n(total) : Txt.n(Math.max(0, plugin.wallet().balance(p))) + " OC";
+        } else {
+            left = "ROULETTE · FAITES VOS JEUX";
+            right = Txt.n(Math.max(0, plugin.wallet().balance(p))) + " OC";
+        }
+        f.title(fr.orbit.casino.hud.Hud.title().background(fr.orbit.casino.hud.Hud.BG_ROULETTE)
+                .text(0, 8, fr.orbit.casino.hud.Hud.Align.LEFT, fr.orbit.casino.hud.Hud.fit(left, 100), leftColor)
+                .text(0, 168, fr.orbit.casino.hud.Hud.Align.RIGHT, fr.orbit.casino.hud.Hud.fit(right, 62), rightColor)
+                .build());
+
+        String help = state == State.SPINNING ? "<#E0484A>Rien ne va plus"
+                : "<#5A6270>Gauche : +" + Txt.n(c) + " OC · droite : retirer";
+        for (int n = 0; n <= 36; n++) {
+            String key = "n" + n;
+            Long bet = mine.get(key);
+            String model = n == ball ? "rl_ball" : bet != null ? "rl_" + chipModel(bet) : "invisible";
+            String name = num(n) + " <#9AA4B2>· " + describe(n);
+            String[] lore = {"<#9AA4B2>Plein : payé 35 contre 1", betLine(bet), help};
+            cellItem(f, p, numberSlot(n), key, model, name, lore);
+        }
+        for (Outside o : OUTSIDE) {
+            Long bet = mine.get(o.key());
+            String model = bet != null ? "rl_" + chipModel(bet) : "invisible";
+            String[] lore = {"<#9AA4B2>Payé " + (o.pays() - 1) + " contre 1 · le zéro fait perdre", betLine(bet), help};
+            cellItem(f, p, o.slot(), o.key(), model, "<#E6EDF3><b>" + o.label(), lore);
+        }
+
+        StringBuilder last = new StringBuilder();
+        for (int n : history) {
+            last.append(num(n)).append(' ');
+        }
+        for (int k = 0; k < chips.size() && k < 5; k++) {
+            long v = chips.get(k);
+            boolean chosen = v == c;
+            String model = "chip_" + v + (chosen ? "" : "_g");
+            String name = "<#E0B864><b>Jeton " + Txt.n(v) + " OC";
+            String[] lore = {chosen ? "<#7BD88F>✔ Jeton choisi" : "<#9AA4B2>Clique pour le choisir",
+                    "<#9AA4B2>Tes mises : " + Txt.n(total) + " OC · max " + Txt.n(plugin.getConfig().getLong("roulette.mise-max", 5000)),
+                    last.isEmpty() ? "<#5A6270>Aucun numéro sorti pour l'instant" : "<#9AA4B2>Derniers : " + last.toString().trim()};
+            f.item(49 + k, fr.orbit.casino.hud.Screens.model(model, name, lore), model + "|" + String.join("|", lore), () -> {
+                chip.put(u, v);
+                refresh(p);
+            });
+        }
+        screens.show(p, f, openIt);
+    }
+
+    private void cellItem(fr.orbit.casino.hud.Screens.Frame f, Player p, int slot, String key, String model, String name, String[] lore) {
+        f.item(slot, fr.orbit.casino.hud.Screens.model(model, name, lore), model + "|" + name + "|" + String.join("|", lore),
+                () -> place(p, key, false), () -> place(p, key, true));
     }
 
     private static String betLine(Long amount) {
         return amount == null ? "<#5A6270>Pas de mise" : "<#E0B864>Ta mise : " + Txt.n(amount) + " OC";
     }
 
-    private void place(Player p, String key, ClickType click) {
+    private void place(Player p, String key, boolean remove) {
         UUID u = p.getUniqueId();
         if (state == State.SPINNING) {
             Txt.bar(p, "<#E0484A>Rien ne va plus : attends le prochain tour.");
             return;
         }
+        if (landed >= 0) { // nouvelle mise après un tour : on efface l'affichage du résultat
+            landed = -1;
+            ball = -1;
+            lastNet.clear();
+        }
         Map<String, Long> mine = bets.computeIfAbsent(u, k -> new LinkedHashMap<>());
-        if (click.isRightClick()) {
+        if (remove) {
             Long had = mine.remove(key);
             if (had != null) {
                 plugin.wallet().credit(u, had, "roulette", "mise retirée", false);
@@ -159,7 +311,7 @@ public final class Roulette {
             if (mine.isEmpty()) {
                 bets.remove(u);
             }
-            open(p);
+            refresh(p);
             return;
         }
         long c = chip.getOrDefault(u, chips.get(0));
@@ -197,9 +349,10 @@ public final class Roulette {
                 }
                 render(null);
             }
-            if (open.containsKey(u) && p.isOnline()) {
-                open(p);
+            if (p.isOnline()) {
+                refresh(p);
             }
+            refreshViewers();
         });
     }
 
@@ -227,11 +380,15 @@ public final class Roulette {
             spin();
         } else {
             render(null);
+            refreshViewers();
         }
     }
 
     private void spin() {
         state = State.SPINNING;
+        landed = -1;
+        lastNet.clear();
+        // l'ancien menu coffre se ferme ; l'écran HD reste ouvert pour voir la bille
         for (UUID u : new ArrayList<>(open.keySet())) {
             Player p = Bukkit.getPlayer(u);
             if (p != null) {
@@ -262,6 +419,8 @@ public final class Roulette {
                 int shown = Cards.RANDOM.nextInt(37);
                 render("<#E0484A>Rien ne va plus\n<#5A6270>» " + num(shown) + " <#5A6270>«");
                 world.playSound(at, Sound.BLOCK_NOTE_BLOCK_HAT, 0.5f, 2f - delay * 0.15f);
+                ball = shown;
+                refreshViewers();
             }
         }.runTaskTimer(plugin, 0L, 2L);
     }
@@ -286,6 +445,7 @@ public final class Roulette {
             if (won > 0) {
                 plugin.wallet().credit(u, won, "roulette", "sorti " + n, won > staked);
             }
+            lastNet.put(u, won - staked);
             Player p = Bukkit.getPlayer(u);
             if (p != null) {
                 long net = won - staked;
@@ -300,15 +460,19 @@ public final class Roulette {
             }
         }
         bets.clear();
+        ball = n;
+        landed = n;
+        refreshViewers();
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             state = State.IDLE;
             render(null);
+            refreshViewers(); // le résultat reste affiché jusqu'à la prochaine mise
         }, 120L);
     }
 
     /** Multiplicateur (mise comprise) de la mise {@code key} quand {@code n} sort. */
     static long pays(String key, int n) {
-        if (key.startsWith("n")) {
+        if (key.matches("n\\d+")) { // « noir » commence aussi par n
             return Integer.parseInt(key.substring(1)) == n ? 36 : 0;
         }
         if (n == 0) {

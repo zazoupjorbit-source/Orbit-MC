@@ -25,7 +25,8 @@ import java.util.Map;
  */
 public final class ClassRegistry {
 
-    public static final List<String> DEFAULTS = List.of("guerrier", "chasseur", "mage", "pretre", "paladin", "druide", "astromancien");
+    public static final List<String> DEFAULTS = List.of("guerrier", "chasseur", "mage", "pretre", "paladin", "druide", "astromancien",
+            "chaman", "lancier", "scalde");
 
     private final OrbitMMO plugin;
     private final Map<String, ClassDef> classes = new LinkedHashMap<>();

@@ -1,0 +1,33 @@
+{
+  "providers": [
+    {"type": "space", "advances": {"\uF801": -1, "\uF802": -2, "\uF803": -4, "\uF804": -8, "\uF805": -16, "\uF806": -32, "\uF807": -64, "\uF808": -128, "\uF821": 1, "\uF822": 2, "\uF823": 4, "\uF824": 8, "\uF825": 16, "\uF826": 32, "\uF827": 64, "\uF828": 128}},
+    {"type": "bitmap", "file": "orbitvol:font/b_vole_t0.png", "ascent": 14, "height": 14, "chars": ["\uE425"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_vole_t1.png", "ascent": 14, "height": 14, "chars": ["\uE426"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_vole_t2.png", "ascent": 14, "height": 14, "chars": ["\uE427"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_vole_t3.png", "ascent": 14, "height": 14, "chars": ["\uE428"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_voleur_t0.png", "ascent": 14, "height": 14, "chars": ["\uE429"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_voleur_t1.png", "ascent": 14, "height": 14, "chars": ["\uE42A"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_voleur_t2.png", "ascent": 14, "height": 14, "chars": ["\uE42B"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_voleur_t3.png", "ascent": 14, "height": 14, "chars": ["\uE42C"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_secret_t0.png", "ascent": 14, "height": 14, "chars": ["\uE42D"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_secret_t1.png", "ascent": 14, "height": 14, "chars": ["\uE42E"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_secret_t2.png", "ascent": 14, "height": 14, "chars": ["\uE42F"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_secret_t3.png", "ascent": 14, "height": 14, "chars": ["\uE430"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_meteores_t0.png", "ascent": 14, "height": 14, "chars": ["\uE431"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_meteores_t1.png", "ascent": 14, "height": 14, "chars": ["\uE432"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_meteores_t2.png", "ascent": 14, "height": 14, "chars": ["\uE433"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_meteores_t3.png", "ascent": 14, "height": 14, "chars": ["\uE434"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_ascension_t0.png", "ascent": 14, "height": 14, "chars": ["\uE435"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_ascension_t1.png", "ascent": 14, "height": 14, "chars": ["\uE436"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_ascension_t2.png", "ascent": 14, "height": 14, "chars": ["\uE437"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_ascension_t3.png", "ascent": 14, "height": 14, "chars": ["\uE438"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_quete_t0.png", "ascent": 14, "height": 14, "chars": ["\uE439"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_quete_t1.png", "ascent": 14, "height": 14, "chars": ["\uE43A"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_quete_t2.png", "ascent": 14, "height": 14, "chars": ["\uE43B"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_quete_t3.png", "ascent": 14, "height": 14, "chars": ["\uE43C"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_bienvenue_t0.png", "ascent": 14, "height": 14, "chars": ["\uE43D"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_bienvenue_t1.png", "ascent": 14, "height": 14, "chars": ["\uE43E"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_bienvenue_t2.png", "ascent": 14, "height": 14, "chars": ["\uE43F"]},
+    {"type": "bitmap", "file": "orbitvol:font/b_bienvenue_t3.png", "ascent": 14, "height": 14, "chars": ["\uE440"]}
+  ]
+}

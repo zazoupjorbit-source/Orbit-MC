@@ -11,6 +11,12 @@
     "x": "",
     "twitch": ""
   },
+  "guide": {
+    "enabled": true,
+    "channel": "staff_guide",
+    "updatesChannel": "staff_general",
+    "refreshMinutes": 5
+  },
   "status": {
     "enabled": true,
     "intervalSeconds": 60,

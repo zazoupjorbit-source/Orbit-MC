@@ -59,6 +59,16 @@ specialisations:
       pluie_d_eclats: { nom: "Pluie d'Éclats", icone: AMETHYST_CLUSTER, palier: 8, colonne: 0, rangs: 1, sort: pluie_d_eclats, requiert: effondrement, description: "Apprend Pluie d'Éclats : vous rappelez la Nuit des Étoiles Filantes sur une large zone." }
       ciel_dechire: { nom: "Ciel déchiré", icone: END_CRYSTAL, palier: 8, colonne: 1, rangs: 3, effets: { degats: 3 }, description: "+{degats} % de dégâts." }
       alignement_parfait: { nom: "Alignement parfait", icone: ENDER_EYE, palier: 8, colonne: 2, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      trainee_ardente: { nom: "Traînée ardente", icone: FIREWORK_ROCKET, palier: 9, colonne: 0, rangs: 3, requiert: etoile_filante, effets: { degats.etoile_filante: 8 }, description: "Étoile filante inflige {degats.etoile_filante} % de dégâts en plus." }
+      deluge_d_eclats: { nom: "Déluge d'éclats", icone: AMETHYST_SHARD, palier: 9, colonne: 1, rangs: 3, requiert: pluie_d_eclats, effets: { degats.pluie_d_eclats: 10 }, description: "Pluie d'Éclats inflige {degats.pluie_d_eclats} % de dégâts en plus." }
+      corps_astral: { nom: "Corps astral", icone: END_STONE, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      alignement_ultime: { nom: "Alignement ultime", icone: ENDER_EYE, palier: 10, colonne: 0, rangs: 3, effets: { crit: 1 }, description: "+{crit} % de chances de coup critique." }
+      conjonction_hative: { nom: "Conjonction hâtive", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.conjonction: 10 }, description: "Recharge de Conjonction réduite de {recharge.conjonction} s." }
+      gravite_absolue: { nom: "Gravité absolue", icone: OBSIDIAN, palier: 10, colonne: 2, rangs: 3, effets: { degats.puits_de_gravite: 10 }, description: "Puits de gravité inflige {degats.puits_de_gravite} % de dégâts en plus." }
+      meteore_ancien: { nom: "Météore ancien", icone: MAGMA_BLOCK, palier: 11, colonne: 0, rangs: 3, effets: { degats.meteore: 5 }, description: "Météore inflige {degats.meteore} % de dégâts en plus." }
+      coeur_d_etoile: { nom: "Cœur d'étoile", icone: NETHER_STAR, palier: 11, colonne: 1, rangs: 1, effets: { degats: 6, crit: 3 }, description: "Talent de maître : +{degats} % de dégâts et +{crit} % de chances de coup critique." }
+      eclat_final: { nom: "Éclat final", icone: AMETHYST_CLUSTER, palier: 11, colonne: 2, rangs: 3, effets: { critdeg: 6 }, description: "Coups critiques : +{critdeg} % de dégâts." }
 
   constellation:
     nom: Constellation
@@ -99,6 +109,16 @@ specialisations:
       renaissance_stellaire: { nom: "Renaissance stellaire", icone: BEACON, palier: 8, colonne: 0, rangs: 1, sort: renaissance_stellaire, requiert: anneau_celeste, description: "Apprend Renaissance stellaire : rend 40 % des PV au groupe, puis le soigne encore." }
       ciel_protecteur: { nom: "Ciel protecteur", icone: END_CRYSTAL, palier: 8, colonne: 1, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
       lumiere_eternelle: { nom: "Lumière éternelle", icone: GLOWSTONE, palier: 8, colonne: 2, rangs: 3, requiert: lumiere_intense, effets: { soins.lumiere_des_astres: 8 }, description: "Lumière des astres soigne {soins.lumiere_des_astres} % de plus." }
+      # --- Paliers de maître (62, 70 et 78 points) ---
+      gardienne_fidele: { nom: "Gardienne fidèle", icone: END_CRYSTAL, palier: 9, colonne: 0, rangs: 3, requiert: etoile_gardienne, effets: { soins.etoile_gardienne: 8 }, description: "Étoile gardienne soigne {soins.etoile_gardienne} % de plus." }
+      renaissance_hative: { nom: "Renaissance hâtive", icone: CLOCK, palier: 9, colonne: 1, rangs: 3, requiert: renaissance_stellaire, effets: { recharge.renaissance_stellaire: 10 }, description: "Recharge de Renaissance stellaire réduite de {recharge.renaissance_stellaire} s." }
+      enveloppe_astrale: { nom: "Enveloppe astrale", icone: END_STONE, palier: 9, colonne: 2, rangs: 3, effets: { pv: 2 }, description: "+{pv} % de points de vie." }
+      clarte_stellaire: { nom: "Clarté stellaire", icone: GLOWSTONE_DUST, palier: 10, colonne: 0, rangs: 3, effets: { soins.lumiere_des_astres: 6 }, description: "Lumière des astres soigne {soins.lumiere_des_astres} % de plus." }
+      firmament_hatif: { nom: "Firmament hâtif", icone: CLOCK, palier: 10, colonne: 1, rangs: 2, effets: { recharge.firmament: 15 }, description: "Recharge de Firmament réduite de {recharge.firmament} s." }
+      nova_radieuse: { nom: "Nova radieuse", icone: SUNFLOWER, palier: 10, colonne: 2, rangs: 3, effets: { soins.nova_bienveillante: 6 }, description: "Nova bienveillante soigne {soins.nova_bienveillante} % de plus." }
+      lien_eternel: { nom: "Lien éternel", icone: LEAD, palier: 11, colonne: 0, rangs: 3, effets: { soins.lien_stellaire: 5 }, description: "Lien stellaire soigne {soins.lien_stellaire} % de plus." }
+      gardien_des_astres: { nom: "Gardien des astres", icone: NETHER_STAR, palier: 11, colonne: 1, rangs: 1, effets: { soins: 8, pv: 4 }, description: "Talent de maître : +{soins} % de soins prodigués et +{pv} % de points de vie." }
+      voile_d_etoiles: { nom: "Voile d'étoiles", icone: WHITE_WOOL, palier: 11, colonne: 2, rangs: 3, effets: { armure: 1 }, description: "Dégâts subis réduits de {armure} % de plus." }
 
 sorts:
   # ---------------- Toute la classe ----------------

@@ -42,6 +42,10 @@ final class QuestTracker {
             return;
         }
         List<Row> lines = rows.size() > MAX_LINES ? new ArrayList<>(rows.subList(0, MAX_LINES)) : rows;
+        // Coupé au plafond : jamais de trait de séparation tout en bas.
+        while (lines.size() > 1 && lines.get(lines.size() - 1).kind() == QuestPanel.Kind.SEPARATOR) {
+            lines = new ArrayList<>(lines.subList(0, lines.size() - 1));
+        }
         Shown now = new Shown(List.copyOf(lines), skinned, title);
         if (now.equals(last.get(id)) && p.getScoreboard() == boards.get(id)) {
             return;

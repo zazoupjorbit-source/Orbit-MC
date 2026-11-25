@@ -92,3 +92,87 @@ boutique:
     roi-du-poker: {texte: "<#C79BFF>[Roi du Poker]", prix: 60000}
     jackpot:    {texte: "<gradient:#E0484A:#E0B864>[Jackpot]</gradient>", prix: 100000}
     legende:    {texte: "<gradient:#3A7FFF:#C79BFF>[Légende d'ORBIT]</gradient>", prix: 250000}
+
+arcade:
+  # Salle d'arcade cachée (même monde que le casino, centre 0 64 400).
+  # Entrées secrètes « monde x y z » : un bouton y est posé s'il n'y a rien. Par défaut : derrière le bambou
+  # du casino (mur ouest). /arcade bouton (en visant un bloc) en ajoute une, /arcade bouton retirer l'enlève.
+  entrees:
+    - "casino -30 65 -14"
+  # Serveur du proxy du PNJ « Vole mon Orbito ».
+  serveur-vol: vol
+  rush:
+    # Courses en même temps (une piste chacune).
+    places: 16
+    # Vitesse en blocs par tick (×20 = m/s) : départ, maximum, gain par bloc parcouru.
+    vitesse-depart: 0.55
+    vitesse-max: 1.25
+    acceleration: 0.00015
+    # Chaque pièce = 1 Orbit Coin, jusqu'à ce plafond par jour et par joueur.
+    plafond-oc-jour: 1500
+    # Modèle des pièces (pack du casino) ; vide = pépite d'or.
+    modele-piece: "orbitcasino:chip_100_g"
+    # Hauteur du support invisible au-dessus des pieds (si le joueur flotte ou s'enfonce en course, ajuster).
+    decalage-siege: 0.6
+    # Lissage du mouvement côté client, en ticks (1 à 3).
+    lissage: 2
+  # Bornes d'arcade 3D (pack du casino) à la place des PNJ de jeu : le PNJ reste, invisible, et reçoit les clics.
+  bornes:
+    actif: true
+    # Taille de la borne (1.25 = 1,25 bloc de large, 2,4 de haut).
+    echelle: 1.25
+    # Si les bornes tournent le dos aux joueurs : 180.
+    lacet: 0
+    # Taille du PNJ invisible (boîte de clic).
+    pnj-taille: 1.3
+    # Déplacer une borne : « id: "x z [lacet]" » (ids : rush vol casino astroblocs cristaux defense pulsar
+    # nebuleuse nova palet turbo chasseurs siege).
+    emplacements: {}
+
+# ------------------------------------------------------------------
+#  Salon des Étoiles (aile est du casino) et jukebox du bar
+# ------------------------------------------------------------------
+crash:
+  # Part redistribuée : P(la fusée atteint ×m) = redistribution / m. Mises de 10 à 1 000 OC.
+  redistribution: 0.97
+  # Au-delà, tout le monde encaisse d'office.
+  plafond: 100
+  attente-mises: 10
+
+mines:
+  redistribution: 0.97
+  # Gain maximum d'une partie (encaissé d'office). Mises de 10 à 1 000 OC.
+  gain-max: 100000
+
+roue:
+  # Total des mises d'un joueur sur un tour (chaque mise rapporte en moyenne 96 %).
+  mise-max: 2000
+  attente-mises: 20
+  # -1 si la roue s'arrête visiblement sur une autre case que celle payée (texture vue à l'envers).
+  sens: 1
+
+jukebox:
+  # Seulement des musiques autorisées : disques de Minecraft, ou morceaux libres de droits ajoutés au pack
+  # (son = clé du son, icone = objet affiché). Jamais de musique du commerce.
+  morceaux:
+    - {id: "13", son: "minecraft:music_disc.13", titre: "13", auteur: "C418", duree: 178}
+    - {id: cat, son: "minecraft:music_disc.cat", titre: "Cat", auteur: "C418", duree: 185}
+    - {id: blocks, son: "minecraft:music_disc.blocks", titre: "Blocks", auteur: "C418", duree: 345}
+    - {id: chirp, son: "minecraft:music_disc.chirp", titre: "Chirp", auteur: "C418", duree: 185}
+    - {id: far, son: "minecraft:music_disc.far", titre: "Far", auteur: "C418", duree: 174}
+    - {id: mall, son: "minecraft:music_disc.mall", titre: "Mall", auteur: "C418", duree: 197}
+    - {id: mellohi, son: "minecraft:music_disc.mellohi", titre: "Mellohi", auteur: "C418", duree: 96}
+    - {id: stal, son: "minecraft:music_disc.stal", titre: "Stal", auteur: "C418", duree: 150}
+    - {id: strad, son: "minecraft:music_disc.strad", titre: "Strad", auteur: "C418", duree: 188}
+    - {id: ward, son: "minecraft:music_disc.ward", titre: "Ward", auteur: "C418", duree: 251}
+    - {id: "11", son: "minecraft:music_disc.11", titre: "11", auteur: "C418", duree: 71}
+    - {id: wait, son: "minecraft:music_disc.wait", titre: "Wait", auteur: "C418", duree: 238}
+    - {id: otherside, son: "minecraft:music_disc.otherside", titre: "Otherside", auteur: "Lena Raine", duree: 195}
+    - {id: "5", son: "minecraft:music_disc.5", titre: "5", auteur: "Samuel Åberg", duree: 178}
+    - {id: pigstep, son: "minecraft:music_disc.pigstep", titre: "Pigstep", auteur: "Lena Raine", duree: 149}
+    - {id: relic, son: "minecraft:music_disc.relic", titre: "Relic", auteur: "Aaron Cherof", duree: 218}
+    - {id: creator, son: "minecraft:music_disc.creator", titre: "Creator", auteur: "Lena Raine", duree: 176}
+    - {id: creator_music_box, son: "minecraft:music_disc.creator_music_box", titre: "Creator (boîte à musique)", auteur: "Lena Raine", duree: 73}
+    - {id: precipice, son: "minecraft:music_disc.precipice", titre: "Precipice", auteur: "Aaron Cherof", duree: 299}
+    - {id: tears, son: "minecraft:music_disc.tears", titre: "Tears", auteur: "Amos Roddy", duree: 175}
+    - {id: lava_chicken, son: "minecraft:music_disc.lava_chicken", titre: "Lava Chicken", auteur: "Hyper Potions", duree: 134}

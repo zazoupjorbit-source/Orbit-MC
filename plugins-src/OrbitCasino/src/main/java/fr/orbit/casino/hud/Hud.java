@@ -24,7 +24,7 @@ import java.util.Map;
 public final class Hud {
 
     public static final Key FONT = Key.key("orbitcasino", "hud");
-    public static final int BG_BLACKJACK = 0xE600, BG_POKER = 0xE610;
+    public static final int BG_BLACKJACK = 0xE600, BG_POKER = 0xE610, BG_ROULETTE = 0xE620, BG_CRASH = 0xE630, BG_MINES = 0xE640;
     public enum Align { LEFT, CENTER, RIGHT }
 
     private static final Map<Integer, Integer> INDEX = new HashMap<>();

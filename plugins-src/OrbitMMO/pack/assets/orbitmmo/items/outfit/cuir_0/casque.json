@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:select", "property": "minecraft:display_context",
+    "cases": [{"when": "head", "model": {"type": "minecraft:model", "model": "orbitmmo:outfit/cuir_0/casque"}}],
+    "fallback": {
+      "type": "minecraft:select", "property": "minecraft:custom_model_data", "index": 0,
+      "cases": [
+        {"when": "orbitmmo:armure/cuir_head_0", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/cuir_head_0"}},
+        {"when": "orbitmmo:armure/cuir_head_1", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/cuir_head_1"}},
+        {"when": "orbitmmo:armure/cuir_head_2", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/cuir_head_2"}},
+        {"when": "orbitmmo:armure/cuir_head_3", "model": {"type": "minecraft:model", "model": "orbitmmo:item/armure/cuir_head_3"}}
+      ],
+      "fallback": {"type": "minecraft:model", "model": "orbitmmo:outfit/cuir_0/casque"}
+    }
+  }
+}

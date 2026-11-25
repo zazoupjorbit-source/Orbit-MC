@@ -1,0 +1,50 @@
+# CHASSEURS D'ORBITE : combat de vaisseaux en apesanteur (salle d'arcade cachée du lobby).
+monde: orbite
+monde-salle: casino
+pack-port: 8799
+base:
+  fichier: auto
+
+# PNJ dans la salle d'arcade (monde-salle) et point de retour des joueurs.
+pnj: { x: -12.5, y: 64.0, z: 389.5, yaw: 0 }
+retour: { x: -12.5, y: 64.0, z: 392.5, yaw: 180 }
+
+# Orbit Coins de jeu : gain = points / 10, avec un plafond par jour et par joueur. Ils ne s'achètent jamais.
+oc:
+  points-par-oc: 10
+  bonus-victoire: 50
+  plafond-jour: 1500
+
+partie:
+  decompte-secondes: 8
+  duree-secondes: 240
+  melee-vaisseaux: 6
+  melee-eliminations: 15
+  duo-eliminations: 12
+  reapparition-secondes: 3
+  convoi-joueurs-max: 4
+
+pilotage:
+  # blocs par tick (20 par seconde), multipliés par la vitesse du vaisseau
+  vitesse-croisiere: 0.55
+  vitesse-poussee: 0.92
+  vitesse-frein: 0.2
+  vitesse-boost: 1.45
+  adherence: 0.16
+  adherence-derapage: 0.015
+  # lissage du déplacement côté client (ticks)
+  lissage: 2
+  # taille des vaisseaux et place du modèle par rapport à l'œil du pilote (blocs)
+  echelle: 1.6
+  modele-avant: 1.5
+  modele-bas: 0.8
+  # hauteur de l'œil d'un joueur assis au-dessus de son siège
+  oeil: 1.02
+  # à passer à 180 si les vaisseaux volent à reculons ; -1 si le roulis penche du mauvais côté
+  modele-lacet: 0
+  roulis: 1.0
+
+armes:
+  portee-laser: 64
+  aide-visee: 0.035
+  degats-missile: 55
