@@ -1,6 +1,22 @@
 # Orbit Tycoon — réglages.
 # Après une modification : /tycoon reload (jamais /reload du serveur).
 
+evenement-farm:
+  actif: true
+  intervalle-minutes: 20
+  duree-minutes: 5
+  annonce-minutes: 5
+  outils:
+  - pioche
+  - hache
+  - houe
+  - peche
+  - epee
+  recompenses:
+  - 4 1
+  - 3 2
+  - 3 1
+  hud-decalage: 225
 enchants-outils:
   erudition:
     effet: 1.0
@@ -321,8 +337,8 @@ generateurs:
   - 65
   max-au-sol: 512
   plasma:
-    bloc: CRYING_OBSIDIAN
-    par-heure: 1.0
+    bloc: REINFORCED_DEEPSLATE
+    par-heure: 0.625
     pile-max: 16
     max-par-ile: 1
   liste:
@@ -1602,6 +1618,7 @@ boutique:
   - 300
   # Seconde ligne du rayon Clés : lot de 16 clés, réduction en % sur le prix ×16.
   reduction-pack-cles: 20
+  generateur-plasma: 500
   baguettes:
     orbitale:
       prix: 400

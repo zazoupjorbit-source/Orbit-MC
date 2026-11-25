@@ -421,6 +421,8 @@ boutique:
   avenues: [mobzone]   # une seule arche : face aux coffres
   # Prix des clés en Plasma, dans l'ordre de coffres.noms (Vote, Farm, Event, Saturne, Neptune, Pets).
   prix-cles: [50, 80, 150, 500, 1000, 300]
+  # Rayon Items : Générateur de Plasma (prix en Plasma).
+  generateur-plasma: 500
   # Seconde ligne du rayon Clés : lot de 16 clés, réduction en % sur le prix ×16.
   reduction-pack-cles: 20
   # Rayon Items : baguettes de vente (prix en Plasma, utilisations) et boosters (Plasma, ×mult pendant minutes).
@@ -587,7 +589,9 @@ generateurs:
   max-au-sol: 512          # au-delà, le générateur attend qu'on ramasse (anti-lag)
   # Générateur de Plasma (coffres Saturne et Neptune seulement, hors /gen) : verse du Plasma au membre présent sur l.île.
   # par-heure = Plasma moyen par heure pour UN générateur ; pile-max = empilement ; max-par-ile = blocs posés par île.
-  plasma: {bloc: CRYING_OBSIDIAN, par-heure: 1.0, pile-max: 16, max-par-ile: 1}
+  # Automatique (25/11/2026) : tourne même hors ligne, Plasma versé à un membre connecté de l.île, sinon au chef.
+  # 0.625/h × pile de 16 = 10 Plasma/h max par île (choix de Wane). Bloc dédié retexturé par le pack (tools/gen-plasma.ps1).
+  plasma: {bloc: REINFORCED_DEEPSLATE, par-heure: 0.625, pile-max: 16, max-par-ile: 1}
   liste:
     - {id: ble, nom: "Blé", bloc: HAY_BLOCK, objet: WHEAT, prix: 680, vente: 0.63}
     - {id: carotte, nom: "Carotte", bloc: ORANGE_TERRACOTTA, objet: CARROT, prix: 750, vente: 0.68}

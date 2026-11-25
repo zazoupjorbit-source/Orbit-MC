@@ -53,7 +53,7 @@ CREATE TABLE `luckperms_group_permissions` (
   `contexts` varchar(200) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `luckperms_group_permissions_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 set autocommit=0;
@@ -91,13 +91,6 @@ INSERT INTO `luckperms_group_permissions` VALUES (39,'helpeur','meta.namecolor.#
 INSERT INTO `luckperms_group_permissions` VALUES (40,'helpeur','weight.60',1,'global','global',0,'{}');
 INSERT INTO `luckperms_group_permissions` VALUES (41,'modo','orbitstaff.tempban',1,'global','global',0,'{}');
 INSERT INTO `luckperms_group_permissions` VALUES (49,'helpeur','displayname.Helpeur',1,'global','global',0,'{}');
-INSERT INTO `luckperms_group_permissions` VALUES (50,'helpeur','orbitstaff.freeze',1,'global','global',0,'{}');
-INSERT INTO `luckperms_group_permissions` VALUES (51,'helpeur','orbitstaff.inspect',1,'global','global',0,'{}');
-INSERT INTO `luckperms_group_permissions` VALUES (52,'helpeur','orbitstaff.mute',1,'global','global',0,'{}');
-INSERT INTO `luckperms_group_permissions` VALUES (53,'helpeur','orbitstaff.notes.create',1,'global','global',0,'{}');
-INSERT INTO `luckperms_group_permissions` VALUES (54,'helpeur','orbitstaff.notes.view',1,'global','global',0,'{}');
-INSERT INTO `luckperms_group_permissions` VALUES (55,'helpeur','orbitstaff.staffmode',1,'global','global',0,'{}');
-INSERT INTO `luckperms_group_permissions` VALUES (56,'helpeur','orbitstaff.warn',1,'global','global',0,'{}');
 INSERT INTO `luckperms_group_permissions` VALUES (57,'helpeur','tab.staff',1,'global','global',0,'{}');
 INSERT INTO `luckperms_group_permissions` VALUES (61,'cofondateur','meta.namecolor.#FFB347',1,'global','global',0,'{}');
 INSERT INTO `luckperms_group_permissions` VALUES (62,'cofondateur','weight.95',1,'global','global',0,'{}');
@@ -132,6 +125,15 @@ INSERT INTO `luckperms_group_permissions` VALUES (96,'pilote','orbit.file.bypass
 INSERT INTO `luckperms_group_permissions` VALUES (97,'commandant','orbit.file.bypass',1,'global','global',0,'{}');
 INSERT INTO `luckperms_group_permissions` VALUES (98,'amiral','orbit.file.bypass',1,'global','global',0,'{}');
 INSERT INTO `luckperms_group_permissions` VALUES (99,'astral','orbit.file.bypass',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (100,'modo','orbittycoon.staff',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (101,'modo','orbittycoon.staff.ban',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (102,'modo','orbitstaff.staffmode',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (103,'modo','orbitstaff.freeze',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (104,'modo','orbitstaff.inspect',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (105,'modo','orbitstaff.mute',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (106,'modo','orbitstaff.warn',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (107,'modo','orbitstaff.notes.create',1,'global','global',0,'{}');
+INSERT INTO `luckperms_group_permissions` VALUES (108,'modo','orbitstaff.notes.view',1,'global','global',0,'{}');
 commit;
 DROP TABLE IF EXISTS `luckperms_tracks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

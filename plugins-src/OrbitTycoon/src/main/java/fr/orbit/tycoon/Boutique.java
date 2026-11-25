@@ -243,7 +243,7 @@ final class Boutique implements Listener {
         poser(h, 22, modele(armures, "nav_boutique_armures"), this::ouvrirArmures);
 
         ItemStack items = objet(Material.CHEST, "<#62CFF4><bold>Items",
-                "<gray>Collecteurs orbitaux,", "<gray>baguettes de vente,",
+                "<gray>Collecteurs orbitaux, Générateur de Plasma,", "<gray>baguettes de vente,",
                 "<gray>boosters de Crédits, Flux et XP.", "", VOIR);
         poser(h, 24, modele(items, "nav_boutique_items"), this::ouvrirItems);
 
@@ -456,6 +456,19 @@ final class Boutique implements Listener {
         // Rangée 1 : collecteurs.
         poser(h, 11, plugin.collecteurs().vitrine(), j -> plugin.collecteurs().acheter(j));
         poser(h, 15, plugin.collecteurs().vitrineCoffre(), j -> plugin.collecteurs().acheterCoffre(j));
+        // Générateur de Plasma (prix : boutique.generateur-plasma).
+        ItemStack gp = plugin.generateurs().generateurPlasma(1);
+        if (gp != null) {
+            long prixGp = Math.max(0, plugin.getConfig().getLong("boutique.generateur-plasma", 500));
+            gp.editMeta(m -> {
+                List<Component> l = new ArrayList<>(m.lore() == null ? List.of() : m.lore());
+                l.add(Component.empty());
+                l.add(ligne("<gray>Prix : " + PLASMA + Monnaies.Monnaie.PLASMA.format(prixGp)));
+                l.add(ligne("<#E0B864>➜ Clic pour acheter"));
+                m.lore(l);
+            });
+            poser(h, 13, gp, j -> confirmerObjet(j, "Générateur de Plasma", prixGp, () -> plugin.generateurs().generateurPlasma(1)));
+        }
         // Rangée 2 : baguettes de vente.
         Baguettes bg = plugin.baguettes();
         int[] casesB = {20, 22, 24};

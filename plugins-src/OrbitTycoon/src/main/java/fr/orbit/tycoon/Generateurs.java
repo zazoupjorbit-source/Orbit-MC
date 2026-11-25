@@ -131,6 +131,23 @@ final class Generateurs implements Listener {
         return estPlasma(t) ? Math.max(1, Math.min(64, plugin.getConfig().getInt("generateurs.plasma.pile-max", 16))) : pileMax();
     }
 
+    /** Générateur de Plasma en objet (coffres, boutique) ; null si l'id « plasma » est pris par la liste /gen. */
+    ItemStack generateurPlasma(int nombre) { return plasma == null ? null : generateur(plasma, nombre); }
+
+    /** Remet le bon bloc sur les Générateurs de Plasma déjà posés (après un changement de generateurs.plasma.bloc). */
+    private void convertirBlocsPlasma() {
+        World w = monde();
+        if (w == null || plasma == null) return;
+        int n = 0;
+        for (var e : poses.entrySet()) {
+            if (!ID_PLASMA.equals(e.getValue().type)) continue;
+            int[] c = coords(e.getKey());
+            Block b = w.getBlockAt(c[0], c[1], c[2]);
+            if (b.getType() != plasma.bloc()) { b.setType(plasma.bloc(), false); n++; }
+        }
+        if (n > 0) plugin.getLogger().info(n + " Générateur(s) de Plasma remis sur le bloc " + plasma.bloc() + ".");
+    }
+
     private int plasmaParIle(int ile) {
         int n = 0;
         for (Pose g : poses.values()) if (g.ile == ile && ID_PLASMA.equals(g.type)) n++;
@@ -143,6 +160,7 @@ final class Generateurs implements Listener {
         charger();
         lire();
         relancer();
+        Bukkit.getScheduler().runTaskLater(plugin, this::convertirBlocsPlasma, 40L);
         World w = monde();
         if (w != null) for (String k : poses.keySet()) {
             int[] c = coords(k);
@@ -173,11 +191,11 @@ final class Generateurs implements Listener {
                 plugin.getLogger().warning("Générateur ignoré (ligne mal écrite) : " + m + " (" + e.getMessage() + ")");
             }
         }
-        Material blocPlasma = Material.matchMaterial(plugin.getConfig().getString("generateurs.plasma.bloc", "CRYING_OBSIDIAN"));
-        if (blocPlasma == null || !blocPlasma.isBlock()) blocPlasma = Material.CRYING_OBSIDIAN;
+        Material blocPlasma = Material.matchMaterial(plugin.getConfig().getString("generateurs.plasma.bloc", "REINFORCED_DEEPSLATE"));
+        if (blocPlasma == null || !blocPlasma.isBlock()) blocPlasma = Material.REINFORCED_DEEPSLATE;
         plasma = parId.containsKey(ID_PLASMA) ? null : new Type(-1, ID_PLASMA, "Plasma", blocPlasma, Material.AMETHYST_SHARD, 0, 0);
         if (plasma != null) parId.put(ID_PLASMA, plasma);
-        if (production != null) relancer();
+        if (production != null) { relancer(); convertirBlocsPlasma(); }
         for (String k : new ArrayList<>(titres.keySet())) titre(k);
     }
 
@@ -274,9 +292,10 @@ final class Generateurs implements Listener {
             it.editMeta(m -> {
                 m.displayName(texte("<gradient:#C77DFF:#62CFF4><bold>Générateur de Plasma</bold></gradient>"));
                 m.lore(List.of(
-                        texte("<#C77DFF>✦ Générateur rare <dark_gray>· <gray>coffres Saturne et Neptune"),
+                        texte("<#C77DFF>✦ Générateur rare <dark_gray>· <gray>coffres Saturne/Neptune, boutique"),
                         texte("<gray>Verse du <#C77DFF>◆ Plasma</#C77DFF><gray> directement sur ton solde,"),
-                        texte("<gray>quand tu es sur ton île : <#C77DFF>" + gain(t, 1) + " <gray>en moyenne."),
+                        texte("<gray>tout seul, même hors ligne : <#C77DFF>" + gain(t, 1) + " <gray>en moyenne"),
+                        texte("<dark_gray>(pile complète x" + pileMax(t) + " : " + gain(t, pileMax(t)) + ")"),
                         texte(""),
                         texte("<#62CFF4>➜ Pose-le sur ton île /is <dark_gray>(" + plugin.getConfig().getInt("generateurs.plasma.max-par-ile", 1) + " bloc max par île)"),
                         texte("<#62CFF4>➜ Clic droit sur un autre : l'empiler <dark_gray>(x" + pileMax(t) + " max)"),
@@ -399,6 +418,7 @@ final class Generateurs implements Listener {
     private void produire() {
         World w = monde();
         if (w == null || poses.isEmpty()) return;
+        produirePlasmaAuto(w);
         // Une île ne produit que si un de ses membres est physiquement dessus (pas juste connecté ailleurs) :
         // évite d'accumuler des tonnes de ressources pendant que personne n'y est.
         Set<Integer> actives = new HashSet<>();
@@ -423,7 +443,7 @@ final class Generateurs implements Listener {
             if (t == null) continue;
             int[] c = coords(e.getKey());
             if (!w.isChunkLoaded(c[0] >> 4, c[2] >> 4)) continue;
-            if (estPlasma(t)) { produirePlasma(w, c, g, presents.get(g.ile)); continue; }
+            if (estPlasma(t)) continue;   // produit à part, tout seul (produirePlasmaAuto)
             // Un collecteur dans le chunk : la production est vendue (Collecteur orbital) ou rangée (Coffre collecteur),
             // sans objet au sol ; seul ce qui ne rentre pas dans un coffre plein tombe au sol.
             int quantite = Equipements.appliquer(g.pile * parCycle(), bonusGrade.getOrDefault(g.ile, 0.0));
@@ -460,20 +480,37 @@ final class Generateurs implements Listener {
         }
     }
 
-    /** Un cycle d'un Générateur de Plasma : chaque générateur de la pile a (par-heure × intervalle / 3600) chance de donner 1 Plasma. */
-    private void produirePlasma(World w, int[] c, Pose g, List<Player> la) {
-        if (la == null || la.isEmpty()) return;
+    /**
+     * Générateurs de Plasma, entièrement automatiques : ils tournent même si personne n'est sur l'île (ni connecté)
+     * et même si le chunk n'est pas chargé. Chaque générateur de la pile a (par-heure × intervalle / 3600) chance
+     * de donner 1 Plasma, versé directement sur le solde d'un membre connecté de l'île (au hasard), sinon du chef.
+     */
+    private void produirePlasmaAuto(World w) {
         double chance = plasmaParHeure() * intervalle() / 3600.0;
+        if (chance <= 0) return;
         java.util.concurrent.ThreadLocalRandom r = java.util.concurrent.ThreadLocalRandom.current();
-        int gagne = 0;
-        for (int i = 0; i < g.pile; i++) if (r.nextDouble() < chance) gagne++;
-        if (gagne <= 0) return;
-        Player p = la.get(r.nextInt(la.size()));
-        plugin.monnaies().ajouter(p.getUniqueId(), Monnaies.Monnaie.PLASMA, gagne);
-        Location l = new Location(w, c[0] + 0.5, c[1] + 1.2, c[2] + 0.5);
-        w.spawnParticle(Particle.WITCH, l, 25, 0.3, 0.4, 0.3, 0.05);
-        w.playSound(l, Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 0.9f, 1.4f);
-        p.sendActionBar(texte("<#C77DFF><bold>+" + gagne + " ◆ Plasma</bold> <dark_gray>· <gray>Générateur de Plasma"));
+        for (var e : poses.entrySet()) {
+            Pose g = e.getValue();
+            if (!ID_PLASMA.equals(g.type)) continue;
+            int gagne = 0;
+            for (int i = 0; i < g.pile; i++) if (r.nextDouble() < chance) gagne++;
+            if (gagne <= 0) continue;
+            int[] c = coords(e.getKey());
+            IlesJoueurs.Ile ile = iles().ileA(c[0], c[2]);
+            if (ile == null || ile.index != g.ile) continue;
+            List<Player> en = new ArrayList<>();
+            for (UUID id : ile.membres.keySet()) { Player p = Bukkit.getPlayer(id); if (p != null) en.add(p); }
+            Player p = en.isEmpty() ? null : en.get(r.nextInt(en.size()));
+            UUID qui = p != null ? p.getUniqueId() : ile.chef();
+            if (qui == null) continue;
+            plugin.monnaies().ajouter(qui, Monnaies.Monnaie.PLASMA, gagne);
+            if (w.isChunkLoaded(c[0] >> 4, c[2] >> 4)) {
+                Location l = new Location(w, c[0] + 0.5, c[1] + 1.2, c[2] + 0.5);
+                w.spawnParticle(Particle.WITCH, l, 25, 0.3, 0.4, 0.3, 0.05);
+                w.playSound(l, Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 0.9f, 1.4f);
+            }
+            if (p != null) p.sendActionBar(texte("<#C77DFF><bold>+" + gagne + " ◆ Plasma</bold> <dark_gray>· <gray>Générateur de Plasma"));
+        }
     }
 
     // ------------------------------------------------------------------ titres au-dessus des générateurs
@@ -534,6 +571,8 @@ final class Generateurs implements Listener {
         }
         String k = cle(b);
         poses.put(k, new Pose(t.id(), 1, ile.index));
+        // Ancien objet (Plasma en obsidienne pleureuse) : le bloc posé prend le bloc actuel du générateur.
+        if (b.getType() != t.bloc()) Bukkit.getScheduler().runTask(plugin, () -> { if (poses.containsKey(k)) b.setType(t.bloc(), false); });
         int avant = debloque.getOrDefault(ile.index, 0);
         if (t.rang() + 1 > avant && t.rang() + 1 < types.size()) {
             debloque.put(ile.index, t.rang() + 1);
