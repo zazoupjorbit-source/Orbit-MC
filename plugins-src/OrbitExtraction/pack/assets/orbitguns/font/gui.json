@@ -1,6 +1,6 @@
 {
   "providers": [
-    {"type": "space", "advances": {"\uF000": -18, "\uF001": -1, "\uF002": -197}},
+    {"type": "space", "advances": {"\uF000": -48, "\uF001": -1, "\uF002": -257}},
     {"type": "bitmap", "file": "orbitguns:gui/home.png", "height": 62, "ascent": 37, "chars": ["\uE200\uE201", "\u0000\u0000", "\u0000\u0000", "\u0000\u0000"]},
     {"type": "bitmap", "file": "orbitguns:gui/home.png", "height": 62, "ascent": -25, "chars": ["\u0000\u0000", "\uE202\uE203", "\u0000\u0000", "\u0000\u0000"]},
     {"type": "bitmap", "file": "orbitguns:gui/home.png", "height": 62, "ascent": -87, "chars": ["\u0000\u0000", "\u0000\u0000", "\uE204\uE205", "\u0000\u0000"]},

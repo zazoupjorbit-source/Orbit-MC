@@ -37,5 +37,37 @@
   "maven": {
     "version": "3.9.16",
     "url": "https://archive.apache.org/dist/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.zip"
+  },
+  "gradle": {
+    "_note": "Compile les mods Fabric (mods-src/OrbitExtractionMod). Pose dans tools\\gradle.",
+    "version": "9.8.2",
+    "url": "https://services.gradle.org/distributions/gradle-9.8.2-bin.zip",
+    "sha256": "21bd5da2de49b642904077f38c0efdc7778e92b3ed0889392dca61b97e389607"
+  },
+  "fabric": {
+    "_note": "Instances moddees (Fabric) : pas de paper.jar ni de LuckPerms, mais fabric.jar + le dossier mods. Le meme loader et la meme Fabric API doivent etre dans le gradle.properties du mod et cote client.",
+    "instances": ["extraction-modde"],
+    "minecraft": "26.3",
+    "loader": "0.20.1",
+    "installer": "1.1.2",
+    "serveur": {
+      "fichier": "fabric-server-26.3-0.20.1-1.1.2.jar",
+      "url": "https://meta.fabricmc.net/v2/versions/loader/26.3/0.20.1/1.1.2/server/jar",
+      "sha256": "70446947655b4f8f286aba896aa4c19a255e8ca8a730636ef2a6017ae4415d95"
+    },
+    "mods": [
+      {
+        "fichier": "fabric-api-0.167.0+26.3.jar",
+        "url": "https://cdn.modrinth.com/data/P7dR8mSH/versions/lPHkrIVF/fabric-api-0.167.0%2B26.3.jar",
+        "sha256": "ec6c9dbd884d68ae071fdc96cbdd91f2a5256bf3085a3b457e475827b31cad19",
+        "client": true
+      },
+      {
+        "fichier": "FabricProxy-Lite-2.12.0.jar",
+        "url": "https://cdn.modrinth.com/data/8dI2tmqs/versions/CsEpiziv/FabricProxy-Lite-2.12.0.jar",
+        "sha256": "dca0d05685afaa25d554372ad118d90b6b27f85ded93e6db0b85d822aa29342a",
+        "client": false
+      }
+    ]
   }
 }

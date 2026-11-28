@@ -64,6 +64,7 @@ public final class OrbitDevCore extends JavaPlugin {
     private fr.orbit.devcore.anneau.Anneaux anneaux;
     private fr.orbit.devcore.chat.Annonces annonces;
     private fr.orbit.devcore.chat.ClearLag clearLag;
+    private fr.orbit.devcore.elexyr.Elexyr elexyr;
 
     @Override
     public void onEnable() {
@@ -110,6 +111,9 @@ public final class OrbitDevCore extends JavaPlugin {
         fireworkGame = new FireworkGame(this);
         pm.registerEvents(fireworkGame, this); // après PlayerListener : la boussole prend sa case d'abord
         fireworkGame.start();
+        elexyr = new fr.orbit.devcore.elexyr.Elexyr(this);
+        pm.registerEvents(elexyr, this);
+        elexyr.start();
         annonces = new fr.orbit.devcore.chat.Annonces(this);
         annonces.start();
         clearLag = new fr.orbit.devcore.chat.ClearLag(this);
@@ -133,6 +137,7 @@ public final class OrbitDevCore extends JavaPlugin {
         register("boutique", new ShopCommand(this));
         register("vote", new fr.orbit.devcore.command.VoteCommand(this));
         register("anneau", new fr.orbit.devcore.command.AnneauCommand(this));
+        register("elexyr", new fr.orbit.devcore.command.ElexyrCommand(this));
 
         npcs.spawnAllLoaded();
         cosmetics.start();
@@ -153,6 +158,9 @@ public final class OrbitDevCore extends JavaPlugin {
         }
         if (fireworkGame != null) {
             fireworkGame.stop();
+        }
+        if (elexyr != null) {
+            elexyr.stop();
         }
         if (lobbyPack != null) {
             lobbyPack.shutdown();
@@ -277,6 +285,10 @@ public final class OrbitDevCore extends JavaPlugin {
 
     public ShopMenu shopMenu() {
         return shopMenu;
+    }
+
+    public fr.orbit.devcore.elexyr.Elexyr elexyr() {
+        return elexyr;
     }
 
     public fr.orbit.devcore.anneau.Anneaux anneaux() {

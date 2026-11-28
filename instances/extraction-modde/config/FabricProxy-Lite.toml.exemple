@@ -1,0 +1,5 @@
+hackOnlineMode = true
+hackEarlySend = false
+hackMessageChain = true
+disconnectMessage = "Ce serveur ne se rejoint que par le proxy Orbit MC (localhost:25565)."
+secret = "__SECRET_VELOCITY__"

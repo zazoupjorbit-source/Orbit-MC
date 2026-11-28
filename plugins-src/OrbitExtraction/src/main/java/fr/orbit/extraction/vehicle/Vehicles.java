@@ -290,7 +290,7 @@ public final class Vehicles implements Listener {
         return sb.toString();
     }
 
-    /** Lignes de description d'un type (écran des colis du téléphone). */
+    /** Lignes de description d'un type (écran des colis de la tablette). */
     public List<String> describe(Def d) {
         List<String> out = new ArrayList<>();
         out.add("<#8A919B>" + d.seats().size() + " place" + (d.seats().size() > 1 ? "s" : "") + " • <#D7DCE2>" + Math.round(d.maxSpeed() * 72)
@@ -421,7 +421,7 @@ public final class Vehicles implements Listener {
         return true;
     }
 
-    /** Colis du téléphone : pose un véhicule neuf, plein, près du joueur. Faux s'il n'y a pas la place. */
+    /** Colis de la tablette : pose un véhicule neuf, plein, près du joueur. Faux s'il n'y a pas la place. */
     public boolean deliver(Player p, Def d) {
         World w = world();
         if (w == null || p.getWorld() != w) {

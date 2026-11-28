@@ -42,7 +42,9 @@ public class EventScheduler {
             String time = String.valueOf(entry.get("time"));
             String type = String.valueOf(entry.get("type")).toLowerCase(Locale.ROOT);
             String name = String.valueOf(entry.get("name"));
-            if (!day.equals(now.getDayOfWeek().name()) || !time.equals(now.format(TIME))) {
+            // day: DAILY (ou TOUS) = tous les jours
+            boolean today = day.equals("DAILY") || day.equals("TOUS") || day.equals(now.getDayOfWeek().name());
+            if (!today || !time.equals(now.format(TIME))) {
                 continue;
             }
             String key = day + "|" + time + "|" + type + "|" + name;

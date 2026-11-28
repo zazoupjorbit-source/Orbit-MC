@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "contrebande:item/produit_cristal",
+    "tints": [
+      {"type": "minecraft:constant", "value": -1},
+      {"type": "minecraft:custom_model_data", "index": 0, "default": -10301452},
+      {"type": "minecraft:constant", "value": -1}
+    ]
+  }
+}

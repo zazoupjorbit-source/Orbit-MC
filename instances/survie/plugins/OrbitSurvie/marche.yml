@@ -15,12 +15,121 @@
 vente-ratio: 0.30
 artisanat: 1.05
 # Coût du combustible ajouté à chaque cuisson (four, fumoir, haut fourneau).
-cuisson: 0.4
+cuisson: 1.6
+
+# Inflation (25/11/2026, demande de Zazou : « augmente les prix mais qu'ils gagnent plus avec les farms ») :
+# toutes les valeurs ci-dessous sont multipliées par « global », et les produits de farm en plus par leur bonus.
+# Les objets fabriqués suivent (ils sont calculés depuis les recettes). Achat ET vente montent ensemble.
+inflation:
+  global: 4
+  bonus:
+    farms:
+      multiplicateur: 1.5
+      objets:
+        # Cultures
+        - WHEAT
+        - CARROT
+        - POTATO
+        - BEETROOT
+        - MELON_SLICE
+        - PUMPKIN
+        - SUGAR_CANE
+        - CACTUS
+        - BAMBOO
+        - COCOA_BEANS
+        - NETHER_WART
+        - SWEET_BERRIES
+        - GLOW_BERRIES
+        - APPLE
+        - KELP
+        - CHORUS_FRUIT
+        - "*_MUSHROOM"
+        # Élevage
+        - EGG
+        - BEEF
+        - PORKCHOP
+        - CHICKEN
+        - MUTTON
+        - RABBIT
+        - LEATHER
+        - FEATHER
+        - RABBIT_HIDE
+        - HONEYCOMB
+        - HONEY_BOTTLE
+        - "*_WOOL"
+        # Butin des farms à monstres
+        - ROTTEN_FLESH
+        - BONE
+        - STRING
+        - SPIDER_EYE
+        - GUNPOWDER
+        - SLIME_BALL
+        - MAGMA_CREAM
+        - BLAZE_ROD
+        - ENDER_PEARL
+        - GHAST_TEAR
+        - PHANTOM_MEMBRANE
+        - INK_SAC
+        - GLOW_INK_SAC
+        - PRISMARINE_SHARD
+        - PRISMARINE_CRYSTALS
+        - ARMADILLO_SCUTE
+        # Pêche et bois
+        - COD
+        - SALMON
+        - TROPICAL_FISH
+        - PUFFERFISH
+        - "*_LOG"
+        - "*_STEM"
+
+# Roulement des prix : toutes les « minutes », « objets » articles tirés au hasard voient leur cours partir à la
+# hausse ou à la baisse (entre « ecart-min » et hausse-max / baisse-max), puis repartir à la normale au roulement
+# suivant. Le cours glisse doucement (« vitesse » de l'écart rattrapée toutes les 5 min). Annonce dans le chat.
+# /shop admin roulement en relance un tout de suite.
+roulement:
+  actif: true
+  minutes: 60
+  objets: 12
+  hausse-max: 0.40
+  baisse-max: 0.35
+  ecart-min: 0.10
+  vitesse: 0.2
+  # Objets trop bon marché exclus du tirage (prix de référence en crédits, inflation comprise).
+  prix-ref-min: 16
+  # Nombre d'objets cités dans l'annonce (par sens).
+  annonce: 3
+  # Catégories tirées au sort (vide = toutes). Noms : MINERAIS, BOIS, CONSTRUCTION, COULEURS, NATURE, NOURRITURE,
+  # MER, BUTIN, REDSTONE, OUTILS, ARMURES, MAGIE, DIVERS.
+  categories: [MINERAIS, BOIS, NOURRITURE, MER, BUTIN, NATURE, REDSTONE, MAGIE]
+
+# Bornes par objet (par rapport au prix normal), tout compris : ventes en masse, achats, roulement.
+# Le premier groupe qui correspond gagne.
+limites:
+  diamant:
+    min: 0.85
+    max: 1.20
+    objets: [DIAMOND, DIAMOND_BLOCK, DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE]
+  netherite:
+    min: 0.85
+    max: 1.20
+    objets: [ANCIENT_DEBRIS, "NETHERITE_*"]
+  emeraude:
+    min: 0.80
+    max: 1.25
+    objets: [EMERALD, EMERALD_BLOCK, EMERALD_ORE, DEEPSLATE_EMERALD_ORE]
+  rares:
+    min: 0.85
+    max: 1.20
+    objets: [ELYTRA, NETHER_STAR, BEACON, TOTEM_OF_UNDYING, ENCHANTED_GOLDEN_APPLE, HEART_OF_THE_SEA, TRIDENT, HEAVY_CORE, MACE, DRAGON_EGG]
+  metaux:
+    min: 0.70
+    max: 1.30
+    objets: [IRON_INGOT, RAW_IRON, IRON_BLOCK, IRON_ORE, DEEPSLATE_IRON_ORE, GOLD_INGOT, RAW_GOLD, GOLD_BLOCK, GOLD_ORE, DEEPSLATE_GOLD_ORE]
 
 dynamique:
   # Valeur (en crédits, au prix de référence) qu'il faut vendre d'un objet pour que son prix soit divisé par ~2,7.
-  # Plus c'est grand, plus les prix sont stables.
-  volume: 6000
+  # Plus c'est grand, plus les prix sont stables. (×4 avec l'inflation du 25/11 pour garder la même stabilité.)
+  volume: 24000
   # Bornes du prix par rapport à la référence. Garder max / min × vente-ratio × artisanat < 1
   # (sinon acheter un objet bradé, le fabriquer et revendre le résultat cher devient rentable).
   min: 0.5

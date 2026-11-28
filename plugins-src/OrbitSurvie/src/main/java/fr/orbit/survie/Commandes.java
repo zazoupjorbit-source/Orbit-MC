@@ -28,6 +28,26 @@ public final class Commandes implements TabExecutor {
             case "argent" -> argent(s, a);
             case "payer" -> payer(s, a);
             case "richesses" -> richesses(s);
+            case "grade" -> {
+                if (s instanceof Player p) {
+                    if (a.length >= 1) {
+                        plugin.grades().acheter(p, a[0].toLowerCase(Locale.ROOT));
+                    } else {
+                        plugin.grades().ouvrir(p);
+                    }
+                }
+            }
+            case "contrats" -> {
+                if (s instanceof Player p) {
+                    plugin.contrats().ouvrir(p);
+                }
+            }
+            case "metiers" -> {
+                if (s instanceof Player p) {
+                    plugin.metiers().ouvrir(p);
+                }
+            }
+            case "classement" -> plugin.classements().afficher(s, a.length >= 1 ? a[0] : null);
             case "kit" -> {
                 if (s instanceof Player p) {
                     if (a.length >= 1) {
@@ -113,10 +133,14 @@ public final class Commandes implements TabExecutor {
                 plugin.marche().charger();
                 plugin.bases().charger();
                 plugin.kits().charger();
-                Msg.send(s, "Configuration rechargée (marché, prix, kits, armoires, hôtel des ventes).");
+                plugin.grades().charger();
+                plugin.contrats().charger();
+                plugin.metiers().charger();
+                Msg.send(s, "Configuration rechargée (marché, prix, kits, armoires, hôtel des ventes, grades, contrats, métiers, "
+                        + "événements, arène, échoppes).");
             }
             default -> {
-                Msg.send(s, "<white>/ile generer<gray> : met l'île comme sur le plan <red>(lance /ile ecarts avant !)");
+                Msg.send(s, "<white>/ile generer<gray> : met le spawn comme sur le plan <red>(lance /ile ecarts avant !)");
                 Msg.send(s, "<white>/ile ecarts<gray> : compare le monde et le plan, sans rien toucher");
                 Msg.send(s, "<white>/ile tp [point]<gray>, <white>/ile points<gray>, <white>/ile pnj<gray>, <white>/ile reload");
                 Msg.send(s, "<white>/ile argent <pseudo> <montant><gray> : fixe un solde");
@@ -194,7 +218,7 @@ public final class Commandes implements TabExecutor {
             return;
         }
         plugin.db().then(plugin.eco().classement(10), liste -> {
-            Msg.send(s, Msg.OR + "<bold>Les plus riches de l'île");
+            Msg.send(s, Msg.OR + "<bold>Les plus riches du port");
             for (int i = 0; i < liste.size(); i++) {
                 s.sendMessage(Msg.raw("  " + (i < 3 ? Msg.OR : "<gray>") + (i + 1) + ". <white>" + liste.get(i).nom()
                         + " <dark_gray>— " + Msg.argent(liste.get(i).solde())));
@@ -227,21 +251,22 @@ public final class Commandes implements TabExecutor {
                 richesses(p);
                 Msg.send(p, "<white>/payer <pseudo> <montant><gray> pour envoyer des crédits.");
             }
-            case "arene" -> {
-                Msg.send(p, "<red><bold>Zone de duel</bold><gray> : descends dans la fosse pour te battre.");
-                Msg.send(p, "Le PvP n'existe <white>que dans la fosse<gray> (pas dans le monde de survie).");
-                Msg.send(p, "Mort dans l'arène : tu <white>gardes ton inventaire<gray> et ton expérience.");
-            }
+            case "arene" -> plugin.duels().pnj(p);
+            case "grades" -> plugin.grades().ouvrir(p);
+            case "capitaine" -> plugin.contrats().ouvrir(p);
+            case "maitre" -> plugin.metiers().ouvrir(p);
+            case "prospecteur" -> plugin.ressources().aller(p);
             case "guide" -> {
-                Msg.send(p, Msg.OR + "<bold>Bienvenue sur l'île !");
-                Msg.send(p, "<white>Nord<gray> : le portail → téléportation aléatoire dans la survie.");
-                Msg.send(p, "<white>Est<gray> : le marché (mineur, bûcheron, fermier, chasseur). Tout le reste : <white>/shop<gray>.");
-                Msg.send(p, "<white>Ouest<gray> : la tour des enchantements (table niveau 30, enclumes).");
-                Msg.send(p, "<white>Sud-ouest<gray> : l'hôtel des ventes et la banque. <white>Sud-est<gray> : l'arène de duel.");
-                Msg.send(p, "<white>Sud<gray> : le port et le pêcheur. <white>Nord-est<gray> : le pavillon des kits.");
+                Msg.send(p, Msg.OR + "<bold>Bienvenue au port orbital !");
+                Msg.send(p, "<white>Nord<gray> : la baie de lancement → une capsule te dépose au hasard sur la planète ; le Prospecteur → monde ressources.");
+                Msg.send(p, "<white>Est<gray> : la galerie marchande et le maître des métiers. Tout le reste : <white>/shop<gray>.");
+                Msg.send(p, "<white>Ouest<gray> : le comptoir d'échange (hôtel des ventes, banque). <white>Nord-ouest<gray> : le labo d'enchantement.");
+                Msg.send(p, "<white>Sud<gray> : l'arène (duels, paris, tournoi). <white>Nord-est<gray> : kits et grades.");
+                Msg.send(p, "<white>Sud-est<gray> : les quais, le pêcheur et le capitaine (contrats du jour). <white>Sud-ouest<gray> : la serre.");
                 Msg.send(p, "<white>Ta base<gray> : pose ton " + Msg.OR + "armoire de base<gray> (kit de départ) pour la protéger ; "
                         + "paie-la en crédits, sinon la protection saute.");
-                Msg.send(p, "Commandes : <white>/shop /vendre /spawn /kit /base /argent /payer /hdv /richesses /lobby");
+                Msg.send(p, "Commandes : <white>/shop /vendre /hdv /echoppes /contrats /metiers /grade /classement /evenement");
+                Msg.send(p, "<white>/spawn /home /sethome /tpa /ressources /kit /base /argent /payer /duel /tournoi /lobby");
             }
             default -> { }
         }
@@ -256,6 +281,10 @@ public final class Commandes implements TabExecutor {
             out.addAll(plugin.ile().reperes().points().keySet());
         } else if (cmd.getName().equals("kit") && a.length == 1) {
             out.addAll(plugin.kits().ids());
+        } else if (cmd.getName().equals("grade") && a.length == 1) {
+            out.addAll(plugin.grades().ids());
+        } else if (cmd.getName().equals("classement") && a.length == 1) {
+            out.addAll(Classements.cles());
         } else if (cmd.getName().equals("hdv") && a.length == 1) {
             out.addAll(List.of("vendre", "ventes"));
         } else if ((cmd.getName().equals("payer") || cmd.getName().equals("argent")) && a.length == 1) {

@@ -1,0 +1,39 @@
+profile=Profile
+profile.BAS=Low
+profile.MOYEN=Medium
+profile.HAUT=High
+profile.ULTRA=Ultra
+profile.comment=Low: no shadows or light shafts. High: recommended. Ultra: for strong graphics cards.
+
+screen.ECLAIRAGE=Lighting
+screen.CIEL=Sky
+screen.EAU=Water and foliage
+screen.IMAGE=Image
+
+option.OMBRES=Shadows
+option.OMBRES_DOUCEUR=Shadow softness
+option.shadowMapResolution=Shadow quality
+option.shadowDistance=Shadow distance
+option.sunPathRotation=Sun angle
+option.LUMIERE_EN_MAIN=Handheld light
+option.RAYONS=Light shafts
+option.RAYONS_FORCE=Light shaft strength
+option.RAYONS_PAS=Light shaft quality
+
+option.ETOILES=Stars
+option.NEBULEUSE=ORBIT nebula
+option.NEBULEUSE_FORCE=Nebula strength
+option.SOLEIL_TAILLE=Sun size
+option.BROUILLARD=Haze
+
+option.EAU_VAGUES=Waves
+option.EAU_OPACITE=Water opacity
+option.VEGETATION_VENT=Waving foliage
+option.VENT_FORCE=Wind strength
+
+option.BLOOM=Bloom
+option.BLOOM_FORCE=Bloom strength
+option.EXPOSITION=Brightness
+option.SATURATION=Saturation
+option.TEINTE_ORBIT=ORBIT tint
+option.VIGNETTE=Vignette

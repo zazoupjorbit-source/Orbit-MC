@@ -34,16 +34,19 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * Écrans du téléphone (coffre 6 lignes). Avec le pack : le fond est une image (tools/PhoneGuiGen.java) affichée par
+ * Écrans de la tablette (coffre 6 lignes). Avec le pack : le fond est une image (tools/PhoneGuiGen.java) affichée par
  * des glyphes de la police {@code orbitguns:gui} dans le titre, et les zones cliquables sont des objets invisibles.
  * Sans le pack : même disposition, en vitres.
+ *
+ * Disposition : contenu sur les lignes 0 à 3 (cases 0 à 35), actions et pagination sur la ligne 4 (36 à 44),
+ * barre d'onglets sur la ligne 5 (45 à 52) et crédits en case 53.
  */
 public final class PhoneMenu implements Listener {
 
     /** L'ordre fixe les points de code de la police : même ordre que dans PhoneGuiGen.main. */
     public enum Screen {
-        HOME("Téléphone"), SHOP("Téléphone — boutique"), COLIS("Téléphone — colis"), MESSAGES("Téléphone — messages"),
-        KITS("Téléphone — kits"), HDV("Téléphone — hôtel des ventes"), PROFIL("Téléphone — fiche de l'opérateur");
+        HOME("Tablette"), SHOP("Tablette — boutique"), COLIS("Tablette — colis"), MESSAGES("Tablette — messages"),
+        KITS("Tablette — kits"), HDV("Tablette — hôtel des ventes"), PROFIL("Tablette — fiche de l'opérateur");
 
         private final String plain;
 
@@ -170,10 +173,42 @@ public final class PhoneMenu implements Listener {
                 "<#8A919B>abattus, extractions réussies, butin revendu."));
     }
 
+    /** Ligne 4 : pagination et actions. Ligne 5 : onglets (45 à 52) et crédits (53). */
+    private static final int ACTIONS = 36, TABS = 45, CREDITS = 53;
+
+    /** Barre d'onglets de la tablette (même ordre que PhoneGuiGen.TABS) et solde de crédits. */
     private void header(Player p, Holder h, boolean textured) {
-        set(h, 0, zone(textured, Material.ARROW, "<#E8695C>← Retour", List.of("<#8A919B>Écran d'accueil du téléphone")),
-                e -> open(p, Screen.HOME));
-        set(h, 8, creditsItem(p), null);
+        tab(p, h, textured, 0, Screen.HOME, Material.COMPASS, "<#E8695C><b>Accueil</b>", "Raid, applications, carte.");
+        tab(p, h, textured, 1, Screen.SHOP, Material.SUNFLOWER, "<#F5C542><b>Boutique</b>", "Armes, munitions, vivres.");
+        tab(p, h, textured, 2, Screen.COLIS, Material.BARREL, "<#3FC46A><b>Colis</b>", "Un largage près de toi, en plein raid.");
+        tab(p, h, textured, 3, Screen.MESSAGES, Material.WRITABLE_BOOK, "<#6EA2FF><b>Messages</b>", "Écris aux joueurs connectés.");
+        tab(p, h, textured, 4, Screen.KITS, Material.LEATHER_CHESTPLATE, "<#FF9A3D><b>Kits</b>", "Rangs et kits.");
+        tab(p, h, textured, 5, Screen.HDV, Material.GOLD_INGOT, "<#E05CB8><b>Hôtel des ventes</b>", "Achète et vends entre joueurs.");
+        tab(p, h, textured, 6, Screen.PROFIL, Material.PLAYER_HEAD, "<#22C7D9><b>Fiche de l'opérateur</b>", "État, équipement, bilan. <#3A3F47>(Maj + F)");
+        boolean raid = plugin.raid().inRaid(p);
+        ItemStack cache = zone(textured, Material.CHEST, "<#A48CFF><b>Cache</b>", List.of(
+                "<#8A919B>Le coffre de ta planque (54 cases).", raid ? "<#C0392B>Inaccessible en raid." : "<#5A6270>Clic : ouvrir"));
+        set(h, TABS + 7, cache, e -> openStash(p));
+        set(h, CREDITS, creditsItem(p), null);
+    }
+
+    private void tab(Player p, Holder h, boolean textured, int index, Screen target, Material fallback, String name, String desc) {
+        boolean here = h.screen == target;
+        ItemStack it = zone(textured, fallback, name, List.of("<#8A919B>" + desc, "",
+                here ? "<#E8695C>▶ Onglet ouvert" : "<#5A6270>Clic : ouvrir"));
+        if (here && !textured) {
+            it.editMeta(m -> m.setEnchantmentGlintOverride(true));
+        }
+        set(h, TABS + index, it, e -> open(p, target));
+    }
+
+    private void openStash(Player p) {
+        if (plugin.raid().inRaid(p)) {
+            deny(p, "<#C0392B>Ton coffre est à la planque.</#C0392B> Extrais-toi d'abord.");
+            return;
+        }
+        p.closeInventory();
+        Bukkit.getScheduler().runTask(plugin, () -> plugin.stash().open(p));
     }
 
     private static void click(Player p) {
@@ -208,17 +243,7 @@ public final class PhoneMenu implements Listener {
         boolean textured = plugin.pack().isLoaded(p.getUniqueId());
         boolean raid = plugin.raid().inRaid(p);
         Profile pr = plugin.profiles().get(p);
-
-        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-        head.editMeta(SkullMeta.class, m -> {
-            m.setOwningPlayer(p);
-            m.displayName(Text.item("<#E8695C><b>" + Text.esc(p.getName()) + "</b>"));
-            m.lore(Text.lore(List.of(
-                    "<#8A919B>Statut : " + (raid ? "<#E67E22>en raid" : "<#2ECC71>à la planque"),
-                    "<#8A919B>Crédits : <#F5C542>" + phone.credits(p))));
-        });
-        set(h, 0, head, null);
-        set(h, 8, creditsItem(p), null);
+        header(p, h, textured);
 
         long left = raid ? Math.max(0, (pr.raidEnds - System.currentTimeMillis()) / 1000) : 0;
         card(h, textured, 0, Material.RED_STAINED_GLASS_PANE, "<#E23B3B><b>Raid</b>", raid
@@ -246,14 +271,7 @@ public final class PhoneMenu implements Listener {
                 "<#8A919B>Écris aux joueurs connectés.", "", "<#5A6270>Clic : ouvrir"), e -> open(p, Screen.MESSAGES));
         card(h, textured, 4, Material.PURPLE_STAINED_GLASS_PANE, "<#A48CFF><b>Coffre</b>", List.of(
                 "<#8A919B>Le coffre de ta planque (54 cases).", raid ? "<#C0392B>Inaccessible en raid." : "<#8A919B>Ce que tu y ranges est à l'abri.",
-                "", "<#5A6270>Clic : ouvrir"), e -> {
-            if (plugin.raid().inRaid(p)) {
-                deny(p, "<#C0392B>Ton coffre est à la planque.</#C0392B> Extrais-toi d'abord.");
-                return;
-            }
-            p.closeInventory();
-            Bukkit.getScheduler().runTask(plugin, () -> plugin.stash().open(p));
-        });
+                "", "<#5A6270>Clic : ouvrir"), e -> openStash(p));
         card(h, textured, 5, Material.CYAN_STAINED_GLASS_PANE, "<#22C7D9><b>Stats</b>", List.of(
                 "<#8A919B>Raids : <#D7DCE2>" + pr.raids + "</#D7DCE2>  •  Extraits : <#2ECC71>" + pr.survived,
                 "<#8A919B>Morts : <#C0392B>" + pr.deaths,
@@ -261,7 +279,7 @@ public final class PhoneMenu implements Listener {
                 "<#8A919B>Infectés abattus : <#D7DCE2>" + pr.infectedKills, "",
                 "<#5A6270>Clic : fiche de l'opérateur <#3A3F47>(Maj + F)"), e -> open(p, Screen.PROFIL));
 
-        // Dernière ligne : trois boutons larges (3 cases chacun) : kits, hôtel des ventes, carte.
+        // Ligne 4 : trois boutons larges (3 cases chacun) : kits, hôtel des ventes, carte.
         Rank rank = plugin.ranks().of(p);
         int ready = 0;
         for (Kit k : plugin.kits().all()) {
@@ -286,9 +304,9 @@ public final class PhoneMenu implements Listener {
                 back > 0 ? "<#E67E22>" + back + " objet" + (back > 1 ? "s" : "") + " à récupérer" : "<#5A6270>Taxe de " + market.taxPercent() + " % sur chaque vente.",
                 "", "<#5A6270>Clic : ouvrir"));
         for (int c = 0; c < 3; c++) {
-            set(h, 45 + c, kitsBtn, e -> open(p, Screen.KITS));
-            set(h, 48 + c, hdvBtn, e -> open(p, Screen.HDV));
-            set(h, 51 + c, mapBtn, e -> {
+            set(h, ACTIONS + c, kitsBtn, e -> open(p, Screen.KITS));
+            set(h, ACTIONS + 3 + c, hdvBtn, e -> open(p, Screen.HDV));
+            set(h, ACTIONS + 6 + c, mapBtn, e -> {
                 if (e.isShiftClick()) {
                     plugin.miniMap().cycleZoom(p);
                 } else {
@@ -301,10 +319,10 @@ public final class PhoneMenu implements Listener {
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 0.6f, 1.6f);
     }
 
-    /** Carte d'application : 3 colonnes x 2 lignes, toutes cliquables. */
+    /** Carte d'application : 3 colonnes x 2 lignes (lignes 0-1 ou 2-3), toutes cliquables. */
     private void card(Holder h, boolean textured, int index, Material glass, String name, List<String> lore,
                       Consumer<InventoryClickEvent> action) {
-        int c0 = (index % 3) * 3, r0 = 1 + (index / 3) * 2;
+        int c0 = (index % 3) * 3, r0 = (index / 3) * 2;
         ItemStack it = zone(textured, glass, name, lore);
         for (int r = r0; r < r0 + 2; r++) {
             for (int c = c0; c < c0 + 3; c++) {
@@ -325,12 +343,10 @@ public final class PhoneMenu implements Listener {
         boolean raid = plugin.raid().inRaid(p);
         Profile pr = plugin.profiles().get(p);
         Rank rank = plugin.ranks().of(p);
-        set(h, 0, zone(textured, Material.ARROW, "<#E8695C>← Retour", List.of("<#8A919B>Écran d'accueil du téléphone")),
-                e -> open(p, Screen.HOME));
-        set(h, 8, creditsItem(p), null);
+        header(p, h, textured);
 
         // --- Bandeau 1 : état
-        set(h, 9, zone(textured, Material.RED_STAINED_GLASS_PANE, "<#E8695C><b>État</b>",
+        set(h, 0, zone(textured, Material.RED_STAINED_GLASS_PANE, "<#E8695C><b>État</b>",
                 List.of("<#8A919B>Ce que tu portes sur toi, maintenant.")), null);
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
         head.editMeta(SkullMeta.class, m -> {
@@ -341,12 +357,12 @@ public final class PhoneMenu implements Listener {
                     "<#8A919B>Statut : " + (raid ? "<#E67E22>en raid" : "<#2ECC71>à la planque"),
                     "<#8A919B>Crédits : <#F5C542>" + phone.credits(p))));
         });
-        set(h, 10, head, null);
+        set(h, 1, head, null);
 
         double max = maxHealth(p);
         long hp = Math.round(Math.max(0, p.getHealth()) * 100 / Math.max(1, max));
         String hpCol = hp > 50 ? "#2ECC71" : hp > 25 ? "#F1C40F" : "#E74C3C";
-        set(h, 11, icon(Material.GLISTERING_MELON_SLICE, "<#FF5C5C><b>Vie</b>", List.of(
+        set(h, 2, icon(Material.GLISTERING_MELON_SLICE, "<#FF5C5C><b>Vie</b>", List.of(
                 "<#8A919B>Vie : <" + hpCol + ">" + hp + "</" + hpCol + "> <#5A6270>/ 100",
                 "<#5A6270>" + fmt(p.getHealth() / 2) + " coeurs sur " + fmt(max / 2), "",
                 "<#8A919B>Pas de régénération en raid :",
@@ -354,33 +370,33 @@ public final class PhoneMenu implements Listener {
 
         org.bukkit.attribute.AttributeInstance armorAttr = p.getAttribute(org.bukkit.attribute.Attribute.ARMOR);
         org.bukkit.attribute.AttributeInstance toughAttr = p.getAttribute(org.bukkit.attribute.Attribute.ARMOR_TOUGHNESS);
-        set(h, 12, icon(Material.SHIELD, "<#D7DCE2><b>Protection</b>", List.of(
+        set(h, 3, icon(Material.SHIELD, "<#D7DCE2><b>Protection</b>", List.of(
                 "<#8A919B>Armure : <white>" + fmt(armorAttr == null ? 0 : armorAttr.getValue()),
                 "<#8A919B>Robustesse : <white>" + fmt(toughAttr == null ? 0 : toughAttr.getValue()), "",
                 "<#5A6270>Le chiffre de l'écrou, à gauche de la console.")), null);
 
         int food = p.getFoodLevel();
-        set(h, 13, icon(Material.COOKED_BEEF, "<#E6A23C><b>Vivres</b>", List.of(
+        set(h, 4, icon(Material.COOKED_BEEF, "<#E6A23C><b>Vivres</b>", List.of(
                 "<#8A919B>Faim : " + (food <= 6 ? "<#C0392B>" : "<white>") + food + " <#5A6270>/ 20",
                 food <= 6 ? "<#C0392B>Affamé : tu ne peux plus courir." : "<#5A6270>La petite barre sous la vie.")), null);
 
         fr.orbit.extraction.gun.GunService.GunStatus g = plugin.gunService().status(p);
-        set(h, 14, g == null
+        set(h, 5, g == null
                 ? icon(Material.IRON_HORSE_ARMOR, "<#D9C27A><b>Arme en main</b>", List.of("<#5A6270>Aucune arme à feu en main."))
                 : withLore(p.getInventory().getItemInMainHand(), List.of("", "<#D9C27A>Chargeur : <white>" + g.mag() + " <#5A6270>/ " + g.magMax(),
                 "<#D9C27A>Réserve : <white>" + g.reserve() + " <#5A6270>(" + g.ammo() + ")")), null);
 
         int meds = plugin.meds().count(p);
-        set(h, 15, icon(Material.PAPER, "<#2ECC71><b>Soins</b>", List.of(
+        set(h, 6, icon(Material.PAPER, "<#2ECC71><b>Soins</b>", List.of(
                 "<#8A919B>Dans le sac : <white>" + meds,
                 "<#5A6270>Clic droit avec l'objet, sans bouger", "<#5A6270>d'objet ni prendre de coup.")), null);
 
         long left = raid ? Math.max(0, (pr.raidEnds - System.currentTimeMillis()) / 1000) : 0;
-        set(h, 16, icon(raid ? Material.CLOCK : Material.CAMPFIRE, raid ? "<#E67E22><b>Raid en cours</b>" : "<#2ECC71><b>À la planque</b>", raid
+        set(h, 7, icon(raid ? Material.CLOCK : Material.CAMPFIRE, raid ? "<#E67E22><b>Raid en cours</b>" : "<#2ECC71><b>À la planque</b>", raid
                 ? List.of("<#8A919B>Temps restant : <white>" + Text.clock(left),
                 "<#8A919B>Extractions : <#2ECC71>" + String.join("<#5A6270>, </#5A6270><#2ECC71>", pr.extracts), "",
                 "<#5A6270>Clic : distances et directions")
-                : List.of("<#8A919B>En sécurité. Prépare ton équipement,", "<#8A919B>puis pars en raid depuis le téléphone.")), e -> {
+                : List.of("<#8A919B>En sécurité. Prépare ton équipement,", "<#8A919B>puis pars en raid depuis la tablette.")), e -> {
             if (plugin.raid().inRaid(p)) {
                 p.closeInventory();
                 plugin.raid().info(p);
@@ -404,43 +420,43 @@ public final class PhoneMenu implements Listener {
         rankLore.add("");
         rankLore.add("<#5A6270>Les rangs ne donnent que du confort :");
         rankLore.add("<#5A6270>armes et tenues se trouvent en jeu.");
-        set(h, 17, icon(Material.NETHER_STAR, "<" + rank.color() + "><b>Rang</b>", rankLore), null);
+        set(h, 8, icon(Material.NETHER_STAR, "<" + rank.color() + "><b>Rang</b>", rankLore), null);
 
         // --- Bandeau 2 : équipement porté
-        set(h, 18, zone(textured, Material.GRAY_STAINED_GLASS_PANE, "<#B8C0CA><b>Équipement</b>",
+        set(h, 9, zone(textured, Material.GRAY_STAINED_GLASS_PANE, "<#B8C0CA><b>Équipement</b>",
                 List.of("<#8A919B>Tenue, armes et objets en main.")), null);
         org.bukkit.inventory.PlayerInventory inv = p.getInventory();
-        worn(h, textured, 19, inv.getHelmet(), "Casque");
-        worn(h, textured, 20, inv.getChestplate(), "Plastron");
-        worn(h, textured, 21, inv.getLeggings(), "Jambières");
-        worn(h, textured, 22, inv.getBoots(), "Bottes");
-        set(h, 23, outfitIcon(p), null);
+        worn(h, textured, 10, inv.getHelmet(), "Casque");
+        worn(h, textured, 11, inv.getChestplate(), "Plastron");
+        worn(h, textured, 12, inv.getLeggings(), "Jambières");
+        worn(h, textured, 13, inv.getBoots(), "Bottes");
+        set(h, 14, outfitIcon(p), null);
         int grenades = 0;
         for (ItemStack it : inv.getContents()) {
             if (it != null && plugin.items().grenadeOf(it) != null) {
                 grenades += it.getAmount();
             }
         }
-        set(h, 24, icon(Material.FIREWORK_STAR, "<#E67E22><b>Grenades</b>", List.of("<#8A919B>Dans le sac : <white>" + grenades)), null);
-        worn(h, textured, 25, inv.getItemInMainHand(), "Main droite");
-        worn(h, textured, 26, inv.getItemInOffHand(), "Main gauche");
+        set(h, 15, icon(Material.FIREWORK_STAR, "<#E67E22><b>Grenades</b>", List.of("<#8A919B>Dans le sac : <white>" + grenades)), null);
+        worn(h, textured, 16, inv.getItemInMainHand(), "Main droite");
+        worn(h, textured, 17, inv.getItemInOffHand(), "Main gauche");
 
         // --- Bandeau 3 : bilan
-        set(h, 27, zone(textured, Material.CYAN_STAINED_GLASS_PANE, "<#22C7D9><b>Bilan</b>",
+        set(h, 18, zone(textured, Material.CYAN_STAINED_GLASS_PANE, "<#22C7D9><b>Bilan</b>",
                 List.of("<#8A919B>Tes statistiques depuis ton premier raid.")), null);
         int survival = pr.raids == 0 ? 0 : (int) Math.round(pr.survived * 100.0 / pr.raids);
-        set(h, 28, stat(Material.COMPASS, "Raids", String.valueOf(pr.raids), "Largages sur l'île."), null);
-        set(h, 29, stat(Material.LIME_DYE, "Extractions", String.valueOf(pr.survived), "Raids terminés vivant, butin gardé."), null);
-        set(h, 30, stat(Material.EMERALD, "Taux de survie", survival + " %", "Extractions / raids."), null);
-        set(h, 31, stat(Material.SKELETON_SKULL, "Morts", String.valueOf(pr.deaths), "Tout l'inventaire reste sur place."), null);
-        set(h, 32, stat(Material.IRON_SWORD, "Joueurs abattus", String.valueOf(pr.pvpKills), "Opérateurs éliminés en raid."), null);
-        set(h, 33, stat(Material.ROTTEN_FLESH, "Infectés abattus", String.valueOf(pr.infectedKills), "Chaque infecté rapporte des crédits."), null);
+        set(h, 19, stat(Material.COMPASS, "Raids", String.valueOf(pr.raids), "Largages sur l'île."), null);
+        set(h, 20, stat(Material.LIME_DYE, "Extractions", String.valueOf(pr.survived), "Raids terminés vivant, butin gardé."), null);
+        set(h, 21, stat(Material.EMERALD, "Taux de survie", survival + " %", "Extractions / raids."), null);
+        set(h, 22, stat(Material.SKELETON_SKULL, "Morts", String.valueOf(pr.deaths), "Tout l'inventaire reste sur place."), null);
+        set(h, 23, stat(Material.IRON_SWORD, "Joueurs abattus", String.valueOf(pr.pvpKills), "Opérateurs éliminés en raid."), null);
+        set(h, 24, stat(Material.ROTTEN_FLESH, "Infectés abattus", String.valueOf(pr.infectedKills), "Chaque infecté rapporte des crédits."), null);
         String kd = String.format(java.util.Locale.ROOT, "%.2f", pr.pvpKills / (double) Math.max(1, pr.deaths)).replace('.', ',');
-        set(h, 34, stat(Material.TARGET, "Ratio J/M", kd, "Joueurs abattus par mort."), null);
-        set(h, 35, stat(Material.BONE, "Éliminations", String.valueOf(pr.pvpKills + pr.infectedKills), "Joueurs et infectés confondus."), null);
+        set(h, 25, stat(Material.TARGET, "Ratio J/M", kd, "Joueurs abattus par mort."), null);
+        set(h, 26, stat(Material.BONE, "Éliminations", String.valueOf(pr.pvpKills + pr.infectedKills), "Joueurs et infectés confondus."), null);
 
         // --- Bandeau 4 : planque et compte
-        set(h, 36, zone(textured, Material.YELLOW_STAINED_GLASS_PANE, "<#F5C542><b>Planque</b>",
+        set(h, 27, zone(textured, Material.YELLOW_STAINED_GLASS_PANE, "<#F5C542><b>Planque</b>",
                 List.of("<#8A919B>Ton coffre, tes kits, tes échanges.")), null);
         int used = 0;
         for (String s : pr.stash) {
@@ -448,7 +464,7 @@ public final class PhoneMenu implements Listener {
                 used++;
             }
         }
-        set(h, 37, icon(Material.CHEST, "<#A48CFF><b>Coffre</b>", List.of("<#8A919B>Cases occupées : <white>" + used + " <#5A6270>/ " + Profile.STASH_SIZE,
+        set(h, 28, icon(Material.CHEST, "<#A48CFF><b>Coffre</b>", List.of("<#8A919B>Cases occupées : <white>" + used + " <#5A6270>/ " + Profile.STASH_SIZE,
                 raid ? "<#C0392B>Inaccessible en raid." : "<#5A6270>Clic : ouvrir")), e -> {
             if (plugin.raid().inRaid(p)) {
                 deny(p, "<#C0392B>Ton coffre est à la planque.</#C0392B> Extrais-toi d'abord.");
@@ -463,20 +479,20 @@ public final class PhoneMenu implements Listener {
                 ready++;
             }
         }
-        set(h, 38, icon(Material.LEATHER_CHESTPLATE, "<#FF9A3D><b>Kits</b>", List.of(
+        set(h, 29, icon(Material.LEATHER_CHESTPLATE, "<#FF9A3D><b>Kits</b>", List.of(
                 ready > 0 ? "<#2ECC71>" + ready + " disponible" + (ready > 1 ? "s" : "") : "<#8A919B>Aucun kit disponible.", "<#5A6270>Clic : ouvrir")),
                 e -> open(p, Screen.KITS));
         int unread = pr.unread();
-        set(h, 39, icon(Material.WRITABLE_BOOK, "<#6EA2FF><b>Messages</b>", List.of(
+        set(h, 30, icon(Material.WRITABLE_BOOK, "<#6EA2FF><b>Messages</b>", List.of(
                 unread > 0 ? "<#6EA2FF>" + unread + " non lu" + (unread > 1 ? "s" : "") : "<#8A919B>Aucun nouveau message.", "<#5A6270>Clic : ouvrir")),
                 e -> open(p, Screen.MESSAGES));
         Market market = plugin.market();
         int mine = market.count(p.getUniqueId()), back = market.waiting(p.getUniqueId());
-        set(h, 40, icon(Material.GOLD_INGOT, "<#E05CB8><b>Hôtel des ventes</b>", List.of(
+        set(h, 31, icon(Material.GOLD_INGOT, "<#E05CB8><b>Hôtel des ventes</b>", List.of(
                 "<#8A919B>Tes annonces : <white>" + mine,
                 back > 0 ? "<#E67E22>" + back + " objet" + (back > 1 ? "s" : "") + " à récupérer" : "<#5A6270>Rien à récupérer.", "<#5A6270>Clic : ouvrir")),
                 e -> open(p, Screen.HDV));
-        set(h, 41, icon(Material.FILLED_MAP, "<#5CC8FF><b>Carte tactique</b>", List.of(
+        set(h, 32, icon(Material.FILLED_MAP, "<#5CC8FF><b>Carte tactique</b>", List.of(
                 pr.minimap ? "<#2ECC71>Affichée en main gauche" : "<#C0392B>Rangée",
                 "<#5A6270>Clic : ranger / ressortir", "<#5A6270>Maj + clic : changer de zoom")), e -> {
             if (e.isShiftClick()) {
@@ -486,17 +502,17 @@ public final class PhoneMenu implements Listener {
                 plugin.miniMap().toggle(p);
             }
         });
-        set(h, 42, icon(Material.SUNFLOWER, "<#F5C542><b>Boutique</b>", List.of("<#8A919B>Armes, munitions, vivres.", "<#5A6270>Clic : ouvrir")),
+        set(h, 33, icon(Material.SUNFLOWER, "<#F5C542><b>Boutique</b>", List.of("<#8A919B>Armes, munitions, vivres.", "<#5A6270>Clic : ouvrir")),
                 e -> open(p, Screen.SHOP));
-        set(h, 43, icon(Material.BARREL, "<#3FC46A><b>Colis</b>", List.of("<#8A919B>Un largage près de toi, en plein raid.", "<#5A6270>Clic : ouvrir")),
+        set(h, 34, icon(Material.BARREL, "<#3FC46A><b>Colis</b>", List.of("<#8A919B>Un largage près de toi, en plein raid.", "<#5A6270>Clic : ouvrir")),
                 e -> open(p, Screen.COLIS));
-        set(h, 44, icon(Material.EXPERIENCE_BOTTLE, "<#B8C0CA><b>Commandes</b>", List.of(
+        set(h, 35, icon(Material.EXPERIENCE_BOTTLE, "<#B8C0CA><b>Commandes</b>", List.of(
                 "<#D7DCE2>Clic droit <#8A919B>tirer  <#5A6270>·  <#D7DCE2>clic gauche <#8A919B>viser",
                 "<#D7DCE2>F <#8A919B>recharger (ou zoom de la carte)",
                 "<#D7DCE2>Maj + F <#8A919B>cette fiche",
-                "<#D7DCE2>/telephone <#8A919B>le téléphone")), null);
+                "<#D7DCE2>/tablette <#8A919B>la tablette")), null);
 
-        set(h, 49, zone(textured, Material.BARRIER, "<#E8695C>Fermer", List.of()), e -> p.closeInventory());
+        set(h, ACTIONS + 4, zone(textured, Material.BARRIER, "<#E8695C>Fermer", List.of()), e -> p.closeInventory());
         show(p, h);
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 0.6f, 1.6f);
     }
@@ -561,19 +577,19 @@ public final class PhoneMenu implements Listener {
         for (int i = 0; i < PAGE && pg * PAGE + i < all.size(); i++) {
             Article a = all.get(pg * PAGE + i);
             long price = plugin.ranks().discounted(p, a.price());
-            set(h, 9 + i, withLore(a.icon(), List.of("",
+            set(h, i, withLore(a.icon(), List.of("",
                     "<#8A919B>Prix : <#F5C542>" + price + " crédits</#F5C542>"
                             + (price < a.price() ? " <#5A6270><st>" + a.price() + "</st></#5A6270> " + rank.tag() : "")
                             + (a.amount() > 1 ? " <#5A6270>(x" + a.amount() + ")" : ""),
                     "<#5A6270>Clic : acheter")), e -> buy(p, a));
         }
         if (pg > 0) {
-            set(h, 45, icon(Material.ARROW, "<#D7DCE2>← Page précédente", List.of()), e -> open(p, Screen.SHOP, pg - 1));
+            set(h, ACTIONS, icon(Material.ARROW, "<#D7DCE2>← Page précédente", List.of()), e -> open(p, Screen.SHOP, pg - 1));
         }
         if (pg < pages - 1) {
-            set(h, 53, icon(Material.ARROW, "<#D7DCE2>Page suivante →", List.of()), e -> open(p, Screen.SHOP, pg + 1));
+            set(h, ACTIONS + 8, icon(Material.ARROW, "<#D7DCE2>Page suivante →", List.of()), e -> open(p, Screen.SHOP, pg + 1));
         }
-        set(h, 49, zone(textured, Material.GRAY_STAINED_GLASS_PANE, "<#F5C542>Revendre du butin", List.of(
+        set(h, ACTIONS + 4, zone(textured, Material.GRAY_STAINED_GLASS_PANE, "<#F5C542>Revendre du butin", List.of(
                 "<#8A919B>Maj + clic sur un objet de ton inventaire",
                 "<#8A919B>pour le revendre (la pile entière).",
                 "<#5A6270>Les objets sans valeur sont refusés.")), null);
@@ -598,7 +614,7 @@ public final class PhoneMenu implements Listener {
         Text.bar(p, "<#2ECC71>Acheté</#2ECC71> <#8A919B>— reste <#F5C542>" + phone.credits(p) + " crédits");
         Inventory top = p.getOpenInventory().getTopInventory();
         if (top.getHolder() instanceof Holder h && h.screen == Screen.SHOP) {
-            top.setItem(8, creditsItem(p));
+            top.setItem(CREDITS, creditsItem(p));
         }
     }
 
@@ -622,7 +638,7 @@ public final class PhoneMenu implements Listener {
         plugin.profiles().save(plugin.profiles().get(p));
         p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.7f, 0.9f);
         Text.bar(p, "<#2ECC71>+" + total + " crédits</#2ECC71> <#8A919B>(revente)");
-        e.getView().getTopInventory().setItem(8, creditsItem(p));
+        e.getView().getTopInventory().setItem(CREDITS, creditsItem(p));
     }
 
     // ------------------------------------------------------------------ hôtel des ventes
@@ -640,7 +656,7 @@ public final class PhoneMenu implements Listener {
             Market.Listing l = all.get(pg * PAGE + i);
             boolean own = l.seller().equals(p.getUniqueId());
             long hours = market.hoursLeft(l);
-            set(h, 9 + i, withLore(l.item(), List.of("",
+            set(h, i, withLore(l.item(), List.of("",
                     "<#8A919B>Prix : <#F5C542>" + l.price() + " crédits</#F5C542>",
                     "<#8A919B>Vendeur : <#D7DCE2>" + Text.esc(l.sellerName()),
                     "<#5A6270>Expire dans " + (hours >= 1 ? hours + " h" : "moins d'une heure"),
@@ -658,17 +674,17 @@ public final class PhoneMenu implements Listener {
             });
         }
         if (all.isEmpty()) {
-            set(h, 22, icon(Material.BARRIER, only ? "<#8A919B>Tu n'as aucune annonce en cours" : "<#8A919B>Aucune annonce pour l'instant", List.of(
+            set(h, 13, icon(Material.BARRIER, only ? "<#8A919B>Tu n'as aucune annonce en cours" : "<#8A919B>Aucune annonce pour l'instant", List.of(
                     "<#5A6270>Maj + clic sur un objet de ton inventaire", "<#5A6270>pour le mettre en vente.")), null);
         }
         if (pg > 0) {
-            set(h, 45, icon(Material.ARROW, "<#D7DCE2>← Page précédente", List.of()), e -> open(p, Screen.HDV, pg - 1));
+            set(h, ACTIONS, icon(Material.ARROW, "<#D7DCE2>← Page précédente", List.of()), e -> open(p, Screen.HDV, pg - 1));
         }
         if (pg < pages - 1) {
-            set(h, 53, icon(Material.ARROW, "<#D7DCE2>Page suivante →", List.of()), e -> open(p, Screen.HDV, pg + 1));
+            set(h, ACTIONS + 8, icon(Material.ARROW, "<#D7DCE2>Page suivante →", List.of()), e -> open(p, Screen.HDV, pg + 1));
         }
         int mine = market.count(p.getUniqueId()), max = market.maxListings(p), back = market.waiting(p.getUniqueId());
-        set(h, 47, icon(only ? Material.WRITABLE_BOOK : Material.BOOK, "<#E05CB8><b>" + (only ? "Mes annonces" : "Toutes les annonces") + "</b>", List.of(
+        set(h, ACTIONS + 2, icon(only ? Material.WRITABLE_BOOK : Material.BOOK, "<#E05CB8><b>" + (only ? "Mes annonces" : "Toutes les annonces") + "</b>", List.of(
                 "<#8A919B>Tes annonces : <#D7DCE2>" + mine + "</#D7DCE2> / " + max,
                 "", "<#5A6270>Clic : " + (only ? "voir toutes les annonces" : "ne voir que les miennes"))), e -> {
             if (!mineOnly.remove(p.getUniqueId())) {
@@ -676,7 +692,7 @@ public final class PhoneMenu implements Listener {
             }
             open(p, Screen.HDV);
         });
-        set(h, 49, icon(Material.GOLD_INGOT, "<#F5C542><b>Vendre un objet</b>", List.of(
+        set(h, ACTIONS + 4, icon(Material.GOLD_INGOT, "<#F5C542><b>Vendre un objet</b>", List.of(
                 "<#8A919B>Maj + clic sur un objet de ton inventaire,",
                 "<#8A919B>puis écris son prix dans le chat.",
                 "<#8A919B>La pile entière part en vente.",
@@ -690,7 +706,7 @@ public final class PhoneMenu implements Listener {
         if (back > 0) {
             chest.editMeta(m -> m.setEnchantmentGlintOverride(true));
         }
-        set(h, 51, chest, e -> {
+        set(h, ACTIONS + 6, chest, e -> {
             market.collect(p);
             open(p, Screen.HDV, pg);
         });
@@ -721,7 +737,7 @@ public final class PhoneMenu implements Listener {
             lore.add("<#8A919B>Prix : <#F5C542>" + o.price() + " crédits");
             lore.add("<#8A919B>Largage en <#D7DCE2>" + plugin.parcels().delaySeconds() + " s</#D7DCE2>, près de toi.");
             lore.add("<#5A6270>Clic : commander (en raid)");
-            set(h, 9 + i, icon(o.icon(), "<#3FC46A><b>" + Text.esc(o.name()) + "</b>", lore), e -> {
+            set(h, i, icon(o.icon(), "<#3FC46A><b>" + Text.esc(o.name()) + "</b>", lore), e -> {
                 if (plugin.parcels().order(p, o)) {
                     p.closeInventory();
                 }
@@ -748,10 +764,10 @@ public final class PhoneMenu implements Listener {
             perks.add("");
             perks.add("<#8A919B>Rangs : <#D7DCE2>" + Text.esc(plugin.ranks().shopLink()));
         }
-        set(h, 13, icon(Material.NETHER_STAR, "<" + rank.color() + "><b>Rangs et avantages</b>", perks), null);
+        set(h, 4, icon(Material.NETHER_STAR, "<" + rank.color() + "><b>Rangs et avantages</b>", perks), null);
 
         List<Kit> all = plugin.kits().all();
-        int[] slots = all.size() <= 4 ? new int[]{28, 30, 32, 34} : new int[]{27, 28, 29, 30, 31, 32, 33, 34, 35};
+        int[] slots = all.size() <= 4 ? new int[]{19, 21, 23, 25} : new int[]{18, 19, 20, 21, 22, 23, 24, 25, 26};
         for (int i = 0; i < all.size() && i < slots.length; i++) {
             Kit k = all.get(i);
             boolean unlocked = plugin.kits().unlocked(p, k);
@@ -802,9 +818,9 @@ public final class PhoneMenu implements Listener {
         Holder h = create(p, Screen.MESSAGES, 0);
         boolean textured = plugin.pack().isLoaded(p.getUniqueId());
         header(p, h, textured);
-        int slot = 9;
+        int slot = 0;
         for (Player o : Bukkit.getOnlinePlayers()) {
-            if (o == p || slot >= 27 || !p.canSee(o)) {
+            if (o == p || slot >= 18 || !p.canSee(o)) {
                 continue;
             }
             ItemStack head = new ItemStack(Material.PLAYER_HEAD);
@@ -815,8 +831,8 @@ public final class PhoneMenu implements Listener {
             });
             set(h, slot++, head, e -> phone.compose(p, o));
         }
-        if (slot == 9) {
-            set(h, 13, icon(Material.BARRIER, "<#8A919B>Personne d'autre en ligne", List.of("<#5A6270>Les contacts sont les joueurs connectés.")), null);
+        if (slot == 0) {
+            set(h, 4, icon(Material.BARRIER, "<#8A919B>Personne d'autre en ligne", List.of("<#5A6270>Les contacts sont les joueurs connectés.")), null);
         }
         Profile pr = plugin.profiles().get(p);
         boolean changed = false;
@@ -830,7 +846,7 @@ public final class PhoneMenu implements Listener {
             }
             lore.add("");
             lore.add("<#5A6270>" + ago(m.time()) + "  •  Clic : répondre  •  Maj + clic : supprimer");
-            set(h, 27 + i, icon(m.read() ? Material.PAPER : Material.WRITABLE_BOOK,
+            set(h, 18 + i, icon(m.read() ? Material.PAPER : Material.WRITABLE_BOOK,
                     (m.read() ? "<#9AA1AD>" : "<#6EA2FF><b>") + "De " + Text.esc(m.from()), lore), e -> {
                 if (e.isShiftClick()) {
                     pr.messages.remove(m);

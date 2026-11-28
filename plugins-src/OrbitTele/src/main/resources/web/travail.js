@@ -55,8 +55,10 @@ async function lire(flux) {
     const { value, done } = await lecteur.read();
     if (done) break;
     const t = performance.now();
-    if (!occupe && t - dernier >= 1000 / cfg.fps - 3) {
-      dernier = t;
+    const periode = 1000 / cfg.fps;
+    if (!occupe && t - dernier >= periode - 4) {
+      // cadence régulière : on avance d'une période (sans prendre de retard si une image a sauté)
+      dernier = Math.max(dernier + periode, t - periode / 2);
       image(value, value.displayWidth, value.displayHeight);
     }
     value.close();

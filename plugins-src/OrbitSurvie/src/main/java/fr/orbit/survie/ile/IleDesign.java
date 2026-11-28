@@ -225,8 +225,12 @@ public final class IleDesign {
         c.panneau("bienvenue", "<#F5C542><bold>ORBIT SURVIE</bold><newline><gray>Bienvenue sur l'île !", 0.5, G + 9, 0.5);
         c.panneau("regles", "<#F5C542><bold>RÈGLES</bold><newline><gray>Pas de triche ni de grief<newline>"
                 + "<gray>PvP seulement dans l'arène<newline><gray>Respect de tous les joueurs", -6.5, G + 3.5, 3.5);
-        c.panneau("commandes", "<#4DA3FF><bold>COMMANDES</bold><newline><white>/spawn <gray>retour sur l'île<newline>"
-                + "<white>/kit <gray>tes kits · <white>/hdv <gray>ventes<newline><white>/argent /payer /richesses", 7.5, G + 3.5, 3.5);
+        c.panneau("commandes", "<#4DA3FF><bold>COMMANDES</bold><newline><white>/spawn <gray>retour sur l'île · <white>/home <gray>maison<newline>"
+                + "<white>/kit <gray>kits · <white>/hdv <gray>ventes · <white>/contrats<newline><white>/metiers /grade /classement /duel",
+                7.5, G + 3.5, 3.5);
+        // Classements : le texte est remplacé en jeu (fortunes, puis les classements du mois à tour de rôle).
+        c.panneau("classement-fortune", "<#F5C542><bold>✦ LES PLUS RICHES ✦</bold><newline><gray>…", -6.5, G + 4, -3.5);
+        c.panneau("classement-mois", "<#4DA3FF><bold>CLASSEMENT DU MOIS</bold><newline><gray>…", 7.5, G + 4, -3.5);
         c.particule("SPLASH", 0.5, G + 2.2, 0.5, 12, 1.6, 0.1, 1.6, 0.05);
         c.particule("END_ROD", 0.5, G + 8.5, 0.5, 2, 0.3, 0.6, 0.3, 0.01);
     }
@@ -374,6 +378,7 @@ public final class IleDesign {
             c.set(p[0], G + 5, p[1], "minecraft:smooth_quartz_slab");
         }
         c.point("portail", 0.5, G + 1, oz + 4.5, 180f);
+        c.pnj("prospecteur", "<#3DDCB0><bold>Prospecteur</bold>", "armorer", 3.5, G + 1, oz + 3.5, 0f);
         c.panneau("portail", "<#F5C542><bold>✦ SURVIE ✦</bold><newline><gray>Traverse le portail :<newline><gray>téléportation aléatoire", 0.5, G + 11, pz + 0.5);
         c.particule("PORTAL", 0.5, G + 3.5, pz + 0.5, 30, 2.2, 2.2, 0.4, 0.4);
         c.particule("END_ROD", 0.5, G + 4, pz + 1.5, 3, 3.5, 3, 1.5, 0.01);
@@ -442,6 +447,7 @@ public final class IleDesign {
         c.pnj("bucheron", "<#4DA3FF><bold>Bûcheron</bold>", "mason", 38.5, G + 1, -4.5, 0f);
         c.pnj("fermier", "<#4DA3FF><bold>Fermier</bold>", "farmer", 30.5, G + 1, 5.5, 180f);
         c.pnj("chasseur", "<#4DA3FF><bold>Chasseur</bold>", "leatherworker", 38.5, G + 1, 5.5, 180f);
+        c.pnj("maitre", "<#F5C542><bold>Maître des métiers</bold>", "fletcher", 34.5, G + 1, 0.5, 90f);
         c.point("marche", 27.5, G + 1, 0.5, -90f);
         c.panneau("marche", "<#F5C542><bold>MARCHÉ</bold><newline><gray>Achète et vends aux marchands", 26.5, G + 9, 0.5);
     }
@@ -787,6 +793,7 @@ public final class IleDesign {
         c.set(-4, 65, fin + 1, Material.BARREL);
         c.set(-4, 64, fin + 2, "minecraft:cauldron");
         c.pnj("pecheur", "<#4DA3FF><bold>Pêcheur</bold>", "fisherman", 2.5, 64, fin + 1.5, 180f);
+        c.pnj("capitaine", "<#F5C542><bold>Capitaine</bold>", "shepherd", 1.5, 64, debut + 2.5, 90f);
         c.point("port", 0.5, 64, debut + 1.5, 0f);
         c.panneau("port", "<#F5C542><bold>LE PORT</bold><newline><gray>Pêcheur au bout du ponton", 0.5, 67.5, debut - 1.5);
         c.particule("END_ROD", 0.5, 82, lz + 0.5, 2, 1.5, 0.6, 1.5, 0.02);
@@ -865,6 +872,7 @@ public final class IleDesign {
         c.set(ox - 2, G + 1, oz + 2, Material.BARREL);
         c.set(ox + 2, G + 1, oz + 2, Material.GOLD_BLOCK);
         c.pnj("intendant", "<#F5C542><bold>Kits</bold>", "nitwit", ox + 0.5, G + 1, oz + 0.5, 135f);
+        c.pnj("grades", "<#B57BFF><bold>Grades</bold>", "cleric", ox + 0.5, G + 1, oz + 2.5, 135f);
         c.point("kits", ox - 4.5, G + 1, oz + 5.5, -135f);
         c.panneau("kits", "<#F5C542><bold>KITS</bold><newline><gray>Joueur · VIP · VIP+ · ORBIT", ox + 0.5, G + 12, oz + 0.5);
         c.particule("HAPPY_VILLAGER", ox + 0.5, G + 3, oz + 0.5, 3, 2, 1, 2, 0);

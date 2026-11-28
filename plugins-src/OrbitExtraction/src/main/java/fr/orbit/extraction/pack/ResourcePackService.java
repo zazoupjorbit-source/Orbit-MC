@@ -193,7 +193,7 @@ public final class ResourcePackService implements Listener {
                 // Par-dessus le pack du lobby (envoyé avant, en LOWEST, qui retire ceux des serveurs précédents).
                 .replace(false)
                 .required(required)
-                .prompt(Text.mm("<#C0392B><b>Orbit Extraction</b></#C0392B>\n<#D7DCE2>Armes à feu en 3D, infectés, écrans du téléphone. "
+                .prompt(Text.mm("<#C0392B><b>Orbit Extraction</b></#C0392B>\n<#D7DCE2>Armes à feu en 3D, infectés, écrans de la tablette. "
                         + "Sans le pack, les armes ressemblent à des armures de cheval et certains infectés n'ont pas de texture."))
                 .callback((id, status, audience) -> {
                     if (status == ResourcePackStatus.SUCCESSFULLY_LOADED) {
@@ -208,7 +208,7 @@ public final class ResourcePackService implements Listener {
                 .build();
     }
 
-    /** Vrai si ce joueur a chargé le pack : les menus texturés du téléphone ne s'affichent que dans ce cas. */
+    /** Vrai si ce joueur a chargé le pack : les menus texturés de la tablette ne s'affichent que dans ce cas. */
     public boolean isLoaded(UUID player) {
         return enabled && loaded.contains(player);
     }

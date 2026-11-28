@@ -72,6 +72,8 @@ public final class Marche {
     private static final class Etat {
         double pression;
         long achetes, vendus;
+        /** Roulement des prix : cours actuel (multiplie le prix) et cours visé, vers lequel il glisse. */
+        double cours = 1, cible = 1;
         boolean modifie;
     }
 
@@ -83,6 +85,14 @@ public final class Marche {
 
     private double venteRatio, artisanat, cuisson, volume, facteurMin, facteurMax, retour;
     private int minutes;
+
+    // Roulement des prix (cours qui montent et descendent tout seuls) et bornes par objet.
+    private final Map<Material, double[]> limites = new HashMap<>();
+    private final java.util.Random alea = new java.util.Random();
+    private boolean roulementActif;
+    private int roulementMinutes, roulementNombre, roulementAnnonce;
+    private double roulementHausse, roulementBaisse, roulementAmpMin, roulementVitesse, roulementRefMin;
+    private final Set<Categorie> roulementCategories = java.util.EnumSet.noneOf(Categorie.class);
 
     public Marche(OrbitSurvie plugin) {
         this.plugin = plugin;
@@ -112,6 +122,37 @@ public final class Marche {
         facteurMax = cfg.getDouble("dynamique.max", 1.5);
         minutes = Math.max(1, cfg.getInt("dynamique.minutes", 5));
         retour = Math.min(1, Math.max(0, cfg.getDouble("dynamique.retour", 0.93)));
+
+        roulementActif = cfg.getBoolean("roulement.actif", true);
+        roulementMinutes = Math.max(5, cfg.getInt("roulement.minutes", 60));
+        roulementNombre = Math.max(0, cfg.getInt("roulement.objets", 12));
+        roulementHausse = Math.max(0, cfg.getDouble("roulement.hausse-max", 0.40));
+        roulementBaisse = Math.max(0, Math.min(0.9, cfg.getDouble("roulement.baisse-max", 0.35)));
+        roulementAmpMin = Math.max(0, cfg.getDouble("roulement.ecart-min", 0.10));
+        roulementVitesse = Math.min(1, Math.max(0.01, cfg.getDouble("roulement.vitesse", 0.2)));
+        roulementRefMin = cfg.getDouble("roulement.prix-ref-min", 4);
+        roulementAnnonce = Math.max(0, cfg.getInt("roulement.annonce", 3));
+        roulementCategories.clear();
+        for (String c : cfg.getStringList("roulement.categories")) {
+            try {
+                roulementCategories.add(Categorie.valueOf(c.toUpperCase(Locale.ROOT)));
+            } catch (IllegalArgumentException ignore) {
+                plugin.getLogger().warning("marche.yml : catégorie de roulement inconnue « " + c + " »");
+            }
+        }
+
+        // Multiplicateurs de prix (inflation) : global, puis bonus des produits de farm.
+        double inflation = Math.max(0.01, cfg.getDouble("inflation.global", 1));
+        List<Map.Entry<String, Double>> bonus = new ArrayList<>();
+        ConfigurationSection bs = cfg.getConfigurationSection("inflation.bonus");
+        if (bs != null) {
+            for (String groupe : bs.getKeys(false)) {
+                double mult = bs.getDouble(groupe + ".multiplicateur", 1);
+                for (String motif : bs.getStringList(groupe + ".objets")) {
+                    bonus.add(Map.entry(motif.toUpperCase(Locale.ROOT), mult));
+                }
+            }
+        }
 
         List<String> exclus = cfg.getStringList("exclus");
         List<String> venteSeule = cfg.getStringList("vente-seule");
@@ -149,7 +190,30 @@ public final class Marche {
                 }
             }
             if (v != null && v > 0) {
-                base.put(m, v);
+                double mult = inflation;
+                for (Map.Entry<String, Double> e : bonus) {
+                    if (glob(m.name(), e.getKey())) {
+                        mult *= e.getValue();
+                        break;
+                    }
+                }
+                base.put(m, v * mult);
+            }
+        }
+
+        // Bornes de prix par objet (par rapport à la référence), offre/demande et roulement compris.
+        limites.clear();
+        ConfigurationSection ls = cfg.getConfigurationSection("limites");
+        if (ls != null) {
+            for (String groupe : ls.getKeys(false)) {
+                double lmin = ls.getDouble(groupe + ".min", facteurMin);
+                double lmax = ls.getDouble(groupe + ".max", facteurMax);
+                List<String> objets = ls.getStringList(groupe + ".objets");
+                for (Material m : tous) {
+                    if (!limites.containsKey(m) && correspond(m.name(), objets)) {
+                        limites.put(m, new double[]{lmin, lmax});
+                    }
+                }
             }
         }
 
@@ -524,8 +588,71 @@ public final class Marche {
     }
 
     private double facteur(Article a, double pression) {
-        double f = Math.exp(-pression / elasticite(a));
-        return Math.max(facteurMin, Math.min(facteurMax, f));
+        Etat e = etats.get(a.objet());
+        double f = Math.exp(-pression / elasticite(a)) * (e == null ? 1 : e.cours);
+        f = Math.max(facteurMin, Math.min(facteurMax, f));
+        double[] l = limites.get(a.objet());
+        return l == null ? f : Math.max(l[0], Math.min(l[1], f));
+    }
+
+    /** Bornes du cours d'un objet : la limite de l'objet si elle existe, sinon le roulement normal. */
+    private double[] bornesCours(Material m) {
+        double[] l = limites.get(m);
+        double lo = 1 - roulementBaisse, hi = 1 + roulementHausse;
+        return l == null ? new double[]{lo, hi} : new double[]{Math.max(lo, l[0]), Math.min(hi, l[1])};
+    }
+
+    /**
+     * Nouveau roulement : quelques objets tirés au hasard voient leur cours partir à la hausse ou à la baisse
+     * (dans leurs bornes) ; ceux du roulement précédent repartent vers leur prix normal.
+     */
+    public void roulement(boolean annoncer) {
+        for (Etat e : etats.values()) {
+            if (e.cible != 1) {
+                e.cible = 1;
+                e.modifie = true;
+            }
+        }
+        List<Article> candidats = new ArrayList<>();
+        for (Article a : articles.values()) {
+            if (a.ref() >= roulementRefMin && (roulementCategories.isEmpty() || roulementCategories.contains(a.categorie()))) {
+                candidats.add(a);
+            }
+        }
+        java.util.Collections.shuffle(candidats, alea);
+        List<Article> hausses = new ArrayList<>(), baisses = new ArrayList<>();
+        for (Article a : candidats.subList(0, Math.min(roulementNombre, candidats.size()))) {
+            double[] b = bornesCours(a.objet());
+            boolean monte = alea.nextBoolean();
+            double ecartMax = monte ? b[1] - 1 : 1 - b[0];
+            if (ecartMax <= 0.005) {
+                continue;
+            }
+            double ecart = Math.min(ecartMax, roulementAmpMin + alea.nextDouble() * Math.max(0, ecartMax - roulementAmpMin));
+            Etat e = etats.computeIfAbsent(a.objet(), k -> new Etat());
+            e.cible = monte ? 1 + ecart : 1 - ecart;
+            e.modifie = true;
+            (monte ? hausses : baisses).add(a);
+        }
+        if (annoncer && roulementAnnonce > 0 && (!hausses.isEmpty() || !baisses.isEmpty())) {
+            StringBuilder sb = new StringBuilder("<gray>Le marché bouge : ");
+            if (!hausses.isEmpty()) {
+                sb.append("<#3DDCB0>▲ ").append(noms(hausses)).append(" ");
+            }
+            if (!baisses.isEmpty()) {
+                sb.append("<#FF6B6B>▼ ").append(noms(baisses)).append(" ");
+            }
+            sb.append("<dark_gray>· <white>/shop<gray> → Tendances");
+            Bukkit.broadcast(Msg.msg(sb.toString()));
+        }
+    }
+
+    private String noms(List<Article> l) {
+        List<String> n = new ArrayList<>();
+        for (Article a : l.subList(0, Math.min(roulementAnnonce, l.size()))) {
+            n.add("<white>" + Msg.nom(a.objet()));
+        }
+        return String.join("<gray>, ", n);
     }
 
     /** Prix actuel / référence (1 = au prix de référence). */
@@ -619,7 +746,16 @@ public final class Marche {
         long periode = minutes * 1200L;
         Bukkit.getScheduler().runTaskTimer(plugin, this::retourPrix, periode, periode);
         Bukkit.getScheduler().runTaskTimer(plugin, () -> sauver(false), 1200L, 1200L);
+        long tour = roulementMinutes * 1200L;
+        Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            if (roulementActif) {
+                roulement(true);
+            }
+        }, tour, tour);
         if (!plugin.db().available()) {
+            if (roulementActif) {
+                roulement(false);
+            }
             return;
         }
         plugin.db().then(plugin.db().run(c -> {
@@ -628,16 +764,20 @@ public final class Marche {
                         + "objet VARCHAR(64) NOT NULL PRIMARY KEY, pression DOUBLE NOT NULL DEFAULT 0, "
                         + "achetes BIGINT NOT NULL DEFAULT 0, vendus BIGINT NOT NULL DEFAULT 0, "
                         + "maj TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)");
+                st.executeUpdate("ALTER TABLE survie_marche ADD COLUMN IF NOT EXISTS cours DOUBLE NOT NULL DEFAULT 1");
+                st.executeUpdate("ALTER TABLE survie_marche ADD COLUMN IF NOT EXISTS cible DOUBLE NOT NULL DEFAULT 1");
             }
             Map<String, double[]> lu = new HashMap<>();
-            try (PreparedStatement st = c.prepareStatement("SELECT objet, pression, achetes, vendus FROM survie_marche");
+            try (PreparedStatement st = c.prepareStatement("SELECT objet, pression, achetes, vendus, cours, cible FROM survie_marche");
                  ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
-                    lu.put(rs.getString(1), new double[]{rs.getDouble(2), rs.getLong(3), rs.getLong(4)});
+                    lu.put(rs.getString(1), new double[]{rs.getDouble(2), rs.getLong(3), rs.getLong(4),
+                            rs.getDouble(5), rs.getDouble(6)});
                 }
             }
             return lu;
         }), lu -> {
+            boolean enCours = false;
             for (Map.Entry<String, double[]> e : lu.entrySet()) {
                 Material m = Material.getMaterial(e.getKey());
                 if (m == null) {
@@ -648,12 +788,26 @@ public final class Marche {
                 et.pression += e.getValue()[0];
                 et.achetes += (long) e.getValue()[1];
                 et.vendus += (long) e.getValue()[2];
+                et.cours = e.getValue()[3];
+                et.cible = e.getValue()[4];
+                enCours |= et.cible != 1;
+            }
+            // Premier démarrage (ou plus aucun roulement en cours) : on en lance un tout de suite.
+            if (roulementActif && !enCours) {
+                roulement(false);
             }
         }, () -> plugin.getLogger().warning("Marché : état non relu (base)."));
     }
 
     private void retourPrix() {
         for (Etat e : etats.values()) {
+            if (e.cours != e.cible) {
+                e.cours += (e.cible - e.cours) * roulementVitesse;
+                if (Math.abs(e.cible - e.cours) < 0.005) {
+                    e.cours = e.cible;
+                }
+                e.modifie = true;
+            }
             if (e.pression == 0) {
                 continue;
             }
@@ -674,7 +828,7 @@ public final class Marche {
         for (Map.Entry<Material, Etat> e : etats.entrySet()) {
             Etat et = e.getValue();
             if (et.modifie) {
-                lignes.add(new Object[]{e.getKey().name(), et.pression, et.achetes, et.vendus});
+                lignes.add(new Object[]{e.getKey().name(), et.pression, et.achetes, et.vendus, et.cours, et.cible});
                 et.modifie = false;
             }
         }
@@ -682,14 +836,16 @@ public final class Marche {
             return;
         }
         var f = plugin.db().run(c -> {
-            try (PreparedStatement st = c.prepareStatement("INSERT INTO survie_marche (objet, pression, achetes, vendus) "
-                    + "VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE pression = VALUES(pression), achetes = VALUES(achetes), "
-                    + "vendus = VALUES(vendus)")) {
+            try (PreparedStatement st = c.prepareStatement("INSERT INTO survie_marche (objet, pression, achetes, vendus, cours, cible) "
+                    + "VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE pression = VALUES(pression), achetes = VALUES(achetes), "
+                    + "vendus = VALUES(vendus), cours = VALUES(cours), cible = VALUES(cible)")) {
                 for (Object[] l : lignes) {
                     st.setString(1, (String) l[0]);
                     st.setDouble(2, (Double) l[1]);
                     st.setLong(3, (Long) l[2]);
                     st.setLong(4, (Long) l[3]);
+                    st.setDouble(5, (Double) l[4]);
+                    st.setDouble(6, (Double) l[5]);
                     st.addBatch();
                 }
                 st.executeBatch();
@@ -726,12 +882,14 @@ public final class Marche {
         if (m == null) {
             etats.values().forEach(e -> {
                 e.pression = 0;
+                e.cours = e.cible = 1;
                 e.modifie = true;
             });
         } else {
             Etat e = etats.get(m);
             if (e != null) {
                 e.pression = 0;
+                e.cours = e.cible = 1;
                 e.modifie = true;
             }
         }

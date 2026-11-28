@@ -74,8 +74,15 @@ public final class BaseProtection implements Listener {
 
     private final Bases bases;
 
+    /** Blocs qu'un visiteur a le droit de cliquer dans une base (les échoppes : le clic ouvre le menu d'achat). */
+    private java.util.function.Predicate<Block> libre = b -> false;
+
     public BaseProtection(Bases bases) {
         this.bases = bases;
+    }
+
+    public void libre(java.util.function.Predicate<Block> libre) {
+        this.libre = libre;
     }
 
     /** Vrai (et message) si le joueur n'a pas le droit d'agir à cet endroit. */
@@ -140,7 +147,7 @@ public final class BaseProtection implements Listener {
         }
         Player p = e.getPlayer();
         Base b = bases.a(bl.getLocation());
-        if (b == null || bases.peut(p, b)) {
+        if (b == null || bases.peut(p, b) || libre.test(bl)) {
             return;
         }
         if (e.getAction() == Action.PHYSICAL) {

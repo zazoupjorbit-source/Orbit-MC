@@ -95,6 +95,31 @@ public final class Db {
                 st.executeUpdate("CREATE TABLE IF NOT EXISTS survie_base_membres ("
                         + "base_id BIGINT NOT NULL, uuid CHAR(36) NOT NULL, nom VARCHAR(16) NOT NULL, "
                         + "PRIMARY KEY (base_id, uuid))");
+                // Grades achetés en crédits : date de fin (LuckPerms porte le grade, ceci sert à l'afficher).
+                st.executeUpdate("CREATE TABLE IF NOT EXISTS survie_grades ("
+                        + "uuid CHAR(36) NOT NULL, grade VARCHAR(24) NOT NULL, expire_le DATETIME NOT NULL, "
+                        + "PRIMARY KEY (uuid, grade))");
+                st.executeUpdate("CREATE TABLE IF NOT EXISTS survie_contrats ("
+                        + "uuid CHAR(36) NOT NULL, jour DATE NOT NULL, numero TINYINT NOT NULL, "
+                        + "PRIMARY KEY (uuid, jour, numero))");
+                st.executeUpdate("CREATE TABLE IF NOT EXISTS survie_metiers ("
+                        + "uuid CHAR(36) NOT NULL, metier VARCHAR(16) NOT NULL, xp BIGINT NOT NULL DEFAULT 0, "
+                        + "PRIMARY KEY (uuid, metier))");
+                // Compteurs du mois (contrats, XP de métiers, poissons, monstres, ventes, duels) pour les classements.
+                st.executeUpdate("CREATE TABLE IF NOT EXISTS survie_stats ("
+                        + "uuid CHAR(36) NOT NULL, nom VARCHAR(16) NOT NULL, mois CHAR(7) NOT NULL, cle VARCHAR(24) NOT NULL, "
+                        + "valeur DOUBLE NOT NULL DEFAULT 0, PRIMARY KEY (uuid, mois, cle), KEY idx_top (mois, cle, valeur))");
+                st.executeUpdate("CREATE TABLE IF NOT EXISTS survie_lots_mois ("
+                        + "mois CHAR(7) NOT NULL PRIMARY KEY, paye_le DATETIME NOT NULL)");
+                st.executeUpdate("CREATE TABLE IF NOT EXISTS survie_echoppes ("
+                        + "id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, proprio CHAR(36) NOT NULL, proprio_nom VARCHAR(16) NOT NULL, "
+                        + "monde VARCHAR(64) NOT NULL, x INT NOT NULL, y INT NOT NULL, z INT NOT NULL, "
+                        + "objet MEDIUMTEXT NOT NULL, lot INT NOT NULL, prix DECIMAL(15,2) NOT NULL, "
+                        + "KEY idx_proprio (proprio))");
+                st.executeUpdate("CREATE TABLE IF NOT EXISTS survie_homes ("
+                        + "uuid CHAR(36) NOT NULL, nom VARCHAR(24) NOT NULL, monde VARCHAR(64) NOT NULL, "
+                        + "x DOUBLE NOT NULL, y DOUBLE NOT NULL, z DOUBLE NOT NULL, yaw FLOAT NOT NULL, pitch FLOAT NOT NULL, "
+                        + "PRIMARY KEY (uuid, nom))");
             }
             available = true;
             plugin.getLogger().info("Base MariaDB du réseau jointe : économie et hôtel des ventes actifs.");

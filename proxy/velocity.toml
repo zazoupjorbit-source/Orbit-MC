@@ -6,7 +6,7 @@ bind = "127.0.0.1:25565"
 
 # What should be the MOTD? This gets displayed when the player adds your server to
 # their server list. Only MiniMessage format is accepted.
-motd = "<gradient:#00c6ff:#7b2ff7>ORBIT</gradient> <gray>- reseau de dev local"
+motd = "<bold><gradient:#62CFF4:#E0B864>ORBIT MC</gradient></bold> <dark_gray>»</dark_gray> <white>5 modes, 1 compte</white>\n<#7BD84E>Survie <dark_gray>•</dark_gray> <#FF6A2B>Extraction <dark_gray>•</dark_gray> <#F0475A>HCF <dark_gray>•</dark_gray> <#A99BFF>MMO <dark_gray>•</dark_gray> <#4FD8B4>Tycoon"
 
 # What should we display for the maximum number of players? (Velocity does not support a cap
 # on the number of players online.)
@@ -97,6 +97,8 @@ creatif = "127.0.0.1:25573"
 vol = "127.0.0.1:25574"
 extraction = "127.0.0.1:25570"
 practice = "127.0.0.1:25571"
+# Prototype modde (Fabric + mod OrbitExtractionMod) : il faut le client Fabric avec le mod pour y entrer.
+extraction-modde = "127.0.0.1:25576"
 
 # In what order we should try servers when a player logs in or is kicked from a server.
 try = [

@@ -39,7 +39,7 @@ public final class Profile {
     public boolean minimap = true;
     public int mapZoom = 1;
 
-    /** Message reçu sur le téléphone. */
+    /** Message reçu sur la tablette. */
     public record Message(long time, String from, String text, boolean read) {
     }
 

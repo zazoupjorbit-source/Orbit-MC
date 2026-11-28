@@ -166,7 +166,9 @@ public final class MobService implements Listener {
         double size = Math.max(1, e.getHeight() / 1.6);
         Fx.shatter(e.getLocation().add(0, e.getHeight() / 2, 0), size);
         Bukkit.getPluginManager().callEvent(new MobKilledEvent(ms, killer));
-        if (ms.boss != null) {
+        if (fr.orbit.mmo.worldboss.WorldBossService.onKilled(ms, killer)) {
+            // Boss du monde (NÉMÉSIS) : récompenses et chute gérées par son service.
+        } else if (ms.boss != null) {
             plugin.bosses().onBossDeath(ms, killer);
         } else {
             reward(ms, killer);
@@ -336,7 +338,7 @@ public final class MobService implements Listener {
                 tracked.remove(e.getUniqueId());
                 continue;
             }
-            if (ms.boss != null) {
+            if (ms.boss != null || fr.orbit.mmo.worldboss.WorldBossService.owns(ms)) {
                 continue;
             }
             Player nearest = null;

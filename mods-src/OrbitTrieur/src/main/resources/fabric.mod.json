@@ -1,0 +1,21 @@
+{
+	"schemaVersion": 1,
+	"id": "orbittrieur",
+	"version": "${version}",
+	"name": "Orbit Trieur",
+	"description": "Un bloc trieur qui répartit automatiquement les objets dans les coffres autour de lui, selon des filtres réglés dans un panel en jeu. Compatible avec les stockages de tous les mods qui utilisent l'API de transfert Fabric.",
+	"authors": ["Zazou", "Wane"],
+	"license": "All-Rights-Reserved",
+	"icon": "assets/orbittrieur/textures/block/trieur_face.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["fr.orbit.trieur.OrbitTrieur"],
+		"client": ["fr.orbit.trieur.client.OrbitTrieurClient"]
+	},
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

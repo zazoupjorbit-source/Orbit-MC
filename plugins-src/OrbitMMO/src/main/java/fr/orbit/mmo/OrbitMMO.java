@@ -166,6 +166,9 @@ public final class OrbitMMO extends JavaPlugin {
         // Tenues 3D (paquet fr.orbit.mmo.outfit) : épaulières, cape, casque 3D ; sous-commande /mmoadmin tenue.
         fr.orbit.mmo.outfit.OutfitService.start(this);
 
+        // Boss du monde (paquet fr.orbit.mmo.worldboss) : NÉMÉSIS sur le continent ; sous-commande /mmoadmin nemesis.
+        fr.orbit.mmo.worldboss.WorldBossService.start(this);
+
         for (Player p : getServer().getOnlinePlayers()) {
             playerListener.join(p);
             if (pack.enabled()) {
@@ -178,6 +181,7 @@ public final class OrbitMMO extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        fr.orbit.mmo.worldboss.WorldBossService.stop();
         fr.orbit.mmo.outfit.OutfitService.stop();
         if (nameplates != null) {
             nameplates.stop();

@@ -6,10 +6,14 @@ import java.util.*;
 import javax.imageio.ImageIO;
 
 /**
- * Écrans du téléphone d'Orbit Extraction (coffre 6 lignes), même technique que les menus « station » du lobby
- * (plugins-src/OrbitDevCore/tools/OrbitGuiGen.java) : image 196x248 unités GUI rendue x2, découpée en 2x4 tuiles,
- * affichée par des glyphes de la police orbitguns:gui dans le titre du coffre. Palette propre au mode :
- * acier sombre et rouge « zone infectée ».
+ * Écrans de la tablette d'Orbit Extraction (coffre 6 lignes), même technique que les menus « station » du lobby
+ * (plugins-src/OrbitDevCore/tools/OrbitGuiGen.java) : image 256x248 unités GUI rendue x2, découpée en 2x4 tuiles,
+ * affichée par des glyphes de la police orbitguns:gui dans le titre du coffre.
+ *
+ * La tablette est en paysage : une coque renforcée plus large que le coffre (poignées sur les côtés), un écran de
+ * terminal (lignes de balayage, reflets en diagonale), une ligne d'état et un titre en haut, le contenu sur les
+ * lignes 0 à 4 du coffre et la barre d'onglets sur la ligne 5 (cases 45 à 52 ; 53 = crédits).
+ * Palette propre au mode : acier sombre et rouge « zone infectée ».
  *
  * Contraintes Minecraft (ne pas casser) : rien à plus de 24 unités au-dessus du coffre ; une glyphe ne dépasse
  * pas 256 px ; plaque #404040 sous le libellé « Inventaire » du jeu.
@@ -18,14 +22,23 @@ import javax.imageio.ImageIO;
  */
 public class PhoneGuiGen {
     static final int S = 2;
-    static final int W = 196 * S, H = 248 * S, OX = 10 * S, OY = 24 * S;
+    static final int W = 256 * S, H = 248 * S, OX = 40 * S, OY = 24 * S;
     static BufferedImage img = new BufferedImage(W, H, BufferedImage.TYPE_INT_ARGB);
 
     static final int OUT = 0xFF07080A, RED = 0xFFC0392B, RED_HI = 0xFFE8695C, RED_HI2 = 0xFFF7B5AD, RED_LO = 0xFF7A2018, RED_LO2 = 0xFF4A120D;
+    static final int GOLD = 0xFFF5C542;
     static final int[] METAL = {0xFF50545C, 0xFF3F434B, 0xFF30333A, 0xFF24262C};
     static final int METAL_HI = 0xFF7A808C, METAL_LO = 0xFF131417;
     static final int[] SCREEN = {0xFF171A1D, 0xFF121416, 0xFF0D0F11, 0xFF0A0B0D};
     static final int SCREEN_IN_DK = 0xFF050607, SCREEN_IN_HI = 0xFF2C3036;
+    /** Coque de la tablette : polymère gris anthracite, caoutchouc des coins et des poignées. */
+    static final int[] SHELL = {0xFF3C3F46, 0xFF31343A, 0xFF282A2F, 0xFF1F2125};
+    static final int SHELL_HI = 0xFF5C616B, SHELL_LO = 0xFF111215;
+    static final int[] RUBBER = {0xFF1E1F23, 0xFF18191C, 0xFF131416};
+    static final int DIM = 0xFF5A6270, MID = 0xFF8A919B;
+
+    /** Écran de la tablette (sous-pixels, origine = coin du coffre). */
+    static final int SCR_X = -6, SCR_Y = -30, SCR_W = 364, SCR_H = 282;
 
     // ---------- primitives (sous-pixels, origine = coin du coffre) ----------
     static void px(int x, int y, int c) {
@@ -93,6 +106,10 @@ public class PhoneGuiGen {
     static void rivet(int x, int y) {
         rect(x, y, 3, 3, OUT); px(x, y, 0xFFC2C6CE); px(x + 1, y, 0xFF8E939C); px(x, y + 1, 0xFF8E939C); px(x + 1, y + 1, 0xFF60646C);
     }
+    static void screw(int x, int y) {
+        rect(x, y, 5, 5, OUT); rect(x + 1, y + 1, 3, 3, 0xFF6E737C); px(x + 1, y + 1, 0xFFB5BAC2);
+        px(x + 1, y + 3, 0xFF2A2C31); px(x + 2, y + 2, 0xFF2A2C31); px(x + 3, y + 1, 0xFF2A2C31);
+    }
 
     static void slot(int gx, int gy) {
         int x = gx * S - 2, y = gy * S - 2, s = 36;
@@ -138,11 +155,26 @@ public class PhoneGuiGen {
         g('X', "#...#", "#...#", ".#.#.", "..#..", ".#.#.", "#...#", "#...#");
         g('Y', "#...#", "#...#", ".#.#.", "..#..", "..#..", "..#..", "..#..");
         g('Z', "#####", "....#", "...#.", "..#..", ".#...", "#....", "#####");
+        g('0', ".###.", "#...#", "#..##", "#.#.#", "##..#", "#...#", ".###.");
+        g('1', "..#..", ".##..", "..#..", "..#..", "..#..", "..#..", ".###.");
+        g('2', ".###.", "#...#", "....#", "...#.", "..#..", ".#...", "#####");
+        g('3', "####.", "....#", "....#", ".###.", "....#", "....#", "####.");
+        g('4', "...#.", "..##.", ".#.#.", "#..#.", "#####", "...#.", "...#.");
+        g('5', "#####", "#....", "####.", "....#", "....#", "#...#", ".###.");
+        g('6', ".###.", "#....", "#....", "####.", "#...#", "#...#", ".###.");
+        g('7', "#####", "....#", "...#.", "..#..", ".#...", ".#...", ".#...");
+        g('8', ".###.", "#...#", "#...#", ".###.", "#...#", "#...#", ".###.");
+        g('9', ".###.", "#...#", "#...#", ".####", "....#", "....#", ".###.");
+        g('>', ".#...", "..#..", "...#.", "....#", "...#.", "..#..", ".#...");
+        g('/', "....#", "...#.", "...#.", "..#..", ".#...", ".#...", "#....");
+        g('.', ".....", ".....", ".....", ".....", ".....", ".##..", ".##..");
+        g(':', ".....", ".##..", ".##..", ".....", ".##..", ".##..", ".....");
         g('-', ".....", ".....", ".....", "#####", ".....", ".....", ".....");
         g(' ', ".....", ".....", ".....", ".....", ".....", ".....", ".....");
     }
     static int textW(String s, int sc) { return textW(s, sc, 6 * sc); }
     static int textW(String s, int sc, int adv) { return s.length() * adv - (adv - 5 * sc); }
+    /** Texte en police 5x7 ; outline 0 = sans contour (petits textes de l'écran), shadow 0 = sans ombre. */
     static void text(int x, int y, String s, int sc, int adv, int[] grad, int outline, int shadow, int sd) {
         int tw = textW(s, sc, adv), th = 7 * sc;
         boolean[][] m = new boolean[tw][th];
@@ -154,15 +186,23 @@ public class PhoneGuiGen {
                 if (gl[r].charAt(k) == '#') for (int a = 0; a < sc; a++) for (int b = 0; b < sc; b++) m[cx + k * sc + a][r * sc + b] = true;
             cx += adv;
         }
-        boolean[][] d = new boolean[tw + 2][th + 2];
-        for (int i = 0; i < tw; i++) for (int j = 0; j < th; j++) if (m[i][j])
-            for (int a = 0; a < 3; a++) for (int b = 0; b < 3; b++) d[i + a][j + b] = true;
-        if (shadow != 0) for (int i = 0; i < tw + 2; i++) for (int j = 0; j < th + 2; j++) if (d[i][j]) px(x - 1 + i, y - 1 + j + sd, shadow);
-        for (int i = 0; i < tw + 2; i++) for (int j = 0; j < th + 2; j++) if (d[i][j]) px(x - 1 + i, y - 1 + j, outline);
+        if (outline != 0) {
+            boolean[][] d = new boolean[tw + 2][th + 2];
+            for (int i = 0; i < tw; i++) for (int j = 0; j < th; j++) if (m[i][j])
+                for (int a = 0; a < 3; a++) for (int b = 0; b < 3; b++) d[i + a][j + b] = true;
+            if (shadow != 0) for (int i = 0; i < tw + 2; i++) for (int j = 0; j < th + 2; j++) if (d[i][j]) px(x - 1 + i, y - 1 + j + sd, shadow);
+            for (int i = 0; i < tw + 2; i++) for (int j = 0; j < th + 2; j++) if (d[i][j]) px(x - 1 + i, y - 1 + j, outline);
+        } else if (shadow != 0) {
+            for (int i = 0; i < tw; i++) for (int j = 0; j < th; j++) if (m[i][j]) px(x + i + sd, y + j + sd, shadow);
+        }
         for (int i = 0; i < tw; i++) for (int j = 0; j < th; j++) if (m[i][j]) px(x + i, y + j, pick(grad, j / (double) (th - 1), x + i, y + j));
     }
     static void textC(int cx, int y, String s, int sc, int[] grad, int outline, int shadow, int sd) {
         text(cx - textW(s, sc) / 2, y, s, sc, 6 * sc, grad, outline, shadow, sd);
+    }
+    /** Petit texte d'écran (police x1, une couleur, ombre d'un sous-pixel). */
+    static void small(int x, int y, String s, int col) {
+        text(x, y, s, 1, 6, new int[]{col}, 0, 0xFF030304, 1);
     }
 
     // ---------- icônes : # contour, w blanc, h clair, m moyen, d foncé ----------
@@ -248,26 +288,36 @@ public class PhoneGuiGen {
                 "#whhhmmmdd#.",
                 ".#hmmmddd#..",
                 "..#######..."});
-        ICONS.put("back", new String[]{
-                "....##......",
-                "...#w#......",
-                "..#wh#######",
-                ".#whhhhhhmm#",
-                "#whhhhhmmmd#",
-                ".#hhmmmmmdd#",
-                "..#hm#######",
-                "...#m#......",
-                "....##......"});
-        ICONS.put("signal", new String[]{
-                ".........##.",
-                ".........#w#",
-                "......##.#h#",
-                "......#w##h#",
-                "...##.#h##m#",
-                "...#w##h##m#",
-                "##.#h##m##d#",
-                "#w##m##m##d#",
-                "############"});
+        ICONS.put("home", new String[]{          // abri
+                "....####....",
+                "...#wwhh#...",
+                "..#whhhhm#..",
+                ".#whhhhhmm#.",
+                "############",
+                ".#hh#ww#mm#.",
+                ".#hh#hm#md#.",
+                ".#hm#hm#dd#.",
+                ".##########."});
+        ICONS.put("user", new String[]{          // opérateur
+                "....####....",
+                "...#wwhh#...",
+                "...#whhm#...",
+                "...#hhmm#...",
+                "....####....",
+                "..##whhm##..",
+                ".#whhhhmmd#.",
+                ".#hhhhmmmd#.",
+                ".##########."});
+        ICONS.put("close", new String[]{         // croix
+                ".##......##.",
+                "#ww#....#hm#",
+                ".#wh#..#hm#.",
+                "..#hh##mm#..",
+                "...#hmmd#...",
+                "..#hm##dd#..",
+                ".#hm#..#dd#.",
+                "#hm#....#dd#",
+                ".##......##."});
     }
     static void icon(int x, int y, String name, int sc, int outline, int shadow, int[] pal) {
         String[] gl = ICONS.get(name);
@@ -281,7 +331,6 @@ public class PhoneGuiGen {
                 rect(x + k * sc, y + r * sc + (pass == 0 ? 1 : 0), sc, sc, col);
             }
     }
-    static final int[] ICON_WHITE = {0xFFFFFFFF, 0xFFE9ECF2, 0xFFBDC2CC, 0xFF858A95};
 
     static void button(int x, int y, int w, int h, int light, int fill, int dark, int darker, String label) {
         int lip = 4;
@@ -311,80 +360,179 @@ public class PhoneGuiGen {
         icon(sx(c) * S + 4, sy(r) * S + 7, icon, 2, OUT, 0xFF020203, new int[]{0xFFFFFFFF, mix(col, 0xFFFFFFFF, 0.55), col, mix(col, 0xFF000000, 0.4)});
     }
 
-    static void antenna(int x) {
-        rect(x - 1, -30, 6, 32, OUT);
-        rect(x, -29, 2, 30, METAL_HI); rect(x + 2, -29, 2, 30, METAL[2]);
-        for (int y = -24; y < 0; y += 6) rect(x - 1, y, 6, 1, OUT);
-        rect(x - 3, -2, 10, 5, OUT); rect(x - 2, -1, 8, 3, METAL[1]); rect(x - 2, -1, 8, 1, METAL_HI);
-        for (int i = -6; i <= 9; i++) for (int j = -6; j <= 6; j++) {
-            double d = Math.sqrt((i - 1.5) * (i - 1.5) + j * j);
-            if (d < 6 && d > 3 && (6 - d) / 3 * 0.6 > bayer(x + i, j - 34)) px(x + i, j - 34, 0xFF8A251C);
+    // =====================================================================================
+    // Tablette : coque, écran, ligne d'état, titre, onglets
+    // =====================================================================================
+
+    /** Coin de caoutchouc renforcé (L), avec un liseré rouge. dx/dy = sens vers l'intérieur. */
+    static void bumper(int x, int y, int dx, int dy) {
+        int len = 46, th = 14;
+        for (int i = 0; i < len; i++) for (int j = 0; j < th; j++) {
+            boolean edge = i == 0 || j == 0 || i == len - 1 || j == th - 1;
+            int c = edge ? OUT : pick(RUBBER, j / (double) th, i, j);
+            px(x + dx * i, y + dy * j, c);
+            px(x + dx * j, y + dy * i, c);
         }
-        rect(x - 1, -37, 6, 6, OUT); rect(x, -36, 4, 4, RED_HI); rect(x, -36, 2, 2, 0xFFFFFFFF);
+        for (int i = 3; i < len - 4; i++) { px(x + dx * i, y + dy * 4, RED_LO); px(x + dx * 4, y + dy * i, RED_LO); }
+        for (int i = 3; i < len - 4; i++) { px(x + dx * i, y + dy * 5, RED); px(x + dx * 5, y + dy * i, RED); }
+        for (int k = 14; k < len - 6; k += 6) {   // stries d'adhérence
+            for (int j = 8; j < th - 2; j++) { px(x + dx * k, y + dy * j, 0xFF0B0B0D); px(x + dx * j, y + dy * k, 0xFF0B0B0D); }
+        }
     }
-    static void dial(int cx, int cy, int r, String icon) {
-        int[] ringPal = {METAL[3], METAL[2], METAL[1], METAL[0], METAL_HI};
-        int[] face = {0xFF1C0C0A, 0xFF2A100D, 0xFF3A1511, 0xFF4A1A15};
+
+    /** Poignée latérale : creux de caoutchouc strié. */
+    static void grip(int x, int y, int w, int h) {
+        shape(x, y, w, h, 6, RUBBER, OUT, 0xFF0C0D0F, 0xFF2C2E33);
+        for (int gy = y + 10; gy < y + h - 10; gy += 8) {
+            rect(x + 8, gy, w - 16, 2, 0xFF0A0A0C);
+            rect(x + 8, gy + 2, w - 16, 1, 0xFF2A2C31);
+        }
+    }
+
+    static void led(int cx, int cy, int col) {
+        for (int i = -6; i <= 6; i++) for (int j = -6; j <= 6; j++) {
+            double d = Math.sqrt(i * i + j * j);
+            if (d < 6 && d > 2.5 && (6 - d) / 3.5 * 0.55 > bayer(cx + i, cy + j)) px(cx + i, cy + j, mix(get(cx + i, cy + j), col, 0.5));
+        }
+        rect(cx - 3, cy - 3, 6, 6, OUT); rect(cx - 2, cy - 2, 4, 4, col); px(cx - 2, cy - 2, 0xFFFFFFFF); px(cx - 1, cy - 2, mix(col, 0xFFFFFFFF, 0.6));
+    }
+
+    static void knob(int cx, int cy, int r) {
         for (int x = -r - 1; x <= r + 1; x++) for (int y = -r - 1; y <= r + 1; y++) {
             double d = Math.sqrt(x * x + y * y);
             if (d > r + 0.5) continue;
             int c;
             if (d > r - 0.7) c = OUT;
-            else if (d > r - 4.5) c = pick(ringPal, 0.5 - 0.5 * (x + y) / (r * 1.2), cx + x, cy + y);
-            else if (d > r - 5.5) c = OUT;
-            else c = pick(face, 0.5 - 0.5 * (x + y) / (r * 1.1), cx + x, cy + y);
+            else if (Math.round(Math.toDegrees(Math.atan2(y, x)) / 30.0) % 2 == 0 && d > r - 3) c = METAL[2];
+            else c = pick(new int[]{METAL_HI, METAL[0], METAL[1], METAL[3]}, 0.5 + 0.5 * (x + y) / (r * 1.4), cx + x, cy + y);
             px(cx + x, cy + y, c);
         }
-        icon(cx - 12, cy - 9, icon, 2, OUT, 0xFF120505, new int[]{0xFFFFFFFF, RED_HI2, RED_HI, RED});
+        rect(cx - 1, cy - r + 2, 2, r - 2, RED_HI);
     }
 
-    /** Base commune : inventaire du joueur, panneau principal, plaque « Inventaire », antennes, bannière. */
-    static void frame(String title, String leftIcon, String rightIcon) {
+    static void tablet() {
+        int x0 = -72, y0 = -46, w = 496, h = 324;
+        // ombre portée sur le panneau de l'inventaire
+        for (int i = 6; i < w - 4; i++) for (int j = h; j < h + 5; j++) px(x0 + i, y0 + j, mix(get(x0 + i, y0 + j), 0xFF000000, 0.55));
+        shape(x0, y0, w, h, 14, SHELL, OUT, SHELL_HI, SHELL_LO);
+        bumper(x0, y0, 1, 1); bumper(x0 + w - 1, y0, -1, 1); bumper(x0, y0 + h - 1, 1, -1); bumper(x0 + w - 1, y0 + h - 1, -1, -1);
+        // poignées
+        grip(x0 + 12, 8, 46, 196);
+        grip(x0 + w - 58, 8, 46, 196);
+        // côté gauche : trois touches physiques sous la poignée
+        for (int k = 0; k < 3; k++) {
+            int bx = x0 + 18, by = 214 + k * 14;
+            shape(bx, by, 34, 10, 2, new int[]{0xFF2A2C31, 0xFF202226}, OUT, 0xFF45484F, 0xFF121315);
+            rect(bx + 14, by + 4, 6, 2, k == 0 ? RED_HI : 0xFF5A5F68);
+        }
+        // côté droit : molette et voyant d'alimentation
+        knob(x0 + w - 35, 226, 11);
+        led(x0 + w - 35, 252, 0xFF3FD46A);
+        // haut : caméra, haut-parleur et marquage
+        rect(172, y0 + 3, 9, 9, OUT); rect(173, y0 + 4, 7, 7, 0xFF101826); rect(174, y0 + 5, 2, 2, 0xFF6E9BD8);
+        for (int k = 0; k < 6; k++) rect(196 + k * 6, y0 + 6, 3, 3, 0xFF0E0F11);
+        text(x0 + 70, y0 + 3, "ORBIT TAB-7", 1, 6, new int[]{0xFF6A6F79}, 0, 0xFF16171A, 1);
+        for (int k = 0; k < 5; k++) for (int i = 0; i < 6; i++) for (int j = 0; j < 7; j++)   // bandes de danger
+            if (((i + j) / 3) % 2 == 0) px(x0 + w - 130 + k * 8 + i, y0 + 3 + j, mix(RED, 0xFF000000, 0.35));
+        // vis
+        for (int[] s : new int[][]{{x0 + 22, y0 + 18}, {x0 + w - 27, y0 + 18}, {x0 + 22, y0 + h - 23}, {x0 + w - 27, y0 + h - 23}}) screw(s[0], s[1]);
+
+        // logement et écran
+        shape(SCR_X - 6, SCR_Y - 6, SCR_W + 12, SCR_H + 12, 6, new int[]{0xFF0E0F11}, OUT, 0xFF050506, 0xFF4A4E57);
+        for (int i = 0; i < SCR_W; i++) for (int j = 0; j < SCR_H; j++) {
+            if (!in(i, j, SCR_W, SCR_H, 3)) continue;
+            int x = SCR_X + i, y = SCR_Y + j;
+            int c = pick(SCREEN, j / (double) SCR_H, x, y);
+            if (x % 16 == 0 && y % 16 == 0) c = 0xFF1C1F23;     // trame de points
+            px(x, y, c);
+        }
+    }
+
+    /** Lignes de balayage, vignettage et deux reflets en diagonale, appliqués à la fin sur tout l'écran. */
+    static void screenFx() {
+        double cx = SCR_W / 2.0, cy = SCR_H / 2.0;
+        for (int i = 2; i < SCR_W - 2; i++) for (int j = 2; j < SCR_H - 2; j++) {
+            if (!in(i, j, SCR_W, SCR_H, 3)) continue;
+            int x = SCR_X + i, y = SCR_Y + j;
+            int c = get(x, y);
+            if ((c >>> 24) == 0) continue;
+            if ((y & 3) == 3) c = mix(c, 0xFF000000, 0.14);
+            double dx = (i - cx) / cx, dy = (j - cy) / cy;
+            double v = Math.max(0, Math.max(Math.abs(dx), Math.abs(dy)) - 0.72) / 0.28;
+            c = mix(c, 0xFF000000, v * v * 0.35);
+            int u = i + j;                                     // reflets : de bas-gauche vers haut-droite
+            double fade = 1 - j / (double) SCR_H * 0.7;
+            if (u > 96 && u < 150) c = mix(c, 0xFFFFFFFF, 0.065 * fade);
+            if (u > 166 && u < 178) c = mix(c, 0xFFFFFFFF, 0.05 * fade);
+            px(x, y, c);
+        }
+    }
+
+    record Tab(String label, String icon) {}
+    static final Tab[] TABS = {new Tab("MENU", "home"), new Tab("ACHAT", "shop"), new Tab("COLIS", "drop"), new Tab("MSG", "mail"),
+            new Tab("KITS", "kit"), new Tab("HDV", "tag"), new Tab("FICHE", "user"), new Tab("CACHE", "stash")};
+
+    /** Barre d'onglets (ligne 5 du coffre) ; l'onglet actif est allumé en rouge. Case 8 = crédits. */
+    static void tabs(int active) {
+        int top = sy(5) * S - 5;
+        rect(SCR_X + 3, top, SCR_W - 6, SCR_H - (top - SCR_Y) - 3, 0xFF111214);
+        for (int i = SCR_X + 3; i < SCR_X + SCR_W - 3; i++) { px(i, top, RED_LO); px(i, top + 1, 0xFF050506); }
+        for (int c = 0; c < TABS.length; c++) {
+            Tab t = TABS[c];
+            boolean on = c == active;
+            int x = sx(c) * S - 1, y = sy(5) * S - 1;
+            if (on) {
+                shape(x, y, 34, 34, 2, new int[]{0xFF5A1610, RED_LO2, 0xFF2E0B08}, OUT, RED, 0xFF1E0605);
+                rect(x + 3, y + 1, 28, 2, RED_HI2);
+            } else {
+                shape(x, y, 34, 34, 2, new int[]{0xFF1A1C20, 0xFF131417}, OUT, 0xFF2A2D33, 0xFF0A0B0C);
+            }
+            int[] pal = on ? new int[]{0xFFFFFFFF, RED_HI2, RED_HI, RED} : new int[]{0xFFA4ABB6, 0xFF7C838E, 0xFF5A606A, 0xFF3E434A};
+            icon(x + 11, y + 6, t.icon(), 1, OUT, on ? 0xFF1E0605 : 0xFF060607, pal);
+            int lw = textW(t.label(), 1);
+            small(x + 17 - lw / 2, y + 21, t.label(), on ? 0xFFFFFFFF : MID);
+        }
+        accentSlot(8, 5, GOLD);
+    }
+
+    /** Ligne d'état et titre de l'écran (au-dessus de la ligne 0 du coffre). */
+    static void header(String title, String subtitle) {
+        small(14, -22, "ORBIT-NET // LIAISON SAT.", DIM);
+        // réseau + batterie, à droite
+        for (int k = 0; k < 4; k++) rect(290 + k * 5, -16 - k * 2, 3, 3 + k * 2, k < 3 ? RED_HI : 0xFF3A3E46);
+        rect(314, -22, 22, 9, MID); rect(315, -21, 20, 7, 0xFF0A0B0D); rect(336, -20, 2, 5, MID);
+        rect(316, -20, 13, 5, 0xFF3FD46A);
+        for (int i = 14; i < 338; i += 3) px(i, -9, 0xFF2A1210);
+        text(16, 2, ">", 2, 12, new int[]{RED_HI, RED}, 0, 0xFF030304, 1);
+        text(32, 2, title, 2, 12, new int[]{0xFFFFFFFF, 0xFFF4E3E0, RED_HI2}, 0, 0xFF2A0907, 1);
+        rect(32 + textW(title, 2) + 6, 2, 10, 14, RED_HI);                    // curseur
+        small(338 - textW(subtitle, 1), 7, subtitle, MID);
+        for (int i = 14; i < 338; i++) px(i, 24, (i / 4) % 2 == 0 ? 0xFF3A1511 : 0xFF14090A);
+    }
+
+    /** Base commune : inventaire du joueur, coque, écran, ligne d'état, titre, onglets, plaque « Inventaire ». */
+    static void frame(String title, String subtitle, int activeTab) {
         img = new BufferedImage(W, H, BufferedImage.TYPE_INT_ARGB);
         panel(-8, 266, 368, 178, 7);
         for (int r = 0; r < 3; r++) for (int c = 0; c < 9; c++) slot(sx(c), 140 + 18 * r);
         for (int c = 0; c < 9; c++) slot(sx(c), 198);
         rect(14, 390, 324, 1, 0xFF040405); rect(14, 391, 324, 1, 0xFF2C3036);
-
-        panel(-8, 0, 368, 266, 3);
-        for (int i = 4; i < 348; i++) {
-            double t = 1 - Math.abs(i - 176) / 172.0;
-            px(i, 252, pick(new int[]{0xFF1E0B09, RED_LO, RED, RED_HI}, t, i, 252));
-            px(i, 253, pick(new int[]{0xFF160807, RED_LO2, RED_LO, RED}, t, i, 253));
-        }
+        tablet();
+        header(title, subtitle);
+        tabs(activeTab);
         shape(2, 253, 166, 21, 3, new int[]{0xFF404040}, OUT, 0xFF5A5A5F, 0xFF2B2B2E);
         rivet(6, 262); rivet(161, 262);
-        for (int bx : new int[]{196, 300}) { rect(bx, 260, 12, 12, OUT); rect(bx + 1, 261, 10, 10, METAL[1]); rect(bx + 1, 261, 10, 1, METAL_HI); rivet(bx + 4, 264); }
-
-        antenna(0); antenna(348);
-
-        int bw = Math.max(248, textW(title, 4) + 70), bx = 176 - bw / 2, by = -34, bh = 42, cy = by + bh / 2;
-        shape(bx - 14, cy - 9, bw + 28, 18, 4, METAL, OUT, METAL_HI, METAL_LO);
-        shape(bx, by, bw, bh, 6, new int[]{0xFFE8695C, 0xFFD44A3B, RED, 0xFF9E2D21, RED_LO}, OUT, RED_HI2, RED_LO2);
-        rect(bx + 6, by + 4, bw - 12, 1, 0xFFF4A79E);
-        // bandes de danger aux deux bouts de la bannière
-        for (int k = 0; k < 2; k++) for (int i = 0; i < 18; i++) for (int j = 6; j < bh - 8; j++) {
-            int x = k == 0 ? bx + 30 + i : bx + bw - 48 + i;
-            if (((i + j) / 4) % 2 == 0) px(x, by + j, mix(get(x, by + j), 0xFF1A0605, 0.55));
-        }
-        textC(176, cy - 14, title, 4, new int[]{0xFFFFFFFF, 0xFFFFF3F1, 0xFFF7CFC9}, RED_LO2, 0xFF2A0907, 3);
-        dial(bx + 12, cy, 19, leftIcon);
-        dial(bx + bw - 13, cy, 19, rightIcon);
     }
 
-    static void heading(String label) {
-        int[] grad = {0xFFFFFFFF, RED_HI2, RED_HI};
-        textC(176, sy(0) * 2 + 9, label, 2, grad, OUT, 0, 0);
-        int half = textW(label, 2) / 2 + 10;
-        for (int i = 0; i < 4; i++) {
-            int col = i == 0 ? RED_HI : i == 1 ? RED : i == 2 ? RED_LO : 0xFF2A0D0A;
-            if (176 - half - 5 - i * 8 < 60) break;   // ne touche pas les cases des coins
-            rect(176 - half - 5 - i * 8, sy(0) * 2 + 15, 5, 2, col); rect(176 + half + i * 8, sy(0) * 2 + 15, 5, 2, col);
-        }
+    /** Rail de la ligne 4 (pagination / actions). */
+    static void rail() {
+        int ry = sy(4) * S + 15;
+        rect(46, ry - 1, 260, 4, OUT); rect(46, ry, 260, 1, 0xFF3A3E46); rect(46, ry + 1, 260, 1, 0xFF24262C);
+        for (int i = 0; i < 5; i++) { int dx = 100 + i * 36; rect(dx, ry - 2, 4, 6, OUT); rect(dx + 1, ry - 1, 2, 4, RED_LO); }
     }
 
     // =====================================================================================
-    // Accueil : six applications (cartes de 3 x 2 cases)
+    // Accueil : six applications (cartes de 3 x 2 cases, lignes 0 à 3), trois boutons larges (ligne 4)
     // =====================================================================================
     record App(String name, String icon, int[] pal) {}
     static final App[] APPS = {
@@ -407,38 +555,31 @@ public class PhoneGuiGen {
         button(x + 6, y + 42, w - 12, 26, p[4], p[3], p[2], p[0], a.name());
     }
 
-    static final int[][] HOME_ITEMS = {{0, 0, 0xFFE0B894}, {8, 0, 0xFFF5C542}};
+    static final int[][] HOME_ITEMS = {{8, 5, GOLD}};
 
     static void drawHome() {
-        frame("TÉLÉPHONE", "signal", "signal");
-        accentSlot(0, 0, RED_HI);
-        accentSlot(8, 0, 0xFFF5C542);
-        heading("APPLICATIONS");
-        for (int i = 0; i < 6; i++) appCard((i % 3) * 3, 1 + (i / 3) * 2, APPS[i], 40 + i);
-        // dernière ligne : trois boutons larges de 3 cases (kits, hôtel des ventes, carte)
-        int y = sy(5) * S - 1;
+        frame("ACCUEIL", "APPLICATIONS", 0);
+        for (int i = 0; i < 6; i++) appCard((i % 3) * 3, (i / 3) * 2, APPS[i], 40 + i);
+        int y = sy(4) * S - 1;
         button(sx(0) * S - 2, y, 3 * 36, 34, 0xFFFFC27A, 0xFFFF9A3D, 0xFFC46A17, 0xFF5A2E06, "KITS");
         button(sx(3) * S - 2, y, 3 * 36, 34, 0xFFFFB0E0, 0xFFE05CB8, 0xFFA8307F, 0xFF4A0E36, "MARCHÉ");
         button(sx(6) * S - 2, y, 3 * 36, 34, 0xFFA8E2FF, 0xFF5CC8FF, 0xFF2A8FC4, 0xFF0A3D5A, "CARTE");
     }
 
     // =====================================================================================
-    // Écrans de liste : retour, titre, solde, grille 9 x 4, pagination
+    // Écrans de liste : grille 9 x 4 (lignes 0 à 3), pagination / actions (ligne 4)
     // =====================================================================================
-    static final int[][] LIST_ITEMS = {{8, 0, 0xFFF5C542}, {0, 1, 0xFF9AA4C0}, {1, 1, 0xFFE2524A}, {2, 1, 0xFF2FBF71}, {3, 1, 0xFFF2A93B},
-            {0, 2, 0xFF3A7FFF}, {1, 2, 0xFFB57BFF}, {4, 3, 0xFF22C7D9}};
+    static final int[][] LIST_ITEMS = {{8, 5, GOLD}, {0, 0, 0xFF9AA4C0}, {1, 0, 0xFFE2524A}, {2, 0, 0xFF2FBF71}, {3, 0, 0xFFF2A93B},
+            {0, 1, 0xFF3A7FFF}, {1, 1, 0xFFB57BFF}, {4, 2, 0xFF22C7D9}};
 
-    static final int[][] HDV_ITEMS = {{8, 0, 0xFFF5C542}, {0, 1, 0xFF9AA4C0}, {1, 1, 0xFFE2524A}, {2, 1, 0xFF2FBF71},
-            {2, 5, 0xFFE05CB8}, {4, 5, 0xFFF5C542}, {6, 5, 0xFFE67E22}};
+    static final int[][] HDV_ITEMS = {{8, 5, GOLD}, {0, 0, 0xFF9AA4C0}, {1, 0, 0xFFE2524A}, {2, 0, 0xFF2FBF71},
+            {2, 4, 0xFFE05CB8}, {4, 4, GOLD}, {6, 4, 0xFFE67E22}};
 
-    static final int[][] KIT_ITEMS = {{8, 0, 0xFFF5C542}, {4, 1, 0xFFE6EDF3}, {1, 3, 0xFFD7DCE2}, {3, 3, 0xFFF5C542}, {5, 3, 0xFF5CE0A0}, {7, 3, 0xFFB57BFF}};
+    static final int[][] KIT_ITEMS = {{8, 5, GOLD}, {4, 0, 0xFFE6EDF3}, {1, 2, 0xFFD7DCE2}, {3, 2, GOLD}, {5, 2, 0xFF5CE0A0}, {7, 2, 0xFFB57BFF}};
 
-    static void drawList(String title, String icon, String label, int accent, boolean split) {
-        frame(title, icon, icon);
-        iconSlot(0, 0, "back", RED_HI);
-        accentSlot(8, 0, 0xFFF5C542);
-        heading(label);
-        int gx = sx(0) * S - 6, gy = sy(1) * S - 6, gw = 9 * 36 + 8, gh = 4 * 36 + 8;
+    static void drawList(String title, String label, int accent, boolean split, int tab) {
+        frame(title, label, tab);
+        int gx = sx(0) * S - 6, gy = sy(0) * S - 6, gw = 9 * 36 + 8, gh = 4 * 36 + 8;
         if (split) {   // messages : contacts en haut, messages reçus en bas
             int half = gh / 2;
             shape(gx, gy, gw, half, 4, new int[]{mix(0xFF1C3F99, 0xFF0A0A0C, 0.7), mix(0xFF122A6B, 0xFF0A0A0C, 0.8)}, OUT, 0xFF2F4A8A, 0xFF070A14);
@@ -446,61 +587,40 @@ public class PhoneGuiGen {
         } else {
             shape(gx, gy, gw, gh, 4, new int[]{mix(accent, 0xFF0A0A0C, 0.78), mix(accent, 0xFF0A0A0C, 0.88)}, OUT, mix(accent, 0xFF0A0A0C, 0.4), 0xFF060607);
         }
-        for (int r = 1; r <= 4; r++) for (int c = 0; c < 9; c++) slot(sx(c), sy(r));
+        for (int r = 0; r <= 3; r++) for (int c = 0; c < 9; c++) slot(sx(c), sy(r));
         bracket(gx - 2, gy - 2, gw + 4, accent); bracket2(gx - 2, gy - 2, gw + 4, gh + 4, accent);
-        // rail de pagination
-        int ry = sy(5) * S + 15;
-        rect(46, ry - 1, 260, 4, OUT); rect(46, ry, 260, 1, METAL_HI); rect(46, ry + 1, 260, 1, METAL[2]);
-        for (int i = 0; i < 5; i++) { int dx = 100 + i * 36; rect(dx, ry - 2, 4, 6, OUT); rect(dx + 1, ry - 1, 2, 4, accent); }
-        accentSlot(0, 5, accent);
-        accentSlot(8, 5, accent);
+        rail();
+        accentSlot(0, 4, accent);
+        accentSlot(8, 4, accent);
     }
 
     // =====================================================================================
     // Fiche de l'opérateur (Maj + F) : quatre bandeaux de 8 cases, icône de section dessinée en tête de chacun
     // =====================================================================================
-    static final int[] BAND_COLORS = {0xFFE8695C, 0xFF9AA4C0, 0xFF22C7D9, 0xFFF5C542};
+    static final int[] BAND_COLORS = {0xFFE8695C, 0xFF9AA4C0, 0xFF22C7D9, GOLD};
     static final String[] BAND_ICONS = {"kit", "shop", "stats", "stash"};
 
     static int[][] profileItems() {
         List<int[]> l = new ArrayList<>();
-        l.add(new int[]{8, 0, 0xFFF5C542});
-        for (int r = 1; r <= 4; r++) for (int c = 1; c <= 8; c++) l.add(new int[]{c, r, BAND_COLORS[r - 1]});
+        l.add(new int[]{8, 5, GOLD});
+        for (int r = 0; r <= 3; r++) for (int c = 1; c <= 8; c++) l.add(new int[]{c, r, BAND_COLORS[r]});
         return l.toArray(new int[0][]);
     }
 
     static void drawProfile() {
-        frame("OPÉRATEUR", "kit", "stats");
-        iconSlot(0, 0, "back", RED_HI);
-        accentSlot(8, 0, 0xFFF5C542);
-        heading("MA FICHE");
-        for (int r = 1; r <= 4; r++) {
-            int acc = BAND_COLORS[r - 1];
+        frame("OPÉRATEUR", "MA FICHE", 6);
+        for (int r = 0; r <= 3; r++) {
+            int acc = BAND_COLORS[r];
             int x = sx(0) * S - 6, y = sy(r) * S - 3, w = 9 * 36 + 8, h = 38;
             shape(x, y, w, h, 4, new int[]{mix(acc, 0xFF0A0A0C, 0.8), mix(acc, 0xFF0A0A0C, 0.9)}, OUT, mix(acc, 0xFF0A0A0C, 0.45), 0xFF060607);
             // filet de couleur derrière les huit cases du bandeau
             for (int i = sx(1) * S - 4; i < sx(8) * S + 36; i++) px(i, y + h / 2, mix(acc, 0xFF0A0A0C, 0.65));
             for (int c = 1; c <= 8; c++) slot(sx(c), sy(r));
-            iconSlot(0, r, BAND_ICONS[r - 1], acc);
+            iconSlot(0, r, BAND_ICONS[r], acc);
         }
-        // rail du bas et bouton « fermer » au centre
-        int ry = sy(5) * S + 15;
-        rect(46, ry - 1, 260, 4, OUT); rect(46, ry, 260, 1, METAL_HI); rect(46, ry + 1, 260, 1, METAL[2]);
-        accentSlot(4, 5, RED_HI);
-        icon(sx(4) * S + 4, sy(5) * S + 7, "close", 2, OUT, 0xFF020203, new int[]{0xFFFFFFFF, RED_HI2, RED_HI, RED});
-    }
-
-    static {
-        ICONS.put("close", new String[]{        // croix
-                ".##......##.",
-                "#ww#....#hm#",
-                ".#wh#..#hm#.",
-                "..#hh##mm#..",
-                "...#hmmd#...",
-                "..#hm##dd#..",
-                ".#hm#..#dd#.",
-                "#hm#....#dd#",
-                ".##......##."});
+        rail();
+        accentSlot(4, 4, RED_HI);
+        icon(sx(4) * S + 4, sy(4) * S + 7, "close", 2, OUT, 0xFF020203, new int[]{0xFFFFFFFF, RED_HI2, RED_HI, RED});
     }
 
     // ---------- aperçu ----------
@@ -529,7 +649,7 @@ public class PhoneGuiGen {
         }
         return out;
     }
-    /** Pixel alpha 1 dans la dernière colonne de chaque tuile : avance fixe de 99 unités par tuile. */
+    /** Pixel alpha 1 dans la dernière colonne de chaque tuile : avance fixe de 129 unités par tuile. */
     static BufferedImage forPack() {
         BufferedImage t = new BufferedImage(W, H, BufferedImage.TYPE_INT_ARGB);
         t.setData(img.getData());
@@ -544,19 +664,26 @@ public class PhoneGuiGen {
     static final List<String> SCREENS = new ArrayList<>();
 
     static void write(String name, int[][] items, File pack, File previews) throws Exception {
+        screenFx();
         File out = new File(pack, "assets/orbitguns/textures/gui/" + name + ".png");
         out.getParentFile().mkdirs();
         ImageIO.write(forPack(), "png", out);
         SCREENS.add(name);
         if (previews != null) {
             previews.mkdirs();
-            ImageIO.write(preview(items), "png", new File(previews, "telephone_" + name + "_apercu.png"));
+            ImageIO.write(preview(items), "png", new File(previews, "tablette_" + name + "_apercu.png"));
         }
     }
 
-    /** Police : espaces négatifs + 4 fournisseurs (un par rangée de tuiles) par écran ; écran n = U+E200 + 0x10 * n. */
+    /**
+     * Police : espaces négatifs + 4 fournisseurs (un par rangée de tuiles) par écran ; écran n = U+E200 + 0x10 * n.
+     * Tuile = 128 unités de large (+1 d'avance) : U+F000 recule du titre (x = 8) au bord gauche de l'image (- OX),
+     * U+F001 rattrape l'unité d'avance entre deux tuiles, U+F002 revient au début de la rangée.
+     */
     static void writeFont(File pack) throws Exception {
-        StringBuilder b = new StringBuilder("{\n  \"providers\": [\n    {\"type\": \"space\", \"advances\": {\"\\uF000\": -18, \"\\uF001\": -1, \"\\uF002\": -197}}");
+        int tile = W / 2 / S;
+        StringBuilder b = new StringBuilder("{\n  \"providers\": [\n    {\"type\": \"space\", \"advances\": {\"\\uF000\": " + -(8 + OX / S)
+                + ", \"\\uF001\": -1, \"\\uF002\": " + -(2 * tile + 1) + "}}");
         int[] ascent = {37, -25, -87, -149};
         for (int s = 0; s < SCREENS.size(); s++) {
             int base = 0xE200 + 0x10 * s;
@@ -585,20 +712,20 @@ public class PhoneGuiGen {
         // L'ordre fixe les points de code : il doit rester celui de PhoneMenu.Screen.
         drawHome();
         write("home", HOME_ITEMS, pack, previews);
-        drawList("BOUTIQUE", "shop", "ARMES ET VIVRES", 0xFFF5C542, false);
+        drawList("BOUTIQUE", "ARMES ET VIVRES", GOLD, false, 1);
         write("shop", LIST_ITEMS, pack, previews);
-        drawList("COLIS", "drop", "LARGAGES", 0xFF3FC46A, false);
+        drawList("COLIS", "LARGAGES", 0xFF3FC46A, false, 2);
         write("colis", LIST_ITEMS, pack, previews);
-        drawList("MESSAGES", "mail", "MESSAGERIE", 0xFF3A7FFF, true);
+        drawList("MESSAGES", "CONTACTS / RECUS", 0xFF3A7FFF, true, 3);
         write("messages", LIST_ITEMS, pack, previews);
-        drawList("KITS", "kit", "RANGS ET KITS", 0xFFFF9A3D, false);
+        drawList("KITS", "RANGS ET KITS", 0xFFFF9A3D, false, 4);
         write("kits", KIT_ITEMS, pack, previews);
-        drawList("MARCHÉ", "tag", "HÔTEL DES VENTES", 0xFFE05CB8, false);
-        for (int c : new int[]{2, 4, 6}) accentSlot(c, 5, 0xFFE05CB8);    // mes annonces, vendre, récupérer
+        drawList("MARCHÉ", "HÔTEL DES VENTES", 0xFFE05CB8, false, 5);
+        for (int c : new int[]{2, 4, 6}) accentSlot(c, 4, 0xFFE05CB8);    // mes annonces, vendre, récupérer
         write("hdv", HDV_ITEMS, pack, previews);
         drawProfile();
         write("profil", profileItems(), pack, previews);
         writeFont(pack);
-        System.out.println("OK " + SCREENS.size() + " ecrans du telephone");
+        System.out.println("OK " + SCREENS.size() + " ecrans de la tablette");
     }
 }

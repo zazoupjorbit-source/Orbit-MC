@@ -15,6 +15,19 @@ commands:
   logout:
     description: Deconnexion securisee.
     usage: /logout
+  balance:
+    description: Ton argent, ou celui d'un joueur.
+    aliases: [bal, money, argent]
+    usage: /balance [joueur]
+  pay:
+    description: Envoyer de l'argent a un joueur.
+    usage: /pay <joueur> <montant>
+  eco:
+    description: Administration de l'argent.
+    usage: /eco <give|take|set> <joueur> <montant>
+  hcf:
+    description: Administration du serveur HCF (spawn, bordure, constructions).
+    usage: /hcf
 permissions:
   orbithcf.admin:
     description: Acces aux commandes d'administration OrbitHCF.

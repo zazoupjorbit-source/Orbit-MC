@@ -1,0 +1,14 @@
+{
+  "links": {
+    "site": "",
+    "github": "",
+    "youtube": "",
+    "tiktok": "",
+    "x": "",
+    "orbitmc": ""
+  },
+  "demandes": {
+    "maxOuvertesParMembre": 2,
+    "suiviPublic": true
+  }
+}

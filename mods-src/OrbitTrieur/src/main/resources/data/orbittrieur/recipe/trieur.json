@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "minecraft:chest",
+    "H": "minecraft:hopper",
+    "I": "minecraft:iron_ingot",
+    "G": "minecraft:gold_ingot",
+    "R": "minecraft:comparator"
+  },
+  "pattern": [
+    "IHI",
+    "GCG",
+    "IRI"
+  ],
+  "result": {
+    "id": "orbittrieur:trieur"
+  }
+}

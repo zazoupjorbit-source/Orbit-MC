@@ -1,0 +1,11 @@
+# Pivots des pièces d'Élexyr (écrit par tools/ElexyrGen.java, ne pas modifier à la main).
+# pièce  x  y  z   (unités du modèle : 1/16 de bloc, pieds à Y = 0, avant = -Z)
+tete 0 24 0
+oeil 0 24 0
+machoire 0 26 1
+torse 0 12 0
+bras_d 6 22.8 0
+bras_g -6 22.8 0
+jambe_d 2 12 0
+jambe_g -2 12 0
+hauteur 46.8 0 0

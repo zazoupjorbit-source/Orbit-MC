@@ -1,0 +1,20 @@
+{
+  "textures": {"t": "contrebande:item/synthetiseur", "particle": "contrebande:item/synthetiseur"},
+  "elements": [
+    {"from": [-0.25, 0, -0.25], "to": [16.25, 16.25, 16.25], "shade": true, "faces": {"north": {"uv": [0, 0, 8, 8], "texture": "#t"}, "south": {"uv": [0, 0, 8, 8], "texture": "#t"}, "east": {"uv": [8, 0, 16, 8], "texture": "#t"}, "west": {"uv": [8, 0, 16, 8], "texture": "#t"}, "up": {"uv": [0, 8, 6, 14], "texture": "#t"}, "down": {"uv": [13, 11, 15, 13], "texture": "#t"}}},
+    {"from": [1.5, 16.25, 1.5], "to": [14.5, 17.4, 14.5], "shade": true, "faces": {"north": {"uv": [12, 8, 16, 9], "texture": "#t"}, "south": {"uv": [12, 8, 16, 9], "texture": "#t"}, "east": {"uv": [12, 8, 16, 9], "texture": "#t"}, "west": {"uv": [12, 8, 16, 9], "texture": "#t"}, "up": {"uv": [0, 8, 6, 14], "texture": "#t"}, "down": {"uv": [12, 8, 16, 9], "texture": "#t"}}},
+    {"from": [6, 17.4, 6], "to": [10, 29, 10], "shade": true, "faces": {"north": {"uv": [6, 8, 8, 14], "texture": "#t"}, "south": {"uv": [6, 8, 8, 14], "texture": "#t"}, "east": {"uv": [6, 8, 8, 14], "texture": "#t"}, "west": {"uv": [6, 8, 8, 14], "texture": "#t"}, "up": {"uv": [8, 8, 12, 12], "texture": "#t"}, "down": {"uv": [13, 11, 15, 13], "texture": "#t"}}},
+    {"from": [4.6, 20.5, 4.6], "to": [11.4, 21.6, 11.4], "shade": true, "faces": {"north": {"uv": [12, 8, 16, 9], "texture": "#t"}, "south": {"uv": [12, 8, 16, 9], "texture": "#t"}, "east": {"uv": [12, 8, 16, 9], "texture": "#t"}, "west": {"uv": [12, 8, 16, 9], "texture": "#t"}, "up": {"uv": [12, 8, 16, 9], "texture": "#t"}, "down": {"uv": [12, 8, 16, 9], "texture": "#t"}}},
+    {"from": [4.6, 24.5, 4.6], "to": [11.4, 25.6, 11.4], "shade": true, "faces": {"north": {"uv": [12, 8, 16, 9], "texture": "#t"}, "south": {"uv": [12, 8, 16, 9], "texture": "#t"}, "east": {"uv": [12, 8, 16, 9], "texture": "#t"}, "west": {"uv": [12, 8, 16, 9], "texture": "#t"}, "up": {"uv": [12, 8, 16, 9], "texture": "#t"}, "down": {"uv": [12, 8, 16, 9], "texture": "#t"}}},
+    {"from": [4.4, 29, 4.4], "to": [11.6, 31.6, 11.6], "shade": true, "faces": {"north": {"uv": [8, 8, 12, 12], "texture": "#t"}, "south": {"uv": [8, 8, 12, 12], "texture": "#t"}, "east": {"uv": [8, 8, 12, 12], "texture": "#t"}, "west": {"uv": [8, 8, 12, 12], "texture": "#t"}, "up": {"uv": [8, 8, 12, 12], "texture": "#t"}, "down": {"uv": [8, 8, 12, 12], "texture": "#t"}}},
+    {"from": [1.8, 17.4, 7.2], "to": [3.4, 25, 8.8], "shade": true, "faces": {"north": {"uv": [12, 9, 13, 14], "texture": "#t"}, "south": {"uv": [12, 9, 13, 14], "texture": "#t"}, "east": {"uv": [12, 9, 13, 14], "texture": "#t"}, "west": {"uv": [12, 9, 13, 14], "texture": "#t"}, "up": {"uv": [13, 9, 15, 11], "texture": "#t"}, "down": {"uv": [12, 8, 16, 9], "texture": "#t"}}},
+    {"from": [1.6, 25, 7], "to": [3.6, 26.6, 9], "shade": true, "faces": {"north": {"uv": [13, 9, 15, 11], "texture": "#t"}, "south": {"uv": [13, 9, 15, 11], "texture": "#t"}, "east": {"uv": [13, 9, 15, 11], "texture": "#t"}, "west": {"uv": [13, 9, 15, 11], "texture": "#t"}, "up": {"uv": [13, 9, 15, 11], "texture": "#t"}, "down": {"uv": [13, 9, 15, 11], "texture": "#t"}}},
+    {"from": [12.6, 17.4, 7.2], "to": [14.2, 25, 8.8], "shade": true, "faces": {"north": {"uv": [12, 9, 13, 14], "texture": "#t"}, "south": {"uv": [12, 9, 13, 14], "texture": "#t"}, "east": {"uv": [12, 9, 13, 14], "texture": "#t"}, "west": {"uv": [12, 9, 13, 14], "texture": "#t"}, "up": {"uv": [13, 9, 15, 11], "texture": "#t"}, "down": {"uv": [12, 8, 16, 9], "texture": "#t"}}},
+    {"from": [12.4, 25, 7], "to": [14.4, 26.6, 9], "shade": true, "faces": {"north": {"uv": [13, 9, 15, 11], "texture": "#t"}, "south": {"uv": [13, 9, 15, 11], "texture": "#t"}, "east": {"uv": [13, 9, 15, 11], "texture": "#t"}, "west": {"uv": [13, 9, 15, 11], "texture": "#t"}, "up": {"uv": [13, 9, 15, 11], "texture": "#t"}, "down": {"uv": [13, 9, 15, 11], "texture": "#t"}}}
+  ],
+  "gui_light": "side",
+  "display": {
+    "gui": {"rotation": [28, 40, 0], "translation": [0, -1.5, 0], "scale": [0.55, 0.55, 0.55]},
+    "fixed": {"rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [1, 1, 1]}
+  }
+}

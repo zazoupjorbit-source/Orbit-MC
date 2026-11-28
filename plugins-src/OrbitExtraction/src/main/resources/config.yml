@@ -10,9 +10,9 @@
 # ------------------------------------------------------------------
 
 resource-pack:
-  # Pack Orbit Extraction (généré par tools/gen-pack.ps1) : modèles 3D des armes et du téléphone, textures des
-  # infectés, écrans du téléphone. Proposé pendant l'écran de connexion. Sans le pack : les armes ressemblent à
-  # leur objet de base, le téléphone s'affiche en vitres, et runners / rampants / cracheurs n'ont pas de texture
+  # Pack Orbit Extraction (généré par tools/gen-pack.ps1) : modèles 3D des armes et de la tablette, textures des
+  # infectés, écrans de la tablette. Proposé pendant l'écran de connexion. Sans le pack : les armes ressemblent à
+  # leur objet de base, la tablette s'affiche en vitres, et runners / rampants / cracheurs n'ont pas de texture
   # (damier noir et violet) : sur un serveur public, passe « required » à true.
   enabled: true
   # Port du mini serveur HTTP intégré qui distribue le pack. Les joueurs le téléchargent à l'adresse
@@ -48,7 +48,7 @@ raid:
   prime-joueur: 150
   prime-extraction: 200
   # Commandes autorisées pendant un raid (les admins ne sont pas bloqués).
-  commandes-autorisees: [raid, telephone, tel, phone, kit, kits, carte, minimap, map, msg, tell, r, w, me]
+  commandes-autorisees: [raid, tablette, tab, telephone, tel, phone, kit, kits, carte, minimap, map, msg, tell, r, w, me]
   # Donné une seule fois, à la première arrivée dans la planque.
   kit-de-depart:
     - "arme:c96"
@@ -56,8 +56,8 @@ raid:
     - "grenade:frag:1"
     - "objet:BREAD:6"
 
-# ------------------------------------------------------------------ téléphone
-# Chaque joueur garde un téléphone (clic droit, ou /telephone) : raid, boutique, colis, messages, coffre, stats.
+# ------------------------------------------------------------------ tablette
+# Chaque joueur garde une tablette (clic droit, ou /tablette) : raid, boutique, colis, messages, coffre, stats.
 # Les crédits ne s'achètent pas : ils se gagnent en jeu (primes des infectés, joueurs abattus, extractions, revente).
 economie:
   # Crédits d'un nouveau joueur.
@@ -236,7 +236,7 @@ soins:
 #   remise-boutique  remise sur les achats à la boutique
 #   recharge-colis   attente en moins entre deux colis
 rangs:
-  # Affiché dans le kit du téléphone si renseigné (adresse de la boutique des rangs).
+  # Affiché dans le kit de la tablette si renseigné (adresse de la boutique des rangs).
   lien-boutique: ""
   tab:
     # {joueurs} connectés, {en-raid}, {planque}, {rang} du joueur qui regarde. Vide = pas d'en-tête / de pied.
@@ -273,7 +273,7 @@ rangs:
       recharge-colis: 50
 
 # ------------------------------------------------------------------ kits
-# À prendre à la planque (téléphone > Kits, ou /kit <nom>). Un rang ouvre son kit et ceux des rangs en dessous,
+# À prendre à la planque (tablette > Kits, ou /kit <nom>). Un rang ouvre son kit et ceux des rangs en dessous,
 # chacun avec son propre délai. L'armure s'équipe toute seule si l'emplacement est libre.
 # En raid on peut tout perdre : les délais sont longs pour les gros kits, court pour le kit de base
 # (un joueur à sec peut toujours repartir).
@@ -689,7 +689,7 @@ evenements:
     caisse: largage
 
 # ------------------------------------------------------------------ hôtel des ventes
-# Vente entre joueurs depuis le téléphone (bouton Marché) : Maj + clic sur un objet de son inventaire, puis le
+# Vente entre joueurs depuis la tablette (bouton Marché) : Maj + clic sur un objet de son inventaire, puis le
 # prix dans le chat. Achat et mise en vente à la planque uniquement. Les annonces sont dans marche.yml.
 hdv:
   actif: true
@@ -704,7 +704,7 @@ hdv:
   prix-max: 1000000
 
 colis:
-  # Commandés en raid depuis le téléphone : la caisse tombe près du joueur après ce délai, fume (visible de loin),
+  # Commandés en raid depuis la tablette : la caisse tombe près du joueur après ce délai, fume (visible de loin),
   # son impact attire les infectés (rayon « bruit ») et n'importe quel joueur peut la piller.
   delai-secondes: 20
   # Attente entre deux commandes d'un même joueur, après le largage.

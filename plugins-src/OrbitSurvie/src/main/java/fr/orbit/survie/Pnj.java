@@ -73,13 +73,27 @@ public final class Pnj implements Listener {
         }
         for (Canvas.Panneau p : ile.reperes().panneaux()) {
             assurer(w, "panneau:" + p.id(), p.x(), p.y(), p.z(), loc -> w.spawn(loc, TextDisplay.class, t -> {
-                t.text(Msg.raw(p.texte()));
+                t.text(Msg.raw(textes.getOrDefault(p.id(), p.texte())));
                 t.setBillboard(Display.Billboard.CENTER);
                 t.setPersistent(false);
                 t.setShadowed(true);
                 t.setBackgroundColor(Color.fromARGB(110, 10, 20, 40));
                 t.getPersistentDataContainer().set(tag, PersistentDataType.STRING, "panneau");
             }), 0f);
+        }
+    }
+
+    private final Map<String, String> textes = new HashMap<>();
+
+    /** Change le texte d'un panneau (classements…) : gardé en mémoire et appliqué tout de suite s'il est affiché. */
+    public void texte(String id, String mini) {
+        if (mini.equals(textes.put(id, mini))) {
+            return;
+        }
+        World w = org.bukkit.Bukkit.getWorld(ile.worldName());
+        UUID uuid = vivants.get("panneau:" + id);
+        if (w != null && uuid != null && w.getEntity(uuid) instanceof TextDisplay t) {
+            t.text(Msg.raw(mini));
         }
     }
 

@@ -1,8 +1,8 @@
 name: OrbitSurvie
-version: '0.1.0'
+version: '0.2.0'
 main: fr.orbit.survie.OrbitSurvie
 api-version: '1.21'
-description: Orbit Survie — l'île du spawn (marché, enchantements, hôtel des ventes, arène, port), économie et portail aléatoire.
+description: Orbit Survie — île du spawn, économie, grades, contrats, métiers, classements, événements, arène, échoppes, monde ressources.
 authors: [ORBIT]
 # OrbitDevCore a aussi une commande /spawn : celle de l'île passe avant (interceptée).
 softdepend: [OrbitDevCore]
@@ -48,6 +48,71 @@ commands:
     description: Hôtel des ventes — /hdv pour acheter, /hdv vendre <prix> pour vendre l'objet en main.
     usage: /hdv [vendre <prix>|ventes]
     aliases: [ah]
+  grade:
+    description: Grades VIP, VIP+ et ORBIT, achetés en crédits pour 30 jours.
+    usage: /grade [vip|vipplus|orbit]
+    aliases: [grades]
+  contrats:
+    description: Contrats du jour — des objets à livrer contre des crédits.
+    usage: /contrats
+    aliases: [contrat]
+  metiers:
+    description: Tes métiers (Mineur, Bûcheron, Fermier, Pêcheur, Chasseur).
+    usage: /metiers
+    aliases: [metier, jobs]
+  classement:
+    description: Classements du mois.
+    usage: /classement [contrats|xp|poissons|monstres|ventes|duels]
+    aliases: [classements, top]
+  evenement:
+    description: Événement en cours (concours de pêche, largage, boss).
+    usage: /evenement
+    aliases: [evenements, event]
+  duel:
+    description: Défie un joueur dans l'arène, avec ou sans mise.
+    usage: /duel <pseudo> [mise] | accepter | refuser
+  pari:
+    description: Parie sur un duelliste pendant le compte à rebours.
+    usage: /pari <pseudo> <montant>
+    aliases: [parier]
+  tournoi:
+    description: Tournoi de l'arène.
+    usage: /tournoi [rejoindre|quitter]
+  echoppe:
+    description: Ouvre une échoppe sur un coffre de ta base.
+    usage: /echoppe creer <prix> [quantité] | supprimer | liste
+  echoppes:
+    description: Toutes les échoppes des joueurs.
+    usage: /echoppes
+    aliases: [boutiques]
+  home:
+    description: Retourne à un point de retour.
+    usage: /home [nom]
+    aliases: [maison]
+  sethome:
+    description: Pose un point de retour ici.
+    usage: /sethome [nom]
+  delhome:
+    description: Supprime un point de retour.
+    usage: /delhome <nom>
+  homes:
+    description: Liste de tes points de retour.
+    usage: /homes
+  tpa:
+    description: Demande à te téléporter à un joueur.
+    usage: /tpa <pseudo>
+  tpaccept:
+    description: Accepte une demande de téléportation.
+    usage: /tpaccept
+    aliases: [tpyes]
+  tprefuse:
+    description: Refuse une demande de téléportation.
+    usage: /tprefuse
+    aliases: [tpdeny, tpno]
+  ressources:
+    description: Va dans le monde ressources (depuis l'île), remis à zéro chaque mois.
+    usage: /ressources
+    aliases: [ressource, minage]
 
 permissions:
   survie.admin:

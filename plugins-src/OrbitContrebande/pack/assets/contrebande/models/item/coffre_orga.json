@@ -1,0 +1,13 @@
+{
+  "textures": {"t": "contrebande:item/coffre_orga", "particle": "contrebande:item/coffre_orga"},
+  "elements": [
+    {"from": [-0.25, 0, -0.25], "to": [16.25, 16.25, 16.25], "shade": true, "faces": {"north": {"uv": [0, 0, 8, 8], "texture": "#t"}, "south": {"uv": [0, 0, 8, 8], "texture": "#t"}, "east": {"uv": [8, 0, 16, 8], "texture": "#t"}, "west": {"uv": [8, 0, 16, 8], "texture": "#t"}, "up": {"uv": [0, 8, 6, 14], "texture": "#t"}, "down": {"uv": [8, 8, 10, 10], "texture": "#t"}}},
+    {"from": [6.2, 6.4, -1], "to": [9.8, 10, -0.25], "shade": true, "faces": {"north": {"uv": [6, 8, 8, 10], "texture": "#t"}, "south": {"uv": [6, 8, 8, 10], "texture": "#t"}, "east": {"uv": [6, 8, 8, 10], "texture": "#t"}, "west": {"uv": [6, 8, 8, 10], "texture": "#t"}, "up": {"uv": [6, 8, 8, 10], "texture": "#t"}, "down": {"uv": [6, 8, 8, 10], "texture": "#t"}}},
+    {"from": [6.2, 6.4, 16.25], "to": [9.8, 10, 17], "shade": true, "faces": {"north": {"uv": [6, 8, 8, 10], "texture": "#t"}, "south": {"uv": [6, 8, 8, 10], "texture": "#t"}, "east": {"uv": [6, 8, 8, 10], "texture": "#t"}, "west": {"uv": [6, 8, 8, 10], "texture": "#t"}, "up": {"uv": [6, 8, 8, 10], "texture": "#t"}, "down": {"uv": [6, 8, 8, 10], "texture": "#t"}}}
+  ],
+  "gui_light": "side",
+  "display": {
+    "gui": {"rotation": [28, 40, 0], "translation": [0, -1.5, 0], "scale": [0.55, 0.55, 0.55]},
+    "fixed": {"rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [1, 1, 1]}
+  }
+}

@@ -1,0 +1,40 @@
+# OrbitBowl : la salle ORBIT BOWL (bowling et loisirs) de l'arcade cachée du lobby. Rien ne s'achète : les Orbit
+# Coins gagnés ici sont des OC de jeu, versés par OrbitCasino avec un plafond par jour et par joueur pour chaque jeu.
+# Les défis misés se jouent entre joueurs : chacun mise la même somme, le gagnant prend tout, aucune commission.
+
+base:
+  fichier: auto            # setup/db.properties du réseau
+
+monde: bowl                # monde vide créé par le plugin (la salle se construit toute seule la 1re fois)
+
+arcade:
+  monde: casino            # salle d'arcade (créée par OrbitCasino)
+  pnj: "-18.5 64 392.5 -90" # portier d'ORBIT BOWL dans l'arcade : x y z yaw
+
+pack:
+  actif: true
+  port: 8800               # quilles, boules, fléchettes, cibles, logo (relayé par OrbitPackRelay : 8790-8809)
+
+attente:
+  secondes: 90             # une partie ouverte attend ses joueurs ce temps-là, puis s'annule
+
+defis:
+  meme-ip-interdite: true  # pas de défi misé entre deux comptes de la même connexion
+
+bowling:
+  plafond-oc-jour: 450     # score / 3 par partie (+25 si tu bats le bot)
+flechettes:
+  plafond-oc-jour: 400
+tir:
+  plafond-oc-jour: 400
+basket:
+  plafond-oc-jour: 400
+golf:
+  plafond-oc-jour: 400
+baby:
+  plafond-oc-jour: 300
+laser:
+  plafond-oc-jour: 400
+  duree: 300               # secondes
+  equipe: 4                # joueurs par équipe (bots compris)
+  attente: 20              # secondes de file avant le lancement (avec des bots)

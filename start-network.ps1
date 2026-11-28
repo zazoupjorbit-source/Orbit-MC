@@ -33,13 +33,16 @@ if (Test-Port 3318) {
 
 foreach ($dir in Get-ChildItem (Join-Path $root 'instances') -Directory) {
     $props = Join-Path $dir.FullName 'server.properties'
-    if (-not (Test-Path (Join-Path $dir.FullName 'paper.jar')) -or -not (Test-Path $props)) { continue }
+    if (-not (Test-Path $props)) { continue }
+    # Instance Paper (paper.jar) ou moddee (fabric.jar, voir versions.json bloc "fabric").
+    $jar = if (Test-Path (Join-Path $dir.FullName 'paper.jar')) { 'paper.jar' } elseif (Test-Path (Join-Path $dir.FullName 'fabric.jar')) { 'fabric.jar' } else { $null }
+    if (-not $jar) { continue }
     $port = [int]((Select-String -Path $props -Pattern '^server-port=(\d+)').Matches[0].Groups[1].Value)
     $name = $dir.Name
     if (Test-Port $port) {
         Write-Host "$name tourne deja (port $port)."
     } else {
-        Start-Process cmd.exe -WorkingDirectory $dir.FullName -ArgumentList '/k', "title ORBIT - $name ($port) && `"$javaExe`" -Xms256M -Xmx1G -Dfile.encoding=UTF-8 -jar paper.jar --nogui"
+        Start-Process cmd.exe -WorkingDirectory $dir.FullName -ArgumentList '/k', "title ORBIT - $name ($port) && `"$javaExe`" -Xms256M -Xmx1G -Dfile.encoding=UTF-8 -jar $jar $(if ($jar -eq 'paper.jar') { '--nogui' } else { 'nogui' })"
         Write-Host "$name demarre (port $port)."
     }
 }

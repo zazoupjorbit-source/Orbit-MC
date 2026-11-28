@@ -8,10 +8,16 @@ base:
   fichier: ../../setup/db.properties
 
 ile:
-  # Monde de l'île (créé par le plugin : océan tropical sans fin, limité par une bordure).
-  monde: ile
-  # Côté de la bordure du monde de l'île, en blocs (centrée sur la fontaine).
-  bordure: 260
+  # Spawn de la survie (section gardée sous le nom « ile » pour la compatibilité).
+  #   orbital  : le port orbital au-dessus de la planète (depuis le 26/11/2026), monde vide « orbital ».
+  #   tropical : l'ancienne île tropicale, monde « ile » (toujours sur le disque pour revenir en arrière).
+  # Changer de style = changer aussi « monde », puis redémarrer le serveur (pas de /ile reload).
+  style: orbital
+  monde: orbital
+  # Côté de la bordure du monde du spawn, en blocs (centrée sur 0, 0).
+  bordure: 200
+  # Heure figée du spawn : 18000 = minuit, ciel étoilé (6000 = midi, pour l'île tropicale).
+  heure: 18000
 
 survie:
   # Monde de survie (celui de server.properties). Jamais modifié par le plugin.
@@ -26,24 +32,27 @@ survie:
 
 monnaie:
   nom: crédits
-  depart: 100
+  depart: 400
 
 # Armoires de base (principe de la TC de Rust), décidé le 23/11/2026 : la protection se paie en crédits par jour,
 # d'avance ; impayée, elle saute (n'importe qui peut casser la base), avertissement 2 jours avant.
 bases:
   mondes: [world, world_nether]
-  prix-armoire: 500
+  prix-armoire: 2000
   jours-offerts: 3
   jours-max: 30
   avertir-heures: 48
   membres-max: 8
+  # Rattrapage : ceux qui ont pris le kit Départ avant cette date (l'armoire n'y était pas encore) et qui n'ont
+  # aucune base en reçoivent une à leur prochaine connexion, une seule fois. Vide = pas de rattrapage.
+  rattrapage-avant: "2026-11-23 05:50:00"
   # Nombre d'armoires par grade (groupe LuckPerms, héritage compris).
   limites: {joueur: 1, vip: 2, vipplus: 3, orbit: 4}
   # rayon : la zone va de -rayon à +rayon autour de l'armoire (15 → 31 × 31 blocs), sur toute la hauteur.
   niveaux:
-    - {rayon: 15, par-jour: 20, prix: 0}
-    - {rayon: 25, par-jour: 50, prix: 2000}
-    - {rayon: 40, par-jour: 120, prix: 6000}
+    - {rayon: 15, par-jour: 80, prix: 0}
+    - {rayon: 25, par-jour: 200, prix: 8000}
+    - {rayon: 40, par-jour: 480, prix: 24000}
 
 hdv:
   # Taxe prise au vendeur sur chaque vente, en %.
@@ -143,6 +152,266 @@ kits:
       - {objet: GOLDEN_APPLE, quantite: 4}
       - {objet: ENDER_PEARL, quantite: 8}
       - {objet: EXPERIENCE_BOTTLE, quantite: 16}
+
+# Grades achetés en crédits du jeu, pour une durée (racheter = prolonger). LuckPerms pose le grade.
+# Jamais vendus contre de l'argent réel : c'est ce qui autorise les kits et les limites plus hautes (règle Mojang).
+grades:
+  # Contexte LuckPerms du grade acheté. « server=survie » : il ne vaut que sur la survie. Vide = tout le réseau.
+  contexte: "server=survie"
+  liste:
+    vip:
+      nom: "<#62CFF4>VIP"
+      icone: IRON_CHESTPLATE
+      prix: 1000000
+      jours: 30
+      avantages:
+        - "Kit VIP toutes les 24 h (fer complet)"
+        - "2 armoires de base, 3 points de retour"
+        - "6 échoppes"
+    vipplus:
+      nom: "<#E0B864>VIP+"
+      icone: DIAMOND_SWORD
+      prix: 2500000
+      jours: 30
+      avantages:
+        - "Kit VIP+ toutes les 48 h (outils diamant)"
+        - "Kit VIP en plus"
+        - "3 armoires de base, 5 points de retour"
+        - "10 échoppes"
+    orbit:
+      nom: "<gradient:#62CFF4:#E0B864>ORBIT</gradient>"
+      icone: NETHER_STAR
+      prix: 5000000
+      jours: 30
+      avantages:
+        - "Kit ORBIT toutes les 72 h (diamant enchanté)"
+        - "Kits VIP et VIP+ en plus"
+        - "4 armoires de base, 8 points de retour"
+        - "15 échoppes"
+
+# Contrats du jour (capitaine du port, /contrats) : chaque jour, une commande tirée par palier, la même pour tous.
+# Récompense = prime du palier + valeur de référence au marché × quantité × multiplicateur.
+# objets : « OBJET quantité ».
+contrats:
+  multiplicateur: 0.6
+  # Prime en plus quand tous les contrats du jour sont livrés.
+  prime-complet: 1000
+  paliers:
+    facile:
+      nom: "facile"
+      prime: 240
+      objets:
+        - COBBLESTONE 128
+        - OAK_LOG 48
+        - SPRUCE_LOG 48
+        - BIRCH_LOG 48
+        - COAL 32
+        - WHEAT 48
+        - CARROT 48
+        - POTATO 48
+        - SUGAR_CANE 32
+        - COD 12
+        - ROTTEN_FLESH 32
+        - BONE 24
+        - STRING 16
+        - KELP 48
+        - PUMPKIN 24
+        - EGG 16
+    moyen:
+      nom: "moyen"
+      prime: 600
+      objets:
+        - IRON_INGOT 32
+        - COPPER_INGOT 64
+        - GOLD_INGOT 12
+        - REDSTONE 48
+        - LAPIS_LAZULI 32
+        - SALMON 20
+        - GUNPOWDER 24
+        - LEATHER 24
+        - BREAD 48
+        - COOKED_BEEF 32
+        - SPIDER_EYE 16
+        - INK_SAC 16
+        - HONEYCOMB 12
+        - AMETHYST_SHARD 32
+        - MELON_SLICE 96
+        - ARROW 64
+    difficile:
+      nom: "difficile"
+      prime: 1600
+      objets:
+        - DIAMOND 8
+        - EMERALD 12
+        - OBSIDIAN 32
+        - ENDER_PEARL 12
+        - BLAZE_ROD 10
+        - SLIME_BALL 16
+        - NETHER_WART 64
+        - QUARTZ 64
+        - GOLD_INGOT 48
+        - IRON_INGOT 96
+        - PUFFERFISH 8
+        - TROPICAL_FISH 8
+        - NAUTILUS_SHELL 2
+
+# Métiers (/metiers, maître des métiers au marché). Tout le monde a les cinq ; ils montent en jouant dans la survie.
+metiers:
+  # 25/11/2026 (Zazou) : 200 niveaux et XP plus dure. Avec base 120 / exposant 1.6 : niveau 10 ≈ 24 k XP,
+  # niveau 50 ≈ 1,15 M, niveau 100 ≈ 7,2 M, niveau 200 ≈ 44 M (objectif de très long terme).
+  niveau-max: 200
+  # XP pour passer du niveau n au suivant : xp-base × n ^ xp-exposant.
+  xp-base: 120
+  xp-exposant: 1.6
+  # Paie en crédits par point d'XP, versée toutes les « paie-minutes » ; + « bonus-par-niveau » % par niveau gagné
+  # (×4 avec l'inflation du marché ; bonus 1 % par niveau → +199 % au niveau 200).
+  paie-par-xp: 0.6
+  bonus-par-niveau: 1
+  paie-minutes: 5
+  # Primes versées en atteignant ces niveaux (dans chaque métier).
+  paliers: {10: 2000, 20: 5000, 30: 10000, 40: 18000, 50: 30000, 60: 45000, 70: 60000, 80: 80000, 90: 100000,
+            100: 150000, 110: 180000, 120: 210000, 130: 250000, 140: 290000, 150: 350000, 160: 400000,
+            170: 460000, 180: 520000, 190: 600000, 200: 1000000}
+  # XP par action. Une clé peut contenir * (ex. "*_LOG"). Les minerais d'ardoise des abîmes valent comme les autres.
+  baremes:
+    mineur:
+      COAL_ORE: 4
+      COPPER_ORE: 5
+      IRON_ORE: 10
+      GOLD_ORE: 14
+      REDSTONE_ORE: 8
+      LAPIS_ORE: 12
+      EMERALD_ORE: 40
+      DIAMOND_ORE: 40
+      NETHER_QUARTZ_ORE: 6
+      NETHER_GOLD_ORE: 6
+      ANCIENT_DEBRIS: 120
+      AMETHYST_CLUSTER: 5
+      OBSIDIAN: 6
+    bucheron:
+      "*_LOG": 2
+      "*_STEM": 2
+      MANGROVE_ROOTS: 1
+    fermier:
+      WHEAT: 2
+      CARROTS: 2
+      POTATOES: 2
+      BEETROOTS: 2
+      NETHER_WART: 3
+      COCOA: 2
+      SWEET_BERRY_BUSH: 1
+      MELON: 3
+      PUMPKIN: 3
+      SUGAR_CANE: 1
+      CACTUS: 1
+      BAMBOO: 1
+    pecheur:
+      poisson: 12
+      tresor: 30
+      dechet: 4
+    chasseur:
+      # defaut = tout monstre absent de la liste ; animal = bêtes paisibles (0 = rien).
+      defaut: 6
+      animal: 0
+      CREEPER: 8
+      ENDERMAN: 14
+      WITCH: 12
+      BLAZE: 12
+      WITHER_SKELETON: 14
+      GHAST: 16
+      PIGLIN_BRUTE: 20
+      RAVAGER: 30
+      EVOKER: 30
+      ELDER_GUARDIAN: 150
+      WARDEN: 400
+      WITHER: 500
+      ENDER_DRAGON: 1000
+
+# Classements du mois (/classement, panneaux de la place). Lots versés aux trois premiers de chaque catégorie
+# au changement de mois : contrats, XP de métiers, poissons, monstres, ventes aux joueurs, duels.
+classements:
+  lots-mensuels: [25000, 12000, 6000]
+
+# Événements automatiques (/evenement) : concours de pêche, largage de butin, boss. Un seul à la fois.
+evenements:
+  actif: true
+  intervalle-minutes: 60
+  # Pas d'événement s'il y a moins de joueurs connectés.
+  joueurs-min: 2
+  peche:
+    minutes: 10
+    # Crédits pour le 1er, le 2e, le 3e.
+    lots: [6000, 3200, 1600]
+  largage:
+    minutes: 15
+    # « OBJET quantité chance en % » : chaque ligne est tirée à part.
+    butin:
+      - DIAMOND 6 100
+      - IRON_INGOT 32 100
+      - GOLD_INGOT 16 100
+      - GOLDEN_APPLE 3 100
+      - EXPERIENCE_BOTTLE 24 100
+      - EMERALD 12 70
+      - ENDER_PEARL 8 60
+      - DIAMOND 8 40
+      - NETHERITE_SCRAP 1 25
+      - ENCHANTED_GOLDEN_APPLE 1 10
+      - TOTEM_OF_UNDYING 1 10
+  boss:
+    minutes: 20
+    # Crédits partagés entre les joueurs selon les dégâts infligés.
+    prime: 12000
+    types:
+      - {type: RAVAGER, nom: "Colosse des plaines", vie: 400}
+      - {type: WITHER_SKELETON, nom: "Seigneur des cendres", vie: 300}
+      - {type: IRON_GOLEM, nom: "Gardien oublié", vie: 500}
+    # Butin lâché par le boss en plus de ce qu'il donne d'habitude.
+    butin:
+      - DIAMOND 4 100
+      - EXPERIENCE_BOTTLE 16 100
+      - GOLDEN_APPLE 2 60
+      - NETHERITE_SCRAP 1 20
+
+# Arène : duels avec mise (/duel), paris des spectateurs (/pari), tournoi (/tournoi).
+duels:
+  # Taxe prise sur le pot du duel et sur les gains des paris, en %.
+  taxe: 5
+  mise-max: 500000
+  pari-max: 20000
+  # Compte à rebours avant le combat (les paris sont ouverts pendant ce temps), puis durée maximum du combat.
+  paris-secondes: 20
+  duree-secondes: 180
+  # Une victoire compte au classement du mois si la mise atteint ce montant (ou en tournoi).
+  mise-classement: 400
+tournoi:
+  # Ouverture automatique chaque semaine : jour (MONDAY … SUNDAY, vide = seulement à la main) et heure.
+  jour: SATURDAY
+  heure: "21:00"
+  inscription-minutes: 5
+  joueurs-min: 4
+  # Crédits pour le vainqueur et le finaliste.
+  lots: [20000, 8000]
+
+# Échoppes de joueurs (/echoppe, /echoppes) : un coffre de sa base devient une boutique.
+echoppes:
+  # Taxe prise au vendeur sur chaque vente, en %.
+  taxe: 0
+  limites: {joueur: 3, vip: 6, vipplus: 10, orbit: 15}
+
+# Points de retour (/sethome, /home) : nombre par grade, et mondes où on peut en poser.
+homes:
+  mondes: [world, world_nether, world_the_end]
+  limites: {joueur: 2, vip: 3, vipplus: 5, orbit: 8}
+
+# Monde ressources (/ressources, Prospecteur près du portail) : monde normal à part, remis à zéro chaque mois.
+ressources:
+  actif: true
+  monde: ressources
+  # Côté de la bordure, en blocs.
+  bordure: 4000
+  rtp-min: 50
+  rtp-max: 1800
+  remise-a-zero-mensuelle: true
 
 # Marchands de l'île. achat = prix payé par le joueur pour 1 objet (0 = pas en vente),
 # vente = prix reçu par le joueur pour 1 objet (0 = le marchand ne le reprend pas).

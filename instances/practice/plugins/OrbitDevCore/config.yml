@@ -89,3 +89,7 @@ resource-pack:
 
 # Logo du mode dans le menu Echap (pack ajoute par-dessus celui du lobby) : survie, extraction, practice, mmo.
 menu-echap: practice
+
+# HCF : le butin au sol n'est jamais nettoye par le plugin (seule la disparition normale du jeu joue).
+clear-lag:
+  enabled: false

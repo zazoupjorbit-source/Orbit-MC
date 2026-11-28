@@ -27,7 +27,7 @@ public class DeathbanListener implements Listener {
     public void onDeath(PlayerDeathEvent event) {
         Player victim = event.getEntity();
         if (!plugin.getCombatManager().isDeathbanEnabled()
-                || victim.hasPermission("orbithcf.combat.deathban.bypass")) {
+                || fr.orbitgames.hcf.api.HcfWorlds.staffExempt(victim, "orbithcf.combat.deathban.bypass")) {
             return;
         }
         Duration duration = Duration.ofSeconds(

@@ -4,6 +4,20 @@
 #  Classes, sorts et talents : fichiers classes/<classe>.yml (/mmoadmin classes exporter)
 # ------------------------------------------------------------------
 
+nemesis:
+  auto: true # apparition automatique au repaire
+  premiere-minutes: 30 # apres un demarrage du serveur
+  intervalle-minutes: 180 # entre sa mort et la reapparition suivante
+  annonce-minutes: 5 # annonce aux joueurs du continent avant l'apparition
+  niveau: 40
+  pv: 60 # x PV d'un monstre de son niveau
+  pv-par-joueur: 0.35 # + 35 % des PV de base par participant en plus du premier
+  degats: 2.6 # x degats d'un monstre de son niveau, puis coefficient de chaque attaque
+  vitesse: 1.0
+  echelle: 1.6 # taille du modele : 64 cubes x 1.6 / 16 = 6,4 blocs de haut
+  laisse: 40 # au-dela, il rentre a son repaire
+  xp: 40 # x XP d'un monstre de son niveau, pour chaque participant
+  or: 40
 niveau-objet:
   pilier: 0 # entree dans le Pilier des Astres (gardien de la capitale, portails du continent)
   raid: 0 # pas encore de raid : reserve pour plus tard
@@ -64,8 +78,8 @@ resource-pack:
   # à l'adresse qu'ils ont utilisée pour se connecter : ouvre ce port (TCP) comme le port du jeu.
   port: 8790
   # Pour héberger le pack ailleurs (CDN, site), mets son URL ici : le serveur intégré n'est alors pas lancé.
-  # Tunnel Cloudflare gratuit (tools\cloudflared.exe) vers le port 8790 : l'adresse change à chaque relance.
-  public-url: https://size-railway-semiconductor-fundamentals.trycloudflare.com/orbitmmo.zip
+  # Laisser vide : en local le pack vient de ce port, et OrbitPackRelay (proxy) le relaie aux joueurs à distance.
+  public-url: ''
   # true : le serveur intégré reste lancé même avec public-url (nécessaire pour un tunnel).
   serve-local: true
   # true : refuser le pack déconnecte le joueur.

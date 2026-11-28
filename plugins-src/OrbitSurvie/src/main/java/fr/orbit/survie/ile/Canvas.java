@@ -53,9 +53,12 @@ public final class Canvas {
     static final BlockData SAND = Bukkit.createBlockData(Material.SAND);
     static final BlockData STONE = Bukkit.createBlockData(Material.STONE);
 
-    /** Ce que le générateur d'océan met à cette hauteur. */
+    /** Vrai pour un monde vide (port orbital) : hors du plan, tout est de l'air. Fixé par {@link IleService}. */
+    static volatile boolean vide;
+
+    /** Ce que le générateur met à cette hauteur (océan de l'île, ou rien dans le vide). */
     public static BlockData naturel(int y) {
-        if (y > OceanGenerator.SEA) {
+        if (vide || y > OceanGenerator.SEA) {
             return AIR;
         }
         if (y >= OceanGenerator.SAND_TOP + 1) {

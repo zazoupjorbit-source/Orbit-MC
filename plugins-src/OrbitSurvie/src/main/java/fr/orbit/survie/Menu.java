@@ -50,6 +50,24 @@ public final class Menu implements InventoryHolder {
         return it;
     }
 
+    /** Bordure bleue, coins dorés (même cadre que le marché). */
+    public static void cadre(Menu menu, int lignes) {
+        for (int s = 0; s < lignes * 9; s++) {
+            int ligne = s / 9, col = s % 9;
+            boolean bord = ligne == 0 || ligne == lignes - 1 || col == 0 || col == 8;
+            boolean coin = (ligne == 0 || ligne == lignes - 1) && (col == 0 || col == 8);
+            if (bord) {
+                menu.set(s, icone(coin ? Material.YELLOW_STAINED_GLASS_PANE : Material.BLUE_STAINED_GLASS_PANE, " "), null);
+            }
+        }
+    }
+
+    /** Barre de progression en 20 crans. */
+    public static String barre(double part) {
+        int pleins = (int) Math.round(Math.max(0, Math.min(1, part)) * 20);
+        return "<#3DDCB0>" + "▌".repeat(pleins) + "<dark_gray>" + "▌".repeat(20 - pleins);
+    }
+
     public void open(Player p) {
         p.openInventory(inventory);
     }

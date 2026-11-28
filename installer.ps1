@@ -110,7 +110,9 @@ function Poser([string]$src, [string]$dest, [string]$sha) {
     New-Item -ItemType Directory -Force (Split-Path $dest -Parent) | Out-Null
     try { Copy-Item $src $dest -Force } catch { Alerte "Impossible d'ecrire $dest (serveur en marche ?). Arrete-le et relance." }
 }
+$fabricInst = Get-InstancesFabric
 foreach ($s in Get-DossiersServeurs) {
+    if ($fabricInst -contains $s) { continue }   # instances moddees : voir plus bas
     Poser $paper (Join-Path $Racine "$s\paper.jar")
     # Une seule version de LuckPerms par serveur.
     Get-ChildItem (Join-Path $Racine "$s\plugins") -Filter 'LuckPerms-Bukkit-*.jar' -ErrorAction SilentlyContinue | Where-Object Name -ne $v.luckperms.fichier | Remove-Item -Force -ErrorAction SilentlyContinue
@@ -118,7 +120,26 @@ foreach ($s in Get-DossiersServeurs) {
 }
 Poser $velocity (Join-Path $Racine 'proxy\velocity.jar')
 Poser $tab (Join-Path $Racine "server\plugins\$($v.tab.fichier)")
-Ok "Jars en place (lobby, $((Get-DossiersServeurs).Count - 1) instances, proxy)."
+Ok "Jars en place (lobby, $((Get-DossiersServeurs).Count - 1 - $fabricInst.Count) instances Paper, proxy)."
+
+# Instances moddees (Fabric) : lanceur serveur Fabric (fabric.jar) + mods de base (Fabric API, FabricProxy-Lite pour Velocity).
+if ($v.fabric -and $fabricInst.Count -gt 0) {
+    $fabricJar = Telecharger $v.fabric.serveur.url $v.fabric.serveur.fichier $v.fabric.serveur.sha256
+    $modsBase = @($v.fabric.mods | ForEach-Object { @{ Fichier = $_.fichier; Chemin = (Telecharger $_.url $_.fichier $_.sha256) } })
+    foreach ($s in $fabricInst) {
+        $dir = Join-Path $Racine $s
+        if (-not (Test-Path $dir)) { continue }
+        Poser $fabricJar (Join-Path $dir 'fabric.jar')
+        $mods = Join-Path $dir 'mods'
+        # Une seule version de chaque mod de base : on retire les anciennes (meme nom avant le numero).
+        foreach ($m in $modsBase) {
+            $prefixe = ($m.Fichier -replace '-\d.*$', '')
+            Get-ChildItem $mods -Filter "$prefixe-*.jar" -ErrorAction SilentlyContinue | Where-Object Name -ne $m.Fichier | Remove-Item -Force -ErrorAction SilentlyContinue
+            Poser $m.Chemin (Join-Path $mods $m.Fichier)
+        }
+    }
+    Ok "Fabric $($v.fabric.loader) en place (instances moddees : $($fabricInst -join ', '))."
+}
 
 # ---------------------------------------------------------------- 3. Secrets locaux
 Etape "3/8  Mots de passe et secrets de CE PC (jamais envoyes sur GitHub)"
@@ -229,7 +250,7 @@ if (-not (Test-Path (Join-Path $lobby "versions\$($v.paper.version)\paper-$($v.p
     if ($code -ne 0 -or -not (Test-Path (Join-Path $lobby 'libraries'))) { throw "Preparation de Paper en echec :`n$(($sortie | Select-Object -Last 15) -join "`n")" }
     Ok "Lobby prepare."
 } else { Ok "Lobby deja prepare." }
-foreach ($s in Get-DossiersServeurs | Where-Object { $_ -ne 'server' }) {
+foreach ($s in Get-DossiersServeurs | Where-Object { $_ -ne 'server' -and $fabricInst -notcontains $_ }) {
     $dir = Join-Path $Racine $s
     if (Test-Path (Join-Path $dir "versions\$($v.paper.version)\paper-$($v.paper.version).jar")) { continue }
     foreach ($sub in 'libraries', 'versions', 'cache') {
@@ -247,6 +268,11 @@ else {
         $zip = Telecharger $v.maven.url "apache-maven-$($v.maven.version)-bin.zip" $null
         Dezipper-Vers $zip (Join-Path $Racine 'tools\maven')
         Ok "Maven $($v.maven.version) installe dans tools\maven"
+    }
+    if ($v.gradle -and -not (Get-Gradle)) {
+        $zip = Telecharger $v.gradle.url "gradle-$($v.gradle.version)-bin.zip" $v.gradle.sha256
+        Dezipper-Vers $zip (Join-Path $Racine 'tools\gradle')
+        Ok "Gradle $($v.gradle.version) installe dans tools\gradle (mods Fabric)"
     }
     [void](Compiler-Plugins)
     [void](Deployer-Plugins)

@@ -1,20 +1,20 @@
 ---
 titre: OrbitExtraction (Extraction)
 emoji: 🔫
-resume: Extraction shooter PvPvE : raids, planque, téléphone, armes, infestés, rangs ; commandes admin
+resume: Extraction shooter PvPvE : raids, planque, tablette, armes, infestés, rangs ; commandes admin
 mots: extraction, ext, raid, planque, stash, telephone, kit, carte, infecte, purge, give, arme, munition, grenade, vehicule, evenement, credits, rang
 maj: 2026-11-25
 ---
 **Où** : serveur `extraction` (25570). Permission admin : `extraction.admin` (commandes libres en raid).
 
 **▸ Le mode**
-Le joueur part de sa **planque** (zone sûre, coffre), part en **raid** sur l'île avec ce qu'il emporte, combat infestés et joueurs, et doit rejoindre un **point d'extraction** avant la fin du temps. Mort ou temps écoulé = « porté disparu », tout est perdu. Crédits gagnés en jeu (primes, joueurs abattus, extractions, revente), **jamais achetés**. Un **téléphone** (clic droit) donne raid, boutique, colis, messages, coffre et stats. Pack de textures : armes 3D, téléphone, infestés.
+Le joueur part de sa **planque** (zone sûre, coffre), part en **raid** sur l'île avec ce qu'il emporte, combat infestés et joueurs, et doit rejoindre un **point d'extraction** avant la fin du temps. Mort ou temps écoulé = « porté disparu », tout est perdu. Crédits gagnés en jeu (primes, joueurs abattus, extractions, revente), **jamais achetés**. Une **tablette** renforcée (clic droit) donne raid, boutique, colis, messages, kits, hôtel des ventes, fiche et coffre, avec une barre d'onglets en bas de l'écran. Pack de textures : armes 3D, tablette, infestés.
 
 **▸ Rangs**
 Le rang vient du grade LuckPerms (`group.<grade>`) : bonus de crédits, remise boutique, kits de rang. `/lp user <joueur> parent add vip` (ou `addtemp vip 30d`).
 
 **▸ Commandes joueurs**
-`/raid [info]` · `/planque` (`/stash`) · `/telephone` (`/tel`) · `/kit [nom]` · `/carte [zoom]`
+`/raid [info]` · `/planque` (`/stash`) · `/tablette` (`/tab`, `/telephone`, `/tel`) · `/kit [nom]` · `/carte [zoom]`
 
 **▸ Commandes admin** — `/extraction` (`/ext`)
 • `planque [rayon]` — la planque (zone sûre) à ta position.

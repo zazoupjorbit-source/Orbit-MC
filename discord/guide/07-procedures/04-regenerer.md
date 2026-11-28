@@ -18,7 +18,7 @@ La Station    /station ecarts → /station generer → /station etancheite
 Capitale MMO  /continent capitale <nom> ecarts → generer [confirmer]
 Site MMO      /continent site <id> ecarts → generer [confirmer]
 Tous les sites /continent site tout ecarts → tout generer   (laisse les retouchés)
-Arènes Practice /practice arene generer        (forcer = écrase : pas sans accord)
+Spawn du HCF    /hcf generer spawn             (forcer = écrase : pas sans accord)
 Tycoon        /tycoon generer <zone> [confirmer]
 Casino        /casino generer   ·   Arcade : /arcade generer
 Vol           /vol generer      ·   Siège : /siege arene <n>

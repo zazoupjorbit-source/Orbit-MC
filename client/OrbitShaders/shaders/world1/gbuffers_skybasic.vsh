@@ -1,0 +1,5 @@
+#version 330 compatibility
+#define VSH
+#define PROG_SKYBASIC
+#define END
+#include "/programs/ciel.glsl"

@@ -20,7 +20,7 @@ public final class Keys {
     public static NamespacedKey SPIT_DAMAGE;
     /** Durée du poison d'un crachat (ticks). */
     public static NamespacedKey SPIT_POISON;
-    /** Marque le téléphone (objet de menu, jamais perdu). */
+    /** Marque la tablette (objet de menu, jamais perdu). */
     public static NamespacedKey PHONE;
     /** Id d'un colis largué (sur son entité d'interaction). */
     public static NamespacedKey PARCEL;

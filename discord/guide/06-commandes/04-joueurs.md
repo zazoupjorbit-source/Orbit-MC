@@ -10,13 +10,13 @@ maj: 2026-11-25
 Au lobby : `/cosmetiques` · `/monture` · `/boutique`
 
 **▸ Survie**
-`/argent` · `/payer <pseudo> <montant>` · `/richesses` · `/kit` · `/base` · `/shop` · `/vendre [tout]` · `/prix` · `/hdv`
+`/argent` · `/payer <pseudo> <montant>` · `/richesses` · `/kit` · `/grade` · `/base` · `/shop` · `/vendre [tout]` · `/prix` · `/hdv` · `/contrats` · `/metiers` · `/classement` · `/evenement` · `/duel <pseudo> [mise]` · `/pari <pseudo> <montant>` · `/tournoi` · `/echoppe` · `/echoppes` · `/home` · `/sethome` · `/delhome` · `/homes` · `/tpa <pseudo>` · `/ressources`
 
 **▸ Extraction**
 `/raid [info]` · `/planque` · `/telephone` · `/kit` · `/carte [zoom]`
 
-**▸ Practice**
-`/duel <pseudo> [kit]` · `/duel accepter <pseudo>` · `/party inviter|accepter|quitter` · `/spec [pseudo]` · `/quitter` · `/practice top [kit]` · `/hcf` · `/hub`
+**▸ HCF**
+`/f help` (factions, claims, DTR) · `/f deposit|withdraw` · `/f chat` · `/balance` · `/pay <joueur> <montant>` · `/pvp` · `/lives` · `/revive <joueur>` · `/class` · `/logout` · `/koth list`
 
 **▸ MMO (reborn)**
 `/mmo` · `/perso [joueur]` · `/groupe` · `/guilde` · `/gc [message]` · `/quetes [passer]` · `/monture` · `/carte [zoom]` · `/langue <fr|en|auto>` · touche **F**

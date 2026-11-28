@@ -1,0 +1,28 @@
+# BRÈCHE : shooter tactique à agents (salle d'arcade cachée du lobby).
+monde: breche
+monde-salle: casino
+pack-port: 8802
+heure: 6000
+base:
+  fichier: auto
+
+# PNJ dans la salle d'arcade (monde-salle, mur est) et point de retour des joueurs.
+pnj: { x: 19.5, y: 64.0, z: 407.5, yaw: 90 }
+retour: { x: 17.5, y: 64.0, z: 407.5, yaw: -90 }
+
+partie:
+  # premier à N manches (changement de côté après N-1 manches)
+  manches-victoire: 4
+  attente-secondes: 30
+  achat-secondes: 20
+  manche-secondes: 100
+  noyau-secondes: 45
+  # réglages par défaut du menu (chacun les change pour lui)
+  par-equipe: 5
+  niveau-bots: 2
+
+# Orbit Coins de jeu : gain = score / points-par-oc (+ bonus de victoire), plafond par jour et par joueur. Ils ne s'achètent jamais.
+oc:
+  points-par-oc: 25
+  bonus-victoire: 50
+  plafond-jour: 1500

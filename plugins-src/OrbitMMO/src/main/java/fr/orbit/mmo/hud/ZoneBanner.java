@@ -28,8 +28,9 @@ import java.util.Locale;
  * <p>Il passe par le titre du jeu, qui fait lui-même le fondu (Hud.extractTitle du client 26.3) :</p>
  * <ul>
  *   <li>le <b>titre</b> (échelle 4, 1 unité = 4 px d'interface) porte la plaque : police {@code orbitmmo:zone}, glyphes
- *   de 15 unités de haut posés de 72 à 12 px au-dessus du centre, découpés en tuiles de {@value #TILE} unités ; un calque
- *   de fond blanc puis un calque de filets teinté par la couleur de la zone. Sa largeur totale est exactement celle de
+ *   découpés en tuiles de {@value #TILE} unités ; un calque
+ *   de fond blanc puis un calque de filets (depuis le 25/11 : glyphes de 27 unités posés de 120 à 12 px au-dessus du centre,
+ *   la plaque occupe le haut, de 118 à 74 px) teinté par la couleur de la zone. Sa largeur totale est exactement celle de
  *   la plaque : le client la centre au pixel ;</li>
  *   <li>le <b>sous-titre</b> (échelle 2, 1 unité = 2 px) porte les textes, en polices lisses {@code orbitmmo:zone_*}
  *   (Outfit en TTF, sur-échantillonnée {@value #OVERSAMPLE} fois) remontées dans la plaque par leur décalage. Chaque

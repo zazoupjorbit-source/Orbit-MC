@@ -19,4 +19,4 @@ Outil de construction. `worldedit.*` donné à Zazou. À utiliser avec une **sau
 Lien entre le serveur et le panel de dev (console, état). Rien à toucher.
 
 **▸ OrbitHCF** — practice (6 modules)
-API, Core, Combat, Classes, Events, Display : le mode **PvP HCF** (factions, claims, DTR, KOTH) dans le monde `hcf`. Voir la fiche « OrbitPractice ».
+API, Core, Combat, Classes, Events, Display : le serveur **HCF** (factions, claims, DTR, deathban, KOTH, argent, boutique). Voir la fiche « Orbit HCF ».

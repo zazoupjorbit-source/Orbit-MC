@@ -383,6 +383,8 @@ const INST_LABEL = Object.assign({}, STATE_LABEL, { external: 'Hors panel' });
 const INST_QUICK = {
   velocity: [['glist', 'Joueurs (glist)'], ['server', 'Serveurs'], ['velocity info', 'Infos'], ['velocity plugins', 'Plugins'], ['velocity reload', 'Reload config']],
   paper: [['list', 'Joueurs'], ['save-all', 'Sauvegarder'], ['tps', 'TPS'], ['time set day', 'Jour'], ['weather clear', 'Beau temps'], ['gamemode creative @a', 'Créatif @a'], ['plugins', 'Plugins']],
+  // Instance moddée (Fabric) : pas de /tps ni /plugins, commandes vanilla seulement.
+  fabric: [['list', 'Joueurs'], ['save-all', 'Sauvegarder'], ['time set day', 'Jour'], ['weather clear', 'Beau temps'], ['gamemode creative @a', 'Créatif @a'], ['give @a orbitextraction:munitions_9mm 64', '+64 balles 9 mm']],
 };
 const IC = { sel: localStorage.getItem('instSel') || 'velocity', last: 0, busy: false };
 

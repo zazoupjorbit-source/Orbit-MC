@@ -108,7 +108,13 @@ public final class HcfWorlds {
     public static void eject(Player player, String message) {
         BiConsumer<Player, String> handler = ejector;
         if (handler == null) {
-            player.kickPlayer(message);
+            // Sortie voulue (/logout, deathban) : marquee pour ne pas etre prise pour un combat log.
+            EXITING.add(player.getUniqueId());
+            try {
+                player.kickPlayer(message);
+            } finally {
+                EXITING.remove(player.getUniqueId());
+            }
             return;
         }
         EXITING.add(player.getUniqueId());
@@ -121,6 +127,27 @@ public final class HcfWorlds {
 
     private static final Set<java.util.UUID> EXITING = java.util.concurrent.ConcurrentHashMap.newKeySet();
 
+    /** Staff en mode staff (/f bypass) : seul cas ou un admin echappe aux regles du HCF. */
+    private static final Set<java.util.UUID> STAFF_MODE = java.util.concurrent.ConcurrentHashMap.newKeySet();
+
+    public static boolean isStaffMode(java.util.UUID playerId) {
+        return STAFF_MODE.contains(playerId);
+    }
+
+    /** Bascule le mode staff ; renvoie le nouvel etat. */
+    public static boolean toggleStaffMode(java.util.UUID playerId) {
+        if (STAFF_MODE.remove(playerId)) {
+            return false;
+        }
+        STAFF_MODE.add(playerId);
+        return true;
+    }
+
+    /** Vrai si ce joueur a la permission ET est en mode staff. Sans /f bypass, un admin joue comme tout le monde. */
+    public static boolean staffExempt(Player player, String permission) {
+        return player.hasPermission(permission) && STAFF_MODE.contains(player.getUniqueId());
+    }
+
     /** Vrai pendant une sortie autorisee par {@link #eject} (le blocage en combat ne s'applique pas). */
     public static boolean isExiting(java.util.UUID playerId) {
         return EXITING.contains(playerId);
@@ -131,7 +158,7 @@ public final class HcfWorlds {
      * Le mode qui fait sortir le joueur (/hub du Practice) doit l'appeler AVANT de toucher a l'inventaire.
      */
     public static String exitDenyReason(Player player) {
-        if (!isHcf(player) || isExiting(player.getUniqueId()) || player.hasPermission("orbithcf.admin")) {
+        if (!isHcf(player) || isExiting(player.getUniqueId()) || staffExempt(player, "orbithcf.admin")) {
             return null;
         }
         CombatService combat = OrbitHCF.combat();

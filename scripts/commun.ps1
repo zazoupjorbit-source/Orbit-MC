@@ -25,6 +25,25 @@ function Get-DossiersServeurs {
     return $l
 }
 
+# Instances moddees (Fabric), declarees dans versions.json (bloc "fabric") : chemins relatifs "instances\<nom>".
+# Elles n'ont ni paper.jar ni LuckPerms : fabric.jar + dossier mods\.
+function Get-InstancesFabric {
+    $f = Join-Path $Racine 'versions.json'
+    if (-not (Test-Path $f)) { return @() }
+    $v = Get-Content $f -Raw | ConvertFrom-Json
+    if (-not $v.fabric) { return @() }
+    return @($v.fabric.instances | ForEach-Object { "instances\$_" })
+}
+function Test-InstanceFabric([string]$srv) { return (Get-InstancesFabric) -contains $srv }
+
+function Get-Gradle {
+    $g = Join-Path $Racine 'tools\gradle\bin\gradle.bat'
+    if (Test-Path $g) { return $g }
+    $c = Get-Command gradle.bat -ErrorAction SilentlyContinue
+    if ($c) { return $c.Source }
+    return $null
+}
+
 function Get-Jdk {
     $j = Get-ChildItem (Join-Path $Racine 'java') -Directory -ErrorAction SilentlyContinue | Where-Object Name -like 'jdk-25*' | Sort-Object Name | Select-Object -Last 1
     if (-not $j) { throw "JDK 25 introuvable dans $Racine\java (lance installer.ps1)." }
@@ -104,7 +123,9 @@ $JetonGestion  = '__SECRET_GESTION__'
 $ReglesModeles = @(
     @{ Fichier = 'server.properties';              Motif = '(?m)^(management-server-secret=)([^\r\n]*)'; Jeton = $JetonGestion;  Source = 'gestion' },
     @{ Fichier = 'config\paper-global.yml';        Motif = '(?m)^(\s+secret: )([^\r\n]*)';               Jeton = $JetonVelocity; Source = 'velocity' },
-    @{ Fichier = 'plugins\LuckPerms\config.yml';   Motif = '(?m)^(  password: )([^\r\n]*)';              Jeton = "'$JetonBase'"; Source = 'base' }
+    @{ Fichier = 'plugins\LuckPerms\config.yml';   Motif = '(?m)^(  password: )([^\r\n]*)';              Jeton = "'$JetonBase'"; Source = 'base' },
+    # Instances Fabric : le secret Velocity est lu par le mod FabricProxy-Lite.
+    @{ Fichier = 'config\FabricProxy-Lite.toml';   Motif = '(?m)^(secret = ")([^"\r\n]*)';               Jeton = $JetonVelocity; Source = 'velocity' }
 )
 
 function Get-SecretsLocaux {
@@ -193,7 +214,7 @@ function Test-Secrets {
     # 1) Noms de fichiers interdits.
     $interdits = '(^|/)(\.env|forwarding\.secret|runtime\.json|db(-root)?\.properties|my\.ini|id_rsa|.*\.pem|.*\.key|.*\.p12|.*\.jks)$'
     foreach ($f in $fichiers) { if ($f -match $interdits) { $pb.Add("Fichier secret suivi : $f") } }
-    $vraisFichiers = '(^|/)(server\.properties|paper-global\.yml)$|(^|/)LuckPerms/config\.yml$'
+    $vraisFichiers = '(^|/)(server\.properties|paper-global\.yml|FabricProxy-Lite\.toml)$|(^|/)LuckPerms/config\.yml$'
     foreach ($f in $fichiers) { if ($f -match '^(server|instances/[^/]+)/' -and $f -match $vraisFichiers) { $pb.Add("Vrai fichier de config suivi (seul le .exemple doit l'etre) : $f") } }
 
     # 2) Valeurs des secrets de ce PC, cherchees telles quelles dans tout ce qui est suivi.
@@ -249,8 +270,13 @@ $Plugins = @(
     @{ Nom = 'OrbitChasseurs';  Type = 'ps1';    Dossier = 'plugins-src\OrbitChasseurs';  Jar = 'plugins-src\OrbitChasseurs\target\OrbitChasseurs.jar';   Vers = @('server') },
     @{ Nom = 'OrbitTele';       Type = 'ps1';    Dossier = 'plugins-src\OrbitTele';       Jar = 'plugins-src\OrbitTele\target\OrbitTele.jar';             Vers = @('server') },
     @{ Nom = 'OrbitCasino';     Type = 'ps1';    Dossier = 'plugins-src\OrbitCasino';     Jar = 'plugins-src\OrbitCasino\target\OrbitCasino.jar';         Vers = @('server') },
+    @{ Nom = 'OrbitBowl';       Type = 'ps1';    Dossier = 'plugins-src\OrbitBowl';       Jar = 'plugins-src\OrbitBowl\target\OrbitBowl.jar';           Vers = @('server') },
+    @{ Nom = 'OrbitContrebande'; Type = 'ps1';   Dossier = 'plugins-src\OrbitContrebande'; Jar = 'plugins-src\OrbitContrebande\target\OrbitContrebande.jar'; Vers = @('server') },
+    @{ Nom = 'OrbitBreche';     Type = 'ps1';    Dossier = 'plugins-src\OrbitBreche';     Jar = 'plugins-src\OrbitBreche\target\OrbitBreche.jar';       Vers = @('server') },
     @{ Nom = 'PanelBridge';     Type = 'bridge'; Dossier = 'panel\bridge';                Jar = 'panel\bridge\PanelBridge.jar';                           Vers = @('server') },
-    @{ Nom = 'OrbitStaff';      Type = 'maven';  Dossier = 'mods-src\orbitstaff';         Jar = 'mods-src\orbitstaff\orbitstaff-core\target\OrbitStaff-0.1.0-SNAPSHOT.jar'; Vers = @('server'); Optionnel = $true }
+    @{ Nom = 'OrbitStaff';      Type = 'maven';  Dossier = 'mods-src\orbitstaff';         Jar = 'mods-src\orbitstaff\orbitstaff-core\target\OrbitStaff-0.1.0-SNAPSHOT.jar'; Vers = @('server'); Optionnel = $true },
+    # Mod Fabric (prototype modde) : Gradle + Loom, va dans mods\ (pas plugins\). Optionnel : la 1re compilation a besoin d'internet.
+    @{ Nom = 'OrbitExtractionMod'; Type = 'gradle'; Dossier = 'mods-src\OrbitExtractionMod'; Jar = 'mods-src\OrbitExtractionMod\build\libs\OrbitExtractionMod.jar'; Vers = @('instances\extraction-modde'); Sous = 'mods'; Optionnel = $true }
 )
 
 function Get-ClasspathPaper {
@@ -318,6 +344,15 @@ function Compiler-Plugins([string[]]$Seulement) {
                     $code = $LASTEXITCODE; $ErrorActionPreference = $old
                     if ($code -ne 0) { throw (($sortie | Select-Object -Last 25) -join "`n") }
                 }
+                'gradle' {
+                    $gradle = Get-Gradle
+                    if (-not $gradle) { throw "Gradle introuvable (tools\gradle : lance installer.ps1)." }
+                    $env:JAVA_HOME = Get-Jdk
+                    $old = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+                    $sortie = & $gradle -p $dir build --no-daemon -q --console=plain 2>&1 | ForEach-Object { "$_" }
+                    $code = $LASTEXITCODE; $ErrorActionPreference = $old
+                    if ($code -ne 0) { throw (($sortie | Select-Object -Last 25) -join "`n") }
+                }
             }
             if (-not (Test-Path (Join-Path $Racine $p.Jar))) { throw "jar attendu introuvable : $($p.Jar)" }
             Ok "$($p.Nom) compile."
@@ -340,7 +375,10 @@ function Deployer-Plugins([string[]]$Seulement) {
         if (-not (Test-Path $jar)) { continue }
         $cibles = if ($p.Vers -contains '*') { Get-DossiersServeurs } else { $p.Vers }
         foreach ($c in $cibles) {
-            $plug = Join-Path $Racine (Join-Path $c 'plugins')
+            $sous = if ($p.Sous) { $p.Sous } else { 'plugins' }
+            # Un plugin Paper ne va jamais dans une instance Fabric (et inversement).
+            if (($sous -eq 'plugins') -and (Test-InstanceFabric $c)) { continue }
+            $plug = Join-Path $Racine (Join-Path $c $sous)
             if (-not (Test-Path (Join-Path $Racine $c))) { continue }
             New-Item -ItemType Directory -Force $plug | Out-Null
             $dest = Join-Path $plug (Split-Path $jar -Leaf)
@@ -352,6 +390,12 @@ function Deployer-Plugins([string[]]$Seulement) {
             $enMarche = ($port -gt 0) -and (Test-Path $dest) -and (Test-Port $port)
             $copie = $false
             if (-not $enMarche) { try { Copy-Item $jar $dest -Force; $copie = $true; Ok "$($p.Nom) -> $c" } catch { } }
+            if (-not $copie -and $sous -eq 'mods') {
+                # Fabric n'a pas de dossier update : il faut arreter l'instance pour remplacer le mod.
+                Alerte "$($p.Nom) -> $c : serveur en marche, mod NON remplace. Arrete l'instance puis relance compiler.ps1."
+                $attente = $true
+                continue
+            }
             if (-not $copie) {
                 $upd = Join-Path $plug 'update'
                 New-Item -ItemType Directory -Force $upd | Out-Null

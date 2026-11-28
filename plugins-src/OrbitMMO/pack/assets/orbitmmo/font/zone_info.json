@@ -1,6 +1,6 @@
 {
   "providers": [
     {"type": "space", "advances": {"\uF900": -0.125, "\uF910": 0.125, "\uF901": -0.25, "\uF911": 0.25, "\uF902": -0.5, "\uF912": 0.5, "\uF903": -1, "\uF913": 1, "\uF904": -2, "\uF914": 2, "\uF905": -4, "\uF915": 4, "\uF906": -8, "\uF916": 8, "\uF907": -16, "\uF917": 16, "\uF908": -32, "\uF918": 32, "\uF909": -64, "\uF919": 64, "\uF90A": -128, "\uF91A": 128}},
-    {"type": "ttf", "file": "orbitmmo:qtext.ttf", "size": 4, "oversample": 8, "shift": [0, -27.5], "skip": ""}
+    {"type": "ttf", "file": "orbitmmo:qtext.ttf", "size": 4, "oversample": 8, "shift": [0, -51.5], "skip": ""}
   ]
 }

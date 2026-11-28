@@ -75,6 +75,10 @@ public final class OrbitHCF {
         return get(DtrService.class);
     }
 
+    public static fr.orbitgames.hcf.api.service.EconomyService economy() {
+        return get(fr.orbitgames.hcf.api.service.EconomyService.class);
+    }
+
     public static TimerService timers() {
         return get(TimerService.class);
     }

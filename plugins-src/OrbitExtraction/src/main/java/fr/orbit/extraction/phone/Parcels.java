@@ -37,7 +37,7 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Colis commandés depuis le téléphone en raid : après un délai, une caisse tombe près du joueur. Elle fume
+ * Colis commandés depuis la tablette en raid : après un délai, une caisse tombe près du joueur. Elle fume
  * (visible de loin), le bruit de l'impact attire les infectés, et n'importe quel joueur peut la piller.
  */
 public final class Parcels implements Listener {

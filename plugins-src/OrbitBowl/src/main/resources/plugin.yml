@@ -1,0 +1,18 @@
+name: OrbitBowl
+version: '0.1.0'
+main: fr.orbit.bowl.OrbitBowl
+api-version: '1.21'
+description: "ORBIT BOWL : bowling 6 pistes, fléchettes, tir forain, basket, baby-foot, mini-golf et laser game (salle de l'arcade cachée). Orbit Coins de jeu seulement."
+authors: [ORBIT]
+softdepend: [OrbitCasino]
+
+commands:
+  bowl:
+    description: "ORBIT BOWL : jouer, rejoindre, quitter, règles, records."
+    usage: "/bowl [quitter|rejouer|lancer|regles <jeu>|top <jeu>|salle|sortir|admin ...]"
+    aliases: [bowling]
+
+permissions:
+  orbitbowl.admin:
+    description: Reconstruire la salle, reposer les PNJ, arrêter les parties.
+    default: op

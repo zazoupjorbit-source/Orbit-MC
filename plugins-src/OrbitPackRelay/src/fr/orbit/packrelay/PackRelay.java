@@ -27,7 +27,7 @@ import java.util.regex.*;
 /**
  * Relais des packs de ressources pour les joueurs qui passent par le tunnel playit.
  *
- * Chaque serveur du réseau sert son pack sur un port local (8790-8799) que le tunnel playit ne relaie pas.
+ * Chaque serveur du réseau sert son pack sur un port local (8790-8809) que le tunnel playit ne relaie pas.
  * Ce plugin :
  *  1. ouvre un petit relais HTTP sur 127.0.0.1:8780 : /<port>/<chemin> → http://127.0.0.1:<port>/<chemin> ;
  *  2. lance un tunnel Cloudflare gratuit vers ce relais, le surveille et le relance s'il tombe ;
@@ -39,7 +39,7 @@ import java.util.regex.*;
 public final class PackRelay {
 
     private static final int RELAY_PORT = 8780;
-    private static final int PORT_MIN = 8790, PORT_MAX = 8799;
+    private static final int PORT_MIN = 8790, PORT_MAX = 8809;
     /** Packs déjà publiés par un ancien tunnel (public-url) : nom du fichier → port local. */
     private static final Map<String, Integer> NAMED = Map.of(
             "orbitmmo", 8790, "orbitextraction", 8791, "orbittycoon", 8794, "orbitvol", 8795);

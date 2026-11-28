@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 /**
- * Hôtel des ventes entre joueurs, ouvert depuis le téléphone. Un joueur met en vente un objet de son inventaire au
+ * Hôtel des ventes entre joueurs, ouvert depuis la tablette. Un joueur met en vente un objet de son inventaire au
  * prix qu'il veut ; l'acheteur paie en crédits, le vendeur touche le prix moins la taxe — tout de suite s'il est
  * connecté, à sa prochaine connexion sinon. Une annonce expirée ou retirée revient au vendeur (bouton Récupérer).
  * Tout est enregistré dans marche.yml à chaque changement.
@@ -189,7 +189,7 @@ public final class Market implements Listener {
                 Player seller = Bukkit.getPlayer(l.seller());
                 if (seller != null) {
                     Text.msg(seller, "<#E05CB8>Hôtel des ventes</#E05CB8> <#8A919B>— ton annonce <#D7DCE2>" + Text.esc(name(l.item()))
-                            + "</#D7DCE2> a expiré. Récupère l'objet depuis le téléphone.");
+                            + "</#D7DCE2> a expiré. Récupère l'objet depuis la tablette.");
                 }
             }
         }
@@ -444,7 +444,7 @@ public final class Market implements Listener {
             int back = waiting(p.getUniqueId());
             if (back > 0) {
                 Text.msg(p, "<#E05CB8>Hôtel des ventes</#E05CB8> <#8A919B>— " + back + " objet" + (back > 1 ? "s" : "")
-                        + " invendu" + (back > 1 ? "s" : "") + " à récupérer depuis le téléphone.");
+                        + " invendu" + (back > 1 ? "s" : "") + " à récupérer depuis la tablette.");
             }
         }, 80L);
     }

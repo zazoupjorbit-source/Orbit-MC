@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "orbittrieur:block/trieur_cote",
+    "up": "orbittrieur:block/trieur_dessus",
+    "down": "orbittrieur:block/trieur_dessous",
+    "north": "orbittrieur:block/trieur_face",
+    "south": "orbittrieur:block/trieur_face",
+    "east": "orbittrieur:block/trieur_cote",
+    "west": "orbittrieur:block/trieur_cote"
+  }
+}

@@ -19,7 +19,7 @@ import java.util.Locale;
 
 /**
  * Kits des rangs : arme, munitions, armure, soins. Un rang ouvre son kit et ceux des rangs en dessous ; chaque kit
- * a son propre délai. Les kits se prennent à la planque (téléphone ou /kit) : l'armure s'équipe toute seule si
+ * a son propre délai. Les kits se prennent à la planque (tablette ou /kit) : l'armure s'équipe toute seule si
  * l'emplacement est libre.
  */
 public final class Kits {

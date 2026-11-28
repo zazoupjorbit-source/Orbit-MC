@@ -49,7 +49,7 @@
     <div class="reglages">
       <div><label for="ecran">Écran en jeu</label><select id="ecran"></select></div>
       <div><label for="cadrage">Cadrage</label><select id="cadrage"><option value="ajuster">Tout visible (bandes noires)</option><option value="remplir">Remplir (bords coupés)</option></select></div>
-      <div><label for="fps">Fluidité</label><select id="fps"><option value="10">10 images/s (léger)</option><option value="15" selected>15 images/s</option><option value="20">20 images/s (fluide)</option></select></div>
+      <div><label for="fps">Fluidité</label><select id="fps"><option value="10">10 images/s (léger)</option><option value="15">15 images/s</option><option value="20">20 images/s</option><option value="30" selected>30 images/s (fluide)</option><option value="60">60 images/s (très fluide, réseau lourd)</option></select></div>
       <div><label for="son">Son</label><select id="son"><option value="96000" selected>Avec le son</option><option value="160000">Avec le son, haute qualité</option><option value="0">Sans le son</option></select></div>
       <div><label for="qualite">Qualité de l'image : <span id="qualiteTexte">80 %</span></label><input id="qualite" type="range" min="40" max="95" value="80"></div>
     </div>
@@ -225,7 +225,7 @@ $('partager').onclick = async () => {
   const avecSon = $('son').value !== '0';
   try {
     flux = await navigator.mediaDevices.getDisplayMedia({
-      video: { frameRate: 30 },
+      video: { frameRate: { ideal: 60 } },
       // son tel quel : pas de traitement de voix sur de la musique ou une vidéo
       audio: avecSon ? { echoCancellation: false, noiseSuppression: false, autoGainControl: false } : false,
       ...(avecSon ? { systemAudio: 'include' } : {}),

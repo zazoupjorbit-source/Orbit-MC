@@ -246,7 +246,10 @@ public final class Hdv {
                 case DISPARUE -> Msg.send(p, "<red>Trop tard : cette vente n'est plus disponible.");
                 case SOI_MEME -> Msg.send(p, "<red>C'est ta propre vente.");
                 case PAS_ASSEZ -> Msg.send(p, "<red>Pas assez de crédits : il faut " + Msg.argent(achat.annonce().prix()) + "<red>.");
-                case OK -> livrer(p, achat.annonce());
+                case OK -> {
+                    plugin.stats().ajouter(achat.annonce().vendeur(), achat.annonce().vendeurNom(), "ventes", achat.annonce().prix());
+                    livrer(p, achat.annonce());
+                }
             }
         }, () -> Msg.send(p, "<red>Achat impossible pour le moment (base de données)."));
     }

@@ -1,0 +1,47 @@
+profile=Profil
+profile.BAS=Bas
+profile.MOYEN=Moyen
+profile.HAUT=Haut
+profile.ULTRA=Ultra
+profile.comment=Bas : sans ombres ni rayons. Haut : réglage conseillé. Ultra : pour les grosses cartes graphiques.
+
+screen.ECLAIRAGE=Éclairage
+screen.CIEL=Ciel
+screen.EAU=Eau et végétation
+screen.IMAGE=Image
+
+option.OMBRES=Ombres
+option.OMBRES.comment=Ombres du soleil et de la lune. La plus grosse dépense de la carte graphique.
+option.OMBRES_DOUCEUR=Douceur des ombres
+option.shadowMapResolution=Précision des ombres
+option.shadowMapResolution.comment=Taille de la carte d'ombre. Plus grand = ombres plus nettes, plus lourd.
+option.shadowDistance=Distance des ombres
+option.sunPathRotation=Inclinaison du soleil
+option.sunPathRotation.comment=Le soleil passe en biais : les ombres tombent de côté, plus jolies que tout droit.
+option.LUMIERE_EN_MAIN=Torche en main
+option.LUMIERE_EN_MAIN.comment=Un objet lumineux tenu en main éclaire autour de vous.
+option.RAYONS=Rayons de lumière
+option.RAYONS.comment=Rayons dorés du soleil à travers les feuilles, les nuages et les fenêtres.
+option.RAYONS_FORCE=Force des rayons
+option.RAYONS_PAS=Qualité des rayons
+
+option.ETOILES=Étoiles
+option.NEBULEUSE=Nébuleuse ORBIT
+option.NEBULEUSE.comment=Bande de nébuleuse bleu et or dans le ciel de nuit.
+option.NEBULEUSE_FORCE=Force de la nébuleuse
+option.SOLEIL_TAILLE=Taille du soleil
+option.BROUILLARD=Brume
+
+option.EAU_VAGUES=Vagues
+option.EAU_OPACITE=Opacité de l'eau
+option.VEGETATION_VENT=Végétation au vent
+option.VENT_FORCE=Force du vent
+
+option.BLOOM=Halo lumineux
+option.BLOOM.comment=Halo doux autour du soleil, des torches et des blocs lumineux.
+option.BLOOM_FORCE=Force du halo
+option.EXPOSITION=Luminosité
+option.SATURATION=Saturation
+option.TEINTE_ORBIT=Teinte ORBIT
+option.TEINTE_ORBIT.comment=Ombres légèrement bleutées, lumières légèrement dorées (la DA d'ORBIT). 0 = couleurs neutres.
+option.VIGNETTE=Vignette

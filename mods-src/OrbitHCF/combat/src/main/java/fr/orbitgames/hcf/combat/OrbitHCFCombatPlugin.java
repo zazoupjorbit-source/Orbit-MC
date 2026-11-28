@@ -34,6 +34,7 @@ public final class OrbitHCFCombatPlugin extends JavaPlugin {
 
     private CombatDb combatDb;
     private CombatManager combatManager;
+    private fr.orbitgames.hcf.combat.listener.CombatLogger combatLogger;
     private Messages messages;
 
     private FileConfiguration combatConfig;
@@ -61,6 +62,8 @@ public final class OrbitHCFCombatPlugin extends JavaPlugin {
         combatManager = new CombatManager(this, combatDb);
         OrbitHCF.register(CombatService.class, combatManager);
 
+        combatLogger = new fr.orbitgames.hcf.combat.listener.CombatLogger(this);
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, combatLogger);
         fr.orbitgames.hcf.api.HcfWorlds.register(this, new CombatTagListener(this));
         fr.orbitgames.hcf.api.HcfWorlds.register(this, new PvpTimerListener(this));
         fr.orbitgames.hcf.api.HcfWorlds.register(this, new PearlListener(this));
@@ -69,6 +72,15 @@ public final class OrbitHCFCombatPlugin extends JavaPlugin {
         fr.orbitgames.hcf.api.HcfWorlds.register(this, new EnchantLimiter(this));
         fr.orbitgames.hcf.api.HcfWorlds.register(this, new PotionLimiter(this));
         fr.orbitgames.hcf.api.HcfWorlds.register(this, new DeathbanListener(this));
+
+        // Combat facon 1.7/1.8. Si OrbitPractice est sur le serveur, c'est lui qui s'en charge deja.
+        if (Bukkit.getPluginManager().getPlugin("OrbitPractice") == null) {
+            fr.orbitgames.hcf.combat.listener.OldCombat oldCombat =
+                    new fr.orbitgames.hcf.combat.listener.OldCombat(this, loadYaml("vieux-combat.yml"));
+            Bukkit.getPluginManager().registerEvents(oldCombat, this);
+            Bukkit.getScheduler().runTaskTimer(this, oldCombat::tick, 20L, 20L);
+            getLogger().info("Combat 1.8 : " + (oldCombat.actif() ? "actif" : "coupe (vieux-combat.yml)") + ".");
+        }
 
         PluginCommand pvp = getCommand("pvp");
         if (pvp != null) {
@@ -91,6 +103,9 @@ public final class OrbitHCFCombatPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (combatLogger != null) {
+            combatLogger.shutdown();
+        }
         OrbitHCF.unregister(CombatService.class);
         getLogger().info("OrbitHCF-Combat desactive.");
     }
@@ -105,6 +120,10 @@ public final class OrbitHCFCombatPlugin extends JavaPlugin {
 
     public CombatDb getCombatDb() {
         return combatDb;
+    }
+
+    public fr.orbitgames.hcf.combat.listener.CombatLogger getCombatLogger() {
+        return combatLogger;
     }
 
     public CombatManager getCombatManager() {

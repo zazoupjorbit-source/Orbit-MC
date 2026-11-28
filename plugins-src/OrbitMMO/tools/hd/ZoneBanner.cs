@@ -3,10 +3,11 @@
 // Le bandeau passe par le titre du jeu (Hud.extractTitle du client 26.3) : le jeu le fait apparaitre puis s'effacer
 // en fondu. Le titre est dessine a l'echelle 4 (1 unite de police = 4 px d'interface), haut de sa ligne 40 px
 // au-dessus du centre de l'ecran ; le sous-titre a l'echelle 2 (1 unite = 2 px), haut de sa ligne 10 px sous le centre.
-//  - Le cadre (police orbitmmo:zone) est un glyphe bitmap du titre : 15 unites de haut, ascent 15, donc de 72 px a
-//    12 px au-dessus du centre (le jeu refuse un ascent plus grand que la hauteur : un glyphe ne monte pas plus haut).
-//    Il est dessine 4 fois plus finement que l'interface (16 px d'image par unite) et decoupe en tuiles de 15 unites
-//    (240 px : le client range les glyphes sur des pages de 256 x 256 px).
+//  - Le cadre (police orbitmmo:zone) est un glyphe bitmap du titre : 27 unites de haut, ascent 27, donc de 120 px a
+//    12 px au-dessus du centre (le jeu refuse un ascent plus grand que la hauteur : le glyphe descend forcement jusqu'a
+//    la ligne de base). La plaque est dans le haut du glyphe, le bas est vide. Il est dessine 2 fois plus finement que
+//    l'interface (8 px d'image par unite : 216 px de haut) et decoupe en tuiles de 15 unites (120 px), car le client
+//    range les glyphes sur des pages de 256 x 256 px.
 //    Deux calques : le fond (blanc, non teinte) et les filets / ornements (blancs, teintes par la couleur de la zone).
 //  - Les textes sont dans le sous-titre, en polices lisses (Outfit en TTF, dessinee par le client, sur-echantillonnee
 //    8 fois : 4 px d'image par px d'interface), remontees dans le cadre par leur decalage vertical ("shift").
@@ -27,16 +28,20 @@ using System.Text;
 
 public static class ZoneBannerHd
 {
-    /** Px d'image par px d'interface. */
-    public const int S = 4;
+    /**
+     * Px d'image par px d'interface. 2 et non 4 : le glyphe descend forcement jusqu'a la ligne de base du titre (12 px
+     * au-dessus du centre) ; pour monter la plaque vers le haut de l'ecran il fait 108 px d'interface de haut, et une
+     * page de police ne depasse pas 256 px (25/11 : Zazou voulait le bandeau plus haut, comme le cadre de son capture).
+     */
+    public const int S = 2;
     /** Px d'interface par unite de police du titre (echelle 4). */
     public const int UNIT = 4;
-    /** Hauteur (et ascent) du glyphe du cadre, en unites du titre : de 72 a 12 px au-dessus du centre. */
-    public const int GLYPH_H = 15;
+    /** Hauteur (et ascent) du glyphe du cadre, en unites du titre : de 120 a 12 px au-dessus du centre. */
+    public const int GLYPH_H = 27;
     /** Largeur d'une tuile, en unites du titre. */
     public const int TILE = 15;
     /** Haut du glyphe, en px d'interface au-dessus du centre de l'ecran (y du dessin = y ecran + TOP). */
-    public const int TOP = 72;
+    public const int TOP = 120;
     /** Sur-echantillonnage des polices lisses. */
     public const int OVERSAMPLE = 8;
 
@@ -274,8 +279,9 @@ public static class ZoneBannerHd
         string tex = Path.Combine(pack, "assets", "orbitmmo", "textures", "font", "zone");
         if (Directory.Exists(tex)) Directory.Delete(tex, true);
 
-        // Grand bandeau (regions, villes, sites) : glyphe de 64 unites = 256 px, plaque de y 2 a 46 (70 a 26 px au-dessus
+        // Grand bandeau (regions, villes, sites) : glyphe de 64 unites = 256 px, plaque de y 2 a 46 (118 a 74 px au-dessus
         // du centre), pointes a 22 px des bords. Etiquette (ligne de base y 11), nom (25,5), separateur (31,5), bas (41).
+        // Sous le bandeau, le glyphe est vide jusqu'a la ligne de base du titre.
         int big = 64 * UNIT;
         Tiles(Body(big, 22f, 13f, 2f, 46f), "large_body", 0xE900);
         Tiles(Trim(big, 22f, 13f, 2f, 46f, 31.5f, 0f, 0f), "large_trim", 0xE908);
@@ -290,15 +296,17 @@ public static class ZoneBannerHd
         WriteFont("zone", zone);
 
         // Polices lisses des textes (sous-titre, echelle 2 : ligne de base a 24 + 2 x decalage px du centre).
+        // RAISE : la plaque est montee de (TOP - 72) px, soit RAISE unites du sous-titre.
         string reg = "qtext.ttf", bold = "qtext_b.ttf";
         CopyIfMissing(Path.Combine(fontsDir, "Outfit-Regular.ttf"), reg);
         CopyIfMissing(Path.Combine(fontsDir, "Outfit-Bold.ttf"), bold);
-        TtfFont("zone_label", bold, 3.5, -42.5);
-        TtfFont("zone_name", bold, 6.5, -35.25);
-        TtfFont("zone_name_s", bold, 5.25, -35.25);
-        TtfFont("zone_info", reg, 4, -27.5);
-        TtfFont("zone_mini_label", bold, 3, -42);
-        TtfFont("zone_mini_name", bold, 5, -35.5);
+        double RAISE = (TOP - 72) / 2.0;
+        TtfFont("zone_label", bold, 3.5, -42.5 - RAISE);
+        TtfFont("zone_name", bold, 6.5, -35.25 - RAISE);
+        TtfFont("zone_name_s", bold, 5.25, -35.25 - RAISE);
+        TtfFont("zone_info", reg, 4, -27.5 - RAISE);
+        TtfFont("zone_mini_label", bold, 3, -42 - RAISE);
+        TtfFont("zone_mini_name", bold, 5, -35.5 - RAISE);
 
         // Avances d'Outfit (normal, gras) en 1/10000 de cadratin.
         Dictionary<int, int> r = Advances(Path.Combine(fontsDir, "Outfit-Regular.ttf"));

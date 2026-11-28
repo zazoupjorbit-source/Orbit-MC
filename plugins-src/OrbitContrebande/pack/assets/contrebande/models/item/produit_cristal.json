@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {"layer0": "contrebande:item/produit_cristal_0", "layer1": "contrebande:item/produit_cristal_1", "layer2": "contrebande:item/produit_cristal_2"}
+}

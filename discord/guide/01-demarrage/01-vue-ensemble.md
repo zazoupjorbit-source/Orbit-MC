@@ -14,7 +14,7 @@ lobby       30065  La Station + casino + arcade cachée
 reborn      25567  Orbit MMO (continent, Lumière / Ombre)
 survie      25569  Orbit Survie (île du spawn, économie)
 extraction  25570  Orbit Extraction (extraction shooter)
-practice    25571  Orbit Practice + mode HCF
+practice    25571  Orbit HCF (factions, DTR)
 tycoon      25572  Orbit Tycoon (base spatiale, farm)
 creatif     25573  Créatif superflat
 vol         25574  Vole mon Orbito
@@ -26,7 +26,7 @@ musee       25568  musée (vitrine)
 • **Partout** : LuckPerms, OrbitDevCore, **OrbitStaff**, WorldEdit.
 • **lobby** : + OrbitCasino, OrbitArene, OrbitBornes, OrbitChasseurs, OrbitRoyale, OrbitTele, TAB, PanelBridge.
 • **reborn** : + OrbitMMO. **survie** : + OrbitSurvie. **extraction** : + OrbitExtraction.
-• **practice** : + OrbitPractice et les 6 modules OrbitHCF. **tycoon** : + OrbitTycoon. **vol** : + OrbitVol.
+• **practice** : les 6 modules OrbitHCF (serveur 100 % HCF ; OrbitPractice mis de côté). **tycoon** : + OrbitTycoon. **vol** : + OrbitVol.
 • **proxy Velocity** : OrbitPackRelay.
 
 **▸ La base**

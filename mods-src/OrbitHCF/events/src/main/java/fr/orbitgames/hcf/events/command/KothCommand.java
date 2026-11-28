@@ -43,6 +43,32 @@ public class KothCommand implements CommandExecutor, TabCompleter {
                 ZoneEditor.create(plugin, sender, args[1], CaptureZone.ZoneType.KOTH,
                         plugin.getEventsConfig().getInt("koth.default-capture-seconds", 300));
             }
+            // /koth zone <nom> <monde> <x1> <y1> <z1> <x2> <y2> <z2> : pose la zone sans etre sur place
+            // (console, generateur de KOTH du Core). Cree la zone si elle n'existe pas.
+            case "zone" -> {
+                if (!ZoneEditor.checkAdmin(plugin, sender) || args.length < 9) {
+                    return true;
+                }
+                CaptureZone zone = plugin.getZoneRegistry().get(args[1]);
+                if (zone == null) {
+                    zone = new CaptureZone(args[1], CaptureZone.ZoneType.KOTH,
+                            plugin.getEventsConfig().getInt("koth.default-capture-seconds", 300));
+                    plugin.getZoneRegistry().add(zone);
+                }
+                try {
+                    int[] a = {Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5])};
+                    int[] b = {Integer.parseInt(args[6]), Integer.parseInt(args[7]), Integer.parseInt(args[8])};
+                    zone.setWorldName(args[2]);
+                    zone.setPos1Raw(a);
+                    zone.setPos2Raw(b);
+                } catch (NumberFormatException e) {
+                    sender.sendMessage("Coordonnees invalides.");
+                    return true;
+                }
+                plugin.getZoneRegistry().save();
+                sender.sendMessage("Zone KOTH " + zone.getName() + " posee dans " + args[2] + " : "
+                        + args[3] + " " + args[4] + " " + args[5] + " -> " + args[6] + " " + args[7] + " " + args[8] + ".");
+            }
             case "pos1", "pos2" -> {
                 if (!ZoneEditor.checkAdmin(plugin, sender) || args.length < 2) {
                     return true;

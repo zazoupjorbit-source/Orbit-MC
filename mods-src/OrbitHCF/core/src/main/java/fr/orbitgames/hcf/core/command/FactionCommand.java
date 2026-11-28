@@ -41,7 +41,8 @@ public class FactionCommand implements CommandExecutor, TabCompleter {
     private static final List<String> SUBCOMMANDS = List.of(
             "help", "create", "disband", "invite", "uninvite", "join", "leave", "kick",
             "promote", "demote", "leader", "home", "sethome", "claim", "unclaim", "unclaimall",
-            "map", "who", "list", "ally", "unally", "focus", "unfocus", "stuck", "rename");
+            "map", "who", "list", "ally", "unally", "focus", "unfocus", "stuck", "rename",
+            "deposit", "withdraw", "chat");
     private static final List<String> ADMIN_SUBCOMMANDS = List.of(
             "setdtr", "freeze", "unfreeze", "points", "bypass");
 
@@ -76,7 +77,7 @@ public class FactionCommand implements CommandExecutor, TabCompleter {
             case "leader" -> transferLeader(sender, args);
             case "home" -> home(sender);
             case "sethome" -> sethome(sender);
-            case "claim" -> claim(sender);
+            case "claim" -> claim(sender, args);
             case "unclaim" -> unclaim(sender);
             case "unclaimall" -> unclaimAll(sender);
             case "map" -> map(sender);
@@ -88,6 +89,9 @@ public class FactionCommand implements CommandExecutor, TabCompleter {
             case "unfocus" -> unfocus(sender);
             case "stuck" -> stuck(sender);
             case "rename" -> rename(sender, args);
+            case "deposit", "d" -> bank(sender, args, true);
+            case "withdraw", "w" -> bank(sender, args, false);
+            case "chat", "c" -> chat(sender, args);
             case "setdtr" -> adminSetDtr(sender, args);
             case "freeze" -> adminFreeze(sender, args);
             case "unfreeze" -> adminUnfreeze(sender, args);
@@ -106,8 +110,85 @@ public class FactionCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
+    // ------------------------------------------------------------------
+    // Banque de faction et chat
+    // ------------------------------------------------------------------
+
+    private void say(CommandSender sender, String message) {
+        sender.sendMessage(Text.color(messages.getPrefix() + message));
+    }
+
+    /** /f deposit <montant|all> (tout membre) et /f withdraw <montant|all> (officier et plus). */
+    private void bank(CommandSender sender, String[] args, boolean deposit) {
+        Player player = asPlayer(sender);
+        if (player == null) {
+            return;
+        }
+        FactionImpl faction = factionOf(player);
+        if (faction == null) {
+            return;
+        }
+        var economy = plugin.getEconomy();
+        if (args.length < 2) {
+            say(sender, "&eBanque de &6" + faction.getName() + "&e : &a" + economy.format(economy.getBalance(faction.getId()))
+                    + " &7(/f deposit <montant|all>, /f withdraw <montant|all>)");
+            return;
+        }
+        if (!deposit && !requireRole(player, faction, FactionRole.OFFICER)) {
+            return;
+        }
+        UUID from = deposit ? player.getUniqueId() : faction.getId();
+        UUID to = deposit ? faction.getId() : player.getUniqueId();
+        long amount = args[1].equalsIgnoreCase("all") ? economy.getBalance(from) : MoneyCommand.parseAmount(args[1]);
+        if (amount <= 0) {
+            say(sender, args[1].equalsIgnoreCase("all") ? "&cRien a deplacer." : "&cMontant invalide : &f" + args[1]);
+            return;
+        }
+        if (!economy.withdraw(from, amount)) {
+            say(sender, "&cIl n'y a que &f" + economy.format(economy.getBalance(from)) + "&c.");
+            return;
+        }
+        economy.deposit(to, amount);
+        String line = Text.color(messages.getPrefix() + "&e" + player.getName() + (deposit ? " &aa depose &f" : " &ca retire &f")
+                + economy.format(amount) + (deposit ? " &adans" : " &cde") + " la banque de faction &7("
+                + economy.format(economy.getBalance(faction.getId())) + ")");
+        for (Player online : faction.getOnlinePlayers()) {
+            online.sendMessage(line);
+        }
+    }
+
+    /** /f chat [f|a|p] : change de canal (sans argument : passe au suivant). */
+    private void chat(CommandSender sender, String[] args) {
+        Player player = asPlayer(sender);
+        if (player == null) {
+            return;
+        }
+        FactionImpl faction = factionOf(player);
+        if (faction == null) {
+            return;
+        }
+        var chat = plugin.getChatManager();
+        var current = chat.get(player.getUniqueId());
+        fr.orbitgames.hcf.core.server.ChatManager.Channel next;
+        if (args.length >= 2) {
+            next = switch (args[1].toLowerCase(Locale.ROOT).charAt(0)) {
+                case 'f' -> fr.orbitgames.hcf.core.server.ChatManager.Channel.FACTION;
+                case 'a' -> fr.orbitgames.hcf.core.server.ChatManager.Channel.ALLY;
+                default -> fr.orbitgames.hcf.core.server.ChatManager.Channel.PUBLIC;
+            };
+        } else {
+            next = current == fr.orbitgames.hcf.core.server.ChatManager.Channel.PUBLIC
+                    ? fr.orbitgames.hcf.core.server.ChatManager.Channel.FACTION
+                    : fr.orbitgames.hcf.core.server.ChatManager.Channel.PUBLIC;
+        }
+        chat.set(player.getUniqueId(), next);
+        say(sender, "&eCanal de chat : &6" + next.label + "&e. &7(« ! » devant un message = public, « @ » = faction)");
+    }
+
     private void sendHelp(CommandSender sender) {
         messages.sendList(sender, "help", "page", 1, "pages", 1);
+        say(sender, "&e/f deposit|withdraw <montant|all> &7banque de faction  &e/f chat [f|a|p] &7canal de chat");
+        say(sender, "&e/balance &7ton argent  &e/pay <joueur> <montant>  &7Boutique : panneaux du spawn");
         if (sender.hasPermission("orbithcf.admin")) {
             messages.sendList(sender, "help-admin");
         }
@@ -183,7 +264,15 @@ public class FactionCommand implements CommandExecutor, TabCompleter {
         for (Player online : faction.getOnlinePlayers()) {
             messages.send(online, "faction.disbanded", "faction", name);
         }
+        UUID bankOwner = faction.getLeader();
+        UUID bankId = faction.getId();
         if (factions.disband(faction, sender)) {
+            // La banque de la faction revient a son chef.
+            long bank = plugin.getEconomy().getBalance(bankId);
+            if (bank > 0 && bankOwner != null) {
+                plugin.getEconomy().deposit(bankOwner, bank);
+            }
+            plugin.getEconomy().forget(bankId);
             messages.send(sender, "faction.disbanded", "faction", name);
             messages.broadcastRaw("faction.disbanded-broadcast", "faction", name, "joueur", sender.getName());
         }
@@ -452,7 +541,8 @@ public class FactionCommand implements CommandExecutor, TabCompleter {
     // Claims
     // ------------------------------------------------------------------
 
-    private void claim(CommandSender sender) {
+    /** /f claim : donne la baguette. /f claim valider : achete le terrain selectionne. */
+    private void claim(CommandSender sender, String[] args) {
         Player player = asPlayer(sender);
         if (player == null) {
             return;
@@ -461,27 +551,14 @@ public class FactionCommand implements CommandExecutor, TabCompleter {
         if (faction == null) {
             return;
         }
-        ClaimManager.ClaimResult result = plugin.getClaimManager().playerClaim(player, faction);
-        int cx = player.getLocation().getBlockX() >> 4;
-        int cz = player.getLocation().getBlockZ() >> 4;
-        switch (result) {
-            case SUCCESS -> messages.send(player, "claim.claimed", "x", cx, "z", cz);
-            case WRONG_WORLD -> messages.send(player, "claim.wrong-world");
-            case NOT_CLAIMABLE_ZONE -> messages.send(player, "claim.not-claimable-zone");
-            case ALREADY_CLAIMED -> {
-                Faction at = plugin.getClaimManager().getFactionAt(player.getLocation());
-                messages.send(player, "claim.already-claimed", "faction", at.getName());
-            }
-            case MAX_CLAIMS -> messages.send(player, "claim.max-claims",
-                    "max", plugin.getClaimsConfig().getInt("claims.max-per-faction", 8));
-            case NOT_ADJACENT -> messages.send(player, "claim.not-adjacent");
-            case TOO_CLOSE -> messages.send(player, "claim.too-close");
-            case INSUFFICIENT_RANK -> messages.send(player, "general.insufficient-rank");
-            case CANCELLED -> {
-            }
+        if (args.length >= 2 && (args[1].equalsIgnoreCase("valider") || args[1].equalsIgnoreCase("confirm"))) {
+            plugin.getAreaManager().confirm(player);
+        } else {
+            plugin.getAreaManager().giveWand(player, faction);
         }
     }
 
+    /** /f unclaim : rend le terrain sur lequel on se tient (une partie du prix revient a la banque). */
     private void unclaim(CommandSender sender) {
         Player player = asPlayer(sender);
         if (player == null) {
@@ -491,22 +568,22 @@ public class FactionCommand implements CommandExecutor, TabCompleter {
         if (faction == null || !requireRole(player, faction, FactionRole.OFFICER)) {
             return;
         }
-        Location location = player.getLocation();
-        var claim = plugin.getClaimManager().getClaimAt(location);
-        if (claim.isEmpty()) {
+        var area = plugin.getAreaManager().areaAt(player.getLocation());
+        if (area == null) {
             messages.send(sender, "claim.no-claim-here");
             return;
         }
-        if (!claim.get().getFactionId().equals(faction.getId())) {
+        if (!area.factionId.equals(faction.getId())) {
             messages.send(sender, "claim.not-your-claim");
             return;
         }
-        if (plugin.getClaimManager().unclaimChunk(location.getWorld(),
-                claim.get().getChunkX(), claim.get().getChunkZ())) {
-            messages.send(player, "claim.unclaimed", "x", claim.get().getChunkX(), "z", claim.get().getChunkZ());
+        long back = plugin.getAreaManager().remove(area);
+        if (faction.getHome() != null && area.contains(faction.getHome())) {
+            say(sender, "&7Le home de faction etait sur ce terrain : pense a le reposer (&f/f sethome&7).");
         }
+        say(sender, "&cTerrain abandonne (" + area.minX + ", " + area.minZ + " -> " + area.maxX + ", " + area.maxZ + "). &a"
+                + plugin.getEconomy().format(back) + " &7rendus a la banque de faction.");
     }
-
     private void unclaimAll(CommandSender sender) {
         Player player = asPlayer(sender);
         if (player == null) {
@@ -623,6 +700,7 @@ public class FactionCommand implements CommandExecutor, TabCompleter {
             messages.sendRaw(sender, "who.home-none");
         }
         messages.sendRaw(sender, "who.points", "points", faction.getPoints());
+        sender.sendMessage(Text.color("&eBanque : &a" + plugin.getEconomy().format(plugin.getEconomy().getBalance(faction.getId()))));
         if (!faction.getAllies().isEmpty()) {
             String allies = faction.getAllies().stream()
                     .map(id -> {
@@ -916,6 +994,9 @@ public class FactionCommand implements CommandExecutor, TabCompleter {
         }
         boolean bypassing = plugin.toggleBypass(player.getUniqueId());
         messages.send(player, bypassing ? "admin.bypass-on" : "admin.bypass-off");
+        player.sendMessage(Text.color(bypassing
+                ? "&6Mode staff ACTIF : &epas de deathban, commandes du reseau, mode de jeu libre, construction partout."
+                : "&aMode staff coupe : &etu joues comme un joueur (deathban, survie, pas de /spawn)."));
     }
 
     // ------------------------------------------------------------------

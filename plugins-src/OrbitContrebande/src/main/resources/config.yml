@@ -1,0 +1,32 @@
+# OrbitContrebande : CONTREBANDE, un empire de contrebande aux Docks d'Orbite (borne de l'arcade cachée, lobby seulement).
+# Les Orbit Coins (OC) ne s'achètent jamais : le jeu en verse en jouant, avec un plafond par jour et par joueur.
+# Les « crédits » (cr) n'existent que dans le jeu : caisse de l'organisation, gardée en base d'une nuit à l'autre,
+# ils ne sortent jamais du jeu et ne s'achètent pas.
+
+monde: contrebande       # monde vide (créé par le plugin) : une copie de la ville par place, tous les 300 blocs en x
+places: 4                # nuits en même temps (une organisation par ville)
+
+# PNJ dans la salle d'arcade (monde du casino), contrat docs\arcade-jeux.md : mur est, en face du portier d'ORBIT BOWL
+pnj: "19.5 64 392.5 90"  # x y z yaw
+
+nuit:
+  duree-secondes: 600       # une nuit (22h00 -> 6h00)
+  croissance-secondes: 30   # bac de culture : germe -> 4 quartz (l'engrais raccourcit)
+  condenseur-secondes: 25   # condenseur : minerai -> 3 plasma
+  synthese-secondes: 30     # synthétiseur : 1 quartz + 1 plasma -> 2 cristaux
+
+prix:                    # boutique de Rix (les améliorations du terminal sont dans le code : Menus.AMELIOS)
+  germe: 25
+  minerai: 60
+
+douane:
+  amende-pourcent: 10    # de la caisse, entre 10 et 500 cr
+  voiture-inversee: false   # true si la voiture de patrouille roule en marche arrière (modèle retourné)
+
+oc-diviseur: 10          # OC de la nuit = crédits gagnés / diviseur, partagés entre les présents (+25 % en équipe)
+plafond-oc-jour: 600
+
+# Pack de ressources du jeu (objets, drones, caisse, menus), ajouté par-dessus celui du lobby. Sans lui : objets vanilla.
+pack:
+  actif: true
+  port: 8801             # contrat docs/arcade-jeux.md : un port par famille de jeux (relayé par OrbitPackRelay)

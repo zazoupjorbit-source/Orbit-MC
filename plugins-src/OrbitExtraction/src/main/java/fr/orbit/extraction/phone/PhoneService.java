@@ -40,7 +40,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Téléphone du mode extraction : l'objet (jamais perdu), les crédits, le catalogue de la boutique et des colis,
+ * Tablette du mode extraction : l'objet (jamais perdu), les crédits, le catalogue de la boutique et des colis,
  * les messages entre joueurs. Les écrans sont dans {@link PhoneMenu}, les largages dans {@link Parcels}.
  */
 public final class PhoneService implements Listener {
@@ -122,7 +122,7 @@ public final class PhoneService implements Listener {
             offers.add(new Offer("offre" + (++n), name.toString(), icon == null ? Material.BARREL : icon, Math.max(0, price.longValue()),
                     contents, vehicle));
         }
-        plugin.getLogger().info("Téléphone : " + articles.size() + " articles en boutique, " + offers.size() + " colis.");
+        plugin.getLogger().info("Tablette : " + articles.size() + " articles en boutique, " + offers.size() + " colis.");
     }
 
     public List<Article> articles() {
@@ -159,7 +159,7 @@ public final class PhoneService implements Listener {
     public ItemStack item() {
         ItemStack it = new ItemStack(Material.ECHO_SHARD);
         it.editMeta(m -> {
-            m.displayName(Text.item("<#E8695C><b>Téléphone</b>"));
+            m.displayName(Text.item("<#E8695C><b>Tablette</b>"));
             m.lore(Text.lore(List.of(
                     "<#8A919B>Raid, boutique, colis, messages, coffre.",
                     "<#5A6270>Clic droit : ouvrir  •  ne se perd jamais")));
@@ -175,7 +175,7 @@ public final class PhoneService implements Listener {
                 && it.getItemMeta().getPersistentDataContainer().has(Keys.PHONE, PersistentDataType.BYTE);
     }
 
-    /** S'assure que le joueur a son téléphone (dernière case de la barre si elle est libre) et ses crédits de départ. */
+    /** S'assure que le joueur a sa tablette (dernière case de la barre si elle est libre) et ses crédits de départ. */
     public void give(Player p) {
         Profile pr = plugin.profiles().get(p);
         if (pr.credits < 0) {
@@ -183,8 +183,10 @@ public final class PhoneService implements Listener {
             plugin.profiles().save(pr);
         }
         PlayerInventory inv = p.getInventory();
-        for (ItemStack it : inv.getContents()) {
-            if (isPhone(it)) {
+        ItemStack[] contents = inv.getContents();
+        for (int i = 0; i < contents.length; i++) {
+            if (isPhone(contents[i])) {
+                inv.setItem(i, item());      // remet l'objet à jour (ancien « Téléphone » → tablette)
                 return;
             }
         }
@@ -304,7 +306,7 @@ public final class PhoneService implements Listener {
         int n = plugin.profiles().get(p).unread();
         if (n > 0) {
             Text.msg(p, "<#6EA2FF>✉ " + n + " message" + (n > 1 ? "s" : "") + " non lu" + (n > 1 ? "s" : "")
-                    + "</#6EA2FF> <#8A919B>— ouvre ton téléphone.");
+                    + "</#6EA2FF> <#8A919B>— ouvre ta tablette.");
         }
     }
 
@@ -357,7 +359,7 @@ public final class PhoneService implements Listener {
         }
     }
 
-    /** Le téléphone reste dans l'inventaire du joueur : pas de dépôt dans un coffre, la planque ou un colis. */
+    /** La tablette reste dans l'inventaire du joueur : pas de dépôt dans un coffre, la planque ou un colis. */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onClick(InventoryClickEvent e) {
         if (e.getView().getTopInventory().getType() == InventoryType.CRAFTING) {

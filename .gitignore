@@ -38,10 +38,22 @@
 /discord/data/
 /discord/.env
 
+# --- Bot Discord ORBIT STUDIO ---
+!/discord-studio/
+/discord-studio/node_modules/
+/discord-studio/data/
+/discord-studio/.env
+
+# --- Shaders client (Orbit Shaders) ---
+!/client/
+/client/dist/
+
 # --- Lore, maquettes, base ---
 !/lore/
 !/docs/
 !/site/
+!/station-agents/
+/station-agents/*.exe
 !/maquettes/
 !/setup/
 /setup/*.properties
@@ -68,6 +80,8 @@ runtime.json
 /mods-src/**/.gradle/
 /mods-src/**/node_modules/
 /mods-src/**/dist/
+# Dossier de jeu du client/serveur de dev de Loom (gradle runClient) : mondes et options locales
+/mods-src/**/run/
 *.jar
 
 # --- Proxy Velocity : config seulement (forwarding.secret reste local) ---
@@ -111,6 +125,8 @@ runtime.json
 !/instances/*/eula.txt
 !/instances/*/config/
 /instances/*/config/paper-global.yml
+# Instances Fabric : le secret Velocity est dans la config de FabricProxy-Lite (seul le .exemple est suivi)
+/instances/*/config/FabricProxy-Lite.toml
 !/instances/*/plugins/
 /instances/*/plugins/*
 !/instances/*/plugins/OrbitDevCore/
@@ -164,6 +180,8 @@ runtime.json
 
 # Survie : marque de génération de l'île (liée au monde), aperçu et sauvegardes de config
 /instances/*/plugins/OrbitSurvie/ile-generee
+/instances/*/plugins/OrbitSurvie/ressources-mois.txt
+/instances/*/plugins/OrbitSurvie/*.avant-ameliorations
 /instances/*/plugins/OrbitSurvie/ile-apercu.png
 /instances/*/plugins/OrbitSurvie/*.ancien
 

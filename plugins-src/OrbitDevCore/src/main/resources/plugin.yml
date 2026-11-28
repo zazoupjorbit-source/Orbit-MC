@@ -61,6 +61,10 @@ commands:
   anneau:
     description: Anneaux-portails vers les autres serveurs (style Orbit).
     usage: /anneau <creer|retour|retirer|liste>
+  elexyr:
+    description: Fait apparaître Elxssir, le casse-noisette qui cherche des noisettes (easter egg).
+    usage: /elexyr [apparaitre|retirer [tout]|liste]
+    aliases: [elxssir]
   orbitdev:
     description: Administration d'OrbitDevCore.
     usage: /orbitdev <reload|info|pack|feu|clearlag>

@@ -45,6 +45,7 @@ public final class OrbitHCFCorePlugin extends JavaPlugin {
     private ProfileManager profileManager;
     private FactionManager factionManager;
     private ClaimManager claimManager;
+    private fr.orbitgames.hcf.core.claim.AreaManager areaManager;
     private DtrManager dtrManager;
     private TimerManager timerManager;
     private WarmupManager warmupManager;
@@ -54,6 +55,13 @@ public final class OrbitHCFCorePlugin extends JavaPlugin {
     private FileConfiguration claimsConfig;
     private FileConfiguration dtrConfig;
     private FileConfiguration databaseConfig;
+    private FileConfiguration serverConfig;
+
+    private fr.orbitgames.hcf.core.economy.EconomyManager economy;
+    private fr.orbitgames.hcf.core.server.ServerManager serverManager;
+    private fr.orbitgames.hcf.core.server.ChatManager chatManager;
+    private fr.orbitgames.hcf.core.server.SignListener signListener;
+    private fr.orbitgames.hcf.core.server.WorldBuilder worldBuilder;
 
     private final Set<UUID> bypassing = ConcurrentHashMap.newKeySet();
     private BukkitTask autosaveTask;
@@ -66,6 +74,7 @@ public final class OrbitHCFCorePlugin extends JavaPlugin {
         claimsConfig = loadYaml("claims.yml");
         dtrConfig = loadYaml("dtr.yml");
         databaseConfig = loadYaml("database.yml");
+        serverConfig = loadYaml("serveur.yml");
         messages = new Messages(loadYaml("messages.yml"));
 
         // Stockage
@@ -82,6 +91,7 @@ public final class OrbitHCFCorePlugin extends JavaPlugin {
         profileManager = new ProfileManager(this, database);
         factionManager = new FactionManager(this, database);
         claimManager = new ClaimManager(this, database);
+        areaManager = new fr.orbitgames.hcf.core.claim.AreaManager(this, database);
         dtrManager = new DtrManager(this);
         timerManager = new TimerManager(this, database);
         warmupManager = new WarmupManager(this);
@@ -91,10 +101,20 @@ public final class OrbitHCFCorePlugin extends JavaPlugin {
         factionManager.ensureSystemFactions();
         claimManager.loadConfig(claimsConfig, getConfig());
         claimManager.loadAll();
+        areaManager.load(claimsConfig);
         dtrManager.loadConfig(dtrConfig);
         dtrManager.start();
         timerManager.loadAll();
         timerManager.start();
+
+        // Le serveur HCF : argent, spawn, bordure, chat, panneaux, constructions
+        economy = new fr.orbitgames.hcf.core.economy.EconomyManager(this, database);
+        economy.load();
+        serverManager = new fr.orbitgames.hcf.core.server.ServerManager(this);
+        chatManager = new fr.orbitgames.hcf.core.server.ChatManager(this);
+        signListener = new fr.orbitgames.hcf.core.server.SignListener(this);
+        worldBuilder = new fr.orbitgames.hcf.core.server.WorldBuilder(this);
+        OrbitHCF.register(fr.orbitgames.hcf.api.service.EconomyService.class, economy);
 
         // Enregistrement des services API
         OrbitHCF.register(DatabaseService.class, database);
@@ -109,6 +129,27 @@ public final class OrbitHCFCorePlugin extends JavaPlugin {
         fr.orbitgames.hcf.api.HcfWorlds.register(this, new DeathListener(this));
         fr.orbitgames.hcf.api.HcfWorlds.register(this, new ProtectionListener(this));
         fr.orbitgames.hcf.api.HcfWorlds.register(this, new WarmupListener(this));
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, serverManager);
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, areaManager);
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, chatManager);
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, signListener);
+        fr.orbitgames.hcf.api.HcfWorlds.register(this, new fr.orbitgames.hcf.core.server.OreListener(this));
+
+        fr.orbitgames.hcf.core.command.MoneyCommand money = new fr.orbitgames.hcf.core.command.MoneyCommand(this);
+        for (String name : new String[]{"balance", "pay", "eco"}) {
+            PluginCommand moneyCommand = getCommand(name);
+            if (moneyCommand != null) {
+                moneyCommand.setExecutor(money);
+            }
+        }
+        PluginCommand hcf = getCommand("hcf");
+        if (hcf != null) {
+            fr.orbitgames.hcf.core.command.HcfCommand hcfCommand = new fr.orbitgames.hcf.core.command.HcfCommand(this);
+            hcf.setExecutor(hcfCommand);
+            hcf.setTabCompleter(hcfCommand);
+        }
+        // Les mondes sont charges : la bordure peut etre posee.
+        Bukkit.getScheduler().runTask(this, () -> getLogger().info("Bordures : " + serverManager.applyBorders()));
 
         // Commandes
         FactionCommand factionCommand = new FactionCommand(this);
@@ -153,6 +194,7 @@ public final class OrbitHCFCorePlugin extends JavaPlugin {
         OrbitHCF.unregister(ClaimService.class);
         OrbitHCF.unregister(DtrService.class);
         OrbitHCF.unregister(TimerService.class);
+        OrbitHCF.unregister(fr.orbitgames.hcf.api.service.EconomyService.class);
 
         if (database != null) {
             database.close();
@@ -179,15 +221,11 @@ public final class OrbitHCFCorePlugin extends JavaPlugin {
     // ------------------------------------------------------------------
 
     public boolean isBypassing(UUID playerId) {
-        return bypassing.contains(playerId);
+        return fr.orbitgames.hcf.api.HcfWorlds.isStaffMode(playerId);
     }
 
     public boolean toggleBypass(UUID playerId) {
-        if (bypassing.remove(playerId)) {
-            return false;
-        }
-        bypassing.add(playerId);
-        return true;
+        return fr.orbitgames.hcf.api.HcfWorlds.toggleStaffMode(playerId);
     }
 
     // ------------------------------------------------------------------
@@ -208,6 +246,10 @@ public final class OrbitHCFCorePlugin extends JavaPlugin {
 
     public ClaimManager getClaimManager() {
         return claimManager;
+    }
+
+    public fr.orbitgames.hcf.core.claim.AreaManager getAreaManager() {
+        return areaManager;
     }
 
     public DtrManager getDtrManager() {
@@ -232,6 +274,35 @@ public final class OrbitHCFCorePlugin extends JavaPlugin {
 
     public FileConfiguration getClaimsConfig() {
         return claimsConfig;
+    }
+
+    public FileConfiguration getServerConfig() {
+        return serverConfig;
+    }
+
+    /** Relit serveur.yml (les objets qui le lisent passent tous par {@link #getServerConfig()}). */
+    public void reloadServerConfig() {
+        serverConfig = loadYaml("serveur.yml");
+    }
+
+    public fr.orbitgames.hcf.core.economy.EconomyManager getEconomy() {
+        return economy;
+    }
+
+    public fr.orbitgames.hcf.core.server.ServerManager getServerManager() {
+        return serverManager;
+    }
+
+    public fr.orbitgames.hcf.core.server.ChatManager getChatManager() {
+        return chatManager;
+    }
+
+    public fr.orbitgames.hcf.core.server.SignListener getSignListener() {
+        return signListener;
+    }
+
+    public fr.orbitgames.hcf.core.server.WorldBuilder getWorldBuilder() {
+        return worldBuilder;
     }
 
     public FileConfiguration getDtrConfig() {

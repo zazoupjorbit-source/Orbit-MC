@@ -35,13 +35,24 @@ public final class IleService {
 
     private final JavaPlugin plugin;
     private final String worldName;
+    private final Dessin dessin;
     private Canvas reperes; // points, PNJ et panneaux du dessin (les blocs ne sont pas gardés)
     private BukkitTask job;
     private Runnable apresGeneration = () -> {};
 
-    public IleService(JavaPlugin plugin, String worldName) {
+    public IleService(JavaPlugin plugin, String worldName, Dessin dessin) {
         this.plugin = plugin;
         this.worldName = worldName;
+        this.dessin = dessin;
+    }
+
+    public Dessin dessin() {
+        return dessin;
+    }
+
+    private Canvas plan() {
+        Canvas.vide = dessin.vide();
+        return dessin.dessiner();
     }
 
     public String worldName() {
@@ -56,13 +67,13 @@ public final class IleService {
     public World world() {
         World world = Bukkit.getWorld(worldName);
         if (world == null) {
-            world = new WorldCreator(worldName).generator(new OceanGenerator()).generateStructures(false).createWorld();
+            world = new WorldCreator(worldName).generator(dessin.generateur()).generateStructures(false).createWorld();
             if (world != null) {
                 Canvas.Point s = reperes().points().get("spawn");
                 world.setSpawnLocation(new Location(world, s.x(), s.y(), s.z(), s.yaw(), 0f));
                 world.getWorldBorder().setCenter(0.5, 0.5);
                 world.getWorldBorder().setSize(plugin.getConfig().getInt("ile.bordure", 260));
-                world.setTime(6000);
+                world.setTime(plugin.getConfig().getLong("ile.heure", 6000));
                 world.setStorm(false);
                 world.setThundering(false);
             }
@@ -72,7 +83,7 @@ public final class IleService {
 
     public Canvas reperes() {
         if (reperes == null) {
-            reperes = IleDesign.dessiner();
+            reperes = plan();
             // On ne garde que les repères : le plan complet est recalculé à chaque génération.
             Canvas light = new Canvas();
             reperes.points().values().forEach(p -> light.point(p.nom(), p.x(), p.y(), p.z(), p.yaw()));
@@ -116,21 +127,21 @@ public final class IleService {
      */
     public void parcourir(CommandSender sender, boolean poser) {
         if (busy()) {
-            Msg.send(sender, "<red>Un travail sur l'île est déjà en cours.");
+            Msg.send(sender, "<red>Un travail sur le spawn est déjà en cours.");
             return;
         }
         World world = world();
         if (world == null) {
-            Msg.send(sender, "<red>Monde de l'île impossible à créer.");
+            Msg.send(sender, "<red>Monde du spawn impossible à créer.");
             return;
         }
-        Msg.send(sender, "Calcul du plan de l'île…");
+        Msg.send(sender, "Calcul du plan du spawn…");
         long t0 = System.currentTimeMillis();
-        Canvas plan = IleDesign.dessiner();
+        Canvas plan = plan();
         Msg.send(sender, "Plan prêt : " + Msg.OR + plan.size() + "<gray> blocs dessinés ("
                 + (System.currentTimeMillis() - t0) + " ms). " + (poser ? "Pose" : "Comparaison") + " en cours…");
 
-        int reach = IleDesign.REACH;
+        int reach = dessin.reach();
         List<Chunk> chunks = new ArrayList<>();
         int[] loaded = {0};
         int total = 0;
@@ -157,7 +168,7 @@ public final class IleService {
             int columns = 0;
             while (cursor[0] <= reach && columns++ < 500) {
                 int x = cursor[0], z = cursor[1];
-                for (int y = IleDesign.MIN_Y; y <= IleDesign.MAX_Y; y++) {
+                for (int y = dessin.minY(); y <= dessin.maxY(); y++) {
                     Block block = world.getBlockAt(x, y, z);
                     BlockData voulu = plan.get(x, y, z);
                     BlockData actuel = block.getBlockData();
@@ -194,7 +205,7 @@ public final class IleService {
             if (count[0] > 0) {
                 File out = new File(plugin.getDataFolder(), "ile-ecarts.txt");
                 List<String> text = new ArrayList<>();
-                text.add("# Écarts entre le monde « " + world.getName() + " » et le plan de l'île : " + count[0] + " blocs.");
+                text.add("# Écarts entre le monde « " + world.getName() + " » et le plan du spawn : " + count[0] + " blocs.");
                 text.add("# Une ligne par bloc : x y z | monde : ce qui est posé | plan : ce que /ile generer mettrait.");
                 text.addAll(lines);
                 try {
@@ -209,21 +220,22 @@ public final class IleService {
 
     /** Vue de dessus du plan (4 px par bloc, ombrée selon la hauteur) dans ile-apercu.png. */
     public File apercu() throws IOException {
-        Canvas plan = IleDesign.dessiner();
-        int reach = IleDesign.REACH, px = 4, size = (reach * 2 + 1) * px;
+        Canvas plan = plan();
+        int reach = dessin.reach(), px = 4, size = (reach * 2 + 1) * px;
         java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(size, size, java.awt.image.BufferedImage.TYPE_INT_RGB);
         for (int x = -reach; x <= reach; x++) {
             for (int z = -reach; z <= reach; z++) {
-                int y = IleDesign.MAX_Y;
+                int y = dessin.maxY();
                 BlockData d = plan.get(x, y, z);
-                while (y > IleDesign.MIN_Y && (d.getMaterial() == Material.AIR || d.getMaterial() == Material.LIGHTNING_ROD)) {
+                while (y > dessin.minY() && (d.getMaterial() == Material.AIR || d.getMaterial() == Material.LIGHTNING_ROD
+                        || d.getMaterial() == Material.LIGHT || d.getMaterial() == Material.GLASS)) {
                     d = plan.get(x, --y, z);
                 }
                 org.bukkit.Color c = d.getMapColor();
                 int r = c.getRed(), g = c.getGreen(), b = c.getBlue();
                 if (d.getMaterial() == Material.WATER) {
                     int fond = y;
-                    while (fond > IleDesign.MIN_Y && plan.get(x, fond, z).getMaterial() == Material.WATER) {
+                    while (fond > dessin.minY() && plan.get(x, fond, z).getMaterial() == Material.WATER) {
                         fond--;
                     }
                     double k = Math.min(1, (y - fond) / 20.0);
@@ -231,7 +243,7 @@ public final class IleService {
                     g = (int) (190 * (1 - k) + 90 * k);
                     b = (int) (200 * (1 - k) + 170 * k);
                 } else {
-                    double f = 0.82 + (y - 60) * 0.012;
+                    double f = Math.max(0.55, Math.min(1.3, 0.82 + (y - (dessin.sol() - 6)) * 0.012));
                     r = Math.min(255, (int) (r * f));
                     g = Math.min(255, (int) (g * f));
                     b = Math.min(255, (int) (b * f));
@@ -251,10 +263,10 @@ public final class IleService {
 
     private void report(CommandSender sender, boolean poser, int[] count, Map<String, Integer> sortes) {
         if (count[0] == 0) {
-            Msg.send(sender, poser ? "Île déjà conforme au plan : rien à poser." : "Écarts : aucun, le monde est identique au plan.");
+            Msg.send(sender, poser ? "Spawn déjà conforme au plan : rien à poser." : "Écarts : aucun, le monde est identique au plan.");
             return;
         }
-        Msg.send(sender, (poser ? "Île générée : " + Msg.OR + count[0] + "<gray> blocs posés."
+        Msg.send(sender, (poser ? "Spawn généré : " + Msg.OR + count[0] + "<gray> blocs posés."
                 : "Écarts : " + Msg.OR + count[0] + "<gray> blocs diffèrent du plan, dont " + count[1]
                 + " qui seraient vidés (retouches posées hors du plan). <red>/ile generer les écraserait."));
         sortes.entrySet().stream().sorted((a, b) -> b.getValue() - a.getValue()).limit(8)

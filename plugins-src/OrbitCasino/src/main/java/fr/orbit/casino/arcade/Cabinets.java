@@ -30,7 +30,7 @@ import java.util.UUID;
 
 /**
  * Bornes d'arcade 3D de la salle cachée : à l'emplacement de chaque PNJ de jeu (les siens et ceux d'OrbitBornes,
- * OrbitArene, OrbitRoyale, OrbitChasseurs), une borne texturée (modèles orbitcasino:borne_&lt;id&gt; du pack du casino,
+ * OrbitArene, OrbitRoyale, OrbitChasseurs, OrbitContrebande, OrbitBowl), une borne texturée (modèles orbitcasino:borne_&lt;id&gt; du pack du casino,
  * affiche HD sur l'écran et le fronton). Le PNJ reste là, invisible et un peu agrandi : c'est toujours lui qu'on
  * clique, donc les autres plugins n'ont rien à changer. Vérifié toutes les 2 s (PNJ reposés, /casino generer…).
  * Réglages : arcade.bornes.* (actif, echelle, lacet, pnj-taille, emplacements « x z lacet »).
@@ -75,6 +75,9 @@ public final class Cabinets {
         add(c, "turbo", 18.5, 411.5, 180);
         add(c, "chasseurs", -12.5, 389.5, 0);
         add(c, "siege", 12.5, 389.5, 0);
+        add(c, "contrebande", 19.5, 392.5, 90);   // PNJ d'OrbitContrebande (mur est)
+        add(c, "bowl", -18.5, 392.5, -90);        // portier d'ORBIT BOWL (mur ouest)
+        add(c, "breche", 19.5, 407.5, 90);        // instructrice de BRÈCHE (mur est)
         task = Bukkit.getScheduler().runTaskTimer(plugin, this::tick, 60L, 40L);
         plugin.getLogger().info("Bornes d'arcade : " + spots.size() + " bornes 3D à la place des PNJ.");
     }

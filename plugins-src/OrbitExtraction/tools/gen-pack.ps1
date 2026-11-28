@@ -758,22 +758,36 @@ function Write-Model([string]$id, [scriptblock]$build, [string]$kind) {
     Write-Host ("{0,-16} {1,3} cubes  longueur {2}" -f $id, $script:els.Count, (F ($script:max[2] - $script:min[2])))
 }
 
-# Telephone (menu du mode) : ecran sur la face sud (+Z), celle qu'on voit dans l'inventaire et en vue subjective.
+# Tablette renforcee (menu du mode), en paysage : ecran sur la face sud (+Z), celle qu'on voit dans l'inventaire et
+# en vue subjective. Coque gris fonce, coins en caoutchouc noir a liseret rouge, poignees laterales, barre d'onglets.
 $phone = {
-    B 5.7 3.2 7.55 10.3 12.8 8.45 1
-    B 5.55 3.5 7.65 10.45 12.5 8.35 2
-    B 6.05 4.4 8.45 9.95 11.9 8.55 9
-    B 6.05 11.2 8.55 9.95 11.9 8.6 1
-    B 6.35 11.35 8.6 7.6 11.7 8.65 14
-    B 9.2 11.35 8.6 9.7 11.7 8.65 13
+    B 1.6 4.2 7.4 14.4 12.2 8.4 2
+    foreach ($c in @(@(1.2, 3.8), @(12.8, 3.8), @(1.2, 10.6), @(12.8, 10.6))) {
+        B $c[0] $c[1] 7.25 ($c[0] + 2) ($c[1] + 2) 8.55 1
+    }
+    B 1.25 5.4 8.5 1.45 10.6 8.56 11
+    B 14.55 5.4 8.5 14.75 10.6 8.56 11
+    B 0.9 6 7.55 1.6 10.4 8.25 1
+    B 14.4 6 7.55 15.1 10.4 8.25 1
+    B 2.7 5.1 8.4 13.3 11.4 8.46 1
+    B 3.1 10.6 8.46 6.6 10.95 8.5 14
+    B 11.6 10.6 8.46 12.9 10.95 8.5 13
+    B 3.1 10.3 8.46 12.9 10.4 8.49 11
     foreach ($row in 0, 1) { foreach ($col in 0, 1, 2) {
         $c = @(11, 12, 13, 9, 10, 8)[$row * 3 + $col]
-        B (6.4 + $col * 1.2) (8.9 - $row * 1.5) 8.55 (7.2 + $col * 1.2) (9.9 - $row * 1.5) 8.62 $c
+        B (3.3 + $col * 3.3) (8.1 - $row * 1.6) 8.46 (5.9 + $col * 3.3) (9.5 - $row * 1.6) 8.52 $c
     } }
-    B 7.4 3.55 8.45 8.6 3.95 8.55 2
-    B 6.2 11.6 7.45 7.2 12.4 7.55 3
-    B 6.45 11.8 7.4 6.95 12.2 7.45 9
-    B 10.3 9.5 7.8 10.5 11 8.2 3
+    B 3.1 5.35 8.46 12.9 6.15 8.5 0
+    foreach ($k in 0..6) {
+        $c = if ($k -eq 0) { 11 } else { 3 }
+        B (3.25 + $k * 1.36) 5.5 8.5 (4.35 + $k * 1.36) 6.0 8.53 $c
+    }
+    B 13.6 4.4 8.4 14.1 4.9 8.5 13
+    B 14.4 8.8 7.7 15.2 9.9 8.1 3
+    B 12.6 12.2 7.8 13 14.6 8.2 3
+    B 12.5 14.6 7.75 13.1 15.1 8.25 11
+    B 4.6 12.2 7.6 6.6 12.6 8.2 1
+    B 3 6.4 7.1 13 7.6 7.4 7
 }
 function Write-Phone {
     $script:els = New-Object System.Collections.Generic.List[string]
@@ -781,12 +795,12 @@ function Write-Phone {
     & $phone
     $display = @"
   "display": {
-    "thirdperson_righthand": {"rotation": [90, 0, 0], "translation": [0, 0, 1.6], "scale": [0.55, 0.55, 0.55]},
-    "thirdperson_lefthand": {"rotation": [90, 0, 0], "translation": [0, 0, 1.6], "scale": [0.55, 0.55, 0.55]},
-    "firstperson_righthand": {"rotation": [-8, 8, 0], "translation": [0, 3, -1], "scale": [0.75, 0.75, 0.75]},
-    "firstperson_lefthand": {"rotation": [-8, -8, 0], "translation": [0, 3, -1], "scale": [0.75, 0.75, 0.75]},
+    "thirdperson_righthand": {"rotation": [70, 0, 0], "translation": [0, 1, 1.4], "scale": [0.5, 0.5, 0.5]},
+    "thirdperson_lefthand": {"rotation": [70, 0, 0], "translation": [0, 1, 1.4], "scale": [0.5, 0.5, 0.5]},
+    "firstperson_righthand": {"rotation": [-14, 12, 0], "translation": [-3.5, 3.2, -2], "scale": [0.68, 0.68, 0.68]},
+    "firstperson_lefthand": {"rotation": [-14, -12, 0], "translation": [-3.5, 3.2, -2], "scale": [0.68, 0.68, 0.68]},
     "ground": {"rotation": [0, 0, 0], "translation": [0, 2, 0], "scale": [0.5, 0.5, 0.5]},
-    "gui": {"rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [1.45, 1.45, 1.45]},
+    "gui": {"rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [1.1, 1.1, 1.1]},
     "fixed": {"rotation": [0, 180, 0], "translation": [0, 0, 0], "scale": [1.2, 1.2, 1.2]},
     "head": {"rotation": [0, 180, 0], "translation": [0, 4, 0], "scale": [1, 1, 1]}
   }

@@ -234,6 +234,42 @@ public final class Kits {
         }, () -> Msg.send(p, "<red>Kit indisponible pour le moment (base de données)."));
     }
 
+    /**
+     * Rattrapage : ceux qui ont pris le kit Départ avant que l'armoire de base y soit (date « bases.rattrapage-avant »)
+     * et qui n'ont aucune base en reçoivent une, une seule fois (ligne « armoire-rattrapage » dans survie_kits).
+     */
+    public void rattraperArmoire(Player p) {
+        String avant = plugin.getConfig().getString("bases.rattrapage-avant", "");
+        if (avant.isEmpty() || !plugin.db().available() || !plugin.bases().possedees(p.getUniqueId()).isEmpty()) {
+            return;
+        }
+        UUID uuid = p.getUniqueId();
+        plugin.db().then(plugin.db().transaction(c -> {
+            try (PreparedStatement st = c.prepareStatement(
+                    "SELECT 1 FROM survie_kits WHERE uuid = ? AND kit = 'depart' AND pris_le < ?")) {
+                st.setString(1, uuid.toString());
+                st.setString(2, avant);
+                try (ResultSet rs = st.executeQuery()) {
+                    if (!rs.next()) {
+                        return false;
+                    }
+                }
+            }
+            try (PreparedStatement st = c.prepareStatement(
+                    "INSERT IGNORE INTO survie_kits (uuid, kit, pris_le) VALUES (?, 'armoire-rattrapage', NOW())")) {
+                st.setString(1, uuid.toString());
+                return st.executeUpdate() == 1;
+            }
+        }), donne -> {
+            if (donne && p.isOnline()) {
+                Objets.donner(p, plugin.bases().objet(1));
+                Msg.send(p, "Cadeau : une " + Msg.OR + "armoire de base<gray> ! Pose-la au cœur de ta base pour la protéger "
+                        + "(<white>/base<gray> pour tout savoir).");
+                p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.6f, 1.4f);
+            }
+        }, null);
+    }
+
     public List<String> ids() {
         return new ArrayList<>(kits.keySet());
     }

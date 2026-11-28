@@ -1,0 +1,71 @@
+# ============================================================
+#  OrbitHCF-Core - Le serveur HCF : spawn, bordure, argent, boutique
+#  Rechargement : /hcf reload
+# ============================================================
+
+spawn:
+  # Point d'arrivee (premiere connexion, reapparition apres une mort). Monde vide = spawn du monde HCF.
+  # Se regle en jeu : /hcf spawn definir, ou tout seul par /hcf generer spawn.
+  monde: ""
+  x: 0.5
+  y: 80.0
+  z: 0.5
+  yaw: 0.0
+  # Apres une mort on revient toujours au spawn (les lits ne servent pas de point de retour).
+  reapparition-au-spawn: true
+  # Le serveur est en survie : un joueur qui arrive dans un autre mode y est remis (sauf admin).
+  forcer-survie: true
+
+# Commandes des autres plugins du reseau refusees aux joueurs en HCF (les admins les gardent).
+# En HCF on rentre au spawn a pied : pas de /spawn, pas de /warp, pas de monture.
+commandes-interdites:
+  - spawn
+  - warp
+  - monture
+  - boussole
+  - cosmetiques
+  - boutique
+
+bordure:
+  # Demi-cote de la carte, en blocs, autour de 0,0. 0 = pas de bordure.
+  monde: 2000
+  nether: 500
+  end: 0
+
+economie:
+  symbole: "$"
+  # Argent donne a la premiere connexion
+  depart: 250
+  # Argent gagne en tuant un joueur
+  prime-kill: 100
+
+diamants:
+  # Annonce dans le chat quand un joueur trouve un filon de diamants ([FD])
+  annonce: true
+
+# Panneaux de la boutique du spawn (poses par /hcf generer spawn).
+# Un admin peut aussi en poser a la main : ligne 1 [Achat] ou [Vente], ligne 2 quantite,
+# ligne 3 materiau (nom Bukkit), ligne 4 prix.
+boutique:
+  vente:
+    - { objet: DIAMOND_BLOCK, quantite: 16, prix: 2000, nom: "Bloc diamant" }
+    - { objet: EMERALD_BLOCK, quantite: 16, prix: 2400, nom: "Bloc emeraude" }
+    - { objet: GOLD_BLOCK, quantite: 16, prix: 1500, nom: "Bloc d'or" }
+    - { objet: IRON_BLOCK, quantite: 16, prix: 1000, nom: "Bloc de fer" }
+    - { objet: LAPIS_BLOCK, quantite: 16, prix: 800, nom: "Bloc lapis" }
+    - { objet: REDSTONE_BLOCK, quantite: 16, prix: 700, nom: "Bloc redstone" }
+    - { objet: COAL_BLOCK, quantite: 16, prix: 500, nom: "Bloc charbon" }
+  achat:
+    - { objet: NETHER_WART, quantite: 16, prix: 300, nom: "Verrue Nether" }
+    - { objet: BLAZE_ROD, quantite: 8, prix: 400, nom: "Baton de blaze" }
+    - { objet: SUGAR_CANE, quantite: 16, prix: 150, nom: "Canne a sucre" }
+    - { objet: GLISTERING_MELON_SLICE, quantite: 16, prix: 350, nom: "Melon scint." }
+    - { objet: GLOWSTONE_DUST, quantite: 16, prix: 300, nom: "Poudre lumin." }
+    - { objet: GUNPOWDER, quantite: 16, prix: 400, nom: "Poudre a canon" }
+    - { objet: SPIDER_EYE, quantite: 16, prix: 250, nom: "Oeil d'araignee" }
+    - { objet: GHAST_TEAR, quantite: 4, prix: 400, nom: "Larme de ghast" }
+    - { objet: SLIME_BALL, quantite: 16, prix: 300, nom: "Boule de slime" }
+    - { objet: ENDER_PEARL, quantite: 16, prix: 800, nom: "Perle de l'Ender" }
+    - { objet: CARROT, quantite: 16, prix: 100, nom: "Carotte" }
+    - { objet: POTATO, quantite: 16, prix: 100, nom: "Pomme de terre" }
+    - { objet: COW_SPAWN_EGG, quantite: 2, prix: 600, nom: "Oeuf de vache" }

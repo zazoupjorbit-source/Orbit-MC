@@ -71,7 +71,14 @@ Sans mod ni pack : le son ne passe pas par le jeu mais par le navigateur de chaq
 
 ## Console de jeux
 Clic droit sur la console → assis face à l'écran. Z Q S D + Espace + Maj, **F = retour au menu / quitter**. 30 images par seconde.
-Records : 5 meilleurs par jeu dans `plugins/OrbitTele/scores.yml` (ids `tv_*`, séparés des bornes de la salle d'arcade), affichés au menu et sur l'image de veille.
+Records : 5 meilleurs par jeu dans `plugins/OrbitTele/scores.yml` (ids `tv_*`, séparés des bornes de la salle d'arcade), affichés au menu de la console.
+
+## Image de veille (télé éteinte)
+Demande de Zazou (25/11) : DA Orbit MC et **mode d'emploi seulement** (plus de records). `Veille.java`, deux versions :
+- télé + console : cartes JOUER (clic droit, Z S + Espace, partie à deux), TOUCHES (Z Q S D, Espace, Maj, F), ÉCOUTER (`/tele son`) ;
+- télé seule : REGARDER (diffusion du staff, 48 blocs, `/tele lien` pour le staff) et ÉCOUTER.
+Couleurs prises **exactement dans la palette des cartes** (pas de tramage sur la veille, un dégradé y ferait des marches).
+Aperçus : `docs/veille-console.png`, `docs/veille-tele.png`.
 Ajouter un jeu : une classe qui étend `Jeu` (`tic(Manette a, Manette b)`, `dessiner`) + une ligne dans `Jeu.LISTE`.
 Pas d'Orbit Coins versés par la console.
 

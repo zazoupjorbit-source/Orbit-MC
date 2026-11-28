@@ -382,4 +382,7 @@ $icon.Dispose()
 # Bandeau d'entree de zone (polices orbitmmo:zone*, cadre HD : tools/hd/ZoneBanner.cs, hud/ZoneBanner.java).
 & (Join-Path $PSScriptRoot 'gen-zone.ps1')
 
+# Boss du monde en cubes (NEMESIS) : modeles par os + animations (maquettes\boss\<nom>, paquet Java worldboss).
+& (Join-Path $PSScriptRoot 'gen-boss.ps1')
+
 Write-Host "Pack genere dans $out"

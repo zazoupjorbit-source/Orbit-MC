@@ -295,6 +295,24 @@ bosses:
     adds: loup_givre
     lab: { kind: armor, name: "Cuirasse de givre", item: IRON_CHESTPLATE, value: 12 }
 
+# Boss du monde du continent : NEMESIS, le Gardien dechu (paquet worldboss, docs/boss-du-monde.md).
+# Son repaire se pose en jeu (/mmoadmin nemesis ici) et se garde dans plugins/OrbitMMO/nemesis.yml.
+# Tant qu'aucun repaire n'est pose, il n'apparait jamais tout seul. Valeurs absentes = valeurs ci-dessous.
+nemesis:
+  auto: true                 # apparition automatique au repaire
+  premiere-minutes: 30       # apres un demarrage du serveur
+  intervalle-minutes: 180    # entre sa mort et la reapparition suivante
+  annonce-minutes: 5         # annonce aux joueurs du continent avant l'apparition
+  niveau: 40
+  pv: 60                     # x PV d'un monstre de son niveau
+  pv-par-joueur: 0.35        # + 35 % des PV de base par participant en plus du premier
+  degats: 2.6                # x degats d'un monstre de son niveau, puis coefficient de chaque attaque
+  vitesse: 1.0
+  echelle: 1.6               # taille du modele : 64 cubes x 1.6 / 16 = 6,4 blocs de haut
+  laisse: 40                 # au-dela, il rentre a son repaire
+  xp: 40                     # x XP d'un monstre de son niveau, pour chaque participant
+  or: 40
+
 # Cristal de teleportation (reutilisable, lie au joueur ; un aubergiste le lie a son auberge).
 # recharge-secondes : temps entre deux usages (0 = aucune recharge).
 cristal:

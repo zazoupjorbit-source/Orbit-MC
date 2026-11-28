@@ -159,6 +159,10 @@ public class ClaimManager implements ClaimService {
 
     @Override
     public Optional<Claim> getClaimAt(Location location) {
+        AreaManager.Area area = plugin.getAreaManager().areaAt(location);
+        if (area != null) {
+            return Optional.of(area);
+        }
         return Optional.ofNullable(claims.get(
                 ClaimImpl.key(location.getWorld().getName(), location.getBlockX() >> 4, location.getBlockZ() >> 4)));
     }
@@ -175,6 +179,14 @@ public class ClaimManager implements ClaimService {
         if (zone == FactionType.SAFEZONE || zone == FactionType.ROAD) {
             Faction system = plugin.getFactionManager().getSystemFaction(zone);
             return system != null ? system : wilderness;
+        }
+        // Terrains a la baguette des factions
+        AreaManager.Area area = plugin.getAreaManager().areaAt(location.getWorld().getName(), x, z);
+        if (area != null) {
+            Faction owner = plugin.getFactionManager().getFaction(area.factionId);
+            if (owner != null) {
+                return owner;
+            }
         }
         // Les claims (joueurs et evenements) priment sur la warzone
         ClaimImpl claim = claims.get(ClaimImpl.key(location.getWorld().getName(), x >> 4, z >> 4));
@@ -193,8 +205,12 @@ public class ClaimManager implements ClaimService {
 
     @Override
     public Collection<Claim> getClaims(Faction faction) {
+        java.util.List<Claim> all = new java.util.ArrayList<>(plugin.getAreaManager().of(faction.getId()));
         Set<ClaimImpl> set = claimsByFaction.get(faction.getId());
-        return set != null ? Collections.unmodifiableCollection(set) : Collections.emptyList();
+        if (set != null) {
+            all.addAll(set);
+        }
+        return all;
     }
 
     @Override
@@ -243,6 +259,7 @@ public class ClaimManager implements ClaimService {
 
     @Override
     public void unclaimAll(Faction faction) {
+        plugin.getAreaManager().removeAll(faction.getId());
         Set<ClaimImpl> set = claimsByFaction.remove(faction.getId());
         if (set == null) {
             return;
@@ -371,12 +388,27 @@ public class ClaimManager implements ClaimService {
                     }
                     int blockX = (cx << 4) + 8;
                     int blockZ = (cz << 4) + 8;
+                    if (plugin.getAreaManager().areaAt(world.getName(), blockX, blockZ) != null) {
+                        continue;
+                    }
                     int y = world.getHighestBlockYAt(blockX, blockZ) + 1;
                     return new Location(world, blockX + 0.5D, y, blockZ + 0.5D);
                 }
             }
         }
         return null;
+    }
+
+    /** Vrai si un claim par chunk (zone d'evenement) touche ce rectangle de blocs. */
+    public boolean hasChunkClaimIn(String world, int x1, int z1, int x2, int z2) {
+        for (int cx = x1 >> 4; cx <= x2 >> 4; cx++) {
+            for (int cz = z1 >> 4; cz <= z2 >> 4; cz++) {
+                if (claims.containsKey(ClaimImpl.key(world, cx, cz))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public boolean isProtectContainers() {

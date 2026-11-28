@@ -1,0 +1,15 @@
+{
+  "univers": [
+    { "cle": "ark", "nom": "ORBIT ARK", "court": "ARK", "couleur": "#ff9f43", "salle": true, "dossiers": ["oa-site", "orbit-ark", "OrbitNowipe", "mcp"] },
+    { "cle": "mc", "nom": "ORBIT MC", "court": "MC", "couleur": "#7fe08a", "salle": true, "dossiers": ["MinecraftDev", "orbit-mc-site", "reborn-mc-site", "Projet MMOmc", "mods"] },
+    { "cle": "pz", "nom": "ORBIT PZ", "court": "PZ", "couleur": "#ff6b6b", "salle": true, "dossiers": ["orbit-pz-manager", "Zomboid"] },
+    { "cle": "11d", "nom": "11D LABS", "court": "11D", "couleur": "#b79cff", "salle": true, "dossiers": ["11D-Labs"] },
+    { "cle": "gmod", "nom": "ORBIT GMOD", "court": "GMOD", "couleur": "#5fe0e6", "dossiers": ["GmodDev", "GMod"] },
+    { "cle": "roblox", "nom": "ORBIT ROBLOX", "court": "ROBLOX", "couleur": "#ff7fd0", "dossiers": ["jeux roblox", "Roblox", "Orbit univers RB", "OrbitDefenders", "BrainrotEmpire"] },
+    { "cle": "qg", "nom": "QG ORBIT", "court": "QG", "couleur": "#f2b83a", "planete": false, "dossiers": ["orbit-qg"] }
+  ],
+  "modules": {},
+  "qg": "~/orbit-qg",
+  "reposApresMin": 20,
+  "attenteMaxMin": 180
+}

@@ -53,3 +53,12 @@ illegal-items:
 death:
   # Retirer le combat tag a la mort
   clear-tag: true
+
+# PNJ de combat logger : un joueur qui se deconnecte hors de la Safezone laisse un villageois a son nom.
+# Si le villageois est tue : objets au sol, perte de DTR, deathban. /logout (30 s sans bouger) = sortie sans PNJ.
+combat-logger:
+  enabled: true
+  # Duree de presence du PNJ (au moins le temps de combat restant si le joueur etait en combat)
+  seconds: 30
+  # true : PNJ seulement si le joueur etait en combat
+  only-when-tagged: false

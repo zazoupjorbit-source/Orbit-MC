@@ -68,6 +68,10 @@ public class CombatTagListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
+        if (plugin.getCombatLogger() != null && plugin.getCombatLogger().handles(player)) {
+            // Un PNJ de combat logger a pris sa place : la sanction ne tombe que si le PNJ est tue.
+            return;
+        }
         if (!plugin.getCombatManager().isCombatTagged(uuid)) {
             return;
         }
@@ -105,6 +109,17 @@ public class CombatTagListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         if (plugin.getCombatDb().consumeLogger(event.getPlayer().getUniqueId())) {
+            // Il est mort pendant son absence : il revient comme apres une mort, au spawn et les mains vides.
+            Player player = event.getPlayer();
+            player.getInventory().clear();
+            player.setLevel(0);
+            player.setExp(0f);
+            player.setFoodLevel(20);
+            player.setFireTicks(0);
+            player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
+            var max = player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
+            player.setHealth(max != null ? max.getValue() : 20.0);
+            player.teleport(org.bukkit.Bukkit.getWorlds().get(0).getSpawnLocation().add(0.5, 0, 0.5));
             plugin.getMessages().send(event.getPlayer(), "tag.logged-sanction");
         }
     }

@@ -1,7 +1,6 @@
 package fr.orbit.survie;
 
 import com.destroystokyo.paper.event.block.AnvilDamagedEvent;
-import fr.orbit.survie.ile.IleDesign;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -77,10 +76,11 @@ public final class Protection implements Listener {
         if (!ile(l.getWorld())) {
             return false;
         }
-        double dx = l.getBlockX() + 0.5 - (IleDesign.ARENE_X + 0.5);
-        double dz = l.getBlockZ() + 0.5 - (IleDesign.ARENE_Z + 0.5);
+        var d = plugin.ile().dessin();
+        double dx = l.getBlockX() + 0.5 - (d.areneX() + 0.5);
+        double dz = l.getBlockZ() + 0.5 - (d.areneZ() + 0.5);
         int y = l.getBlockY();
-        return Math.hypot(dx, dz) <= IleDesign.ARENE_R && y >= IleDesign.G - 3 && y <= IleDesign.G + 6;
+        return Math.hypot(dx, dz) <= d.areneR() && y >= d.sol() - 3 && y <= d.sol() + 6;
     }
 
     // ------------------------------------------------------------------ Blocs
@@ -183,6 +183,19 @@ public final class Protection implements Listener {
         if (ile(e.getBlock().getWorld()) && e.getToBlock().getY() > 62) e.setCancelled(true);
     }
 
+    // Port orbital : qui tombe de la station est ramené au spawn (sans dégâts).
+    @EventHandler(ignoreCancelled = true)
+    public void onChute(org.bukkit.event.player.PlayerMoveEvent e) {
+        if (e.getTo().getY() >= plugin.ile().dessin().chute() || !ile(e.getTo().getWorld())) {
+            return;
+        }
+        Location s = plugin.ile().spawn();
+        if (s != null) {
+            e.getPlayer().setFallDistance(0);
+            e.getPlayer().teleportAsync(s);
+        }
+    }
+
     // ------------------------------------------------------------------ Créatures, météo
 
     @EventHandler(ignoreCancelled = true)
@@ -229,6 +242,11 @@ public final class Protection implements Listener {
         }
         Player att = attaquant(e.getDamager());
         if (att == null || att.equals(cible)) {
+            return;
+        }
+        if (dansArene(cible.getLocation()) && dansArene(att.getLocation()) && !plugin.duels().autorise(att, cible)) {
+            e.setCancelled(true);
+            att.sendActionBar(Msg.raw("<red>Un duel est en cours : seuls les deux duellistes se battent"));
             return;
         }
         if (!(dansArene(cible.getLocation()) && dansArene(att.getLocation()))) {

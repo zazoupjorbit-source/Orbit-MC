@@ -1,0 +1,18 @@
+name: OrbitBreche
+version: '0.1.0'
+main: fr.orbit.breche.OrbitBreche
+api-version: '1.21'
+description: "BRÈCHE : shooter tactique à agents de la salle d'arcade cachée (Bleu contre Or, pose et désamorçage du Noyau, 5 agents à 4 pouvoirs, 2 cartes, bots). Orbit Coins de jeu seulement."
+authors: [ORBIT]
+softdepend: [OrbitCasino]
+
+commands:
+  breche:
+    description: "BRÈCHE : jouer, rejouer, quitter, choisir son agent, boutique, classement."
+    usage: "/breche [jouer [helios|vesta|hasard] [niveau] [3|5]|rejouer|quitter|lancer|agent|boutique|top]"
+    aliases: [brèche, tactique]
+
+permissions:
+  orbitbreche.admin:
+    description: Reconstruire les cartes, reposer le PNJ, arrêter les parties, voir leur état.
+    default: op

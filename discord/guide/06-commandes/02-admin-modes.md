@@ -13,6 +13,11 @@ maj: 2026-11-25
 /ile argent <pseudo> <montant>   fixer un solde
 /base donner <pseudo> [nombre]
 /base bypass                 casser dans les bases
+/evenement lancer <peche|largage|boss>   lancer un événement
+/evenement stop              arrêter l'événement en cours
+/tournoi ouvrir | annuler    tournoi de l'arène
+/ressources reset oui        recréer le monde ressources
+/echoppe supprimer           fermer l'échoppe regardée
 ```
 **▸ Extraction** (`extraction.admin`) — `/extraction` ou `/ext`
 ```
@@ -30,11 +35,14 @@ fin <joueur>                 termine son raid
 stats [joueur] | pack [joueur] | reload
 credits <joueur> <montant>
 ```
-**▸ Practice** (`practice.admin`)
+**▸ HCF** (`orbithcf.admin`)
 ```
-/practice arene generer [forcer] | liste | tp <nom>
-/practice hub [definir|generer]
-/practice reload
+/hcf spawn [definir] | bordure | reload
+/hcf generer spawn [forcer] | routes | koth <nom> [x z]
+/eco give|take|set <joueur> <montant>
+/f setdtr|freeze|unfreeze|points <faction> ... | /f bypass
+/koth start|stop|list | /sotw start <duree> | /eotw start
+/lives give <joueur> <n> | /revive <joueur>
 ```
 <!-- suite -->
 **▸ Orbit MMO** (`orbitmmo.admin`)

@@ -598,7 +598,7 @@ namespace DevPanel
                 if (!File.Exists(Path.Combine(Dir, Jar))) throw new ApiError(404, Jar + " introuvable dans " + Dir);
                 Database.EnsureStarted(true);
                 stopRequested = false;
-                string args = Memory + " -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -Dterminal.jline=false -Dterminal.ansi=true -jar " + Jar + (Jar == "paper.jar" ? " --nogui" : "");
+                string args = Memory + " -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -Dterminal.jline=false -Dterminal.ansi=true -jar " + Jar + (Jar == "paper.jar" ? " --nogui" : Jar == "fabric.jar" ? " nogui" : "");
                 var psi = new ProcessStartInfo(ServerManager.FindJdk(), args)
                 {
                     WorkingDirectory = Dir,
@@ -722,7 +722,7 @@ namespace DevPanel
                 }
                 else cpu = 0;
             }
-            d["id"] = Id; d["name"] = Name; d["role"] = Role; d["port"] = Port; d["kind"] = Jar == "paper.jar" ? "paper" : "velocity"; d["dir"] = Dir; d["memory"] = Memory;
+            d["id"] = Id; d["name"] = Name; d["role"] = Role; d["port"] = Port; d["kind"] = Jar == "paper.jar" ? "paper" : Jar == "fabric.jar" ? "fabric" : "velocity"; d["dir"] = Dir; d["memory"] = Memory;
             d["state"] = running ? State : (PortListening(Port) ? "external" : "offline");
             d["pid"] = pid;
             d["ramMb"] = ram / 1048576;
@@ -754,7 +754,9 @@ namespace DevPanel
                     foreach (var dir in Directory.GetDirectories(root).OrderBy(d => d))
                     {
                         string props = Path.Combine(dir, "server.properties");
-                        if (!File.Exists(Path.Combine(dir, "paper.jar")) || !File.Exists(props)) continue;
+                        // Instance Paper (paper.jar) ou moddee Fabric (fabric.jar, voir versions.json bloc "fabric").
+                        string jar = File.Exists(Path.Combine(dir, "paper.jar")) ? "paper.jar" : File.Exists(Path.Combine(dir, "fabric.jar")) ? "fabric.jar" : null;
+                        if (jar == null || !File.Exists(props)) continue;
                         int port = 0; string motd = "";
                         try
                         {
@@ -771,7 +773,7 @@ namespace DevPanel
                         seen.Add(id);
                         var inst = list.FirstOrDefault(i => i.Id == id);
                         if (inst == null)
-                            list.Add(new Instance { Id = id, Name = id, Role = motd.Length > 0 ? motd : "Instance Paper", Dir = dir, Jar = "paper.jar",
+                            list.Add(new Instance { Id = id, Name = id, Role = motd.Length > 0 ? motd : (jar == "fabric.jar" ? "Instance Fabric" : "Instance Paper"), Dir = dir, Jar = jar,
                                                     Memory = "-Xms256M -Xmx1G", StopCmd = "stop", Port = port });
                         else if (!inst.Running) { inst.Port = port; inst.Role = motd.Length > 0 ? motd : inst.Role; }
                     }

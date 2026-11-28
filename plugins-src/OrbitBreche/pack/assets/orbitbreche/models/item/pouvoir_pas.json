@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "orbitbreche:item/pouvoir_pas"
+  }
+}

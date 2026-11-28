@@ -571,7 +571,12 @@ public final class Shop implements CommandExecutor, TabCompleter, Listener {
                     Msg.send(s, "Tous les prix sont remis à la normale.");
                 }
             }
+            case "roulement" -> {
+                marche.roulement(true);
+                Msg.send(s, "Nouveau roulement des prix lancé (les cours glissent vers leur cible en ~1 h).");
+            }
             default -> {
+                Msg.send(s, "<white>/shop admin roulement<gray> : lance tout de suite un nouveau roulement des prix");
                 Msg.send(s, "<white>/shop admin recharger<gray> : relit marche.yml et recalcule les prix");
                 Msg.send(s, "<white>/shop admin sansprix<gray> : objets qui n'ont pas de prix");
                 Msg.send(s, "<white>/shop admin reset [objet|tout]<gray> : remet les prix à la normale");
@@ -591,7 +596,7 @@ public final class Shop implements CommandExecutor, TabCompleter, Listener {
                     out.add("admin");
                 }
             } else if (a.length == 2 && a[0].equalsIgnoreCase("admin")) {
-                out.addAll(List.of("recharger", "sansprix", "reset"));
+                out.addAll(List.of("roulement", "recharger", "sansprix", "reset", "prix"));
             }
         } else if (cmd.getName().equals("vendre") && a.length == 1) {
             out.add("tout");

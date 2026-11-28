@@ -1,0 +1,32 @@
+# ============================================================
+#  OrbitHCF-Combat - Combat facon 1.7/1.8 (en restant en 26.3)
+#  Chaque point se coupe separement ; actif: false remet le combat de 26.3.
+#  Ignore si OrbitPractice est sur le serveur (il fait deja la meme chose).
+# ============================================================
+
+actif: true
+# Plus de balayage : un coup d epee ne touche qu une cible.
+sans-balayage: true
+# Haches faibles (diamant 6 au lieu de 9) et Tranchant a +1,25 par niveau.
+degats-anciens: true
+# Recul entre joueurs calcule comme en 1.8 (aussi en l air), bonus de sprint et de Recul.
+recul-ancien: true
+recul:
+  horizontal: 0.4
+  vertical: 0.4
+  plafond-vertical: 0.4
+  bonus-sprint: 0.5
+  bonus-vertical: 0.1
+# Canne a peche : accrocher un joueur le repousse.
+recul-canne: true
+# Clic droit avec une epee = blocage (part des degats bloquee, de 0 a 1).
+blocage-epee: true
+blocage-part-bloquee: 0.5
+# Pas de main secondaire (touche F bloquee, objet renvoye dans l inventaire) ni de bouclier fabricable.
+sans-main-secondaire: true
+sans-bouclier: true
+# Regeneration naturelle : 1 PV toutes les N secondes avec 9 cuisses ou plus.
+regen-ancienne: true
+regen-secondes: 4
+# Pomme de Notch : Regeneration V 30 s, Absorption I 2 min, Resistance I et Resistance au feu 5 min.
+pomme-notch-ancienne: true

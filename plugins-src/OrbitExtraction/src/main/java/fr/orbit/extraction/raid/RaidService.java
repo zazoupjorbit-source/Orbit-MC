@@ -431,7 +431,7 @@ public final class RaidService implements Listener {
         }
         if (p.getWorld() != h.getWorld() || p.getLocation().distanceSquared(h) > hideoutRadius * hideoutRadius) {
             p.teleport(h);
-            Text.bar(p, "<#8A919B>Ouvre ton <#D7DCE2>téléphone</#D7DCE2> (ou <#D7DCE2>/raid</#D7DCE2>) pour partir en raid.");
+            Text.bar(p, "<#8A919B>Ouvre ton <#D7DCE2>tablette</#D7DCE2> (ou <#D7DCE2>/raid</#D7DCE2>) pour partir en raid.");
         }
     }
 
@@ -521,8 +521,8 @@ public final class RaidService implements Listener {
     public void info(Player p) {
         Profile pr = profiles.get(p);
         if (!pr.inRaid) {
-            Text.msg(p, "Tu es à la planque. Ton <#D7DCE2>téléphone</#D7DCE2> ouvre le raid, la boutique et ton coffre "
-                    + "<#5A6270>(/raid, /planque, /telephone)");
+            Text.msg(p, "Tu es à la planque. Ton <#D7DCE2>tablette</#D7DCE2> ouvre le raid, la boutique et ton coffre "
+                    + "<#5A6270>(/raid, /planque, /tablette)");
             return;
         }
         long left = (pr.raidEnds - System.currentTimeMillis()) / 1000;
@@ -600,7 +600,7 @@ public final class RaidService implements Listener {
                 giveKit(p);
                 profiles.save(pr);
                 Text.msg(p, "Bienvenue dans la zone. Voici de quoi survivre à ton premier raid. "
-                        + "Clic droit avec ton <#D7DCE2>téléphone</#D7DCE2> pour partir.");
+                        + "Clic droit avec ton <#D7DCE2>tablette</#D7DCE2> pour partir.");
             }
         }, 3L);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -643,7 +643,7 @@ public final class RaidService implements Listener {
             return;
         }
         e.setKeepInventory(false);
-        e.getDrops().removeIf(plugin.phone()::isPhone); // le téléphone ne se perd pas
+        e.getDrops().removeIf(plugin.phone()::isPhone); // la tablette ne se perd pas
         e.getDrops().removeIf(plugin.miniMap()::isMap); // la carte tactique non plus
         pr.deaths++;
         Player killer = p.getKiller();

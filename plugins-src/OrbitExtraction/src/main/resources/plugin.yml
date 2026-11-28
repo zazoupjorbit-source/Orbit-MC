@@ -16,9 +16,9 @@ commands:
     usage: /planque
     aliases: [stash, coffre]
   telephone:
-    description: Ouvre ton téléphone (raid, boutique, colis, messages, coffre).
-    usage: /telephone
-    aliases: [tel, phone]
+    description: Ouvre ta tablette (raid, boutique, colis, messages, coffre).
+    usage: /tablette
+    aliases: [tablette, tab, tel, phone]
   kit:
     description: Kits de ton rang (arme, munitions, armure), à prendre à la planque.
     usage: /kit [nom]

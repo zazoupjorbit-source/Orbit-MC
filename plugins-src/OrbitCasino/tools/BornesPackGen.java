@@ -51,7 +51,10 @@ public class BornesPackGen {
                 new Game("palet", "PALET ORBITAL", "Le palet le plus rapide du ciel", ICE, hex("#7CFF8A"), BornesPackGen::palet),
                 new Game("turbo", "TURBO-SPHÈRE", "Bolides · sphère · buts", BLUE, GOLD, BornesPackGen::turbo),
                 new Game("siege", "SIÈGE ORBITAL", "Cartes · plasma · tours", BLUE, GOLD, BornesPackGen::siege),
-                new Game("chasseurs", "CHASSEURS D'ORBITE", "Combat de vaisseaux en apesanteur", ICE, hex("#FF8A3D"), BornesPackGen::chasseurs));
+                new Game("chasseurs", "CHASSEURS D'ORBITE", "Combat de vaisseaux en apesanteur", ICE, hex("#FF8A3D"), BornesPackGen::chasseurs),
+                new Game("contrebande", "CONTREBANDE", "Produis · mélange · sème la douane", hex("#C79BFF"), GOLD, BornesPackGen::contrebande),
+                new Game("bowl", "ORBIT BOWL", "Bowling · fléchettes · laser game", GOLD, BLUE, BornesPackGen::bowl),
+                new Game("breche", "BRÈCHE", "Agents · pouvoirs · 5 contre 5", BLUE, GOLD, BornesPackGen::breche));
 
         regions();
         BufferedImage sheet = new BufferedImage(4 * 520, ((games.size() + 3) / 4) * 1040, BufferedImage.TYPE_INT_RGB);
@@ -1415,5 +1418,348 @@ public class BornesPackGen {
         ship(g, 250, 120, 16, hex("#7CFF8A"), Math.toRadians(80));
         glowDot(g, 330, 130, 30, WHITE);
         sparkle(g, 330, 130, 8, GOLD);
+    }
+    /** Éclat de cristal dressé : prisme à pointe, une face claire, une face sombre. Pied en (bx, by). */
+    static void cristal(Graphics2D g, double bx, double by, double lw, double hh, double angle, Color c) {
+        AffineTransform at = g.getTransform();
+        g.translate(bx, by);
+        g.rotate(angle);
+        glowDot(g, 0, -hh * 0.55, hh * 0.7, c);
+        Path2D p = new Path2D.Double();
+        p.moveTo(-lw / 2, 0);
+        p.lineTo(-lw / 2, -hh * 0.72);
+        p.lineTo(0, -hh);
+        p.lineTo(lw / 2, -hh * 0.72);
+        p.lineTo(lw / 2, 0);
+        p.closePath();
+        g.setPaint(new GradientPaint(0, (float) -hh, mix(c, WHITE, 0.55), 0, 0, mix(c, INK, 0.35)));
+        g.fill(p);
+        Path2D clair = new Path2D.Double();
+        clair.moveTo(-lw / 2, 0);
+        clair.lineTo(-lw / 2, -hh * 0.72);
+        clair.lineTo(0, -hh);
+        clair.lineTo(-lw * 0.1, -hh * 0.68);
+        clair.lineTo(-lw * 0.1, 0);
+        clair.closePath();
+        g.setColor(alpha(WHITE, 120));
+        g.fill(clair);
+        Path2D sombre = new Path2D.Double();
+        sombre.moveTo(lw * 0.2, 0);
+        sombre.lineTo(lw * 0.2, -hh * 0.7);
+        sombre.lineTo(0, -hh);
+        sombre.lineTo(lw / 2, -hh * 0.72);
+        sombre.lineTo(lw / 2, 0);
+        sombre.closePath();
+        g.setColor(alpha(INK, 90));
+        g.fill(sombre);
+        g.setColor(alpha(INK, 220));
+        g.setStroke(new BasicStroke(1.6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+        g.draw(p);
+        g.setTransform(at);
+    }
+
+    static void contrebande(Graphics2D g, int w, int h, Game gm, Random r) {
+        // lune
+        glowDot(g, 432, 60, 84, GOLD);
+        sphere(g, 432, 60, 30, hex("#F3E3B0"));
+        // les Docks d'Orbite la nuit : deux rangées d'immeubles, fenêtres allumées, néons sur les toits
+        Color[] neons = {ICE, GOLD, hex("#FF4FD8"), gm.c1, hex("#7CFF8A")};
+        for (int rang = 0; rang < 2; rang++) {
+            double x = -12;
+            while (x < w) {
+                double bw = 34 + r.nextInt(40), bh = (rang == 0 ? 80 : 44) + r.nextInt(rang == 0 ? 90 : 56), top = 262 - bh;
+                g.setPaint(new GradientPaint(0, (float) top, rang == 0 ? new Color(0x151B36) : new Color(0x0A0E1E), 0, 262, new Color(0x05060C)));
+                g.fill(new Rectangle2D.Double(x, top, bw, bh + 130));
+                neon(g, x + 3, top, x + bw - 3, top, neons[r.nextInt(neons.length)], 1.5f);
+                for (double wy = top + 10; wy < 252; wy += 12) {
+                    for (double wx = x + 6; wx < x + bw - 8; wx += 10) {
+                        if (r.nextInt(3) == 0) {
+                            g.setColor(alpha(r.nextInt(5) == 0 ? ICE : hex("#FFD86B"), rang == 0 ? 130 : 220));
+                            g.fill(new Rectangle2D.Double(wx, wy, 5, 6));
+                        }
+                    }
+                }
+                x += bw + 3;
+            }
+        }
+        // drone de la douane : faisceau rouge, bras, rotors, coque, œil
+        double dx = 148, dy = 74;
+        Path2D cone = new Path2D.Double();
+        cone.moveTo(dx - 7, dy + 14);
+        cone.lineTo(dx + 7, dy + 14);
+        cone.lineTo(dx + 100, 272);
+        cone.lineTo(dx - 78, 272);
+        cone.closePath();
+        g.setPaint(new GradientPaint(0, (float) dy, alpha(hex("#FF4F6A"), 150), 0, 272, alpha(hex("#FF4F6A"), 14)));
+        g.fill(cone);
+        g.setColor(hex("#9AA4B2"));
+        g.setStroke(new BasicStroke(4f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+        g.draw(new Line2D.Double(dx - 48, dy - 8, dx + 48, dy - 8));
+        for (int k = -1; k <= 1; k += 2) {
+            g.setColor(alpha(WHITE, 95));
+            g.fill(new Ellipse2D.Double(dx + k * 48 - 28, dy - 21, 56, 9));
+            g.setColor(hex("#D7DCE2"));
+            g.fill(new Rectangle2D.Double(dx + k * 48 - 2.5, dy - 18, 5, 12));
+        }
+        RoundRectangle2D coque = new RoundRectangle2D.Double(dx - 27, dy - 12, 54, 27, 13, 13);
+        g.setPaint(new GradientPaint(0, (float) (dy - 12), hex("#66728A"), 0, (float) (dy + 15), hex("#1B2030")));
+        g.fill(coque);
+        glow(g, coque, ICE, 1.5f);
+        glowDot(g, dx, dy + 5, 18, hex("#FF4F6A"));
+        sphere(g, dx, dy + 5, 6.5, hex("#FF4F6A"));
+        // caisse de contrebande ouverte : la marchandise dépasse
+        double cx = 372, cy = 214;
+        cristal(g, cx - 36, cy - 30, 17, 62, -0.34, ICE);
+        cristal(g, cx + 36, cy - 30, 17, 58, 0.36, hex("#FF4FD8"));
+        cristal(g, cx, cy - 30, 22, 96, 0, gm.c1);
+        Rectangle2D caisse = new Rectangle2D.Double(cx - 64, cy - 36, 128, 74);
+        g.setPaint(new GradientPaint(0, (float) (cy - 36), hex("#34415F"), 0, (float) (cy + 38), hex("#10162A")));
+        g.fill(caisse);
+        g.setColor(alpha(INK, 110));
+        g.setStroke(new BasicStroke(1.6f));
+        for (int k = 1; k < 4; k++) {
+            g.draw(new Line2D.Double(cx - 64, cy - 36 + k * 18.5, cx + 64, cy - 36 + k * 18.5));
+        }
+        // bande de danger
+        Shape clip = g.getClip();
+        g.clip(new Rectangle2D.Double(cx - 64, cy + 22, 128, 12));
+        g.setColor(GOLD);
+        g.fill(new Rectangle2D.Double(cx - 64, cy + 22, 128, 12));
+        g.setColor(INK);
+        for (double x = cx - 80; x < cx + 70; x += 16) {
+            Path2D b = new Path2D.Double();
+            b.moveTo(x, cy + 34);
+            b.lineTo(x + 8, cy + 34);
+            b.lineTo(x + 20, cy + 22);
+            b.lineTo(x + 12, cy + 22);
+            b.closePath();
+            g.fill(b);
+        }
+        g.setClip(clip);
+        // emblème : losange d'or
+        Path2D los = new Path2D.Double();
+        los.moveTo(cx, cy - 26);
+        los.lineTo(cx + 14, cy - 6);
+        los.lineTo(cx, cy + 14);
+        los.lineTo(cx - 14, cy - 6);
+        los.closePath();
+        g.setColor(INK);
+        g.fill(new RoundRectangle2D.Double(cx - 24, cy - 32, 48, 50, 8, 8));
+        g.setPaint(new GradientPaint((float) (cx - 14), (float) (cy - 26), hex("#FFF0C2"), (float) (cx + 14), (float) (cy + 14), hex("#8A6A2A")));
+        g.fill(los);
+        glow(g, caisse, GOLD, 2f);
+        sparkle(g, cx, cy - 128, 8, WHITE);
+        sparkle(g, cx + 58, cy - 86, 5, WHITE);
+        sparkle(g, cx - 60, cy - 92, 5, WHITE);
+    }
+
+    /** Quille : ventre, col, tête, deux liserés de couleur. Pied en (cx, base), hauteur 3,2 s, penchée de {@code angle}. */
+    static void quille(Graphics2D g, double cx, double base, double s, double angle, Color bande) {
+        AffineTransform at = g.getTransform();
+        g.translate(cx, base - s * 1.6);
+        g.rotate(angle);
+        g.translate(0, s * 1.6);
+        Path2D p = new Path2D.Double();
+        p.moveTo(-s * 0.42, 0);
+        p.curveTo(-s * 0.95, -s * 0.9, -s * 0.55, -s * 1.75, -s * 0.3, -s * 2.15);
+        p.curveTo(-s * 0.2, -s * 2.4, -s * 0.5, -s * 2.75, -s * 0.34, -s * 3.0);
+        p.curveTo(-s * 0.2, -s * 3.3, s * 0.2, -s * 3.3, s * 0.34, -s * 3.0);
+        p.curveTo(s * 0.5, -s * 2.75, s * 0.2, -s * 2.4, s * 0.3, -s * 2.15);
+        p.curveTo(s * 0.55, -s * 1.75, s * 0.95, -s * 0.9, s * 0.42, 0);
+        p.closePath();
+        g.setPaint(new LinearGradientPaint((float) -s, 0f, (float) s, 0f, new float[]{0f, 0.35f, 1f},
+                new Color[]{new Color(0xC9D3E6), WHITE, new Color(0x7E8AA6)}));
+        g.fill(p);
+        Shape clip = g.getClip();
+        g.clip(p);
+        g.setColor(bande);
+        g.fill(new Rectangle2D.Double(-s, -s * 2.46, 2 * s, s * 0.2));
+        g.fill(new Rectangle2D.Double(-s, -s * 2.14, 2 * s, s * 0.12));
+        g.setClip(clip);
+        g.setColor(INK);
+        g.setStroke(new BasicStroke((float) Math.max(1.1, s * 0.09), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+        g.draw(p);
+        g.setTransform(at);
+    }
+
+    static void bowl(Graphics2D g, int w, int h, Game gm, Random r) {
+        // piste en perspective : bois clair, lattes, reflet, rigoles en néon
+        double vy = 100;
+        Path2D piste = new Path2D.Double();
+        piste.moveTo(208, vy);
+        piste.lineTo(304, vy);
+        piste.lineTo(476, h);
+        piste.lineTo(36, h);
+        piste.closePath();
+        g.setPaint(new GradientPaint(0, (float) vy, hex("#8A6A3A"), 0, h, hex("#F0D29A")));
+        g.fill(piste);
+        Shape clip = g.getClip();
+        g.clip(piste);
+        g.setStroke(new BasicStroke(1.2f));
+        for (int k = -6; k <= 6; k++) {
+            g.setColor(alpha(hex("#5A3A14"), 110));
+            g.draw(new Line2D.Double(256 + k * 8, vy, 256 + k * 36.6, h));
+        }
+        g.setPaint(new GradientPaint(0, (float) vy, alpha(WHITE, 110), 0, 220, alpha(WHITE, 0)));
+        g.fill(new Rectangle2D.Double(0, vy, w, 120));
+        for (int k = -2; k <= 2; k++) { // flèches de visée
+            double x = 256 + k * 34, y = 250 - Math.abs(k) * 9;
+            Path2D f = new Path2D.Double();
+            f.moveTo(x, y - 13);
+            f.lineTo(x - 6, y + 5);
+            f.lineTo(x + 6, y + 5);
+            f.closePath();
+            g.setColor(alpha(hex("#5A3A14"), 210));
+            g.fill(f);
+        }
+        g.setClip(clip);
+        neon(g, 208, vy, 36, h, gm.c2, 3f);
+        neon(g, 304, vy, 476, h, gm.c2, 3f);
+        // fosse au fond de la piste
+        g.setColor(INK);
+        g.fill(new Rectangle2D.Double(200, vy - 30, 112, 30));
+        glow(g, new Rectangle2D.Double(200, vy - 30, 112, 30), gm.c1, 1.6f);
+        // quilles encore debout (à gauche), puis l'impact
+        double[][] debout = {{226, vy + 1}, {240, vy + 1}, {233, vy + 7}, {247, vy + 7}};
+        for (double[] q : debout) {
+            quille(g, q[0], q[1], 6.2, 0, gm.c2);
+        }
+        glowDot(g, 268, vy + 2, 64, WHITE);
+        for (int i = 0; i < 12; i++) {
+            double a = i * Math.PI / 6 + 0.2;
+            neon(g, 268 + Math.cos(a) * 20, vy + 2 + Math.sin(a) * 14, 268 + Math.cos(a) * 60, vy + 2 + Math.sin(a) * 42, gm.c1, 1.6f);
+        }
+        // quilles qui volent
+        quille(g, 352, 96, 15, 0.95, gm.c2);
+        quille(g, 316, 44, 12, 2.3, gm.c2);
+        quille(g, 208, 52, 11, -2.1, gm.c2);
+        quille(g, 420, 168, 19, 1.35, gm.c2);
+        quille(g, 108, 150, 22, -0.75, gm.c2);
+        quille(g, 258, 40, 9, 0.4, gm.c2);
+        // la boule, lancée plein centre : traînée, sphère, trois trous
+        for (int k = -1; k <= 1; k++) {
+            neon(g, 268 + k * 16, 222, 262 + k * 44, 340, ICE, 2f);
+        }
+        glowDot(g, 268, 190, 70, gm.c2);
+        sphere(g, 268, 190, 40, gm.c2);
+        g.setColor(alpha(INK, 230));
+        g.fill(new Ellipse2D.Double(256, 170, 11, 12));
+        g.fill(new Ellipse2D.Double(274, 168, 11, 12));
+        g.fill(new Ellipse2D.Double(266, 186, 11, 12));
+        g.setColor(alpha(ICE, 200));
+        g.setStroke(new BasicStroke(1.6f));
+        g.draw(new Arc2D.Double(232, 154, 72, 72, 200, 120, Arc2D.OPEN));
+        sparkle(g, 300, 64, 9, GOLD);
+        sparkle(g, 176, 110, 6, WHITE);
+        sparkle(g, 392, 60, 6, WHITE);
+    }
+
+    /** Agent stylisé de BRÈCHE : casque à visière, buste, fusil tendu (dir = 1 : regarde à droite). */
+    static void agentBreche(Graphics2D g, double cx, double base, double s, int dir, Color c) {
+        AffineTransform at = g.getTransform();
+        g.translate(cx, base);
+        g.scale(dir * s, s);
+        Path2D buste = new Path2D.Double();
+        buste.moveTo(-26, 0);
+        buste.lineTo(-21, -62);
+        buste.lineTo(-5, -78);
+        buste.lineTo(16, -74);
+        buste.lineTo(26, -52);
+        buste.lineTo(22, 0);
+        buste.closePath();
+        g.setPaint(new GradientPaint(0, -80, mix(c, INK, 0.4), 0, 0, mix(c, INK, 0.88)));
+        g.fill(buste);
+        glow(g, buste, alpha(c, 200), 1.1f);
+        g.setColor(mix(c, WHITE, 0.2));
+        g.fill(new RoundRectangle2D.Double(-25, -76, 27, 16, 9, 9));
+        sphere(g, 4, -98, 21, mix(c, INK, 0.4));
+        g.setColor(mix(c, WHITE, 0.8));
+        g.fill(new RoundRectangle2D.Double(7, -104, 19, 8, 6, 6));
+        g.setColor(mix(c, INK, 0.55));
+        g.setStroke(new BasicStroke(10f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+        g.draw(new Line2D.Double(6, -60, 34, -49));
+        g.setColor(INK);
+        g.fill(new Rectangle2D.Double(20, -58, 62, 9));
+        g.fill(new Rectangle2D.Double(36, -50, 7, 17));
+        g.fill(new Rectangle2D.Double(10, -57, 13, 15));
+        g.fill(new Rectangle2D.Double(40, -63, 18, 5));
+        g.setColor(c);
+        g.fill(new Rectangle2D.Double(28, -56, 36, 2.5));
+        g.setTransform(at);
+    }
+
+    static void breche(Graphics2D g, int w, int h, Game gm, Random r) {
+        // la lumière du Noyau, derrière le mur fendu
+        Color coeur = hex("#FF8A3D");
+        glowDot(g, 256, 150, 240, coeur);
+        glowDot(g, 256, 150, 96, WHITE);
+        // le mur : moitié bleue, moitié or, séparées par la brèche en dents de scie
+        int n = 13;
+        for (int cote = -1; cote <= 1; cote += 2) {
+            Color c = cote < 0 ? gm.c1 : gm.c2;
+            double bord = cote < 0 ? 0 : w;
+            Path2D mur = new Path2D.Double(), arete = new Path2D.Double();
+            mur.moveTo(bord, 0);
+            for (int k = 0; k < n; k++) {
+                double y = k * h / (double) (n - 1);
+                double x = 256 + cote * ((k % 2 == 0 ? 12 : 36) + r.nextInt(14) + 38 * Math.sin(Math.PI * y / h));
+                mur.lineTo(x, y);
+                if (k == 0) {
+                    arete.moveTo(x, y);
+                } else {
+                    arete.lineTo(x, y);
+                }
+            }
+            mur.lineTo(bord, h);
+            mur.closePath();
+            g.setPaint(new GradientPaint((float) bord, 0, mix(c, INK, 0.92), 256, 0, mix(c, INK, 0.6)));
+            g.fill(mur);
+            Shape clip = g.getClip();
+            g.clip(mur);
+            g.setStroke(new BasicStroke(1.4f));
+            g.setColor(alpha(c, 64));
+            for (int y = 34; y < h; y += 46) {
+                g.draw(new Line2D.Double(0, y, w, y));
+            }
+            for (int x = 22; x < w; x += 58) {
+                g.draw(new Line2D.Double(x, 0, x, h));
+            }
+            g.setClip(clip);
+            glow(g, arete, c, 2.4f);
+        }
+        // éclats arrachés au mur
+        for (int i = 0; i < 16; i++) {
+            double a = r.nextDouble() * Math.PI * 2, d = 40 + r.nextDouble() * 120, s = 3 + r.nextDouble() * 7;
+            double x = 256 + Math.cos(a) * d, y = 140 + Math.sin(a) * d * 0.8;
+            Path2D e = new Path2D.Double();
+            e.moveTo(x, y - s);
+            e.lineTo(x + s, y + s * 0.4);
+            e.lineTo(x - s * 0.7, y + s);
+            e.closePath();
+            g.setColor(mix(i % 2 == 0 ? gm.c1 : gm.c2, INK, 0.55));
+            g.fill(e);
+        }
+        // le Noyau posé au milieu : socle, montants, cœur brûlant
+        glowDot(g, 256, 212, 64, coeur);
+        sphere(g, 256, 212, 17, coeur);
+        g.setColor(INK);
+        g.fill(new Rectangle2D.Double(232, 232, 48, 9));
+        g.fill(new Rectangle2D.Double(234, 190, 6, 44));
+        g.fill(new Rectangle2D.Double(272, 190, 6, 44));
+        g.fill(new Rectangle2D.Double(232, 186, 48, 7));
+        neon(g, 236, 241, 276, 241, GOLD, 1.6f);
+        neon(g, 240, 213, 272, 213, ICE, 1.4f);
+        // deux agents face à face, de part et d'autre
+        agentBreche(g, 92, 262, 1.25, 1, gm.c1);
+        agentBreche(g, 420, 262, 1.25, -1, gm.c2);
+        // coups de feu croisés
+        double yb = 262 - 53.5 * 1.25;
+        neon(g, 196, yb, 330, yb - 26, gm.c1, 1.6f);
+        neon(g, 316, yb, 182, yb - 44, gm.c2, 1.6f);
+        glowDot(g, 196, yb, 26, mix(gm.c1, WHITE, 0.4));
+        glowDot(g, 316, yb, 26, mix(gm.c2, WHITE, 0.4));
+        sparkle(g, 256, 96, 10, WHITE);
+        sparkle(g, 150, 60, 6, gm.c1);
+        sparkle(g, 366, 52, 6, gm.c2);
     }
 }

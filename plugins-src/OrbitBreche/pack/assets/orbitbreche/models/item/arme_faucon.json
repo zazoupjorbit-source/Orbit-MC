@@ -1,0 +1,25 @@
+{
+  "textures": {
+    "0": "orbitbreche:item/breche",
+    "particle": "orbitbreche:item/breche"
+  },
+  "elements": [
+    {"from": [7.4, 10, -2], "to": [8.6, 11.2, 5], "shade": true, "faces": {"north": {"uv": [5.75, 1.75, 6.25, 2.25], "texture": "#0"}, "south": {"uv": [5.75, 1.75, 6.25, 2.25], "texture": "#0"}, "east": {"uv": [5.125, 1.75, 6.875, 2.25], "texture": "#0"}, "west": {"uv": [5.125, 1.75, 6.875, 2.25], "texture": "#0"}, "up": {"uv": [5.75, 1.125, 6.25, 2.875], "texture": "#0"}, "down": {"uv": [5.75, 1.125, 6.25, 2.875], "texture": "#0"}}},
+    {"from": [6.8, 9, 5], "to": [9.2, 11.6, 8], "shade": true, "faces": {"north": {"uv": [1.7, 1.675, 2.3, 2.325], "texture": "#0"}, "south": {"uv": [1.7, 1.675, 2.3, 2.325], "texture": "#0"}, "east": {"uv": [1.625, 1.675, 2.375, 2.325], "texture": "#0"}, "west": {"uv": [1.625, 1.675, 2.375, 2.325], "texture": "#0"}, "up": {"uv": [1.7, 1.625, 2.3, 2.375], "texture": "#0"}, "down": {"uv": [1.7, 1.625, 2.3, 2.375], "texture": "#0"}}},
+    {"from": [7.2, 8.6, 8], "to": [8.8, 11.4, 10], "shade": true, "faces": {"north": {"uv": [1.75, 1.65, 2.25, 2.35], "texture": "#0"}, "south": {"uv": [1.75, 1.65, 2.25, 2.35], "texture": "#0"}, "east": {"uv": [1.75, 1.65, 2.25, 2.35], "texture": "#0"}, "west": {"uv": [1.75, 1.65, 2.25, 2.35], "texture": "#0"}, "up": {"uv": [1.75, 1.75, 2.25, 2.25], "texture": "#0"}, "down": {"uv": [1.75, 1.75, 2.25, 2.25], "texture": "#0"}}},
+    {"from": [7.2, 4, 9], "to": [8.8, 8.8, 12], "shade": true, "faces": {"north": {"uv": [1.75, 5.4, 2.25, 6.6], "texture": "#0"}, "south": {"uv": [1.75, 5.4, 2.25, 6.6], "texture": "#0"}, "east": {"uv": [1.625, 5.4, 2.375, 6.6], "texture": "#0"}, "west": {"uv": [1.625, 5.4, 2.375, 6.6], "texture": "#0"}, "up": {"uv": [1.75, 5.625, 2.25, 6.375], "texture": "#0"}, "down": {"uv": [1.75, 5.625, 2.25, 6.375], "texture": "#0"}}},
+    {"from": [7.6, 11.4, 9.5], "to": [8.4, 12, 10.5], "shade": true, "faces": {"north": {"uv": [9.75, 1.75, 10.25, 2.25], "texture": "#0"}, "south": {"uv": [9.75, 1.75, 10.25, 2.25], "texture": "#0"}, "east": {"uv": [9.75, 1.75, 10.25, 2.25], "texture": "#0"}, "west": {"uv": [9.75, 1.75, 10.25, 2.25], "texture": "#0"}, "up": {"uv": [9.75, 1.75, 10.25, 2.25], "texture": "#0"}, "down": {"uv": [9.75, 1.75, 10.25, 2.25], "texture": "#0"}}},
+    {"from": [7.6, 11.2, -1.5], "to": [8.4, 11.6, 5], "shade": true, "faces": {"north": {"uv": [13.75, 1.75, 14.25, 2.25], "texture": "#0"}, "south": {"uv": [13.75, 1.75, 14.25, 2.25], "texture": "#0"}, "east": {"uv": [13.188, 1.75, 14.813, 2.25], "texture": "#0"}, "west": {"uv": [13.188, 1.75, 14.813, 2.25], "texture": "#0"}, "up": {"uv": [13.75, 1.188, 14.25, 2.813], "texture": "#0"}, "down": {"uv": [13.75, 1.188, 14.25, 2.813], "texture": "#0"}}},
+    {"from": [7.6, 10.2, -2.2], "to": [8.4, 11, -2], "shade": false, "light_emission": 15, "faces": {"north": {"uv": [5.75, 5.75, 6.25, 6.25], "texture": "#0"}, "south": {"uv": [5.75, 5.75, 6.25, 6.25], "texture": "#0"}, "east": {"uv": [5.75, 5.75, 6.25, 6.25], "texture": "#0"}, "west": {"uv": [5.75, 5.75, 6.25, 6.25], "texture": "#0"}, "up": {"uv": [5.75, 5.75, 6.25, 6.25], "texture": "#0"}, "down": {"uv": [5.75, 5.75, 6.25, 6.25], "texture": "#0"}}}
+  ],
+  "display": {
+    "thirdperson_righthand": {"rotation": [90, 0, 0], "translation": [0, 1.875, -0.375], "scale": [0.75, 0.75, 0.75]},
+    "thirdperson_lefthand": {"rotation": [90, 0, 0], "translation": [0, 1.875, -0.375], "scale": [0.75, 0.75, 0.75]},
+    "firstperson_righthand": {"rotation": [0, 0, 0], "translation": [-1.5, 2.6, -1.022], "scale": [0.638, 0.638, 0.638]},
+    "firstperson_lefthand": {"rotation": [0, 0, 0], "translation": [-1.5, 2.6, -1.022], "scale": [0.638, 0.638, 0.638]},
+    "ground": {"rotation": [0, 0, 0], "translation": [0, 2, 0], "scale": [0.45, 0.45, 0.45]},
+    "gui": {"rotation": [0, 90, 0], "translation": [2.17, -0, 0], "scale": [1, 1, 1]},
+    "fixed": {"rotation": [0, 90, 0], "translation": [0, 0, 0], "scale": [1, 1, 1]},
+    "head": {"rotation": [0, 90, 0], "translation": [0, 4, 0], "scale": [0.75, 0.75, 0.75]}
+  }
+}

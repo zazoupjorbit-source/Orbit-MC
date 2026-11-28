@@ -126,7 +126,7 @@ arcade:
     # Taille du PNJ invisible (boîte de clic).
     pnj-taille: 1.3
     # Déplacer une borne : « id: "x z [lacet]" » (ids : rush vol casino astroblocs cristaux defense pulsar
-    # nebuleuse nova palet turbo chasseurs siege).
+    # nebuleuse nova palet turbo chasseurs siege contrebande bowl).
     emplacements: {}
 
 # ------------------------------------------------------------------

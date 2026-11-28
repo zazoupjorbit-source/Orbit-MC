@@ -105,12 +105,12 @@ modes:
       - "<gray>Le sas militaire."
       - "<gray>Entre, loote, ressors vivant."
   practice:
-    name: "<#3A7FFF><bold>Practice HCF</bold>"
+    name: "<#3A7FFF><bold>HCF</bold>"
     icon: DIAMOND_SWORD
     warp: practice
     description:
-      - "<gray>L'arène holographique."
-      - "<gray>Duels classés et kits HCF."
+      - "<gray>Factions, claims, DTR, KOTH."
+      - "<gray>Une mort coûte cher à ta faction."
   mmo:
     name: "<#F5C542><bold>MMO</bold>"
     icon: ENDER_EYE

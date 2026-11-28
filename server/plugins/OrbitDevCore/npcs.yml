@@ -1,7 +1,7 @@
 npcs:
   practice:
     server: practice
-    name: <gradient:#ff4d4d:#ffb000><bold>PRACTICE HCF</bold></gradient>
+    name: <gradient:#ff4d4d:#ffb000><bold>HCF</bold></gradient>
     type: VILLAGER
     profession: librarian
     location:

@@ -22,6 +22,17 @@ Top 3 de chaque mode arcade. ORBIT RUSH et Vole mon Orbito sont branchés en dur
 2. il écrit le meilleur score de chaque joueur : `INSERT INTO arcade_scores (jeu, uuid, nom, meilleur, parties) VALUES (?, ?, ?, ?, 1) ON DUPLICATE KEY UPDATE nom = VALUES(nom), meilleur = GREATEST(meilleur, VALUES(meilleur)), parties = parties + 1`.
 Tables créées par OrbitCasino (base `orbit_mc`, accès `setup/db.properties`) ; les recréer aussi avec `CREATE TABLE IF NOT EXISTS` (même schéma, voir `Arcade.createSharedTables`). Le tableau se relit chaque minute. `jeu` ≤ 16 caractères.
 
+## Bornes d'arcade 3D (à la place des PNJ)
+Chaque PNJ de jeu de la salle est habillé d'une **borne 3D** par OrbitCasino : le PNJ reste là, invisible, et reçoit toujours le clic
+(le plugin du jeu n'a rien à changer). 16 bornes au 27/11 : rush, vol, casino, astroblocs, cristaux, defense, pulsar, nebuleuse, nova,
+palet, turbo, chasseurs, siege, **contrebande**, **bowl**, **breche**. Pour un nouveau jeu, deux ajouts dans OrbitCasino (seule exception à
+« ne pas toucher aux fichiers d'une autre famille ») :
+1. `plugins-src/OrbitCasino/tools/BornesPackGen.java` : une ligne `new Game("<id>", "TITRE", "Accroche", couleur1, couleur2, BornesPackGen::<id>)`
+   et sa fonction d'affiche (zone 512×384, le titre occupe le bas à partir de y ≈ 265 ; visuel original, aucun look repris) ;
+2. `plugins-src/OrbitCasino/.../arcade/Cabinets.java` : `add(c, "<id>", x, z, lacet)` à l'emplacement exact du PNJ.
+Puis `build.ps1` d'OrbitCasino (aperçu : `maquettes/bornes-arcade.png`). Le pack du casino change : les joueurs le retéléchargent.
+Déplacer une borne sans recompiler : `arcade.bornes.emplacements.<id>: "x z [lacet]"` dans la config du casino.
+
 ## Familles, plugins et emplacements
 | Famille | Plugin (nouveau dossier `plugins-src/…`) | Jeux | Monde de jeu | Port du pack | PNJ dans la salle (monde `casino`) |
 |---|---|---|---|---|---|
@@ -30,6 +41,9 @@ Tables créées par OrbitCasino (base `orbit_mc`, accès `setup/db.properties`) 
 | C. Arène | **OrbitArene** | mode « .io » (taille qui grossit façon Agar + serpent façon Snake), poseur de bombes façon Bomberman, air hockey, mini foot-voiture façon Rocket League | `arene` | 8797 | x = 6.5 / 10.5 / 14.5 / 18.5, y 64, z 411.5, yaw 180 |
 | E. Création libre (idée de Claude) | **OrbitChasseurs** | CHASSEURS D'ORBITE : combat de vaisseaux en apesanteur dans un champ d'astéroïdes, bots | `orbite` | 8799 | x -12.5, y 64, z 389.5, yaw 0 |
 | D. Cartes | **OrbitRoyale** | bataille de tours 1v1 à cartes et élixir façon Clash Royale | `royale` | 8798 | x 12.5, y 64, z 389.5, yaw 0 |
+| G. Gestion | **OrbitContrebande** (CONTREBANDE) | empire persistant en coop (1 à 4, organisations en base) : nuits de 10 min dans une ville de 3 quartiers, culture, mélanges et carnet, livraisons, douane (agents à pied, voitures de patrouille, drones), skate, améliorations (mécaniques de jeu de gestion/revente, thème contrebande spatiale) | `contrebande` (une ville par place, x = 300 × place, construites au démarrage) | 8801 (`contrebande:` icônes des objets, marchandise teintée, communicateur, drones et caisse en 3D, menus « station ») | x 19.5, y 64, z 392.5, yaw 90 (`pnj` de sa config) |
+| F. Salle de loisirs | **OrbitBowl** (ORBIT BOWL) | bowling 6 pistes (physique des quilles, bot, défis misés), fléchettes, stand de tir forain, basket, baby-foot, mini-golf 9 trous, laser game Bleu/Or avec bots | `bowl` | 8800 (relais : plage étendue à 8809) | portier x -18.5, y 64, z 392.5, yaw -90 (`arcade.pnj` de sa config) |
+| H. Tir tactique | **OrbitBreche** (BRÈCHE) | shooter tactique à agents, 3v3 ou 5v5 Bleu contre Or avec bots : phase d'achat, pose et désamorçage du Noyau, 5 agents à 4 pouvoirs, 6 armes, 2 cartes (Station Hélios, Faille de Vesta) | `breche` (vide ; cartes bâties par code, Hélios en x 0, Vesta en x 200) | 8802 (`orbitbreche:` armes 3D, Noyau, tourelle, icônes des pouvoirs) | instructrice x 19.5, y 64, z 407.5, yaw 90 (`pnj` de sa config) |
 
 Pas faits (décision de Zazou) : la MOBA façon League of Legends, et Clash of Clans (Vole mon Orbito couvre déjà base + pillage).
 

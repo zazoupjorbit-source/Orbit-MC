@@ -46,3 +46,19 @@ protection:
   safezone-cancel-hunger: true
   # Les explosions ne cassent des blocs que dans les claims raidables et la wilderness
   explosion-protection: true
+
+# Claims a la baguette (/f claim) : un rectangle au bloc pres, choisi en deux clics, paye par la faction.
+baguette:
+  # Longueur minimale et maximale d'un cote, en blocs
+  cote-min: 5
+  cote-max: 80
+  # Nombre de terrains par faction
+  terrains-max: 4
+  # Un nouveau terrain doit toucher un terrain de la faction
+  terrains-colles: true
+  # Ecart minimal avec le terrain d'une autre faction, en blocs
+  ecart-blocs: 2
+  # Prix par bloc de surface (20 x 20 = 400 blocs = 200 $). La banque de faction paie d'abord, le joueur complete.
+  prix-par-bloc: 0.5
+  # Part du prix rendue a la banque quand on abandonne un terrain (/f unclaim)
+  remboursement: 0.5

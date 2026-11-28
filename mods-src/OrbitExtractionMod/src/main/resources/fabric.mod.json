@@ -1,0 +1,27 @@
+{
+	"schemaVersion": 1,
+	"id": "orbitextraction",
+	"version": "${version}",
+	"name": "Orbit Extraction (prototype moddé)",
+	"description": "Prototype du mode extraction d'Orbit MC en moddé : une arme avec son vrai modèle, tir et rechargement sur touches dédiées, compteur de munitions natif.",
+	"authors": [
+		"Zazou",
+		"Wane"
+	],
+	"license": "All-Rights-Reserved",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"fr.orbit.extractionmod.OrbitExtractionMod"
+		],
+		"client": [
+			"fr.orbit.extractionmod.client.OrbitExtractionModClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

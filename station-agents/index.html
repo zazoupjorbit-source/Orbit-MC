@@ -1,0 +1,1703 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a1238">
+<title>La Station</title>
+<style>
+:root{
+  --nuit:#050a1f; --verre:rgba(7,12,36,.86); --trait:rgba(111,177,255,.22);
+  --or:#f2b83a; --or2:#ffd87a; --bleu:#6fb1ff; --cyan:#5fe0e6; --texte:#e9eefc; --doux:#9db0e8; --sourd:#6877b4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--nuit);color:var(--texte);overflow:hidden;
+  font-family:Bahnschrift,"Segoe UI",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+canvas{position:fixed;left:0;top:0;display:block}
+#scene{image-rendering:pixelated;cursor:grab}
+#scene.prise{cursor:grabbing}
+#scene.cible{cursor:pointer}
+#calque{pointer-events:none}
+
+#tete{position:fixed;left:18px;top:14px;display:flex;align-items:center;gap:14px;pointer-events:none}
+#blason{width:38px;height:38px;flex:none}
+#titre{font-size:20px;font-weight:700;letter-spacing:.22em;color:var(--or);line-height:1}
+#sous{font-size:10.5px;letter-spacing:.3em;color:var(--bleu);margin-top:6px;text-transform:uppercase}
+#compteurs{position:fixed;left:18px;top:66px;display:flex;gap:8px;flex-wrap:wrap;pointer-events:none}
+.pastille{display:flex;align-items:center;gap:7px;padding:5px 10px 5px 8px;border-radius:999px;background:var(--verre);
+  border:1px solid var(--trait);font-size:12px;color:var(--doux);font-variant-numeric:tabular-nums}
+.pastille b{color:var(--texte);font-weight:600}
+.point{width:8px;height:8px;border-radius:50%;flex:none}
+.pastille.alerte{border-color:rgba(242,184,58,.6);color:var(--or2)}
+.pastille.alerte b{color:var(--or2)}
+
+#liste{position:fixed;right:14px;top:14px;bottom:14px;width:286px;background:var(--verre);border:1px solid var(--trait);
+  border-radius:12px;display:flex;flex-direction:column;backdrop-filter:blur(6px);transition:transform .25s ease}
+#liste.ferme{transform:translateX(calc(100% + 20px))}
+#liste header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 10px;border-bottom:1px solid var(--trait)}
+#liste header span{font-size:11px;letter-spacing:.26em;color:var(--doux);text-transform:uppercase}
+#corps{overflow:auto;padding:6px 8px 10px;flex:1;scrollbar-width:thin;scrollbar-color:#2a3878 transparent}
+.groupe{font-size:10.5px;letter-spacing:.24em;color:var(--or);padding:12px 8px 6px;text-transform:uppercase;display:flex;justify-content:space-between}
+.groupe i{font-style:normal;color:var(--sourd);letter-spacing:.05em}
+.ligne{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;background:none;border:1px solid transparent;border-radius:8px;
+  padding:7px 8px;color:inherit;font:inherit;cursor:pointer}
+.ligne:hover{background:rgba(111,177,255,.08)}
+.ligne.choisi{background:rgba(242,184,58,.10);border-color:rgba(242,184,58,.45)}
+.ligne .point{margin-top:5px}
+.ligne .nom{font-size:13px;line-height:1.25;color:var(--texte);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:222px}
+.ligne .etat{font-size:11.5px;color:var(--doux);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:222px}
+.ligne.attend .etat{color:var(--or2)}
+.ligne.repos .nom{color:var(--doux)}
+.ligne.repos .etat{color:var(--sourd)}
+.bouton{background:var(--verre);border:1px solid var(--trait);color:var(--doux);border-radius:8px;height:30px;min-width:30px;
+  padding:0 9px;font:inherit;font-size:12px;cursor:pointer}
+.bouton:hover{color:var(--texte);border-color:rgba(111,177,255,.5)}
+#qgBloc{padding:10px 14px 10px;border-bottom:1px solid var(--trait);font-size:11.5px;color:var(--doux)}
+#qgBloc:empty{display:none}
+#qgBloc .tete{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+#qgBloc .tete span{font-size:11px;letter-spacing:.26em;color:var(--or);text-transform:uppercase;display:flex;align-items:center;gap:7px}
+#qgBloc .tete .bouton{height:24px;font-size:11.5px}
+#qgBloc .univ{display:flex;align-items:center;gap:8px;margin:3px 0}
+#qgBloc .univ b{width:46px;font-size:10.5px;letter-spacing:.12em;flex:none}
+#qgBloc .blocs{display:flex;gap:2px;flex-wrap:wrap}
+#qgBloc .blocs i{width:7px;height:9px;border-radius:2px;display:block}
+#qgBloc .obj{margin-top:8px;color:var(--texte)}
+#qgBloc ul{margin:4px 0 0;padding-left:16px;color:var(--doux);line-height:1.4}
+#qgBloc .agenda{margin-top:6px;color:var(--or2)}
+#fiche .role{display:inline-flex;align-items:center;gap:6px;margin-top:6px;padding:2px 9px 2px 7px;border-radius:999px;font-size:11.5px;border:1px solid}
+#ouvrir{position:fixed;right:14px;top:14px;display:none}
+#liste.ferme + #ouvrir{display:block}
+
+#fiche{position:fixed;left:18px;bottom:16px;width:340px;max-width:calc(100vw - 36px);background:var(--verre);border:1px solid var(--trait);
+  border-radius:12px;padding:14px 16px 14px;backdrop-filter:blur(6px);display:none}
+#fiche.vu{display:block}
+#fiche h2{margin:0 26px 2px 0;font-size:15px;font-weight:600;line-height:1.3}
+#fiche .projet{font-size:10.5px;letter-spacing:.24em;color:var(--or);text-transform:uppercase}
+#fiche .rang{font-size:12.5px;color:var(--doux);margin-top:9px;line-height:1.45}
+#fiche .rang b{color:var(--texte);font-weight:600}
+#fiche .demande{margin-top:10px;padding:9px 11px;border-radius:8px;border:1px solid rgba(242,184,58,.5);background:rgba(242,184,58,.08);
+  color:var(--or2);font-size:12.5px;line-height:1.45}
+#fiche .recap{margin-top:9px;font-size:12px;color:var(--sourd);line-height:1.5}
+#fiche .barre{height:4px;border-radius:2px;background:#1a2454;margin-top:7px;overflow:hidden}
+#fiche .barre i{display:block;height:100%;background:var(--or)}
+#fermer{position:absolute;right:10px;top:10px;height:24px;min-width:24px;padding:0}
+
+#bas{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:6px;align-items:center}
+#aide{font-size:11px;color:var(--doux);letter-spacing:.04em;margin-right:6px;white-space:nowrap;background:var(--verre);
+  border:1px solid var(--trait);border-radius:8px;height:30px;line-height:28px;padding:0 11px}
+#alerte{position:fixed;left:50%;top:18px;transform:translateX(-50%);padding:8px 14px;border-radius:8px;background:rgba(60,14,26,.92);
+  border:1px solid rgba(255,138,154,.6);color:#ffc2cb;font-size:12.5px;display:none}
+#alerte.vu{display:block}
+@media (max-width:900px){ #aide{display:none} }
+
+/* Mode compact (?mini) : la petite fenêtre flottante */
+#outilsMini{display:none}
+body.mini #tete, body.mini #bas, body.mini #liste, body.mini #ouvrir{display:none !important}
+body.mini #compteurs{left:6px;top:6px;gap:4px}
+body.mini .pastille{padding:2px 7px 2px 6px;font-size:11px;gap:5px}
+body.mini .point{width:7px;height:7px}
+body.mini #fiche{left:6px;right:22px;bottom:6px;width:auto;padding:9px 11px;border-radius:9px}
+body.mini #fiche h2{font-size:13px}
+body.mini #fiche .rang{font-size:11.5px;margin-top:5px}
+body.mini #fiche .demande{font-size:11.5px;padding:6px 8px;margin-top:7px}
+body.mini #fiche .recap{display:none}
+body.mini #alerte{top:auto;bottom:8px;font-size:11px;padding:6px 10px;width:max-content;max-width:calc(100vw - 16px)}
+body.mini #outilsMini{display:flex;position:fixed;right:6px;top:6px;gap:4px;z-index:3}
+body.mini #outilsMini .bouton{height:24px;min-width:24px;padding:0 6px;font-size:12px;border-radius:6px;opacity:0;transition:opacity .2s}
+body.mini:hover #outilsMini .bouton{opacity:1}
+body.mini #outilsMini #mMasquer{opacity:.6;font-size:14px}
+body.mini #outilsMini #mMasquer:hover{opacity:1;color:var(--or2);border-color:rgba(242,184,58,.6)}
+/* Poignée (haut) et coin (bas-droit) : Station.exe s'en sert pour déplacer et redimensionner */
+#poignee, #coin{display:none}
+body.mini #poignee{display:block;position:fixed;left:0;top:0;right:150px;height:26px;cursor:grab;z-index:1}
+body.mini #poignee::after{content:"";position:absolute;left:calc(50vw - 18px);top:3px;width:36px;height:3px;border-radius:2px;
+  background:rgba(157,176,232,.18);transition:background .2s}
+body.mini:hover #poignee::after{background:rgba(242,184,58,.75)}
+body.mini #coin{display:block;position:fixed;right:0;bottom:0;width:18px;height:18px;cursor:nwse-resize;z-index:3;opacity:.35;transition:opacity .2s;
+  background:linear-gradient(135deg,transparent 52%,#9db0e8 52% 58%,transparent 58% 68%,#9db0e8 68% 74%,transparent 74%)}
+body.mini:hover #coin{opacity:.9}
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<canvas id="calque"></canvas>
+
+<div id="tete">
+  <svg id="blason" viewBox="0 0 38 38" aria-hidden="true">
+    <circle cx="19" cy="19" r="8" fill="#1f4fc4"/><circle cx="16.5" cy="16.5" r="3" fill="#6fb1ff" opacity=".55"/>
+    <ellipse cx="19" cy="19" rx="17" ry="6" fill="none" stroke="#f2b83a" stroke-width="2" transform="rotate(-22 19 19)"/>
+    <circle cx="33.5" cy="12.6" r="2.4" fill="#ffd87a"/>
+  </svg>
+  <div><div id="titre">LA STATION</div><div id="sous">Agents en orbite</div></div>
+</div>
+<div id="compteurs"></div>
+
+<aside id="liste">
+  <header><span>Équipage</span><button class="bouton" id="replier" title="Replier la liste">›</button></header>
+  <div id="qgBloc"></div>
+  <div id="corps"></div>
+</aside>
+<button class="bouton" id="ouvrir" title="Afficher l'équipage">‹ Équipage</button>
+
+<section id="fiche"><button class="bouton" id="fermer" title="Fermer">×</button><div id="ficheCorps"></div></section>
+
+<div id="bas">
+  <span id="aide">Salles des univers : au travail · QG : t'attend · Quartiers : au repos · Écran PROJETS : ouvre le QG</span>
+  <button class="bouton" id="moins" title="Dézoomer">−</button>
+  <button class="bouton" id="plus" title="Zoomer">+</button>
+  <button class="bouton" id="recadrer" title="Recadrer la station">Recadrer</button>
+</div>
+<div id="outilsMini">
+  <button class="bouton" id="mMoins" title="Dézoomer">−</button>
+  <button class="bouton" id="mPlus" title="Zoomer">+</button>
+  <button class="bouton" id="mCadre" title="Recadrer la station">⟲</button>
+  <button class="bouton" id="mGrand" title="Ouvrir en grand dans le navigateur">⤢</button>
+  <button class="bouton" id="mMasquer" title="Masquer (Ctrl+Alt+S ou l'icône près de l'horloge)">×</button>
+</div>
+<div id="poignee" title="Attraper ici pour déplacer"></div>
+<div id="coin" title="Tirer pour redimensionner"></div>
+<div id="alerte">Liaison perdue avec le serveur — lance <b>lancer.bat</b> (ou <b>node serveur.mjs</b>).</div>
+
+<script>
+"use strict";
+// ============================================================================
+//  LA STATION — les sessions Claude de ce PC, vues comme l'équipage d'une station
+//  Tout est dessiné par code (aucune image). Données : /api/etat (serveur.mjs).
+//  Essai sans serveur de données : ajouter ?demo à l'adresse.
+// ============================================================================
+const DEMO = new URLSearchParams(location.search).has("demo");
+const MINI = new URLSearchParams(location.search).has("mini"); // petite fenêtre flottante (Station.exe)
+if (MINI) document.body.classList.add("mini");
+const ECHELLES = [.5, .75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5, 6];
+const HW = 16, HH = 8;                         // demi-tuile isométrique (32 × 16)
+const proj = (x, y, z = 0) => [(x - y) * HW, (x + y) * HH - z];
+const $ = (id) => document.getElementById(id);
+
+const OR = "#f2b83a", OR2 = "#ffd87a", ORS = "#c8922a", ORN = "#8a651c", CYAN = "#5fe0e6", BLEU = "#6fb1ff";
+const COULEURS = ["#f2b83a", "#5fe0e6", "#ff8a9a", "#b79cff", "#7fe08a", "#ff9f43", "#6fb1ff", "#ff7fd0"];
+const TEINTES = [
+  { sol: ["#1d3c96", "#2144a6"], joint: "#16307c", trait: "#6fb1ff" },
+  { sol: ["#5b4a1c", "#655220"], joint: "#473a14", trait: "#f2b83a" },
+  { sol: ["#16506a", "#1a5a76"], joint: "#0f4058", trait: "#5fe0e6" },
+  { sol: ["#3b2b80", "#43318e"], joint: "#2c2064", trait: "#b79cff" },
+  { sol: ["#6a2c40", "#763248"], joint: "#532030", trait: "#ff9aa8" },
+];
+const GENRES = { code: "#6fb1ff", lit: "#5fe0e6", cherche: "#5fe0e6", commande: "#f2b83a", web: "#b79cff",
+  reflechit: "#e9eefc", redige: "#7fe08a", plan: "#f2b83a", drone: "#ff9f43", question: "#f2b83a" };
+const POINTS = { travaille: "#6fb1ff", question: "#f2b83a", attend: "#f2b83a", fini: "#5fe0e6", repos: "#4a5690" };
+
+// Les univers ORBIT (le serveur envoie ceux de config.json ; ceux-ci servent au mode ?demo).
+// salle : une salle à son nom dans la station, même vide ; planete : une planète autour de la station.
+const UNIVERS_DEFAUT = [
+  { cle: "ark", nom: "ORBIT ARK", court: "ARK", couleur: "#ff9f43", salle: true, planete: true },
+  { cle: "mc", nom: "ORBIT MC", court: "MC", couleur: "#7fe08a", salle: true, planete: true },
+  { cle: "pz", nom: "ORBIT PZ", court: "PZ", couleur: "#ff6b6b", salle: true, planete: true },
+  { cle: "11d", nom: "11D LABS", court: "11D", couleur: "#b79cff", salle: true, planete: true },
+  { cle: "gmod", nom: "ORBIT GMOD", court: "GMOD", couleur: "#5fe0e6", salle: false, planete: true },
+  { cle: "roblox", nom: "ORBIT ROBLOX", court: "ROBLOX", couleur: "#ff7fd0", salle: false, planete: true },
+  { cle: "qg", nom: "QG ORBIT", court: "QG", couleur: "#f2b83a", salle: false, planete: false },
+];
+let UNIVERS = UNIVERS_DEFAUT, sigUnivers = "", QG = null;
+// Les outils posés au fond de chaque salle (dessinés dans fabriquer, animés dans dessinerObjet).
+const OUTILS = { ark: ["incubateur", "crane", "tek"], mc: ["etabli", "four", "herbe"], pz: ["radio", "barricade", "trousse"],
+  "11d": ["eprouvettes", "cube", "reacteur"], gmod: ["physgun", "caisse", "caisse"], roblox: ["brique", "plante", "brique"] };
+// Les rôles : couleur de la combinaison + accessoire (voir accessoire()).
+const ROLES = {
+  ingenierie: { nom: "Ingénierie", couleur: "#f2b83a", dit: "casque de chantier et clé" },
+  recherche: { nom: "Recherche", couleur: "#5fe0e6", dit: "loupe" },
+  operations: { nom: "Opérations", couleur: "#6fb1ff", dit: "lampe frontale et antenne" },
+  web: { nom: "Liaison web", couleur: "#b79cff", dit: "grande antenne" },
+  design: { nom: "Design", couleur: "#ff7fd0", dit: "béret et pinceau" },
+  commandement: { nom: "Commandement", couleur: "#dfe6ff", dit: "étoile et galons, mène les drones" },
+  sav: { nom: "SAV ARK", couleur: "#ff9f43", dit: "casque-micro" },
+  prod: { nom: "Mise en prod", couleur: "#ff5a6e", dit: "réacteur dorsal" },
+  annonce: { nom: "Annonces Discord", couleur: "#8f8cff", dit: "mégaphone" },
+  boutique: { nom: "Boutique", couleur: "#7fe08a", dit: "œuf de dino" },
+  plugin: { nom: "Plugins MC", couleur: "#4cc27a", dit: "pioche" },
+};
+const roleDe = (d) => ROLES[d.role?.cle] || ROLES.ingenierie;
+const DRONES = { "orbit-enqueteur-ark": "#ff5a6e", "orbit-verif-mc": "#7fe08a", Explore: "#5fe0e6", Plan: "#f2b83a", "web-fetch": "#b79cff" };
+const STATUTS = { en_cours: ["#6fb1ff", "en cours"], test: ["#f2b83a", "en test"], pret: ["#5fe0e6", "prêts"], en_prod: ["#7fe08a", "en prod"] };
+function melange(a, b, k) { const p = hex(a), q = hex(b); return "#" + p.map((v, i) => Math.round(v + (q[i] - v) * k).toString(16).padStart(2, "0")).join(""); }
+function teinteDe(col) { return { sol: [melange("#121c4c", col, .2), melange("#142054", col, .25)], joint: melange("#0e1640", col, .14), trait: col }; }
+
+// ---------------------------------------------------------------- outils
+// Toiles de travail en mémoire normale (willReadFrequently) : la carte graphique ne peut pas les vider
+// (sinon, après une mise en veille ou un masquage, la station disparaissait et ne restaient que les étiquettes).
+function toile(w, h) { const c = document.createElement("canvas"); c.width = w; c.height = h; c.getContext("2d", { willReadFrequently: true }); return c; }
+function alea(g) { return () => { g |= 0; g = g + 0x6D2B79F5 | 0; let t = Math.imul(g ^ g >>> 15, 1 | g); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function hex(h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; }
+function sombre(h, k) { const [r, g, b] = hex(h); return "rgb(" + Math.round(r * k) + "," + Math.round(g * k) + "," + Math.round(b * k) + ")"; }
+function hache(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+const court = (s, n) => (s.length > n ? s.slice(0, n - 1).trimEnd() + "…" : s);
+function duree(ms) {
+  const m = Math.floor(ms / 60000);
+  if (m < 1) return "à l'instant";
+  if (m < 60) return m + " min";
+  const h = Math.floor(m / 60); return h + " h" + (m % 60 ? " " + String(m % 60).padStart(2, "0") : "");
+}
+
+// Dessin au pixel près : pas de lissage, tout passe par des rectangles d'un pixel.
+function G(ctx, ox, oy) {
+  const g = {
+    rect(x, y, w, h, col) { ctx.fillStyle = col; ctx.fillRect(Math.round(ox + x), Math.round(oy + y), w, h); },
+    px(x, y, col) { ctx.fillStyle = col; ctx.fillRect(Math.round(ox + x), Math.round(oy + y), 1, 1); },
+    poly(pts, col) {
+      ctx.fillStyle = col;
+      let y0 = Infinity, y1 = -Infinity;
+      for (const p of pts) { if (p[1] < y0) y0 = p[1]; if (p[1] > y1) y1 = p[1]; }
+      for (let y = Math.ceil(y0 - 0.5); y <= Math.floor(y1 - 0.5); y++) {
+        const yc = y + 0.5; let xa = Infinity, xb = -Infinity;
+        for (let i = 0; i < pts.length; i++) {
+          const a = pts[i], b = pts[(i + 1) % pts.length];
+          if ((a[1] <= yc && b[1] > yc) || (b[1] <= yc && a[1] > yc)) {
+            const x = a[0] + (yc - a[1]) * (b[0] - a[0]) / (b[1] - a[1]);
+            if (x < xa) xa = x; if (x > xb) xb = x;
+          }
+        }
+        const l = Math.round(xa), r = Math.round(xb);
+        if (r > l) ctx.fillRect(ox + l, oy + y, r - l, 1);
+      }
+    },
+    ligne(x0, y0, x1, y1, col) {
+      x0 = Math.round(x0); y0 = Math.round(y0); x1 = Math.round(x1); y1 = Math.round(y1);
+      ctx.fillStyle = col;
+      const dx = Math.abs(x1 - x0), dy = -Math.abs(y1 - y0), sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1; let e = dx + dy;
+      for (;;) { ctx.fillRect(ox + x0, oy + y0, 1, 1); if (x0 === x1 && y0 === y1) break; const e2 = 2 * e; if (e2 >= dy) { e += dy; x0 += sx; } if (e2 <= dx) { e += dx; y0 += sy; } }
+    },
+    l3(a, b, col) { const p = proj(...a), q = proj(...b); g.ligne(p[0], p[1], q[0], q[1], col); },
+    tuile(i, j, base, joint) {
+      const [x, y] = proj(i, j);
+      g.poly([[x, y], [x + 16, y + 8], [x, y + 16], [x - 16, y + 8]], joint);
+      g.poly([[x, y + 1], [x + 14, y + 8], [x, y + 15], [x - 14, y + 8]], base);
+    },
+    boite(x0, y0, x1, y1, z0, z1, c) {
+      if (c.g) g.poly([proj(x0, y1, z1), proj(x1, y1, z1), proj(x1, y1, z0), proj(x0, y1, z0)], c.g);
+      if (c.d) g.poly([proj(x1, y0, z1), proj(x1, y1, z1), proj(x1, y1, z0), proj(x1, y0, z0)], c.d);
+      if (c.h) g.poly([proj(x0, y0, z1), proj(x1, y0, z1), proj(x1, y1, z1), proj(x0, y1, z1)], c.h);
+    },
+    faceY(xa, xb, y, z0, z1, col) { g.poly([proj(xa, y, z1), proj(xb, y, z1), proj(xb, y, z0), proj(xa, y, z0)], col); },
+    faceX(ya, yb, x, z0, z1, col) { g.poly([proj(x, ya, z1), proj(x, yb, z1), proj(x, yb, z0), proj(x, ya, z0)], col); },
+    sol(x0, y0, x1, y1, z, col) { g.poly([proj(x0, y0, z), proj(x1, y0, z), proj(x1, y1, z), proj(x0, y1, z)], col); },
+  };
+  return g;
+}
+function sprite(w, h, ox, oy, fn) { const c = toile(w, h); fn(G(c.getContext("2d"), ox, oy)); return { c, ox, oy }; }
+function poser(ctx, s, x, y) { ctx.drawImage(s.c, Math.round(x) - s.ox, Math.round(y) - s.oy); }
+
+// Petite image depuis des lignes de caractères ; contour sombre facultatif.
+function carte(lignes, pal, contour) {
+  const h = lignes.length, w = lignes[0].length, c = toile(w + 2, h + 2), x = c.getContext("2d");
+  if (contour) { x.fillStyle = contour; for (let r = 0; r < h; r++) for (let q = 0; q < w; q++) if (lignes[r][q] !== ".") { x.fillRect(q, r + 1, 3, 1); x.fillRect(q + 1, r, 1, 3); } }
+  for (let r = 0; r < h; r++) for (let q = 0; q < w; q++) { const k = lignes[r][q]; if (k === "." || !pal[k]) continue; x.fillStyle = pal[k]; x.fillRect(q + 1, r + 1, 1, 1); }
+  return c;
+}
+function miroir(c) { const m = toile(c.width, c.height), x = m.getContext("2d"); x.translate(c.width, 0); x.scale(-1, 1); x.drawImage(c, 0, 0); return m; }
+
+// ---------------------------------------------------------------- l'astronaute
+const FACE = [
+  "...WWWWWW...", "..WWWWWWWW..", ".WVVVVVVWWW.", ".VVhhVVVVWw.", ".VVhVVVVVWw.", ".VVVVVVVVWw.", ".WVVVVVVWww.",
+  "..WWWWWWww..", "..AAAAAAAa..", ".WWWGGWWWWw.", ".WWWWWWWWWw.", ".WwWWWWWWdw.", "..WWWWWWWw..", "..aAAAAAAa..",
+];
+const DOS = [
+  "...WWWWWW...", "..WWWWWWWW..", ".WWWWWWWWWW.", ".WWWWWWWWWw.", ".WWWWWWWWww.", ".WWWWWWWwww.", ".WWWWWWwwww.",
+  "..WWwwwwww..", "..AAAAAAAa..", ".WKKKKKKKKw.", ".WKKAAAAKKw.", ".WKKKKKKKKw.", "..KKKGGKKK..", "..aAAAAAAa..",
+];
+const JAMBES = [
+  ["..WWW..WWw..", "..WWW..Www..", "..BBB..BBB.."],   // debout
+  ["..WWW..WWw..", "..WWW..BBB..", "..BBB......."],   // pas 1
+  ["..WWW..WWw..", "..BBB..Www..", ".......BBB.."],   // pas 2
+];
+const spritesAgent = new Map();
+function spriteAgent(A, vue, pose, mir) { // A : couleur du rôle
+  const cle = A + vue + pose + (mir ? "m" : "");
+  let s = spritesAgent.get(cle);
+  if (s) return s;
+  let corps = (vue === "face" ? FACE : DOS).map((l) => l.split(""));
+  if (pose === 3) { // bras levé pour faire signe
+    corps[6][11] = "W"; corps[7][10] = "W"; corps[7][11] = "W"; corps[8][10] = "W"; corps[10][10] = "."; corps[11][10] = "."; corps[11][9] = "w";
+  }
+  const lignes = corps.map((l) => l.join("")).concat(JAMBES[pose === 3 ? 0 : pose]);
+  s = carte(lignes, { W: "#eef2ff", w: "#c2cbee", d: "#8f9bcb", V: "#101b52", h: "#a8d4ff", A, a: sombre(A, .68), G: OR, B: "#2b3567", K: "#7481b8" }, "#060b22");
+  if (mir) s = miroir(s);
+  spritesAgent.set(cle, s);
+  return s;
+}
+
+// ---------------------------------------------------------------- objets dessinés une fois
+const S = {};
+function fabriquer() {
+  const C = { h: "#3a4990", g: "#232d63", d: "#182050" };
+  S.bureau = sprite(40, 44, 20, 24, (g) => {
+    g.boite(.1, .22, .9, .78, 0, 9, C);
+    g.sol(.16, .28, .84, .72, 9, "#2b3877");
+    g.sol(.3, .3, .7, .44, 9, "#4f6fd0");
+    g.l3([.1, .78, 8], [.9, .78, 8], ORS);
+    g.l3([.9, .22, 8], [.9, .78, 8], ORN);
+  });
+  S.holo = {};
+  for (const [k, col] of Object.entries(GENRES)) S.holo[k] = sprite(40, 48, 20, 28, (g) => {
+    g.faceY(.18, .82, .58, 11, 23, col);
+    g.faceY(.22, .78, .58, 12, 22, sombre(col, .42));
+    for (const [z, a, b] of [[20, .28, .66], [18, .28, .54], [16, .28, .72], [14, .28, .48]]) g.l3([a, .58, z], [b, .58, z], col);
+  });
+  S.veille = sprite(40, 48, 20, 28, (g) => { g.faceY(.4, .6, .58, 11, 13, "#34427f"); });
+  S.sep = sprite(40, 40, 20, 22, (g) => {
+    g.boite(.36, 0, .64, 1, 0, 12, { h: "#4252a0", g: "#27336c", d: "#1a2352" });
+    g.sol(.45, .06, .55, .94, 12, ORS);
+  });
+  S.poteau = sprite(40, 72, 20, 54, (g) => {
+    g.boite(.36, 0, .64, 1, 0, 12, { h: "#4252a0", g: "#27336c", d: "#1a2352" });
+    g.boite(.44, .44, .56, .56, 12, 36, { h: OR2, g: ORS, d: ORN });
+    g.boite(.3, .3, .7, .7, 36, 38, { h: OR2, g: ORS, d: ORN });
+  });
+  S.capsule = sprite(40, 44, 20, 24, (g) => {
+    g.boite(.08, .1, .92, .9, 0, 6, C);
+    g.boite(.16, .18, .84, .82, 6, 12, { h: "#1b2c6e", g: "#152358", d: "#101a48" });
+    g.sol(.22, .24, .78, .76, 12, "#233f94");
+    g.l3([.26, .3, 12], [.5, .3, 12], "#6f9cf0");
+    g.l3([.08, .9, 5], [.92, .9, 5], ORS);
+  });
+  S.baie = sprite(40, 64, 20, 44, (g) => {
+    g.boite(.14, .2, .86, .8, 0, 30, { h: "#3a4990", g: "#161e4a", d: "#101640" });
+    g.faceY(.2, .8, .8, 4, 27, "#0a0f2c");
+    g.l3([.14, .8, 30], [.86, .8, 30], "#5a6cc0");
+  });
+  // Table holographique de la passerelle (l'hologramme est animé dans dessinerObjet)
+  S.balise = sprite(40, 44, 20, 26, (g) => {
+    g.boite(.1, .1, .9, .9, 0, 3, { h: "#3a4990", g: "#232d63", d: "#182050" });
+    g.boite(.3, .3, .7, .7, 3, 8, { h: "#2b3877", g: "#1b2458", d: "#141c48" });
+    g.boite(.16, .16, .84, .84, 8, 11, { h: "#4f6fd0", g: "#27336c", d: "#1a2352" });
+    g.sol(.24, .24, .76, .76, 11, "#0b1748");
+    g.l3([.16, .84, 10], [.84, .84, 10], OR); g.l3([.84, .16, 10], [.84, .84, 10], ORS);
+    for (const [a, b] of [[.3, .3], [.7, .3], [.3, .7], [.7, .7]]) { const p = proj(a, b, 11); g.px(p[0], p[1], CYAN); }
+  });
+  S.pot = sprite(40, 40, 20, 22, (g) => {
+    g.boite(.32, .32, .68, .68, 0, 6, { h: ORS, g: ORN, d: "#6e5016" });
+    g.sol(.37, .37, .63, .63, 6, "#2e2210");
+  });
+  const VERT = { G: "#4cc27a", g: "#2a8a52" };
+  S.feuilles = [
+    carte(["...g.G...", ".G.gGg.g.", "gGgGGgGg.", ".gGGgGGgG", "..gGGGg..", "...gGg...", "....g...."], VERT, "#060b22"),
+    carte(["..G..", ".gGg.", "gGGgG", ".GgG.", "gGGGg", ".gGg.", "..g..", "..g.."], VERT, "#060b22"),
+  ];
+  S.cafe = sprite(40, 52, 20, 32, (g) => {
+    g.boite(.2, .2, .8, .75, 0, 20, { h: "#5a6cc0", g: "#3a4990", d: "#27336c" });
+    g.faceY(.3, .7, .75, 13, 17, "#0a3a52"); g.faceY(.34, .5, .75, 14, 16, CYAN);
+    g.faceY(.32, .68, .75, 3, 9, "#0a1030"); g.faceY(.44, .56, .75, 3, 5, "#eef2ff");
+    g.l3([.2, .75, 20], [.8, .75, 20], OR);
+  });
+  S.distributeur = sprite(40, 56, 20, 36, (g) => {
+    g.boite(.14, .08, .86, .62, 0, 22, { h: "#4252a0", g: "#2b3877", d: "#1d2757" });
+    g.faceY(.22, .78, .62, 7, 19, "#0a1440");
+    for (const [z, col] of [[17, CYAN], [14, OR2], [11, "#ff8a9a"], [8, "#7fe08a"]])
+      for (let u = .27; u < .74; u += .12) g.faceY(u, u + .07, .62, z - 1, z, col);
+    g.faceY(.3, .7, .62, 2, 4, "#050a1f");
+    g.l3([.14, .62, 21], [.86, .62, 21], OR);
+  });
+  S.casier = sprite(40, 56, 20, 36, (g) => {
+    g.boite(.06, .05, .5, .95, 0, 24, { h: "#4f60b0", g: "#2b3877", d: "#33438e" });
+    g.l3([.5, .5, 1], [.5, .5, 23], "#1d2757");
+    for (const y of [.18, .68]) { g.l3([.5, y, 20], [.5, y + .14, 20], "#1d2757"); g.l3([.5, y, 18], [.5, y + .14, 18], "#1d2757"); }
+    g.l3([.5, .42, 12], [.5, .42, 10], OR); g.l3([.5, .58, 12], [.5, .58, 10], OR);
+  });
+  const SIEGE = { h: "#3557c4", g: "#22389a", d: "#2a46b0" }, DOSSIER = { h: "#2c47b0", g: "#1b2c7a", d: "#22389a" };
+  S.canape = {};
+  for (const p of ["g", "m", "d"]) S.canape[p] = sprite(40, 44, 20, 24, (g) => {
+    g.boite(.06, 0, .3, 1, 0, 13, DOSSIER);
+    g.boite(.3, 0, .82, 1, 0, 5, SIEGE);
+    if (p === "g") g.boite(.3, 0, .82, .16, 5, 9, SIEGE);
+    if (p === "d") g.boite(.3, .84, .82, 1, 5, 9, SIEGE);
+    g.l3([.82, 0, 4], [.82, 1, 4], ORS);
+  });
+  const ombre = toile(12, 5), ox = ombre.getContext("2d");
+  ox.fillStyle = "rgba(2,4,16,.42)"; ox.fillRect(2, 0, 8, 5); ox.fillRect(0, 1, 12, 3);
+  S.ombre = ombre;
+  const N = "#0a1030";
+  S.bulleAlerte = carte([".GGGGG.", "GGGNGGG", "GGGNGGG", "GGGNGGG", "GGGGGGG", "GGGNGGG", ".GGGGG.", "...G..."], { G: OR, N }, "#060b22");
+  S.bulleQuestion = carte([".GGGGG.", "GGNNNGG", "GGGGNGG", "GGGNGGG", "GGGGGGG", "GGGNGGG", ".GGGGG.", "...G..."], { G: OR, N }, "#060b22");
+  S.bulleOk = carte([".CCCCC.", "CCCCCNC", "CCCCNCC", "CNCNCCC", "CCNCCCC", "CCCCCCC", ".CCCCC.", "...C..."], { C: CYAN, N }, "#060b22");
+  S.z = carte(["ZZZ", ".Z.", "ZZZ"], { Z: "#cfe0ff" });
+  S.casque = carte([".WWWW.", "WVVVVW", "WVhVVW", "WVVVVW", ".WWWW."], { W: "#eef2ff", V: "#101b52", h: "#a8d4ff" }, "#060b22");
+  S.drone = carte([".KKKKKKK.", "KKWWWWWKK", "KWVVhVVWK", "KKWWWWWKK", ".KKKKKKK.", "..c...c.."], { K: "#7481b8", W: "#eef2ff", V: "#101b52", h: "#a8d4ff", c: CYAN }, "#060b22");
+
+  // ---- les outils des salles d'univers
+  const M = { h: "#4252a0", g: "#2b3877", d: "#1d2757" }, BOIS = { h: "#b5824a", g: "#8a5c34", d: "#6e4628" };
+  const O = S.outil = {}, outil = (nom, fn) => { O[nom] = sprite(40, 60, 20, 40, fn); };
+  // écran des projets du QG, sur pieds, large de deux cases (contenu animé dans dessinerEcranQg)
+  S.ecran = sprite(76, 72, 20, 48, (g) => {
+    g.boite(.25, .6, .4, .76, 0, 9, M); g.boite(1.6, .6, 1.75, .76, 0, 9, M);
+    g.boite(.05, .58, 1.95, .78, 8, 33, { h: "#4b63c8", g: "#2b3877", d: "#1d2757" });
+    g.faceY(.13, 1.87, .78, 9.5, 31.5, "#040818");
+    g.l3([.05, .78, 33], [1.95, .78, 33], OR); g.l3([.05, .78, 8], [1.95, .78, 8], ORS);
+  });
+  // ARK : incubateur à œuf, crâne de dino (posé dans dessinerObjet), terminal tek
+  outil("incubateur", (g) => {
+    g.boite(.18, .18, .82, .82, 0, 5, M);
+    g.boite(.28, .28, .72, .72, 5, 18, { h: "#bff6ff", g: "#1f5f7a", d: "#174a62" });
+    g.faceY(.4, .6, .72, 9, 13, "#f3ead0"); g.faceY(.43, .57, .72, 7, 15, "#f3ead0"); g.faceY(.46, .54, .72, 15, 16, "#f3ead0");
+    for (const [x, z] of [[.46, 12], [.53, 9], [.5, 14]]) { const p = proj(x, .72, z); g.px(p[0], p[1], "#4cc27a"); }
+    g.boite(.26, .26, .74, .74, 18, 20, { h: OR2, g: ORS, d: ORN });
+  });
+  outil("crane", (g) => { g.boite(.3, .3, .7, .7, 0, 9, M); g.l3([.3, .7, 8], [.7, .7, 8], ORS); });
+  S.crane = carte(["...BBBBB....", "..BBBBBBBB..", ".BBNNBBBBBBB", "BBBNNBBBBBBb", "BBBBBBbbbbbb", ".BbBbB......", "..b.b......."], { B: "#efe4c8", b: "#bfae88", N: "#1a1408" }, "#060b22");
+  outil("tek", (g) => {
+    g.boite(.22, .3, .78, .7, 0, 28, { h: "#2a2f55", g: "#141833", d: "#0f1228" });
+    g.faceY(.28, .72, .7, 4, 25, "#070a1c");
+    g.l3([.38, .7, 17], [.5, .7, 23], CYAN); g.l3([.5, .7, 23], [.62, .7, 17], CYAN); g.l3([.38, .7, 17], [.62, .7, 17], CYAN);
+    g.l3([.22, .7, 28], [.78, .7, 28], "#5a6cc0");
+  });
+  // MC : établi, four, bloc d'herbe
+  outil("etabli", (g) => {
+    g.boite(.15, .15, .85, .85, 0, 12, { h: "#b5824a", g: "#7a5232", d: "#5e3e24" });
+    for (const v of [.38, .62]) { g.l3([v, .15, 12], [v, .85, 12], "#8a5c34"); g.l3([.15, v, 12], [.85, v, 12], "#8a5c34"); }
+    g.faceY(.24, .38, .85, 4, 9, "#c2cbee"); g.faceY(.56, .72, .85, 6, 8, "#4e3220"); g.faceX(.3, .45, .85, 3, 9, "#8a5c34");
+  });
+  outil("four", (g) => {
+    g.boite(.15, .15, .85, .85, 0, 13, { h: "#9a9aa6", g: "#6e6e7a", d: "#585862" });
+    g.faceY(.3, .7, .85, 1.5, 7.5, "#3a3a42"); g.faceY(.33, .67, .85, 2, 7, "#121212");
+    const R = alea(5); for (let k = 0; k < 14; k++) { const p = proj(.15 + R() * .7, .85, 8 + R() * 5); g.px(p[0], p[1], "#55555e"); }
+  });
+  outil("herbe", (g) => {
+    g.boite(.2, .2, .8, .8, 0, 12, { h: "#5fbf4a", g: "#86593a", d: "#6a4630" });
+    g.faceY(.2, .8, .8, 9.5, 12, "#4ca33c"); g.faceX(.2, .8, .8, 9.5, 12, "#3f8f32");
+    const R = alea(9); for (let k = 0; k < 12; k++) { const p = proj(.22 + R() * .56, .8, 1 + R() * 8); g.px(p[0], p[1], R() < .5 ? "#5e3e24" : "#9a6a44"); }
+    for (let k = 0; k < 6; k++) { const p = proj(.25 + R() * .5, .25 + R() * .5, 12); g.px(p[0], p[1], "#7fd060"); }
+  });
+  // PZ : radio militaire, barricade, trousse de soins
+  outil("radio", (g) => {
+    g.boite(.25, .3, .75, .7, 0, 11, { h: "#6a7a44", g: "#46522c", d: "#36401f" });
+    g.faceY(.31, .52, .7, 4, 9, "#1a1f10"); g.faceY(.34, .49, .7, 6, 7, "#7fe08a");
+    for (const x of [.58, .66]) { const p = proj(x, .7, 7); g.rect(p[0], p[1], 2, 2, "#c2cbee"); }
+    g.l3([.68, .4, 11], [.68, .4, 31], "#8f9bcb");
+  });
+  outil("barricade", (g) => {
+    const PL = { h: "#8a5c34", g: "#6e4628", d: "#5a3820" };
+    g.boite(.12, .5, .22, .62, 0, 22, PL); g.boite(.78, .5, .88, .62, 0, 22, PL);
+    for (let k = 0; k < 3; k++) { g.l3([.12, .62, 4 + k], [.88, .62, 17 + k], "#a8784a"); g.l3([.12, .62, 17 + k], [.88, .62, 4 + k], "#8a5c34"); }
+    for (const [x, z] of [[.2, 6], [.8, 18], [.2, 18], [.8, 6]]) { const p = proj(x, .62, z); g.px(p[0], p[1], "#c2cbee"); }
+  });
+  outil("trousse", (g) => {
+    g.boite(.22, .28, .78, .72, 0, 8, { h: "#e8ecf5", g: "#b8c0d8", d: "#9aa3c0" });
+    g.faceY(.45, .55, .72, 1.5, 6.5, "#e0303a"); g.faceY(.38, .62, .72, 3.3, 4.7, "#e0303a");
+    g.l3([.4, .5, 9], [.6, .5, 9], "#5a6496");
+  });
+  // 11D LABS : éprouvettes, cube à 4 dimensions (animé), réacteur
+  outil("eprouvettes", (g) => {
+    g.boite(.12, .38, .88, .62, 0, 4, M);
+    [[.2, CYAN, 8], [.36, "#7fe08a", 5], [.52, "#ff7fd0", 9], [.68, "#b79cff", 6]].forEach(([u, col, n]) => {
+      g.boite(u, .44, u + .1, .56, 4, 15, { h: "#dfe8ff", g: "#9fb0e0", d: "#8090c8" });
+      g.faceY(u, u + .1, .56, 4, 4 + n, col);
+    });
+  });
+  outil("cube", (g) => { g.boite(.3, .3, .7, .7, 0, 7, { h: "#3b2b80", g: "#2c2064", d: "#221850" }); g.sol(.4, .4, .6, .6, 7, "#b79cff"); });
+  outil("reacteur", (g) => {
+    g.boite(.22, .22, .78, .78, 0, 4, M);
+    g.boite(.36, .36, .64, .64, 4, 24, { h: "#e2c8ff", g: "#7a4ad0", d: "#5a2ea8" });
+    for (const z of [9, 17]) g.boite(.3, .3, .7, .7, z, z + 1.5, { h: OR2, g: ORS, d: ORN });
+    g.boite(.3, .3, .7, .7, 24, 26, M);
+  });
+  // GMOD : pistolet à physique, caisses ; ROBLOX : brique à tenons
+  outil("physgun", (g) => {
+    g.boite(.38, .38, .62, .62, 0, 10, M);
+    g.boite(.28, .42, .74, .58, 10, 14, { h: "#cfe0ff", g: "#5a7ad0", d: "#3a5ab0" });
+    g.faceX(.44, .56, .74, 11, 13, CYAN);
+  });
+  outil("caisse", (g) => {
+    g.boite(.15, .15, .85, .85, 0, 13, BOIS);
+    g.l3([.15, .85, 1], [.85, .85, 12], "#5e3e24"); g.l3([.15, .85, 12], [.85, .85, 1], "#5e3e24");
+    g.l3([.85, .15, 1], [.85, .85, 12], "#4e3220"); g.l3([.85, .15, 12], [.85, .85, 1], "#4e3220");
+  });
+  outil("brique", (g) => {
+    g.boite(.18, .28, .82, .72, 0, 8, { h: "#ff5a6e", g: "#c23a4a", d: "#9a2a38" });
+    for (const u of [.34, .62]) for (const v of [.4, .6]) g.boite(u - .07, v - .07, u + .07, v + .07, 8, 10, { h: "#ff8a9a", g: "#d24a5a", d: "#aa3446" });
+  });
+}
+
+// ---- les planètes des univers (couleur d'un pixel selon le type de planète)
+const BAYER = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
+const PAL = {
+  jungle: ["#0b2010", "#17401c", "#286a2c", "#43983e", "#7fd060"], ocean: ["#050e2a", "#0a2456", "#164a94", "#2f7cd0", "#7cbcff"],
+  lave: ["#3a0e04", "#8a2a08", "#e0601a", "#ffb040"], herbe: ["#14361a", "#25602a", "#3e9a3a", "#6cc64e"], eau: ["#0a1e4a", "#173f8a", "#2c6fd0", "#5fa6ff"],
+  terre: ["#2a1a10", "#4e3220", "#7a5232", "#a8784a"], pierre: ["#22222a", "#44444e", "#6e6e7a", "#9a9aa6"],
+  mort: ["#100c0c", "#262020", "#423834", "#6a5a50", "#9a887a"], rouille: ["#2a0808", "#5a1414", "#9a2a2a", "#d24a4a"],
+  cristal: ["#12082a", "#2a1258", "#53289e", "#9264e6", "#dcc2ff"], sarcelle: ["#04161c", "#0a3440", "#146070", "#2aa0b0", "#8ae8f0"],
+  rose: ["#2a0820", "#5a1446", "#a02a7a", "#e05ab0", "#ffb0e0"],
+};
+const LUM = [.55, -.62, .56];
+function eclairage(nx, ny) { const q = nx * nx + ny * ny; return q > 1 ? 0 : Math.max(0, nx * LUM[0] + ny * LUM[1] + Math.sqrt(1 - q) * LUM[2]); }
+function teintePlanete(type, nx, ny, xx, yy, r, col) {
+  const s = eclairage(nx, ny), B = BAYER[yy & 3][xx & 3] / 16 - .5;
+  const niv = (p, v) => p[Math.max(0, Math.min(p.length - 1, Math.round(v * (p.length - 1) + B * .9)))];
+  if (type === "ark") {
+    const n = Math.sin(nx * 5.2 + Math.sin(ny * 4.1) * 1.6) + Math.sin(ny * 6.3 - nx * 2.2) * .8 + Math.sin((nx + ny) * 9) * .25;
+    if (n > .4 && Math.sin(nx * 23 + ny * 17) > .9) return niv(PAL.lave, s + .2); // volcans
+    return niv(n > 0 ? PAL.jungle : PAL.ocean, s);
+  }
+  if (type === "mc") { // planète en blocs : une couleur franche par bloc
+    const b = Math.max(2, Math.round(r / 5)), bx = Math.floor(xx / b), by = Math.floor(yy / b);
+    const sc = eclairage((bx * b + b / 2 - r) / r, (by * b + b / 2 - r) / r), h = hache(bx + "," + by) % 10;
+    const p = h < 5 ? PAL.herbe : h < 7 ? PAL.eau : h < 9 ? PAL.terre : PAL.pierre;
+    return p[Math.max(0, Math.min(p.length - 1, Math.round(sc * (p.length - 1))))];
+  }
+  if (type === "pz") {
+    if (s < .16 && hache(Math.floor(xx / 2) + ":" + Math.floor(yy / 2)) % 23 === 0) return "#ffcf6a"; // villes encore allumées
+    const nuage = Math.sin(ny * 7 + nx * 2 + Math.sin(nx * 5)) > .62;
+    return niv(nuage ? PAL.rouille : PAL.mort, s);
+  }
+  if (type === "11d") {
+    const f = hache(Math.floor((nx + ny) * 3.2) + ":" + Math.floor((nx - ny) * 3.2)) % 5 / 5;
+    return niv(PAL.cristal, s * .78 + f * .32);
+  }
+  if (type === "gmod") {
+    if (Math.abs(Math.sin(nx * 10)) < .07 || Math.abs(Math.sin(ny * 10)) < .07) return s > .3 ? "#ffb060" : "#8a4a18";
+    return niv(PAL.sarcelle, s);
+  }
+  if (type === "roblox") return niv(PAL.rose, s + ((xx & 3) < 2 && (yy & 3) < 2 ? .1 : 0));
+  return niv([sombre(col, .12), sombre(col, .3), sombre(col, .55), col, melange(col, "#ffffff", .5)], s);
+}
+
+// Disque de l'hologramme (rayon 6) ; le bas-droit est dans l'ombre.
+const DISQUE = [];
+for (let dy = -7; dy <= 7; dy++) for (let dx = -7; dx <= 7; dx++) { const q = dx * dx + dy * dy; if (q <= 52) DISQUE.push([dx, dy, dx + dy > 4, q > 38]); }
+let ciel = null; // position de la planète du fond (pour le satellite)
+
+// ---------------------------------------------------------------- disposition de la station
+// Comme le port orbital de la survie : un atrium rond au centre (le QG ORBIT) et des modules ronds tout autour,
+// reliés par des coursives. Une case = une tuile ; chaque salle est un disque de tuiles.
+let plan = null, signature = null, station = null;
+const cle = (i, j) => i + "," + j;
+const SLOTS = { ul: [-9, 0], up: [-6, -6], ur: [0, -9], r: [6, -6], l: [-6, 6], ll: [0, 9], lr: [9, 0], dn: [6, 6] };
+const R_MOD = 2.5, R_ATRIUM = 4, HMUR = 30;
+const TEINTES_DECO = {
+  quartiers: { sol: ["#1d1a4f", "#211e5a"], joint: "#141238", trait: "#b79cff" },
+  quais: { sol: ["#1c2756", "#1f2b5e"], joint: "#141c44", trait: "#5fe0e6" },
+  serre: { sol: ["#163a2c", "#1a4232"], joint: "#0f2a20", trait: "#7fe08a" },
+};
+
+function disposer(projets) {
+  const zones = new Map(), modules = [], objets = [], bloque = new Set(), voie = new Set(), caps = [];
+  const disque = (cx, cy, r, z) => {
+    for (let j = Math.floor(cy - r); j <= Math.ceil(cy + r); j++) for (let i = Math.floor(cx - r); i <= Math.ceil(cx + r); i++)
+      if (Math.hypot(i - cx, j - cy) <= r + .01 && !zones.has(cle(i, j))) zones.set(cle(i, j), z);
+  };
+  const atrium = { t: "atrium" };
+  disque(0, 0, R_ATRIUM, atrium);
+  // en haut les 4 univers à salle fixe ; en bas deux places pour les autres projets, les quartiers, les quais et la serre
+  const fixes = projets.filter((p) => p.u && p.u.salle), autres = projets.filter((p) => !(p.u && p.u.salle) && p.n > 0);
+  const salles = [];
+  ["ul", "up", "ur", "r"].forEach((s, k) => { if (fixes[k]) salles.push({ p: fixes[k], slot: s }); });
+  const bas = fixes.slice(4).concat(autres);
+  if (bas[0]) salles.push({ p: bas[0], slot: "lr" });
+  salles.push(bas[1] ? { p: bas[1], slot: "ll" } : { deco: "serre", slot: "ll" });
+  salles.push({ deco: "quartiers", slot: "l" }, { deco: "quais", slot: "dn" });
+  for (const s of salles) {
+    const [cx, cy] = SLOTS[s.slot];
+    const m = { nom: s.p ? s.p.nom : s.deco.toUpperCase(), u: s.p ? s.p.u || null : null, deco: s.deco || null, cx, cy, r: R_MOD, postes: [], debout: [], chemin: [] };
+    m.teinte = m.u ? teinteDe(m.u.couleur) : TEINTES_DECO[s.deco] || TEINTES[modules.length % TEINTES.length];
+    disque(cx, cy, R_MOD, { t: "module", m });
+    modules.push(m);
+  }
+  // coursives : de l'atrium jusqu'au centre de chaque salle (en escalier pour les diagonales)
+  for (const m of modules) {
+    let i = 0, j = 0;
+    while (i !== m.cx || j !== m.cy) {
+      if (Math.abs(m.cx - i) >= Math.abs(m.cy - j)) i += Math.sign(m.cx - i); else j += Math.sign(m.cy - j);
+      const k = cle(i, j); voie.add(k); m.chemin.push([i, j]);
+      if (!zones.has(k)) zones.set(k, { t: "coursive", m });
+    }
+  }
+  const sol = (i, j) => zones.has(cle(i, j)), pris = (i, j) => bloque.has(cle(i, j));
+  const dispo = (i, j) => sol(i, j) && !pris(i, j) && !voie.has(cle(i, j));
+  const dansSalle = (m, i, j) => { const z = zones.get(cle(i, j)); return !!z && z.t === "module" && z.m === m; };
+  const mettre = (t, i, j, plus) => { bloque.add(cle(i, j)); const o = { t, i, j, g: hache(t + i + "," + j) % 97, ...plus }; objets.push(o); return o; };
+  const essayer = (liste, fn) => { for (const c of liste) if (c.every(([i, j]) => dispo(i, j))) { fn(c); return; } };
+
+  // l'atrium (QG) : table holographique, écran des projets, salon, café, plantes
+  mettre("balise", 0, 0);
+  if (dispo(-2, -3) && dispo(-1, -3)) { mettre("ecran", -2, -3, { d: -3.4 }); bloque.add(cle(-1, -3)); }
+  essayer([[[-3, 1], [-3, 2]], [[-2, 2], [-2, 3]], [[-3, -2], [-3, -1]]], ([a, b]) => { mettre("canape", a[0], a[1], { p: "g" }); mettre("canape", b[0], b[1], { p: "d" }); });
+  essayer([[[2, -3]], [[3, -2]], [[3, 2]]], ([a]) => mettre("cafe", a[0], a[1]));
+  let np = 0; for (const [i, j] of [[3, 2], [2, 3], [-2, 3], [3, -1], [-3, -1], [1, -3]]) if (np < 2 && dispo(i, j)) { mettre("plante", i, j); np++; }
+
+  for (const m of modules) {
+    const at = (dx, dy) => [m.cx + dx, m.cy + dy];
+    if (m.deco === "quartiers") {
+      for (const [dx, dy] of [[-1, -1], [1, -1], [-1, 1], [1, 1], [0, -2], [-2, 0], [2, 0]]) {
+        const [i, j] = at(dx, dy);
+        if (dispo(i, j) && dansSalle(m, i, j + 1) && !pris(i, j + 1)) { const cap = { x: i, y: j, pris: null }; caps.push(cap); mettre("capsule", i, j, { cap }); }
+      }
+      for (const [dx, dy] of [[-2, -1], [-1, -2]]) { const [i, j] = at(dx, dy); if (dispo(i, j)) mettre("casier", i, j); }
+    } else if (m.deco === "quais") {
+      for (const [dx, dy, t] of [[-2, 0, "caisse"], [-1, -2, "caisse"], [2, -1, "distributeur"]]) { const [i, j] = at(dx, dy); if (dispo(i, j)) mettre(t, i, j); }
+    } else if (m.deco === "serre") {
+      for (const [dx, dy] of [[-2, 0], [-1, -2], [1, -2], [2, 0], [-1, 1], [1, 1], [0, 2]]) { const [i, j] = at(dx, dy); if (dispo(i, j)) mettre("plante", i, j); }
+    } else {
+      // bureaux (l'agent s'assoit derrière, côté fond), puis les outils de l'univers sur le pourtour
+      for (const [dx, dy] of [[-1, -1], [1, -1], [-1, 1], [1, 1], [0, -2], [-2, 0], [2, 0]]) {
+        if (m.postes.length >= 4) break;
+        const [i, j] = at(dx, dy);
+        if (!dansSalle(m, i, j) || pris(i, j) || !dispo(i, j + 1) || !dansSalle(m, i, j + 1)) continue;
+        const poste = { x: i, y: j, pris: null }; m.postes.push(poste); mettre("bureau", i, j + 1, { poste });
+      }
+      const outils = OUTILS[m.u?.cle] || ["plante", "distributeur"];
+      let k = 0;
+      for (const [dx, dy] of [[-2, 0], [0, -2], [-2, -1], [-1, -2], [1, -2], [-2, 1], [2, -1]]) {
+        if (k >= 3) break;
+        const [i, j] = at(dx, dy);
+        if (!dispo(i, j) || m.postes.some((p) => p.x === i && p.y === j)) continue;
+        mettre(outils[k % outils.length], i, j); k++;
+      }
+    }
+  }
+
+  // on vérifie que tout est accessible depuis l'atrium (sinon on retire le bureau ou la capsule)
+  const libre = (i, j) => sol(i, j) && !bloque.has(cle(i, j));
+  const atteint = new Set([cle(1, 0)]), file = [[1, 0]];
+  while (file.length) { const [i, j] = file.pop(); for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const k = cle(i + di, j + dj); if (!atteint.has(k) && libre(i + di, j + dj)) { atteint.add(k); file.push([i + di, j + dj]); } } }
+  const retirer = (i, j) => { bloque.delete(cle(i, j)); const n = objets.findIndex((o) => o.i === i && o.j === j); if (n >= 0) objets.splice(n, 1); };
+  for (const m of modules) m.postes = m.postes.filter((p) => { const ok = atteint.has(cle(p.x, p.y)); if (!ok) retirer(p.x, p.y + 1); return ok; });
+  for (let n = caps.length - 1; n >= 0; n--) if (!atteint.has(cle(caps[n].x, caps[n].y + 1))) { retirer(caps[n].x, caps[n].y); caps.splice(n, 1); }
+
+  // places : autour de la table (attente), debout dans les salles pleines, dans les coursives en dernier recours
+  const places = [], secours = [];
+  for (const [k, z] of zones) {
+    if (!atteint.has(k) || voie.has(k)) continue;
+    const [i, j] = k.split(",").map(Number);
+    if (z === atrium) { const d = Math.hypot(i, j); if (d >= 1.4 && d <= 3.2) places.push({ x: i, y: j, pris: null }); }
+    else if (z.t === "module" && !z.m.postes.some((p) => p.x === i && p.y === j) && !caps.some((c) => c.x === i && c.y + 1 === j)) z.m.debout.push({ x: i, y: j, pris: null });
+    else if (z.t === "coursive") secours.push({ x: i, y: j, pris: null });
+  }
+  places.sort((a, b) => Math.hypot(a.x - 1.2, a.y - 1.2) - Math.hypot(b.x - 1.2, b.y - 1.2));
+  for (const o of objets) if (o.d === undefined) o.d = o.i + o.j + 1;
+
+  // limites et contour à l'écran (cadrage, planètes)
+  let X0 = 0, X1 = 1, Y0 = 0, Y1 = 1;
+  const pts = [];
+  for (const k of zones.keys()) {
+    const [i, j] = k.split(",").map(Number);
+    X0 = Math.min(X0, i); X1 = Math.max(X1, i + 1); Y0 = Math.min(Y0, j); Y1 = Math.max(Y1, j + 1);
+    for (const [a, b] of [[i, j], [i + 1, j], [i, j + 1], [i + 1, j + 1]]) pts.push(proj(a, b, HMUR), proj(a, b, -10));
+  }
+  const quais = modules.find((m) => m.deco === "quais");
+  return { X0, X1, Y0, Y1, H: HMUR, zones, atrium, modules, places, secours, caps, objets, libre, coque: enveloppe(pts),
+    sas: { x: quais.cx, y: quais.cy }, quais };
+}
+
+// Enveloppe convexe (chaîne monotone) des points du contour.
+function enveloppe(pts) {
+  const p = pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]), v = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const bas = [], haut = [];
+  for (const q of p) { while (bas.length > 1 && v(bas[bas.length - 2], bas[bas.length - 1], q) <= 0) bas.pop(); bas.push(q); }
+  for (let i = p.length - 1; i >= 0; i--) { const q = p[i]; while (haut.length > 1 && v(haut[haut.length - 2], haut[haut.length - 1], q) <= 0) haut.pop(); haut.push(q); }
+  return bas.slice(0, -1).concat(haut.slice(0, -1));
+}
+
+function chemin(a, b) {
+  if (a.x === b.x && a.y === b.y) return [];
+  const { X0, Y0 } = plan, W = plan.X1 - X0, H = plan.Y1 - Y0;
+  const dans = (i, j) => i >= X0 && i < plan.X1 && j >= Y0 && j < plan.Y1, idx = (i, j) => (j - Y0) * W + (i - X0);
+  if (!dans(a.x, a.y) || !dans(b.x, b.y)) return null;
+  const prec = new Int32Array(W * H).fill(-1), file = [idx(a.x, a.y)]; prec[file[0]] = file[0];
+  for (let h = 0; h < file.length; h++) {
+    const c = file[h], i = c % W + X0, j = Math.floor(c / W) + Y0;
+    if (i === b.x && j === b.y) break;
+    for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const ni = i + di, nj = j + dj; if (!dans(ni, nj) || !plan.libre(ni, nj)) continue;
+      const n = idx(ni, nj); if (prec[n] !== -1) continue; prec[n] = c; file.push(n);
+    }
+  }
+  const fin = idx(b.x, b.y); if (prec[fin] === -1) return null;
+  const out = []; for (let c = fin; c !== prec[c]; c = prec[c]) out.push({ x: c % W + X0, y: Math.floor(c / W) + Y0 });
+  return out.reverse();
+}
+
+// ---------------------------------------------------------------- le décor fixe (sols, murs vitrés, coque)
+function rendreStation() {
+  const { X0, X1, Y0, Y1, zones } = plan;
+  const gauche = (X0 - 7 - (Y1 + 7)) * HW, droite = (X1 + 7 - (Y0 - 7)) * HW;
+  const haut = (X0 + Y0 - 6) * HH - HMUR - 80, bas = (X1 + Y1 + 8) * HH + 34;
+  const w = droite - gauche, h = bas - haut;
+  station = toile(w, h);
+  const g = G(station.getContext("2d"), -gauche, -haut), R = alea(7 + plan.modules.length);
+  Object.assign(plan, { bx: gauche, by: haut, sw: w, sh: h });
+  const sol = (i, j) => zones.has(cle(i, j));
+  const traitDe = (z) => z.t === "module" ? z.m.teinte.trait : z.t === "atrium" ? OR : "#4b63c8";
+
+  // derrière tout : mât du radar, panneaux solaires en ailes, quilles et réacteurs sous les salles
+  g.l3([-8.6, -8.6, -6], [-8.6, -8.6, 58], "#8f9bcb"); g.l3([-8.54, -8.6, -6], [-8.54, -8.6, 58], "#4a5aae");
+  const panneau = (x0, y0, x1, y1) => {
+    g.boite(x0, y0, x1, y1, -6, -4, { h: "#15307c", g: "#0d1c52", d: "#0a1642" });
+    for (let u = x0 + .5; u < x1; u += .5) g.l3([u, y0, -4], [u, y1, -4], "#2a55c0");
+    for (let v = y0 + 1; v < y1; v += 1) g.l3([x0, v, -4], [x1, v, -4], "#3f7df0");
+    for (const [a, b] of [[[x0, y0], [x1, y0]], [[x1, y0], [x1, y1]], [[x1, y1], [x0, y1]], [[x0, y1], [x0, y0]]]) g.l3([...a, -4], [...b, -4], OR);
+  };
+  const M = { h: "#4252a0", g: "#27336c", d: "#1a2352" };
+  g.boite(-12.4, -.3, -11.4, .3, -7, -5, M); panneau(-16.4, -1.6, -12.4, 1.6);
+  g.boite(-.3, -12.4, .3, -11.4, -7, -5, M); panneau(-1.6, -16.4, 1.6, -12.4);
+  for (const c of [{ cx: 0, cy: 0, r: 2.2 }].concat(plan.modules.map((m) => ({ cx: m.cx, cy: m.cy, r: 1.4 })))) {
+    g.boite(c.cx + .5 - c.r, c.cy + .5 - c.r, c.cx + .5 + c.r, c.cy + .5 + c.r, -22, -8, { g: "#10173a", d: "#0b1029" });
+    g.faceY(c.cx - .1, c.cx + 1.1, c.cy + .5 + c.r, -19, -12, "#1f4fc4"); g.faceY(c.cx + .1, c.cx + .9, c.cy + .5 + c.r, -17, -14, "#8fd0ff");
+  }
+
+  // sols, murs (vitrés côté espace, bas quand ils cacheraient une salle) et rebords, du fond vers l'avant
+  // Un grand mur vitré seulement sur le bord arrière de la station : rien ne doit se trouver derrière lui à l'écran
+  // (sinon un simple rebord, pour garder la vue sur les salles du fond).
+  const masque = (i, j, ax) => {
+    const xa = ax === "x" ? (i - j - 1) * HW : (i - j) * HW, xb = xa + HW;
+    for (const k of zones.keys()) {
+      const [a, b] = k.split(",").map(Number); if (a + b >= i + j) continue;
+      const x = (a - b) * HW; if (x > xa - HW && x < xb + HW) return true;
+    }
+    return false;
+  };
+  const hautsMurs = new Set();
+  const tuile = (i, j, z) => {
+    const a = (i + j) & 1; let base, joint;
+    if (z.t === "module") { base = z.m.teinte.sol[a]; joint = z.m.teinte.joint; }
+    else if (z.t === "atrium") { base = a ? "#232f68" : "#263472"; joint = "#182150"; }
+    else { base = a ? "#1c2756" : "#1f2b5e"; joint = "#141c44"; }
+    const lu = lumiere(i + .5, j + .5); if (lu > .01) { base = eclaircir(base, lu); joint = eclaircir(joint, lu * .6); }
+    g.tuile(i, j, base, joint);
+    if (z.t === "coursive") { const p = proj(i + .5, j + .5); g.rect(p[0] - 2, p[1], 4, 1, "#33468e"); }
+  };
+  const mur = (i, j, ax) => {
+    const z = zones.get(cle(i, j)), bas = masque(i, j, ax), hm = bas ? 4 : HMUR, trait = traitDe(z);
+    const face = (z0, z1, col, a = 0, b = 1) => ax === "x" ? g.faceX(j + a, j + b, i, z0, z1, col) : g.faceY(i + a, i + b, j, z0, z1, col);
+    face(0, hm, ax === "x" ? "#202a60" : "#27336c");
+    if (ax === "x") g.sol(i - .22, j, i, j + 1, hm, "#4252a0"); else g.sol(i, j - .22, i + 1, j, hm, "#4252a0");
+    const haut = ax === "x" ? [[i, j, hm], [i, j + 1, hm]] : [[i, j, hm], [i + 1, j, hm]];
+    if (bas) { g.l3(haut[0], haut[1], trait); return; }
+    hautsMurs.add(cle(i, j) + ax);
+    face(0, 4, "#182050"); face(HMUR - 6, HMUR - 5, ORS);
+    face(8, 22, "#4b63c8", .1, .9); face(9, 21, "#050a1f", .16, .84); face(9, 12, "#0a1440", .16, .84); // hublot
+    for (let n = 0; n < 5; n++) { const u = .2 + R() * .6, zz = 10 + R() * 10, p = ax === "x" ? proj(i, j + u, zz) : proj(i + u, j, zz); g.px(p[0], p[1], R() < .2 ? OR2 : R() < .5 ? "#ffffff" : "#7f93d8"); }
+    g.l3(haut[0], haut[1], trait);
+  };
+  const bord = (i, j, ax) => {
+    const z = zones.get(cle(i, j)), trait = traitDe(z);
+    if (ax === "x") {
+      g.faceX(j, j + 1, i + 1, -8, 0, "#182050"); g.faceX(j, j + 1, i + 1, -3, -2, ORN); g.faceX(j, j + 1, i + 1, 0, 3, "#2b3877");
+      g.l3([i + 1, j, 3], [i + 1, j + 1, 3], trait);
+      if ((i + j) % 2 === 0) { const p = proj(i + 1, j + .5, -6); g.rect(p[0] - 1, p[1], 2, 2, (i & 2) ? "#3aa6b0" : ORS); }
+    } else {
+      g.faceY(i, i + 1, j + 1, -8, 0, "#232d63"); g.faceY(i, i + 1, j + 1, -3, -2, ORS); g.faceY(i, i + 1, j + 1, 0, 3, "#33407f");
+      g.l3([i, j + 1, 3], [i + 1, j + 1, 3], trait);
+      if ((i + j) % 2 === 0) { const p = proj(i + .5, j + 1, -6); g.rect(p[0], p[1], 2, 2, (j & 2) ? CYAN : OR2); }
+    }
+  };
+  const items = [];
+  for (const [k, z] of zones) {
+    const [i, j] = k.split(",").map(Number);
+    items.push([i + j, () => tuile(i, j, z)]);
+    if (!sol(i - 1, j)) items.push([i + j - .5, () => mur(i, j, "x")]);
+    if (!sol(i, j - 1)) items.push([i + j - .5, () => mur(i, j, "y")]);
+    if (!sol(i + 1, j)) items.push([i + j + .9, () => bord(i, j, "x")]);
+    if (!sol(i, j + 1)) items.push([i + j + .9, () => bord(i, j, "y")]);
+  }
+  items.sort((a, b) => a[0] - b[0]);
+  for (const [, f] of items) f();
+
+  // marquages au sol : anneaux dorés de l'atrium, cercle de chaque salle
+  for (const r of [1.25, 2.3]) for (let a = 0; a < 6.2832; a += .012) { const p = proj(.5 + Math.cos(a) * r, .5 + Math.sin(a) * r); g.px(p[0], p[1], r > 2 ? ORN : ORS); }
+  for (const m of plan.modules) { const col = melange(m.teinte.sol[0], m.teinte.trait, .45); for (let a = 0; a < 6.2832; a += .02) { const p = proj(m.cx + .5 + Math.cos(a) * 2.05, m.cy + .5 + Math.sin(a) * 2.05); g.px(p[0], p[1], col); } }
+  // la planète de chaque univers, vue par le hublot du fond de sa salle
+  for (const m of plan.modules) {
+    if (!m.u || m.u.planete === false) continue;
+    const [i, j] = [m.cx, m.cy - 2]; if (!hautsMurs.has(cle(i, j) + "y")) continue;
+    const [cx, cy] = proj(i + .5, j, 15), r = 4;
+    for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) if (dx * dx + dy * dy <= r * r + 1) g.px(cx + dx, cy + dy, teintePlanete(m.u.cle, dx / r, dy / r, dx + r, dy + r, r, m.u.couleur));
+  }
+
+  // navette amarrée devant les quais (moteurs animés dans dessinerExterieur)
+  {
+    const q = plan.quais, X0n = q.cx - 1.4, yb = q.cy + 3, y0 = yb + .35, y1 = y0 + 1.5;
+    plan.navette = { X0: X0n, y0, y1 };
+    const METAL = { h: "#5a6cc0", g: "#3a4990", d: "#27336c" }, COQUE = { h: "#9aa8e0", g: "#6676b8", d: "#55639e" }, DOS = { h: "#8492cf", g: "#5a69a8", d: "#4a5790" };
+    g.boite(X0n + 2.1, yb, X0n + 2.8, y0, -7, -3, METAL);
+    g.boite(X0n - .45, y0 + .25, X0n, y0 + .7, -8, -5, METAL); g.boite(X0n - .45, y1 - .7, X0n, y1 - .25, -8, -5, METAL);
+    g.boite(X0n, y0, X0n + 4.2, y1, -10, -2, COQUE);
+    g.boite(X0n + .5, y0 + .3, X0n + 3.4, y1 - .3, -2, 0, DOS);
+    g.boite(X0n + 4.2, y0 + .2, X0n + 5, y1 - .2, -9, -3, DOS);
+    g.faceX(y0 + .3, y1 - .3, X0n + 5, -7.5, -4.5, "#0f2a7a"); g.faceX(y0 + .45, y0 + .75, X0n + 5, -7, -5.5, BLEU);
+    g.faceY(X0n, X0n + 4.2, y1, -7.5, -6.5, OR);
+    for (let x = X0n + .6; x < X0n + 3.8; x += .7) g.faceY(x, x + .3, y1, -5, -3.6, "#16307c");
+    g.faceY(X0n + 4.2, X0n + 5, y1 - .2, -7.5, -6.5, OR);
+  }
+}
+
+// Flaques de lumière au sol (plafonniers), en paliers par tuile pour rester « pixel ».
+function lumiere(x, y) {
+  let k = 0;
+  const flaque = (cx, cy, r, f) => { const d = Math.hypot(x - cx, y - cy); if (d < r) k = Math.max(k, f * (1 - d / r)); };
+  flaque(.5, .5, 3.8, .3);
+  for (const m of plan.modules) flaque(m.cx + .5, m.cy + .5, 2.8, m.deco === "quartiers" ? .08 : .2);
+  return k;
+}
+function eclaircir(h, k) { return "rgb(" + hex(h).map((v) => Math.min(255, Math.round(v * (1 + k) + 30 * k))).join(",") + ")"; }
+
+// ---------------------------------------------------------------- le fond (espace, planète)
+let fond = null, scintillantes = [];
+function rendreFond() {
+  const w = sc.width, h = sc.height; fond = toile(w, h); const x = fond.getContext("2d");
+  const gr = x.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, "#03061a"); gr.addColorStop(.6, "#060e30"); gr.addColorStop(1, "#0a153e");
+  x.fillStyle = gr; x.fillRect(0, 0, w, h);
+  for (const [cx, cy, r, col] of [[.8, .18, .5, "rgba(47,107,255,.11)"], [.18, .3, .38, "rgba(120,80,220,.07)"], [.62, .9, .42, "rgba(242,184,58,.04)"]]) {
+    const g2 = x.createRadialGradient(cx * w, cy * h, 0, cx * w, cy * h, r * Math.max(w, h)); g2.addColorStop(0, col); g2.addColorStop(1, "rgba(0,0,0,0)");
+    x.fillStyle = g2; x.fillRect(0, 0, w, h);
+  }
+  const R = alea(7); scintillantes = [];
+  for (let i = 0, n = Math.round(w * h / 850); i < n; i++) {
+    const px = Math.floor(R() * w), py = Math.floor(R() * h), v = R();
+    x.globalAlpha = .3 + R() * .7; x.fillStyle = v < .68 ? "#8fa3e0" : v < .9 ? "#ffffff" : OR2; x.fillRect(px, py, 1, 1);
+    if (R() < .05) { x.globalAlpha = .9; x.fillRect(px - 1, py, 3, 1); x.fillRect(px, py - 1, 1, 3); scintillantes.push([px, py, R() * 6.28]); }
+  }
+  x.globalAlpha = 1;
+  ciel = { cx: Math.round(w * .06), cy: Math.round(h * 1.04), r: Math.round(Math.min(w, h) * .36) };
+  planete(x, ciel.cx, ciel.cy, ciel.r);
+  // les planètes des univers ORBIT, autour de la station (la liste de droite n'en cache aucune)
+  // chaque planète prend sa place préférée si elle est dégagée (ni derrière la station, ni sous les boutons), sinon la première place libre
+  const we = Math.max(80, w - margeCss * dpr / cam.s), base = Math.min(we, h), css = dpr / cam.s;
+  const sil = plan ? silhouette() : null;
+  const libre = (cx, cy, r) => {
+    if (cx - r < 2 || cy - r < 2 || cx + r > we - 2 || cy + r > h - 2) return false;
+    if (cx - r < (MINI ? 230 : 430) * css && cy - r < (MINI ? 26 : 96) * css) return false;     // titre et compteurs
+    if (MINI && cx + r > we - 160 * css && cy - r < 32 * css) return false;                     // boutons de la petite fenêtre
+    if (Math.hypot(cx - ciel.cx, cy - ciel.cy) < ciel.r * 1.8 + r) return false;                // grande planète ORBIT et son anneau
+    if (sil && [[0, 0], [r, 0], [-r, 0], [0, r], [0, -r], [r * .7, r * .7], [-r * .7, r * .7]].some(([dx, dy]) => dedans(sil, cx + dx, cy + dy))) return false;
+    return !planetes.some((q) => Math.hypot(q.cx - cx, q.cy - cy) < q.r * 1.9 + r + 10);
+  };
+  planetes = [];
+  for (const u of UNIVERS) {
+    if (u.planete === false) continue;
+    const pref = POS_PLANETES[u.cle] || [.5, .06, .032];
+    let p = null;
+    for (const k of [1, .8, .65]) {
+      for (const [fx, fy] of [pref].concat(PLACES)) { const r = Math.max(5, Math.round(base * pref[2] * k)), cx = Math.round(we * fx), cy = Math.round(h * fy); if (libre(cx, cy, r)) { p = { u, cx, cy, r }; break; } }
+      if (p) break;
+    }
+    if (!p) p = { u, cx: Math.round(we * pref[0]), cy: Math.round(h * pref[1]), r: Math.max(5, Math.round(base * pref[2] * .65)), cache: true };
+    planetes.push(p); planeteUnivers(x, p);
+  }
+}
+let planetes = [], margeCss = 0;
+const POS_PLANETES = { ark: [.9, .15, .062], mc: [.66, .24, .05], pz: [.95, .42, .045], "11d": [.62, .07, .042], gmod: [.44, .05, .03], roblox: [.82, .33, .036] };
+const PLACES = [[.5, .06], [.38, .07], [.75, .07], [.88, .1], [.96, .25], [.96, .5], [.95, .7], [.9, .88], [.75, .93], [.6, .94], [.45, .94], [.05, .45], [.04, .3], [.3, .93]];
+// Contour de la station à l'écran (coque, murs, pont), en pixels de la scène.
+function silhouette() { return plan.coque.map(([x, y]) => [x + cam.x, y + cam.y]); }
+function dedans(poly, x, y) {
+  let ok = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i], [xj, yj] = poly[j];
+    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) ok = !ok;
+  }
+  return ok;
+}
+const ANNEAUX = { "11d": [[-.5, 1.35, 1.5, "#b79cff"], [.35, 1.55, 1.66, "#5fe0e6"], [1.15, 1.75, 1.82, "#dcc2ff"]], gmod: [[-.3, 1.4, 1.6, "#5fe0e6"]], ark: [[.25, 1.5, 1.58, "#ff9f43"]] };
+function planeteUnivers(x, p) {
+  const { u, cx, cy, r } = p;
+  if (r < 4) return;
+  const d = 2 * r + 2, c = toile(d, d), k = c.getContext("2d"), im = k.createImageData(d, d);
+  for (let yy = 0; yy < d; yy++) for (let xx = 0; xx < d; xx++) {
+    const nx = (xx - r) / r, ny = (yy - r) / r; if (nx * nx + ny * ny > 1) continue;
+    const col = hex(teintePlanete(u.cle, nx, ny, xx, yy, r, u.couleur)), o = (yy * d + xx) * 4;
+    im.data[o] = col[0]; im.data[o + 1] = col[1]; im.data[o + 2] = col[2]; im.data[o + 3] = 255;
+  }
+  k.putImageData(im, 0, 0);
+  // atmosphère : un liseré à la couleur de l'univers côté soleil
+  k.globalCompositeOperation = "source-atop"; k.fillStyle = u.couleur;
+  for (let a = 0; a < 6.2832; a += .5 / r) { const ex = Math.cos(a), ey = Math.sin(a); if (ex * LUM[0] + ey * LUM[1] < .15) continue; k.globalAlpha = .55; k.fillRect(Math.round(r + ex * (r - .5)), Math.round(r + ey * (r - .5)), 1, 1); }
+  k.globalAlpha = 1; k.globalCompositeOperation = "source-over";
+  const anneaux = ANNEAUX[u.cle] || [];
+  const anneau = (devant) => {
+    for (const [inc, k0, k1, col] of anneaux) {
+      const cs = Math.cos(inc), sn = Math.sin(inc); x.fillStyle = col;
+      for (let kk = k0; kk <= k1; kk += .5 / r) for (let i = 0, n = Math.round(r * kk * 7); i < n; i++) {
+        const a = i / n * 6.2832; if ((Math.sin(a) > 0) !== devant) continue;
+        const ex = Math.cos(a) * r * kk, ey = Math.sin(a) * r * kk * .28;
+        x.globalAlpha = devant ? .75 : .45; x.fillRect(Math.round(cx + ex * cs - ey * sn), Math.round(cy + ex * sn + ey * cs), 1, 1);
+      }
+    }
+    x.globalAlpha = 1;
+  };
+  anneau(false); x.drawImage(c, cx - r, cy - r); anneau(true);
+}
+function planete(x, cx, cy, r) {
+  if (r < 6) return; // fenêtre pas encore affichée
+  const B = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
+  const rampe = ["#050b28", "#0a1648", "#10287a", "#1b45b4", "#3470e6", "#7fb2ff"].map(hex);
+  const d = 2 * r + 2, c = toile(d, d), k = c.getContext("2d"), im = k.createImageData(d, d);
+  const lx = .55, ly = -.62, lz = .56;
+  for (let yy = 0; yy < d; yy++) for (let xx = 0; xx < d; xx++) {
+    const nx = (xx - r) / r, ny = (yy - r) / r, q = nx * nx + ny * ny; if (q > 1) continue;
+    const s = Math.max(0, nx * lx + ny * ly + Math.sqrt(1 - q) * lz);
+    const bande = Math.sin(ny * 9 + Math.sin(nx * 3 + ny * 2) * 1.2) * .09;
+    let v = Math.round((s + bande) * 5 + (B[yy & 3][xx & 3] / 16 - .5) * .95);
+    if (q > .93 && s > .25) v++;
+    const col = rampe[Math.max(0, Math.min(5, v))], o = (yy * d + xx) * 4;
+    im.data[o] = col[0]; im.data[o + 1] = col[1]; im.data[o + 2] = col[2]; im.data[o + 3] = 255;
+  }
+  k.putImageData(im, 0, 0);
+  const anneau = (devant) => {
+    const cs = Math.cos(-.36), sn = Math.sin(-.36), motif = [ORN, ORS, OR, OR2, null, ORS, ORN, null, null, ORN];
+    for (let kk = 1.42, b = 0; kk < 1.74; kk += .6 / r, b++) {
+      const col = motif[Math.floor((kk - 1.42) * 31) % motif.length]; if (!col) continue;
+      x.fillStyle = col; x.globalAlpha = .6;
+      for (let i = 0, n = Math.round(r * kk * 7); i < n; i++) {
+        const a = i / n * 6.2832; if ((Math.sin(a) > 0) !== devant) continue;
+        const ex = Math.cos(a) * r * kk, ey = Math.sin(a) * r * kk * .27;
+        x.fillRect(Math.round(cx + ex * cs - ey * sn), Math.round(cy + ex * sn + ey * cs), 1, 1);
+      }
+    }
+    x.globalAlpha = 1;
+  };
+  anneau(false); x.drawImage(c, cx - r, cy - r); anneau(true);
+}
+
+// ---------------------------------------------------------------- caméra et tailles
+const sc = $("scene"), scx = sc.getContext("2d"), cc = $("calque"), ccx = cc.getContext("2d");
+const cam = { s: 2, x: 0, y: 0 };
+let dpr = 1, zoomManuel = false;
+
+function taille() {
+  dpr = window.devicePixelRatio || 1;
+  const W = innerWidth, H = innerHeight;
+  sc.width = Math.max(8, Math.ceil(W * dpr / cam.s)); sc.height = Math.max(8, Math.ceil(H * dpr / cam.s));
+  sc.style.width = sc.width * cam.s / dpr + "px"; sc.style.height = sc.height * cam.s / dpr + "px";
+  cc.width = Math.round(W * dpr); cc.height = Math.round(H * dpr); cc.style.width = W + "px"; cc.style.height = H + "px";
+  scx.imageSmoothingEnabled = false;
+  rendreFond();
+}
+function cadrer() {
+  dpr = window.devicePixelRatio || 1;
+  // On cadre sur le pont et ses murs ; les panneaux solaires peuvent passer sous l'interface.
+  const large = innerWidth > 900 && !MINI, marge = large && !$("liste").classList.contains("ferme") ? 300 : 0;
+  margeCss = marge;
+  const hautCss = MINI ? 26 : 34, basCss = MINI ? 4 : 46;
+  const dw = (innerWidth - marge) * dpr, dh = (innerHeight - hautCss - basCss) * dpr;
+  let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+  for (const [x, y] of plan.coque) { x0 = Math.min(x0, x - 8); x1 = Math.max(x1, x + 8); y0 = Math.min(y0, y - 10); y1 = Math.max(y1, y + 14); }
+  const ajuste = Math.min(dw / (x1 - x0), dh / (y1 - y0));
+  cam.s = ajuste >= 2 ? Math.min(6, Math.floor(ajuste)) : Math.max(.5, Math.floor(ajuste * 4) / 4); // en dessous de 2 : par quarts
+  cam.x = Math.round((dw / cam.s - (x1 - x0)) / 2 - x0);
+  cam.y = Math.round(hautCss * dpr / cam.s + (dh / cam.s - (y1 - y0)) / 2 - y0);
+  taille();
+}
+function zoomer(sens, cxDev, cyDev) {
+  let i = ECHELLES.findIndex((v) => v >= cam.s - 1e-6); if (i < 0) i = ECHELLES.length - 1;
+  if (ECHELLES[i] > cam.s + 1e-6 && sens > 0) i--; // échelle hors liste : on part de la plus proche
+  const s2 = ECHELLES[Math.max(0, Math.min(ECHELLES.length - 1, i + sens))]; if (s2 === cam.s) return;
+  const mx = cxDev / cam.s - cam.x, my = cyDev / cam.s - cam.y;
+  cam.s = s2; cam.x = Math.round(cxDev / s2 - mx); cam.y = Math.round(cyDev / s2 - my);
+  zoomManuel = true; taille();
+}
+
+// ---------------------------------------------------------------- l'équipage
+const agents = new Map();
+let premier = true, choisi = null, survol = null, horloge = Date.now();
+const VITESSE = 3.4; // tuiles par seconde
+
+function liberer(a) { if (a.place) { a.place.ref.pris = null; a.place = null; } a.cat = null; }
+
+function allerVers(a, tx, ty, direct) {
+  if (direct) { a.x = tx + .5; a.y = ty + .5; a.route = []; return true; }
+  const r = chemin({ x: Math.floor(a.x), y: Math.floor(a.y) }, { x: tx, y: ty });
+  if (!r) { a.x = tx + .5; a.y = ty + .5; a.route = []; return true; }
+  a.route = r; a.cache = false;
+  return r.length === 0;
+}
+
+function affecter(a, direct) {
+  const ph = a.d.phase, cat = ph === "travaille" || ph === "question" ? "poste" : ph === "repos" ? "capsule" : "pont";
+  if (a.cat === cat && a.place && (cat !== "poste" || a.place.module === a.d.projet)) return;
+  liberer(a);
+  let ref = null, tx, ty;
+  if (cat === "poste") { const m = plan.modules.find((mm) => mm.nom === a.d.projet); ref = m && (m.postes.find((p) => !p.pris) || m.debout.find((p) => !p.pris)); if (ref) { tx = ref.x; ty = ref.y; } }
+  else if (cat === "pont") { ref = plan.places.find((p) => !p.pris); if (ref) { tx = ref.x; ty = ref.y; } }
+  else { ref = plan.caps.find((p) => !p.pris); if (ref) { tx = ref.x; ty = ref.y + 1; } }
+  if (!ref) { ref = plan.secours.find((p) => !p.pris) || plan.places.find((p) => !p.pris); if (ref) { tx = ref.x; ty = ref.y; } } // plus de place : coursive
+  if (!ref) { ref = { pris: null }; tx = plan.sas.x; ty = plan.sas.y; }
+  ref.pris = a.id; a.cat = cat; a.place = { ref, tx, ty, module: a.d.projet };
+  if (a.neuf && !direct) { a.x = plan.sas.x + .5; a.y = plan.sas.y + .5; }
+  a.neuf = false;
+  if (allerVers(a, tx, ty, direct)) arriver(a);
+}
+
+function arriver(a) {
+  a.vue = "face"; a.mir = a.cat === "pont" ? a.place.tx < 0 : false;
+  a.cache = a.cat === "capsule" && plan.caps.includes(a.place.ref);
+}
+
+function majDonnees(liste, univers, qg) {
+  if (univers !== undefined) QG = qg || null;
+  if (Array.isArray(univers) && univers.length) {
+    const su = JSON.stringify(univers);
+    if (su !== sigUnivers) { sigUnivers = su; UNIVERS = univers; signature = null; if (fond) rendreFond(); }
+  }
+  const compte = new Map();
+  for (const d of liste) compte.set(d.projet, (compte.get(d.projet) || 0) + 1);
+  // d'abord les salles fixes des univers (même vides), puis les autres projets qui ont du monde
+  const fixes = UNIVERS.filter((u) => u.salle).map((u) => ({ nom: u.nom, n: compte.get(u.nom) || 0, u }));
+  const autres = [...compte].filter(([nom]) => !fixes.some((f) => f.nom === nom))
+    .map(([nom, n]) => ({ nom, n, u: UNIVERS.find((u) => u.nom === nom) || null })).sort((p, q) => q.n - p.n || p.nom.localeCompare(q.nom));
+  const projets = fixes.concat(autres);
+  const sig = projets.map((p) => p.nom + ":" + Math.max(2, Math.ceil(p.n / 2))).join("|") || "vide";
+  let refait = false;
+  if (sig !== signature) {
+    signature = sig; plan = disposer(projets); rendreStation(); refait = true;
+    for (const a of agents.values()) { a.place = null; a.cat = null; if (a.part) agents.delete(a.id); }
+    if (!zoomManuel) cadrer();
+  }
+  const vus = new Set();
+  for (const d of liste) {
+    vus.add(d.id);
+    let a = agents.get(d.id);
+    if (!a) { a = { id: d.id, g: hache(d.id) % 13, x: plan.sas.x + .5, y: plan.sas.y + .5, route: [], place: null, cat: null, vue: "face", mir: false, pas: 0, cache: false, drones: new Map(), neuf: true, sx: 0, sy: 0 }; agents.set(d.id, a); }
+    a.d = d; a.part = false; a.role = d.role?.cle || "ingenierie"; a.col = roleDe(d).couleur;
+  }
+  for (const a of agents.values()) {
+    if (vus.has(a.id)) { affecter(a, refait || premier); continue; }
+    if (!a.part) { a.part = true; liberer(a); if (allerVers(a, plan.sas.x, plan.sas.y, false)) agents.delete(a.id); }
+  }
+  for (const a of agents.values()) { // drones
+    const actifs = new Set((a.part ? [] : a.d.drones).map((d) => d.id));
+    if (!a.part) for (const d of a.d.drones) if (!a.drones.has(d.id)) a.drones.set(d.id, { ang: Math.random() * 6.28, alpha: 0, d });
+    for (const [id, dr] of a.drones) dr.fin = !actifs.has(id);
+  }
+  premier = false;
+  if (choisi && !agents.has(choisi)) choisi = null;
+  majInterface();
+}
+
+function avancer(dt) {
+  for (const a of agents.values()) {
+    for (const [id, dr] of a.drones) { dr.ang += dt * 1.3; dr.alpha = Math.max(0, Math.min(1, dr.alpha + (dr.fin ? -dt : dt) * 2)); if (dr.fin && dr.alpha <= 0) a.drones.delete(id); }
+    if (!a.route.length) continue;
+    let reste = VITESSE * dt;
+    while (reste > 0 && a.route.length) {
+      const n = a.route[0], dx = n.x + .5 - a.x, dy = n.y + .5 - a.y, dist = Math.hypot(dx, dy);
+      if (dist > .001) { if (Math.abs(dx) > Math.abs(dy)) { a.vue = dx > 0 ? "face" : "dos"; a.mir = dx > 0; } else { a.vue = dy > 0 ? "face" : "dos"; a.mir = dy < 0; } }
+      if (dist <= reste) { a.x = n.x + .5; a.y = n.y + .5; a.route.shift(); reste -= dist; }
+      else { a.x += dx / dist * reste; a.y += dy / dist * reste; reste = 0; }
+    }
+    a.pas += dt * 7;
+    if (!a.route.length) { if (a.part) agents.delete(a.id); else arriver(a); }
+  }
+}
+
+// ---------------------------------------------------------------- dessin de chaque image
+function dessinerObjet(c, o, t) {
+  const [X, Y] = proj(o.i, o.j), px = X + cam.x, py = Y + cam.y;
+  if (o.t === "bureau") {
+    poser(c, S.bureau, px, py);
+    const a = o.poste.pris && agents.get(o.poste.pris);
+    if (a && !a.route.length && a.cat === "poste") {
+      const s = S.holo[a.d.activite.genre] || S.holo.code;
+      c.globalAlpha = .72 + .18 * Math.sin(t / 140 + a.g); poser(c, s, px, py);
+      c.fillStyle = GENRES[a.d.activite.genre] || BLEU; // particules de données qui montent de l'écran
+      for (let k = 0; k < 3; k++) {
+        const f = (t / 1500 + k / 3 + a.g / 13) % 1; c.globalAlpha = (1 - f) * .8;
+        c.fillRect(Math.round(px - 6 + ((a.g * 7 + k * 5) % 12)), Math.round(py - 14 - f * 16), 1, 1);
+      }
+      c.globalAlpha = 1;
+    } else poser(c, S.veille, px, py);
+  } else if (o.t === "capsule") {
+    poser(c, S.capsule, px, py);
+    const a = o.cap.pris && agents.get(o.cap.pris);
+    if (a && a.cache) {
+      c.drawImage(S.casque, px - 4, py - 9);
+      c.fillStyle = a.col; c.fillRect(px - 13, py + 10, 3, 1);
+      for (let k = 0; k < 2; k++) { const f = (t / 2600 + k / 2 + a.g / 13) % 1; c.globalAlpha = Math.sin(f * Math.PI); c.drawImage(S.z, Math.round(px + 3 + f * 7), Math.round(py - 12 - f * 11)); }
+      c.globalAlpha = 1;
+    } else { c.fillStyle = "#34427f"; c.fillRect(px - 13, py + 10, 3, 1); }
+  } else if (o.t === "baie") {
+    poser(c, S.baie, px, py);
+    const pas = Math.floor(t / 420);
+    for (let r = 0; r < 5; r++) for (let q = 0; q < 3; q++) {
+      const v = hache(o.g + ":" + r + ":" + q + ":" + (pas + (r * 3 + q) % 4 >> 2));
+      if (v % 5 === 0) continue;
+      const p = proj(.3 + q * .2, .8, 7 + r * 4.4);
+      c.fillStyle = v % 7 === 0 ? OR : v % 3 === 0 ? CYAN : "#3f7df0"; c.fillRect(Math.round(px + p[0]), Math.round(py + p[1]), 2, 1);
+    }
+  } else if (o.t === "balise") {
+    poser(c, S.balise, px, py);
+    const n = [...agents.values()].some((a) => a.cat === "pont" && a.d.phase === "attend" && !a.route.length);
+    // Hologramme : planète ORBIT qui tourne, cyan au calme, dorée et plus vive quand un agent t'attend.
+    const col = n ? "#ffe9a8" : "#9ff4ff", col2 = n ? OR : "#3cc7e0", pouls = .5 + .5 * Math.sin(t / (n ? 240 : 800));
+    const sol = py + 8, hy = Math.round(sol - 35 + Math.sin(t / 650) * 1.5), rot = t / (n ? 260 : 420);
+    c.fillStyle = col;
+    for (let r = 0; r < sol - 16 - hy; r++) { const lw = Math.round(2 + r * .36); c.globalAlpha = .1 + pouls * .08; c.fillRect(px - lw, sol - 12 - r, lw * 2, 1); }
+    c.globalAlpha = .12 + pouls * .1; c.fillRect(px - 9, hy - 9, 18, 18); // halo
+    const anneau = (devant) => {
+      c.fillStyle = OR2; c.globalAlpha = devant ? 1 : .5;
+      for (let k = 0; k < 60; k++) {
+        const an = k / 60 * 6.2832 + rot * .4; if ((Math.sin(an) > 0) !== devant) continue;
+        c.fillRect(Math.round(px + Math.cos(an) * 12), Math.round(hy + Math.sin(an) * 3.5), 1, 1);
+      }
+    };
+    anneau(false);
+    const balayage = Math.floor(t / 90);
+    for (const [dx, dy, ombre, bord] of DISQUE) {
+      const v = Math.sin(dx * .5 + rot * 2.2 + Math.sin(dy * .5) * .6);
+      if (v < -.6 && !bord) continue; // bandes vides : effet hologramme
+      c.globalAlpha = ((dy + balayage) % 3 === 0 ? .55 : .95) * (ombre ? .7 : 1);
+      c.fillStyle = bord ? col : v > .2 ? col : col2; c.fillRect(px + dx, hy + dy, 1, 1);
+    }
+    anneau(true);
+    c.globalAlpha = 1;
+  } else if (o.t === "plante") {
+    poser(c, S.pot, px, py);
+    const f = S.feuilles[(o.i + o.j) & 1], bouge = Math.sin(t / 1400 + o.i * 2) > .8 ? 1 : 0;
+    c.drawImage(f, px - (f.width >> 1) + bouge, py + 3 - f.height);
+  } else if (o.t === "cafe") {
+    poser(c, S.cafe, px, py);
+    c.fillStyle = "#dfe6ff";
+    for (let k = 0; k < 3; k++) { const f = (t / 1700 + k / 3) % 1; c.globalAlpha = (1 - f) * .5; c.fillRect(Math.round(px + 2 + Math.sin(f * 6 + k) * 1.5), Math.round(py - 13 - f * 12), 1, 2); }
+    c.globalAlpha = 1;
+  } else if (o.t === "canape") poser(c, S.canape[o.p], px, py);
+  else if (o.t === "casier") poser(c, S.casier, px, py);
+  else if (o.t === "distributeur") {
+    poser(c, S.distributeur, px, py);
+    if ((t + o.i * 370) % 2600 < 1300) { const p = proj(.8, .62, 20); c.fillStyle = "#7fe08a"; c.fillRect(px + p[0], py + p[1], 1, 1); }
+  } else if (o.t === "ecran") { poser(c, S.ecran, px, py); dessinerEcranQg(c, t, px, py); }
+  else if (S.outil[o.t]) { poser(c, S.outil[o.t], px, py); animerOutil(c, o, px, py, t); }
+  else if (o.t === "poteau") poser(c, S.poteau, px, py);
+  else poser(c, S.sep, px, py);
+}
+
+// Les outils des salles qui bougent un peu (feu du four, bulles, cube à 4 dimensions…).
+function animerOutil(c, o, px, py, t) {
+  const g = G(c, px, py), ph = (o.g || 0) * 97;
+  if (o.t === "crane") c.drawImage(S.crane, px - 7, py - 9);
+  else if (o.t === "incubateur") { if ((t + ph) % 1800 < 900) { const p = proj(.5, .82, 3); c.fillStyle = "#7fe08a"; c.fillRect(px + p[0], py + p[1], 1, 1); } c.globalAlpha = .1 + .07 * Math.sin(t / 700); g.faceY(.28, .72, .72, 5, 18, "#bff6ff"); c.globalAlpha = 1; }
+  else if (o.t === "tek") for (let k = 0; k < 3; k++) { c.globalAlpha = .35 + .65 * Math.max(0, Math.sin(t / 380 - k * .9)); g.l3([.32, .7, 7 + k * 3], [.68, .7, 7 + k * 3], CYAN); c.globalAlpha = 1; }
+  else if (o.t === "four") { const f = Math.abs(Math.sin(t / 90 + ph)) * 3; g.faceY(.36, .64, .85, 2, 3 + f, "#ff7a1a"); g.faceY(.42, .58, .85, 2, 2.5 + f * .6, "#ffd87a"); }
+  else if (o.t === "radio") {
+    if ((t + ph) % 1000 < 500) { const p = proj(.6, .7, 9); c.fillStyle = "#ff5a6e"; c.fillRect(px + p[0], py + p[1], 1, 1); }
+    const [ax, ay] = proj(.68, .4, 31), f = (t / 1200) % 1; c.fillStyle = "#7fe08a"; c.globalAlpha = 1 - f;
+    for (let a = -1; a <= 1; a += .25) c.fillRect(Math.round(px + ax + Math.cos(a - 1.57) * 2 * (1 + f * 3)), Math.round(py + ay - 1 + Math.sin(a - 1.57) * 2 * (1 + f * 3)), 1, 1);
+    c.globalAlpha = 1;
+  } else if (o.t === "eprouvettes") {
+    c.fillStyle = "#ffffff";
+    [[.2, 8], [.36, 5], [.52, 9], [.68, 6]].forEach(([u, n], k) => { const f = (t / 900 + k * .27) % 1; c.globalAlpha = 1 - f; const p = proj(u + .05, .56, 4.5 + f * n); c.fillRect(Math.round(px + p[0]), Math.round(py + p[1]), 1, 1); });
+    c.globalAlpha = 1;
+  } else if (o.t === "cube") { // tesseract : deux cubes qui tournent en sens contraire, reliés coin à coin
+    const cx = px, cy = py - 21, a = t / 1500, b = .5;
+    const sommets = (s, rot) => { const out = []; for (const x of [-1, 1]) for (const y of [-1, 1]) for (const z of [-1, 1]) {
+      const X = x * Math.cos(rot) - z * Math.sin(rot), Z = x * Math.sin(rot) + z * Math.cos(rot), Y = y * Math.cos(b) - Z * Math.sin(b);
+      out.push([cx + X * s, cy + Y * s]); } return out; };
+    const ext = sommets(6, a), int = sommets(3, -a * 1.3), L = G(c, 0, 0);
+    const aretes = [[0, 1], [0, 2], [1, 3], [2, 3], [4, 5], [4, 6], [5, 7], [6, 7], [0, 4], [1, 5], [2, 6], [3, 7]];
+    c.globalAlpha = .55; for (let k = 0; k < 8; k++) L.ligne(ext[k][0], ext[k][1], int[k][0], int[k][1], "#5a3ea8");
+    c.globalAlpha = 1; for (const [p, q] of aretes) { L.ligne(ext[p][0], ext[p][1], ext[q][0], ext[q][1], "#b79cff"); L.ligne(int[p][0], int[p][1], int[q][0], int[q][1], CYAN); }
+    c.globalAlpha = .12 + .06 * Math.sin(t / 300); c.fillStyle = "#b79cff"; c.fillRect(cx - 9, cy - 9, 18, 18); c.globalAlpha = 1;
+  } else if (o.t === "reacteur") {
+    c.globalAlpha = .1 + .08 * Math.sin(t / 260); c.fillStyle = "#b79cff"; c.fillRect(px - 7, py - 22, 14, 22); c.globalAlpha = 1;
+    const z = 4 + (t / 60) % 20; g.faceY(.36, .64, .64, z, z + 1, "#ffffff");
+  } else if (o.t === "physgun") { c.globalAlpha = .3 + .3 * Math.sin(t / 200); const p = proj(.74, .5, 12); c.fillStyle = CYAN; c.fillRect(px + p[0] - 1, py + p[1] - 2, 3, 4); c.globalAlpha = 1; }
+}
+
+function dessinerAgent(c, a, t) {
+  const [X, Y] = proj(a.x, a.y), px = Math.round(X + cam.x), py = Math.round(Y + cam.y);
+  a.sx = px; a.sy = py;
+  const marche = a.route.length > 0, ph = a.d.phase, genre = a.d.activite.genre;
+  if (a.id === choisi) { c.fillStyle = OR; for (let k = 0; k < 40; k++) { const an = k / 40 * 6.2832 + t / 900; c.fillRect(Math.round(px + Math.cos(an) * 10), Math.round(py + 1 + Math.sin(an) * 5), 1, 1); } }
+  c.drawImage(S.ombre, px - 6, py - 1);
+  let pose = 0, saut = 0;
+  if (marche) { pose = 1 + (Math.floor(a.pas) & 1); saut = Math.floor(a.pas) & 1; }
+  else if (a.cat === "poste" && ph === "travaille" && (genre === "code" || genre === "commande" || genre === "redige")) saut = Math.floor(t / 230 + a.g) & 1;
+  else if (a.cat === "pont" && ph === "attend" && Math.floor(t / 420 + a.g) % 4 < 2) pose = 3;
+  c.drawImage(spriteAgent(a.col, a.vue, pose, a.mir), px - 7, py - 16 - saut);
+  accessoire(c, a, px, py - saut, t, marche);
+  if (marche) return;
+  const hy = py - 28;
+  if (a.cat === "pont") {
+    if (ph === "attend") c.drawImage(S.bulleAlerte, px - 4, hy - Math.round(Math.abs(Math.sin(t / 300 + a.g)) * 3));
+    else c.drawImage(S.bulleOk, px - 4, hy);
+  } else if (a.cat === "poste") {
+    if (ph === "question") c.drawImage(S.bulleQuestion, px - 4, hy - Math.round(Math.abs(Math.sin(t / 300)) * 3));
+    else if (genre === "reflechit") { const n = 1 + Math.floor(t / 320) % 3; for (let k = 0; k < n; k++) { c.fillStyle = "#060b22"; c.fillRect(px - 6 + k * 4, py - 22, 4, 4); c.fillStyle = "#eef2ff"; c.fillRect(px - 5 + k * 4, py - 21, 2, 2); } }
+  } else if (a.cat === "capsule" && !a.cache) { // plus de capsule libre : dort debout
+    const f = (t / 2600 + a.g / 13) % 1; c.globalAlpha = Math.sin(f * Math.PI); c.drawImage(S.z, Math.round(px + 4 + f * 6), Math.round(py - 20 - f * 9)); c.globalAlpha = 1;
+  }
+}
+
+// L'accessoire du rôle, posé sur l'astronaute (coordonnées en pixels du dessin, retournées si l'agent regarde de l'autre côté).
+function accessoire(c, a, px, py, t, marche) {
+  const mir = a.mir, ox = px - 6, oy = py - 15, face = a.vue === "face", au = a.d.phase === "travaille";
+  const f = (q, r, w, h, col) => { c.fillStyle = col; c.fillRect(ox + (mir ? 11 - q - w + 1 : q), oy + r, w, h); };
+  switch (a.role) {
+    case "ingenierie": f(2, -1, 8, 2, OR); f(1, 1, 10, 1, ORS); f(11, 10, 1, 3, "#c2cbee"); f(10, 9, 1, 1, "#c2cbee"); f(12, 9, 1, 1, "#c2cbee"); break;
+    case "recherche": f(11, 8, 3, 1, OR2); f(11, 10, 3, 1, OR2); f(11, 9, 1, 1, OR2); f(13, 9, 1, 1, OR2); f(12, 9, 1, 1, "#a8d4ff"); f(10, 11, 1, 2, ORN); break;
+    case "operations":
+      f(9, -3, 1, 3, "#8f9bcb"); if (t % 1400 < 700) f(9, -4, 1, 1, "#ff5a6e");
+      if (face) { f(5, 1, 2, 1, "#fff6b0"); c.globalAlpha = .25; f(4, 0, 4, 3, "#fff6b0"); c.globalAlpha = 1; } break;
+    case "web":
+      f(2, -4, 1, 4, "#8f9bcb"); f(1, -4, 3, 1, "#8f9bcb"); f(2, -5, 1, 1, t % 900 < 450 ? "#b79cff" : "#eef2ff");
+      if (au) { const k = (t / 500) % 1; c.globalAlpha = 1 - k; f(0, -6 - Math.round(k * 2), 1, 1, "#b79cff"); f(4, -6 - Math.round(k * 2), 1, 1, "#b79cff"); c.globalAlpha = 1; } break;
+    case "design": f(3, -1, 6, 2, "#ff7fd0"); f(8, -2, 1, 1, "#ff7fd0"); f(11, 8, 1, 4, ORN); f(11, 7, 1, 1, COULEURS[Math.floor(t / 600) % COULEURS.length]); break;
+    case "commandement": f(5, -3, 1, 3, OR2); f(4, -2, 3, 1, OR2); f(0, 8, 2, 1, OR); f(10, 8, 2, 1, OR); break;
+    case "sav": f(1, -1, 10, 1, "#2b3567"); f(0, 3, 2, 3, "#3a4990"); f(10, 3, 2, 3, "#3a4990"); if (face) { f(2, 6, 3, 1, "#2b3567"); f(4, 7, 1, 1, au && t % 600 < 300 ? "#ff9f43" : "#8a651c"); } break;
+    case "prod": {
+      f(3, 0, 6, 1, "#ff5a6e"); f(-1, 8, 2, 5, "#8f9bcb"); f(-1, 8, 2, 1, "#dfe6ff");
+      if (marche || au) { const fl = 1 + (Math.floor(t / 70) & 1); f(-1, 13, 2, fl, "#ff9f43"); f(-1, 13, 2, 1, "#ffd87a"); } break;
+    }
+    case "annonce":
+      f(11, 9, 1, 2, "#8f8cff"); f(12, 8, 1, 4, "#8f8cff"); f(13, 7, 1, 6, "#cfd0ff");
+      if (au && t % 800 < 400) { f(15, 7, 1, 1, "#cfd0ff"); f(15, 12, 1, 1, "#cfd0ff"); f(16, 9, 1, 2, "#cfd0ff"); } break;
+    case "boutique": f(11, 8, 3, 4, "#f3ead0"); f(12, 7, 1, 1, "#f3ead0"); f(11, 9, 1, 1, "#4cc27a"); f(13, 10, 1, 1, "#4cc27a"); break;
+    case "plugin": f(12, 7, 1, 6, ORN); f(10, 6, 5, 1, "#9fe7ff"); f(10, 7, 1, 1, "#9fe7ff"); f(14, 7, 1, 1, "#9fe7ff"); break;
+  }
+}
+
+function dessinerDrone(c, a, dr, t) {
+  const [X, Y] = proj(a.x + Math.cos(dr.ang) * .95, a.y + Math.sin(dr.ang) * .95, 24 + Math.sin(t / 300 + dr.ang) * 2);
+  const px = Math.round(X + cam.x), py = Math.round(Y + cam.y), col = DRONES[dr.d.type] || "#ff9f43";
+  c.globalAlpha = dr.alpha * .35; c.drawImage(S.ombre, px - 6, py + 22);
+  if (dr.d.type === "Explore" || dr.d.type === "orbit-enqueteur-ark") { // faisceau de balayage
+    c.fillStyle = col; const k = Math.sin(t / 260 + dr.ang);
+    for (let r = 2; r < 20; r++) { c.globalAlpha = dr.alpha * .12 * (1 - r / 20); c.fillRect(Math.round(px - r * .35 + k * r * .2), py + r, Math.max(1, Math.round(r * .7)), 1); }
+  }
+  c.globalAlpha = dr.alpha; c.drawImage(S.drone, px - 5, py - 4);
+  c.fillStyle = col; c.fillRect(px - 4, py, 9, 1);
+  if (Math.floor(t / 300) & 1) c.fillRect(px, py - 5, 1, 1);
+  c.globalAlpha = 1;
+}
+
+// Le ciel : une étoile filante de temps en temps, un satellite autour de la planète.
+function dessinerCiel(c, t) {
+  if (!ciel) return;
+  const cycle = 13000, n = Math.floor(t / cycle), f = (t % cycle) / cycle;
+  if (f < .07) {
+    const R = alea(n * 7 + 3), sx = sc.width * (.3 + R() * .7), sy = sc.height * R() * .35, q = f / .07, lg = Math.min(sc.width, 420) * .4;
+    for (let k = 0; k < 22; k++) {
+      const u = q - k * .012; if (u < 0) break;
+      c.globalAlpha = (1 - k / 22) * (1 - q * .5); c.fillStyle = k < 2 ? "#ffffff" : "#bcd4ff";
+      c.fillRect(Math.round(sx - u * lg), Math.round(sy + u * lg * .42), k < 2 ? 2 : 1, 1);
+    }
+  }
+  const a = t / 11000, x = Math.round(ciel.cx + Math.cos(a) * ciel.r * 1.55), y = Math.round(ciel.cy - ciel.r * .1 + Math.sin(a) * ciel.r * .38);
+  if (!(Math.sin(a) < 0 && Math.hypot(x - ciel.cx, y - ciel.cy) < ciel.r)) { // caché quand il passe derrière
+    c.globalAlpha = 1; c.fillStyle = "#3f7df0"; c.fillRect(x - 4, y, 3, 1); c.fillRect(x + 2, y, 3, 1);
+    c.fillStyle = "#dfe6ff"; c.fillRect(x - 1, y - 1, 3, 2);
+    if (t % 1400 < 200) { c.fillStyle = "#ff5a6e"; c.fillRect(x, y - 2, 1, 1); }
+  }
+  c.globalAlpha = 1;
+}
+
+// Les univers où l'on travaille : la planète s'allume et une navette fait la liaison avec la station.
+function actifsParUnivers() {
+  const n = {};
+  for (const a of agents.values()) if (!a.part && a.d.univers && a.d.phase === "travaille") n[a.d.univers] = (n[a.d.univers] || 0) + 1;
+  return n;
+}
+function dessinerLiaisons(c, t) {
+  if (!planetes.length || !plan) return;
+  const n = actifsParUnivers(), [sx0, sy0] = proj(.5, .5, -14), sx = sx0 + cam.x, sy = sy0 + cam.y;
+  for (const p of planetes) {
+    const nb = n[p.u.cle] || 0; if (!nb) continue;
+    const pouls = .5 + .5 * Math.sin(t / 420 + p.cx);
+    c.fillStyle = p.u.couleur; // halo
+    for (let k = 0; k < 2; k++) { const rr = p.r + 2 + k * 2 + pouls; c.globalAlpha = (k ? .25 : .5) * (.6 + pouls * .4);
+      for (let a = 0, m = Math.round(rr * 6); a < m; a++) { const an = a / m * 6.2832; c.fillRect(Math.round(p.cx + Math.cos(an) * rr), Math.round(p.cy + Math.sin(an) * rr), 1, 1); } }
+    const dx = p.cx - sx, dy = p.cy - sy, lg = Math.hypot(dx, dy); if (lg < p.r + 10) continue;
+    const ux = dx / lg, uy = dy / lg, bout = lg - p.r - 3;
+    const defile = (t / 90) % 5; // le trajet en pointillés qui défilent vers la planète
+    for (let d = defile; d < bout; d += 5) { c.globalAlpha = .18 + .3 * Math.min(1, d / 40); c.fillRect(Math.round(sx + ux * d), Math.round(sy + uy * d), 1, 1); }
+    for (let k = 0; k < Math.min(nb, 3); k++) { // une navette par agent (trois au plus)
+      const u = (t / 5200 + (hache(p.u.cle) % 100) / 100 + k / 3) % 1, f = u < .5 ? u * 2 : 2 - u * 2, d = 20 + f * (bout - 20);
+      const x = Math.round(sx + ux * d), y = Math.round(sy + uy * d), sens = u < .5 ? 1 : -1;
+      for (let q = 1; q <= 4; q++) { c.globalAlpha = .7 - q * .15; c.fillRect(Math.round(x - ux * (q * 2 + 1) * sens), Math.round(y - uy * (q * 2 + 1) * sens), 2, 1); }
+      c.globalAlpha = 1; c.fillStyle = "#eef2ff"; c.fillRect(x - 2, y - 1, 4, 3); c.fillStyle = p.u.couleur; c.fillRect(x - 1, y, 2, 1);
+    }
+  }
+  c.globalAlpha = 1;
+}
+
+// L'écran des projets du QG ORBIT, sur le mur de gauche (une ligne par univers, un bloc par projet).
+let survolEcran = false;
+function sousEcran(mx, my) { // point de la scène → sur l'écran ? (face avant, plan y = j + .78)
+  const o = plan && plan.objets.find((q) => q.t === "ecran"); if (!o) return false;
+  const yp = o.j + .78, x = (mx - cam.x) / 16 + yp, z = (x + yp) * 8 - (my - cam.y);
+  return x >= o.i + .05 && x <= o.i + 1.95 && z >= 8 && z <= 34;
+}
+function dessinerEcranQg(c, t, px, py) {
+  const g = G(c, px, py), X = (k) => .22 + k * .47, f = (ka, kb, z0, z1, col) => g.faceY(X(ka), X(kb), .78, z0, z1, col);
+  if (!QG) { // pas de QG configuré : neige
+    const R = alea(Math.floor(t / 120));
+    for (let n = 0; n < 40; n++) { const p = proj(.2 + R() * 1.6, .78, 11 + R() * 19); c.fillStyle = R() < .5 ? "#1b2a66" : "#2a3f8e"; c.fillRect(Math.round(px + p[0]), Math.round(py + p[1]), 1, 1); }
+    return;
+  }
+  f(.45, 3.3, 28.4, 29.1, ORS);
+  f(0, .25, 28, 29.6, QG.enLigne ? (t % 1600 < 1100 ? "#7fe08a" : "#2c5a34") : "#5a6496");
+  const ordre = (k) => { const i = UNIVERS.findIndex((u) => u.cle === k); return i < 0 ? 99 : i; };
+  Object.keys(QG.projets).sort((a, b) => ordre(a) - ordre(b)).slice(0, 3).forEach((k, r) => {
+    const z1 = 26.4 - r * 4.3, z0 = z1 - 3.1, u = UNIVERS.find((v) => v.cle === k);
+    f(0, .3, z0, z1, u ? u.couleur : "#8f9bcb");
+    let pos = .48;
+    const st = QG.projets[k], noms = ["en_prod", "pret", "test", "en_cours"].concat(Object.keys(st).filter((s) => !STATUTS[s]));
+    for (const s of noms) for (let i = 0; i < (st[s] || 0) && pos < 3.3; i++) { f(pos, pos + .2, z0 + .4, z1 - .4, STATUTS[s]?.[0] || "#5a6496"); pos += .27; }
+  });
+  f(0, .3, 11.2, 12.7, OR);
+  for (let i = 0, n = Math.min(11, QG.objectifs.ouverts); i < n; i++) f(.48 + i * .26, .62 + i * .26, 11.2, 12.7, i < QG.objectifs.haute ? "#ff5a6e" : OR2);
+  const zz = 10 + (t / 45) % 21; c.globalAlpha = .18; f(-.1, 3.4, zz, zz + .7, "#9ff4ff"); c.globalAlpha = 1;
+  if (survolEcran) { const L = (a, b) => g.l3(a, b, OR2); L([.05, .78, 8], [1.95, .78, 8]); L([.05, .78, 33], [1.95, .78, 33]); L([.05, .78, 8], [.05, .78, 33]); L([1.95, .78, 8], [1.95, .78, 33]); }
+}
+
+// L'extérieur vivant : coursive lumineuse, réacteurs, navette, feux de position, parabole.
+function dessinerExterieur(c, t) {
+  const P = (x, y, z) => { const p = proj(x, y, z); return [p[0] + cam.x, p[1] + cam.y]; };
+  c.fillStyle = OR2; // une lumière file dans chaque coursive, de l'atrium vers la salle
+  for (const m of plan.modules) {
+    const n = m.chemin.length, pos = (t / 170 + hache(m.nom) % 9) % (n + 4) - 2;
+    m.chemin.forEach(([i, j], k) => { const d = Math.abs(k - pos); if (d > 2) return; const [x, y] = P(i + .5, j + .5, 0); c.globalAlpha = (1 - d / 2) * .8; c.fillRect(x - 2, y, 4, 1); });
+  }
+  c.fillStyle = "#e6f6ff"; // réacteurs sous l'atrium et sous chaque salle
+  for (const q of [{ cx: 0, cy: 0, r: 2.2 }].concat(plan.modules.map((m) => ({ cx: m.cx, cy: m.cy, r: 1.4 })))) {
+    const [a, b] = P(q.cx + .5, q.cy + .5 + q.r, -15.5); c.globalAlpha = .45 + .4 * Math.abs(Math.sin(t / 70 + q.cx * 3 + q.cy)); c.fillRect(a - 2, b - 1, 4, 2);
+  }
+  const { X0: X0n, y0, y1 } = plan.navette; // moteurs de la navette des quais
+  for (const [yy, ph] of [[y0 + .47, 0], [y1 - .47, 1.7]]) {
+    const [a, b] = P(X0n - .45, yy, -6.5), fl = 2 + Math.round(Math.abs(Math.sin(t / 55 + ph)) * 3);
+    c.globalAlpha = .75; c.fillStyle = CYAN; c.fillRect(a - fl - 1, b - 1, fl, 3);
+    c.globalAlpha = 1; c.fillStyle = "#e6fbff"; c.fillRect(a - 2, b, 2, 1);
+  }
+  const feu = (x, y, col, allume) => {
+    if (!allume) return; const [a, b] = P(x, y, -1);
+    c.fillStyle = col; c.globalAlpha = .28; c.fillRect(a - 2, b - 2, 5, 5); c.globalAlpha = 1; c.fillRect(a - 1, b - 1, 2, 2);
+  };
+  feu(-16.4, 0, "#ff5a6e", t % 1600 < 260);           // bout de l'aile gauche
+  feu(0, -16.4, "#6dff9a", (t + 800) % 1600 < 260);   // bout de l'aile droite
+  const s = t % 2400; feu(plan.quais.cx + 2.9, plan.quais.cy + .5, "#ffffff", s < 90 || (s > 220 && s < 310));
+  { const [a, b] = P(-8.6, -8.6, 62), co = Math.cos(t / 650), hw = Math.round(Math.abs(co) * 5), bx = a + Math.round(co * 2);
+    c.globalAlpha = 1; c.fillStyle = co > 0 ? "#dfe6ff" : "#8f9bcb"; c.fillRect(a - hw, b - 4, hw * 2 + 1, 2);
+    c.fillStyle = "#8f9bcb"; c.fillRect(a, b - 3, 1, 3); c.fillRect(bx, b - 7, 1, 3);
+    if (t % 1200 < 500) { c.fillStyle = OR2; c.fillRect(bx, b - 8, 1, 1); } }
+  c.globalAlpha = 1;
+}
+
+function dessiner(t) {
+  const c = scx;
+  c.imageSmoothingEnabled = false; // remis à zéro si la toile a été recréée
+  c.drawImage(fond, 0, 0);
+  for (const [x, y, p] of scintillantes) { c.globalAlpha = .25 + .75 * Math.abs(Math.sin(t / 900 + p)); c.fillStyle = "#ffffff"; c.fillRect(x - 1, y, 3, 1); c.fillRect(x, y - 1, 1, 3); }
+  c.globalAlpha = 1;
+  dessinerCiel(c, t);
+  dessinerLiaisons(c, t);
+  c.drawImage(station, cam.x + plan.bx, cam.y + plan.by);
+  dessinerExterieur(c, t);
+  const liste = [];
+  for (const o of plan.objets) liste.push({ d: o.d, o });
+  for (const a of agents.values()) {
+    if (!a.cache) liste.push({ d: a.x + a.y, a });
+    for (const dr of a.drones.values()) liste.push({ d: a.x + a.y + Math.cos(dr.ang) * .95 + Math.sin(dr.ang) * .95 + .01, a, dr });
+  }
+  liste.sort((p, q) => p.d - q.d);
+  for (const e of liste) { if (e.o) dessinerObjet(c, e.o, t); else if (e.dr) dessinerDrone(c, e.a, e.dr, t); else dessinerAgent(c, e.a, t); }
+  dessinerCalque();
+}
+
+// Le calque : textes nets (plaques des murs, étiquettes des agents), dessinés à la résolution de l'écran.
+function dessinerCalque() {
+  const c = ccx, E = cam.s;
+  c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, cc.width, cc.height);
+  const police = (px, gras = 700) => gras + " " + px + 'px Bahnschrift, "Segoe UI", system-ui, sans-serif';
+  c.textAlign = "center"; c.textBaseline = "middle";
+  const ecrire = (txt, wx, wy, wz, pente, col, large) => {
+    const [X, Y] = proj(wx, wy, wz);
+    c.setTransform(1, pente, 0, 1, (X + cam.x) * E, (Y + cam.y) * E);
+    c.font = police(Math.round(6.2 * E)); c.letterSpacing = Math.round(E * .9) + "px"; c.fillStyle = col;
+    c.fillText(txt, 0, 0, large * E);
+  };
+  c.letterSpacing = "0px"; c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const k = E / dpr;
+
+  // plaques : une au-dessus du fond de chaque salle, « QG ORBIT » au-dessus de l'écran des projets
+  const plaque = (txt, wx, wy, wz, col) => {
+    const [X, Y] = proj(wx, wy, wz), x = (X + cam.x) * k, y = (Y + cam.y) * k;
+    const fp = Math.max(7, Math.min(10.5, 6.2 * k)), hp = Math.round(fp * 1.7);
+    c.font = police(fp); c.letterSpacing = (fp > 9 ? 2 : 1) + "px"; const w = c.measureText(txt).width + fp * 1.4;
+    c.fillStyle = "rgba(7,12,36,.9)"; c.strokeStyle = col; c.lineWidth = 1; c.beginPath(); c.roundRect(Math.round(x - w / 2) + .5, Math.round(y - hp) + .5, Math.round(w), hp, 4); c.fill(); c.stroke();
+    c.fillStyle = col; c.fillText(txt, x + 1, y - hp / 2 + .5); c.letterSpacing = "0px";
+  };
+  for (const m of plan.modules) plaque(m.u ? m.u.court : m.nom, m.cx + .5, m.cy + .5, m.cx + m.cy < 0 ? HMUR + 16 : 30, m.teinte.trait);
+  { const o = plan.objets.find((q) => q.t === "ecran"); plaque("QG ORBIT", o ? o.i + 1 : .5, o ? o.j + .78 : .5, 44, OR); }
+
+  // noms des planètes (en compact : seulement celles où l'on travaille)
+  { const n = actifsParUnivers();
+    for (const p of planetes) {
+      const nb = n[p.u.cle] || 0; if ((MINI && !nb) || p.cache) continue;
+      const fp = MINI ? 8.5 : 10; c.font = police(fp, 700); c.letterSpacing = "1.5px";
+      const txt = p.u.court + (nb ? " · " + nb : ""), x = p.cx * k, y = (p.cy + p.r) * k + fp + 3;
+      c.fillStyle = "rgba(5,10,31,.75)"; const w = c.measureText(txt).width + 8; c.fillRect(Math.round(x - w / 2), Math.round(y - fp * .7), Math.round(w), Math.round(fp * 1.45));
+      c.fillStyle = nb ? p.u.couleur : sombre(p.u.couleur, .7); c.fillText(txt, x + .75, y);
+    }
+    c.letterSpacing = "0px"; }
+  if (survolEcran) { // bulle d'aide de l'écran des projets
+    const o = plan.objets.find((q) => q.t === "ecran"), [X, Y] = proj(o.i + 1, o.j + .78, 30), x = (X + cam.x) * k, y = (Y + cam.y) * k;
+    const txt = QG ? (QG.enLigne ? "Ouvrir le QG ORBIT" : "Lancer et ouvrir le QG ORBIT") : "QG ORBIT non configuré";
+    c.font = police(11, 600); const w = c.measureText(txt).width + 16;
+    c.fillStyle = "rgba(7,12,36,.95)"; c.strokeStyle = OR; c.lineWidth = 1; c.beginPath(); c.roundRect(Math.round(x - w / 2) + .5, Math.round(y - 24) + .5, Math.round(w), 20, 5); c.fill(); c.stroke();
+    c.fillStyle = OR2; c.fillText(txt, x, y - 14);
+  }
+
+
+  // étiquettes des agents
+  const puces = [];
+  for (const a of agents.values()) {
+    const vedette = a.id === choisi || a.id === survol;
+    if (a.cat === "capsule" && !vedette) continue;
+    let sous = "", ton = "#9db0e8";
+    if (a.cat === "poste") { sous = a.d.phase === "question" ? "te pose une question" : a.d.activite.texte; if (a.d.phase === "question") ton = OR2; }
+    else if (a.cat === "pont") { sous = a.d.phase === "attend" ? "attend ta décision" : "a terminé"; ton = a.d.phase === "attend" ? OR2 : CYAN; }
+    else sous = "au repos";
+    if (a.route.length) sous = a.part ? "quitte la station" : "en route";
+    const haut = a.cache ? 22 : (a.cat === "pont" || a.d.phase === "question") && !a.route.length ? 41 : 30;
+    let x, y;
+    if (a.cache) { const [X, Y] = proj(a.place.ref.x + .5, a.place.ref.y + .5); x = (X + cam.x) * k; y = (Y + cam.y - haut) * k; }
+    else { x = a.sx * k; y = (a.sy - haut) * k; }
+    puces.push({ a, x, y, nom: court(a.d.nom, vedette ? 40 : MINI ? 16 : 22), sous: court(sous, vedette ? 44 : MINI ? 22 : 30), ton, vedette });
+  }
+  puces.sort((p, q) => (p.vedette - q.vedette) || p.y - q.y);
+  const poses = [];
+  const petit = MINI, f1 = petit ? 9.5 : 11, f2 = petit ? 8.5 : 10;
+  for (const p of puces) {
+    if (petit && !p.vedette) p.sous = ""; // en compact : le nom seul, le détail au survol
+    c.font = police(f1, 600); const w1 = c.measureText(p.nom).width;
+    c.font = police(f2, 400); const w2 = p.sous ? c.measureText(p.sous).width : 0;
+    const w = Math.ceil(Math.max(w1, w2)) + (petit ? 11 : 14), h = p.sous ? (petit ? 26 : 30) : (petit ? 15 : 18);
+    let x0 = Math.max(4, Math.min(innerWidth - w - 4, Math.round(p.x - w / 2))), y0 = Math.round(p.y - h); // jamais coupée au bord
+    for (let essai = 0; essai < 6; essai++) { const g = poses.find((r) => x0 < r.x + r.w + 2 && x0 + w + 2 > r.x && y0 < r.y + r.h + 2 && y0 + h + 2 > r.y); if (!g) break; y0 = g.y - h - 3; }
+    if (petit && !p.vedette && y0 < 26) continue; // plus de place au-dessus : on n'affiche pas
+    poses.push({ x: x0, y: y0, w, h });
+    const col = p.a.col;
+    c.fillStyle = "rgba(7,12,36," + (p.vedette ? ".97" : ".86") + ")"; c.strokeStyle = p.a.id === choisi ? OR : col; c.lineWidth = p.a.id === choisi ? 1.5 : 1;
+    c.beginPath(); c.roundRect(x0 + .5, y0 + .5, w, h, 5); c.fill(); c.stroke();
+    c.fillStyle = col; c.fillRect(x0 + 1, y0 + 5, 2, h - 9);
+    c.textAlign = "left"; c.font = police(f1, 600); c.fillStyle = petit && !p.sous ? (p.ton === "#9db0e8" ? "#e9eefc" : p.ton) : "#e9eefc";
+    c.fillText(p.nom, x0 + (petit ? 6.5 : 8), y0 + (petit ? 8 : 9.5));
+    if (p.sous) { c.font = police(f2, 400); c.fillStyle = p.ton; c.fillText(p.sous, x0 + (petit ? 6.5 : 8), y0 + (petit ? 18.5 : 21.5)); }
+    c.textAlign = "center";
+  }
+}
+
+// ---------------------------------------------------------------- l'interface (liste, fiche, compteurs)
+let empreinte = "", structure = null;
+const lignes = new Map();
+function texteEtat(d) {
+  if (d.phase === "travaille") return d.activite.texte || "au travail";
+  if (d.phase === "question") return "te pose une question";
+  if (d.phase === "attend") return "attend ta décision · " + duree(horloge - d.depuis);
+  if (d.phase === "fini") return "a terminé · " + duree(horloge - d.depuis);
+  return "au repos · " + duree(horloge - d.depuis);
+}
+function el(tag, classe, texte) { const e = document.createElement(tag); if (classe) e.className = classe; if (texte != null) e.textContent = texte; return e; }
+
+function majInterface() {
+  const tous = [...agents.values()].filter((a) => !a.part).map((a) => a.d);
+  const n = (f) => tous.filter(f).length;
+  const mission = n((d) => d.phase === "travaille"), attente = n((d) => d.phase === "attend" || d.phase === "question"), finis = n((d) => d.phase === "fini"), repos = n((d) => d.phase === "repos");
+  document.title = (attente ? "(" + attente + ") " : "") + "La Station";
+  majQg();
+  const sig = JSON.stringify([choisi, tous.map((d) => [d.id, d.nom, d.projet, d.phase, texteEtat(d), d.plan, d.demande, d.recap, d.outils, d.drones.length, d.role])]);
+  if (sig === empreinte) return;
+  empreinte = sig;
+
+  const cpt = $("compteurs"); cpt.replaceChildren();
+  const pastille = (col, nb, txt, alerte) => { const p = el("div", "pastille" + (alerte ? " alerte" : "")); const pt = el("span", "point"); pt.style.background = col; p.append(pt, el("b", null, String(nb)), document.createTextNode(txt)); cpt.append(p); };
+  pastille(POINTS.travaille, mission, mission > 1 ? "en mission" : "en mission");
+  pastille(POINTS.attend, attente, attente > 1 ? "t'attendent" : "t'attend", attente > 0);
+  if (finis) pastille(POINTS.fini, finis, finis > 1 ? "ont terminé" : "a terminé");
+  pastille(POINTS.repos, repos, "au repos");
+
+  // La liste : on garde les mêmes boutons d'une seconde à l'autre (sinon un clic peut se perdre).
+  const corps = $("corps"), ordre = { question: 0, attend: 1, travaille: 2, fini: 3, repos: 4 };
+  const sansSalle = [...new Set(tous.map((d) => d.projet))].filter((n) => !plan.modules.some((m) => m.nom === n)).map((nom) => ({ nom, teinte: { trait: "#9db0e8" } }));
+  const groupes = plan.modules.concat(sansSalle).map((m) => [m, tous.filter((d) => d.projet === m.nom).sort((a, b) => ordre[a.phase] - ordre[b.phase] || b.depuis - a.depuis)]).filter((g) => g[1].length);
+  const forme = groupes.map(([m, mb]) => m.nom + ":" + mb.map((d) => d.id).join(",")).join("|");
+  if (forme !== structure) {
+    structure = forme; corps.replaceChildren();
+    if (!tous.length) corps.append(el("div", "groupe", "Aucune session ouverte"));
+    for (const [m, membres] of groupes) {
+      const g = el("div", "groupe"); g.style.color = m.teinte.trait; g.append(el("span", null, m.nom), el("i", null, String(membres.length))); corps.append(g);
+      for (const d of membres) {
+        let l = lignes.get(d.id);
+        if (!l) {
+          l = { b: el("button"), pt: el("span", "point"), nom: el("div", "nom"), etat: el("div", "etat") };
+          const bloc = el("div"); bloc.append(l.nom, l.etat); l.b.append(l.pt, bloc);
+          l.b.onclick = () => { choisi = choisi === d.id ? null : d.id; empreinte = ""; majInterface(); };
+          lignes.set(d.id, l);
+        }
+        corps.append(l.b);
+      }
+    }
+    for (const id of lignes.keys()) if (!agents.has(id)) lignes.delete(id);
+  }
+  for (const d of tous) {
+    const l = lignes.get(d.id); if (!l) continue;
+    l.b.className = "ligne " + d.phase + (d.id === choisi ? " choisi" : ""); l.b.title = d.nom;
+    l.pt.style.background = POINTS[d.phase]; l.pt.style.boxShadow = d.phase === "travaille" ? "0 0 0 3px rgba(111,177,255,.18)" : "none";
+    if (l.nom.textContent !== d.nom) l.nom.textContent = d.nom;
+    const te = texteEtat(d); if (l.etat.textContent !== te) l.etat.textContent = te;
+  }
+
+  const fiche = $("fiche"), a = choisi && agents.get(choisi);
+  fiche.classList.toggle("vu", !!a);
+  if (a) {
+    const d = a.d, f = $("ficheCorps"); f.replaceChildren();
+    f.append(el("div", "projet", d.projet), el("h2", null, d.nom));
+    const ro = roleDe(d), pastilleRole = el("div", "role"), pr = el("span", "point");
+    pr.style.background = ro.couleur; pastilleRole.style.borderColor = ro.couleur + "88"; pastilleRole.style.color = ro.couleur;
+    pastilleRole.append(pr, document.createTextNode(ro.nom)); pastilleRole.title = ro.dit + (d.role?.via ? " · d'après " + d.role.via : "");
+    f.append(pastilleRole);
+    const rang = (gras, reste) => { const r = el("div", "rang"); r.append(el("b", null, gras), document.createTextNode(reste)); f.append(r); };
+    rang({ travaille: "Au travail", question: "Te pose une question", attend: "Attend ta décision", fini: "A terminé", repos: "Au repos" }[d.phase], d.phase === "travaille" ? (d.activite.texte ? " · " + d.activite.texte : "") : " · depuis " + duree(horloge - d.depuis));
+    if (d.plan && d.plan.total) {
+      rang("Plan " + d.plan.fait + "/" + d.plan.total, d.plan.etape ? " · " + d.plan.etape : "");
+      const barre = el("div", "barre"), i = el("i"); i.style.width = Math.round(d.plan.fait / d.plan.total * 100) + "%"; barre.append(i); f.append(barre);
+    }
+    if (d.tourDebut) rang(d.outils + " action" + (d.outils > 1 ? "s" : ""), " sur ce tour · commencé il y a " + duree(horloge - d.tourDebut).replace("à l'instant", "moins d'une minute"));
+    if (d.drones.length) rang(d.drones.length + " drone" + (d.drones.length > 1 ? "s" : ""), " · " + d.drones.map((x) => x.texte).join(" · "));
+    if (d.demande) f.append(el("div", "demande", d.demande));
+    if (d.recap) f.append(el("div", "recap", d.recap));
+  }
+}
+
+// Le bloc QG ORBIT de la liste : projets par univers, objectifs, prochain rendez-vous.
+let sigQg = "";
+function majQg() {
+  const s = JSON.stringify(QG); if (s === sigQg) return; sigQg = s;
+  const b = $("qgBloc"); b.replaceChildren(); if (!QG) return;
+  const tete = el("div", "tete"), titre = el("span"), pt = el("i", "point");
+  pt.style.background = QG.enLigne ? "#7fe08a" : "#5a6496"; pt.title = QG.enLigne ? "QG allumé" : "QG éteint (il se lance à l'ouverture)";
+  titre.append(pt, document.createTextNode("QG ORBIT"));
+  const bt = el("button", "bouton", QG.enLigne ? "Ouvrir" : "Lancer"); bt.onclick = ouvrirQg;
+  tete.append(titre, bt); b.append(tete);
+  for (const [k, st] of Object.entries(QG.projets)) {
+    const u = UNIVERS.find((v) => v.cle === k), ligne = el("div", "univ"), nom = el("b", null, u ? u.court : k.toUpperCase()), blocs = el("div", "blocs");
+    nom.style.color = u ? u.couleur : "var(--doux)";
+    const detail = [];
+    for (const [s, n] of Object.entries(st)) { for (let i = 0; i < n; i++) { const c = el("i"); c.style.background = STATUTS[s]?.[0] || "#5a6496"; blocs.append(c); } detail.push(n + " " + (STATUTS[s]?.[1] || s.replace("_", " "))); }
+    ligne.title = detail.join(" · "); ligne.append(nom, blocs); b.append(ligne);
+  }
+  const o = QG.objectifs;
+  b.append(el("div", "obj", o.ouverts + " objectif" + (o.ouverts > 1 ? "s" : "") + " ouvert" + (o.ouverts > 1 ? "s" : "") + (o.haute ? " · " + o.haute + " prioritaire" + (o.haute > 1 ? "s" : "") : "")));
+  if (o.prochains.length) { const ul = el("ul"); for (const p of o.prochains) ul.append(el("li", null, (p.cat ? p.cat + " : " : "") + p.txt)); b.append(ul); }
+  if (QG.agenda) { const [a, m, j] = QG.agenda.date.split("-"); b.append(el("div", "agenda", "Prochain : " + j + "/" + m + (QG.agenda.heure && QG.agenda.heure !== "00:00" ? " " + QG.agenda.heure : "") + " · " + QG.agenda.titre)); }
+}
+
+// ---------------------------------------------------------------- souris
+function agentSous(mx, my) {
+  let mieux = null, md = -Infinity;
+  for (const a of agents.values()) {
+    let x, y, d;
+    if (a.cache) { const [X, Y] = proj(a.place.ref.x + .5, a.place.ref.y + .5); x = X + cam.x; y = Y + cam.y + 4; d = a.place.ref.x + a.place.ref.y; }
+    else { x = a.sx; y = a.sy; d = a.x + a.y; }
+    if (mx >= x - 9 && mx <= x + 9 && my >= y - 20 && my <= y + 5 && d > md) { mieux = a; md = d; }
+  }
+  return mieux;
+}
+let prise = null;
+sc.addEventListener("pointerdown", (e) => { prise = { x: e.clientX, y: e.clientY, cx: cam.x, cy: cam.y, bouge: false }; sc.setPointerCapture(e.pointerId); });
+sc.addEventListener("pointermove", (e) => {
+  const mx = e.clientX * dpr / cam.s, my = e.clientY * dpr / cam.s;
+  if (prise) {
+    const dx = (e.clientX - prise.x) * dpr / cam.s, dy = (e.clientY - prise.y) * dpr / cam.s;
+    if (Math.abs(dx) + Math.abs(dy) > 3) { prise.bouge = true; zoomManuel = true; sc.classList.add("prise"); }
+    if (prise.bouge) { cam.x = Math.round(prise.cx + dx); cam.y = Math.round(prise.cy + dy); }
+    return;
+  }
+  const a = agentSous(mx, my); survol = a ? a.id : null;
+  survolEcran = !a && sousEcran(mx, my);
+  sc.classList.toggle("cible", !!a || survolEcran);
+});
+sc.addEventListener("pointerup", (e) => {
+  const p = prise; prise = null; sc.classList.remove("prise");
+  if (p && !p.bouge) {
+    const mx = e.clientX * dpr / cam.s, my = e.clientY * dpr / cam.s, a = agentSous(mx, my);
+    if (!a && sousEcran(mx, my)) { ouvrirQg(); return; }
+    choisi = a ? (choisi === a.id ? null : a.id) : null; empreinte = ""; majInterface();
+  }
+});
+sc.addEventListener("pointerleave", () => { survol = null; survolEcran = false; });
+function ouvrirQg() { if (!DEMO && QG) window.open("/qg", "_blank"); }
+sc.addEventListener("wheel", (e) => { e.preventDefault(); zoomer(e.deltaY < 0 ? 1 : -1, e.clientX * dpr, e.clientY * dpr); }, { passive: false });
+$("plus").onclick = () => zoomer(1, innerWidth * dpr / 2, innerHeight * dpr / 2);
+$("moins").onclick = () => zoomer(-1, innerWidth * dpr / 2, innerHeight * dpr / 2);
+$("recadrer").onclick = () => { zoomManuel = false; cadrer(); };
+$("replier").onclick = () => { $("liste").classList.add("ferme"); if (!zoomManuel) cadrer(); };
+$("ouvrir").onclick = () => { $("liste").classList.remove("ferme"); if (!zoomManuel) cadrer(); };
+$("fermer").onclick = () => { choisi = null; empreinte = ""; majInterface(); };
+$("mPlus").onclick = $("plus").onclick;
+$("mMoins").onclick = $("moins").onclick;
+$("mCadre").onclick = $("recadrer").onclick;
+$("mGrand").onclick = () => window.open("/" + (DEMO ? "?demo" : ""), "_blank");
+$("mMasquer").onclick = () => window.close(); // avec Station.exe, c'est lui qui masque (le clic n'arrive pas ici)
+sc.addEventListener("dblclick", () => { zoomManuel = false; cadrer(); });
+addEventListener("resize", () => { if (zoomManuel) taille(); else cadrer(); });
+
+// Si la carte graphique a quand même perdu quelque chose : on refait tous les dessins.
+function reconstruire() {
+  spritesAgent.clear(); fabriquer();
+  if (plan) rendreStation();
+  rendreFond(); empreinte = "";
+}
+sc.addEventListener("contextrestored", reconstruire);
+cc.addEventListener("contextrestored", reconstruire);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && station && station.getContext("2d").isContextLost?.()) reconstruire();
+});
+
+// ---------------------------------------------------------------- données
+let demo = null;
+function etatDemo() {
+  const t = Date.now();
+  const ACTES = [["code", "écrit OrbitalDesign.java"], ["lit", "lit config.yml"], ["commande", "Compile le plugin"], ["cherche", "cherche « spawnPortal »"], ["reflechit", "réfléchit"], ["web", "navigue dans le navigateur"], ["redige", "rédige sa réponse"], ["commande", "Relance le serveur survie"]];
+  if (!demo) demo = [["mc", "Port orbital de la survie", "travaille", "ingenierie"], ["mc", "Compiler OrbitPractice", "travaille", "plugin"], ["mc", "Caisses de butin", "attend", "design"],
+    ["ark", "SAV : dino perdu", "travaille", "sav"], ["ark", "Mise en prod du site", "travaille", "prod"], ["ark", "Annonce de Noël", "fini", "annonce"], ["ark", "Couple de Rex en boutique", "repos", "boutique"],
+    ["pz", "Manager Zomboid", "travaille", "operations"], ["11d", "Site 11D Labs", "travaille", "web"], ["11d", "Audit des sources", "attend", "recherche"],
+    ["gmod", "Casino : roulette", "travaille", "commandement"], ["roblox", "Extraction Roblox", "repos", "ingenierie"]]
+    .map(([u, nom, phase, role], i) => ({ id: "demo" + i, univers: u, projet: UNIVERS_DEFAUT.find((x) => x.cle === u).nom, role: { cle: role, via: "démo" }, nom, phase,
+      fin: t + 5000 + Math.random() * 14000, depuis: t - Math.random() * 600000, acte: i % ACTES.length, outils: 3 + i, debut: i, tour: t - 240000 }));
+  for (const a of demo) {
+    if (t > a.fin) {
+      a.phase = { travaille: Math.random() < .5 ? "attend" : "fini", attend: "travaille", fini: Math.random() < .6 ? "repos" : "travaille", repos: "travaille" }[a.phase];
+      a.depuis = t; a.fin = t + 7000 + Math.random() * 15000; if (a.phase === "travaille") { a.outils = 0; a.tour = t; }
+    }
+    if (a.phase === "travaille" && Math.random() < .35) { a.acte = Math.floor(Math.random() * ACTES.length); a.outils++; }
+  }
+  return { maintenant: t, univers: UNIVERS_DEFAUT,
+    qg: { enLigne: true, projets: { ark: { en_cours: 2, test: 3, pret: 4, en_prod: 1 }, mc: { en_cours: 1, test: 4, pret: 1 }, autre: { en_cours: 1, idee: 1 } },
+      objectifs: { ouverts: 7, haute: 1, prochains: [{ txt: "Ajouter un lore et quelques missions", cat: "Extraction", prio: "haute" }, { txt: "Nouveaux sorts de zone", cat: "MMO", prio: "normale" }] },
+      agenda: { date: "2026-12-01", heure: "00:00", titre: "Ouverture du calendrier de l'avent" } },
+    agents: demo.map((a, i) => ({ id: a.id, nom: a.nom, projet: a.projet, univers: a.univers, role: a.role, dossier: a.projet, phase: a.phase, depuis: a.depuis, debut: a.debut,
+    activite: a.phase === "travaille" ? { genre: ACTES[a.acte][0], texte: ACTES[a.acte][1] } : { genre: "veille", texte: "" }, tourDebut: a.tour, outils: a.outils,
+    plan: { fait: a.phase === "travaille" ? 2 : 4, total: 4, etape: a.phase === "travaille" ? "Dessiner le quai d'amarrage" : null },
+    demande: a.phase === "attend" ? "Je régénère le port orbital ? (/ile ecarts d'abord)" : null, recap: a.phase === "travaille" ? null : "Le port orbital compile et se charge. Pas encore vu en jeu.",
+    drones: a.phase !== "travaille" ? [] : i === 3 ? [{ id: "d" + i, texte: "Enquête dans les journaux", type: "orbit-enqueteur-ark" }] : i === 1 ? [{ id: "d" + i, texte: "Vérifie les jars installés", type: "orbit-verif-mc" }]
+      : i === 10 ? [{ id: "d10", texte: "Explore les addons", type: "Explore" }, { id: "d10b", texte: "Prépare le plan", type: "Plan" }] : [] })) };
+}
+async function rafraichir() {
+  try {
+    const r = DEMO ? etatDemo() : await (await fetch("/api/etat", { cache: "no-store" })).json();
+    horloge = r.maintenant; majDonnees(r.agents, r.univers || [], r.qg); $("alerte").classList.remove("vu");
+  } catch (err) { $("alerte").classList.add("vu"); console.error(err); }
+  setTimeout(rafraichir, 1000);
+}
+
+// ---------------------------------------------------------------- départ
+if (innerWidth <= 900) $("liste").classList.add("ferme"); // petite fenêtre : la station d'abord
+fabriquer();
+majDonnees([]);
+premier = true;
+let avant = performance.now();
+function image(t) {
+  const dt = Math.min(.1, (t - avant) / 1000); avant = t;
+  avancer(dt); dessiner(t);
+  requestAnimationFrame(image);
+}
+requestAnimationFrame(image);
+rafraichir();
+</script>
+</body>
+</html>
